@@ -179,7 +179,7 @@
       "tipo": "Aventura",
       "duracion": 60,
       "dificultad": "Media",
-      "rating": 6.0,
+      "rating": 6,
       "web": "https://www.escapebarcelona.com/jurassic-land.php",
       "valoracion": "",
       "descripcion": "Una aventura inmersiva ambientada en una reserva de dinosaurios. Los jugadores deben restaurar los sistemas de seguridad de la isla tras un fallo crítico. Destaca por su ambientación selvática, el uso de animatronics y por ser una sala ideal para grupos grandes y familias.",
@@ -236,7 +236,7 @@
       "tipo": "Aventura / Agilidad",
       "duracion": 80,
       "dificultad": "Media",
-      "rating": 7.0,
+      "rating": 7,
       "web": "https://www.escapebarcelona.com/tomb-hunter-la-leyenda-de-akasha.php",
       "valoracion": "",
       "descripcion": "Aventura de arqueología pura al estilo Indiana Jones. Con efectos especiales que hacen \"vibrar el suelo\" y una escenografía de templo antiguo, combina puzzles lógicos con pruebas físicas de agilidad y tensión.",
@@ -407,7 +407,7 @@
       "tipo": "Avenura",
       "duracion": 105,
       "dificultad": "Media",
-      "rating": 9.0,
+      "rating": 9,
       "web": "https://www.reddopamine.com/landing-misterio-achijira",
       "valoracion": "",
       "descripcion": "Tu Misión Será recatar a los que hicieron la última expedición. Su vida está en tus manos. No es tan sencillo como parece. Las pruebas y los distintos tipos de escenarios que te encontrarán pondrán a prueba tu conocimiento. Jugar es fácil, conseguir que todo salga bien no tanto...",
@@ -428,17 +428,17 @@
       "tipo": "Aventura",
       "duracion": 70,
       "dificultad": "Media",
-      "rating": 9.0,
+      "rating": 9,
       "web": "https://sagaescaperoom.com/",
       "valoracion": 9.375,
       "descripcion": "Inmersión cinematográfica absoluta con una estética Steampunk y victoriana impecable (niebla, olores y texturas de primer nivel). Jugada por 3 adultos y 2 niñas de 10 años en modo Tensión, resultó una experiencia redonda: las niñas fliparon desde la primera sala y el trato del Game Master fue excelente y muy cordial. Los puzzles de nueva generación están totalmente integrados en la trama, logrando un flujo de juego magnífico sin candados forzados. Una joya visual y narrativa que, gracias a su ambientación única, encantó a todo el grupo por igual.",
       "max_personas": "",
       "historia": 9.5,
-      "ambientacion": 10.0,
-      "jugabilidad": 9.0,
-      "gamemaster": 9.0,
+      "ambientacion": 10,
+      "jugabilidad": 9,
+      "gamemaster": 9,
       "terpeca": "",
-      "ranking": 1
+      "ranking": 2
     },
     {
       "nombre": "La Taberna",
@@ -453,12 +453,12 @@
       "valoracion": 8.5,
       "descripcion": "Aventura de alta inmersión que inicia en una taberna hiperrealista donde la interacción con el entorno y el roleo son la clave. Destaca por una escenografía brutal en la mayoría de sus salas, logrando que el equipo (3 adultos y 2 niñas de 9 años) se sienta realmente dentro de una película de fantasía. Aunque el arranque es muy original y los enigmas mecánicos están integrados, nuestra experiencia con el acting de la Game Master Tabernera no nos terminó de impactar y algún puzzle se nos hizo complicado, perdiendo fluidez en ciertos momentos. A pesar de ello, se mantiene sin duda como uno de los mejores escapes a nivel español por su despliegue visual.",
       "max_personas": "",
-      "historia": 9.0,
-      "ambientacion": 9.0,
-      "jugabilidad": 9.0,
-      "gamemaster": 7.0,
+      "historia": 9,
+      "ambientacion": 9,
+      "jugabilidad": 9,
+      "gamemaster": 7,
       "terpeca": "",
-      "ranking": 4
+      "ranking": 5
     },
     {
       "nombre": "K.O.N.G. Protocol",
@@ -468,17 +468,17 @@
       "tipo": "Tecnológico",
       "duracion": 120,
       "dificultad": "Media-Alta",
-      "rating": 9.0,
+      "rating": 9,
       "web": "https://escapebarcelona.com/",
       "valoracion": 8.375,
       "descripcion": "Ambientación muy cuidada y sorprendente, lo mejor del escape. Requiere algo de agilidad física. Inicio algo duro: los primeros enigmas cuestan incluso con experiencia, pero luego fluye mejor.  Gran trabajo del GM como NPC, con buena tensión durante la partida. Ojo: zona complicada para aparcar.",
       "max_personas": "",
       "historia": 8.5,
-      "ambientacion": 9.0,
-      "jugabilidad": 8.0,
-      "gamemaster": 8.0,
+      "ambientacion": 9,
+      "jugabilidad": 8,
+      "gamemaster": 8,
       "terpeca": "",
-      "ranking": 6
+      "ranking": 7
     },
     {
       "nombre": "Jurásico",
@@ -488,17 +488,17 @@
       "tipo": "Aventura familiar",
       "duracion": 60,
       "dificultad": "Media",
-      "rating": 8.0,
+      "rating": 8,
       "web": "https://goldenpop.es/jurasico/",
       "valoracion": 9.25,
       "descripcion": "Espectáculo visual y sensorial que recrea una selva hiperrealista bajo el centro de Barcelona. Una aventura de 120 minutos cargada de nostalgia, con una escenografía cinematográfica y efectos de sonido potentes. Jugado por 4 adultos y una niña de 9 años, destacamos el excelente acting inicial; el impacto del Game Master sobre la peque fue muy bueno y lo recuerda con mucho cariño. Es un escape dinámico con separación del grupo y una gran cantidad de juegos que garantiza que no haya momentos de parón. Ve preparado para gatear y ensuciarte con un poco de barro, ya que la vegetación se tiene que mantener. Una experiencia de 'nueva generación' de las más potentes del panorama actual.",
       "max_personas": "",
-      "historia": 9.0,
-      "ambientacion": 10.0,
-      "jugabilidad": 8.0,
-      "gamemaster": 10.0,
+      "historia": 9,
+      "ambientacion": 10,
+      "jugabilidad": 8,
+      "gamemaster": 10,
       "terpeca": "",
-      "ranking": 2
+      "ranking": 3
     },
     {
       "nombre": "WHITECHAPEL",
@@ -508,17 +508,17 @@
       "tipo": "Terror / Inmersivo",
       "duracion": 90,
       "dificultad": "Media",
-      "rating": 9.0,
+      "rating": 9,
       "web": "https://www.roomwhitechapel.com/",
       "valoracion": 8.75,
       "descripcion": "Un viaje asfixiante al Londres de Jack el Destripador con una de las ambientaciones más envolventes y lúgubres de Barcelona. Jugado por 6 adultos en modo Terror (también disponible en modo Aventura), resultó ser una experiencia de una intensidad arrolladora. A pesar de ser un grupo numeroso, nunca estuvimos parados, gracias a un diseño de 'calles' oscuras y laberínticas que mantiene la tensión constante. Destaca por un acting magistral y un contacto físico con los personajes que eleva la adrenalina al máximo. Una experiencia puramente cinematográfica que se sitúa, sin duda, en el top de los escapes de terror realizados.",
       "max_personas": "",
-      "historia": 9.0,
-      "ambientacion": 8.0,
-      "jugabilidad": 9.0,
-      "gamemaster": 9.0,
+      "historia": 9,
+      "ambientacion": 8,
+      "jugabilidad": 9,
+      "gamemaster": 9,
       "terpeca": "",
-      "ranking": 3
+      "ranking": 4
     },
     {
       "nombre": "Catacumbas",
@@ -533,12 +533,12 @@
       "valoracion": 8.25,
       "descripcion": "Aventura épica inspirada en el universo de Indiana Jones que ofrece una de las puestas en escena más espectaculares de la ciudad. Jugada por 4 adultos y una niña de 9 años, resultó ser una experiencia increíble con pasadizos, puertas y salas totalmente inesperados. Destaca por sus más de 200 m² de decorados hiperrealistas y pruebas directamente basadas en las películas, logrando una atmósfera de expedición arqueológica total. Los enigmas están magistralmente integrados, priorizando mecanismos electrónicos y un trabajo cooperativo que mantiene la adrenalina alta sin necesidad de terror. Una experiencia de exploración pura donde las transiciones entre zonas dejan al grupo boquiabierto.",
       "max_personas": "",
-      "historia": 8.0,
-      "ambientacion": 9.0,
-      "jugabilidad": 8.0,
-      "gamemaster": 8.0,
+      "historia": 8,
+      "ambientacion": 9,
+      "jugabilidad": 8,
+      "gamemaster": 8,
       "terpeca": "",
-      "ranking": 7
+      "ranking": 8
     },
     {
       "nombre": "Exorcista",
@@ -553,12 +553,12 @@
       "valoracion": 8,
       "descripcion": "Homenaje visceral y cinematográfico al clásico del cine de posesiones. Jugado por 5 adultos en modo Terror (disponible también modo Aventura), resultó una experiencia de una intensidad asombrosa, aunque el espacio puede sentirse algo justo para un grupo de cinco. Destaca por una ambientación lúgubre y opresiva con efectos visuales y sonoros que recrean fenómenos paranormales impactantes. El punto más fuerte es el acting increíble de los Game Masters, con una mención especial a la interpretación de 'la niña', posiblemente la mejor actuación vista jamás en un escape room. Incluye dinámicas de separación total del grupo, dejando a los jugadores solos en momentos puntuales de máxima vulnerabilidad. Una pesadilla real con una puesta en escena inolvidable.",
       "max_personas": "",
-      "historia": 8.0,
-      "ambientacion": 8.0,
-      "jugabilidad": 7.0,
-      "gamemaster": 9.0,
+      "historia": 8,
+      "ambientacion": 8,
+      "jugabilidad": 7,
+      "gamemaster": 9,
       "terpeca": "",
-      "ranking": 9
+      "ranking": 10
     },
     {
       "nombre": "Jaipur",
@@ -573,12 +573,12 @@
       "valoracion": 8.5,
       "descripcion": "Fantasía pura y colorista inspirada en el folclore de la India que rompe con la estética lúgubre tradicional. Jugado por 3 adultos y 3 niñas de 10-11 años, resultó una experiencia sumamente divertida donde las pequeñas no pararon ni un segundo de resolver retos. Destaca por una escenografía vibrante y una decoración preciosa, con olores característicos que te transportan a un mercado exótico. Los puzzles son muy táctiles e ingeniosos, huyendo de los clásicos candados para centrarse en mecanismos 'mágicos' que fluyen con naturalidad. Con una historia sólida y un sorprendente giro de argumento, es un espectáculo visual cargado de buen rollo donde el asombro y el ingenio son los protagonistas.",
       "max_personas": "",
-      "historia": 8.0,
-      "ambientacion": 9.0,
-      "jugabilidad": 9.0,
-      "gamemaster": 8.0,
+      "historia": 8,
+      "ambientacion": 9,
+      "jugabilidad": 9,
+      "gamemaster": 8,
       "terpeca": "",
-      "ranking": 5
+      "ranking": 6
     },
     {
       "nombre": "encryptroom",
@@ -593,12 +593,12 @@
       "valoracion": 7.5,
       "descripcion": "",
       "max_personas": "",
-      "historia": 7.0,
-      "ambientacion": 8.0,
-      "jugabilidad": 7.0,
-      "gamemaster": 8.0,
+      "historia": 7,
+      "ambientacion": 8,
+      "jugabilidad": 7,
+      "gamemaster": 8,
       "terpeca": "",
-      "ranking": 10
+      "ranking": 11
     },
     {
       "nombre": "Bank of Thaqar",
@@ -613,12 +613,12 @@
       "valoracion": 6.75,
       "descripcion": "Referente de la 'vieja escuela' jugado originalmente en 2015. En su momento fue pionero en la temática de atracos, pero con la perspectiva actual de las salas de nueva generación, se siente una experiencia sencilla, lineal y muy basada en candados. Nota importante: Nuestra valoración se basa en la versión de hace años; desconocemos si ha recibido actualizaciones técnicas o de escenografía desde entonces. Comparado con los estándares inmersivos de 2026, palidece en espectacularidad y fluidez narrativa, quedando como una pieza de coleccionista para entender los inicios del sector. Lo hicimos 4 adultos",
       "max_personas": "",
-      "historia": 7.0,
-      "ambientacion": 7.0,
-      "jugabilidad": 7.0,
-      "gamemaster": 6.0,
+      "historia": 7,
+      "ambientacion": 7,
+      "jugabilidad": 7,
+      "gamemaster": 6,
       "terpeca": "",
-      "ranking": 12
+      "ranking": 13
     },
     {
       "nombre": "Roomions",
@@ -633,12 +633,12 @@
       "valoracion": 8.125,
       "descripcion": "Hoy hemos probado el escape room de Roomions y la experiencia ha sido muy positiva. Fuimos dos adultos y dos niños (6 y 10 años) y el juego funcionó perfecto para todos. El pequeño, en su primer escape room, participó mucho y salió encantado. La mayor, con experiencia, también lo disfrutó mucho. Es un room de tamaño contenido (una sala y media), pero muy bien aprovechado: no paras en ningún momento y todo fluye. Mención especial al Game Master, Edu (Nefario Jr.), que lo hizo genial. Muy recomendable: familiar y muy divertido.",
       "max_personas": "",
-      "historia": 8.0,
-      "ambientacion": 8.0,
-      "jugabilidad": 8.0,
+      "historia": 8,
+      "ambientacion": 8,
+      "jugabilidad": 8,
       "gamemaster": 8.5,
       "terpeca": "",
-      "ranking": 8
+      "ranking": 9
     },
     {
       "nombre": "Tao Room Escape",
@@ -653,17 +653,37 @@
       "valoracion": 7.375,
       "descripcion": "Visitamos Tao Room Escape Virus Games en grupo de 8 (4 adultos y 4 niños de entre 6 y 10 años, algunos ya con experiencia en escape rooms). La experiencia seguramente cambia mucho según el tamaño del grupo: en nuestro caso, las salas se nos quedaron pequeñas y con pocos enigmas para tanta gente, lo que hizo que varios participantes se quedaran sin apenas intervenir. Es una pena, porque es un escape del que nos habían hablado muy bien y le teníamos muchas ganas. Aun así, nos dejó un poco fríos. Probablemente sea más disfrutable en grupos más reducidos (3-4 personas). No descartamos darle otra oportunidad en el futuro en ese formato.",
       "max_personas": "",
-      "historia": 7.0,
+      "historia": 7,
       "ambientacion": 7.5,
       "jugabilidad": 7.5,
       "gamemaster": 7.5,
       "terpeca": "",
-      "ranking": 11
+      "ranking": 12
+    },
+    {
+      "nombre": "El secreto de los Krugger",
+      "empresa": "Insomnia Corp.",
+      "ciudad": "Berga",
+      "tematica": "Terror",
+      "tipo": "Terror",
+      "duracion": 360,
+      "dificultad": "Alta",
+      "rating": 10.1,
+      "web": "https://www.insomniacorp.com/escapes/secreto-krugger",
+      "valoracion": 10,
+      "descripcion": "Fuimos a vivir la experiencia de El Secreto de los Krugger y salimos convencidos de que una sola vez no es suficiente.\nÉramos dos parejas y cogimos una habitación por pareja, así que pudimos jugar dos experiencias distintas: Xperiment y Aradia.\nXperiment nos pareció una auténtica barbaridad: enorme, súper inmersiva y muy disfrutable. Conseguimos salir en unos 70-75 minutos. Después hicimos los cuatro juntos Aradia y llegamos por los pelos… incluso teniendo que mirar alguna prueba en el papel de ayuda (sí, losers). Aun así, las dos horas volaron. Cuesta entender cómo se le puede sacar tantísimo partido a unas habitaciones. Ambientaciones brutales.\nLuego llegó la cena tematizada con espectáculo, que ya fue otro nivel… y para rematar, el auténtico “escape de los escapes”: todo el hotel abierto, corriendo por pasillos, persecuciones, sustos y una tensión constante espectacular.\nDe los 22 juegos no conseguimos verlo todo: resolvimos unos 10 y llegaríamos a ver unos 16-18 aproximadamente.\nSinceramente, dudo que podamos vivir una experiencia de terror mejor que la que ofrece Krugger. Una auténtica pasada.",
+      "max_personas": "",
+      "historia": 10,
+      "ambientacion": 10,
+      "jugabilidad": 10,
+      "gamemaster": 10,
+      "terpeca": "",
+      "ranking": 1
     }
   ],
   "meta": {
     "source": "escape_rooms_tracker_mejorado.xlsx",
     "pendientes_count": 22,
-    "hechos_count": 12
+    "hechos_count": 13
   }
 }
