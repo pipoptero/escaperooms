@@ -186,7 +186,7 @@
 
   /* ── CARDS ── */
   .rooms-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
-  .room-card{background:var(--bg2);border:1px solid var(--border);padding:0;position:relative;transition:transform .2s,border-color .2s,box-shadow .2s;overflow:hidden;animation:fadeUp .3s ease both;display:flex;flex-direction:column;min-height:100%;}
+  .room-card{background:var(--bg2);border:1px solid var(--border);padding:0;position:relative;transition:transform .2s,border-color .2s,box-shadow .2s;overflow:hidden;animation:fadeUp .3s ease both;display:flex;flex-direction:column;min-height:100%;cursor:pointer;}
   .room-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--amber),transparent);opacity:0;transition:opacity .2s;}
   .room-card:hover{border-color:rgba(245,166,35,.35);transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.45);}
   .room-card:hover::before{opacity:1;}
@@ -200,6 +200,9 @@
   .card-media-top{position:absolute;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;z-index:2;}
   .card-media .terpeca-img{width:30px;height:30px;}
   .card-media .terpeca-pos{font-size:.5rem;}
+  .award-seal{display:flex;align-items:center;gap:4px;background:rgba(10,10,15,.82);border:1px solid rgba(245,166,35,.32);padding:3px 5px;box-shadow:0 4px 16px rgba(0,0,0,.35);}
+  .award-seal img{width:24px!important;height:24px!important;object-fit:contain!important;background:transparent!important;filter:none!important;transform:none!important;}
+  .award-seal span{font-family:'Share Tech Mono',monospace;font-size:.54rem;line-height:1;color:var(--amber);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;}
   .card-media .fav-heart{font-size:1.2rem;}
   .card-media .fav-likes{font-size:.58rem;padding:1px 4px;}
   .card-media-title{position:absolute;left:14px;right:14px;bottom:12px;z-index:2;display:flex;align-items:flex-end;gap:10px;}
@@ -225,7 +228,7 @@
   .meta-key{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;}
   .meta-val{font-family:'Rajdhani',sans-serif;font-size:.86rem;font-weight:600;color:var(--text2);margin-top:2px;}
   .diff-alta{color:var(--red);}.diff-media-alta{color:var(--amber);}.diff-media{color:var(--green);}.diff-baja{color:var(--blue);}
-  .card-desc{font-family:'Rajdhani',sans-serif;font-size:.85rem;font-weight:400;color:var(--text3);line-height:1.55;margin-bottom:12px;padding:10px 12px;border-left:2px solid rgba(245,166,35,.2);background:rgba(255,255,255,.02);font-style:italic;white-space:pre-line;}
+  .card-desc{font-family:'Rajdhani',sans-serif;font-size:.8rem;font-weight:400;color:var(--text3);line-height:1.45;margin-bottom:10px;padding:8px 10px;border-left:2px solid rgba(245,166,35,.2);background:rgba(255,255,255,.02);font-style:italic;white-space:pre-line;}
   .card-footer{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid rgba(255,255,255,.04);margin-top:auto;}
   .web-link{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--text3);text-decoration:none;letter-spacing:.07em;text-transform:uppercase;transition:color .2s;}
   .web-link:hover{color:var(--amber);}.web-link::before{content:'→ ';}
@@ -265,6 +268,29 @@
   .room-card.is-fav::before{background:linear-gradient(90deg,transparent,var(--red),transparent);}
   .sort-btn.fav-filter{border-color:rgba(230,57,70,.3);color:var(--red);}
   .sort-btn.fav-filter.active{background:rgba(230,57,70,.08);border-color:var(--red);}
+
+  /* â”€â”€ DETAIL MODAL â”€â”€ */
+  .detail-modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);}
+  .detail-modal.open{display:flex;}
+  .detail-dialog{width:min(1120px,100%);max-height:min(88vh,920px);background:var(--card);border:1px solid rgba(245,166,35,.28);box-shadow:0 24px 80px rgba(0,0,0,.75);display:grid;grid-template-columns:minmax(280px,420px) 1fr;overflow:hidden;}
+  .detail-media{position:relative;background:linear-gradient(135deg,#171927,#2a1b0d 55%,#101018);min-height:520px;border-right:1px solid var(--border);}
+  .detail-media img{width:100%;height:100%;object-fit:contain;display:block;background:radial-gradient(ellipse at center,rgba(255,255,255,.05),rgba(0,0,0,.28));}
+  .detail-media .card-media-fallback{font-size:4.2rem;}
+  .detail-content{padding:26px;overflow:auto;}
+  .detail-close{position:absolute;top:14px;right:14px;z-index:4;width:36px;height:36px;border:1px solid rgba(245,166,35,.35);background:rgba(10,10,15,.8);color:var(--amber);font-family:'Share Tech Mono',monospace;font-size:1.1rem;cursor:pointer;}
+  .detail-close:hover{border-color:var(--amber);background:rgba(245,166,35,.08);}
+  .detail-kicker{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--text3);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;}
+  .detail-title{font-family:'Cinzel',serif;font-size:clamp(1.7rem,3vw,2.6rem);line-height:1.05;color:var(--text);margin-bottom:8px;}
+  .detail-company{font-family:'Share Tech Mono',monospace;font-size:.74rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px;}
+  .detail-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;}
+  .detail-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:18px;}
+  .detail-meta .meta-item{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.05);padding:10px 12px;}
+  .detail-section-title{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--text3);letter-spacing:.14em;text-transform:uppercase;margin:18px 0 8px;display:flex;align-items:center;gap:10px;}
+  .detail-section-title::after{content:'';height:1px;background:var(--border);flex:1;}
+  .detail-desc{font-size:1rem;line-height:1.75;color:var(--text2);white-space:pre-line;}
+  .detail-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;}
+  .detail-link{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--amber);text-decoration:none;letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(245,166,35,.28);padding:9px 13px;}
+  .detail-link:hover{border-color:var(--amber);background:rgba(245,166,35,.06);}
 
   /* ── REVIEW LIST (Hechos) ── */
   .reviews-list{display:flex;flex-direction:column;gap:2px;}
@@ -454,6 +480,11 @@
     .tab{flex:1 1 50%;min-width:0;padding:9px 10px;font-size:.72rem;text-align:center;}
     .panel{padding:14px;}.rooms-grid{grid-template-columns:1fr;}
     .updated-badge{top:auto;bottom:16px;right:50%;transform:translateX(50%);text-align:center;}
+    .detail-modal{padding:10px;}
+    .detail-dialog{grid-template-columns:1fr;max-height:92vh;}
+    .detail-media{height:320px;min-height:0;border-right:none;border-bottom:1px solid var(--border);}
+    .detail-content{padding:18px;}
+    .detail-meta{grid-template-columns:1fr 1fr;}
   }
 </style>
 </head>
@@ -512,9 +543,9 @@
       <div class="filters">
         <span class="filter-label">Filtrar:</span>
         <input type="text" class="filter-input" id="search-pend" placeholder="🔍  Nombre, empresa, ciudad, género..." oninput="renderPendientes()">
-        <select class="filter-select" id="filter-comunidad-pend" onchange="renderPendientes()"><option value="">Comunidad autónoma</option></select>
-        <select class="filter-select" id="filter-prov-pend" onchange="renderPendientes()"><option value="">Provincia</option></select>
-        <select class="filter-select" id="filter-ciudad-pend" onchange="renderPendientes()"><option value="">Todas las ciudades</option></select>
+        <select class="filter-select" id="filter-comunidad-pend" onchange="updateGeoFilters('pend');renderPendientes()"><option value="">Comunidad autónoma</option></select>
+        <select class="filter-select" id="filter-prov-pend" onchange="updateGeoFilters('pend');renderPendientes()"><option value="">Provincia</option></select>
+        <select class="filter-select" id="filter-ciudad-pend" onchange="updateGeoFilters('pend');renderPendientes()"><option value="">Todas las ciudades</option></select>
         <select class="filter-select" id="filter-jugadores-pend" onchange="renderPendientes()"><option value="">Jugadores</option></select>
         <select class="filter-select" id="filter-dif-pend"   onchange="renderPendientes()"><option value="">Dificultad</option></select>
         <select class="filter-select" id="filter-genero-pend" onchange="renderPendientes()"><option value="">Género</option></select>
@@ -560,14 +591,16 @@
       <div class="filters">
         <span class="filter-label">Buscar:</span>
         <input type="text" class="filter-input" id="search-cat" placeholder="🔍  Nombre, empresa, ciudad..." oninput="renderCatalogo()">
-        <select class="filter-select" id="filter-comunidad-cat" onchange="renderCatalogo()"><option value="">Comunidad autónoma</option></select>
-        <select class="filter-select" id="filter-prov-cat" onchange="renderCatalogo()"><option value="">Provincia</option></select>
-        <select class="filter-select" id="filter-ciudad-cat" onchange="renderCatalogo()"><option value="">Ciudad</option></select>
+        <select class="filter-select" id="filter-comunidad-cat" onchange="updateGeoFilters('cat');renderCatalogo()"><option value="">Comunidad autónoma</option></select>
+        <select class="filter-select" id="filter-prov-cat" onchange="updateGeoFilters('cat');renderCatalogo()"><option value="">Provincia</option></select>
+        <select class="filter-select" id="filter-ciudad-cat" onchange="updateGeoFilters('cat');renderCatalogo()"><option value="">Ciudad</option></select>
         <select class="filter-select" id="filter-jugadores-cat" onchange="renderCatalogo()"><option value="">Jugadores</option></select>
         <select class="filter-select" id="filter-dif-cat" onchange="renderCatalogo()"><option value="">Dificultad</option></select>
         <label class="filter-check"><input type="checkbox" id="filter-terror-cat" onchange="renderCatalogo()"> Terror</label>
         <label class="filter-check"><input type="checkbox" id="filter-img-cat" onchange="renderCatalogo()"> Con imagen</label>
         <label class="filter-check"><input type="checkbox" id="filter-open-cat" onchange="renderCatalogo()"> Abiertos</label>
+        <label class="filter-check"><input type="checkbox" id="filter-hide-done-cat" onchange="renderCatalogo()"> Ocultar hechos</label>
+        <label class="filter-check"><input type="checkbox" id="filter-unplanned-cat" onchange="renderCatalogo()"> Sin planificar</label>
         <button class="clear-btn" onclick="clearFilters('cat')">✕ Limpiar</button>
       </div>
       <div class="sort-row">
@@ -580,6 +613,14 @@
       <div class="result-info" id="result-info-cat"></div>
       <div class="rooms-grid" id="grid-catalogo"></div>
     </div>
+  </div>
+</div>
+
+<div class="detail-modal" id="detail-modal" aria-hidden="true" onclick="closeDetail(event)">
+  <div class="detail-dialog" role="dialog" aria-modal="true" aria-labelledby="detail-title" onclick="event.stopPropagation()">
+    <button class="detail-close" type="button" onclick="closeDetail()" aria-label="Cerrar detalle">×</button>
+    <div class="detail-media" id="detail-media"></div>
+    <div class="detail-content" id="detail-content"></div>
   </div>
 </div>
 
@@ -604,7 +645,13 @@ if (!USER_ID) {
 // Cache de votos: { roomSlug: { userId: stars, ... }, ... }
 let votesCache = {};
 
-let PENDIENTES = [], HECHOS = [], CATALOGO = [], sortPend = 'rating', sortCatalogo = 'rating';
+let PENDIENTES = [], HECHOS = [], CATALOGO = [], TERPECA_AWARDS = [], sortPend = 'rating', sortCatalogo = 'rating';
+let GROUP_ROOM_INDEX = { pendientes: new Set(), hechos: new Set() };
+
+// Preparado para el siguiente paso con Google/Firebase Auth:
+// users/{uid}/roomStates/{roomKey} -> { pendiente, hecho, favorito, descartado, updatedAt }
+let CURRENT_USER = null;
+let USER_ROOM_STATES = {};
 
 // ── Utilidades ────────────────────────────────────────────────────────────────
 function slugify(str) {
@@ -669,6 +716,15 @@ function normalizedKey(text) {
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9]+/g, ' ').trim();
 }
+function compactKey(text) {
+  return normalizedKey(text).replace(/\s+/g, '');
+}
+function stateKey(room) {
+  return normalizedKey(room.nombre || room.id || '');
+}
+function cleanValue(text) {
+  return String(text || '').trim();
+}
 function communityOf(p) {
   return p.comunidad || COMMUNITY_BY_PROVINCE[normalizedKey(p.provincia)] || '';
 }
@@ -693,6 +749,33 @@ function imageHtml(p) {
   const src = p.imagen || localSrc;
   const fallback = `<div class="card-media-fallback">${initial}</div>`;
   return `<img src="${src}" alt="${p.nombre || 'Escape room'}" loading="lazy" onerror="this.replaceWith(this.nextElementSibling)">${fallback}`;
+}
+
+function rebuildGroupIndexes() {
+  GROUP_ROOM_INDEX = {
+    pendientes: new Set(PENDIENTES.map(stateKey).filter(Boolean)),
+    hechos: new Set(HECHOS.map(stateKey).filter(Boolean))
+  };
+}
+
+function groupStateFor(room) {
+  const key = stateKey(room);
+  return {
+    pending: GROUP_ROOM_INDEX.pendientes.has(key),
+    done: GROUP_ROOM_INDEX.hechos.has(key)
+  };
+}
+
+function userStateFor(room) {
+  return USER_ROOM_STATES[stateKey(room)] || {};
+}
+
+function groupStateTags(room) {
+  const state = groupStateFor(room);
+  return [
+    state.done ? '<span class="tag tag-feature">Hecho por el grupo</span>' : '',
+    state.pending ? '<span class="tag tag-tipo">Pendiente del grupo</span>' : ''
+  ].filter(Boolean).join('');
 }
 
 // ── Firebase REST API ─────────────────────────────────────────────────────────
@@ -855,6 +938,17 @@ async function loadCatalogo() {
   }
 }
 
+async function loadTerpecaAwards() {
+  try {
+    const r = await fetch('terpeca_awards.json?v=' + Date.now());
+    if (!r.ok) return;
+    const d = await r.json();
+    TERPECA_AWARDS = d.awards || [];
+  } catch(e) {
+    console.warn('No se pudo cargar terpeca_awards.json:', e.message);
+  }
+}
+
 async function loadData() {
   try {
     const r = await fetch('data.json?v=' + Date.now());
@@ -862,6 +956,7 @@ async function loadData() {
     const d = await r.json();
     PENDIENTES = d.pendientes || [];
     HECHOS     = d.hechos     || [];
+    rebuildGroupIndexes();
     const lastMod = r.headers.get('last-modified');
     if (lastMod) {
       document.getElementById('update-date').textContent =
@@ -870,6 +965,7 @@ async function loadData() {
     // Cargar votos primero (bloquea hasta tener datos para el ranking)
     await loadVotes();
     await loadCatalogo();
+    await loadTerpecaAwards();
 
     document.getElementById('loading').style.display = 'none';
     document.getElementById('app').style.display = 'block';
@@ -893,9 +989,51 @@ async function loadData() {
 loadData();
 
 // ── Filtros y UI ──────────────────────────────────────────────────────────────
+function fillOptions(id, vals, ph) {
+  const s = document.getElementById(id);
+  const current = s.value;
+  s.innerHTML = `<option value="">${ph}</option>`;
+  vals.forEach(v => s.appendChild(new Option(v, v)));
+  s.value = vals.includes(current) ? current : '';
+}
+
+function uniqueSorted(vals) {
+  return [...new Set(vals.map(v => String(v || '').trim()).filter(Boolean))].sort();
+}
+
+function geoFilteredRooms(list, scope) {
+  const comunidad = document.getElementById(`filter-comunidad-${scope}`).value;
+  const prov = document.getElementById(`filter-prov-${scope}`).value;
+  return list.filter(room => {
+    if (comunidad && communityOf(room) !== comunidad) return false;
+    if (prov && String(room.provincia || '').trim() !== prov) return false;
+    return true;
+  });
+}
+
+function updateGeoFilters(scope) {
+  const list = scope === 'cat' ? CATALOGO : PENDIENTES;
+  const cityPlaceholder = scope === 'cat' ? 'Ciudad' : 'Todas las ciudades';
+  const communityId = `filter-comunidad-${scope}`;
+  const provinceId = `filter-prov-${scope}`;
+  const cityId = `filter-ciudad-${scope}`;
+  const comunidad = document.getElementById(communityId).value;
+  const previousProvince = document.getElementById(provinceId).value;
+
+  const communityRooms = comunidad ? list.filter(room => communityOf(room) === comunidad) : list;
+  fillOptions(provinceId, uniqueSorted(communityRooms.map(room => room.provincia)), 'Provincia');
+  if (previousProvince && document.getElementById(provinceId).value !== previousProvince) {
+    document.getElementById(cityId).value = '';
+  }
+
+  const cityRooms = geoFilteredRooms(list, scope);
+  fillOptions(cityId, uniqueSorted(cityRooms.map(room => room.ciudad)), cityPlaceholder);
+}
+
 function populateFilters() {
   const fill = (id, vals, ph) => {
     const s = document.getElementById(id);
+    vals = [...new Set(vals.map(v => String(v || '').trim()).filter(Boolean))];
     s.innerHTML = `<option value="">${ph}</option>`;
     vals.forEach(v => s.appendChild(new Option(v, v)));
   };
@@ -1015,13 +1153,15 @@ function clearFilters(w) {
       .forEach(id => { document.getElementById(id).value = ''; });
     document.getElementById('filter-abierto-pend').checked = false;
     document.getElementById('filter-verificado-pend').checked = false;
+    updateGeoFilters('pend');
     renderPendientes();
   } else {
     if (w === 'cat') {
       ['search-cat','filter-comunidad-cat','filter-prov-cat','filter-ciudad-cat','filter-jugadores-cat','filter-dif-cat']
         .forEach(id => { document.getElementById(id).value = ''; });
-      ['filter-terror-cat','filter-img-cat','filter-open-cat']
+      ['filter-terror-cat','filter-img-cat','filter-open-cat','filter-hide-done-cat','filter-unplanned-cat']
         .forEach(id => { document.getElementById(id).checked = false; });
+      updateGeoFilters('cat');
       renderCatalogo();
       return;
     }
@@ -1170,6 +1310,41 @@ function terpecaBadge(pos) {
   </div>`;
 }
 
+function terpecaAwardFor(room) {
+  const roomKey = normalizedKey(room.nombre || '');
+  const companyKey = compactKey(room.empresa || '');
+  if (!roomKey || !companyKey) return null;
+  const candidates = TERPECA_AWARDS.filter(a => a.room_key === roomKey);
+  return candidates.find(a => {
+    const awardCompany = compactKey(a.company || '');
+    return awardCompany && (awardCompany.includes(companyKey) || companyKey.includes(awardCompany));
+  }) || null;
+}
+
+function terpecaAwardLabel(award) {
+  if (!award) return '';
+  if (award.status === 'winner' && award.rank) return `TOP #${award.rank}`;
+  if (award.status === 'winner') return 'TOP';
+  if (award.status === 'finalist') return 'Finalista';
+  return 'Nominada';
+}
+
+function terpecaAwardSeal(room) {
+  const award = terpecaAwardFor(room);
+  if (!award) return '';
+  const label = terpecaAwardLabel(award);
+  return `<div class="award-seal" title="TERPECA ${award.year} - ${label}">
+    <img src="${TERPECA_LOGO}" alt="TERPECA">
+    <span>${label}</span>
+  </div>`;
+}
+
+function terpecaAwardTag(room) {
+  const award = terpecaAwardFor(room);
+  if (!award) return '';
+  return `<span class="tag tag-feature">TERPECA ${escapeHtml(terpecaAwardLabel(award))}</span>`;
+}
+
 // ── Favicon logo ─────────────────────────────────────────────────────────────
 function faviconHtml(webUrl, cssClass) {
   if (!webUrl) return `<div class="${cssClass}"><span class="logo-emoji">🔐</span></div>`;
@@ -1182,6 +1357,108 @@ function faviconHtml(webUrl, cssClass) {
   }
 }
 
+function escapeHtml(text) {
+  return String(text || '').replace(/[&<>"']/g, ch => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[ch]));
+}
+
+function roomKey(room) {
+  return room.id || slugify(room.nombre || '');
+}
+
+function findDetailRoom(kind, key) {
+  const list = kind === 'catalogo' ? CATALOGO : PENDIENTES;
+  return list.find(room => roomKey(room) === key) || null;
+}
+
+function detailImageHtml(room, kind) {
+  const initial = escapeHtml((room.nombre || '?').trim().slice(0, 1).toUpperCase());
+  const fallback = `<div class="card-media-fallback">${initial}</div>`;
+  const src = room.imagen || (kind === 'pendientes' ? `images/${slugify(room.nombre || '')}.webp` : '');
+  if (!src) return fallback;
+  return `<img src="${src}" alt="${escapeHtml(room.nombre || 'Escape room')}" onerror="this.replaceWith(this.nextElementSibling)">${fallback}`;
+}
+
+function metaItem(label, value, extraClass = '') {
+  if (value === '' || value === null || value === undefined) return '';
+  return `<div class="meta-item"><span class="meta-key">${label}</span><span class="meta-val ${extraClass}">${value}</span></div>`;
+}
+
+function detailTags(room, kind) {
+  const genres = kind === 'catalogo' ? [] : listValues(room.generos || room.tematica);
+  const features = kind === 'catalogo' ? [] : listValues(room.caracteristicas);
+  return [
+    room.ciudad || room.provincia ? `<span class="tag tag-city">📍 ${escapeHtml([cleanValue(room.ciudad), cleanValue(room.provincia)].filter(Boolean).join(' - '))}</span>` : '',
+    communityOf(room) ? `<span class="tag tag-muted">${escapeHtml(communityOf(room))}</span>` : '',
+    groupStateTags(room),
+    terpecaAwardTag(room),
+    room.terror ? `<span class="tag tag-tema">Terror</span>` : '',
+    ...genres.map(g => `<span class="tag tag-tema">${escapeHtml(g)}</span>`),
+    room.tipo ? `<span class="tag tag-tipo">${escapeHtml(room.tipo)}</span>` : '',
+    room.dificultad ? `<span class="tag tag-tipo">${escapeHtml(room.dificultad)}</span>` : '',
+    isTruthyFlag(room.abierto) || room.abierto === true ? `<span class="tag tag-feature">Abierto</span>` : '',
+    isTruthyFlag(room.verificado) || room.verificado === true ? `<span class="tag tag-feature">Verificado</span>` : '',
+    ...features.map(v => `<span class="tag tag-feature">${escapeHtml(v)}</span>`)
+  ].filter(Boolean).join('');
+}
+
+function openDetailFromCard(event, kind, key) {
+  if (event.target.closest('a,button,input,select,label')) return;
+  openDetail(kind, key);
+}
+
+function openDetail(kind, key) {
+  const room = findDetailRoom(kind, key);
+  if (!room) return;
+  const rating = displayRating(room);
+  const players = playerLabel(room);
+  const price = priceLabel(room);
+  const sourceLabel = kind === 'catalogo' ? 'Catalogo general' : 'Pendiente';
+  const desc = escapeHtml(room.descripcion || 'Sin sinopsis disponible.');
+  const modal = document.getElementById('detail-modal');
+
+  document.getElementById('detail-media').innerHTML = detailImageHtml(room, kind);
+  document.getElementById('detail-content').innerHTML = `
+    <div class="detail-kicker">${sourceLabel}</div>
+    <h2 class="detail-title" id="detail-title">${escapeHtml(room.nombre || 'Escape room')}</h2>
+    <div class="detail-company">${escapeHtml(room.empresa || '')}</div>
+    <div class="detail-tags">${detailTags(room, kind)}</div>
+    <div class="detail-meta">
+      ${metaItem('Rating', rating ? `★ ${rating}` : '')}
+      ${metaItem('Duracion', room.duracion ? `⏱ ${room.duracion} min` : '')}
+      ${metaItem('Jugadores', players ? `👥 ${players}` : '')}
+      ${metaItem('Precio', price)}
+      ${metaItem('Dificultad', room.dificultad || '', dc(room.dificultad))}
+      ${metaItem('Pais', room.pais || '')}
+      ${kind === 'pendientes' ? metaItem('Opiniones', room.votos ? `🗳 ${room.votos}` : '') : ''}
+    </div>
+    <div class="detail-section-title">Sinopsis</div>
+    <div class="detail-desc">${desc}</div>
+    <div class="detail-actions">
+      ${room.web ? `<a class="detail-link" href="${room.web}" target="_blank">Ver web oficial</a>` : ''}
+      ${kind === 'catalogo' ? `<span class="tag tag-muted">Catálogo</span>` : `<span class="tag tag-feature">Pendiente</span>`}
+    </div>`;
+
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDetail(event) {
+  if (event && event.target !== document.getElementById('detail-modal')) return;
+  const modal = document.getElementById('detail-modal');
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && document.getElementById('detail-modal')?.classList.contains('open')) {
+    closeDetail();
+  }
+});
+
 // ── Templates de tarjetas ─────────────────────────────────────────────────────
 function cardPend(p, i) {
   const slug = slugify(p.nombre);
@@ -1190,8 +1467,8 @@ function cardPend(p, i) {
   const price = priceLabel(p);
   const genres = listValues(p.generos || p.tematica);
   const features = listValues(p.caracteristicas).slice(0, 3);
-  const location = [p.ciudad, p.provincia].filter(Boolean).join(' - ');
-  return `<div class="room-card" style="animation-delay:${i*.04}s">
+  const location = [cleanValue(p.ciudad), cleanValue(p.provincia)].filter(Boolean).join(' - ');
+  return `<div class="room-card" tabindex="0" role="button" onclick="openDetailFromCard(event,'pendientes','${slug}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetail('pendientes','${slug}')}" style="animation-delay:${i*.04}s">
   <div class="card-media">
     ${imageHtml(p)}
     <div class="card-media-top">
@@ -1224,7 +1501,7 @@ function cardPend(p, i) {
       ${isTruthyFlag(p.abierto) ? `<span class="tag tag-feature">Abierto</span>` : ''}
       ${isTruthyFlag(p.verificado) ? `<span class="tag tag-feature">Verificado</span>` : ''}
     </div>` : ''}
-    ${p.descripcion ? `<div class="card-desc">${p.descripcion}</div>` : ''}
+    ${p.descripcion ? `<div class="card-desc">${shortText(p.descripcion, 105)}</div>` : ''}
     <div class="card-meta">
       ${p.duracion      ? `<div class="meta-item"><span class="meta-key">Duración</span><span class="meta-val">⏱ ${p.duracion} min</span></div>` : ''}
       ${p.dificultad    ? `<div class="meta-item"><span class="meta-key">Dificultad</span><span class="meta-val ${dc(p.dificultad)}">⚠ ${p.dificultad}</span></div>` : ''}
@@ -1309,13 +1586,16 @@ function cardCatalogo(c, i) {
   const rating = displayRating(c);
   const players = playerLabel(c);
   const price = priceLabel(c);
-  const location = [c.ciudad, c.provincia].filter(Boolean).join(' - ');
-  return `<div class="room-card" style="animation-delay:${Math.min(i, 20)*.025}s">
+  const location = [cleanValue(c.ciudad), cleanValue(c.provincia)].filter(Boolean).join(' - ');
+  const groupTags = groupStateTags(c);
+  const awardSeal = terpecaAwardSeal(c);
+  return `<div class="room-card" tabindex="0" role="button" onclick="openDetailFromCard(event,'catalogo','${roomKey(c)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetail('catalogo','${roomKey(c)}')}" style="animation-delay:${Math.min(i, 20)*.025}s">
   <div class="card-media">
     ${catalogImageHtml(c)}
     <div class="card-media-top">
       ${faviconHtml(c.web, 'card-logo')}
       <div style="display:flex;gap:8px;align-items:flex-start">
+        ${awardSeal}
         ${c.verificado ? `<span class="tag tag-feature">Verificado</span>` : ''}
       </div>
     </div>
@@ -1333,8 +1613,9 @@ function cardCatalogo(c, i) {
       ${c.terror ? `<span class="tag tag-tema">Terror</span>` : ''}
       ${c.dificultad ? `<span class="tag tag-tipo">${c.dificultad}</span>` : ''}
       ${c.abierto ? `<span class="tag tag-feature">Abierto</span>` : `<span class="tag tag-muted">Estado no confirmado</span>`}
+      ${groupTags}
     </div>
-    ${c.descripcion ? `<div class="card-desc">${c.descripcion}</div>` : ''}
+    ${c.descripcion ? `<div class="card-desc">${shortText(c.descripcion, 105)}</div>` : ''}
     <div class="card-meta">
       ${c.duracion ? `<div class="meta-item"><span class="meta-key">Duración</span><span class="meta-val">⏱ ${c.duracion} min</span></div>` : ''}
       ${players ? `<div class="meta-item"><span class="meta-key">Jugadores</span><span class="meta-val">👥 ${players}</span></div>` : ''}
@@ -1365,8 +1646,8 @@ function renderPendientes() {
   let f = PENDIENTES.filter(p => {
     if (s && ![p.nombre,p.empresa,p.ciudad,p.provincia,communityOf(p),p.tematica,p.generos,p.tipo,p.publico,p.caracteristicas].some(x=>(x||'').toLowerCase().includes(s))) return false;
     if (comunidad && communityOf(p) !== comunidad) return false;
-    if (c && p.ciudad !== c) return false;
-    if (prov && p.provincia !== prov) return false;
+    if (c && String(p.ciudad || '').trim() !== c) return false;
+    if (prov && String(p.provincia || '').trim() !== prov) return false;
     if (!supportsPlayers(p, players)) return false;
     if (d && p.dificultad !== d) return false;
     if (!matchesList(p.generos || p.tematica, genero)) return false;
@@ -1416,17 +1697,22 @@ function renderCatalogo() {
   const onlyTerror = document.getElementById('filter-terror-cat').checked;
   const onlyImages = document.getElementById('filter-img-cat').checked;
   const onlyOpen = document.getElementById('filter-open-cat').checked;
+  const hideDone = document.getElementById('filter-hide-done-cat').checked;
+  const onlyUnplanned = document.getElementById('filter-unplanned-cat').checked;
 
   let f = CATALOGO.filter(c => {
+    const groupState = groupStateFor(c);
     if (s && ![c.nombre, c.empresa, c.ciudad, c.provincia, communityOf(c), c.pais].some(x => (x || '').toLowerCase().includes(s))) return false;
     if (comunidad && communityOf(c) !== comunidad) return false;
-    if (prov && c.provincia !== prov) return false;
-    if (ciudad && c.ciudad !== ciudad) return false;
+    if (prov && String(c.provincia || '').trim() !== prov) return false;
+    if (ciudad && String(c.ciudad || '').trim() !== ciudad) return false;
     if (!supportsPlayers(c, players)) return false;
     if (dificultad && c.dificultad !== dificultad) return false;
     if (onlyTerror && !c.terror) return false;
     if (onlyImages && !c.imagen) return false;
     if (onlyOpen && !c.abierto) return false;
+    if (hideDone && groupState.done) return false;
+    if (onlyUnplanned && (groupState.done || groupState.pending)) return false;
     return true;
   });
 
