@@ -16,6 +16,28 @@ PROJECT = "room-escapes"
 PAGE_SIZE = 300
 USER_AGENT = "scaperooms-catalog-builder/1.0"
 
+COMMUNITIES_BY_PROVINCE_ID = {
+    "01": "Pais Vasco", "20": "Pais Vasco", "48": "Pais Vasco",
+    "02": "Castilla-La Mancha", "13": "Castilla-La Mancha", "16": "Castilla-La Mancha", "19": "Castilla-La Mancha", "45": "Castilla-La Mancha",
+    "03": "Comunitat Valenciana", "12": "Comunitat Valenciana", "46": "Comunitat Valenciana",
+    "04": "Andalucia", "11": "Andalucia", "14": "Andalucia", "18": "Andalucia", "21": "Andalucia", "23": "Andalucia", "29": "Andalucia", "41": "Andalucia",
+    "05": "Castilla y Leon", "09": "Castilla y Leon", "24": "Castilla y Leon", "34": "Castilla y Leon", "37": "Castilla y Leon", "40": "Castilla y Leon", "42": "Castilla y Leon", "47": "Castilla y Leon", "49": "Castilla y Leon",
+    "06": "Extremadura", "10": "Extremadura",
+    "07": "Illes Balears",
+    "08": "Catalunya", "17": "Catalunya", "25": "Catalunya", "43": "Catalunya",
+    "15": "Galicia", "27": "Galicia", "32": "Galicia", "36": "Galicia",
+    "22": "Aragon", "44": "Aragon", "50": "Aragon",
+    "26": "La Rioja",
+    "28": "Comunidad de Madrid",
+    "30": "Region de Murcia",
+    "31": "Comunidad Foral de Navarra",
+    "33": "Asturias",
+    "35": "Canarias", "38": "Canarias",
+    "39": "Cantabria",
+    "51": "Ceuta",
+    "52": "Melilla",
+}
+
 
 def slugify(text):
     text = str(text or "").strip().lower()
@@ -84,6 +106,11 @@ def local_image(room_id):
     return ""
 
 
+def community_from_province(province):
+    province_id = str(province.get("province_id", "")).zfill(2)
+    return COMMUNITIES_BY_PROVINCE_ID.get(province_id, "")
+
+
 def build():
     result = []
     for doc in fetch_rooms():
@@ -96,10 +123,13 @@ def build():
             "empresa": fields.get("company") or "",
             "ciudad": fields.get("city") or "",
             "provincia": province.get("name", ""),
+            "comunidad": community_from_province(province),
             "pais": fields.get("country") or "",
             "duracion": fields.get("duration") or "",
             "min_personas": fields.get("min_players") or "",
             "max_personas": fields.get("max_players") or "",
+            "precio_min": fields.get("min_price") or "",
+            "precio_max": fields.get("max_price") or "",
             "dificultad": difficulty_label(fields.get("difficulty")),
             "rating": fields.get("score") or "",
             "votos": fields.get("totalReviews") or "",

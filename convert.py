@@ -37,6 +37,7 @@ COL_ALIASES = {
     "empresa":     ["empresa", "company"],
     "ciudad":      ["ciudad", "city", "location"],
     "provincia":   ["provincia", "province", "region"],
+    "comunidad":   ["comunidad", "comunidad autÃ³noma", "comunidad autonoma", "autonomÃ­a", "autonomia", "ccaa"],
     "tematica":    ["temática", "tematica", "theme", "tema"],
     "generos":     ["géneros", "generos", "género", "genero", "genres", "genre", "categorías", "categorias"],
     "tipo":        ["tipo", "type"],
@@ -53,6 +54,9 @@ COL_ALIASES = {
     "descripcion":   ["descripción", "descripcion", "description", "descripción del escape", "descripcion del escape", "descripción del room", "resumen"],
     "min_personas":  ["min_personas", "min personas", "mínimo jugadores", "minimo jugadores", "min players"],
     "max_personas":  ["max_personas", "max personas", "máximo jugadores", "maximo jugadores", "jugadores", "players", "max players", "capacidad"],
+    "precio_min":    ["precio_min", "precio min", "precio mÃ­nimo", "precio minimo", "min_price", "min price", "desde"],
+    "precio_max":    ["precio_max", "precio max", "precio mÃ¡ximo", "precio maximo", "max_price", "max price", "hasta"],
+    "precio":        ["precio", "price", "tarifa", "coste"],
     "abierto":       ["abierto", "estado", "status", "open"],
     "verificado":    ["verificado", "verified"],
     "historia":      ["historia", "history"],
@@ -84,8 +88,8 @@ def safe_str(val):
     return s
 
 # Campos numéricos: float para notas, int para conteos/duraciones
-NUMERIC_FIELDS  = {"rating", "rating_collector", "duracion", "valoracion", "historia", "ambientacion", "jugabilidad", "gamemaster", "terpeca"}
-INTEGER_FIELDS  = {"duracion", "min_personas", "max_personas", "votos", "terpeca"}
+NUMERIC_FIELDS  = {"rating", "rating_collector", "duracion", "valoracion", "historia", "ambientacion", "jugabilidad", "gamemaster", "terpeca", "precio_min", "precio_max"}
+INTEGER_FIELDS  = {"duracion", "min_personas", "max_personas", "votos", "terpeca", "precio_min", "precio_max"}
 
 def safe_num(val):
     """Convierte un valor a float limpio.

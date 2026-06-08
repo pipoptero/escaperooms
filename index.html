@@ -195,6 +195,7 @@
   .room-card:hover .card-media img{transform:scale(1.035);}
   .card-media::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.08) 0%,rgba(0,0,0,.22) 45%,rgba(0,0,0,.82) 100%);pointer-events:none;}
   .card-media-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:3.2rem;font-weight:900;color:rgba(245,166,35,.42);letter-spacing:.08em;text-shadow:0 0 28px rgba(245,166,35,.18);}
+  .card-media img + .card-media-fallback{display:none;}
   .card-media-fallback::before{content:'';position:absolute;inset:18px;border:1px solid rgba(245,166,35,.18);}
   .card-media-top{position:absolute;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;z-index:2;}
   .card-media .terpeca-img{width:30px;height:30px;}
@@ -224,7 +225,7 @@
   .meta-key{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;}
   .meta-val{font-family:'Rajdhani',sans-serif;font-size:.86rem;font-weight:600;color:var(--text2);margin-top:2px;}
   .diff-alta{color:var(--red);}.diff-media-alta{color:var(--amber);}.diff-media{color:var(--green);}.diff-baja{color:var(--blue);}
-  .card-desc{font-family:'Rajdhani',sans-serif;font-size:.85rem;font-weight:400;color:var(--text3);line-height:1.55;margin-bottom:12px;padding:10px 12px;border-left:2px solid rgba(245,166,35,.2);background:rgba(255,255,255,.02);font-style:italic;}
+  .card-desc{font-family:'Rajdhani',sans-serif;font-size:.85rem;font-weight:400;color:var(--text3);line-height:1.55;margin-bottom:12px;padding:10px 12px;border-left:2px solid rgba(245,166,35,.2);background:rgba(255,255,255,.02);font-style:italic;white-space:pre-line;}
   .card-footer{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid rgba(255,255,255,.04);margin-top:auto;}
   .web-link{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--text3);text-decoration:none;letter-spacing:.07em;text-transform:uppercase;transition:color .2s;}
   .web-link:hover{color:var(--amber);}.web-link::before{content:'→ ';}
@@ -498,21 +499,22 @@
 
   <div style="max-width:1400px;margin:0 auto;padding:0 32px;">
     <div class="tabs-container">
-      <button class="tab active" id="tab-pend"  onclick="switchTab('pendientes')">🔒 Pendientes <span class="count-badge" id="badge-pend">0</span></button>
+      <button class="tab active" id="tab-cat"   onclick="switchTab('catalogo')">🗂 Catálogo <span class="count-badge" id="badge-cat">0</span></button>
+      <button class="tab"        id="tab-pend"  onclick="switchTab('pendientes')">🔒 Pendientes <span class="count-badge" id="badge-pend">0</span></button>
       <button class="tab"        id="tab-hecho" onclick="switchTab('hechos')">✅ Hechos <span class="count-badge" id="badge-hecho">0</span></button>
       <button class="tab"        id="tab-rank"  onclick="switchTab('ranking')">🏆 Ranking</button>
-      <button class="tab"        id="tab-cat"   onclick="switchTab('catalogo')">🗂 Catálogo <span class="count-badge" id="badge-cat">0</span></button>
     </div>
   </div>
 
   <div class="content">
     <!-- PENDIENTES -->
-    <div id="panel-pendientes" class="panel">
+    <div id="panel-pendientes" class="panel" style="display:none">
       <div class="filters">
         <span class="filter-label">Filtrar:</span>
         <input type="text" class="filter-input" id="search-pend" placeholder="🔍  Nombre, empresa, ciudad, género..." oninput="renderPendientes()">
-        <select class="filter-select" id="filter-ciudad-pend" onchange="renderPendientes()"><option value="">Todas las ciudades</option></select>
+        <select class="filter-select" id="filter-comunidad-pend" onchange="renderPendientes()"><option value="">Comunidad autónoma</option></select>
         <select class="filter-select" id="filter-prov-pend" onchange="renderPendientes()"><option value="">Provincia</option></select>
+        <select class="filter-select" id="filter-ciudad-pend" onchange="renderPendientes()"><option value="">Todas las ciudades</option></select>
         <select class="filter-select" id="filter-jugadores-pend" onchange="renderPendientes()"><option value="">Jugadores</option></select>
         <select class="filter-select" id="filter-dif-pend"   onchange="renderPendientes()"><option value="">Dificultad</option></select>
         <select class="filter-select" id="filter-genero-pend" onchange="renderPendientes()"><option value="">Género</option></select>
@@ -554,10 +556,11 @@
     </div>
 
     <!-- CATALOGO -->
-    <div id="panel-catalogo" class="panel" style="display:none">
+    <div id="panel-catalogo" class="panel">
       <div class="filters">
         <span class="filter-label">Buscar:</span>
         <input type="text" class="filter-input" id="search-cat" placeholder="🔍  Nombre, empresa, ciudad..." oninput="renderCatalogo()">
+        <select class="filter-select" id="filter-comunidad-cat" onchange="renderCatalogo()"><option value="">Comunidad autónoma</option></select>
         <select class="filter-select" id="filter-prov-cat" onchange="renderCatalogo()"><option value="">Provincia</option></select>
         <select class="filter-select" id="filter-ciudad-cat" onchange="renderCatalogo()"><option value="">Ciudad</option></select>
         <select class="filter-select" id="filter-jugadores-cat" onchange="renderCatalogo()"><option value="">Jugadores</option></select>
@@ -647,6 +650,36 @@ function displayRating(p) {
 function shortText(text, max = 230) {
   const s = String(text || '').trim();
   return s.length > max ? s.slice(0, max).trim() + '...' : s;
+}
+const COMMUNITY_BY_PROVINCE = {
+  'alava':'Pais Vasco','araba alava':'Pais Vasco','gipuzkoa':'Pais Vasco','bizkaia':'Pais Vasco',
+  'albacete':'Castilla-La Mancha','ciudad real':'Castilla-La Mancha','cuenca':'Castilla-La Mancha','guadalajara':'Castilla-La Mancha','toledo':'Castilla-La Mancha',
+  'alicante':'Comunitat Valenciana','alicante alacant':'Comunitat Valenciana','castellon':'Comunitat Valenciana','castellon castello':'Comunitat Valenciana','valencia':'Comunitat Valenciana','valencia valencia':'Comunitat Valenciana',
+  'almeria':'Andalucia','cadiz':'Andalucia','cordoba':'Andalucia','granada':'Andalucia','huelva':'Andalucia','jaen':'Andalucia','malaga':'Andalucia','sevilla':'Andalucia',
+  'avila':'Castilla y Leon','burgos':'Castilla y Leon','leon':'Castilla y Leon','palencia':'Castilla y Leon','salamanca':'Castilla y Leon','segovia':'Castilla y Leon','soria':'Castilla y Leon','valladolid':'Castilla y Leon','zamora':'Castilla y Leon',
+  'badajoz':'Extremadura','caceres':'Extremadura',
+  'balears illes':'Illes Balears','barcelona':'Catalunya','girona':'Catalunya','lleida':'Catalunya','tarragona':'Catalunya',
+  'coruna a':'Galicia','a coruna':'Galicia','lugo':'Galicia','ourense':'Galicia','pontevedra':'Galicia',
+  'huesca':'Aragon','teruel':'Aragon','zaragoza':'Aragon',
+  'rioja la':'La Rioja','la rioja':'La Rioja','madrid':'Comunidad de Madrid','murcia':'Region de Murcia','navarra':'Comunidad Foral de Navarra',
+  'asturias':'Asturias','palmas las':'Canarias','las palmas':'Canarias','santa cruz de tenerife':'Canarias','cantabria':'Cantabria','ceuta':'Ceuta','melilla':'Melilla'
+};
+function normalizedKey(text) {
+  return String(text || '').toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, ' ').trim();
+}
+function communityOf(p) {
+  return p.comunidad || COMMUNITY_BY_PROVINCE[normalizedKey(p.provincia)] || '';
+}
+function priceLabel(p) {
+  const direct = String(p.precio || '').trim();
+  if (direct) return direct;
+  const min = parseInt(p.precio_min);
+  const max = parseInt(p.precio_max);
+  if (min && max && min !== max) return `${min} - ${max} €`;
+  if (min || max) return `${min || max} €`;
+  return '';
 }
 function catalogImageHtml(p) {
   const initial = (p.nombre || '?').trim().slice(0, 1).toUpperCase();
@@ -866,14 +899,16 @@ function populateFilters() {
     s.innerHTML = `<option value="">${ph}</option>`;
     vals.forEach(v => s.appendChild(new Option(v, v)));
   };
-  fill('filter-ciudad-pend', [...new Set(PENDIENTES.map(p=>p.ciudad).filter(Boolean))].sort(), 'Todas las ciudades');
+  fill('filter-comunidad-pend', [...new Set(PENDIENTES.map(p=>communityOf(p)).filter(Boolean))].sort(), 'Comunidad autonoma');
   fill('filter-prov-pend',   [...new Set(PENDIENTES.map(p=>p.provincia).filter(Boolean))].sort(), 'Provincia');
+  fill('filter-ciudad-pend', [...new Set(PENDIENTES.map(p=>p.ciudad).filter(Boolean))].sort(), 'Todas las ciudades');
   fill('filter-jugadores-pend', ['1','2','3','4','5','6','7','8','9','10'].filter(n => PENDIENTES.some(p => supportsPlayers(p, n))).map(n => `${n} jugador${n === '1' ? '' : 'es'}`), 'Jugadores');
   fill('filter-dif-pend',    [...new Set(PENDIENTES.map(p=>p.dificultad).filter(Boolean))].sort(), 'Dificultad');
   fill('filter-genero-pend', [...new Set(PENDIENTES.flatMap(p=>listValues(p.generos || p.tematica)))].sort(), 'Género');
   fill('filter-tipo-pend',   [...new Set(PENDIENTES.map(p=>p.tipo).filter(Boolean))].sort(), 'Tipo');
   fill('filter-publico-pend',[...new Set(PENDIENTES.flatMap(p=>listValues(p.publico)))].sort(), 'Público');
   fill('filter-dif-hecho',   [...new Set(HECHOS.map(h=>h.dificultad).filter(Boolean))].sort(), 'Dificultad');
+  fill('filter-comunidad-cat', [...new Set(CATALOGO.map(c=>communityOf(c)).filter(Boolean))].sort(), 'Comunidad autonoma');
   fill('filter-prov-cat',    [...new Set(CATALOGO.map(c=>c.provincia).filter(Boolean))].sort(), 'Provincia');
   fill('filter-ciudad-cat',  [...new Set(CATALOGO.map(c=>c.ciudad).filter(Boolean))].sort(), 'Ciudad');
   fill('filter-jugadores-cat', ['1','2','3','4','5','6','7','8','9','10'].filter(n => CATALOGO.some(c => supportsPlayers(c, n))).map(n => `${n} jugador${n === '1' ? '' : 'es'}`), 'Jugadores');
@@ -976,14 +1011,14 @@ function setSortCatalogo(s) {
 
 function clearFilters(w) {
   if (w === 'pend') {
-    ['search-pend','filter-ciudad-pend','filter-prov-pend','filter-jugadores-pend','filter-dif-pend','filter-genero-pend','filter-tipo-pend','filter-publico-pend']
+    ['search-pend','filter-comunidad-pend','filter-ciudad-pend','filter-prov-pend','filter-jugadores-pend','filter-dif-pend','filter-genero-pend','filter-tipo-pend','filter-publico-pend']
       .forEach(id => { document.getElementById(id).value = ''; });
     document.getElementById('filter-abierto-pend').checked = false;
     document.getElementById('filter-verificado-pend').checked = false;
     renderPendientes();
   } else {
     if (w === 'cat') {
-      ['search-cat','filter-prov-cat','filter-ciudad-cat','filter-jugadores-cat','filter-dif-cat']
+      ['search-cat','filter-comunidad-cat','filter-prov-cat','filter-ciudad-cat','filter-jugadores-cat','filter-dif-cat']
         .forEach(id => { document.getElementById(id).value = ''; });
       ['filter-terror-cat','filter-img-cat','filter-open-cat']
         .forEach(id => { document.getElementById(id).checked = false; });
@@ -1152,6 +1187,7 @@ function cardPend(p, i) {
   const slug = slugify(p.nombre);
   const rating = displayRating(p);
   const players = playerLabel(p);
+  const price = priceLabel(p);
   const genres = listValues(p.generos || p.tematica);
   const features = listValues(p.caracteristicas).slice(0, 3);
   const location = [p.ciudad, p.provincia].filter(Boolean).join(' - ');
@@ -1193,6 +1229,7 @@ function cardPend(p, i) {
       ${p.duracion      ? `<div class="meta-item"><span class="meta-key">Duración</span><span class="meta-val">⏱ ${p.duracion} min</span></div>` : ''}
       ${p.dificultad    ? `<div class="meta-item"><span class="meta-key">Dificultad</span><span class="meta-val ${dc(p.dificultad)}">⚠ ${p.dificultad}</span></div>` : ''}
       ${players         ? `<div class="meta-item"><span class="meta-key">Jugadores</span><span class="meta-val">👥 ${players}</span></div>` : ''}
+      ${price           ? `<div class="meta-item"><span class="meta-key">Precio</span><span class="meta-val">${price}</span></div>` : ''}
       ${p.votos         ? `<div class="meta-item"><span class="meta-key">Opiniones</span><span class="meta-val">🗳 ${p.votos}</span></div>` : ''}
     </div>
     ${voteWidget(slug)}
@@ -1271,6 +1308,7 @@ function cardHecho(h, rank) {
 function cardCatalogo(c, i) {
   const rating = displayRating(c);
   const players = playerLabel(c);
+  const price = priceLabel(c);
   const location = [c.ciudad, c.provincia].filter(Boolean).join(' - ');
   return `<div class="room-card" style="animation-delay:${Math.min(i, 20)*.025}s">
   <div class="card-media">
@@ -1296,11 +1334,11 @@ function cardCatalogo(c, i) {
       ${c.dificultad ? `<span class="tag tag-tipo">${c.dificultad}</span>` : ''}
       ${c.abierto ? `<span class="tag tag-feature">Abierto</span>` : `<span class="tag tag-muted">Estado no confirmado</span>`}
     </div>
-    ${c.descripcion ? `<div class="card-desc">${shortText(c.descripcion)}</div>` : ''}
+    ${c.descripcion ? `<div class="card-desc">${c.descripcion}</div>` : ''}
     <div class="card-meta">
       ${c.duracion ? `<div class="meta-item"><span class="meta-key">Duración</span><span class="meta-val">⏱ ${c.duracion} min</span></div>` : ''}
       ${players ? `<div class="meta-item"><span class="meta-key">Jugadores</span><span class="meta-val">👥 ${players}</span></div>` : ''}
-      ${c.votos ? `<div class="meta-item"><span class="meta-key">Opiniones</span><span class="meta-val">🗳 ${c.votos}</span></div>` : ''}
+      ${price ? `<div class="meta-item"><span class="meta-key">Precio</span><span class="meta-val">${price}</span></div>` : ''}
       ${c.pais ? `<div class="meta-item"><span class="meta-key">País</span><span class="meta-val">${c.pais}</span></div>` : ''}
     </div>
     <div class="card-footer">
@@ -1315,6 +1353,7 @@ function cardCatalogo(c, i) {
 function renderPendientes() {
   const s = document.getElementById('search-pend').value.toLowerCase();
   const c = document.getElementById('filter-ciudad-pend').value;
+  const comunidad = document.getElementById('filter-comunidad-pend').value;
   const prov = document.getElementById('filter-prov-pend').value;
   const players = document.getElementById('filter-jugadores-pend').value;
   const d = document.getElementById('filter-dif-pend').value;
@@ -1324,7 +1363,8 @@ function renderPendientes() {
   const onlyOpen = document.getElementById('filter-abierto-pend').checked;
   const onlyVerified = document.getElementById('filter-verificado-pend').checked;
   let f = PENDIENTES.filter(p => {
-    if (s && ![p.nombre,p.empresa,p.ciudad,p.provincia,p.tematica,p.generos,p.tipo,p.publico,p.caracteristicas].some(x=>(x||'').toLowerCase().includes(s))) return false;
+    if (s && ![p.nombre,p.empresa,p.ciudad,p.provincia,communityOf(p),p.tematica,p.generos,p.tipo,p.publico,p.caracteristicas].some(x=>(x||'').toLowerCase().includes(s))) return false;
+    if (comunidad && communityOf(p) !== comunidad) return false;
     if (c && p.ciudad !== c) return false;
     if (prov && p.provincia !== prov) return false;
     if (!supportsPlayers(p, players)) return false;
@@ -1368,6 +1408,7 @@ function renderHechos() {
 
 function renderCatalogo() {
   const s = document.getElementById('search-cat').value.toLowerCase();
+  const comunidad = document.getElementById('filter-comunidad-cat').value;
   const prov = document.getElementById('filter-prov-cat').value;
   const ciudad = document.getElementById('filter-ciudad-cat').value;
   const players = document.getElementById('filter-jugadores-cat').value;
@@ -1377,7 +1418,8 @@ function renderCatalogo() {
   const onlyOpen = document.getElementById('filter-open-cat').checked;
 
   let f = CATALOGO.filter(c => {
-    if (s && ![c.nombre, c.empresa, c.ciudad, c.provincia, c.pais].some(x => (x || '').toLowerCase().includes(s))) return false;
+    if (s && ![c.nombre, c.empresa, c.ciudad, c.provincia, communityOf(c), c.pais].some(x => (x || '').toLowerCase().includes(s))) return false;
+    if (comunidad && communityOf(c) !== comunidad) return false;
     if (prov && c.provincia !== prov) return false;
     if (ciudad && c.ciudad !== ciudad) return false;
     if (!supportsPlayers(c, players)) return false;
