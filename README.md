@@ -269,13 +269,19 @@ Ve a **Realtime Database → Reglas** y pega:
           ".validate": "newData.val() === true || !newData.exists()"
         }
       }
+    },
+    "users": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid"
+      }
     }
   }
 }
 ```
 Haz clic en **Publicar**.
 
-Estas reglas hacen que cualquiera pueda ver votos y favoritos agregados, pero solo cada usuario autenticado pueda escribir sus propios datos.
+Estas reglas hacen que cualquiera pueda ver votos y favoritos agregados, pero solo cada usuario autenticado pueda escribir sus propios datos personales (`pendientes`, `hechos`, etc.).
 
 ### Estructura de datos en Firebase
 ```
@@ -286,6 +292,12 @@ tu-proyecto/
 └── likes/
     └── {slug_escape}/
         └── {user_id}: true       ← ha marcado favorito
+└── users/
+    └── {user_id}/
+        └── roomStates/
+            └── {slug_escape}/
+                ├── pending: true
+                └── done: false
 ```
 
 ---

@@ -269,6 +269,13 @@
   .room-card.is-fav::before{background:linear-gradient(90deg,transparent,var(--red),transparent);}
   .sort-btn.fav-filter{border-color:rgba(230,57,70,.3);color:var(--red);}
   .sort-btn.fav-filter.active{background:rgba(230,57,70,.08);border-color:var(--red);}
+  .personal-actions{display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+  .personal-btn{font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--border);background:rgba(255,255,255,.025);color:var(--text3);padding:6px 8px;cursor:pointer;transition:all .2s;}
+  .personal-btn:hover{border-color:rgba(245,166,35,.38);color:var(--amber);}
+  .personal-btn.active.pending{border-color:rgba(245,166,35,.45);background:rgba(245,166,35,.08);color:var(--amber);}
+  .personal-btn.active.done{border-color:rgba(6,214,160,.38);background:rgba(6,214,160,.07);color:var(--green);}
+  .personal-btn.danger:hover{border-color:rgba(230,57,70,.45);color:var(--red);}
+  .personal-hint{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;}
 
   .auth-bar{max-width:1400px;margin:16px auto 0;padding:0 32px;display:flex;justify-content:flex-end;align-items:center;gap:10px;}
   .auth-status{display:flex;align-items:center;gap:10px;border:1px solid var(--border);background:rgba(255,255,255,.035);padding:7px 10px;font-family:'Share Tech Mono',monospace;font-size:.64rem;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;}
@@ -780,6 +787,9 @@ function compactKey(text) {
 function stateKey(room) {
   return normalizedKey(room.nombre || room.id || '');
 }
+function userRoomKey(room) {
+  return slugify(room.nombre || room.id || '');
+}
 function cleanValue(text) {
   return String(text || '').trim();
 }
@@ -825,7 +835,7 @@ function groupStateFor(room) {
 }
 
 function userStateFor(room) {
-  return USER_ROOM_STATES[stateKey(room)] || {};
+  return USER_ROOM_STATES[userRoomKey(room)] || {};
 }
 
 function groupStateTags(room) {
@@ -834,6 +844,43 @@ function groupStateTags(room) {
     state.done ? '<span class="tag tag-feature">Hecho por el grupo</span>' : '',
     state.pending ? '<span class="tag tag-tipo">Pendiente del grupo</span>' : ''
   ].filter(Boolean).join('');
+}
+
+function userStateTags(room) {
+  const state = userStateFor(room);
+  return [
+    state.done ? '<span class="tag tag-feature">Hecho por ti</span>' : '',
+    state.pending ? '<span class="tag tag-tipo">Tu pendiente</span>' : ''
+  ].filter(Boolean).join('');
+}
+
+function mergeRooms(primary, extra, predicate) {
+  const seen = new Set(primary.map(userRoomKey));
+  const result = [...primary];
+  extra.filter(predicate).forEach(room => {
+    const key = userRoomKey(room);
+    if (!key || seen.has(key)) return;
+    result.push(room);
+    seen.add(key);
+  });
+  return result;
+}
+
+function personalPendingRooms() {
+  return [...CATALOGO, ...PENDIENTES].filter(room => userStateFor(room).pending);
+}
+
+function personalDoneRooms() {
+  return [...CATALOGO, ...PENDIENTES].filter(room => userStateFor(room).done);
+}
+
+function allPendingRooms() {
+  const groupPending = PENDIENTES.filter(room => !userStateFor(room).done);
+  return mergeRooms(groupPending, personalPendingRooms(), room => !groupStateFor(room).done);
+}
+
+function allDoneRooms() {
+  return mergeRooms(HECHOS, personalDoneRooms(), () => true);
 }
 
 // ── Firebase REST API ─────────────────────────────────────────────────────────
@@ -906,13 +953,81 @@ async function initFirebaseAuth() {
 
 async function refreshSignedSession() {
   if (AUTH_USER) AUTH_TOKEN = await AUTH_USER.getIdToken();
+  await loadUserRoomStates();
   await loadVotes();
   await loadLikes();
   refreshAllLikeCounts();
+  populateFilters();
+  renderStats();
   renderPendientes();
   renderHechos();
   renderRanking();
   renderCatalogo();
+}
+
+async function loadUserRoomStates() {
+  if (!AUTH_USER || !FIREBASE_ENABLED) {
+    USER_ROOM_STATES = {};
+    return;
+  }
+  try {
+    const data = await fbGet(`users/${USER_ID}/roomStates`);
+    USER_ROOM_STATES = data || {};
+  } catch(e) {
+    console.warn('No se pudieron cargar tus listas personales:', e.message);
+    USER_ROOM_STATES = {};
+  }
+}
+
+async function saveUserRoomState(room, patch) {
+  if (!AUTH_USER) {
+    alert('Inicia sesion con Google para guardar tus pendientes y hechos personales.');
+    return;
+  }
+  const key = userRoomKey(room);
+  if (!key) return;
+  const previous = USER_ROOM_STATES[key] || {};
+  const next = {
+    ...previous,
+    nombre: room.nombre || previous.nombre || '',
+    empresa: room.empresa || previous.empresa || '',
+    pending: !!previous.pending,
+    done: !!previous.done,
+    ...patch,
+    updatedAt: Date.now()
+  };
+  if (next.done) next.pending = false;
+  if (next.pending) next.done = false;
+  if (!next.pending && !next.done) {
+    delete USER_ROOM_STATES[key];
+    await fbDelete(`users/${USER_ID}/roomStates/${key}`);
+  } else {
+    USER_ROOM_STATES[key] = next;
+    await fbPut(`users/${USER_ID}/roomStates/${key}`, next);
+  }
+}
+
+async function setPersonalRoomState(kind, key, state) {
+  const room = findDetailRoom(kind, key);
+  if (!room) return;
+  const current = userStateFor(room);
+  const patch = state === 'pending'
+    ? { pending: !current.pending, done: false }
+    : { done: !current.done, pending: false };
+  try {
+    await saveUserRoomState(room, patch);
+    populateFilters();
+    renderStats();
+    renderPendientes();
+    renderHechos();
+    renderCatalogo();
+    if (document.getElementById('detail-modal')?.classList.contains('open')) {
+      openDetail(kind, key);
+    }
+  } catch(e) {
+    console.error('No se pudo guardar tu estado personal:', e);
+    alert(`No se pudo guardar en tu cuenta.\n\nDetalle: ${e.message}\n\nRevisa las reglas de Firebase para users/{uid}/roomStates.`);
+  }
 }
 
 async function migrateAnonymousDataToAccount() {
@@ -1004,7 +1119,10 @@ function fbUrl(path) {
 
 async function fbGet(path) {
   const r = await fetch(fbUrl(path));
-  if (!r.ok) throw new Error(`Firebase GET error: ${r.status}`);
+  if (!r.ok) {
+    const body = await r.text();
+    throw new Error(`Firebase GET error ${r.status}: ${body}`);
+  }
   return r.json();
 }
 
@@ -1014,13 +1132,19 @@ async function fbPut(path, value) {
     body: JSON.stringify(value),
     headers: {'Content-Type': 'application/json'}
   });
-  if (!r.ok) throw new Error(`Firebase PUT error: ${r.status}`);
+  if (!r.ok) {
+    const body = await r.text();
+    throw new Error(`Firebase PUT error ${r.status}: ${body}`);
+  }
   return r.json();
 }
 
 async function fbDelete(path) {
   const r = await fetch(fbUrl(path), { method: 'DELETE' });
-  if (!r.ok) throw new Error(`Firebase DELETE error: ${r.status}`);
+  if (!r.ok) {
+    const body = await r.text();
+    throw new Error(`Firebase DELETE error ${r.status}: ${body}`);
+  }
   return r.json();
 }
 
@@ -1192,6 +1316,7 @@ async function loadData() {
         new Date(lastMod).toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'numeric'});
     }
     await initFirebaseAuth();
+    await loadUserRoomStates();
     // Cargar votos primero (bloquea hasta tener datos para el ranking)
     await loadVotes();
     await loadCatalogo();
@@ -1261,34 +1386,40 @@ function updateGeoFilters(scope) {
 }
 
 function populateFilters() {
+  const pendingRooms = allPendingRooms();
+  const doneRooms = allDoneRooms();
   const fill = (id, vals, ph) => {
     const s = document.getElementById(id);
+    const current = s.value;
     vals = [...new Set(vals.map(v => String(v || '').trim()).filter(Boolean))];
     s.innerHTML = `<option value="">${ph}</option>`;
     vals.forEach(v => s.appendChild(new Option(v, v)));
+    s.value = current && vals.includes(current) ? current : '';
   };
-  fill('filter-comunidad-pend', [...new Set(PENDIENTES.map(p=>communityOf(p)).filter(Boolean))].sort(), 'Comunidad autonoma');
-  fill('filter-prov-pend',   [...new Set(PENDIENTES.map(p=>p.provincia).filter(Boolean))].sort(), 'Provincia');
-  fill('filter-ciudad-pend', [...new Set(PENDIENTES.map(p=>p.ciudad).filter(Boolean))].sort(), 'Todas las ciudades');
-  fill('filter-jugadores-pend', ['1','2','3','4','5','6','7','8','9','10'].filter(n => PENDIENTES.some(p => supportsPlayers(p, n))).map(n => `${n} jugador${n === '1' ? '' : 'es'}`), 'Jugadores');
-  fill('filter-dif-pend',    [...new Set(PENDIENTES.map(p=>p.dificultad).filter(Boolean))].sort(), 'Dificultad');
-  fill('filter-genero-pend', [...new Set(PENDIENTES.flatMap(p=>listValues(p.generos || p.tematica)))].sort(), 'Género');
-  fill('filter-tipo-pend',   [...new Set(PENDIENTES.map(p=>p.tipo).filter(Boolean))].sort(), 'Tipo');
-  fill('filter-publico-pend',[...new Set(PENDIENTES.flatMap(p=>listValues(p.publico)))].sort(), 'Público');
-  fill('filter-dif-hecho',   [...new Set(HECHOS.map(h=>h.dificultad).filter(Boolean))].sort(), 'Dificultad');
+  fill('filter-comunidad-pend', [...new Set(pendingRooms.map(p=>communityOf(p)).filter(Boolean))].sort(), 'Comunidad autonoma');
+  fill('filter-prov-pend',   [...new Set(pendingRooms.map(p=>p.provincia).filter(Boolean))].sort(), 'Provincia');
+  fill('filter-ciudad-pend', [...new Set(pendingRooms.map(p=>p.ciudad).filter(Boolean))].sort(), 'Todas las ciudades');
+  fill('filter-jugadores-pend', ['1','2','3','4','5','6','7','8','9','10'].filter(n => pendingRooms.some(p => supportsPlayers(p, n))).map(n => `${n} jugador${n === '1' ? '' : 'es'}`), 'Jugadores');
+  fill('filter-dif-pend',    [...new Set(pendingRooms.map(p=>p.dificultad).filter(Boolean))].sort(), 'Dificultad');
+  fill('filter-genero-pend', [...new Set(pendingRooms.flatMap(p=>listValues(p.generos || p.tematica)))].sort(), 'Género');
+  fill('filter-tipo-pend',   [...new Set(pendingRooms.map(p=>p.tipo).filter(Boolean))].sort(), 'Tipo');
+  fill('filter-publico-pend',[...new Set(pendingRooms.flatMap(p=>listValues(p.publico)))].sort(), 'Público');
+  fill('filter-dif-hecho',   [...new Set(doneRooms.map(h=>h.dificultad).filter(Boolean))].sort(), 'Dificultad');
   fill('filter-comunidad-cat', [...new Set(CATALOGO.map(c=>communityOf(c)).filter(Boolean))].sort(), 'Comunidad autonoma');
   fill('filter-prov-cat',    [...new Set(CATALOGO.map(c=>c.provincia).filter(Boolean))].sort(), 'Provincia');
   fill('filter-ciudad-cat',  [...new Set(CATALOGO.map(c=>c.ciudad).filter(Boolean))].sort(), 'Ciudad');
   fill('filter-jugadores-cat', ['1','2','3','4','5','6','7','8','9','10'].filter(n => CATALOGO.some(c => supportsPlayers(c, n))).map(n => `${n} jugador${n === '1' ? '' : 'es'}`), 'Jugadores');
   fill('filter-dif-cat',     [...new Set(CATALOGO.map(c=>c.dificultad).filter(Boolean))].sort(), 'Dificultad');
-  document.getElementById('badge-pend').textContent  = PENDIENTES.length;
-  document.getElementById('badge-hecho').textContent = HECHOS.length;
+  document.getElementById('badge-pend').textContent  = pendingRooms.length;
+  document.getElementById('badge-hecho').textContent = doneRooms.length;
   document.getElementById('badge-cat').textContent = CATALOGO.length;
 }
 
 function renderStats() {
-  const total = HECHOS.length + PENDIENTES.length;
-  const pct   = total > 0 ? Math.round((HECHOS.length / total) * 100) : 0;
+  const pendingRooms = allPendingRooms();
+  const doneRooms = allDoneRooms();
+  const total = doneRooms.length + pendingRooms.length;
+  const pct   = total > 0 ? Math.round((doneRooms.length / total) * 100) : 0;
 
   // Media grupo (solo los que tienen valoración)
   const conVal = HECHOS.filter(h => parseFloat(h.valoracion) > 0);
@@ -1296,7 +1427,7 @@ function renderStats() {
     ? (conVal.reduce((s,h) => s + parseFloat(h.valoracion), 0) / conVal.length).toFixed(1) : '—';
 
   // Horas jugadas (hechos)
-  const minsJugados = HECHOS.reduce((s,h) => s + (parseInt(h.duracion) || 0), 0);
+  const minsJugados = doneRooms.reduce((s,h) => s + (parseInt(h.duracion) || 0), 0);
   const hrsJugados  = minsJugados >= 60
     ? `${Math.floor(minsJugados/60)}h ${minsJugados%60 > 0 ? minsJugados%60+'m' : ''}`
     : `${minsJugados}m`;
@@ -1322,8 +1453,8 @@ function renderStats() {
 
   document.getElementById('stats-bar').innerHTML = `
     <div class="stats-top">
-      <div class="stat-item"><span class="stat-num">${HECHOS.length}</span><span class="stat-label">Completados</span></div>
-      <div class="stat-item"><span class="stat-num">${PENDIENTES.length}</span><span class="stat-label">Pendientes</span></div>
+      <div class="stat-item"><span class="stat-num">${doneRooms.length}</span><span class="stat-label">Completados</span></div>
+      <div class="stat-item"><span class="stat-num">${pendingRooms.length}</span><span class="stat-label">Pendientes</span></div>
       <div class="stat-item"><span class="stat-num">${total}</span><span class="stat-label">Total</span></div>
       <div class="stat-item"><span class="stat-num">${avgGrupo}</span><span class="stat-label">Media grupo</span></div>
       <div class="stat-item"><span class="stat-num">${hrsJugados}</span><span class="stat-label">Horas jugadas</span></div>
@@ -1580,12 +1711,16 @@ function escapeHtml(text) {
   }[ch]));
 }
 
+function jsString(text) {
+  return String(text || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+}
+
 function roomKey(room) {
   return room.id || slugify(room.nombre || '');
 }
 
 function findDetailRoom(kind, key) {
-  const list = kind === 'catalogo' ? CATALOGO : PENDIENTES;
+  const list = kind === 'catalogo' ? CATALOGO : kind === 'hechos' ? HECHOS : PENDIENTES;
   return list.find(room => roomKey(room) === key) || null;
 }
 
@@ -1609,6 +1744,7 @@ function detailTags(room, kind) {
     room.ciudad || room.provincia ? `<span class="tag tag-city">📍 ${escapeHtml([cleanValue(room.ciudad), cleanValue(room.provincia)].filter(Boolean).join(' - '))}</span>` : '',
     communityOf(room) ? `<span class="tag tag-muted">${escapeHtml(communityOf(room))}</span>` : '',
     groupStateTags(room),
+    userStateTags(room),
     terpecaAwardTag(room),
     room.terror ? `<span class="tag tag-tema">Terror</span>` : '',
     ...genres.map(g => `<span class="tag tag-tema">${escapeHtml(g)}</span>`),
@@ -1617,6 +1753,16 @@ function detailTags(room, kind) {
     isTruthyFlag(room.abierto) || room.abierto === true ? `<span class="tag tag-feature">Abierto</span>` : '',
     ...features.map(v => `<span class="tag tag-feature">${escapeHtml(v)}</span>`)
   ].filter(Boolean).join('');
+}
+
+function personalActionsHtml(room, kind) {
+  const key = jsString(roomKey(room));
+  const state = userStateFor(room);
+  if (!AUTH_USER) return '<span class="personal-hint">Entra con Google para guardar tu lista</span>';
+  return `<div class="personal-actions">
+    <button class="personal-btn pending ${state.pending ? 'active' : ''}" type="button" onclick="setPersonalRoomState('${kind}','${key}','pending')">${state.pending ? 'Quitar pendiente' : 'Mi pendiente'}</button>
+    <button class="personal-btn done ${state.done ? 'active' : ''}" type="button" onclick="setPersonalRoomState('${kind}','${key}','done')">${state.done ? 'Quitar hecho' : 'Hecho por mi'}</button>
+  </div>`;
 }
 
 function openDetailFromCard(event, kind, key) {
@@ -1630,7 +1776,7 @@ function openDetail(kind, key) {
   const rating = displayRating(room);
   const players = playerLabel(room);
   const price = priceLabel(room);
-  const sourceLabel = kind === 'catalogo' ? 'Catalogo general' : 'Pendiente';
+  const sourceLabel = kind === 'catalogo' ? 'Catalogo general' : kind === 'hechos' ? 'Hecho' : 'Pendiente';
   const desc = escapeHtml(room.descripcion || 'Sin sinopsis disponible.');
   const modal = document.getElementById('detail-modal');
 
@@ -1653,7 +1799,8 @@ function openDetail(kind, key) {
     <div class="detail-desc">${desc}</div>
     <div class="detail-actions">
       ${room.web ? `<a class="detail-link" href="${room.web}" target="_blank">Ver web oficial</a>` : ''}
-      ${kind === 'catalogo' ? `<span class="tag tag-muted">Catálogo</span>` : `<span class="tag tag-feature">Pendiente</span>`}
+      ${kind === 'catalogo' ? `<span class="tag tag-muted">Catálogo</span>` : kind === 'hechos' ? `<span class="tag tag-feature">Hecho</span>` : `<span class="tag tag-feature">Pendiente</span>`}
+      ${personalActionsHtml(room, kind)}
     </div>`;
 
   modal.classList.add('open');
@@ -1678,13 +1825,15 @@ document.addEventListener('keydown', event => {
 // ── Templates de tarjetas ─────────────────────────────────────────────────────
 function cardPend(p, i) {
   const slug = slugify(p.nombre);
+  const detailKind = PENDIENTES.some(room => userRoomKey(room) === userRoomKey(p)) ? 'pendientes' : 'catalogo';
+  const detailKey = jsString(roomKey(p));
   const rating = displayRating(p);
   const players = playerLabel(p);
   const price = priceLabel(p);
   const genres = listValues(p.generos || p.tematica);
   const features = listValues(p.caracteristicas).slice(0, 3);
   const location = [cleanValue(p.ciudad), cleanValue(p.provincia)].filter(Boolean).join(' - ');
-  return `<div class="room-card" tabindex="0" role="button" onclick="openDetailFromCard(event,'pendientes','${slug}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetail('pendientes','${slug}')}" style="animation-delay:${i*.04}s">
+  return `<div class="room-card" tabindex="0" role="button" onclick="openDetailFromCard(event,'${detailKind}','${detailKey}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetail('${detailKind}','${detailKey}')}" style="animation-delay:${i*.04}s">
   <div class="card-media">
     ${imageHtml(p)}
     <div class="card-media-top">
@@ -1717,6 +1866,7 @@ function cardPend(p, i) {
       ${listValues(p.publico).map(v => `<span class="tag tag-muted">${v}</span>`).join('')}
       ${features.map(v => `<span class="tag tag-feature">${v}</span>`).join('')}
       ${isTruthyFlag(p.abierto) ? `<span class="tag tag-feature">Abierto</span>` : ''}
+      ${userStateTags(p)}
     </div>` : ''}
     ${p.descripcion ? `<div class="card-desc">${shortText(p.descripcion, 105)}</div>` : ''}
     <div class="card-meta">
@@ -1729,7 +1879,7 @@ function cardPend(p, i) {
     ${voteWidget(slug)}
     <div class="card-footer">
       ${p.web ? `<a class="web-link" href="${p.web}" target="_blank">Ver web</a>` : '<span></span>'}
-      <span class="tag" style="background:rgba(6,214,160,.05);color:#06d6a0;border:1px solid rgba(6,214,160,.18)">🔒 Pendiente</span>
+      ${personalActionsHtml(p, detailKind)}
     </div>
   </div>
 </div>`;
@@ -1737,6 +1887,9 @@ function cardPend(p, i) {
 
 function cardHecho(h, rank) {
   const slug    = slugify(h.nombre);
+  const detailKind = HECHOS.some(room => userRoomKey(room) === userRoomKey(h))
+    ? 'hechos'
+    : CATALOGO.some(room => userRoomKey(room) === userRoomKey(h)) ? 'catalogo' : 'pendientes';
   const medals  = ['gold','silver','bronze'];
   const emoji   = ['🥇','🥈','🥉'];
   const rankDisp = emoji[rank - 1]
@@ -1767,6 +1920,7 @@ function cardHecho(h, rank) {
         ${h.ciudad   ? `<span class="tag tag-city">📍 ${h.ciudad}</span>` : ''}
         ${h.tematica ? `<span class="tag tag-tema">${h.tematica}</span>`  : ''}
         ${h.tipo     ? `<span class="tag tag-tipo">${h.tipo}</span>`      : ''}
+        ${userStateTags(h)}
       </div>
       <div class="rv-meta">
         ${h.duracion   ? `<div class="rv-meta-item"><span class="meta-key">Duración</span><span class="meta-val">⏱ ${h.duracion} min</span></div>` : ''}
@@ -1794,19 +1948,23 @@ function cardHecho(h, rank) {
         ${catStars('Game Master',  h.gamemaster)}
       </div>` : ''}
       ${h.web ? `<a class="rv-web" href="${h.web}" target="_blank">Ver web</a>` : ''}
+      <div style="margin-top:12px">${personalActionsHtml(h, detailKind)}</div>
     </div>
 
   </div>`;
 }
 
 function cardCatalogo(c, i) {
+  const slug = slugify(c.nombre);
   const rating = displayRating(c);
   const players = playerLabel(c);
   const price = priceLabel(c);
   const location = [cleanValue(c.ciudad), cleanValue(c.provincia)].filter(Boolean).join(' - ');
   const groupTags = groupStateTags(c);
+  const userTags = userStateTags(c);
   const awardSeal = terpecaAwardSeal(c);
-  return `<div class="room-card" tabindex="0" role="button" onclick="openDetailFromCard(event,'catalogo','${roomKey(c)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetail('catalogo','${roomKey(c)}')}" style="animation-delay:${Math.min(i, 20)*.025}s">
+  const detailKey = jsString(roomKey(c));
+  return `<div class="room-card" tabindex="0" role="button" onclick="openDetailFromCard(event,'catalogo','${detailKey}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetail('catalogo','${detailKey}')}" style="animation-delay:${Math.min(i, 20)*.025}s">
   <div class="card-media">
     ${catalogImageHtml(c)}
     <div class="card-media-top">
@@ -1820,7 +1978,13 @@ function cardCatalogo(c, i) {
         <div class="room-name">${c.nombre}</div>
         <div class="empresa">${c.empresa || ''}</div>
       </div>
-      ${rating ? `<div class="rating-badge ${rc(rating)}">★ ${rating}</div>` : ''}
+      <div class="card-media-actions">
+        <button class="fav-btn ${iLiked(slug) ? 'active' : ''}" data-slug="${slug}" onclick="toggleFav('${slug}',this)" title="Me gusta">
+          <span class="fav-heart">♥</span>
+          <span class="fav-likes">${likeCount(slug)}</span>
+        </button>
+        ${rating ? `<div class="rating-badge ${rc(rating)}">★ ${rating}</div>` : ''}
+      </div>
     </div>
   </div>
   <div class="card-body">
@@ -1830,6 +1994,7 @@ function cardCatalogo(c, i) {
       ${c.dificultad ? `<span class="tag tag-tipo">${c.dificultad}</span>` : ''}
       ${c.abierto ? `<span class="tag tag-feature">Abierto</span>` : `<span class="tag tag-muted">Estado no confirmado</span>`}
       ${groupTags}
+      ${userTags}
     </div>
     ${c.descripcion ? `<div class="card-desc">${shortText(c.descripcion, 105)}</div>` : ''}
     <div class="card-meta">
@@ -1840,7 +2005,7 @@ function cardCatalogo(c, i) {
     </div>
     <div class="card-footer">
       ${c.web ? `<a class="web-link" href="${c.web}" target="_blank">Ver web</a>` : '<span></span>'}
-      <span class="tag tag-muted">Catálogo</span>
+      ${personalActionsHtml(c, 'catalogo')}
     </div>
   </div>
 </div>`;
@@ -1848,6 +2013,7 @@ function cardCatalogo(c, i) {
 
 // ── Renders principales ───────────────────────────────────────────────────────
 function renderPendientes() {
+  const pendingRooms = allPendingRooms();
   const s = document.getElementById('search-pend').value.toLowerCase();
   const c = document.getElementById('filter-ciudad-pend').value;
   const comunidad = document.getElementById('filter-comunidad-pend').value;
@@ -1859,7 +2025,7 @@ function renderPendientes() {
   const publico = document.getElementById('filter-publico-pend').value;
   const onlyOpen = document.getElementById('filter-abierto-pend').checked;
   const onlyVerified = document.getElementById('filter-verificado-pend').checked;
-  let f = PENDIENTES.filter(p => {
+  let f = pendingRooms.filter(p => {
     if (s && ![p.nombre,p.empresa,p.ciudad,p.provincia,communityOf(p),p.tematica,p.generos,p.tipo,p.publico,p.caracteristicas].some(x=>(x||'').toLowerCase().includes(s))) return false;
     if (comunidad && communityOf(p) !== comunidad) return false;
     if (c && String(p.ciudad || '').trim() !== c) return false;
@@ -1878,15 +2044,16 @@ function renderPendientes() {
   else if (sortPend==='name')   f.sort((a,b)=>a.nombre.localeCompare(b.nombre));
   else if (sortPend==='dur')    f.sort((a,b)=>parseInt(b.duracion||0)-parseInt(a.duracion||0));
   else if (sortPend==='dif')    f.sort((a,b)=>do_(b.dificultad)-do_(a.dificultad));
-  document.getElementById('result-info-pend').textContent = `Mostrando ${f.length} de ${PENDIENTES.length} escape rooms${showOnlyFavs ? ' · solo favoritos' : ''}`;
+  document.getElementById('result-info-pend').textContent = `Mostrando ${f.length} de ${pendingRooms.length} escape rooms${showOnlyFavs ? ' · solo favoritos' : ''}`;
   const g = document.getElementById('grid-pendientes');
   g.innerHTML = f.length ? f.map(cardPend).join('') : `<div class="empty-state"><div class="lock">🔒</div><p>${showOnlyFavs ? 'NO HAY FAVORITOS AÚN — PULSA ♥ EN UNA TARJETA' : 'NO SE ENCONTRARON RESULTADOS'}</p></div>`;
 }
 
 function renderHechos() {
+  const doneRooms = allDoneRooms();
   const s = document.getElementById('search-hecho').value.toLowerCase();
   const d = document.getElementById('filter-dif-hecho').value;
-  let f = HECHOS.filter(h => {
+  let f = doneRooms.filter(h => {
     if (s && ![h.nombre,h.empresa].some(x=>(x||'').toLowerCase().includes(s))) return false;
     if (d && h.dificultad !== d) return false;
     return true;
@@ -1918,6 +2085,7 @@ function renderCatalogo() {
 
   let f = CATALOGO.filter(c => {
     const groupState = groupStateFor(c);
+    const userState = userStateFor(c);
     if (s && ![c.nombre, c.empresa, c.ciudad, c.provincia, communityOf(c), c.pais].some(x => (x || '').toLowerCase().includes(s))) return false;
     if (comunidad && communityOf(c) !== comunidad) return false;
     if (prov && String(c.provincia || '').trim() !== prov) return false;
@@ -1927,8 +2095,8 @@ function renderCatalogo() {
     if (onlyTerror && !c.terror) return false;
     if (onlyImages && !c.imagen) return false;
     if (onlyOpen && !c.abierto) return false;
-    if (hideDone && groupState.done) return false;
-    if (onlyUnplanned && (groupState.done || groupState.pending)) return false;
+    if (hideDone && (groupState.done || userState.done)) return false;
+    if (onlyUnplanned && (groupState.done || groupState.pending || userState.done || userState.pending)) return false;
     return true;
   });
 
