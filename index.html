@@ -207,6 +207,7 @@
   .card-media .fav-likes{font-size:.58rem;padding:1px 4px;}
   .card-media-title{position:absolute;left:14px;right:14px;bottom:12px;z-index:2;display:flex;align-items:flex-end;gap:10px;}
   .card-media-title-main{min-width:0;flex:1;}
+  .card-media-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
   .card-header{display:flex;align-items:center;gap:10px;margin:0 0 10px;}
   .card-body{padding:15px 16px 16px;display:flex;flex-direction:column;flex:1;}
   .room-name{font-family:'Cinzel',serif;font-size:1.08rem;font-weight:700;color:var(--text);line-height:1.15;flex:1;text-shadow:0 1px 10px rgba(0,0,0,.65);}
@@ -268,6 +269,15 @@
   .room-card.is-fav::before{background:linear-gradient(90deg,transparent,var(--red),transparent);}
   .sort-btn.fav-filter{border-color:rgba(230,57,70,.3);color:var(--red);}
   .sort-btn.fav-filter.active{background:rgba(230,57,70,.08);border-color:var(--red);}
+
+  .auth-bar{max-width:1400px;margin:16px auto 0;padding:0 32px;display:flex;justify-content:flex-end;align-items:center;gap:10px;}
+  .auth-status{display:flex;align-items:center;gap:10px;border:1px solid var(--border);background:rgba(255,255,255,.035);padding:7px 10px;font-family:'Share Tech Mono',monospace;font-size:.64rem;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;}
+  .auth-avatar{width:26px;height:26px;border-radius:50%;object-fit:cover;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);}
+  .auth-name{color:var(--text2);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .auth-btn{border:1px solid rgba(245,166,35,.3);background:rgba(245,166,35,.06);color:var(--amber);font-family:'Share Tech Mono',monospace;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;padding:9px 12px;cursor:pointer;}
+  .auth-btn:hover{border-color:var(--amber);background:rgba(245,166,35,.1);}
+  .auth-btn.secondary{color:var(--text3);border-color:var(--border);background:rgba(255,255,255,.025);}
+  .auth-btn[disabled]{opacity:.45;cursor:not-allowed;}
 
   /* â”€â”€ DETAIL MODAL â”€â”€ */
   .detail-modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);}
@@ -480,6 +490,9 @@
     .tab{flex:1 1 50%;min-width:0;padding:9px 10px;font-size:.72rem;text-align:center;}
     .panel{padding:14px;}.rooms-grid{grid-template-columns:1fr;}
     .updated-badge{top:auto;bottom:16px;right:50%;transform:translateX(50%);text-align:center;}
+    .auth-bar{padding:0 14px;justify-content:center;flex-wrap:wrap;}
+    .auth-status{max-width:100%;}
+    .auth-name{max-width:160px;}
     .detail-modal{padding:10px;}
     .detail-dialog{grid-template-columns:1fr;max-height:92vh;}
     .detail-media{height:320px;min-height:0;border-right:none;border-bottom:1px solid var(--border);}
@@ -525,6 +538,15 @@
       <div class="vault-dash right"></div>
     </div>
   </header>
+
+  <div class="auth-bar">
+    <div class="auth-status" id="auth-status">
+      <span>Cuenta personal</span>
+      <span class="auth-name" id="auth-name">Sin iniciar sesion</span>
+    </div>
+    <button class="auth-btn" id="auth-login" type="button" onclick="signInGoogle()">Entrar con Google</button>
+    <button class="auth-btn secondary" id="auth-logout" type="button" onclick="signOutGoogle()" style="display:none">Salir</button>
+  </div>
 
   <div class="stats-bar" id="stats-bar"></div>
 
@@ -624,6 +646,8 @@
   </div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <script>
 // ════════════════════════════════════════════════════════════
 //  🔥 CONFIGURACIÓN FIREBASE
@@ -631,15 +655,49 @@
 //  Deja FIREBASE_URL = '' si no quieres usar votaciones.
 // ════════════════════════════════════════════════════════════
 const FIREBASE_URL = 'https://scapesrooms-default-rtdb.europe-west1.firebasedatabase.app/';   // ← Pega aquí tu URL, ej: 'https://mi-proyecto-default-rtdb.europe-west1.firebasedatabase.app'
+const FIREBASE_CONFIG = {
+  apiKey: 'AIzaSyDr33ghQfJINQjkR94YI4k4y0zsUJPYpb4',
+  authDomain: 'scapesrooms.firebaseapp.com',
+  projectId: 'scapesrooms',
+  appId: '1:355203547760:web:25cb7dd64d2e793f12aab5',
+  databaseURL: FIREBASE_URL
+};
 // ════════════════════════════════════════════════════════════
 
 const FIREBASE_ENABLED = FIREBASE_URL.trim() !== '';
+const FIREBASE_AUTH_ENABLED = FIREBASE_ENABLED
+  && FIREBASE_CONFIG.apiKey.trim()
+  && FIREBASE_CONFIG.authDomain.trim()
+  && FIREBASE_CONFIG.projectId.trim()
+  && FIREBASE_CONFIG.appId.trim();
 
-// ID único por navegador/usuario (se genera una sola vez y se guarda)
-let USER_ID = localStorage.getItem('er_uid');
-if (!USER_ID) {
-  USER_ID = 'u_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
-  localStorage.setItem('er_uid', USER_ID);
+// ID anónimo por navegador. Al iniciar sesión se usa el uid real de Firebase Auth.
+let LOCAL_USER_ID = localStorage.getItem('er_uid');
+if (!LOCAL_USER_ID) {
+  LOCAL_USER_ID = 'u_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+  localStorage.setItem('er_uid', LOCAL_USER_ID);
+}
+let USER_ID = LOCAL_USER_ID;
+let AUTH_USER = null;
+let AUTH_TOKEN = '';
+let FIREBASE_APP = null;
+let FIREBASE_AUTH = null;
+let GOOGLE_PROVIDER = null;
+
+function favStorageKey(userId = USER_ID) {
+  return userId === LOCAL_USER_ID ? 'er_favs' : `er_favs_${userId}`;
+}
+
+function readStoredFavs(key = favStorageKey()) {
+  try {
+    return new Set(JSON.parse(localStorage.getItem(key) || '[]'));
+  } catch(e) {
+    return new Set();
+  }
+}
+
+function writeStoredFavs() {
+  localStorage.setItem(favStorageKey(), JSON.stringify([...FAVS]));
 }
 
 // Cache de votos: { roomSlug: { userId: stars, ... }, ... }
@@ -779,19 +837,153 @@ function groupStateTags(room) {
 }
 
 // ── Firebase REST API ─────────────────────────────────────────────────────────
+function firebaseAuthConfigured() {
+  return !!FIREBASE_AUTH_ENABLED;
+}
+
+function renderAuthStatus() {
+  const loginBtn = document.getElementById('auth-login');
+  const logoutBtn = document.getElementById('auth-logout');
+  const nameEl = document.getElementById('auth-name');
+  const statusEl = document.getElementById('auth-status');
+  if (!loginBtn || !logoutBtn || !nameEl || !statusEl) return;
+
+  statusEl.querySelector('.auth-avatar')?.remove();
+  if (!firebaseAuthConfigured()) {
+    nameEl.textContent = 'Configura Firebase Auth';
+    loginBtn.disabled = true;
+    loginBtn.title = 'Rellena FIREBASE_CONFIG y habilita Google en Firebase Console';
+    logoutBtn.style.display = 'none';
+    return;
+  }
+
+  loginBtn.disabled = false;
+  loginBtn.title = 'Entrar con tu cuenta de Google';
+  if (AUTH_USER) {
+    const avatar = document.createElement('img');
+    avatar.className = 'auth-avatar';
+    avatar.alt = '';
+    avatar.referrerPolicy = 'no-referrer';
+    avatar.src = AUTH_USER.photoURL || '';
+    statusEl.insertBefore(avatar, nameEl);
+    nameEl.textContent = AUTH_USER.displayName || AUTH_USER.email || 'Cuenta Google';
+    loginBtn.style.display = 'none';
+    logoutBtn.style.display = '';
+  } else {
+    nameEl.textContent = 'Sin iniciar sesion';
+    loginBtn.style.display = '';
+    logoutBtn.style.display = 'none';
+  }
+}
+
+async function initFirebaseAuth() {
+  renderAuthStatus();
+  if (!firebaseAuthConfigured() || !window.firebase) return;
+  if (!FIREBASE_APP) {
+    FIREBASE_APP = firebase.apps.length ? firebase.app() : firebase.initializeApp(FIREBASE_CONFIG);
+    FIREBASE_AUTH = firebase.auth();
+    GOOGLE_PROVIDER = new firebase.auth.GoogleAuthProvider();
+    await FIREBASE_AUTH.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+  }
+  return new Promise(resolve => {
+    const off = FIREBASE_AUTH.onAuthStateChanged(async user => {
+      AUTH_USER = user;
+      USER_ID = user ? user.uid : LOCAL_USER_ID;
+      AUTH_TOKEN = user ? await user.getIdToken() : '';
+      renderAuthStatus();
+      off();
+      resolve(user);
+    });
+  });
+}
+
+async function refreshSignedSession() {
+  if (AUTH_USER) AUTH_TOKEN = await AUTH_USER.getIdToken();
+  await loadVotes();
+  await loadLikes();
+  refreshAllLikeCounts();
+  renderPendientes();
+  renderHechos();
+  renderRanking();
+  renderCatalogo();
+}
+
+async function migrateAnonymousDataToAccount() {
+  if (!AUTH_USER || USER_ID === LOCAL_USER_ID) return;
+  const localFavs = readStoredFavs('er_favs');
+  const favSlugs = new Set([...localFavs, ...Object.entries(likesCache).filter(([, users]) => users && users[LOCAL_USER_ID]).map(([slug]) => slug)]);
+  for (const slug of favSlugs) {
+    if (!likesCache[slug]) likesCache[slug] = {};
+    likesCache[slug][USER_ID] = true;
+    delete likesCache[slug][LOCAL_USER_ID];
+    await fbPut(`likes/${slug}/${USER_ID}`, true);
+    await fbDelete(`likes/${slug}/${LOCAL_USER_ID}`);
+  }
+
+  for (const [slug, users] of Object.entries(votesCache)) {
+    if (!users || !users[LOCAL_USER_ID]) continue;
+    votesCache[slug][USER_ID] = users[LOCAL_USER_ID];
+    delete votesCache[slug][LOCAL_USER_ID];
+    await fbPut(`votes/${slug}/${USER_ID}`, votesCache[slug][USER_ID]);
+    await fbDelete(`votes/${slug}/${LOCAL_USER_ID}`);
+  }
+  FAVS = favSlugs;
+  writeStoredFavs();
+}
+
+async function signInGoogle() {
+  if (!firebaseAuthConfigured() || !FIREBASE_AUTH || !GOOGLE_PROVIDER) {
+    alert('Falta configurar Firebase Auth en index.html y activar Google en Firebase Console.');
+    return;
+  }
+  try {
+    await FIREBASE_AUTH.signInWithPopup(GOOGLE_PROVIDER);
+    AUTH_USER = FIREBASE_AUTH.currentUser;
+    USER_ID = AUTH_USER ? AUTH_USER.uid : LOCAL_USER_ID;
+    AUTH_TOKEN = AUTH_USER ? await AUTH_USER.getIdToken() : '';
+    await migrateAnonymousDataToAccount();
+    await refreshSignedSession();
+  } catch(e) {
+    console.error('Error al iniciar sesion con Google:', e);
+    alert('No se pudo iniciar sesion con Google. Revisa la configuracion de Firebase Auth.');
+  }
+}
+
+async function signOutGoogle() {
+  if (!FIREBASE_AUTH) return;
+  await FIREBASE_AUTH.signOut();
+  AUTH_USER = null;
+  AUTH_TOKEN = '';
+  USER_ID = LOCAL_USER_ID;
+  FAVS = readStoredFavs('er_favs');
+  renderAuthStatus();
+  await refreshSignedSession();
+}
+
+function fbUrl(path) {
+  const base = `${FIREBASE_URL.replace(/\/$/, '')}/${path}.json`;
+  return AUTH_TOKEN ? `${base}?auth=${encodeURIComponent(AUTH_TOKEN)}` : base;
+}
+
 async function fbGet(path) {
-  const r = await fetch(`${FIREBASE_URL}/${path}.json`);
+  const r = await fetch(fbUrl(path));
   if (!r.ok) throw new Error(`Firebase GET error: ${r.status}`);
   return r.json();
 }
 
 async function fbPut(path, value) {
-  const r = await fetch(`${FIREBASE_URL}/${path}.json`, {
+  const r = await fetch(fbUrl(path), {
     method: 'PUT',
     body: JSON.stringify(value),
     headers: {'Content-Type': 'application/json'}
   });
   if (!r.ok) throw new Error(`Firebase PUT error: ${r.status}`);
+  return r.json();
+}
+
+async function fbDelete(path) {
+  const r = await fetch(fbUrl(path), { method: 'DELETE' });
+  if (!r.ok) throw new Error(`Firebase DELETE error: ${r.status}`);
   return r.json();
 }
 
@@ -920,7 +1112,7 @@ async function loadVotes() {
   if (!FIREBASE_ENABLED) return;
   try {
     const data = await fbGet('votes');
-    if (data) votesCache = data;
+    votesCache = data || {};
   } catch(e) {
     console.warn('No se pudieron cargar los votos de Firebase:', e.message);
   }
@@ -962,6 +1154,7 @@ async function loadData() {
       document.getElementById('update-date').textContent =
         new Date(lastMod).toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'numeric'});
     }
+    await initFirebaseAuth();
     // Cargar votos primero (bloquea hasta tener datos para el ranking)
     await loadVotes();
     await loadCatalogo();
@@ -1175,7 +1368,7 @@ function clearFilters(w) {
 // likesCache: { slug: { userId: true, ... }, ... }
 let likesCache = {};
 // Local set para saber qué ha marcado ESTE usuario (también en localStorage como fallback)
-let FAVS = new Set(JSON.parse(localStorage.getItem('er_favs') || '[]'));
+let FAVS = readStoredFavs('er_favs');
 let showOnlyFavs = false;
 
 function likeCount(slug) {
@@ -1190,14 +1383,14 @@ async function loadLikes() {
   if (!FIREBASE_ENABLED) return;
   try {
     const data = await fbGet('likes');
-    if (data) likesCache = data;
+    likesCache = data || {};
     // Sincronizar FAVS con lo que haya en Firebase para este usuario
     FAVS = new Set(
       Object.entries(likesCache)
         .filter(([, users]) => users && users[USER_ID])
         .map(([slug]) => slug)
     );
-    localStorage.setItem('er_favs', JSON.stringify([...FAVS]));
+    writeStoredFavs();
   } catch(e) {
     console.warn('No se pudieron cargar los likes:', e.message);
   }
@@ -1228,7 +1421,7 @@ async function toggleFav(slug, btn) {
     likesCache[slug][USER_ID] = true;
     FAVS.add(slug);
   }
-  localStorage.setItem('er_favs', JSON.stringify([...FAVS]));
+  writeStoredFavs();
 
   // Actualizar UI inmediatamente
   const card = btn.closest('.room-card');
@@ -1247,22 +1440,9 @@ async function toggleFav(slug, btn) {
     return;
   }
 
-  const url = `${FIREBASE_URL.replace(/\/$/, '')}/likes/${slug}/${USER_ID}.json`;
-  console.log(`[Likes] ${wasLiked ? 'DELETE' : 'PUT'} → ${url}`);
   try {
-    const method = wasLiked ? 'DELETE' : 'PUT';
-    const opts = { method };
-    if (!wasLiked) {
-      opts.body = 'true';
-      opts.headers = { 'Content-Type': 'application/json' };
-    }
-    const r = await fetch(url, opts);
-    if (!r.ok) {
-      const body = await r.text();
-      console.error(`[Likes] Error ${r.status}:`, body);
-    } else {
-      console.log(`[Likes] ✅ Guardado correctamente`);
-    }
+    if (wasLiked) await fbDelete(`likes/${slug}/${USER_ID}`);
+    else await fbPut(`likes/${slug}/${USER_ID}`, true);
   } catch(e) {
     console.error('[Likes] Error de red:', e.message);
   }
@@ -1398,7 +1578,6 @@ function detailTags(room, kind) {
     room.tipo ? `<span class="tag tag-tipo">${escapeHtml(room.tipo)}</span>` : '',
     room.dificultad ? `<span class="tag tag-tipo">${escapeHtml(room.dificultad)}</span>` : '',
     isTruthyFlag(room.abierto) || room.abierto === true ? `<span class="tag tag-feature">Abierto</span>` : '',
-    isTruthyFlag(room.verificado) || room.verificado === true ? `<span class="tag tag-feature">Verificado</span>` : '',
     ...features.map(v => `<span class="tag tag-feature">${escapeHtml(v)}</span>`)
   ].filter(Boolean).join('');
 }
@@ -1475,10 +1654,6 @@ function cardPend(p, i) {
       ${faviconHtml(p.web, 'card-logo')}
       <div style="display:flex;gap:8px;align-items:flex-start">
         ${terpecaBadge(p.terpeca)}
-        <button class="fav-btn ${iLiked(slug) ? 'active' : ''}" data-slug="${slug}" onclick="toggleFav('${slug}',this)" title="Me apetece ir">
-          <span class="fav-heart">♥</span>
-          <span class="fav-likes">${likeCount(slug)}</span>
-        </button>
       </div>
     </div>
     <div class="card-media-title">
@@ -1486,7 +1661,13 @@ function cardPend(p, i) {
         <div class="room-name">${p.nombre}</div>
         <div class="empresa">${p.empresa || ''}</div>
       </div>
-      ${rating ? `<div class="rating-badge ${rc(rating)}">★ ${rating}</div>` : ''}
+      <div class="card-media-actions">
+        <button class="fav-btn ${iLiked(slug) ? 'active' : ''}" data-slug="${slug}" onclick="toggleFav('${slug}',this)" title="Me apetece ir">
+          <span class="fav-heart">♥</span>
+          <span class="fav-likes">${likeCount(slug)}</span>
+        </button>
+        ${rating ? `<div class="rating-badge ${rc(rating)}">★ ${rating}</div>` : ''}
+      </div>
     </div>
   </div>
   <div class="card-body">
@@ -1499,7 +1680,6 @@ function cardPend(p, i) {
       ${listValues(p.publico).map(v => `<span class="tag tag-muted">${v}</span>`).join('')}
       ${features.map(v => `<span class="tag tag-feature">${v}</span>`).join('')}
       ${isTruthyFlag(p.abierto) ? `<span class="tag tag-feature">Abierto</span>` : ''}
-      ${isTruthyFlag(p.verificado) ? `<span class="tag tag-feature">Verificado</span>` : ''}
     </div>` : ''}
     ${p.descripcion ? `<div class="card-desc">${shortText(p.descripcion, 105)}</div>` : ''}
     <div class="card-meta">
@@ -1596,7 +1776,6 @@ function cardCatalogo(c, i) {
       ${faviconHtml(c.web, 'card-logo')}
       <div style="display:flex;gap:8px;align-items:flex-start">
         ${awardSeal}
-        ${c.verificado ? `<span class="tag tag-feature">Verificado</span>` : ''}
       </div>
     </div>
     <div class="card-media-title">

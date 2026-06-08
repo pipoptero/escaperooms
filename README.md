@@ -235,25 +235,47 @@ Sustitúyela por:
 ```js
 const FIREBASE_URL = 'https://scapesrooms-default-rtdb.europe-west1.firebasedatabase.app';
 ```
-Guarda y sube el `index.html` a GitHub. ¡Listo! 🎉
 
-### 5. Reglas de seguridad (importante — expiran en 30 días)
+En la misma zona encontrarás `FIREBASE_CONFIG`. Para activar el login con Google:
+
+1. En Firebase Console ve a **Configuración del proyecto → General → Tus apps**.
+2. Crea una app web o abre la app web existente.
+3. Copia los campos `apiKey`, `authDomain`, `projectId` y `appId`.
+4. Pégalos en `FIREBASE_CONFIG`.
+5. Ve a **Authentication → Sign-in method → Google** y habilita el proveedor.
+6. En **Authentication → Settings → Authorized domains**, comprueba que estén autorizados tu dominio de GitHub Pages y `localhost` para pruebas.
+
+Guarda y sube el `index.html` a GitHub. Si `FIREBASE_CONFIG` queda vacío, la web seguirá funcionando como hasta ahora, pero sin login.
+
+### 5. Reglas de seguridad
 Ve a **Realtime Database → Reglas** y pega:
 ```json
 {
   "rules": {
     "votes": {
       ".read": true,
-      ".write": true
+      "$room": {
+        "$uid": {
+          ".write": "auth != null && auth.uid === $uid",
+          ".validate": "newData.isNumber() && newData.val() >= 0.5 && newData.val() <= 5"
+        }
+      }
     },
     "likes": {
       ".read": true,
-      ".write": true
+      "$room": {
+        "$uid": {
+          ".write": "auth != null && auth.uid === $uid",
+          ".validate": "newData.val() === true || !newData.exists()"
+        }
+      }
     }
   }
 }
 ```
 Haz clic en **Publicar**.
+
+Estas reglas hacen que cualquiera pueda ver votos y favoritos agregados, pero solo cada usuario autenticado pueda escribir sus propios datos.
 
 ### Estructura de datos en Firebase
 ```
