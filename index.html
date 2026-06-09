@@ -277,27 +277,44 @@
   .auth-btn[disabled]{opacity:.45;cursor:not-allowed;}
 
   /* â”€â”€ DETAIL MODAL â”€â”€ */
-  .detail-modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);}
+  .detail-modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);}
   .detail-modal.open{display:flex;}
-  .detail-dialog{width:min(1120px,100%);max-height:min(88vh,920px);background:var(--card);border:1px solid rgba(245,166,35,.28);box-shadow:0 24px 80px rgba(0,0,0,.75);display:grid;grid-template-columns:minmax(280px,420px) 1fr;overflow:hidden;}
-  .detail-media{position:relative;background:linear-gradient(135deg,#171927,#2a1b0d 55%,#101018);min-height:520px;border-right:1px solid var(--border);}
+  .detail-dialog{width:min(1380px,100%);height:min(94vh,960px);background:var(--card);border:1px solid rgba(245,166,35,.28);box-shadow:0 24px 80px rgba(0,0,0,.75);display:grid;grid-template-columns:minmax(250px,360px) minmax(0,1fr);overflow:hidden;}
+  .detail-media{position:relative;background:linear-gradient(135deg,#171927,#2a1b0d 55%,#101018);min-height:0;border-right:1px solid var(--border);}
   .detail-media img{width:100%;height:100%;object-fit:contain;display:block;background:radial-gradient(ellipse at center,rgba(255,255,255,.05),rgba(0,0,0,.28));}
+  .detail-media img + .card-media-fallback{display:none;}
   .detail-media .card-media-fallback{font-size:4.2rem;}
-  .detail-content{padding:26px;overflow:auto;}
+  .detail-content{padding:20px 22px;overflow:auto;min-height:0;}
   .detail-close{position:absolute;top:14px;right:14px;z-index:4;width:36px;height:36px;border:1px solid rgba(245,166,35,.35);background:rgba(10,10,15,.8);color:var(--amber);font-family:'Share Tech Mono',monospace;font-size:1.1rem;cursor:pointer;}
   .detail-close:hover{border-color:var(--amber);background:rgba(245,166,35,.08);}
-  .detail-kicker{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--text3);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;}
-  .detail-title{font-family:'Cinzel',serif;font-size:clamp(1.7rem,3vw,2.6rem);line-height:1.05;color:var(--text);margin-bottom:8px;}
-  .detail-company{font-family:'Share Tech Mono',monospace;font-size:.74rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px;}
-  .detail-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;}
-  .detail-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:18px;}
-  .detail-meta .meta-item{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.05);padding:10px 12px;}
-  .detail-section-title{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--text3);letter-spacing:.14em;text-transform:uppercase;margin:18px 0 8px;display:flex;align-items:center;gap:10px;}
+  .detail-kicker{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--text3);letter-spacing:.13em;text-transform:uppercase;margin-bottom:6px;}
+  .detail-title{font-family:'Cinzel',serif;font-size:clamp(1.45rem,2.35vw,2.2rem);line-height:1.04;color:var(--text);margin-bottom:6px;}
+  .detail-company{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;}
+  .detail-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px;}
+  .detail-meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:12px;}
+  .detail-meta .meta-item{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.05);padding:8px 10px;}
+  .detail-section-title{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--text3);letter-spacing:.13em;text-transform:uppercase;margin:12px 0 7px;display:flex;align-items:center;gap:10px;}
   .detail-section-title::after{content:'';height:1px;background:var(--border);flex:1;}
-  .detail-desc{font-size:1rem;line-height:1.75;color:var(--text2);white-space:pre-line;}
-  .detail-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;}
+  .detail-desc{font-size:.95rem;line-height:1.55;color:var(--text2);white-space:pre-line;}
+  .detail-review{border:1px solid rgba(245,166,35,.16);background:rgba(245,166,35,.035);padding:12px 14px;margin-top:6px;overflow:visible;}
+  .detail-review-text{font-size:.95rem;line-height:1.55;color:var(--text2);white-space:pre-line;overflow-wrap:anywhere;}
+  .detail-review-text.empty{color:var(--text3);font-style:italic;}
+  .detail-cats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 14px;margin-top:8px;}
+  .detail-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
   .detail-link{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--amber);text-decoration:none;letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(245,166,35,.28);padding:9px 13px;}
   .detail-link:hover{border-color:var(--amber);background:rgba(245,166,35,.06);}
+  .detail-account{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.025);padding:12px 14px;margin-top:14px;}
+  .detail-account-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;}
+  .detail-account-title{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--text3);letter-spacing:.14em;text-transform:uppercase;}
+  .detail-account-state{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;}
+  .detail-personal-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:10px;}
+  .detail-personal-btn{min-height:44px;display:flex;align-items:center;justify-content:center;gap:7px;font-family:'Share Tech Mono',monospace;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--border);background:rgba(255,255,255,.025);color:var(--text3);cursor:pointer;transition:all .2s;text-align:center;}
+  .detail-personal-btn:hover{border-color:rgba(245,166,35,.38);color:var(--amber);background:rgba(245,166,35,.04);}
+  .detail-personal-btn.active.pending{border-color:rgba(245,166,35,.55);background:rgba(245,166,35,.1);color:var(--amber);}
+  .detail-personal-btn.active.done{border-color:rgba(6,214,160,.45);background:rgba(6,214,160,.08);color:var(--green);}
+  .detail-personal-btn.active.favorite{border-color:rgba(230,57,70,.48);background:rgba(230,57,70,.08);color:var(--red);}
+  .detail-account .vote-section{margin-top:10px;margin-bottom:0;}
+  .detail-login-hint{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;line-height:1.5;}
 
   /* ── REVIEW LIST (Hechos) ── */
   .reviews-list{display:flex;flex-direction:column;gap:2px;}
@@ -384,6 +401,8 @@
   .ranking-table th{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.13em;color:var(--text3);text-transform:uppercase;padding:9px 13px;border-bottom:1px solid var(--border);text-align:left;font-weight:normal;}
   .ranking-table td{font-family:'Rajdhani',sans-serif;font-size:.9rem;font-weight:500;padding:11px 13px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--text2);}
   .ranking-table tr:hover td{background:rgba(255,255,255,.02);}
+  .ranking-table tr.rank-clickable{cursor:pointer;}
+  .ranking-table tr.rank-clickable:focus{outline:1px solid rgba(245,166,35,.5);outline-offset:-2px;}
   .rank-pos{font-family:'Cinzel',serif;font-weight:700;font-size:1.05rem;color:var(--text3);}
   .rank-pos.gold{color:var(--gold);}.rank-pos.silver{color:#c0c0c0;}.rank-pos.bronze{color:#cd7f32;}
   .rank-room-name{font-family:'Cinzel',serif;font-size:.9rem;color:var(--text);}
@@ -512,11 +531,19 @@
     .auth-name{max-width:72px;}
     .catalog-result-row{align-items:flex-start;flex-direction:column;}
     .catalog-result-row .catalog-more{justify-content:flex-start;}
-    .detail-modal{padding:10px;}
-    .detail-dialog{grid-template-columns:1fr;max-height:92vh;}
-    .detail-media{height:320px;min-height:0;border-right:none;border-bottom:1px solid var(--border);}
-    .detail-content{padding:18px;}
+    .detail-modal{padding:0;align-items:stretch;}
+    .detail-dialog{width:100%;height:100vh;grid-template-columns:1fr;grid-template-rows:220px minmax(0,1fr);border:none;}
+    .detail-media{height:auto;min-height:0;border-right:none;border-bottom:1px solid var(--border);}
+    .detail-content{padding:14px;overflow:auto;}
+    .detail-title{font-size:1.35rem;}
+    .detail-tags{margin-bottom:10px;}
     .detail-meta{grid-template-columns:1fr 1fr;}
+    .detail-meta .meta-item{padding:7px 8px;}
+    .detail-review{padding:10px 11px;}
+    .detail-review-text{font-size:.9rem;line-height:1.48;}
+    .detail-cats{grid-template-columns:1fr;}
+    .detail-personal-grid{grid-template-columns:1fr;}
+    .detail-account-head{align-items:flex-start;flex-direction:column;}
   }
 </style>
 </head>
@@ -1233,44 +1260,44 @@ function voteStats(slug) {
 // Cada estrella tiene mitad izquierda (valor N-0.5) y mitad derecha (valor N)
 // Los valores guardados en Firebase son 0.5 a 5.0 (× 2 = nota 1-10)
 
-function buildStarsHtml(slug, myVote) {
+function buildStarsHtml(slug, myVote, widgetId = slug) {
   let html = '';
   for (let i = 1; i <= 5; i++) {
     const fillPct = Math.min(Math.max((myVote - (i - 1)) * 100, 0), 100);
     html += `<div class="star-wrap">
       <div class="star-bg">★</div>
-      <div class="star-fg" id="sfg_${slug}_${i}" style="width:${fillPct}%">★</div>
-      <div class="half-l" onmouseenter="previewStars('${slug}',${i - 0.5})" onmouseleave="unpreviewStars('${slug}',${myVote})" onclick="castVote('${slug}',${i - 0.5})"></div>
-      <div class="half-r" onmouseenter="previewStars('${slug}',${i})"       onmouseleave="unpreviewStars('${slug}',${myVote})" onclick="castVote('${slug}',${i})"></div>
+      <div class="star-fg" id="sfg_${widgetId}_${i}" style="width:${fillPct}%">★</div>
+      <div class="half-l" onmouseenter="previewStars('${widgetId}',${i - 0.5})" onmouseleave="unpreviewStars('${widgetId}',${myVote})" onclick="castVote('${slug}',${i - 0.5},'${widgetId}')"></div>
+      <div class="half-r" onmouseenter="previewStars('${widgetId}',${i})"       onmouseleave="unpreviewStars('${widgetId}',${myVote})" onclick="castVote('${slug}',${i},'${widgetId}')"></div>
     </div>`;
   }
   return html;
 }
 
-function previewStars(slug, val) {
+function previewStars(widgetId, val) {
   for (let i = 1; i <= 5; i++) {
-    const fg = document.getElementById(`sfg_${slug}_${i}`);
+    const fg = document.getElementById(`sfg_${widgetId}_${i}`);
     if (!fg) continue;
     const fillPct = Math.min(Math.max((val - (i - 1)) * 100, 0), 100);
     fg.style.width = fillPct + '%';
     fg.classList.add('preview');
   }
-  const statusEl = document.getElementById('vstatus_' + slug);
+  const statusEl = document.getElementById('vstatus_' + widgetId);
   if (statusEl && statusEl.dataset.saved !== '1') {
     statusEl.textContent = `${(val * 2 % 1 === 0 ? val * 2 : (val * 2).toFixed(1))}/10`;
     statusEl.className = 'vote-status saving';
   }
 }
 
-function unpreviewStars(slug, myVote) {
+function unpreviewStars(widgetId, myVote) {
   for (let i = 1; i <= 5; i++) {
-    const fg = document.getElementById(`sfg_${slug}_${i}`);
+    const fg = document.getElementById(`sfg_${widgetId}_${i}`);
     if (!fg) continue;
     const fillPct = Math.min(Math.max((myVote - (i - 1)) * 100, 0), 100);
     fg.style.width = fillPct + '%';
     fg.classList.remove('preview');
   }
-  const statusEl = document.getElementById('vstatus_' + slug);
+  const statusEl = document.getElementById('vstatus_' + widgetId);
   if (statusEl && statusEl.dataset.saved !== '1') {
     statusEl.textContent = myVote > 0 ? `Tu nota: ${myVote * 2}/10` : 'Haz clic para votar';
     statusEl.className = myVote > 0 ? 'vote-status my-vote' : 'vote-status';
@@ -1284,7 +1311,7 @@ function communityHtml(avg, count) {
   return `<strong>${score}</strong>/10 &nbsp;·&nbsp; ${count} voto${count !== 1 ? 's' : ''}`;
 }
 
-function voteWidget(slug) {
+function voteWidget(slug, widgetId = slug) {
   if (!FIREBASE_ENABLED) {
     return `<div class="vote-section"><div class="vote-no-firebase">Votaciones no configuradas</div></div>`;
   }
@@ -1292,34 +1319,34 @@ function voteWidget(slug) {
   const statusText  = myVote > 0 ? `Tu nota: ${myVote * 2}/10` : 'Haz clic para votar';
   const statusClass = myVote > 0 ? 'my-vote' : '';
 
-  return `<div class="vote-section" id="vs_${slug}">
+  return `<div class="vote-section" id="vs_${widgetId}">
     <div class="vote-section-top">
       <div>
         <div class="vote-label">Tu valoración</div>
-        <div class="stars" id="stars_${slug}">${buildStarsHtml(slug, myVote)}</div>
+        <div class="stars" id="stars_${widgetId}">${buildStarsHtml(slug, myVote, widgetId)}</div>
       </div>
-      <div class="vote-community" id="comm_${slug}">
+      <div class="vote-community" id="comm_${widgetId}">
         <div class="vote-label" style="text-align:right">Comunidad</div>
         ${communityHtml(avg, count)}
       </div>
     </div>
-    <div class="vote-status ${statusClass}" id="vstatus_${slug}" data-saved="${myVote > 0 ? 1 : 0}">${statusText}</div>
+    <div class="vote-status ${statusClass}" id="vstatus_${widgetId}" data-saved="${myVote > 0 ? 1 : 0}">${statusText}</div>
   </div>`;
 }
 
-async function castVote(slug, stars) {
+async function castVote(slug, stars, widgetId = slug) {
   if (!FIREBASE_ENABLED) return;
   if (!votesCache[slug]) votesCache[slug] = {};
   votesCache[slug][USER_ID] = stars;
 
-  // Update stars visually
+    // Update stars visually
   for (let i = 1; i <= 5; i++) {
-    const fg = document.getElementById(`sfg_${slug}_${i}`);
+    const fg = document.getElementById(`sfg_${widgetId}_${i}`);
     if (fg) { fg.style.width = Math.min(Math.max((stars-(i-1))*100,0),100)+'%'; fg.classList.remove('preview'); }
   }
 
-  const statusEl = document.getElementById('vstatus_' + slug);
-  const commEl   = document.getElementById('comm_'    + slug);
+  const statusEl = document.getElementById('vstatus_' + widgetId);
+  const commEl   = document.getElementById('comm_'    + widgetId);
   if (statusEl) { statusEl.textContent = 'Guardando...'; statusEl.className = 'vote-status saving'; statusEl.dataset.saved = '0'; }
 
   try {
@@ -1328,11 +1355,10 @@ async function castVote(slug, stars) {
     if (statusEl) { statusEl.textContent = `Tu nota: ${stars * 2}/10 ✓`; statusEl.className = 'vote-status my-vote'; statusEl.dataset.saved = '1'; }
     if (commEl)   { commEl.innerHTML = `<div class="vote-label" style="text-align:right">Comunidad</div>${communityHtml(avg, count)}`; }
     // Re-bind mouseleave con el nuevo myVote
-    const starsEl = document.getElementById('stars_' + slug);
+    const starsEl = document.getElementById('stars_' + widgetId);
     if (starsEl) {
       starsEl.querySelectorAll('.half-l,.half-r').forEach(el => {
-        const v = parseFloat(el.getAttribute('onmouseleave').match(/[\d.]+/g).pop());
-        el.setAttribute('onmouseleave', `unpreviewStars('${slug}',${stars})`);
+        el.setAttribute('onmouseleave', `unpreviewStars('${widgetId}',${stars})`);
       });
     }
   } catch(e) {
@@ -1686,8 +1712,14 @@ async function toggleFav(slug, btn) {
   const likesEl = btn.querySelector('.fav-likes');
   const count = likeCount(slug);
   btn.classList.toggle('active', !wasLiked);
-  card.classList.toggle('is-fav', !wasLiked);
+  btn.classList.toggle('favorite', !wasLiked);
+  card?.classList.toggle('is-fav', !wasLiked);
   if (likesEl) likesEl.textContent = count;
+  document.querySelectorAll(`[data-slug="${slug}"]`).forEach(el => {
+    el.classList.toggle('active', !wasLiked);
+    const countEl = el.querySelector('.fav-likes');
+    if (countEl) countEl.textContent = count;
+  });
 
   updateFavCount();
   if (showOnlyFavs) renderCatalogoDesdeInicio();
@@ -1818,7 +1850,8 @@ function findDetailRoom(kind, key) {
 function detailImageHtml(room, kind) {
   const initial = escapeHtml((room.nombre || '?').trim().slice(0, 1).toUpperCase());
   const fallback = `<div class="card-media-fallback">${initial}</div>`;
-  const src = room.imagen || (kind === 'pendientes' ? `images/${slugify(room.nombre || '')}.webp` : '');
+  const localSrc = `images/${slugify(room.nombre || '')}.webp`;
+  const src = room.imagen || (kind === 'pendientes' || kind === 'hechos' ? localSrc : '');
   if (!src) return fallback;
   return `<img src="${src}" alt="${escapeHtml(room.nombre || 'Escape room')}" onerror="this.replaceWith(this.nextElementSibling)">${fallback}`;
 }
@@ -1826,6 +1859,38 @@ function detailImageHtml(room, kind) {
 function metaItem(label, value, extraClass = '') {
   if (value === '' || value === null || value === undefined) return '';
   return `<div class="meta-item"><span class="meta-key">${label}</span><span class="meta-val ${extraClass}">${value}</span></div>`;
+}
+
+function communityScoreMeta(room) {
+  if (!FIREBASE_ENABLED) return '';
+  const { avg, count } = voteStats(slugify(room.nombre || ''));
+  return count > 0 ? metaItem('Comunidad', `🗳 ${(avg * 2).toFixed(1)}/10 (${count})`) : '';
+}
+
+function reviewScoreMeta(room) {
+  return [
+    metaItem('Escapistas', room.rating ? `★ ${room.rating}` : ''),
+    metaItem('Grupo', room.valoracion ? `★ ${room.valoracion}/10` : ''),
+    communityScoreMeta(room)
+  ].join('');
+}
+
+function reviewBlockHtml(room) {
+  const hasReview = !!(room.descripcion || room.historia || room.ambientacion || room.jugabilidad || room.gamemaster);
+  if (!hasReview) return '';
+  return `
+    <div class="detail-section-title">Review del grupo</div>
+    <div class="detail-review">
+      <div class="detail-review-text ${!room.descripcion ? 'empty' : ''}">${escapeHtml(room.descripcion || 'Sin opinión añadida aún.')}</div>
+      ${(room.historia || room.ambientacion || room.jugabilidad || room.gamemaster) ? `
+      <div class="detail-section-title" style="margin-top:14px">Valoración por categorías</div>
+      <div class="detail-cats">
+        ${catStars('Historia', room.historia)}
+        ${catStars('Ambientación', room.ambientacion)}
+        ${catStars('Jugabilidad', room.jugabilidad)}
+        ${catStars('Game Master', room.gamemaster)}
+      </div>` : ''}
+    </div>`;
 }
 
 function detailTags(room, kind) {
@@ -1856,6 +1921,34 @@ function personalActionsHtml(room, kind) {
   </div>`;
 }
 
+function detailAccountHtml(room, kind) {
+  const key = jsString(roomKey(room));
+  const slug = slugify(room.nombre || '');
+  const state = userStateFor(room);
+  const favorite = iLiked(slug);
+  const stateLabel = state.done ? 'Hecho por ti' : state.pending ? 'Pendiente personal' : favorite ? 'Favorito' : 'Sin marcar';
+  if (!AUTH_USER) {
+    return `<div class="detail-account">
+      <div class="detail-account-head">
+        <div class="detail-account-title">Mi cuenta</div>
+      </div>
+      <div class="detail-login-hint">Entra con Google para guardar pendientes, hechos, favoritos y tu valoración.</div>
+    </div>`;
+  }
+  return `<div class="detail-account">
+    <div class="detail-account-head">
+      <div class="detail-account-title">Mi cuenta</div>
+      <div class="detail-account-state">${stateLabel}</div>
+    </div>
+    <div class="detail-personal-grid">
+      <button class="detail-personal-btn pending ${state.pending ? 'active' : ''}" type="button" onclick="setPersonalRoomState('${kind}','${key}','pending')">${state.pending ? '✓ Pendiente' : 'Mi pendiente'}</button>
+      <button class="detail-personal-btn done ${state.done ? 'active' : ''}" type="button" onclick="setPersonalRoomState('${kind}','${key}','done')">${state.done ? '✓ Hecho' : 'Hecho por mi'}</button>
+      <button class="detail-personal-btn favorite ${favorite ? 'active' : ''}" data-slug="${slug}" type="button" onclick="toggleFav('${slug}',this)">${favorite ? '♥ Favorito' : '♡ Favorito'} <span class="fav-likes">${likeCount(slug)}</span></button>
+    </div>
+    ${voteWidget(slug, `${slug}_detail`)}
+  </div>`;
+}
+
 function openDetailFromCard(event, kind, key) {
   if (event.target.closest('a,button,input,select,label')) return;
   openDetail(kind, key);
@@ -1867,8 +1960,10 @@ function openDetail(kind, key) {
   const rating = displayRating(room);
   const players = playerLabel(room);
   const price = priceLabel(room);
-  const sourceLabel = kind === 'catalogo' ? 'Catalogo general' : kind === 'hechos' ? 'Hecho' : 'Pendiente';
-  const desc = escapeHtml(room.descripcion || 'Sin sinopsis disponible.');
+  const sourceLabel = kind === 'catalogo' ? 'Catalogo general' : kind === 'hechos' ? 'Review del grupo' : 'Pendiente';
+  const location = [cleanValue(room.ciudad), cleanValue(room.provincia), cleanValue(communityOf(room))].filter(Boolean).join(' - ');
+  const isReview = kind === 'hechos';
+  const synopsis = !isReview && room.descripcion ? escapeHtml(room.descripcion) : '';
   const modal = document.getElementById('detail-modal');
 
   document.getElementById('detail-media').innerHTML = detailImageHtml(room, kind);
@@ -1878,20 +1973,24 @@ function openDetail(kind, key) {
     <div class="detail-company">${escapeHtml(room.empresa || '')}</div>
     <div class="detail-tags">${detailTags(room, kind)}</div>
     <div class="detail-meta">
-      ${metaItem('Rating', rating ? `★ ${rating}` : '')}
+      ${!isReview ? metaItem('Rating', rating ? `★ ${rating}` : '') : ''}
       ${metaItem('Duracion', room.duracion ? `⏱ ${room.duracion} min` : '')}
       ${metaItem('Jugadores', players ? `👥 ${players}` : '')}
       ${metaItem('Precio', price)}
       ${metaItem('Dificultad', room.dificultad || '', dc(room.dificultad))}
+      ${metaItem('Ubicacion', location)}
       ${metaItem('Pais', room.pais || '')}
+      ${reviewScoreMeta(room)}
       ${kind === 'pendientes' ? metaItem('Opiniones', room.votos ? `🗳 ${room.votos}` : '') : ''}
     </div>
+    ${synopsis ? `
     <div class="detail-section-title">Sinopsis</div>
-    <div class="detail-desc">${desc}</div>
+    <div class="detail-desc">${synopsis}</div>` : ''}
+    ${isReview ? reviewBlockHtml(room) : ''}
+    ${detailAccountHtml(room, kind)}
     <div class="detail-actions">
       ${room.web ? `<a class="detail-link" href="${room.web}" target="_blank">Ver web oficial</a>` : ''}
-      ${kind === 'catalogo' ? `<span class="tag tag-muted">Catálogo</span>` : kind === 'hechos' ? `<span class="tag tag-feature">Hecho</span>` : `<span class="tag tag-feature">Pendiente</span>`}
-      ${personalActionsHtml(room, kind)}
+      ${kind === 'catalogo' ? `<span class="tag tag-muted">Catálogo</span>` : kind === 'hechos' ? `<span class="tag tag-feature">Review grupo</span>` : `<span class="tag tag-feature">Pendiente</span>`}
     </div>`;
 
   modal.classList.add('open');
@@ -1994,7 +2093,9 @@ function cardHecho(h, rank) {
     ? `<span class="rv-score-pill rv-score-comunidad">🗳 ${(avg*2).toFixed(1)}/10 <span style="opacity:.6">(${count})</span></span>`
     : '';
 
-  return `<div class="review-row" style="animation-delay:${(rank-1)*.05}s">
+  const detailKey = jsString(roomKey(h));
+
+  return `<div class="review-row" tabindex="0" role="button" onclick="openDetailFromCard(event,'${detailKind}','${detailKey}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetail('${detailKind}','${detailKey}')}" style="animation-delay:${(rank-1)*.05}s">
 
     <div class="rv-rank">
       ${rankDisp}
@@ -2267,7 +2368,8 @@ function renderRanking() {
             }
           </td>`
         : '';
-      return `<tr>
+      const detailKey = jsString(roomKey(h));
+      return `<tr class="rank-clickable" tabindex="0" role="button" onclick="openDetailFromCard(event,'hechos','${detailKey}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetail('hechos','${detailKey}')}">
         <td data-label="#"><span class="rank-pos ${medals[i]||''}">${emoji[i]||'#'+(i+1)}</span></td>
         <td data-label="Escape Room"><span class="rank-room-name">${h.nombre || '—'}</span></td>
         <td data-label="Empresa">${h.empresa || '—'}</td>
