@@ -574,8 +574,9 @@
     <div class="tabs-container">
       <button class="tab active" id="tab-cat"   onclick="switchTab('catalogo')">🗂 Catálogo <span class="count-badge" id="badge-cat">0</span></button>
       <button class="tab"        id="tab-pend"  onclick="switchTab('pendientes')">🔒 Pendientes <span class="count-badge" id="badge-pend">0</span></button>
-      <button class="tab"        id="tab-hecho" onclick="switchTab('hechos')">✅ Hechos <span class="count-badge" id="badge-hecho">0</span></button>
-      <button class="tab"        id="tab-rank"  onclick="switchTab('ranking')">🏆 Ranking</button>
+      <button class="tab auth-tab" id="tab-mine" onclick="switchTab('mis-hechos')" style="display:none">✅ Mis hechos <span class="count-badge" id="badge-mine">0</span></button>
+      <button class="tab"        id="tab-hecho" onclick="switchTab('hechos')">✍ Reviews <span class="count-badge" id="badge-hecho">0</span></button>
+      <button class="tab"        id="tab-rank"  onclick="switchTab('ranking')">🏆 Ranking grupo</button>
     </div>
   </div>
 
@@ -603,11 +604,35 @@
         <button class="sort-btn" id="sort-pend-name" onclick="setSortPend('name')">A→Z</button>
         <button class="sort-btn" id="sort-pend-dur"  onclick="setSortPend('dur')">⏱ Duración</button>
         <button class="sort-btn" id="sort-pend-dif"  onclick="setSortPend('dif')">⚠ Dificultad</button>
-        <button class="sort-btn fav-filter" id="sort-pend-fav" onclick="toggleFavFilter()" title="Mostrar solo favoritos">♥ Favoritos <span id="fav-count"></span></button>
       </div>
       <div class="divider-line"></div>
       <div class="result-info" id="result-info-pend"></div>
       <div class="rooms-grid"  id="grid-pendientes"></div>
+    </div>
+
+    <!-- MIS HECHOS -->
+    <div id="panel-mis-hechos" class="panel" style="display:none">
+      <div class="filters">
+        <span class="filter-label">Filtrar:</span>
+        <input type="text" class="filter-input" id="search-mine" placeholder="🔍  Nombre, empresa, ciudad..." oninput="renderMisHechos()">
+        <select class="filter-select" id="filter-comunidad-mine" onchange="updateGeoFilters('mine');renderMisHechos()"><option value="">Comunidad autónoma</option></select>
+        <select class="filter-select" id="filter-prov-mine" onchange="updateGeoFilters('mine');renderMisHechos()"><option value="">Provincia</option></select>
+        <select class="filter-select" id="filter-ciudad-mine" onchange="updateGeoFilters('mine');renderMisHechos()"><option value="">Ciudad</option></select>
+        <select class="filter-select" id="filter-jugadores-mine" onchange="renderMisHechos()"><option value="">Jugadores</option></select>
+        <select class="filter-select" id="filter-dif-mine" onchange="renderMisHechos()"><option value="">Dificultad</option></select>
+        <label class="filter-check"><input type="checkbox" id="filter-abierto-mine" onchange="renderMisHechos()"> Abiertos</label>
+        <button class="clear-btn" onclick="clearFilters('mine')">✕ Limpiar</button>
+      </div>
+      <div class="sort-row">
+        <span class="filter-label">Ordenar:</span>
+        <button class="sort-btn active" id="sort-mine-rating" onclick="setSortMine('rating')">★ Rating</button>
+        <button class="sort-btn" id="sort-mine-name" onclick="setSortMine('name')">A→Z</button>
+        <button class="sort-btn" id="sort-mine-dur" onclick="setSortMine('dur')">⏱ Duración</button>
+        <button class="sort-btn" id="sort-mine-dif" onclick="setSortMine('dif')">⚠ Dificultad</button>
+      </div>
+      <div class="divider-line"></div>
+      <div class="result-info" id="result-info-mine"></div>
+      <div class="rooms-grid" id="grid-mis-hechos"></div>
     </div>
 
     <!-- HECHOS -->
@@ -641,6 +666,7 @@
         <label class="filter-check"><input type="checkbox" id="filter-terror-cat" onchange="renderCatalogoDesdeInicio()"> Terror</label>
         <label class="filter-check"><input type="checkbox" id="filter-open-cat" onchange="renderCatalogoDesdeInicio()"> Abiertos</label>
         <label class="filter-check"><input type="checkbox" id="filter-hide-done-cat" onchange="renderCatalogoDesdeInicio()"> Ocultar hechos</label>
+        <label class="filter-check auth-only" id="filter-fav-cat-wrap" style="display:none"><input type="checkbox" id="filter-fav-cat" onchange="renderCatalogoDesdeInicio()"> Favoritos <span id="fav-count"></span></label>
         <button class="clear-btn" onclick="clearFilters('cat')">✕ Limpiar</button>
       </div>
       <div class="sort-row">
@@ -725,10 +751,11 @@ function writeStoredFavs() {
 // Cache de votos: { roomSlug: { userId: stars, ... }, ... }
 let votesCache = {};
 
-let PENDIENTES = [], HECHOS = [], CATALOGO = [], TERPECA_AWARDS = [], sortPend = 'rating', sortCatalogo = 'rating';
+let PENDIENTES = [], HECHOS = [], CATALOGO = [], TERPECA_AWARDS = [], sortPend = 'rating', sortMine = 'rating', sortCatalogo = 'rating';
 const CATALOG_PAGE_SIZE = 120;
 let catalogVisibleCount = CATALOG_PAGE_SIZE;
 let GROUP_ROOM_INDEX = { pendientes: new Set(), hechos: new Set() };
+let ACTIVE_TAB = 'catalogo';
 
 // Preparado para el siguiente paso con Google/Firebase Auth:
 // users/{uid}/roomStates/{roomKey} -> { pendiente, hecho, favorito, descartado, updatedAt }
@@ -883,21 +910,46 @@ function mergeRooms(primary, extra, predicate) {
   return result;
 }
 
+function uniqueRooms(rooms) {
+  const seen = new Set();
+  return rooms.filter(room => {
+    const key = userRoomKey(room);
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function personalRoomSources() {
+  return uniqueRooms([...CATALOGO, ...PENDIENTES, ...HECHOS]);
+}
+
 function personalPendingRooms() {
-  return [...CATALOGO, ...PENDIENTES].filter(room => userStateFor(room).pending);
+  return personalRoomSources().filter(room => userStateFor(room).pending);
 }
 
 function personalDoneRooms() {
-  return [...CATALOGO, ...PENDIENTES].filter(room => userStateFor(room).done);
+  return personalRoomSources().filter(room => userStateFor(room).done);
+}
+
+function currentPendingRooms() {
+  return AUTH_USER ? personalPendingRooms() : PENDIENTES;
+}
+
+function currentDoneRooms() {
+  return AUTH_USER ? personalDoneRooms() : HECHOS;
+}
+
+function reviewRooms() {
+  return HECHOS;
 }
 
 function allPendingRooms() {
-  const groupPending = PENDIENTES.filter(room => !userStateFor(room).done);
-  return mergeRooms(groupPending, personalPendingRooms(), room => !groupStateFor(room).done);
+  return currentPendingRooms();
 }
 
 function allDoneRooms() {
-  return HECHOS;
+  return currentDoneRooms();
 }
 
 // ── Firebase REST API ─────────────────────────────────────────────────────────
@@ -945,6 +997,7 @@ function renderAuthStatus() {
     loginBtn.style.display = '';
     logoutBtn.style.display = 'none';
   }
+  syncNavigationForAuth();
 }
 
 async function initFirebaseAuth() {
@@ -977,6 +1030,7 @@ async function refreshSignedSession() {
   populateFilters();
   renderStats();
   renderPendientes();
+  renderMisHechos();
   renderHechos();
   renderRanking();
   renderCatalogo();
@@ -1036,6 +1090,7 @@ async function setPersonalRoomState(kind, key, state) {
     populateFilters();
     renderStats();
     renderPendientes();
+    renderMisHechos();
     renderHechos();
     renderCatalogo();
     if (document.getElementById('detail-modal')?.classList.contains('open')) {
@@ -1343,7 +1398,7 @@ async function loadData() {
     document.getElementById('app').style.display = 'block';
     if (!FIREBASE_ENABLED) document.getElementById('setup-banner').style.display = 'block';
 
-    populateFilters(); renderStats(); renderPendientes(); renderHechos(); renderRanking(); renderCatalogo();
+    populateFilters(); renderStats(); renderPendientes(); renderMisHechos(); renderHechos(); renderRanking(); renderCatalogo();
     updateFavCount();
 
     // Cargar likes DESPUÉS de pintar la UI y actualizar contadores
@@ -1384,8 +1439,8 @@ function geoFilteredRooms(list, scope) {
 }
 
 function updateGeoFilters(scope) {
-  const list = scope === 'cat' ? CATALOGO : PENDIENTES;
-  const cityPlaceholder = scope === 'cat' ? 'Ciudad' : 'Todas las ciudades';
+  const list = scope === 'cat' ? CATALOGO : scope === 'mine' ? allDoneRooms() : allPendingRooms();
+  const cityPlaceholder = scope === 'pend' ? 'Todas las ciudades' : 'Ciudad';
   const communityId = `filter-comunidad-${scope}`;
   const provinceId = `filter-prov-${scope}`;
   const cityId = `filter-ciudad-${scope}`;
@@ -1405,8 +1460,10 @@ function updateGeoFilters(scope) {
 function populateFilters() {
   const pendingRooms = allPendingRooms();
   const doneRooms = allDoneRooms();
+  const reviews = reviewRooms();
   const fill = (id, vals, ph) => {
     const s = document.getElementById(id);
+    if (!s) return;
     const current = s.value;
     vals = [...new Set(vals.map(v => String(v || '').trim()).filter(Boolean))];
     s.innerHTML = `<option value="">${ph}</option>`;
@@ -1421,15 +1478,22 @@ function populateFilters() {
   fill('filter-genero-pend', [...new Set(pendingRooms.flatMap(p=>listValues(p.generos || p.tematica)))].sort(), 'Género');
   fill('filter-tipo-pend',   [...new Set(pendingRooms.map(p=>p.tipo).filter(Boolean))].sort(), 'Tipo');
   fill('filter-publico-pend',[...new Set(pendingRooms.flatMap(p=>listValues(p.publico)))].sort(), 'Público');
-  fill('filter-dif-hecho',   [...new Set(doneRooms.map(h=>h.dificultad).filter(Boolean))].sort(), 'Dificultad');
+  fill('filter-comunidad-mine', [...new Set(doneRooms.map(p=>communityOf(p)).filter(Boolean))].sort(), 'Comunidad autonoma');
+  fill('filter-prov-mine',   [...new Set(doneRooms.map(p=>p.provincia).filter(Boolean))].sort(), 'Provincia');
+  fill('filter-ciudad-mine', [...new Set(doneRooms.map(p=>p.ciudad).filter(Boolean))].sort(), 'Ciudad');
+  fill('filter-jugadores-mine', ['1','2','3','4','5','6','7','8','9','10'].filter(n => doneRooms.some(p => supportsPlayers(p, n))).map(n => `${n} jugador${n === '1' ? '' : 'es'}`), 'Jugadores');
+  fill('filter-dif-mine',    [...new Set(doneRooms.map(p=>p.dificultad).filter(Boolean))].sort(), 'Dificultad');
+  fill('filter-dif-hecho',   [...new Set(reviews.map(h=>h.dificultad).filter(Boolean))].sort(), 'Dificultad');
   fill('filter-comunidad-cat', [...new Set(CATALOGO.map(c=>communityOf(c)).filter(Boolean))].sort(), 'Comunidad autonoma');
   fill('filter-prov-cat',    [...new Set(CATALOGO.map(c=>c.provincia).filter(Boolean))].sort(), 'Provincia');
   fill('filter-ciudad-cat',  [...new Set(CATALOGO.map(c=>c.ciudad).filter(Boolean))].sort(), 'Ciudad');
   fill('filter-jugadores-cat', ['1','2','3','4','5','6','7','8','9','10'].filter(n => CATALOGO.some(c => supportsPlayers(c, n))).map(n => `${n} jugador${n === '1' ? '' : 'es'}`), 'Jugadores');
   fill('filter-dif-cat',     [...new Set(CATALOGO.map(c=>c.dificultad).filter(Boolean))].sort(), 'Dificultad');
   document.getElementById('badge-pend').textContent  = pendingRooms.length;
-  document.getElementById('badge-hecho').textContent = doneRooms.length;
+  document.getElementById('badge-mine').textContent = personalDoneRooms().length;
+  document.getElementById('badge-hecho').textContent = reviews.length;
   document.getElementById('badge-cat').textContent = CATALOGO.length;
+  syncNavigationForAuth();
 }
 
 function renderStats() {
@@ -1458,10 +1522,31 @@ function renderStats() {
     </div>`;
 }
 
+function syncNavigationForAuth() {
+  const signed = !!AUTH_USER;
+  document.querySelectorAll('.auth-tab,.auth-only').forEach(el => {
+    el.style.display = signed ? '' : 'none';
+  });
+  const pendTab = document.getElementById('tab-pend');
+  if (pendTab) {
+    pendTab.innerHTML = signed
+      ? `🔒 Mis pendientes <span class="count-badge" id="badge-pend">${personalPendingRooms().length}</span>`
+      : `🔒 Pendientes grupo <span class="count-badge" id="badge-pend">${PENDIENTES.length}</span>`;
+  }
+  if (!signed) {
+    showOnlyFavs = false;
+    const favFilter = document.getElementById('filter-fav-cat');
+    if (favFilter) favFilter.checked = false;
+    if (ACTIVE_TAB === 'mis-hechos') switchTab('catalogo');
+  }
+}
+
 function switchTab(t) {
-  ['pendientes','hechos','ranking','catalogo'].forEach(x => {
+  if (t === 'mis-hechos' && !AUTH_USER) t = 'catalogo';
+  ACTIVE_TAB = t;
+  ['pendientes','mis-hechos','hechos','ranking','catalogo'].forEach(x => {
     document.getElementById('panel-' + x).style.display = x === t ? 'block' : 'none';
-    const id = x==='pendientes'?'pend':x==='hechos'?'hecho':x==='ranking'?'rank':'cat';
+    const id = x==='pendientes'?'pend':x==='mis-hechos'?'mine':x==='hechos'?'hecho':x==='ranking'?'rank':'cat';
     document.getElementById('tab-' + id).classList.toggle('active', x === t);
   });
 }
@@ -1471,6 +1556,13 @@ function setSortPend(s) {
   document.querySelectorAll('[id^="sort-pend-"]').forEach(b => b.classList.remove('active'));
   document.getElementById('sort-pend-' + s).classList.add('active');
   renderPendientes();
+}
+
+function setSortMine(s) {
+  sortMine = s;
+  document.querySelectorAll('[id^="sort-mine-"]').forEach(b => b.classList.remove('active'));
+  document.getElementById('sort-mine-' + s).classList.add('active');
+  renderMisHechos();
 }
 
 function setSortCatalogo(s) {
@@ -1504,11 +1596,22 @@ function clearFilters(w) {
     updateGeoFilters('pend');
     renderPendientes();
   } else {
+    if (w === 'mine') {
+      ['search-mine','filter-comunidad-mine','filter-prov-mine','filter-ciudad-mine','filter-jugadores-mine','filter-dif-mine']
+        .forEach(id => { document.getElementById(id).value = ''; });
+      document.getElementById('filter-abierto-mine').checked = false;
+      updateGeoFilters('mine');
+      renderMisHechos();
+      return;
+    }
     if (w === 'cat') {
       ['search-cat','filter-comunidad-cat','filter-prov-cat','filter-ciudad-cat','filter-jugadores-cat','filter-dif-cat']
         .forEach(id => { document.getElementById(id).value = ''; });
       ['filter-terror-cat','filter-open-cat','filter-hide-done-cat']
         .forEach(id => { document.getElementById(id).checked = false; });
+      const favFilter = document.getElementById('filter-fav-cat');
+      if (favFilter) favFilter.checked = false;
+      showOnlyFavs = false;
       updateGeoFilters('cat');
       renderCatalogoDesdeInicio();
       return;
@@ -1587,7 +1690,7 @@ async function toggleFav(slug, btn) {
   if (likesEl) likesEl.textContent = count;
 
   updateFavCount();
-  if (showOnlyFavs) renderPendientes();
+  if (showOnlyFavs) renderCatalogoDesdeInicio();
 
   // Persistir en Firebase
   if (!FIREBASE_ENABLED) {
@@ -1610,8 +1713,9 @@ function updateFavCount() {
 
 function toggleFavFilter() {
   showOnlyFavs = !showOnlyFavs;
-  document.getElementById('sort-pend-fav').classList.toggle('active', showOnlyFavs);
-  renderPendientes();
+  const filter = document.getElementById('filter-fav-cat');
+  if (filter) filter.checked = showOnlyFavs;
+  renderCatalogoDesdeInicio();
 }
 
 // ── Helper: estrellas de categoría (escala 0-10) ──────────────────────────────
@@ -1812,7 +1916,9 @@ document.addEventListener('keydown', event => {
 // ── Templates de tarjetas ─────────────────────────────────────────────────────
 function cardPend(p, i) {
   const slug = slugify(p.nombre);
-  const detailKind = PENDIENTES.some(room => userRoomKey(room) === userRoomKey(p)) ? 'pendientes' : 'catalogo';
+  const detailKind = HECHOS.some(room => userRoomKey(room) === userRoomKey(p))
+    ? 'hechos'
+    : PENDIENTES.some(room => userRoomKey(room) === userRoomKey(p)) ? 'pendientes' : 'catalogo';
   const detailKey = jsString(roomKey(p));
   const rating = displayRating(p);
   const players = playerLabel(p);
@@ -2024,20 +2130,52 @@ function renderPendientes() {
     if (!matchesList(p.publico, publico)) return false;
     if (onlyOpen && !isTruthyFlag(p.abierto)) return false;
     if (onlyVerified && !isTruthyFlag(p.verificado)) return false;
-    if (showOnlyFavs && !iLiked(slugify(p.nombre))) return false;
     return true;
   });
   if      (sortPend==='rating') f.sort((a,b)=>(parseFloat(displayRating(b))||0)-(parseFloat(displayRating(a))||0));
   else if (sortPend==='name')   f.sort((a,b)=>a.nombre.localeCompare(b.nombre));
   else if (sortPend==='dur')    f.sort((a,b)=>parseInt(b.duracion||0)-parseInt(a.duracion||0));
   else if (sortPend==='dif')    f.sort((a,b)=>do_(b.dificultad)-do_(a.dificultad));
-  document.getElementById('result-info-pend').textContent = `Mostrando ${f.length} de ${pendingRooms.length} escape rooms${showOnlyFavs ? ' · solo favoritos' : ''}`;
+  const pendingLabel = AUTH_USER ? 'pendientes personales' : 'pendientes del grupo';
+  document.getElementById('result-info-pend').textContent = `Mostrando ${f.length} de ${pendingRooms.length} ${pendingLabel}`;
   const g = document.getElementById('grid-pendientes');
-  g.innerHTML = f.length ? f.map(cardPend).join('') : `<div class="empty-state"><div class="lock">🔒</div><p>${showOnlyFavs ? 'NO HAY FAVORITOS AÚN — PULSA ♥ EN UNA TARJETA' : 'NO SE ENCONTRARON RESULTADOS'}</p></div>`;
+  g.innerHTML = f.length ? f.map(cardPend).join('') : `<div class="empty-state"><div class="lock">🔒</div><p>${AUTH_USER ? 'AÚN NO TIENES PENDIENTES — MARCA SALAS DESDE EL CATÁLOGO' : 'NO SE ENCONTRARON RESULTADOS'}</p></div>`;
+}
+
+function renderMisHechos() {
+  const doneRooms = personalDoneRooms();
+  const s = document.getElementById('search-mine')?.value.toLowerCase() || '';
+  const ciudad = document.getElementById('filter-ciudad-mine')?.value || '';
+  const comunidad = document.getElementById('filter-comunidad-mine')?.value || '';
+  const prov = document.getElementById('filter-prov-mine')?.value || '';
+  const players = document.getElementById('filter-jugadores-mine')?.value || '';
+  const dificultad = document.getElementById('filter-dif-mine')?.value || '';
+  const onlyOpen = !!document.getElementById('filter-abierto-mine')?.checked;
+
+  let f = doneRooms.filter(p => {
+    if (s && ![p.nombre,p.empresa,p.ciudad,p.provincia,communityOf(p),p.tematica,p.generos,p.tipo,p.publico,p.caracteristicas].some(x=>(x||'').toLowerCase().includes(s))) return false;
+    if (comunidad && communityOf(p) !== comunidad) return false;
+    if (ciudad && String(p.ciudad || '').trim() !== ciudad) return false;
+    if (prov && String(p.provincia || '').trim() !== prov) return false;
+    if (!supportsPlayers(p, players)) return false;
+    if (dificultad && p.dificultad !== dificultad) return false;
+    if (onlyOpen && !isTruthyFlag(p.abierto)) return false;
+    return true;
+  });
+
+  if      (sortMine==='rating') f.sort((a,b)=>(parseFloat(displayRating(b))||0)-(parseFloat(displayRating(a))||0));
+  else if (sortMine==='name')   f.sort((a,b)=>(a.nombre || '').localeCompare(b.nombre || ''));
+  else if (sortMine==='dur')    f.sort((a,b)=>parseInt(b.duracion||0)-parseInt(a.duracion||0));
+  else if (sortMine==='dif')    f.sort((a,b)=>do_(b.dificultad)-do_(a.dificultad));
+
+  document.getElementById('result-info-mine').textContent = `Mostrando ${f.length} de ${doneRooms.length} hechos personales`;
+  document.getElementById('grid-mis-hechos').innerHTML = f.length
+    ? f.map(cardPend).join('')
+    : `<div class="empty-state"><div class="lock">✓</div><p>AÚN NO TIENES HECHOS — MARCA SALAS DESDE EL CATÁLOGO</p></div>`;
 }
 
 function renderHechos() {
-  const doneRooms = allDoneRooms();
+  const doneRooms = reviewRooms();
   const s = document.getElementById('search-hecho').value.toLowerCase();
   const d = document.getElementById('filter-dif-hecho').value;
   let f = doneRooms.filter(h => {
@@ -2053,7 +2191,7 @@ function renderHechos() {
     return avgB - avgA;
   });
 
-  document.getElementById('result-info-hecho').textContent = `${f.length} escape rooms completados`;
+  document.getElementById('result-info-hecho').textContent = `${f.length} reviews del grupo`;
   document.getElementById('grid-hechos').innerHTML = f.map((h, i) => cardHecho(h, i + 1)).join('');
 }
 
@@ -2067,6 +2205,7 @@ function renderCatalogo() {
   const onlyTerror = document.getElementById('filter-terror-cat').checked;
   const onlyOpen = document.getElementById('filter-open-cat').checked;
   const hideDone = document.getElementById('filter-hide-done-cat').checked;
+  showOnlyFavs = !!document.getElementById('filter-fav-cat')?.checked;
 
   let f = CATALOGO.filter(c => {
     const groupState = groupStateFor(c);
@@ -2080,6 +2219,7 @@ function renderCatalogo() {
     if (onlyTerror && !c.terror) return false;
     if (onlyOpen && !c.abierto) return false;
     if (hideDone && (groupState.done || userState.done)) return false;
+    if (showOnlyFavs && !iLiked(slugify(c.nombre))) return false;
     return true;
   });
 
@@ -2094,7 +2234,7 @@ function renderCatalogo() {
   const visible = f.slice(0, catalogVisibleCount);
   const remaining = Math.max(f.length - visible.length, 0);
   document.getElementById('result-info-cat').textContent =
-    `Mostrando ${visible.length} de ${f.length} salas filtradas (${CATALOGO.length} en catalogo)`;
+    `Mostrando ${visible.length} de ${f.length} salas filtradas (${CATALOGO.length} en catalogo)${showOnlyFavs ? ' · favoritos' : ''}`;
   document.getElementById('grid-catalogo').innerHTML = visible.length
     ? visible.map(cardCatalogo).join('')
     : `<div class="empty-state"><div class="lock">?</div><p>NO SE ENCONTRARON RESULTADOS</p></div>`;
