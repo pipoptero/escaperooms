@@ -1,3 +1,5 @@
-﻿# general
+# general
 .env
 .DS_Store
+firebase-config.js
+*.local.js

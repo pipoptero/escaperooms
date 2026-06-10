@@ -2,6 +2,7 @@
 """Genera catalog.json desde el catálogo público de Escape Collector."""
 
 import json
+import os
 import re
 import unicodedata
 from pathlib import Path
@@ -11,9 +12,12 @@ ROOT = Path(__file__).resolve().parents[1]
 CATALOG_FILE = ROOT / "catalog.json"
 CATALOG_IMAGES_DIR = ROOT / "images" / "ec-all"
 
-API_KEY = "AIzaSyDdd9YI85mqWq32qbKeU9oeDgUEeTaq5B8"
+API_KEY = os.environ.get("GOOGLE_API_KEY", "").strip()
 PROJECT = "room-escapes"
 PAGE_SIZE = 300
+if not API_KEY:
+    raise RuntimeError("GOOGLE_API_KEY no configurada. Exporta la clave antes de ejecutar este script.")
+
 USER_AGENT = "scaperooms-catalog-builder/1.0"
 
 COMMUNITIES_BY_PROVINCE_ID = {

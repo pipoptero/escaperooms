@@ -156,6 +156,7 @@
   .filter-label{font-family:'Share Tech Mono',monospace;font-size:.67rem;color:var(--text3);letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;}
   .filter-select,.filter-input{font-family:'Rajdhani',sans-serif;font-size:.86rem;font-weight:500;background:var(--bg3);color:var(--text);border:1px solid var(--border);padding:7px 12px;outline:none;cursor:pointer;transition:border-color .2s;appearance:none;-webkit-appearance:none;min-width:110px;}
   .filter-select:focus,.filter-input:focus{border-color:rgba(245,166,35,.45);}
+  .filter-select.award-filter{min-width:150px;border-color:rgba(245,166,35,.24);color:var(--amber);}
   .filter-input{min-width:190px;}
   .filter-input::placeholder{color:var(--text3);}
   .filter-check{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:6px;border:1px solid var(--border);background:var(--bg3);padding:7px 10px;cursor:pointer;user-select:none;}
@@ -302,6 +303,16 @@
   .detail-section-title{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--text3);letter-spacing:.13em;text-transform:uppercase;margin:12px 0 7px;display:flex;align-items:center;gap:10px;}
   .detail-section-title::after{content:'';height:1px;background:var(--border);flex:1;}
   .detail-desc{font-size:.95rem;line-height:1.55;color:var(--text2);white-space:pre-line;}
+  .detail-awards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;margin-bottom:12px;}
+  .detail-award{display:grid;grid-template-columns:44px minmax(0,1fr);gap:10px;align-items:center;border:1px solid rgba(245,166,35,.16);background:rgba(245,166,35,.035);padding:9px 10px;min-width:0;}
+  .detail-award-logo{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.2);overflow:hidden;}
+  .detail-award-logo img{max-width:38px;max-height:38px;object-fit:contain;display:block;}
+  .detail-award-logo img.award-logo-wide{max-width:40px;max-height:24px;}
+  .detail-award-logo img.award-logo-square{max-width:34px;max-height:34px;}
+  .detail-award-main{min-width:0;}
+  .detail-award-name{font-family:'Cinzel',serif;font-size:.82rem;color:var(--amber);line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .detail-award-line{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;margin-top:3px;line-height:1.35;overflow-wrap:anywhere;}
+  .detail-award-status{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--text2);margin-top:4px;line-height:1.3;}
   .detail-review{border:1px solid rgba(245,166,35,.16);background:rgba(245,166,35,.035);padding:12px 14px;margin-top:6px;overflow:visible;}
   .detail-review-text{font-size:.95rem;line-height:1.55;color:var(--text2);white-space:pre-line;overflow-wrap:anywhere;}
   .detail-review-text.empty{color:var(--text3);font-style:italic;}
@@ -404,6 +415,11 @@
     .rv-rank{flex-direction:row;gap:10px;padding:12px 16px;border-right:none;border-bottom:1px solid var(--border);}
     .rv-info{border-right:none;padding:14px 16px;}
     .rv-opinion{padding:14px 16px;}
+    .filters{gap:8px;}
+    .filter-label{width:100%;}
+    .filter-input{min-width:0;flex:1 1 100%;}
+    .filter-select{min-width:0;flex:1 1 calc(50% - 8px);}
+    .filter-select.award-filter{min-width:0;flex-basis:100%;}
   }
 
   /* ── VOTE SECTION ── */
@@ -572,6 +588,11 @@
     .detail-tags{margin-bottom:10px;}
     .detail-meta{grid-template-columns:1fr 1fr;}
     .detail-meta .meta-item{padding:7px 8px;}
+    .detail-awards{grid-template-columns:1fr;gap:7px;}
+    .detail-award{grid-template-columns:38px minmax(0,1fr);padding:8px;gap:9px;}
+    .detail-award-logo{width:38px;height:38px;}
+    .detail-award-logo img{max-width:32px;max-height:32px;}
+    .detail-award-name{font-size:.78rem;white-space:normal;}
     .detail-review{padding:10px 11px;}
     .detail-review-text{font-size:.9rem;line-height:1.48;}
     .detail-cats{grid-template-columns:1fr;}
@@ -726,6 +747,16 @@
         <select class="filter-select" id="filter-ciudad-cat" onchange="updateGeoFilters('cat');renderCatalogoDesdeInicio()"><option value="">Ciudad</option></select>
         <select class="filter-select" id="filter-jugadores-cat" onchange="renderCatalogoDesdeInicio()"><option value="">Jugadores</option></select>
         <select class="filter-select" id="filter-dif-cat" onchange="renderCatalogoDesdeInicio()"><option value="">Dificultad</option></select>
+        <select class="filter-select award-filter" id="filter-awards-cat" onchange="renderCatalogoDesdeInicio()">
+          <option value="">Premios</option>
+          <option value="any">Cualquier premio</option>
+          <option value="terpeca">TERPECA</option>
+          <option value="10escapes">10Escapes</option>
+          <option value="escape_room_awards">Escape Room Awards</option>
+          <option value="giba_awards">Giba Awards</option>
+          <option value="winners">Ganadoras</option>
+          <option value="nominees">Nominadas / finalistas</option>
+        </select>
         <label class="filter-check"><input type="checkbox" id="filter-terror-cat" onchange="renderCatalogoDesdeInicio()"> Terror</label>
         <label class="filter-check"><input type="checkbox" id="filter-open-cat" onchange="renderCatalogoDesdeInicio()"> Abiertos</label>
         <label class="filter-check"><input type="checkbox" id="filter-hide-done-cat" onchange="renderCatalogoDesdeInicio()"> Ocultar hechos</label>
@@ -756,7 +787,7 @@
     <button class="assistant-close" type="button" onclick="toggleAssistant(false)" aria-label="Cerrar recomendador">×</button>
   </div>
   <div class="assistant-body">
-    <div class="assistant-intro">Dime zona, jugadores y estilo. Te propongo salas del catálogo con buena pinta.</div>
+    <div class="assistant-intro">Dime zona, jugadores, estilo y premios. Te propongo salas del catálogo con buena pinta.</div>
     <div class="assistant-grid">
       <label class="assistant-field full">
         <span class="assistant-label">Ciudad o provincia</span>
@@ -801,6 +832,18 @@
           <option value="favorite">Favoritos</option>
         </select>
       </label>
+      <label class="assistant-field">
+        <span class="assistant-label">Premios</span>
+        <select class="assistant-select" id="assistant-awards">
+          <option value="">Indiferente</option>
+          <option value="any">Premiadas</option>
+          <option value="winners">Ganadoras</option>
+          <option value="terpeca">TERPECA</option>
+          <option value="10escapes">10Escapes</option>
+          <option value="escape_room_awards">Escape Room Awards</option>
+          <option value="giba_awards">Giba Awards</option>
+        </select>
+      </label>
     </div>
     <div class="assistant-actions">
       <button class="assistant-btn" type="button" onclick="recommendRooms()">Recomendar</button>
@@ -822,20 +865,15 @@
 
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="firebase-config.js"></script>
 <script>
 // ════════════════════════════════════════════════════════════
 //  🔥 CONFIGURACIÓN FIREBASE
 //  Rellena con tus datos de Firebase Realtime Database.
 //  Deja FIREBASE_URL = '' si no quieres usar votaciones.
 // ════════════════════════════════════════════════════════════
-const FIREBASE_URL = 'https://scapesrooms-default-rtdb.europe-west1.firebasedatabase.app/';   // ← Pega aquí tu URL, ej: 'https://mi-proyecto-default-rtdb.europe-west1.firebasedatabase.app'
-const FIREBASE_CONFIG = {
-  apiKey: 'AIzaSyDr33ghQfJINQjkR94YI4k4y0zsUJPYpb4',
-  authDomain: 'scapesrooms.firebaseapp.com',
-  projectId: 'scapesrooms',
-  appId: '1:355203547760:web:25cb7dd64d2e793f12aab5',
-  databaseURL: FIREBASE_URL
-};
+const FIREBASE_CONFIG = window.THE_VAULT_FIREBASE_CONFIG || {};
+const FIREBASE_URL = String(FIREBASE_CONFIG.databaseURL || '').trim();
 // ════════════════════════════════════════════════════════════
 
 const FIREBASE_ENABLED = FIREBASE_URL.trim() !== '';
@@ -1736,7 +1774,7 @@ function toggleAssistant(force) {
 }
 
 function clearAssistant() {
-  ['assistant-place','assistant-players','assistant-style','assistant-difficulty'].forEach(id => {
+  ['assistant-place','assistant-players','assistant-style','assistant-difficulty','assistant-awards'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
@@ -1746,19 +1784,24 @@ function clearAssistant() {
 }
 
 function roomTextForRecommendation(room) {
-  return [
+  return normalizedKey([
     room.nombre, room.empresa, room.ciudad, room.provincia, communityOf(room), room.pais,
-    room.tematica, room.generos, room.tipo, room.descripcion, room.caracteristicas
-  ].join(' ').toLowerCase();
+    room.tematica, room.generos, room.tipo, room.descripcion, room.caracteristicas,
+    room.terror ? 'terror miedo' : ''
+  ].join(' '));
 }
 
 function recommendationScore(room, query) {
   let score = 0;
   const rating = parseFloat(displayRating(room)) || 0;
   const votes = parseInt(room.votos) || 0;
+  const awards = publicAwardsFor(room);
+  const bestAwardScore = awards.length ? Math.max(...awards.map(awardPriority)) : 0;
   score += rating * 12;
   score += Math.min(votes, 300) / 15;
-  if (publicAwardsFor(room).length) score += 18;
+  if (awards.length) score += Math.min(24, awards.length * 4) + Math.min(22, bestAwardScore / 4);
+  if (query.awards && awards.length) score += 36;
+  if (query.awards === 'winners') score += 12;
   if (room.abierto) score += 4;
   if (query.place && [room.ciudad, room.provincia, communityOf(room)].some(v => normalizedKey(v).includes(query.place))) score += 18;
   if (query.style && roomTextForRecommendation(room).includes(query.style)) score += 14;
@@ -1793,9 +1836,10 @@ function recommendRooms() {
   const style = normalizedKey(document.getElementById('assistant-style').value);
   const difficulty = document.getElementById('assistant-difficulty').value;
   const status = document.getElementById('assistant-status').value;
+  const awards = document.getElementById('assistant-awards').value;
   const resultsEl = document.getElementById('assistant-results');
 
-  const query = { place, players, style, difficulty };
+  const query = { place, players, style, difficulty, awards };
   let results = CATALOGO.filter(room => {
     const groupState = groupStateFor(room);
     const userState = userStateFor(room);
@@ -1804,6 +1848,7 @@ function recommendRooms() {
     if (players && !supportsPlayers(room, players)) return false;
     if (style && !text.includes(style)) return false;
     if (difficulty && room.dificultad !== difficulty) return false;
+    if (awards && !awardMatchesFilter(room, awards)) return false;
     if (status === 'available' && (groupState.done || userState.done)) return false;
     if (status === 'open' && !room.abierto) return false;
     if (status === 'favorite' && !iLiked(slugify(room.nombre || ''))) return false;
@@ -1818,7 +1863,7 @@ function recommendRooms() {
 
   resultsEl.innerHTML = results.length
     ? results.map(recommendationCard).join('')
-    : '<div class="assistant-empty">No he encontrado salas con esos criterios. Prueba ampliando zona, estilo o estado.</div>';
+    : '<div class="assistant-empty">No he encontrado salas con esos criterios. Prueba ampliando zona, estilo, premios o estado.</div>';
 }
 
 function clearFilters(w) {
@@ -1839,7 +1884,7 @@ function clearFilters(w) {
       return;
     }
     if (w === 'cat') {
-      ['search-cat','filter-comunidad-cat','filter-prov-cat','filter-ciudad-cat','filter-jugadores-cat','filter-dif-cat']
+      ['search-cat','filter-comunidad-cat','filter-prov-cat','filter-ciudad-cat','filter-jugadores-cat','filter-dif-cat','filter-awards-cat']
         .forEach(id => { document.getElementById(id).value = ''; });
       ['filter-terror-cat','filter-open-cat','filter-hide-done-cat']
         .forEach(id => { document.getElementById(id).checked = false; });
@@ -2139,6 +2184,34 @@ function awardTags(room, limit = 4) {
   }).join('');
 }
 
+function awardMatchesFilter(room, filter) {
+  if (!filter) return true;
+  const awards = publicAwardsFor(room);
+  if (filter === 'any') return awards.length > 0;
+  if (['terpeca','10escapes','escape_room_awards','giba_awards'].includes(filter)) {
+    return awards.some(award => award.source_id === filter);
+  }
+  if (filter === 'winners') {
+    return awards.some(award => ['winner','best_of_best'].includes(award.status));
+  }
+  if (filter === 'nominees') {
+    return awards.some(award => ['nominee','finalist','runner_up'].includes(award.status));
+  }
+  return true;
+}
+
+function awardFilterLabel(filter) {
+  return {
+    any: 'con premio',
+    terpeca: 'TERPECA',
+    '10escapes': '10Escapes',
+    escape_room_awards: 'Escape Room Awards',
+    giba_awards: 'Giba Awards',
+    winners: 'ganadoras',
+    nominees: 'nominadas/finalistas'
+  }[filter] || '';
+}
+
 function faviconHtml(webUrl, cssClass) {
   if (!webUrl) return `<div class="${cssClass}"><span class="logo-emoji">🔐</span></div>`;
   try {
@@ -2212,6 +2285,63 @@ function reviewBlockHtml(room) {
         ${catStars('Jugabilidad', room.jugabilidad)}
         ${catStars('Game Master', room.gamemaster)}
       </div>` : ''}
+    </div>`;
+}
+
+function awardSourceLabel(award) {
+  return award.source_id === '10escapes' ? '10Escapes'
+    : award.source_id === 'terpeca' ? 'TERPECA'
+    : award.source_id === 'giba_awards' ? 'Giba Awards'
+    : award.source_id === 'escape_room_awards' ? 'Escape Room Awards'
+    : award.source_name || 'Premio';
+}
+
+function detailAwardLogoHtml(award) {
+  if (award.source_id === 'terpeca') {
+    return `<img src="${TERPECA_LOGO}" alt="TERPECA">`;
+  }
+  const logos = {
+    '10escapes': { src: TEN_ESCAPES_LOGO, alt: '10Escapes', cls: 'award-logo-wide' },
+    'escape_room_awards': { src: ESCAPE_ROOM_AWARDS_LOGO, alt: 'Escape Room Awards', cls: 'award-logo-wide' },
+    'giba_awards': { src: GIBA_AWARDS_LOGO, alt: 'Giba Awards', cls: 'award-logo-square' }
+  };
+  const logo = logos[award.source_id];
+  if (!logo) return `<span>${escapeHtml((awardSourceLabel(award) || '?').slice(0, 1))}</span>`;
+  return `<img class="${logo.cls}" src="${logo.src}" alt="${logo.alt}">`;
+}
+
+function awardStatusText(award) {
+  if (award.source_id === '10escapes') {
+    if (award.status === 'best_of_best') return award.rank ? `Best of the Best #${award.rank}` : 'Best of the Best';
+    if (award.rank) return `Top #${award.rank}`;
+    return 'Top 10Escapes';
+  }
+  if (award.status === 'winner') return award.rank ? `Ganadora #${award.rank}` : 'Ganadora';
+  if (award.status === 'runner_up') return award.rank ? `Finalista #${award.rank}` : 'Finalista';
+  if (award.status === 'finalist') return 'Finalista';
+  if (award.status === 'nominee') return 'Nominada';
+  return award.label || 'Reconocimiento';
+}
+
+function detailAwardsHtml(room) {
+  const awards = publicAwardsFor(room);
+  if (!awards.length) return '';
+  return `
+    <div class="detail-section-title">Premios y nominaciones</div>
+    <div class="detail-awards">
+      ${awards.map(award => {
+        const source = awardSourceLabel(award);
+        const meta = [award.year, award.category].filter(Boolean).join(' · ');
+        const status = awardStatusText(award);
+        return `<div class="detail-award">
+          <div class="detail-award-logo">${detailAwardLogoHtml(award)}</div>
+          <div class="detail-award-main">
+            <div class="detail-award-name">${escapeHtml(source)}</div>
+            ${meta ? `<div class="detail-award-line">${escapeHtml(meta)}</div>` : ''}
+            <div class="detail-award-status">${escapeHtml(status)}</div>
+          </div>
+        </div>`;
+      }).join('')}
     </div>`;
 }
 
@@ -2305,6 +2435,7 @@ function openDetail(kind, key) {
       ${reviewScoreMeta(room)}
       ${kind === 'pendientes' ? metaItem('Opiniones', room.votos ? `🗳 ${room.votos}` : '') : ''}
     </div>
+    ${detailAwardsHtml(room)}
     ${synopsis ? `
     <div class="detail-section-title">Sinopsis</div>
     <div class="detail-desc">${synopsis}</div>` : ''}
@@ -2625,6 +2756,7 @@ function renderCatalogo() {
   const ciudad = document.getElementById('filter-ciudad-cat').value;
   const players = document.getElementById('filter-jugadores-cat').value;
   const dificultad = document.getElementById('filter-dif-cat').value;
+  const awardFilter = document.getElementById('filter-awards-cat')?.value || '';
   const onlyTerror = document.getElementById('filter-terror-cat').checked;
   const onlyOpen = document.getElementById('filter-open-cat').checked;
   const hideDone = document.getElementById('filter-hide-done-cat').checked;
@@ -2639,6 +2771,7 @@ function renderCatalogo() {
     if (ciudad && String(c.ciudad || '').trim() !== ciudad) return false;
     if (!supportsPlayers(c, players)) return false;
     if (dificultad && c.dificultad !== dificultad) return false;
+    if (!awardMatchesFilter(c, awardFilter)) return false;
     if (onlyTerror && !c.terror) return false;
     if (onlyOpen && !c.abierto) return false;
     if (hideDone && (groupState.done || userState.done)) return false;
@@ -2656,8 +2789,9 @@ function renderCatalogo() {
 
   const visible = f.slice(0, catalogVisibleCount);
   const remaining = Math.max(f.length - visible.length, 0);
+  const awardSuffix = awardFilter ? ` · ${awardFilterLabel(awardFilter)}` : '';
   document.getElementById('result-info-cat').textContent =
-    `Mostrando ${visible.length} de ${f.length} salas filtradas (${CATALOGO.length} en catalogo)${showOnlyFavs ? ' · favoritos' : ''}`;
+    `Mostrando ${visible.length} de ${f.length} salas filtradas (${CATALOGO.length} en catalogo)${showOnlyFavs ? ' · favoritos' : ''}${awardSuffix}`;
   document.getElementById('grid-catalogo').innerHTML = visible.length
     ? visible.map(cardCatalogo).join('')
     : `<div class="empty-state"><div class="lock">?</div><p>NO SE ENCONTRARON RESULTADOS</p></div>`;

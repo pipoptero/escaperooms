@@ -12,6 +12,7 @@ Si el nombre coincide con una sala local, copia también a:
 
 import csv
 import json
+import os
 import re
 import shutil
 import time
@@ -26,10 +27,13 @@ CATALOG_DIR = IMAGES_DIR / "ec-all"
 DATA_FILE = ROOT / "data.json"
 AUDIT_FILE = ROOT / "image_sources.ec-all.csv"
 
-API_KEY = "AIzaSyDdd9YI85mqWq32qbKeU9oeDgUEeTaq5B8"
+API_KEY = os.environ.get("GOOGLE_API_KEY", "").strip()
 PROJECT = "room-escapes"
 BUCKET = "room-escapes.appspot.com"
 PAGE_SIZE = 300
+if not API_KEY:
+    raise RuntimeError("GOOGLE_API_KEY no configurada. Exporta la clave antes de ejecutar este script.")
+
 USER_AGENT = "scaperooms-escape-collector-catalog/1.0"
 
 
