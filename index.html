@@ -869,8 +869,8 @@
 <script>
 // ════════════════════════════════════════════════════════════
 //  🔥 CONFIGURACIÓN FIREBASE
-//  Rellena con tus datos de Firebase Realtime Database.
-//  Deja FIREBASE_URL = '' si no quieres usar votaciones.
+//  La configuración real se carga desde firebase-config.js.
+//  En producción lo genera GitHub Actions desde GitHub Secrets.
 // ════════════════════════════════════════════════════════════
 const FIREBASE_CONFIG = window.THE_VAULT_FIREBASE_CONFIG || {};
 const FIREBASE_URL = String(FIREBASE_CONFIG.databaseURL || '').trim();
