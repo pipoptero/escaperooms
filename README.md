@@ -1,254 +1,318 @@
-# 🔐 The Vault — Escape Room Chronicles
+# The Vault - Escape Room Chronicles
 
-Web interactiva para llevar el seguimiento de escape rooms. Se actualiza automáticamente al subir el Excel.
+Web estática para registrar, consultar y valorar escape rooms: los que el grupo ya ha jugado, los pendientes y un catálogo amplio de salas para descubrir nuevas experiencias.
 
-## 🗂 Estructura del repositorio
+El proyecto está pensado para funcionar en GitHub Pages. La parte del grupo se actualiza desde un Excel, mientras que el catálogo general, las imágenes y los premios se guardan en archivos JSON e imágenes locales.
 
-```
-escape-rooms-tracker/
-├── index.html                          ← La web (no tocar)
-├── convert.py                          ← Script de conversión (no tocar)
-├── data.json                           ← Generado automáticamente por la Action
-├── escape_rooms_tracker_mejorado.xlsx  ← TU ARCHIVO EXCEL ← aquí actualizas
-└── .github/
-    └── workflows/
-        └── update-data.yml             ← La GitHub Action (no tocar)
-```
+## Qué Incluye
 
----
+- Catálogo general de escape rooms con imágenes, ubicación, precio, jugadores, dificultad, terror, descripción y estado.
+- Lista de pendientes del grupo, generada desde el Excel.
+- Reviews del grupo, también desde el Excel, con puntuación, reseña y valoración por categorías.
+- Ranking del grupo basado en las salas jugadas y puntuadas.
+- Login con Google mediante Firebase Auth.
+- Listas personales por usuario: mis pendientes, mis hechos y favoritos.
+- Favoritos con corazón directamente desde el catálogo.
+- Votaciones y likes sincronizados con Firebase Realtime Database.
+- Popup de detalle de cada sala con portada, sinopsis, datos técnicos, premios y acciones personales.
+- Recomendador flotante para buscar salas por ciudad/provincia, estilo, jugadores, dificultad y estado.
+- Badges de premios para TERPECA, 10Escapes, Escape Room Awards y Giba Awards.
+- GitHub Action para regenerar `data.json` automáticamente cuando se sube el Excel.
 
-## 🚀 Configuración inicial (solo una vez)
-
-### 1. Crear el repositorio en GitHub
-- Ve a github.com → **New repository**
-- Nombre: `escape-rooms-tracker` (o el que quieras)
-- Visibilidad: **Public** (necesario para GitHub Pages gratis)
-- No inicialices con README
-
-### 2. Subir los archivos
-Sube todos los archivos de esta carpeta al repo arrastrándolos desde la interfaz web de GitHub, o con Git desde terminal:
-```bash
-git init
-git add .
-git commit -m "🔐 Initial commit"
-git remote add origin https://github.com/TU_USUARIO/escape-rooms-tracker.git
-git push -u origin main
-```
-
-### 3. Activar permisos de la Action
-- En el repo: **Settings → Actions → General → Workflow permissions**
-- Selecciona **"Read and write permissions"** → **Save**
-
-### 4. Activar GitHub Pages
-- En el repo: **Settings → Pages**
-- Source: **Deploy from a branch**
-- Branch: `main` / folder: `/ (root)`
-- Guarda → en ~2 minutos tendrás una URL del tipo:
-  `https://TU_USUARIO.github.io/escape-rooms-tracker`
-
-### 5. Primera ejecución de la Action
-Al subir el Excel por primera vez, la Action se ejecutará automáticamente y generará `data.json`. Puedes seguirlo en la pestaña **Actions** del repo.
-
----
-
-## 🔄 Flujo de actualización (uso diario)
-
-1. **Edita tu Excel** localmente (añade rooms, cambia valoraciones, añade opiniones...)
-2. **Sube el Excel** a GitHub (arrastra y suelta en la interfaz web, o `git push`)
-3. **GitHub Action** se ejecuta automáticamente (~30 segundos)
-4. **La web** se actualiza sola con los nuevos datos ✅
-
----
-
-## 📋 Formato del Excel
-
-El Excel debe tener **dos hojas**:
-
-### Hoja «Pendientes»
-| Columna | Descripción |
-|---------|-------------|
-| Nombre del Escape | Nombre del escape room |
-| Empresa | Empresa/local |
-| Ciudad | Ciudad |
-| Temática | Temática del escape |
-| Tipo | Tipo de experiencia |
-| Duración | Duración en minutos *(entero)* |
-| Dificultad | Alta / Media-Alta / Media / Baja |
-| Valoración | Rating de escapistas.com (0-10) *(acepta decimales: 8.5 o 8,5)* |
-| Web | URL de la web |
-| Max_personas | Número máximo de jugadores *(opcional)* |
-| Descripción | Descripción breve del escape room *(opcional)* |
-| Posición TERPECA | Posición en el ranking mundial TERPECA *(opcional, entero)* |
-
-#### Columnas opcionales para modo catálogo
-Estas columnas permiten ampliar el listado al estilo de un catálogo más grande tipo Escape Collector sin romper el Excel actual:
-
-| Columna | Descripción |
-|---------|-------------|
-| Provincia | Provincia o región para filtrar más fino |
-| Min_personas | Número mínimo de jugadores |
-| Géneros | Uno o varios géneros separados por coma, barra o punto y coma |
-| Público | Familiar, infantil, English-friendly, etc. |
-| Características | Etiquetas extra como contacto físico, grupos grandes, portátil, etc. |
-| Abierto | Sí/No, Abierto/Cerrado o true/false |
-| Verificado | Sí/No o true/false |
-| Imagen | URL directa de la imagen/portada que se mostrará en la tarjeta |
-| Rating Collector | Nota externa adicional si quieres importarla manualmente |
-| Votos | Número de opiniones/votos externos |
-
-### Imágenes locales
-
-La web puede mostrar imágenes locales guardadas en la carpeta `images/`.
-El conversor busca automáticamente archivos con el nombre normalizado del escape:
+## Captura Mental del Flujo
 
 ```text
-images/cybercity-2049.jpg
-images/la-taberna.webp
+Excel del grupo
+  -> convert.py
+  -> data.json
+  -> Pendientes, Reviews y Ranking grupo
+
+Catálogo externo
+  -> scripts/build_catalog.py
+  -> catalog.json
+  -> Catálogo general
+
+Premios
+  -> scripts/build_terpeca_awards.py
+  -> terpeca_awards.json
+
+Premios extra
+  -> scripts/build_extra_awards.py
+  -> extra_awards.json
+
+Firebase
+  -> login Google
+  -> votos, likes y estados personales por usuario
 ```
 
-Si existe una imagen local, se usa antes que la columna `Imagen` del Excel. Si no existe, se usa la URL indicada en `Imagen`. Si tampoco hay URL, la tarjeta muestra una portada visual de fallback.
+## Estructura del Proyecto
 
-Para descargar imágenes desde URLs que tengas autorizadas:
+```text
+.
+├── index.html
+├── data.json
+├── catalog.json
+├── terpeca_awards.json
+├── extra_awards.json
+├── escape_rooms_tracker_mejorado.xlsx
+├── convert.py
+├── images/
+│   ├── ec-all/
+│   └── awards/
+│       ├── 10escapes-logo.png
+│       ├── escape-room-awards-logo.png
+│       └── giba-awards-logo.svg
+├── scripts/
+│   ├── build_catalog.py
+│   ├── build_terpeca_awards.py
+│   ├── build_extra_awards.py
+│   ├── download_escape_collector_catalog.py
+│   └── download_images.py
+└── .github/
+    └── workflows/
+        └── update-data.yml
+```
+
+## Archivos Principales
+
+### `index.html`
+
+Contiene toda la aplicación: interfaz, estilos, carga de JSON, filtros, popup, login, Firebase, recomendador y renderizado de tarjetas.
+
+Es una web estática, así que puede publicarse directamente en GitHub Pages sin servidor backend.
+
+### `escape_rooms_tracker_mejorado.xlsx`
+
+Excel principal del grupo. Es la fuente de datos para:
+
+- Pendientes del grupo.
+- Reviews del grupo.
+- Ranking del grupo.
+- Estadísticas superiores: hechos, pendientes, total, media y horas jugadas.
+
+Cuando se sube una nueva versión del Excel a GitHub, la Action ejecuta `convert.py` y actualiza `data.json`.
+
+### `data.json`
+
+Archivo generado desde el Excel. Lo consume la web para mostrar los datos propios del grupo.
+
+No se edita manualmente salvo casos puntuales.
+
+### `catalog.json`
+
+Catálogo general de salas. Contiene datos amplios de escape rooms: nombre, empresa, ciudad, provincia, comunidad autónoma, país, duración, jugadores, precio, dificultad, rating, votos, terror, web, descripción e imagen.
+
+Este archivo alimenta la pestaña `Catálogo`.
+
+### `terpeca_awards.json`
+
+Datos de premios TERPECA normalizados para poder cruzarlos con el catálogo.
+
+### `extra_awards.json`
+
+Datos de premios adicionales:
+
+- 10Escapes.
+- Escape Room Awards.
+- Giba Awards.
+
+La web cruza estos premios con las salas del catálogo y muestra los badges correspondientes.
+
+## Vistas de la Web
+
+### Catálogo
+
+Es la vista principal. Muestra salas del catálogo general con:
+
+- Imagen de portada.
+- Nombre y empresa.
+- Ciudad y provincia.
+- Dificultad.
+- Terror.
+- Precio.
+- Duración.
+- Jugadores.
+- Resumen de sinopsis.
+- Rating externo.
+- Botón de favorito.
+- Acciones personales si el usuario está logado.
+- Badges de premios.
+
+La carga inicial muestra un bloque limitado de salas y permite ampliar con el botón `Mostrar más`.
+
+### Mis Pendientes / Pendientes Grupo
+
+Sin login se muestra la lista de pendientes del grupo.
+
+Con login, la pestaña pasa a mostrar los pendientes personales del usuario. Esto permite que cada persona tenga su propia lista sin modificar los datos del grupo.
+
+### Mis Hechos
+
+Solo aparece con login. Permite ver las salas que el usuario ha marcado como hechas.
+
+Importante: marcar una sala como `Hecho por mí` no la mete en las reviews del grupo. Las reviews del grupo solo salen del Excel.
+
+### Reviews
+
+Muestra las salas jugadas por el grupo y sus reseñas.
+
+Incluye:
+
+- Valoración del grupo.
+- Review personal del grupo.
+- Datos de sala.
+- Valoraciones por categoría si existen en el Excel.
+- Acceso al popup de detalle.
+
+### Ranking Grupo
+
+Ranking basado en las salas jugadas por el grupo. Está pensado como escaparate de nuestras opiniones, no como ranking personal de cada usuario.
+
+Al clicar una sala se abre el popup con detalle, imagen, datos técnicos y review del grupo.
+
+## Popup de Detalle
+
+El popup de sala reúne la información más completa:
+
+- Portada.
+- Nombre y empresa.
+- Ubicación.
+- Duración.
+- Jugadores.
+- Precio.
+- Dificultad.
+- Terror.
+- Estado.
+- Sinopsis completa.
+- Premios detectados.
+- Review del grupo, si existe.
+- Acciones personales del usuario logado.
+
+## Premios y Badges
+
+La web muestra badges de premios sobre la imagen de la tarjeta y como tags en el detalle.
+
+Premios soportados:
+
+- TERPECA.
+- 10Escapes.
+- Escape Room Awards.
+- Giba Awards.
+
+En tarjetas se muestran hasta 3 badges visibles. Si una sala tiene Giba Awards, la web intenta que al menos uno de los badges visibles sea Giba para que no quede oculto por otros premios.
+
+### Regenerar TERPECA
 
 ```bash
-python scripts/download_images.py image_sources.csv
-python convert.py
+python scripts/build_terpeca_awards.py
 ```
 
-El CSV debe tener estas columnas:
+Genera:
 
-```csv
-nombre,imagen
-Cybercity 2049,https://example.com/cybercity-2049.jpg
+```text
+terpeca_awards.json
 ```
 
-### Hoja «Hechos»
-Mismas columnas que Pendientes (incluida Posición TERPECA), más:
-| Columna | Descripción |
-|---------|-------------|
-| Valoración Grupo | Vuestra puntuación personal (0-10) *(acepta decimales: 9.2 o 9,2)* |
-| Descripción | **Tu opinión/reseña personal** del escape *(opcional)* |
-| Historia | Valoración de la historia (0-10) *(opcional)* |
-| Ambientación | Valoración de la ambientación (0-10) *(opcional)* |
-| Jugabilidad | Valoración de la jugabilidad (0-10) *(opcional)* |
-| GameMaster | Valoración del game master (0-10) *(opcional)* |
+### Regenerar 10Escapes, Escape Room Awards y Giba Awards
 
-> **Notas sobre el formato:**
-> - Los valores numéricos con decimal deben escribirse con **punto** (`8.5`). El script también acepta coma (`8,5`) como fallback.
-> - ⚠️ Si Excel muestra un valor decimal como una fecha (por ejemplo `8.9` aparece como `08/09/2026`), selecciona la celda, formato → **Número**, y vuelve a escribir el valor. El script detecta y corrige este problema automáticamente.
-> - La columna Descripción puede llamarse: `Descripción`, `Descripcion`, `Description`, `Descripción del Escape` o `Resumen`.
-> - Las columnas de categorías (Historia, Ambientación, Jugabilidad, GameMaster) son opcionales.
-> - No dejes filas con cabeceras repetidas ni bloques de datos duplicados en el Excel — el script elimina duplicados automáticamente pero es mejor mantener el Excel limpio.
-
----
-
-## 🖥 Vistas de la web
-
-### Header — The Vault
-Cabecera con estilo steampunk/metálico con el título **THE VAULT** y subtítulo *Escape Room Chronicles*.
-
-Debajo del título, una **barra de estadísticas** muestra en tiempo real:
-- Escapes completados, pendientes y total
-- Media de valoración del grupo
-- Horas totales jugadas
-- **Barra de progreso animada** con % completado de la lista
-- **Insights dinámicos:** mejor escape, empresa top, ciudad top y temática favorita — calculados automáticamente desde los datos del Excel
-
-### Pestaña Pendientes
-Cuadrícula de tarjetas con filtros por ciudad, dificultad y tipo. Ordenación por rating, nombre, duración o dificultad. Cada tarjeta incluye:
-- **Logo circular** obtenido automáticamente del favicon de la web del escape
-- Nombre, empresa
-- Si tiene posición en el ranking TERPECA: **badge oficial TERPECA** con el número de posición debajo
-- **♥ botón de favorito** con contador de likes de todos los usuarios
-- Ciudad · Temática · **★ Rating** alineado a la derecha
-- Tipo, descripción (si existe), duración, dificultad, máximo de jugadores
-- Widget de votación con **medias estrellas** (nota 1-10)
-
-El botón **♥ Favoritos (N)** en la barra de filtros muestra solo los escapes que tú has marcado.
-
-### Pestaña Hechos
-Vista de **reseñas** — cada escape ocupa una fila con tres columnas:
-- **Izquierda:** posición en el ranking según votos de la comunidad (🥇🥈🥉 para el podio)
-- **Centro:** logo circular + nombre + badge TERPECA si aplica, info técnica, puntuaciones (Escapistas / Grupo / Comunidad) y widget de votación
-- **Derecha:** opinión personal (columna Descripción del Excel) y, si existen, **valoraciones por categorías** (Historia, Ambientación, Jugabilidad, Game Master) con estrellas visuales
-
-### Pestaña Ranking
-Tabla ordenada por **Valoración Grupo** (nota personal del Excel). Columnas: posición, nombre, empresa, temática, dificultad, duración, rating Escapistas, nota Grupo y **media de votos de la Comunidad** con número de votantes. La columna Comunidad solo aparece si Firebase está configurado.
-
----
-
-## 🏆 Badge TERPECA
-
-Si un escape tiene valor en la columna **Posición TERPECA**, se muestra automáticamente el logo oficial de los *Top Escape Rooms Project Enthusiasts' Choice Awards* con el número de posición debajo. Aparece tanto en Pendientes como en Hechos.
-
----
-
-## ⭐ Sistema de votación con estrellas
-
-Cada tarjeta incluye un widget de **medias estrellas**:
-- 5 estrellas clicables, cada una con mitad izquierda (½ estrella) y mitad derecha (1 estrella)
-- Permite dar notas del **1 al 10**
-- Al pasar el ratón se previsualiza la nota antes de confirmar
-- Muestra tu nota personal y la **media de la comunidad** con número de votantes
-- El Ranking incluye la media comunitaria de cada escape
-- Requiere Firebase configurado
-
----
-
-## ♥ Sistema de favoritos / likes
-
-Cada tarjeta de Pendientes tiene un botón **♥** junto al nombre:
-- El corazón es gris si no lo has marcado, rojo si sí
-- Debajo del corazón se muestra el **total de likes de todos los usuarios**
-- Al pulsar se sincroniza con Firebase en tiempo real
-- Tus favoritos se recuerdan entre visitas y dispositivos
-- El botón **♥ Favoritos** en la barra de filtros muestra solo tus escapes marcados
-- Sin Firebase, los favoritos se guardan solo localmente en el navegador
-
----
-
-## 🔥 Configurar Firebase (votaciones y likes)
-
-Firebase es gratuito y solo necesitas configurarlo una vez.
-
-### 1. Crear proyecto
-- Ve a [console.firebase.google.com](https://console.firebase.google.com)
-- **Añadir proyecto** → nombre: `scapesrooms` → desactiva Analytics → **Crear proyecto**
-
-### 2. Crear la base de datos
-- Menú izquierdo: **Compilación → Realtime Database**
-- **Crear una base de datos** → región: **Belgium (europe-west1)**
-- Selecciona **Empezar en modo de prueba** → **Habilitar**
-
-### 3. Copiar la URL
-Verás una URL del tipo:
-```
-https://scapesrooms-default-rtdb.europe-west1.firebasedatabase.app
+```bash
+python scripts/build_extra_awards.py
 ```
 
-### 4. Pegar en index.html
-Busca esta línea al inicio del `<script>`:
+Genera:
+
+```text
+extra_awards.json
+```
+
+Fuentes actuales:
+
+- https://10escapes.com/
+- https://escaperoomawardsoficial.com/
+- https://www.gibaescape.com/proyectos/escape-room-giba-awards
+
+## Imágenes
+
+Las imágenes de salas se guardan localmente en:
+
+```text
+images/ec-all/
+```
+
+Los logos de premios se guardan en:
+
+```text
+images/awards/
+```
+
+Si una sala no tiene imagen, la web muestra un fallback visual con la inicial.
+
+## Recomendador
+
+La web incluye un asistente flotante en la esquina inferior izquierda.
+
+Permite recomendar salas filtrando por:
+
+- Ciudad, provincia o comunidad.
+- Número de jugadores.
+- Estilo: terror, aventura, familiar, investigación, etc.
+- Dificultad.
+- Estado: disponibles, abiertas o favoritas.
+
+El recomendador no usa IA externa ni envía datos fuera. Trabaja directamente con `catalog.json`, los premios y los estados personales disponibles en el navegador/Firebase.
+
+## Login con Google
+
+El login se hace con Firebase Authentication y proveedor Google.
+
+Cuando el usuario inicia sesión puede guardar:
+
+- Favoritos.
+- Mis pendientes.
+- Mis hechos.
+- Votos personales.
+
+Los datos personales se guardan bajo:
+
+```text
+users/{uid}/roomStates/{room}
+```
+
+## Firebase
+
+Firebase se usa para:
+
+- Login con Google.
+- Likes/favoritos.
+- Votos.
+- Estados personales por usuario.
+
+### Configuración en `index.html`
+
+En la zona de configuración se encuentran:
+
 ```js
-const FIREBASE_URL = '';
+const FIREBASE_URL = '...';
+const FIREBASE_CONFIG = {
+  apiKey: '...',
+  authDomain: '...',
+  projectId: '...',
+  appId: '...',
+  databaseURL: FIREBASE_URL
+};
 ```
-Sustitúyela por:
-```js
-const FIREBASE_URL = 'https://scapesrooms-default-rtdb.europe-west1.firebasedatabase.app';
-```
 
-En la misma zona encontrarás `FIREBASE_CONFIG`. Para activar el login con Google:
+Para que funcione el login:
 
-1. En Firebase Console ve a **Configuración del proyecto → General → Tus apps**.
-2. Crea una app web o abre la app web existente.
-3. Copia los campos `apiKey`, `authDomain`, `projectId` y `appId`.
-4. Pégalos en `FIREBASE_CONFIG`.
-5. Ve a **Authentication → Sign-in method → Google** y habilita el proveedor.
-6. En **Authentication → Settings → Authorized domains**, comprueba que estén autorizados tu dominio de GitHub Pages y `localhost` para pruebas.
+1. Crear un proyecto en Firebase.
+2. Crear una app web.
+3. Activar Authentication con Google.
+4. Autorizar `localhost` y el dominio de GitHub Pages.
+5. Crear Realtime Database.
+6. Publicar reglas de seguridad.
 
-Guarda y sube el `index.html` a GitHub. Si `FIREBASE_CONFIG` queda vacío, la web seguirá funcionando como hasta ahora, pero sin login.
+### Reglas Orientativas
 
-### 5. Reglas de seguridad
-Ve a **Realtime Database → Reglas** y pega:
 ```json
 {
   "rules": {
@@ -279,57 +343,162 @@ Ve a **Realtime Database → Reglas** y pega:
   }
 }
 ```
-Haz clic en **Publicar**.
 
-Estas reglas hacen que cualquiera pueda ver votos y favoritos agregados, pero solo cada usuario autenticado pueda escribir sus propios datos personales (`pendientes`, `hechos`, etc.).
+## Excel del Grupo
 
-### Estructura de datos en Firebase
+El Excel debe mantener dos bloques principales:
+
+- Pendientes.
+- Hechos / Reviews.
+
+Columnas habituales:
+
+```text
+Nombre del Escape
+Empresa
+Ciudad
+Provincia
+Comunidad
+Temática
+Tipo
+Duración
+Dificultad
+Valoración
+Valoración Grupo
+Web
+Descripción
+Historia
+Ambientación
+Jugabilidad
+GameMaster
+Min_personas
+Max_personas
+Precio
+Imagen
 ```
-tu-proyecto/
-├── votes/
-│   └── {slug_escape}/
-│       └── {user_id}: 4.5        ← nota en estrellas (0.5–5)
-└── likes/
-    └── {slug_escape}/
-        └── {user_id}: true       ← ha marcado favorito
-└── users/
-    └── {user_id}/
-        └── roomStates/
-            └── {slug_escape}/
-                ├── pending: true
-                └── done: false
+
+No todas son obligatorias, pero cuanta más información haya, más rica será la ficha.
+
+## Actualización Normal
+
+Para actualizar las salas del grupo:
+
+1. Editar el Excel.
+2. Subirlo al repositorio.
+3. GitHub Actions ejecuta `convert.py`.
+4. Se genera `data.json`.
+5. GitHub Pages sirve la web actualizada.
+
+## GitHub Actions
+
+El workflow está en:
+
+```text
+.github/workflows/update-data.yml
 ```
 
----
+Se ejecuta al detectar cambios en archivos `.xlsx`.
 
-## ❓ Preguntas frecuentes
+Hace:
 
-**¿Cuánto tarda en actualizarse tras subir el Excel?**
-Normalmente menos de 1 minuto. La Action tarda ~20-30s en ejecutarse.
+1. Checkout del repositorio.
+2. Instalación de dependencias Python.
+3. Conversión del Excel a `data.json`.
+4. Commit automático si `data.json` cambia.
 
-**¿Cómo comparto la web con el grupo?**
-Simplemente comparte la URL de GitHub Pages. No necesitan cuenta de GitHub ni registrarse.
+## Desarrollo Local
 
-**¿Puedo cambiar el nombre del archivo Excel?**
-Sí, el script detecta automáticamente cualquier `.xlsx` en la raíz del repo.
+Como la web usa `fetch('data.json')`, `fetch('catalog.json')` y otros JSON, no conviene abrir `index.html` directamente como archivo.
 
-**¿El repositorio tiene que ser público?**
-Para GitHub Pages gratis, sí. Si quieres repo privado necesitas GitHub Pro, o puedes usar Netlify (permite repos privados gratis).
+Es mejor servir la carpeta por HTTP local:
 
-**La Action falla con error de permisos**
-Ve a Settings → Actions → General → Workflow permissions y activa "Read and write permissions".
+```bash
+python -m http.server 8765
+```
 
-**La web muestra error 404 en data.json**
-La Action aún no se ha ejecutado o falló. Ve a la pestaña Actions, comprueba el log y dale a "Re-run jobs" si es necesario.
+Y abrir:
 
-**Las votaciones o likes no aparecen / dan error 401**
-Ve a Firebase Console → Realtime Database → Reglas y asegúrate de tener los nodos `votes` y `likes` con `.read: true` y `.write: true` publicados.
+```text
+http://localhost:8765/
+```
 
-**Los decimales en el Excel aparecen como fechas**
-Es un problema de formato de celda en Excel. Selecciona la celda → formato → **Número** → vuelve a escribir el valor. El script lo detecta y corrige automáticamente.
+## Scripts Útiles
 
-**Aparecen escapes duplicados o un escape con nombre raro sin datos**
-Revisa el Excel buscando filas de cabecera repetidas o bloques de datos pegados dos veces. El script elimina duplicados automáticamente y avisa en el log de la Action (`⚠ Duplicados eliminados: N`).
+### Convertir Excel a JSON del grupo
 
-**El favicon/logo no aparece en alguna tarjeta**
-Es normal si el escape no tiene web configurada en el Excel, o si la web no tiene favicon. Se muestra 🔐 como fallback automáticamente.
+```bash
+python convert.py
+```
+
+### Regenerar catálogo
+
+```bash
+python scripts/build_catalog.py
+```
+
+### Descargar/actualizar catálogo desde Escape Collector
+
+```bash
+python scripts/download_escape_collector_catalog.py
+```
+
+### Descargar imágenes desde CSV
+
+```bash
+python scripts/download_images.py image_sources.ec-all.csv
+```
+
+### Regenerar TERPECA
+
+```bash
+python scripts/build_terpeca_awards.py
+```
+
+### Regenerar premios extra
+
+```bash
+python scripts/build_extra_awards.py
+```
+
+## Publicación en GitHub Pages
+
+1. Subir el repositorio a GitHub.
+2. Ir a `Settings -> Pages`.
+3. En `Build and deployment`, elegir `Deploy from a branch`.
+4. Seleccionar rama `main` y carpeta `/root`.
+5. Guardar.
+
+La web quedará disponible en una URL similar a:
+
+```text
+https://usuario.github.io/scaperooms/
+```
+
+## Notas de Diseño
+
+La estética de la web está inspirada en una caja fuerte/archivo de expediciones:
+
+- Fondo oscuro.
+- Detalles dorados.
+- Título `THE VAULT`.
+- Tarjetas con portadas grandes.
+- Badges de premios sobre la imagen.
+- Interfaz compacta para móvil.
+
+La prioridad de diseño es que el catálogo sea fácil de explorar y que las acciones personales no confundan los datos del grupo.
+
+## Avisos
+
+- Las reviews del grupo solo se modifican desde el Excel.
+- Las listas personales dependen del login con Google.
+- Los datos de catálogo y premios proceden de fuentes públicas y pueden requerir regeneración periódica.
+- Si no hay Firebase configurado, la web sigue funcionando, pero sin sincronización real de usuario.
+
+## Estado Actual
+
+La web está preparada para:
+
+- Uso público como catálogo.
+- Uso del grupo como ranking/reviews.
+- Uso personal con login.
+- Crecimiento futuro con filtros por premios, mapas, listas personalizadas y más fuentes de datos.
