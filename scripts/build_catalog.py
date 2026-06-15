@@ -5,6 +5,7 @@ import json
 import os
 import re
 import unicodedata
+from datetime import datetime
 from pathlib import Path
 from urllib.request import Request, urlopen
 
@@ -110,12 +111,45 @@ def local_image(room_id):
     return ""
 
 
+def catalog_key(room):
+    return str(room.get("id") or f"{room.get('nombre', '')}|{room.get('empresa', '')}").strip().lower()
+
+
+def load_existing_catalog():
+    if not CATALOG_FILE.exists():
+        return []
+    try:
+        data = json.loads(CATALOG_FILE.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return []
+    return data.get("catalogo", []) if isinstance(data, dict) else []
+
+
+def preserve_missing_rooms(fresh_rooms, existing_rooms):
+    fresh_keys = {catalog_key(room) for room in fresh_rooms}
+    today = datetime.now().date().isoformat()
+    preserved = []
+    for old_room in existing_rooms:
+        key = catalog_key(old_room)
+        if not key or key in fresh_keys:
+            continue
+        room = dict(old_room)
+        room["origen_activo"] = False
+        room["estado_origen"] = "missing_from_source"
+        room["estado_origen_label"] = "No encontrado en Escape Collector en la ultima actualizacion"
+        room["estado_origen_fecha"] = today
+        room["abierto"] = False
+        preserved.append(room)
+    return preserved
+
+
 def community_from_province(province):
     province_id = str(province.get("province_id", "")).zfill(2)
     return COMMUNITIES_BY_PROVINCE_ID.get(province_id, "")
 
 
 def build():
+    existing_rooms = load_existing_catalog()
     result = []
     for doc in fetch_rooms():
         fields = {k: value(v) for k, v in doc.get("fields", {}).items()}
@@ -143,19 +177,33 @@ def build():
             "web": fields.get("url") or "",
             "descripcion": fields.get("description") or "",
             "imagen": local_image(room_id),
+            "origen_activo": True,
+            "estado_origen": "active",
         })
 
-    result.sort(key=lambda room: (float(room["rating"] or 0), int(room["votos"] or 0)), reverse=True)
+    preserved = preserve_missing_rooms(result, existing_rooms)
+    result.extend(preserved)
+    result.sort(key=lambda room: (
+        bool(room.get("origen_activo", True)),
+        float(room.get("rating") or 0),
+        int(room.get("votos") or 0),
+    ), reverse=True)
     data = {
         "catalogo": result,
         "meta": {
             "source": "Escape Collector / Firestore público",
             "count": len(result),
+            "active_count": sum(1 for room in result if room.get("origen_activo", True)),
+            "preserved_missing_from_source": len(preserved),
             "with_images": sum(1 for room in result if room.get("imagen")),
         },
     }
     CATALOG_FILE.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"catalog.json generado -> {data['meta']['count']} salas, {data['meta']['with_images']} con imagen")
+    print(
+        f"catalog.json generado -> {data['meta']['count']} salas, "
+        f"{data['meta']['with_images']} con imagen, "
+        f"{len(preserved)} conservadas sin origen activo"
+    )
 
 
 if __name__ == "__main__":

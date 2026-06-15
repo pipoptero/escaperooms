@@ -3,3 +3,8 @@
 .DS_Store
 firebase-config.js
 *.local.js
+reports/
+__pycache__/
+*.pyc
+scripts/update_catalog_and_awards.py
+run-maintenance-local.ps1
