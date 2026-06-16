@@ -690,8 +690,8 @@
   <div style="max-width:1400px;margin:0 auto;padding:0 32px;">
     <div class="tabs-container">
       <button class="tab active" id="tab-cat"   onclick="switchTab('catalogo')">🗂 Catálogo <span class="count-badge" id="badge-cat">0</span></button>
-      <button class="tab"        id="tab-pend"  onclick="switchTab('pendientes')">🔒 Pendientes <span class="count-badge" id="badge-pend">0</span></button>
-      <button class="tab auth-tab" id="tab-mine" onclick="switchTab('mis-hechos')" style="display:none">✅ Mis hechos <span class="count-badge" id="badge-mine">0</span></button>
+      <button class="tab auth-tab" id="tab-pend"  onclick="switchTab('pendientes')" style="display:none">🔒 Pendientes <span class="count-badge" id="badge-pend">0</span></button>
+      <button class="tab auth-tab" id="tab-mine" onclick="switchTab('mis-hechos')" style="display:none">✅ Hechos <span class="count-badge" id="badge-mine">0</span></button>
       <button class="tab"        id="tab-hecho" onclick="switchTab('hechos')">✍ Reviews <span class="count-badge" id="badge-hecho">0</span></button>
       <button class="tab"        id="tab-rank"  onclick="switchTab('ranking')">🏆 Ranking grupo</button>
     </div>
@@ -1925,6 +1925,13 @@ function populateFilters() {
 }
 
 function renderStats() {
+  const statsBar = document.getElementById('stats-bar');
+  if (!AUTH_USER) {
+    statsBar.style.display = 'none';
+    statsBar.innerHTML = '';
+    return;
+  }
+  statsBar.style.display = '';
   const pendingRooms = allPendingRooms();
   const doneRooms = allDoneRooms();
   const total = doneRooms.length + pendingRooms.length;
@@ -1940,7 +1947,7 @@ function renderStats() {
     ? `${Math.floor(minsJugados/60)}h ${minsJugados%60 > 0 ? minsJugados%60+'m' : ''}`
     : `${minsJugados}m`;
 
-  document.getElementById('stats-bar').innerHTML = `
+  statsBar.innerHTML = `
     <div class="stats-top">
       <div class="stat-item"><span class="stat-num">${doneRooms.length}</span><span class="stat-label">Hechos</span></div>
       <div class="stat-item"><span class="stat-num">${pendingRooms.length}</span><span class="stat-label">Pendientes</span></div>
@@ -1957,20 +1964,18 @@ function syncNavigationForAuth() {
   });
   const pendTab = document.getElementById('tab-pend');
   if (pendTab) {
-    pendTab.innerHTML = signed
-      ? `🔒 Mis pendientes <span class="count-badge" id="badge-pend">${personalPendingRooms().length}</span>`
-      : `🔒 Pendientes grupo <span class="count-badge" id="badge-pend">${PENDIENTES.length}</span>`;
+    pendTab.innerHTML = `🔒 Pendientes <span class="count-badge" id="badge-pend">${personalPendingRooms().length}</span>`;
   }
   if (!signed) {
     showOnlyFavs = false;
     const favFilter = document.getElementById('filter-fav-cat');
     if (favFilter) favFilter.checked = false;
-    if (ACTIVE_TAB === 'mis-hechos') switchTab('catalogo');
+    if (ACTIVE_TAB === 'mis-hechos' || ACTIVE_TAB === 'pendientes') switchTab('catalogo');
   }
 }
 
 function switchTab(t) {
-  if (t === 'mis-hechos' && !AUTH_USER) t = 'catalogo';
+  if ((t === 'mis-hechos' || t === 'pendientes') && !AUTH_USER) t = 'catalogo';
   ACTIVE_TAB = t;
   ['pendientes','mis-hechos','hechos','ranking','catalogo'].forEach(x => {
     document.getElementById('panel-' + x).style.display = x === t ? 'block' : 'none';
