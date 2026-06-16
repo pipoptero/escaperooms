@@ -770,7 +770,7 @@
       <div class="sort-row">
         <span class="filter-label">Ordenar:</span>
         <button class="sort-btn" id="sort-rank-escapistas" onclick="setSortRank('escapistas')">★ Escapistas</button>
-        <button class="sort-btn active" id="sort-rank-grupo" onclick="setSortRank('grupo')">★ Grupo</button>
+        <button class="sort-btn active" id="sort-rank-grupo" onclick="setSortRank('grupo')">★ The Vault</button>
         <button class="sort-btn" id="sort-rank-comunidad" onclick="setSortRank('comunidad')">★ Comunidad</button>
       </div>
       <div class="divider-line" style="margin-top:18px"></div>
@@ -3125,7 +3125,15 @@ function rankingScore(room, type) {
 }
 
 function rankingSortLabel() {
-  return sortRank === 'escapistas' ? 'Escapistas' : sortRank === 'comunidad' ? 'Comunidad' : 'Grupo';
+  return sortRank === 'escapistas' ? 'Escapistas' : sortRank === 'comunidad' ? 'Comunidad' : 'The Vault';
+}
+
+function rankingTheme(room) {
+  return [
+    ...listValues(room.tematica),
+    ...listValues(room.generos),
+    ...listValues(room.tipo)
+  ].find(Boolean) || 'Sin temática';
 }
 
 function renderRanking() {
@@ -3148,7 +3156,7 @@ function renderRanking() {
   document.getElementById('ranking-table').innerHTML = `
     <thead><tr>
       <th>#</th><th>Escape Room</th><th>Empresa</th><th>Temática</th>
-      <th>Dificultad</th><th>⏱ Min</th><th>★ Escapistas</th><th>★ Grupo</th><th>★ Comunidad</th>
+      <th>Dificultad</th><th>⏱ Min</th><th>★ Escapistas</th><th>★ The Vault</th><th>★ Comunidad</th>
     </tr></thead>
     <tbody>${rows.map((room, i) => {
       const slug = slugify(room.nombre || '');
@@ -3164,11 +3172,11 @@ function renderRanking() {
         <td data-label="#"><span class="rank-pos ${medals[i]||''}">${emoji[i]||'#'+(i+1)}</span></td>
         <td data-label="Escape Room"><span class="rank-room-name">${escapeHtml(room.nombre || '—')}</span></td>
         <td data-label="Empresa">${escapeHtml(room.empresa || '—')}</td>
-        <td data-label="Temática"><span class="tag tag-tema" style="font-size:.7rem">${escapeHtml(room.tematica || room.generos || '—')}</span></td>
+        <td data-label="Temática"><span class="tag tag-tema" style="font-size:.7rem">${escapeHtml(rankingTheme(room))}</span></td>
         <td data-label="Dificultad"><span class="meta-val ${dc(room.dificultad)}" style="font-size:.82rem">⚠ ${escapeHtml(room.dificultad || '—')}</span></td>
         <td data-label="Duración">${room.duracion ? `${escapeHtml(room.duracion)} min` : '—'}</td>
         <td data-label="Escapistas">${displayRating(room) ? `★ ${escapeHtml(displayRating(room))}` : '—'}</td>
-        <td data-label="Grupo" class="rank-score-group">${room.valoracion ? `★ ${escapeHtml(room.valoracion)}` : '—'}</td>
+        <td data-label="The Vault" class="rank-score-group">${room.valoracion ? `★ ${escapeHtml(room.valoracion)}` : '—'}</td>
         <td data-label="Comunidad" class="rank-score-community">${commScore}</td>
       </tr>`;
     }).join('')}</tbody>`;
