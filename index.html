@@ -1620,7 +1620,7 @@ function myRoomReview(slug) {
 }
 
 function reviewFormHtml(room, kind, slug) {
-  const key = roomKey(room);
+  const key = jsString(roomKey(room));
   const personal = userStateFor(room);
   const canReview = AUTH_USER && personal.done;
   const review = myRoomReview(slug) || { scores: {}, text: '' };
@@ -1683,12 +1683,14 @@ async function saveRoomReview(kind, key) {
     alert('Inicia sesión con Google para guardar tu reseña.');
     return;
   }
-  const room = getRoomByKindKey(kind, key);
+  const room = findDetailRoom(kind, key);
   if (!room || !userStateFor(room).done) {
     alert('Solo puedes reseñar salas que tengas marcadas como Hecho por mí.');
     return;
   }
   const slug = slugify(room.nombre || room.empresa || roomKey(room));
+  const status = document.getElementById(`review-status-${cssSafe(slug)}`);
+  if (status) status.textContent = 'Guardando resena...';
   const widgetId = `${slug}_${USER_ID}_review`;
   const scores = {};
   REVIEW_CATEGORIES.forEach(([id]) => {
@@ -1714,21 +1716,22 @@ async function saveRoomReview(kind, key) {
     updatedAt: now
   };
   try {
+    if (AUTH_USER) AUTH_TOKEN = await AUTH_USER.getIdToken(true);
     await fbPut(`roomReviews/${slug}/${USER_ID}`, review);
     if (!roomReviewsCache[slug]) roomReviewsCache[slug] = {};
     roomReviewsCache[slug][USER_ID] = review;
-    const status = document.getElementById(`review-status-${cssSafe(slug)}`);
-    if (status) status.textContent = 'Reseña guardada';
+    if (status) status.textContent = 'Resena guardada';
     openDetail(kind, key);
   } catch (err) {
     console.error(err);
+    if (status) status.textContent = 'No se pudo guardar la resena';
     alert('No se pudo guardar la reseña. Revisa las reglas de Firebase para roomReviews.');
   }
 }
 
 async function deleteRoomReview(kind, key) {
   if (!AUTH_USER || !FIREBASE_ENABLED) return;
-  const room = getRoomByKindKey(kind, key);
+  const room = findDetailRoom(kind, key);
   if (!room) return;
   const slug = slugify(room.nombre || room.empresa || roomKey(room));
   try {
