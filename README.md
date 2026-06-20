@@ -471,7 +471,7 @@ python scripts/build_extra_awards.py
 La web quedará disponible en una URL similar a:
 
 ```text
-https://usuario.github.io/scaperooms/
+https://pipoptero.github.io/escaperooms/
 ```
 
 ## Notas de Diseño
