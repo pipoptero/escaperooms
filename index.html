@@ -303,6 +303,34 @@
   .auth-btn.secondary{color:var(--text3);border-color:var(--border);background:rgba(255,255,255,.025);}
   .auth-btn[disabled]{opacity:.45;cursor:not-allowed;}
 
+  /* -- ESCAPIST GROUPS / PROFILE -- */
+  .profile-modal{position:fixed;inset:0;z-index:210;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);}
+  .profile-modal.open{display:flex;}
+  .profile-dialog{width:min(880px,100%);max-height:min(92vh,820px);background:var(--card);border:1px solid rgba(245,166,35,.28);box-shadow:0 24px 80px rgba(0,0,0,.75);display:flex;flex-direction:column;overflow:hidden;}
+  .profile-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 18px;border-bottom:1px solid var(--border);background:rgba(245,166,35,.04);}
+  .profile-title{font-family:'Share Tech Mono',monospace;color:var(--amber);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;}
+  .profile-close{width:32px;height:32px;border:1px solid var(--border);background:rgba(255,255,255,.025);color:var(--text3);cursor:pointer;}
+  .profile-body{padding:16px 18px;overflow:auto;}
+  .profile-section{border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);padding:13px 14px;margin-bottom:13px;}
+  .profile-section-title{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--text3);letter-spacing:.13em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+  .profile-section-title::after{content:'';height:1px;background:var(--border);flex:1;}
+  .profile-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .profile-input{flex:1;min-width:220px;background:var(--bg2);border:1px solid var(--border);color:var(--text);font-family:'Rajdhani',sans-serif;font-size:.92rem;padding:9px 10px;outline:none;}
+  .profile-input:focus{border-color:rgba(245,166,35,.48);}
+  .profile-status-msg{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;line-height:1.5;margin-top:9px;overflow-wrap:anywhere;}
+  .profile-groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;}
+  .profile-group-card{border:1px solid rgba(245,166,35,.14);background:rgba(245,166,35,.035);padding:11px 12px;min-width:0;}
+  .profile-group-name{font-family:'Cinzel',serif;color:var(--text);font-size:1rem;font-weight:700;line-height:1.15;margin-bottom:4px;overflow-wrap:anywhere;}
+  .profile-group-meta{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;line-height:1.5;margin-bottom:8px;}
+  .profile-group-actions{display:flex;gap:6px;flex-wrap:wrap;}
+  .profile-group-rooms{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px;}
+  .group-room-control{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.02);padding:11px 12px;margin-top:10px;}
+  .group-room-title{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--text3);letter-spacing:.13em;text-transform:uppercase;margin-bottom:8px;}
+  .group-room-list{display:flex;gap:7px;flex-wrap:wrap;}
+  .group-toggle{font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;border:1px solid var(--border);background:rgba(255,255,255,.025);color:var(--text3);padding:7px 9px;cursor:pointer;transition:all .2s;}
+  .group-toggle:hover{border-color:rgba(245,166,35,.38);color:var(--amber);}
+  .group-toggle.active{border-color:rgba(6,214,160,.42);background:rgba(6,214,160,.08);color:var(--green);}
+
   /* â”€â”€ DETAIL MODAL â”€â”€ */
   .detail-modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);}
   .detail-modal.open{display:flex;}
@@ -703,6 +731,7 @@
         <span class="auth-name" id="auth-name">Sin iniciar sesion</span>
       </div>
       <button class="auth-btn" id="auth-login" type="button" onclick="signInGoogle()">Entrar con Google</button>
+      <button class="auth-btn secondary" id="auth-profile" type="button" onclick="openProfile()" style="display:none">Perfil</button>
       <button class="auth-btn secondary" id="auth-logout" type="button" onclick="signOutGoogle()" style="display:none">Salir</button>
     </div>
   </div>
@@ -924,6 +953,16 @@
   </div>
 </div>
 
+
+<div class="profile-modal" id="profile-modal" aria-hidden="true" onclick="closeProfile(event)">
+  <div class="profile-dialog" role="dialog" aria-modal="true" aria-labelledby="profile-title" onclick="event.stopPropagation()">
+    <div class="profile-head">
+      <div class="profile-title" id="profile-title">Perfil escapista</div>
+      <button class="profile-close" type="button" onclick="closeProfile()" aria-label="Cerrar perfil">X</button>
+    </div>
+    <div class="profile-body" id="profile-content"></div>
+  </div>
+</div>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <script src="firebase-config.js"></script>
@@ -993,6 +1032,12 @@ let ACTIVE_TAB = 'catalogo';
 // users/{uid}/roomStates/{roomKey} -> { pendiente, hecho, favorito, descartado, updatedAt }
 let CURRENT_USER = null;
 let USER_ROOM_STATES = {};
+let USER_PROFILE = {};
+let USER_GROUPS = {};
+let GROUP_MEMBERS = {};
+let GROUP_ROOMS = {};
+let PENDING_INVITE_ID = new URLSearchParams(window.location.search).get('invite') || '';
+let INVITE_NOTICE_SHOWN = false;
 
 // ── Utilidades ────────────────────────────────────────────────────────────────
 function slugify(str) {
@@ -1126,7 +1171,8 @@ function userStateTags(room) {
   const state = userStateFor(room);
   return [
     state.done ? '<span class="tag tag-feature">Hecho por ti</span>' : '',
-    state.pending ? '<span class="tag tag-tipo">Tu pendiente</span>' : ''
+    state.pending ? '<span class="tag tag-tipo">Tu pendiente</span>' : '',
+    ...groupUserTags(room)
   ].filter(Boolean).join('');
 }
 
@@ -1161,7 +1207,10 @@ function personalPendingRooms() {
 }
 
 function personalDoneRooms() {
-  return personalRoomSources().filter(room => userStateFor(room).done);
+  return uniqueRooms([
+    ...personalRoomSources().filter(room => userStateFor(room).done),
+    ...groupDoneRooms()
+  ]);
 }
 
 function currentPendingRooms() {
@@ -1192,6 +1241,7 @@ function firebaseAuthConfigured() {
 function renderAuthStatus() {
   const loginBtn = document.getElementById('auth-login');
   const logoutBtn = document.getElementById('auth-logout');
+  const profileBtn = document.getElementById('auth-profile');
   const nameEl = document.getElementById('auth-name');
   const statusEl = document.getElementById('auth-status');
   if (!loginBtn || !logoutBtn || !nameEl || !statusEl) return;
@@ -1202,6 +1252,7 @@ function renderAuthStatus() {
     loginBtn.disabled = true;
     loginBtn.title = 'Rellena FIREBASE_CONFIG y habilita Google en Firebase Console';
     logoutBtn.style.display = 'none';
+    if (profileBtn) profileBtn.style.display = 'none';
     return;
   }
   if (!window.firebase) {
@@ -1209,6 +1260,7 @@ function renderAuthStatus() {
     loginBtn.disabled = true;
     loginBtn.title = 'No se pudo cargar Firebase desde gstatic.com';
     logoutBtn.style.display = 'none';
+    if (profileBtn) profileBtn.style.display = 'none';
     return;
   }
 
@@ -1223,10 +1275,12 @@ function renderAuthStatus() {
     statusEl.insertBefore(avatar, nameEl);
     nameEl.textContent = AUTH_USER.displayName || AUTH_USER.email || 'Cuenta Google';
     loginBtn.style.display = 'none';
+    if (profileBtn) profileBtn.style.display = '';
     logoutBtn.style.display = '';
   } else {
     nameEl.textContent = 'Sin iniciar sesion';
     loginBtn.style.display = '';
+    if (profileBtn) profileBtn.style.display = 'none';
     logoutBtn.style.display = 'none';
   }
   syncNavigationForAuth();
@@ -1256,6 +1310,8 @@ async function initFirebaseAuth() {
 async function refreshSignedSession() {
   if (AUTH_USER) AUTH_TOKEN = await AUTH_USER.getIdToken();
   await loadUserRoomStates();
+  await saveUserProfile();
+  await loadUserGroups();
   await loadVotes();
   await loadRoomReviews();
   await loadLikes();
@@ -1267,6 +1323,7 @@ async function refreshSignedSession() {
   renderHechos();
   renderRanking();
   renderCatalogo();
+  await handlePendingInvite();
 }
 
 async function loadUserRoomStates() {
@@ -1335,6 +1392,359 @@ async function setPersonalRoomState(kind, key, state) {
   }
 }
 
+
+// -- Grupos escapistas -------------------------------------------------------
+function randomId(prefix) {
+  return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 9)}`;
+}
+
+function activeUserGroups() {
+  return Object.entries(USER_GROUPS || {})
+    .filter(([, group]) => group && group.status !== 'left' && group.status !== 'removed')
+    .sort((a, b) => String(a[1].name || '').localeCompare(String(b[1].name || '')));
+}
+
+function groupName(groupId) {
+  return USER_GROUPS[groupId]?.name || GROUP_MEMBERS[groupId]?.[USER_ID]?.groupName || 'Grupo escapista';
+}
+
+function findRoomByUserKey(key) {
+  return [...CATALOGO, ...PENDIENTES, ...HECHOS].find(room => userRoomKey(room) === key) || null;
+}
+
+function roomFromGroupRecord(key, record) {
+  const base = findRoomByUserKey(key);
+  if (base) return { ...base, _groupDone: true };
+  return {
+    id: key,
+    nombre: record.roomName || record.nombre || key,
+    empresa: record.company || record.empresa || '',
+    ciudad: record.city || record.ciudad || '',
+    provincia: record.province || record.provincia || '',
+    comunidad: record.community || record.comunidad || '',
+    imagen: record.image || record.imagen || '',
+    web: record.web || '',
+    duracion: record.duration || record.duracion || '',
+    dificultad: record.difficulty || record.dificultad || '',
+    _groupDone: true
+  };
+}
+
+function groupDoneEntriesForKey(key) {
+  if (!AUTH_USER || !key) return [];
+  return activeUserGroups()
+    .filter(([groupId]) => GROUP_ROOMS[groupId] && GROUP_ROOMS[groupId][key])
+    .map(([groupId, group]) => ({ groupId, name: group.name || groupName(groupId), room: GROUP_ROOMS[groupId][key] }));
+}
+
+function groupDoneEntriesForRoom(room) {
+  return groupDoneEntriesForKey(userRoomKey(room));
+}
+
+function groupDoneRooms() {
+  const byKey = new Map();
+  activeUserGroups().forEach(([groupId]) => {
+    Object.entries(GROUP_ROOMS[groupId] || {}).forEach(([key, record]) => {
+      if (!byKey.has(key)) byKey.set(key, roomFromGroupRecord(key, record));
+    });
+  });
+  return [...byKey.values()];
+}
+
+function isRoomDoneForUser(room) {
+  return !!userStateFor(room).done || groupDoneEntriesForRoom(room).length > 0;
+}
+
+function groupUserTags(room) {
+  const groups = groupDoneEntriesForRoom(room);
+  if (!groups.length) return [];
+  const visible = groups.slice(0, 2).map(item => `<span class="tag tag-feature">Grupo: ${escapeHtml(item.name)}</span>`);
+  if (groups.length > 2) visible.push(`<span class="tag tag-muted">+${groups.length - 2} grupos</span>`);
+  return visible;
+}
+
+async function saveUserProfile() {
+  if (!AUTH_USER || !FIREBASE_ENABLED) return;
+  USER_PROFILE = {
+    uid: USER_ID,
+    displayName: AUTH_USER.displayName || AUTH_USER.email || 'Usuario',
+    shortName: shortDisplayName(),
+    email: AUTH_USER.email || '',
+    photoURL: AUTH_USER.photoURL || '',
+    updatedAt: Date.now()
+  };
+  try {
+    await fbPut(`profiles/${USER_ID}`, USER_PROFILE);
+  } catch (e) {
+    console.warn('No se pudo guardar el perfil:', e.message);
+  }
+}
+
+async function loadUserGroups() {
+  if (!AUTH_USER || !FIREBASE_ENABLED) {
+    USER_GROUPS = {};
+    GROUP_MEMBERS = {};
+    GROUP_ROOMS = {};
+    return;
+  }
+  try {
+    USER_GROUPS = await fbGet(`userGroups/${USER_ID}`) || {};
+  } catch (e) {
+    console.warn('No se pudieron cargar tus grupos:', e.message);
+    USER_GROUPS = {};
+  }
+  GROUP_MEMBERS = {};
+  GROUP_ROOMS = {};
+  for (const [groupId] of activeUserGroups()) {
+    try { GROUP_MEMBERS[groupId] = await fbGet(`groupMembers/${groupId}`) || {}; }
+    catch (e) { console.warn('No se pudieron cargar miembros del grupo:', groupId, e.message); GROUP_MEMBERS[groupId] = {}; }
+    try { GROUP_ROOMS[groupId] = await fbGet(`groupRooms/${groupId}`) || {}; }
+    catch (e) { console.warn('No se pudieron cargar salas del grupo:', groupId, e.message); GROUP_ROOMS[groupId] = {}; }
+  }
+}
+
+function groupRoomCount(groupId) {
+  return Object.keys(GROUP_ROOMS[groupId] || {}).length;
+}
+
+function groupMemberCount(groupId) {
+  return Object.values(GROUP_MEMBERS[groupId] || {}).filter(member => member && member.status !== 'left').length;
+}
+
+function groupRoomsPreviewHtml(groupId) {
+  const rooms = Object.entries(GROUP_ROOMS[groupId] || {}).slice(0, 5);
+  if (!rooms.length) return '<span class="tag tag-muted">Sin salas hechas todavia</span>';
+  return rooms.map(([, room]) => `<span class="tag tag-feature">${escapeHtml(room.roomName || 'Sala')}</span>`).join('');
+}
+
+function openProfile(message = '') {
+  renderProfile(message);
+  const modal = document.getElementById('profile-modal');
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeProfile(event) {
+  if (event && event.target !== document.getElementById('profile-modal')) return;
+  const modal = document.getElementById('profile-modal');
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden', 'true');
+  if (!document.getElementById('detail-modal')?.classList.contains('open')) document.body.style.overflow = '';
+}
+
+function setProfileStatus(message) {
+  const node = document.getElementById('profile-status');
+  if (node) node.innerHTML = message || '';
+}
+
+function renderProfile(message = '') {
+  const root = document.getElementById('profile-content');
+  if (!root) return;
+  if (!AUTH_USER) {
+    root.innerHTML = `<div class="profile-section"><div class="profile-section-title">Cuenta</div><div class="review-empty">Entra con Google para crear y compartir grupos escapistas.</div></div>`;
+    return;
+  }
+  const groups = activeUserGroups();
+  root.innerHTML = `
+    <div class="profile-section">
+      <div class="profile-section-title">Crear grupo escapista</div>
+      <div class="profile-row">
+        <input class="profile-input" id="new-group-name" maxlength="60" placeholder="Nombre del grupo" onkeydown="if(event.key==='Enter') createEscapistGroup()">
+        <button class="auth-btn" type="button" onclick="createEscapistGroup()">Crear grupo</button>
+      </div>
+      <div class="profile-status-msg" id="profile-status">${message || ''}</div>
+    </div>
+    <div class="profile-section">
+      <div class="profile-section-title">Mis grupos</div>
+      <div class="profile-groups">
+        ${groups.length ? groups.map(([groupId, group]) => `<article class="profile-group-card">
+          <div class="profile-group-name">${escapeHtml(group.name || 'Grupo escapista')}</div>
+          <div class="profile-group-meta">${groupMemberCount(groupId)} miembros · ${groupRoomCount(groupId)} salas hechas · ${escapeHtml(group.role || 'member')}</div>
+          <div class="profile-group-actions">
+            <button class="auth-btn secondary" type="button" onclick="createGroupInvite('${groupId}')">Copiar invitacion</button>
+          </div>
+          <div class="profile-group-rooms">${groupRoomsPreviewHtml(groupId)}</div>
+        </article>`).join('') : '<div class="review-empty">Todavia no tienes grupos. Crea uno y comparte la invitacion.</div>'}
+      </div>
+    </div>`;
+}
+
+async function createEscapistGroup() {
+  if (!AUTH_USER || !FIREBASE_ENABLED) return;
+  const input = document.getElementById('new-group-name');
+  const name = (input?.value || '').trim();
+  if (!name) {
+    setProfileStatus('Escribe un nombre para el grupo.');
+    return;
+  }
+  const groupId = randomId('group');
+  const now = Date.now();
+  const profileName = shortDisplayName();
+  try {
+    await saveUserProfile();
+    await fbPut(`groups/${groupId}`, { name, ownerUid: USER_ID, createdAt: now, updatedAt: now });
+    await fbPut(`groupMembers/${groupId}/${USER_ID}`, { role: 'owner', status: 'active', displayName: profileName, photoURL: AUTH_USER.photoURL || '', joinedAt: now });
+    await fbPut(`userGroups/${USER_ID}/${groupId}`, { name, role: 'owner', status: 'active', joinedAt: now });
+    await loadUserGroups();
+    renderProfile('Grupo creado. Ya puedes copiar una invitacion.');
+    populateFilters(); renderStats(); renderMisHechos(); renderCatalogo();
+  } catch (e) {
+    console.error(e);
+    setProfileStatus(`No se pudo crear el grupo. ${escapeHtml(e.message)}`);
+  }
+}
+
+async function createGroupInvite(groupId) {
+  if (!AUTH_USER || !FIREBASE_ENABLED) return;
+  const group = USER_GROUPS[groupId];
+  if (!group) return;
+  const inviteId = randomId('invite');
+  const now = Date.now();
+  const invite = {
+    groupId,
+    groupName: group.name || 'Grupo escapista',
+    createdBy: USER_ID,
+    createdByName: shortDisplayName(),
+    status: 'pending',
+    createdAt: now,
+    expiresAt: now + 1000 * 60 * 60 * 24 * 30
+  };
+  try {
+    await fbPut(`groupInvites/${inviteId}`, invite);
+    const link = `${window.location.origin}${window.location.pathname}?invite=${encodeURIComponent(inviteId)}`;
+    try { await navigator.clipboard.writeText(link); }
+    catch {}
+    setProfileStatus(`Invitacion copiada: <br><span>${escapeHtml(link)}</span>`);
+  } catch (e) {
+    console.error(e);
+    setProfileStatus(`No se pudo crear la invitacion. ${escapeHtml(e.message)}`);
+  }
+}
+
+function invitePromptHtml(inviteId, invite) {
+  return `<div class="profile-section">
+    <div class="profile-section-title">Invitacion de grupo</div>
+    <div class="profile-group-name">${escapeHtml(invite.groupName || 'Grupo escapista')}</div>
+    <div class="profile-group-meta">Invitacion de ${escapeHtml(invite.createdByName || 'un escapista')}</div>
+    <div class="profile-row">
+      <button class="auth-btn" type="button" onclick="acceptGroupInvite('${inviteId}')">Aceptar invitacion</button>
+      <button class="auth-btn secondary" type="button" onclick="declineVisibleInvite()">Ahora no</button>
+    </div>
+  </div>`;
+}
+
+async function handlePendingInvite() {
+  if (!PENDING_INVITE_ID || INVITE_NOTICE_SHOWN) return;
+  if (!FIREBASE_ENABLED) return;
+  if (!AUTH_USER) {
+    INVITE_NOTICE_SHOWN = true;
+    alert('Has abierto una invitacion de grupo. Entra con Google para poder aceptarla.');
+    return;
+  }
+  try {
+    const invite = await fbGet(`groupInvites/${PENDING_INVITE_ID}`);
+    if (!invite || invite.status !== 'pending' || (invite.expiresAt && invite.expiresAt < Date.now())) {
+      INVITE_NOTICE_SHOWN = true;
+      openProfile('La invitacion no existe o ha caducado.');
+      return;
+    }
+    INVITE_NOTICE_SHOWN = true;
+    const root = document.getElementById('profile-content');
+    openProfile();
+    if (root) root.innerHTML = invitePromptHtml(PENDING_INVITE_ID, invite);
+  } catch (e) {
+    console.warn('No se pudo leer la invitacion:', e.message);
+  }
+}
+
+function declineVisibleInvite() {
+  PENDING_INVITE_ID = '';
+  window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
+  closeProfile();
+}
+
+async function acceptGroupInvite(inviteId) {
+  if (!AUTH_USER || !FIREBASE_ENABLED) return;
+  try {
+    const invite = await fbGet(`groupInvites/${inviteId}`);
+    if (!invite || invite.status !== 'pending') throw new Error('Invitacion no disponible');
+    if (invite.expiresAt && invite.expiresAt < Date.now()) throw new Error('Invitacion caducada');
+    const now = Date.now();
+    await saveUserProfile();
+    await fbPut(`groupMembers/${invite.groupId}/${USER_ID}`, { role: 'member', status: 'active', displayName: shortDisplayName(), photoURL: AUTH_USER.photoURL || '', joinedAt: now });
+    await fbPut(`userGroups/${USER_ID}/${invite.groupId}`, { name: invite.groupName || 'Grupo escapista', role: 'member', status: 'active', joinedAt: now });
+    await fbPut(`groupInvites/${inviteId}`, { ...invite, status: 'accepted', acceptedBy: USER_ID, acceptedByName: shortDisplayName(), acceptedAt: now });
+    PENDING_INVITE_ID = '';
+    window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
+    await loadUserGroups();
+    populateFilters(); renderStats(); renderMisHechos(); renderCatalogo();
+    openProfile('Invitacion aceptada. Las salas hechas por el grupo ya cuentan como hechas para ti.');
+  } catch (e) {
+    console.error(e);
+    openProfile(`No se pudo aceptar la invitacion. ${escapeHtml(e.message)}`);
+  }
+}
+
+function groupRoomControlsHtml(room, kind) {
+  if (!AUTH_USER) return '';
+  const groups = activeUserGroups();
+  if (!groups.length) {
+    return `<div class="group-room-control"><div class="group-room-title">Grupos escapistas</div><div class="review-empty">Crea un grupo desde tu perfil para asignar salas hechas.</div></div>`;
+  }
+  const key = jsString(roomKey(room));
+  const roomDone = isRoomDoneForUser(room) || userStateFor(room).done;
+  return `<div class="group-room-control">
+    <div class="group-room-title">Grupos escapistas</div>
+    <div class="group-room-list">
+      ${groups.map(([groupId, group]) => {
+        const active = !!GROUP_ROOMS[groupId]?.[userRoomKey(room)];
+        return `<button class="group-toggle ${active ? 'active' : ''}" type="button" onclick="toggleGroupRoom('${kind}','${key}','${groupId}')">${active ? 'Hecho con ' : 'Asignar a '}${escapeHtml(group.name || 'Grupo')}</button>`;
+      }).join('')}
+    </div>
+    ${!roomDone ? '<div class="profile-status-msg">Asignarla a un grupo tambien contara esta sala como hecha para ti.</div>' : ''}
+  </div>`;
+}
+
+async function toggleGroupRoom(kind, key, groupId) {
+  if (!AUTH_USER || !FIREBASE_ENABLED) return;
+  const room = findDetailRoom(kind, key);
+  if (!room || !USER_GROUPS[groupId]) return;
+  const roomStateKey = userRoomKey(room);
+  const exists = !!GROUP_ROOMS[groupId]?.[roomStateKey];
+  try {
+    if (exists) {
+      await fbDelete(`groupRooms/${groupId}/${roomStateKey}`);
+      if (GROUP_ROOMS[groupId]) delete GROUP_ROOMS[groupId][roomStateKey];
+    } else {
+      const now = Date.now();
+      const record = {
+        roomName: room.nombre || '',
+        company: room.empresa || '',
+        city: room.ciudad || '',
+        province: room.provincia || '',
+        community: communityOf(room) || '',
+        image: room.imagen || `images/${slugify(room.nombre || '')}.webp`,
+        web: room.web || '',
+        duration: room.duracion || '',
+        difficulty: room.dificultad || '',
+        addedBy: USER_ID,
+        addedByName: shortDisplayName(),
+        addedAt: now,
+        updatedAt: now
+      };
+      await fbPut(`groupRooms/${groupId}/${roomStateKey}`, record);
+      if (!GROUP_ROOMS[groupId]) GROUP_ROOMS[groupId] = {};
+      GROUP_ROOMS[groupId][roomStateKey] = record;
+    }
+    populateFilters(); renderStats(); renderMisHechos(); renderCatalogo();
+    if (document.getElementById('profile-modal')?.classList.contains('open')) renderProfile();
+    if (document.getElementById('detail-modal')?.classList.contains('open')) openDetail(kind, key);
+  } catch (e) {
+    console.error(e);
+    alert(`No se pudo actualizar el grupo.\n\nDetalle: ${e.message}`);
+  }
+}
 async function migrateAnonymousDataToAccount() {
   if (!AUTH_USER || USER_ID === LOCAL_USER_ID) return;
   const localFavs = readStoredFavs('er_favs');
@@ -1413,6 +1823,10 @@ async function signOutGoogle() {
   AUTH_TOKEN = '';
   USER_ID = LOCAL_USER_ID;
   FAVS = readStoredFavs('er_favs');
+  USER_PROFILE = {};
+  USER_GROUPS = {};
+  GROUP_MEMBERS = {};
+  GROUP_ROOMS = {};
   renderAuthStatus();
   await refreshSignedSession();
 }
@@ -1660,7 +2074,7 @@ function myRoomReview(slug) {
 function reviewFormHtml(room, kind, slug) {
   const key = jsString(roomKey(room));
   const personal = userStateFor(room);
-  const canReview = AUTH_USER && personal.done;
+  const canReview = AUTH_USER && isRoomDoneForUser(room);
   const review = myRoomReview(slug) || { scores: {}, text: '' };
   if (!AUTH_USER) {
     return '<div class="review-empty">Entra con Google para escribir tu reseña cuando hayas marcado la sala como hecha.</div>';
@@ -1849,6 +2263,7 @@ async function loadData() {
     await loadCatalogo();
     await loadTerpecaAwards();
     await loadExtraAwards();
+    await loadUserGroups();
 
     document.getElementById('loading').style.display = 'none';
     document.getElementById('app').style.display = 'block';
@@ -1856,6 +2271,7 @@ async function loadData() {
 
     populateFilters(); renderStats(); renderPendientes(); renderMisHechos(); renderHechos(); renderRanking(); renderCatalogo();
     updateFavCount();
+    await handlePendingInvite();
 
     // Cargar likes DESPUÉS de pintar la UI y actualizar contadores
     loadLikes().then(() => refreshAllLikeCounts());
@@ -2689,7 +3105,8 @@ function detailAccountHtml(room, kind) {
   const slug = slugify(room.nombre || '');
   const state = userStateFor(room);
   const favorite = iLiked(slug);
-  const stateLabel = state.done ? 'Hecho por ti' : state.pending ? 'Pendiente personal' : favorite ? 'Favorito' : 'Sin marcar';
+  const groupDone = groupDoneEntriesForRoom(room);
+  const stateLabel = state.done ? 'Hecho por ti' : groupDone.length ? `Hecho con ${groupDone.length} grupo${groupDone.length !== 1 ? 's' : ''}` : state.pending ? 'Pendiente personal' : favorite ? 'Favorito' : 'Sin marcar';
   if (!AUTH_USER) {
     return `<div class="detail-account">
       <div class="detail-account-head">
@@ -2708,6 +3125,7 @@ function detailAccountHtml(room, kind) {
       <button class="detail-personal-btn done ${state.done ? 'active' : ''}" type="button" onclick="setPersonalRoomState('${kind}','${key}','done')">${state.done ? '✓ Hecho' : 'Hecho por mi'}</button>
       <button class="detail-personal-btn favorite ${favorite ? 'active' : ''}" data-slug="${slug}" type="button" onclick="toggleFav('${slug}',this)">${favorite ? '♥ Favorito' : '♡ Favorito'} <span class="fav-likes">${likeCount(slug)}</span></button>
     </div>
+    ${groupRoomControlsHtml(room, kind)}
   </div>`;
 }
 
@@ -3032,7 +3450,7 @@ function renderMisHechos() {
   else if (sortMine==='dur')    f.sort((a,b)=>parseInt(b.duracion||0)-parseInt(a.duracion||0));
   else if (sortMine==='dif')    f.sort((a,b)=>do_(b.dificultad)-do_(a.dificultad));
 
-  document.getElementById('result-info-mine').textContent = `Mostrando ${f.length} de ${doneRooms.length} hechos personales`;
+  document.getElementById('result-info-mine').textContent = `Mostrando ${f.length} de ${doneRooms.length} hechos personales y de grupos`;
   document.getElementById('grid-mis-hechos').innerHTML = f.length
     ? f.map(cardPend).join('')
     : `<div class="empty-state"><div class="lock">✓</div><p>AÚN NO TIENES HECHOS — MARCA SALAS DESDE EL CATÁLOGO</p></div>`;
@@ -3084,7 +3502,7 @@ function renderCatalogo() {
     if (!awardMatchesFilter(c, awardFilter)) return false;
     if (onlyTerror && !c.terror) return false;
     if (onlyOpen && !c.abierto) return false;
-    if (hideDone && (groupState.done || userState.done)) return false;
+    if (hideDone && (groupState.done || isRoomDoneForUser(c))) return false;
     if (showOnlyFavs && !iLiked(slugify(c.nombre))) return false;
     return true;
   });

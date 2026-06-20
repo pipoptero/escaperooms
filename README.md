@@ -344,6 +344,58 @@ Para que funcione el login:
 }
 ```
 
+
+### Reglas adicionales para grupos escapistas
+
+Para activar perfiles, grupos privados, invitaciones por enlace y salas hechas por grupo, anade tambien estas ramas a las reglas de Firebase Realtime Database. La invitacion simple funciona mediante un enlace con un identificador largo; para email verificado o auditoria completa, el siguiente paso natural seria Firebase Cloud Functions.
+
+```json
+{
+  "profiles": {
+    "$uid": {
+      ".read": "auth != null",
+      ".write": "auth != null && auth.uid === $uid"
+    }
+  },
+  "groups": {
+    "$groupId": {
+      ".read": "auth != null && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active'",
+      ".write": "auth != null && ((!data.exists() && newData.child('ownerUid').val() === auth.uid) || root.child('groupMembers/' + $groupId + '/' + auth.uid + '/role').val() === 'owner')"
+    }
+  },
+  "groupMembers": {
+    "$groupId": {
+      ".read": "auth != null && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active'",
+      "$uid": {
+        ".write": "auth != null && (auth.uid === $uid || root.child('groupMembers/' + $groupId + '/' + auth.uid + '/role').val() === 'owner')"
+      }
+    }
+  },
+  "userGroups": {
+    "$uid": {
+      ".read": "auth != null && auth.uid === $uid",
+      "$groupId": {
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    }
+  },
+  "groupRooms": {
+    "$groupId": {
+      ".read": "auth != null && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active'",
+      "$room": {
+        ".write": "auth != null && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active'"
+      }
+    }
+  },
+  "groupInvites": {
+    "$inviteId": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    }
+  }
+}
+```
+
 ## Excel del Grupo
 
 El Excel debe mantener dos bloques principales:
