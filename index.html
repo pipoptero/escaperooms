@@ -1512,17 +1512,31 @@ async function loadUserGroups() {
     GROUP_ROOMS = {};
     return;
   }
+  let rawGroups = {};
   try {
-    USER_GROUPS = await fbGet(`userGroups/${USER_ID}`) || {};
+    rawGroups = await fbGet(`userGroups/${USER_ID}`) || {};
   } catch (e) {
     console.warn('No se pudieron cargar tus grupos:', e.message);
-    USER_GROUPS = {};
   }
+  USER_GROUPS = {};
   GROUP_MEMBERS = {};
   GROUP_ROOMS = {};
-  for (const [groupId] of activeUserGroups()) {
-    try { GROUP_MEMBERS[groupId] = await fbGet(`groupMembers/${groupId}`) || {}; }
-    catch (e) { console.warn('No se pudieron cargar miembros del grupo:', groupId, e.message); GROUP_MEMBERS[groupId] = {}; }
+  for (const [groupId, group] of Object.entries(rawGroups || {})) {
+    if (!group || group.status === 'left' || group.status === 'removed') continue;
+    try {
+      const members = await fbGet(`groupMembers/${groupId}`) || {};
+      const myMember = members[USER_ID];
+      if (!myMember || myMember.status !== 'active') {
+        try { await fbDelete(`userGroups/${USER_ID}/${groupId}`); } catch {}
+        continue;
+      }
+      USER_GROUPS[groupId] = { ...group, role: myMember.role || group.role || 'member', status: 'active' };
+      GROUP_MEMBERS[groupId] = members;
+    } catch (e) {
+      console.warn('No se pudo validar la membresia del grupo:', groupId, e.message);
+      try { await fbDelete(`userGroups/${USER_ID}/${groupId}`); } catch {}
+      continue;
+    }
     try { GROUP_ROOMS[groupId] = await fbGet(`groupRooms/${groupId}`) || {}; }
     catch (e) { console.warn('No se pudieron cargar salas del grupo:', groupId, e.message); GROUP_ROOMS[groupId] = {}; }
   }
@@ -1612,7 +1626,10 @@ function renderGroupDetail(groupId, message = '') {
           <div class="group-detail-title">${escapeHtml(group.name || 'Grupo escapista')}</div>
           <div class="profile-group-meta">${escapeHtml(group.role || 'member')} - privado</div>
         </div>
-        <button class="auth-btn" type="button" onclick="createGroupInvite('${groupId}')">Copiar invitacion</button>
+        <div class="profile-group-actions">
+          <button class="auth-btn" type="button" onclick="createGroupInvite('${groupId}')">Copiar invitacion</button>
+          ${group.role === 'owner' ? `<button class="auth-btn secondary" type="button" onclick="deleteEscapistGroup('${groupId}')">Eliminar grupo</button>` : ''}
+        </div>
       </div>
       <div class="group-stats-grid">
         <div class="group-stat"><div class="group-stat-value">${stats.rooms}</div><div class="group-stat-label">Salas</div></div>
@@ -1620,7 +1637,7 @@ function renderGroupDetail(groupId, message = '') {
         <div class="group-stat"><div class="group-stat-value">${stats.hours}</div><div class="group-stat-label">Horas</div></div>
         <div class="group-stat"><div class="group-stat-value">${stats.communityAvg}</div><div class="group-stat-label">Comunidad</div></div>
       </div>
-      ${message ? `<div class="profile-status-msg">${message}</div>` : ''}
+      <div class="profile-status-msg" id="profile-status">${message || ''}</div>
     </div>
     <div class="profile-section">
       <div class="profile-section-title">Miembros</div>
@@ -1632,6 +1649,37 @@ function renderGroupDetail(groupId, message = '') {
     </div>`;
 }
 
+
+async function deleteEscapistGroup(groupId) {
+  const group = USER_GROUPS[groupId];
+  if (!AUTH_USER || !FIREBASE_ENABLED || !group) return;
+  if (group.role !== 'owner') {
+    alert('Solo el propietario puede eliminar el grupo.');
+    return;
+  }
+  const name = group.name || 'este grupo';
+  if (!confirm(`Eliminar ${name}?\n\nSe borraran sus salas hechas y miembros para todos los integrantes. Esta accion no se puede deshacer.`)) return;
+  try {
+    for (const roomKeyValue of Object.keys(GROUP_ROOMS[groupId] || {})) {
+      await fbDelete(`groupRooms/${groupId}/${roomKeyValue}`);
+    }
+    await fbDelete(`groups/${groupId}`);
+    const members = GROUP_MEMBERS[groupId] || {};
+    for (const uid of Object.keys(members).filter(uid => uid !== USER_ID)) {
+      await fbDelete(`groupMembers/${groupId}/${uid}`);
+    }
+    await fbDelete(`groupMembers/${groupId}/${USER_ID}`);
+    await fbDelete(`userGroups/${USER_ID}/${groupId}`);
+    delete USER_GROUPS[groupId];
+    delete GROUP_MEMBERS[groupId];
+    delete GROUP_ROOMS[groupId];
+    populateFilters(); renderStats(); renderMisHechos(); renderCatalogo();
+    renderProfile('Grupo eliminado.');
+  } catch (e) {
+    console.error(e);
+    renderGroupDetail(groupId, `No se pudo eliminar el grupo. ${escapeHtml(e.message)}`);
+  }
+}
 function openGroupRoomDetail(kind, key) {
   closeProfile();
   setTimeout(() => openDetail(kind, key), 0);
@@ -1650,12 +1698,27 @@ async function removeRoomFromGroup(groupId, roomKeyValue) {
     renderGroupDetail(groupId, `No se pudo quitar la sala. ${escapeHtml(e.message)}`);
   }
 }
-function openProfile(message = '') {
-  renderProfile(message);
+async function openProfile(message = '', refresh = true) {
   const modal = document.getElementById('profile-modal');
+  const root = document.getElementById('profile-content');
   modal.classList.add('open');
   modal.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
+
+  if (AUTH_USER && FIREBASE_ENABLED && refresh) {
+    if (root) root.innerHTML = '<div class="profile-section"><div class="profile-section-title">Perfil escapista</div><div class="review-empty">Actualizando grupos...</div></div>';
+    try {
+      await loadUserGroups();
+      populateFilters();
+      renderStats();
+      renderMisHechos();
+      renderCatalogo();
+    } catch (e) {
+      console.warn('No se pudieron refrescar los grupos al abrir perfil:', e.message);
+      message = message || 'No se pudieron actualizar los grupos. Revisa conexion o reglas Firebase.';
+    }
+  }
+  renderProfile(message);
 }
 
 function closeProfile(event) {
@@ -1695,7 +1758,7 @@ function renderProfile(message = '') {
           <div class="profile-group-name">${escapeHtml(group.name || 'Grupo escapista')}</div>
           <div class="profile-group-meta">${groupMemberCount(groupId)} miembros · ${groupRoomCount(groupId)} salas hechas · ${escapeHtml(group.role || 'member')}</div>
           <div class="profile-group-actions">
-            <button class="auth-btn secondary" type="button" onclick="renderGroupDetail('${groupId}')">Ver grupo</button><button class="auth-btn secondary" type="button" onclick="createGroupInvite('${groupId}')">Copiar invitacion</button>
+            <button class="auth-btn secondary" type="button" onclick="renderGroupDetail('${groupId}')">Ver grupo</button><button class="auth-btn secondary" type="button" onclick="createGroupInvite('${groupId}')">Copiar invitacion</button>${group.role === 'owner' ? `<button class="auth-btn secondary" type="button" onclick="deleteEscapistGroup('${groupId}')">Eliminar</button>` : ''}
           </div>
           <div class="profile-group-rooms">${groupRoomsPreviewHtml(groupId)}</div>
         </article>`).join('') : '<div class="review-empty">Todavia no tienes grupos. Crea uno y comparte la invitacion.</div>'}
@@ -1728,6 +1791,49 @@ async function createEscapistGroup() {
   }
 }
 
+async function copyTextToClipboard(text) {
+  if (!text) return false;
+  if (navigator.clipboard && window.isSecureContext) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch (e) {
+      console.warn('No se pudo copiar con navigator.clipboard:', e.message);
+    }
+  }
+  try {
+    const field = document.createElement('textarea');
+    field.value = text;
+    field.setAttribute('readonly', '');
+    field.style.position = 'fixed';
+    field.style.left = '-9999px';
+    field.style.top = '0';
+    document.body.appendChild(field);
+    field.focus();
+    field.select();
+    field.setSelectionRange(0, field.value.length);
+    const copied = document.execCommand('copy');
+    field.remove();
+    return copied;
+  } catch (e) {
+    console.warn('No se pudo copiar con fallback:', e.message);
+    return false;
+  }
+}
+
+function inviteLinkStatusHtml(link, copied) {
+  const safeLink = escapeHtml(link);
+  const actionText = copied
+    ? 'Invitacion copiada'
+    : 'Invitacion creada. Si no se copio automaticamente, usa este boton';
+  return `${actionText}:<br><span>${safeLink}</span><br><button class="auth-btn secondary" type="button" onclick="copyVisibleInviteLink('${jsString(link)}')">Copiar enlace</button>`;
+}
+
+async function copyVisibleInviteLink(link) {
+  const copied = await copyTextToClipboard(link);
+  setProfileStatus(inviteLinkStatusHtml(link, copied));
+}
+
 async function createGroupInvite(groupId) {
   if (!AUTH_USER || !FIREBASE_ENABLED) return;
   const group = USER_GROUPS[groupId];
@@ -1743,12 +1849,11 @@ async function createGroupInvite(groupId) {
     createdAt: now,
     expiresAt: now + 1000 * 60 * 60 * 24 * 30
   };
+  const link = `${window.location.origin}${window.location.pathname}?invite=${encodeURIComponent(inviteId)}`;
   try {
     await fbPut(`groupInvites/${inviteId}`, invite);
-    const link = `${window.location.origin}${window.location.pathname}?invite=${encodeURIComponent(inviteId)}`;
-    try { await navigator.clipboard.writeText(link); }
-    catch {}
-    setProfileStatus(`Invitacion copiada: <br><span>${escapeHtml(link)}</span>`);
+    const copied = await copyTextToClipboard(link);
+    setProfileStatus(inviteLinkStatusHtml(link, copied));
   } catch (e) {
     console.error(e);
     setProfileStatus(`No se pudo crear la invitacion. ${escapeHtml(e.message)}`);
@@ -1784,7 +1889,7 @@ async function handlePendingInvite() {
     }
     INVITE_NOTICE_SHOWN = true;
     const root = document.getElementById('profile-content');
-    openProfile();
+    openProfile('', false);
     if (root) root.innerHTML = invitePromptHtml(PENDING_INVITE_ID, invite);
   } catch (e) {
     console.warn('No se pudo leer la invitacion:', e.message);
@@ -2269,8 +2374,8 @@ async function saveRoomReview(kind, key) {
     return;
   }
   const room = findDetailRoom(kind, key);
-  if (!room || !userStateFor(room).done) {
-    alert('Solo puedes reseñar salas que tengas marcadas como Hecho por mí.');
+  if (!room || !isRoomDoneForUser(room)) {
+    alert('Solo puedes reseñar salas que tengas marcadas como Hecho por mi o hechas por uno de tus grupos.');
     return;
   }
   const slug = slugify(room.nombre || room.empresa || roomKey(room));
