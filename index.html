@@ -330,7 +330,27 @@
   .group-toggle{font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;border:1px solid var(--border);background:rgba(255,255,255,.025);color:var(--text3);padding:7px 9px;cursor:pointer;transition:all .2s;}
   .group-toggle:hover{border-color:rgba(245,166,35,.38);color:var(--amber);}
   .group-toggle.active{border-color:rgba(6,214,160,.42);background:rgba(6,214,160,.08);color:var(--green);}
-
+  .profile-back{margin-bottom:12px;}
+  .group-hero{border:1px solid rgba(245,166,35,.16);background:linear-gradient(135deg,rgba(245,166,35,.07),rgba(255,255,255,.018));padding:14px;margin-bottom:13px;}
+  .group-hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;}
+  .group-detail-title{font-family:'Cinzel',serif;font-size:1.25rem;color:var(--text);line-height:1.15;}
+  .group-stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px;}
+  .group-stat{border:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.13);padding:9px 10px;min-width:0;}
+  .group-stat-value{font-family:'Cinzel',serif;font-size:1.2rem;color:var(--amber);line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .group-stat-label{font-family:'Share Tech Mono',monospace;font-size:.54rem;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-top:3px;}
+  .group-members-list{display:flex;gap:8px;flex-wrap:wrap;}
+  .group-member{display:flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.025);padding:7px 9px;min-width:0;}
+  .group-member img{width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.08);}
+  .group-member-name{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--text2);letter-spacing:.06em;text-transform:uppercase;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .group-member-role{font-family:'Share Tech Mono',monospace;font-size:.52rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;}
+  .group-room-table{display:flex;flex-direction:column;gap:7px;}
+  .group-room-row{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:10px;align-items:center;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.022);padding:8px;}
+  .group-room-thumb{width:52px;aspect-ratio:2/3;background:var(--bg2);border:1px solid rgba(255,255,255,.08);overflow:hidden;display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;color:var(--amber);font-weight:900;}
+  .group-room-thumb img{width:100%;height:100%;object-fit:contain;display:block;}
+  .group-room-main{min-width:0;}
+  .group-room-name{font-family:'Cinzel',serif;font-size:.95rem;color:var(--text);line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .group-room-sub{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;line-height:1.5;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .group-room-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;}
   /* â”€â”€ DETAIL MODAL â”€â”€ */
   .detail-modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);}
   .detail-modal.open{display:flex;}
@@ -681,7 +701,12 @@
     .community-review-head{flex-direction:column;gap:2px;}
     .assistant-toggle{left:14px;bottom:14px;width:48px;height:48px;}
     .assistant-panel{left:0;right:0;bottom:0;width:100%;max-height:86vh;border-left:none;border-right:none;border-bottom:none;}
-    .assistant-grid{grid-template-columns:1fr;}
+    .profile-modal{padding:0;align-items:stretch;}
+    .profile-dialog{width:100%;max-height:100vh;border-left:none;border-right:none;}
+    .group-stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .group-room-row{grid-template-columns:44px minmax(0,1fr);}
+    .group-room-thumb{width:44px;}
+    .group-room-actions{grid-column:1/-1;justify-content:flex-start;}    .assistant-grid{grid-template-columns:1fr;}
   }
 </style>
 </head>
@@ -1517,6 +1542,114 @@ function groupRoomsPreviewHtml(groupId) {
   return rooms.map(([, room]) => `<span class="tag tag-feature">${escapeHtml(room.roomName || 'Sala')}</span>`).join('');
 }
 
+
+function groupRoomEntries(groupId) {
+  return Object.entries(GROUP_ROOMS[groupId] || {})
+    .map(([key, record]) => ({ key, record, room: roomFromGroupRecord(key, record) }))
+    .sort((a, b) => String(a.room.nombre || '').localeCompare(String(b.room.nombre || '')));
+}
+
+function groupStats(groupId) {
+  const entries = groupRoomEntries(groupId);
+  const minutes = entries.reduce((sum, item) => sum + (parseInt(item.room.duracion) || parseInt(item.record.duration) || 0), 0);
+  const hours = minutes >= 60 ? `${Math.floor(minutes / 60)}h ${minutes % 60 ? `${minutes % 60}m` : ''}` : `${minutes}m`;
+  const communityVotes = entries.map(item => voteStats(slugify(item.room.nombre || item.record.roomName)).avg).filter(Boolean);
+  const communityAvg = communityVotes.length ? (communityVotes.reduce((sum, val) => sum + val, 0) / communityVotes.length * 2).toFixed(1) : '-';
+  return { rooms: entries.length, members: groupMemberCount(groupId), hours, communityAvg };
+}
+
+function groupMembersHtml(groupId) {
+  const members = Object.entries(GROUP_MEMBERS[groupId] || {})
+    .filter(([, member]) => member && member.status !== 'left')
+    .sort((a, b) => (a[1].role === 'owner' ? -1 : b[1].role === 'owner' ? 1 : String(a[1].displayName || '').localeCompare(String(b[1].displayName || ''))));
+  if (!members.length) return '<div class="review-empty">No hay miembros cargados.</div>';
+  return `<div class="group-members-list">${members.map(([, member]) => `<div class="group-member">
+    ${member.photoURL ? `<img src="${escapeHtml(member.photoURL)}" alt="" referrerpolicy="no-referrer">` : '<div class="auth-avatar"></div>'}
+    <div><div class="group-member-name">${escapeHtml(member.displayName || 'Escapista')}</div><div class="group-member-role">${escapeHtml(member.role || 'member')}</div></div>
+  </div>`).join('')}</div>`;
+}
+
+function groupRoomImageHtml(room) {
+  const initial = (room.nombre || '?').trim().slice(0, 1).toUpperCase();
+  if (!room.imagen) return initial;
+  return `<img src="${room.imagen}" alt="" loading="lazy" onerror="this.replaceWith(document.createTextNode('${escapeHtml(initial)}'))">`;
+}
+
+function groupRoomsListHtml(groupId) {
+  const entries = groupRoomEntries(groupId);
+  if (!entries.length) return '<div class="review-empty">Este grupo aun no tiene salas hechas. Abre una sala y asignala desde el bloque Grupos escapistas.</div>';
+  return `<div class="group-room-table">${entries.map(({ key, room, record }) => {
+    const ref = detailRefForRoom(room, ['catalogo', 'hechos', 'pendientes']);
+    const meta = [room.empresa || record.company, room.ciudad || record.city, room.provincia || record.province].filter(Boolean).join(' - ');
+    return `<article class="group-room-row">
+      <div class="group-room-thumb">${groupRoomImageHtml(room)}</div>
+      <div class="group-room-main">
+        <div class="group-room-name">${escapeHtml(room.nombre || record.roomName || 'Sala')}</div>
+        <div class="group-room-sub">${escapeHtml(meta || 'Sin ubicacion')}</div>
+      </div>
+      <div class="group-room-actions">
+        <button class="auth-btn secondary" type="button" onclick="openGroupRoomDetail('${ref.kind}','${jsString(ref.key)}')">Ver sala</button>
+        <button class="auth-btn secondary" type="button" onclick="removeRoomFromGroup('${groupId}','${jsString(key)}')">Quitar</button>
+      </div>
+    </article>`;
+  }).join('')}</div>`;
+}
+
+function renderGroupDetail(groupId, message = '') {
+  const root = document.getElementById('profile-content');
+  const group = USER_GROUPS[groupId];
+  if (!root || !group) {
+    renderProfile('No se pudo abrir el grupo seleccionado.');
+    return;
+  }
+  const stats = groupStats(groupId);
+  root.innerHTML = `
+    <button class="auth-btn secondary profile-back" type="button" onclick="renderProfile('${jsString(message)}')">Volver a mis grupos</button>
+    <div class="group-hero">
+      <div class="group-hero-top">
+        <div>
+          <div class="profile-section-title">Grupo escapista</div>
+          <div class="group-detail-title">${escapeHtml(group.name || 'Grupo escapista')}</div>
+          <div class="profile-group-meta">${escapeHtml(group.role || 'member')} - privado</div>
+        </div>
+        <button class="auth-btn" type="button" onclick="createGroupInvite('${groupId}')">Copiar invitacion</button>
+      </div>
+      <div class="group-stats-grid">
+        <div class="group-stat"><div class="group-stat-value">${stats.rooms}</div><div class="group-stat-label">Salas</div></div>
+        <div class="group-stat"><div class="group-stat-value">${stats.members}</div><div class="group-stat-label">Miembros</div></div>
+        <div class="group-stat"><div class="group-stat-value">${stats.hours}</div><div class="group-stat-label">Horas</div></div>
+        <div class="group-stat"><div class="group-stat-value">${stats.communityAvg}</div><div class="group-stat-label">Comunidad</div></div>
+      </div>
+      ${message ? `<div class="profile-status-msg">${message}</div>` : ''}
+    </div>
+    <div class="profile-section">
+      <div class="profile-section-title">Miembros</div>
+      ${groupMembersHtml(groupId)}
+    </div>
+    <div class="profile-section">
+      <div class="profile-section-title">Escape rooms hechos por el grupo</div>
+      ${groupRoomsListHtml(groupId)}
+    </div>`;
+}
+
+function openGroupRoomDetail(kind, key) {
+  closeProfile();
+  setTimeout(() => openDetail(kind, key), 0);
+}
+
+async function removeRoomFromGroup(groupId, roomKeyValue) {
+  if (!AUTH_USER || !FIREBASE_ENABLED || !USER_GROUPS[groupId]) return;
+  if (!confirm('Quitar esta sala del historial del grupo?')) return;
+  try {
+    await fbDelete(`groupRooms/${groupId}/${roomKeyValue}`);
+    if (GROUP_ROOMS[groupId]) delete GROUP_ROOMS[groupId][roomKeyValue];
+    populateFilters(); renderStats(); renderMisHechos(); renderCatalogo();
+    renderGroupDetail(groupId, 'Sala quitada del grupo.');
+  } catch (e) {
+    console.error(e);
+    renderGroupDetail(groupId, `No se pudo quitar la sala. ${escapeHtml(e.message)}`);
+  }
+}
 function openProfile(message = '') {
   renderProfile(message);
   const modal = document.getElementById('profile-modal');
@@ -1562,7 +1695,7 @@ function renderProfile(message = '') {
           <div class="profile-group-name">${escapeHtml(group.name || 'Grupo escapista')}</div>
           <div class="profile-group-meta">${groupMemberCount(groupId)} miembros · ${groupRoomCount(groupId)} salas hechas · ${escapeHtml(group.role || 'member')}</div>
           <div class="profile-group-actions">
-            <button class="auth-btn secondary" type="button" onclick="createGroupInvite('${groupId}')">Copiar invitacion</button>
+            <button class="auth-btn secondary" type="button" onclick="renderGroupDetail('${groupId}')">Ver grupo</button><button class="auth-btn secondary" type="button" onclick="createGroupInvite('${groupId}')">Copiar invitacion</button>
           </div>
           <div class="profile-group-rooms">${groupRoomsPreviewHtml(groupId)}</div>
         </article>`).join('') : '<div class="review-empty">Todavia no tienes grupos. Crea uno y comparte la invitacion.</div>'}
