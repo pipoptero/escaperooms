@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="The Vault">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="35%" r="70%">
+      <stop offset="0" stop-color="#24170a"/>
+      <stop offset="0.55" stop-color="#0d0a06"/>
+      <stop offset="1" stop-color="#07070b"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#fff0a6"/>
+      <stop offset="0.25" stop-color="#f5a623"/>
+      <stop offset="0.52" stop-color="#b66b12"/>
+      <stop offset="0.78" stop-color="#ffd166"/>
+      <stop offset="1" stop-color="#8b520c"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="0" stdDeviation="10" flood-color="#f5a623" flood-opacity="0.55"/>
+      <feDropShadow dx="0" dy="12" stdDeviation="9" flood-color="#000000" flood-opacity="0.75"/>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="108" fill="url(#bg)"/>
+  <circle cx="256" cy="256" r="207" fill="none" stroke="#3a2a0a" stroke-width="10"/>
+  <circle cx="256" cy="256" r="184" fill="none" stroke="#f5a623" stroke-opacity="0.3" stroke-width="2"/>
+  <path d="M172 234v-42c0-55 35-96 84-96s84 41 84 96v42h-42v-42c0-31-16-55-42-55s-42 24-42 55v42z" fill="none" stroke="url(#gold)" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+  <rect x="137" y="218" width="238" height="178" rx="24" fill="url(#gold)" filter="url(#glow)"/>
+  <rect x="164" y="244" width="184" height="126" rx="16" fill="#111018" opacity="0.24"/>
+  <circle cx="256" cy="296" r="25" fill="#0a0a0f" opacity="0.72"/>
+  <path d="M256 318v44" stroke="#0a0a0f" stroke-width="24" stroke-linecap="round" opacity="0.72"/>
+  <path d="M96 256h54M362 256h54M256 96v48M256 368v48" stroke="#f5a623" stroke-opacity="0.36" stroke-width="10" stroke-linecap="round"/>
+</svg>
