@@ -1136,6 +1136,17 @@ function stateKey(room) {
 function userRoomKey(room) {
   return slugify(room.nombre || room.id || '');
 }
+function roomVoteSlug(room) {
+  return userRoomKey(room) || slugify(room.id || room.nombre || room.empresa || '');
+}
+function roomVoteKeys(room) {
+  return [...new Set([
+    roomVoteSlug(room),
+    slugify(room.nombre || ''),
+    slugify(room.id || ''),
+    slugify(room.empresa || '')
+  ].filter(Boolean))];
+}
 function cleanValue(text) {
   return String(text || '').trim();
 }
@@ -1567,7 +1578,7 @@ function groupStats(groupId) {
   const entries = groupRoomEntries(groupId);
   const minutes = entries.reduce((sum, item) => sum + (parseInt(item.room.duracion) || parseInt(item.record.duration) || 0), 0);
   const hours = minutes >= 60 ? `${Math.floor(minutes / 60)}h ${minutes % 60 ? `${minutes % 60}m` : ''}` : `${minutes}m`;
-  const communityVotes = entries.map(item => voteStats(slugify(item.room.nombre || item.record.roomName)).avg).filter(Boolean);
+  const communityVotes = entries.map(item => voteStatsForRoom(item.room).avg).filter(Boolean);
   const communityAvg = communityVotes.length ? (communityVotes.reduce((sum, val) => sum + val, 0) / communityVotes.length * 2).toFixed(1) : '-';
   return { rooms: entries.length, members: groupMemberCount(groupId), hours, communityAvg };
 }
@@ -2114,9 +2125,29 @@ function voteStats(slug) {
   return { avg: Math.round(avg * 10) / 10, count: vals.length, myVote: roomVotes[USER_ID] || 0 };
 }
 
-// ── Half-star widget ──────────────────────────────────────────────────────────
-// Cada estrella tiene mitad izquierda (valor N-0.5) y mitad derecha (valor N)
-// Los valores guardados en Firebase son 0.5 a 5.0 (× 2 = nota 1-10)
+function reviewScoreAsVote(review) {
+  const values = Object.values(review?.scores || {}).filter(v => v > 0);
+  if (!values.length) return 0;
+  const avg = values.reduce((sum, value) => sum + value, 0) / values.length;
+  return Math.round(avg * 10) / 10;
+}
+
+function voteStatsForRoom(room) {
+  const byUser = {};
+  roomVoteKeys(room).forEach(slug => {
+    Object.entries(votesCache[slug] || {}).forEach(([uid, value]) => {
+      if (value > 0) byUser[uid] = value;
+    });
+    Object.entries(roomReviewsCache[slug] || {}).forEach(([uid, review]) => {
+      const value = reviewScoreAsVote(review);
+      if (value > 0 && !byUser[uid]) byUser[uid] = value;
+    });
+  });
+  const vals = Object.values(byUser).filter(v => v > 0);
+  if (!vals.length) return { avg: null, count: 0, myVote: 0 };
+  const avg = vals.reduce((s, v) => s + v, 0) / vals.length;
+  return { avg: Math.round(avg * 10) / 10, count: vals.length, myVote: byUser[USER_ID] || 0 };
+}
 
 function buildStarsHtml(slug, myVote, widgetId = slug) {
   let html = '';
@@ -2197,30 +2228,48 @@ async function castVote(slug, stars, widgetId = slug) {
   if (!votesCache[slug]) votesCache[slug] = {};
   votesCache[slug][USER_ID] = stars;
 
-    // Update stars visually
   for (let i = 1; i <= 5; i++) {
     const fg = document.getElementById(`sfg_${widgetId}_${i}`);
-    if (fg) { fg.style.width = Math.min(Math.max((stars-(i-1))*100,0),100)+'%'; fg.classList.remove('preview'); }
+    if (fg) {
+      fg.style.width = Math.min(Math.max((stars - (i - 1)) * 100, 0), 100) + '%';
+      fg.classList.remove('preview');
+    }
   }
 
   const statusEl = document.getElementById('vstatus_' + widgetId);
-  const commEl   = document.getElementById('comm_'    + widgetId);
-  if (statusEl) { statusEl.textContent = 'Guardando...'; statusEl.className = 'vote-status saving'; statusEl.dataset.saved = '0'; }
+  const commEl = document.getElementById('comm_' + widgetId);
+  if (statusEl) {
+    statusEl.textContent = 'Guardando...';
+    statusEl.className = 'vote-status saving';
+    statusEl.dataset.saved = '0';
+  }
 
   try {
     await fbPut(`votes/${slug}/${USER_ID}`, stars);
     const { avg, count } = voteStats(slug);
-    if (statusEl) { statusEl.textContent = `Tu nota: ${stars * 2}/10 ✓`; statusEl.className = 'vote-status my-vote'; statusEl.dataset.saved = '1'; }
-    if (commEl)   { commEl.innerHTML = `<div class="vote-label" style="text-align:right">Comunidad</div>${communityHtml(avg, count)}`; }
-    // Re-bind mouseleave con el nuevo myVote
+    if (statusEl) {
+      statusEl.textContent = `Tu nota: ${stars * 2}/10 OK`;
+      statusEl.className = 'vote-status my-vote';
+      statusEl.dataset.saved = '1';
+    }
+    if (commEl) {
+      commEl.innerHTML = `<div class="vote-label" style="text-align:right">Comunidad</div>${communityHtml(avg, count)}`;
+    }
     const starsEl = document.getElementById('stars_' + widgetId);
     if (starsEl) {
       starsEl.querySelectorAll('.half-l,.half-r').forEach(el => {
         el.setAttribute('onmouseleave', `unpreviewStars('${widgetId}',${stars})`);
       });
     }
+    renderRanking();
+    renderHechos();
+    renderMisHechos();
+    renderCatalogo();
   } catch(e) {
-    if (statusEl) { statusEl.textContent = 'Error al guardar :('; statusEl.className = 'vote-status error'; }
+    if (statusEl) {
+      statusEl.textContent = 'Error al guardar :(';
+      statusEl.className = 'vote-status error';
+    }
   }
 }
 
@@ -2411,6 +2460,10 @@ async function saveRoomReview(kind, key) {
     if (!roomReviewsCache[slug]) roomReviewsCache[slug] = {};
     roomReviewsCache[slug][USER_ID] = review;
     if (status) status.textContent = 'Resena guardada';
+    renderRanking();
+    renderHechos();
+    renderMisHechos();
+    renderCatalogo();
     openDetail(kind, key);
   } catch (err) {
     console.error(err);
@@ -2427,6 +2480,10 @@ async function deleteRoomReview(kind, key) {
   try {
     await fbDelete(`roomReviews/${slug}/${USER_ID}`);
     if (roomReviewsCache[slug]) delete roomReviewsCache[slug][USER_ID];
+    renderRanking();
+    renderHechos();
+    renderMisHechos();
+    renderCatalogo();
     openDetail(kind, key);
   } catch (err) {
     console.error(err);
@@ -2664,6 +2721,11 @@ function switchTab(t) {
     const id = x==='pendientes'?'pend':x==='mis-hechos'?'mine':x==='hechos'?'hecho':x==='ranking'?'rank':'cat';
     document.getElementById('tab-' + id).classList.toggle('active', x === t);
   });
+  if (t === 'ranking') renderRanking();
+  else if (t === 'catalogo') renderCatalogo();
+  else if (t === 'hechos') renderHechos();
+  else if (t === 'mis-hechos') renderMisHechos();
+  else if (t === 'pendientes') renderPendientes();
 }
 
 function setSortPend(s) {
@@ -3223,7 +3285,7 @@ function metaItem(label, value, extraClass = '') {
 
 function communityScoreMeta(room) {
   if (!FIREBASE_ENABLED) return '';
-  const { avg, count } = voteStats(slugify(room.nombre || ''));
+  const { avg, count } = voteStatsForRoom(room);
   return count > 0 ? metaItem('Comunidad', `🗳 ${(avg * 2).toFixed(1)}/10 (${count})`) : '';
 }
 
@@ -3340,7 +3402,7 @@ function personalActionsHtml(room, kind) {
 
 function detailAccountHtml(room, kind) {
   const key = jsString(roomKey(room));
-  const slug = slugify(room.nombre || '');
+  const slug = roomVoteSlug(room);
   const state = userStateFor(room);
   const favorite = iLiked(slug);
   const groupDone = groupDoneEntriesForRoom(room);
@@ -3434,7 +3496,7 @@ document.addEventListener('keydown', event => {
 
 // ── Templates de tarjetas ─────────────────────────────────────────────────────
 function cardPend(p, i) {
-  const slug = slugify(p.nombre);
+  const slug = roomVoteSlug(p);
   const detailRef = detailRefForRoom(p, ['catalogo', 'pendientes', 'hechos']);
   const detailKind = detailRef.kind;
   const detailKey = jsString(detailRef.key);
@@ -3497,7 +3559,7 @@ function cardPend(p, i) {
 }
 
 function cardHecho(h, rank) {
-  const slug    = slugify(h.nombre);
+  const slug    = roomVoteSlug(h);
   const detailKind = HECHOS.some(room => userRoomKey(room) === userRoomKey(h))
     ? 'hechos'
     : CATALOGO.some(room => userRoomKey(room) === userRoomKey(h)) ? 'catalogo' : 'pendientes';
@@ -3507,7 +3569,7 @@ function cardHecho(h, rank) {
     ? `<div class="rv-rank-emoji">${emoji[rank - 1]}</div>`
     : `<div class="rv-rank-num">#${rank}</div>`;
 
-  const { avg, count } = voteStats(slug);
+  const { avg, count } = voteStatsForRoom(h);
   const commPill = FIREBASE_ENABLED && count > 0
     ? `<span class="rv-score-pill rv-score-comunidad">🗳 ${(avg*2).toFixed(1)}/10 <span style="opacity:.6">(${count})</span></span>`
     : '';
@@ -3706,8 +3768,8 @@ function renderHechos() {
 
   // Ordenar por nota media de comunidad (Firebase), fallback 0 si sin votos
   f.sort((a, b) => {
-    const avgA = voteStats(slugify(a.nombre)).avg || 0;
-    const avgB = voteStats(slugify(b.nombre)).avg || 0;
+    const avgA = voteStatsForRoom(a).avg || 0;
+    const avgB = voteStatsForRoom(b).avg || 0;
     return avgB - avgA;
   });
 
@@ -3783,8 +3845,8 @@ function rankingRooms() {
     byKey.set(key, merged);
   };
 
-  CATALOGO.forEach(room => {
-    if (voteStats(slugify(room.nombre || '')).count > 0) mergeRoom(room, 'comunidad');
+  uniqueRooms([...CATALOGO, ...PENDIENTES, ...HECHOS]).forEach(room => {
+    if (voteStatsForRoom(room).count > 0) mergeRoom(room, 'comunidad');
   });
   HECHOS.forEach(room => mergeRoom(room, 'grupo'));
 
@@ -3794,7 +3856,7 @@ function rankingRooms() {
 function rankingScore(room, type) {
   if (type === 'escapistas') return parseFloat(displayRating(room)) || 0;
   if (type === 'comunidad') {
-    const { avg } = voteStats(slugify(room.nombre || ''));
+    const { avg } = voteStatsForRoom(room);
     return avg ? avg * 2 : 0;
   }
   return parseFloat(room.valoracion) || 0;
@@ -3825,7 +3887,7 @@ function renderRanking() {
     return (a.nombre || '').localeCompare(b.nombre || '');
   });
   const medals = ['gold','silver','bronze'], emoji = ['🥇','🥈','🥉'];
-  const votedCount = rows.filter(room => voteStats(slugify(room.nombre || '')).count > 0).length;
+  const votedCount = rows.filter(room => voteStatsForRoom(room).count > 0).length;
   const info = document.getElementById('result-info-rank');
   if (info) info.textContent = `${rows.length} salas en ranking · ${votedCount} con votos de comunidad · ordenado por ${rankingSortLabel()}`;
 
@@ -3835,8 +3897,8 @@ function renderRanking() {
       <th>Dificultad</th><th>⏱ Min</th><th>★ Escapistas</th><th>★ The Vault</th><th>★ Comunidad</th>
     </tr></thead>
     <tbody>${rows.map((room, i) => {
-      const slug = slugify(room.nombre || '');
-      const { avg, count } = voteStats(slug);
+      const slug = roomVoteSlug(room);
+      const { avg, count } = voteStatsForRoom(room);
       const commScore = count > 0
         ? `<span class="comm-avg">★ ${(avg * 2).toFixed(1)}</span> <span class="comm-count">(${count})</span>`
         : `<span class="comm-empty">—</span>`;
