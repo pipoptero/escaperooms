@@ -317,6 +317,14 @@
   .profile-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
   .profile-input{flex:1;min-width:220px;background:var(--bg2);border:1px solid var(--border);color:var(--text);font-family:'Rajdhani',sans-serif;font-size:.92rem;padding:9px 10px;outline:none;}
   .profile-input:focus{border-color:rgba(245,166,35,.48);}
+  .profile-textarea{width:100%;min-height:74px;resize:vertical;background:var(--bg2);border:1px solid var(--border);color:var(--text);font-family:'Rajdhani',sans-serif;font-size:.92rem;padding:9px 10px;outline:none;line-height:1.35;}
+  .profile-textarea:focus{border-color:rgba(245,166,35,.48);}
+  .profile-field-label{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin:10px 0 5px;display:block;}
+  .profile-check{display:flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;margin-top:9px;}
+  .profile-check input{width:15px;height:15px;accent-color:var(--amber);}
+  .profile-preview{display:flex;align-items:center;gap:10px;border:1px solid rgba(245,166,35,.14);background:rgba(245,166,35,.035);padding:10px 12px;margin-bottom:12px;}
+  .profile-preview-name{font-family:'Cinzel',serif;color:var(--text);font-weight:700;line-height:1.1;}
+  .profile-preview-meta{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;margin-top:3px;}
   .profile-status-msg{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;line-height:1.5;margin-top:9px;overflow-wrap:anywhere;}
   .profile-groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;}
   .profile-group-card{border:1px solid rgba(245,166,35,.14);background:rgba(245,166,35,.035);padding:11px 12px;min-width:0;}
@@ -1303,13 +1311,16 @@ function renderAuthStatus() {
   loginBtn.disabled = false;
   loginBtn.title = 'Entrar con tu cuenta de Google';
   if (AUTH_USER) {
-    const avatar = document.createElement('img');
-    avatar.className = 'auth-avatar';
-    avatar.alt = '';
-    avatar.referrerPolicy = 'no-referrer';
-    avatar.src = AUTH_USER.photoURL || '';
-    statusEl.insertBefore(avatar, nameEl);
-    nameEl.textContent = AUTH_USER.displayName || AUTH_USER.email || 'Cuenta Google';
+    const publicPhoto = publicPhotoURL();
+    if (publicPhoto) {
+      const avatar = document.createElement('img');
+      avatar.className = 'auth-avatar';
+      avatar.alt = '';
+      avatar.referrerPolicy = 'no-referrer';
+      avatar.src = publicPhoto;
+      statusEl.insertBefore(avatar, nameEl);
+    }
+    nameEl.textContent = shortDisplayName();
     loginBtn.style.display = 'none';
     if (profileBtn) profileBtn.style.display = '';
     logoutBtn.style.display = '';
@@ -1346,7 +1357,9 @@ async function initFirebaseAuth() {
 async function refreshSignedSession() {
   if (AUTH_USER) AUTH_TOKEN = await AUTH_USER.getIdToken();
   await loadUserRoomStates();
+  await loadUserProfile();
   await saveUserProfile();
+  renderAuthStatus();
   await loadUserGroups();
   await loadVotes();
   await loadRoomReviews();
@@ -1499,20 +1512,114 @@ function groupUserTags(room) {
   return visible;
 }
 
-async function saveUserProfile() {
-  if (!AUTH_USER || !FIREBASE_ENABLED) return;
+function googleDisplayName(user = AUTH_USER) {
+  return String(user?.displayName || user?.email || 'Usuario').trim() || 'Usuario';
+}
+
+function googleShortName(user = AUTH_USER) {
+  const raw = googleDisplayName(user);
+  const parts = raw.split(/\s+/).filter(Boolean);
+  if (parts.length === 1) return parts[0];
+  return `${parts[0]} ${parts.slice(1, 2).map(p => `${p[0]}.`).join('')}`;
+}
+
+function publicPhotoURL() {
+  return USER_PROFILE.useGooglePhoto === false ? '' : (AUTH_USER?.photoURL || USER_PROFILE.photoURL || '');
+}
+
+async function loadUserProfile() {
+  if (!AUTH_USER || !FIREBASE_ENABLED) {
+    USER_PROFILE = {};
+    return;
+  }
+  try {
+    const saved = await fbGet(`profiles/${USER_ID}`) || {};
+    USER_PROFILE = {
+      ...saved,
+      uid: USER_ID,
+      displayName: googleDisplayName(),
+      email: AUTH_USER.email || saved.email || '',
+      photoURL: AUTH_USER.photoURL || saved.photoURL || '',
+      publicName: String(saved.publicName || saved.shortName || googleShortName()).trim(),
+      useGooglePhoto: saved.useGooglePhoto !== false,
+      baseCity: saved.baseCity || '',
+      baseProvince: saved.baseProvince || '',
+      bio: saved.bio || ''
+    };
+  } catch (e) {
+    console.warn('No se pudo cargar el perfil:', e.message);
+    USER_PROFILE = {
+      uid: USER_ID,
+      displayName: googleDisplayName(),
+      email: AUTH_USER.email || '',
+      photoURL: AUTH_USER.photoURL || '',
+      publicName: googleShortName(),
+      useGooglePhoto: true,
+      baseCity: '',
+      baseProvince: '',
+      bio: ''
+    };
+  }
+}
+
+async function saveUserProfile(extra = {}) {
+  if (!AUTH_USER || !FIREBASE_ENABLED) return false;
+  const previous = USER_PROFILE || {};
+  const publicName = String(extra.publicName || previous.publicName || previous.shortName || googleShortName()).trim() || googleShortName();
   USER_PROFILE = {
+    ...previous,
+    ...extra,
     uid: USER_ID,
-    displayName: AUTH_USER.displayName || AUTH_USER.email || 'Usuario',
-    shortName: shortDisplayName(),
+    displayName: googleDisplayName(),
+    shortName: publicName,
+    publicName,
     email: AUTH_USER.email || '',
     photoURL: AUTH_USER.photoURL || '',
+    useGooglePhoto: extra.useGooglePhoto !== undefined ? !!extra.useGooglePhoto : previous.useGooglePhoto !== false,
+    baseCity: String(extra.baseCity ?? previous.baseCity ?? '').trim(),
+    baseProvince: String(extra.baseProvince ?? previous.baseProvince ?? '').trim(),
+    bio: String(extra.bio ?? previous.bio ?? '').trim(),
     updatedAt: Date.now()
   };
   try {
     await fbPut(`profiles/${USER_ID}`, USER_PROFILE);
+    return true;
   } catch (e) {
     console.warn('No se pudo guardar el perfil:', e.message);
+    return false;
+  }
+}
+
+async function syncProfileIdentityToGroups() {
+  if (!AUTH_USER || !FIREBASE_ENABLED) return;
+  const displayName = shortDisplayName();
+  const photoURL = publicPhotoURL();
+  for (const [groupId] of activeUserGroups()) {
+    const member = GROUP_MEMBERS[groupId]?.[USER_ID] || {};
+    const next = { ...member, displayName, photoURL, status: member.status || 'active', role: member.role || 'member', updatedAt: Date.now() };
+    try {
+      await fbPut(`groupMembers/${groupId}/${USER_ID}`, next);
+      if (!GROUP_MEMBERS[groupId]) GROUP_MEMBERS[groupId] = {};
+      GROUP_MEMBERS[groupId][USER_ID] = next;
+    } catch (e) {
+      console.warn('No se pudo actualizar tu nombre en el grupo:', groupId, e.message);
+    }
+  }
+}
+
+async function syncProfileIdentityToReviews() {
+  if (!AUTH_USER || !FIREBASE_ENABLED) return;
+  const displayName = shortDisplayName();
+  for (const [slug, reviews] of Object.entries(roomReviewsCache || {})) {
+    const review = reviews?.[USER_ID];
+    if (!review || review.userName === displayName) continue;
+    const next = { ...review, userName: displayName, updatedAt: review.updatedAt || Date.now() };
+    try {
+      await fbPut(`roomReviews/${slug}/${USER_ID}`, next);
+      roomReviewsCache[slug][USER_ID] = next;
+    } catch (e) {
+      console.warn('No se pudo actualizar tu nombre en una resena:', slug, e.message);
+    }
   }
 }
 
@@ -1753,21 +1860,44 @@ function renderProfile(message = '') {
     return;
   }
   const groups = activeUserGroups();
+  const publicName = escapeHtml(shortDisplayName());
+  const city = escapeHtml(USER_PROFILE.baseCity || '');
+  const province = escapeHtml(USER_PROFILE.baseProvince || '');
+  const bio = escapeHtml(USER_PROFILE.bio || '');
+  const photo = publicPhotoURL();
+  const place = [USER_PROFILE.baseCity, USER_PROFILE.baseProvince].filter(Boolean).join(' - ') || 'Sin ubicacion base';
   root.innerHTML = `
+    <div class="profile-section">
+      <div class="profile-section-title">Mi perfil escapista</div>
+      <div class="profile-preview">
+        ${photo ? `<img class="auth-avatar" src="${escapeHtml(photo)}" alt="" referrerpolicy="no-referrer">` : '<div class="auth-avatar"></div>'}
+        <div><div class="profile-preview-name">${publicName}</div><div class="profile-preview-meta">${escapeHtml(place)}</div></div>
+      </div>
+      <label class="profile-field-label" for="profile-public-name">Nombre publico</label>
+      <div class="profile-row"><input class="profile-input" id="profile-public-name" maxlength="40" value="${publicName}" placeholder="Tu alias escapista"></div>
+      <div class="profile-row">
+        <div style="flex:1;min-width:180px"><label class="profile-field-label" for="profile-city">Ciudad base</label><input class="profile-input" id="profile-city" maxlength="40" value="${city}" placeholder="Ciudad"></div>
+        <div style="flex:1;min-width:180px"><label class="profile-field-label" for="profile-province">Provincia base</label><input class="profile-input" id="profile-province" maxlength="40" value="${province}" placeholder="Provincia"></div>
+      </div>
+      <label class="profile-field-label" for="profile-bio">Bio corta</label>
+      <textarea class="profile-textarea" id="profile-bio" maxlength="180" placeholder="Tipo de salas que te gustan, estilo de juego, ciudad habitual...">${bio}</textarea>
+      <label class="profile-check"><input type="checkbox" id="profile-use-google-photo" ${USER_PROFILE.useGooglePhoto !== false ? 'checked' : ''}> Mostrar foto de Google</label>
+      <div class="profile-row" style="margin-top:10px"><button class="auth-btn" type="button" onclick="saveProfileSettings()">Guardar perfil</button></div>
+      <div class="profile-status-msg" id="profile-status">${message || ''}</div>
+    </div>
     <div class="profile-section">
       <div class="profile-section-title">Crear grupo escapista</div>
       <div class="profile-row">
         <input class="profile-input" id="new-group-name" maxlength="60" placeholder="Nombre del grupo" onkeydown="if(event.key==='Enter') createEscapistGroup()">
         <button class="auth-btn" type="button" onclick="createEscapistGroup()">Crear grupo</button>
       </div>
-      <div class="profile-status-msg" id="profile-status">${message || ''}</div>
     </div>
     <div class="profile-section">
       <div class="profile-section-title">Mis grupos</div>
       <div class="profile-groups">
         ${groups.length ? groups.map(([groupId, group]) => `<article class="profile-group-card">
           <div class="profile-group-name">${escapeHtml(group.name || 'Grupo escapista')}</div>
-          <div class="profile-group-meta">${groupMemberCount(groupId)} miembros · ${groupRoomCount(groupId)} salas hechas · ${escapeHtml(group.role || 'member')}</div>
+          <div class="profile-group-meta">${groupMemberCount(groupId)} miembros | ${groupRoomCount(groupId)} salas hechas | ${escapeHtml(group.role || 'member')}</div>
           <div class="profile-group-actions">
             <button class="auth-btn secondary" type="button" onclick="renderGroupDetail('${groupId}')">Ver grupo</button><button class="auth-btn secondary" type="button" onclick="createGroupInvite('${groupId}')">Copiar invitacion</button>${group.role === 'owner' ? `<button class="auth-btn secondary" type="button" onclick="deleteEscapistGroup('${groupId}')">Eliminar</button>` : ''}
           </div>
@@ -1775,6 +1905,38 @@ function renderProfile(message = '') {
         </article>`).join('') : '<div class="review-empty">Todavia no tienes grupos. Crea uno y comparte la invitacion.</div>'}
       </div>
     </div>`;
+}
+
+async function saveProfileSettings() {
+  if (!AUTH_USER || !FIREBASE_ENABLED) return;
+  const publicName = (document.getElementById('profile-public-name')?.value || '').trim();
+  if (!publicName) {
+    setProfileStatus('El nombre publico no puede estar vacio.');
+    return;
+  }
+  if (publicName.length > 40) {
+    setProfileStatus('El nombre publico es demasiado largo.');
+    return;
+  }
+  setProfileStatus('Guardando perfil...');
+  const saved = await saveUserProfile({
+    publicName,
+    useGooglePhoto: !!document.getElementById('profile-use-google-photo')?.checked,
+    baseCity: document.getElementById('profile-city')?.value || '',
+    baseProvince: document.getElementById('profile-province')?.value || '',
+    bio: document.getElementById('profile-bio')?.value || ''
+  });
+  if (!saved) {
+    setProfileStatus('No se pudo guardar el perfil. Revisa las reglas de Firebase para profiles/{uid}.');
+    return;
+  }
+  await syncProfileIdentityToGroups();
+  await syncProfileIdentityToReviews();
+  renderAuthStatus();
+  renderHechos();
+  renderRanking();
+  renderCatalogo();
+  renderProfile('Perfil actualizado.');
 }
 
 async function createEscapistGroup() {
@@ -1788,10 +1950,11 @@ async function createEscapistGroup() {
   const groupId = randomId('group');
   const now = Date.now();
   const profileName = shortDisplayName();
+  const profilePhoto = publicPhotoURL();
   try {
     await saveUserProfile();
     await fbPut(`groups/${groupId}`, { name, ownerUid: USER_ID, createdAt: now, updatedAt: now });
-    await fbPut(`groupMembers/${groupId}/${USER_ID}`, { role: 'owner', status: 'active', displayName: profileName, photoURL: AUTH_USER.photoURL || '', joinedAt: now });
+    await fbPut(`groupMembers/${groupId}/${USER_ID}`, { role: 'owner', status: 'active', displayName: profileName, photoURL: profilePhoto, joinedAt: now });
     await fbPut(`userGroups/${USER_ID}/${groupId}`, { name, role: 'owner', status: 'active', joinedAt: now });
     await loadUserGroups();
     renderProfile('Grupo creado. Ya puedes copiar una invitacion.');
@@ -1921,7 +2084,7 @@ async function acceptGroupInvite(inviteId) {
     if (invite.expiresAt && invite.expiresAt < Date.now()) throw new Error('Invitacion caducada');
     const now = Date.now();
     await saveUserProfile();
-    await fbPut(`groupMembers/${invite.groupId}/${USER_ID}`, { role: 'member', status: 'active', displayName: shortDisplayName(), photoURL: AUTH_USER.photoURL || '', joinedAt: now });
+    await fbPut(`groupMembers/${invite.groupId}/${USER_ID}`, { role: 'member', status: 'active', displayName: shortDisplayName(), photoURL: publicPhotoURL(), joinedAt: now });
     await fbPut(`userGroups/${USER_ID}/${invite.groupId}`, { name: invite.groupName || 'Grupo escapista', role: 'member', status: 'active', joinedAt: now });
     await fbPut(`groupInvites/${inviteId}`, { ...invite, status: 'accepted', acceptedBy: USER_ID, acceptedByName: shortDisplayName(), acceptedAt: now });
     PENDING_INVITE_ID = '';
@@ -2286,12 +2449,11 @@ async function loadVotes() {
 
 // ── Cargar data.json ──────────────────────────────────────────────────────────
 function shortDisplayName(user = AUTH_USER) {
-  const raw = String(user?.displayName || user?.email || 'Usuario').trim();
-  if (!raw) return 'Usuario';
-  const parts = raw.split(/\s+/).filter(Boolean);
-  if (parts.length === 1) return parts[0];
-  return `${parts[0]} ${parts.slice(1, 2).map(p => `${p[0]}.`).join('')}`;
+  if (user === AUTH_USER && USER_PROFILE?.publicName) return String(USER_PROFILE.publicName).trim() || googleShortName(user);
+  return googleShortName(user);
 }
+
+function formatReviewDate
 
 function formatReviewDate(ts) {
   if (!ts) return '';
@@ -2552,6 +2714,9 @@ async function loadData() {
     }
     await initFirebaseAuth();
     await loadUserRoomStates();
+    await loadUserProfile();
+    await saveUserProfile();
+    renderAuthStatus();
     // Cargar votos primero (bloquea hasta tener datos para el ranking)
     await loadVotes();
     await loadRoomReviews();
