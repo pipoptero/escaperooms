@@ -173,6 +173,8 @@
 
   /* ── FILTERS ── */
   .filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+.mobile-filter-toggle{display:none;}
+.mobile-filter-summary{display:none;}
   .filter-label{font-family:'Share Tech Mono',monospace;font-size:.67rem;color:var(--text3);letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;}
   .filter-select,.filter-input{font-family:'Rajdhani',sans-serif;font-size:.86rem;font-weight:500;background:var(--bg3);color:var(--text);border:1px solid var(--border);padding:7px 12px;outline:none;cursor:pointer;transition:border-color .2s;appearance:none;-webkit-appearance:none;min-width:110px;}
   .filter-select:focus,.filter-input:focus{border-color:rgba(245,166,35,.45);}
@@ -540,6 +542,47 @@
     .filter-input{min-width:0;flex:1 1 100%;}
     .filter-select{min-width:0;flex:1 1 calc(50% - 8px);}
     .filter-select.award-filter{min-width:0;flex-basis:100%;}
+    #panel-catalogo .mobile-filter-toggle{
+      display:flex;
+      width:100%;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+      padding:10px 12px;
+      border:1px solid rgba(245,166,35,.28);
+      background:rgba(245,166,35,.045);
+      color:var(--amber);
+      font-family:'Share Tech Mono',monospace;
+      font-size:.68rem;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      cursor:pointer;
+    }
+    #panel-catalogo .mobile-filter-toggle::after{content:'Abrir';color:var(--text3);font-size:.58rem;}
+    #panel-catalogo.filters-open .mobile-filter-toggle::after{content:'Cerrar';}
+    #panel-catalogo .mobile-filter-summary{
+      display:block;
+      margin:-3px 0 10px;
+      font-family:'Rajdhani',sans-serif;
+      font-size:.84rem;
+      color:var(--text3);
+    }
+    #panel-catalogo .filters{display:none;}
+    #panel-catalogo.filters-open .filters{display:flex;}
+    #panel-catalogo .sort-row{margin-top:8px;}
+    #grid-catalogo{gap:12px;}
+    #grid-catalogo .card-media{aspect-ratio:16/10;max-height:220px;}
+    #grid-catalogo .card-body{padding:11px 12px 12px;}
+    #grid-catalogo .card-tags{margin-bottom:0;}
+    #grid-catalogo .card-desc,
+    #grid-catalogo .card-meta{display:none;}
+    #grid-catalogo .card-footer{padding-top:8px;margin-top:8px;}
+    #grid-catalogo .room-name{font-size:.96rem;}
+    #grid-catalogo .card-media-title{left:11px;right:11px;bottom:10px;}
+    #grid-catalogo .award-stack{max-width:132px;gap:4px;}
+    #grid-catalogo .award-seal{padding:2px 4px;}
+    #grid-catalogo .award-seal span{display:none;}
   }
 
   /* ── VOTE SECTION ── */
@@ -700,10 +743,12 @@
     .auth-name{max-width:72px;}
     .catalog-result-row{align-items:flex-start;flex-direction:column;}
     .catalog-result-row .catalog-more{justify-content:flex-start;}
-    .detail-modal{padding:0;align-items:stretch;}
-    .detail-dialog{width:100%;height:100vh;grid-template-columns:1fr;grid-template-rows:220px minmax(0,1fr);border:none;}
-    .detail-media{height:auto;min-height:0;border-right:none;border-bottom:1px solid var(--border);}
-    .detail-content{padding:14px;overflow:auto;}
+    .detail-modal{padding:0;align-items:stretch;background:var(--card);backdrop-filter:none;overflow:hidden;}
+    .detail-modal.open{display:block;}
+    .detail-dialog{width:100%;height:100dvh;display:block;border:none;box-shadow:none;overflow:auto;background:var(--card);}
+    .detail-media{height:168px;min-height:168px;border-right:none;border-bottom:1px solid var(--border);}
+    .detail-close{position:fixed;top:10px;right:10px;width:40px;height:40px;background:rgba(10,10,15,.92);}
+    .detail-content{padding:14px 14px 24px;overflow:visible;}
     .detail-title{font-size:1.35rem;}
     .detail-tags{margin-bottom:10px;}
     .detail-meta{grid-template-columns:1fr 1fr;}
@@ -882,6 +927,8 @@
 
     <!-- CATALOGO -->
     <div id="panel-catalogo" class="panel">
+      <button class="mobile-filter-toggle" id="mobile-filter-toggle-cat" type="button" onclick="toggleCatalogMobileFilters()" aria-expanded="false">Filtros</button>
+      <div class="mobile-filter-summary" id="mobile-filter-summary-cat">Sin filtros activos</div>
       <div class="filters">
         <span class="filter-label">Buscar:</span>
         <input type="text" class="filter-input" id="search-cat" placeholder="🔍  Nombre, empresa, ciudad..." oninput="renderCatalogoDesdeInicio()">
@@ -3178,6 +3225,61 @@ function setSortMine(s) {
   renderMisHechos();
 }
 
+function catalogFilterSummary() {
+  const textValue = id => (document.getElementById(id)?.value || '').trim();
+  const optionText = id => {
+    const el = document.getElementById(id);
+    if (!el || !el.value) return '';
+    return el.options[el.selectedIndex]?.textContent?.trim() || el.value;
+  };
+  const isChecked = id => !!document.getElementById(id)?.checked;
+  const parts = [];
+  const search = textValue('search-cat');
+  if (search) parts.push(`Busqueda: ${shortText(search, 22)}`);
+  [
+    'filter-comunidad-cat',
+    'filter-prov-cat',
+    'filter-ciudad-cat',
+    'filter-jugadores-cat',
+    'filter-dif-cat',
+    'filter-awards-cat'
+  ].forEach(id => {
+    const label = optionText(id);
+    if (label) parts.push(label);
+  });
+  if (isChecked('filter-terror-cat')) parts.push('Terror');
+  if (isChecked('filter-open-cat')) parts.push('Abiertos');
+  if (isChecked('filter-hide-done-cat')) parts.push('Ocultar hechos');
+  if (isChecked('filter-fav-cat')) parts.push('Favoritos');
+  return parts;
+}
+
+function updateCatalogMobileFilters() {
+  const parts = catalogFilterSummary();
+  const summary = document.getElementById('mobile-filter-summary-cat');
+  const toggle = document.getElementById('mobile-filter-toggle-cat');
+  const panel = document.getElementById('panel-catalogo');
+  if (summary) {
+    summary.textContent = parts.length
+      ? `${parts.length} ${parts.length === 1 ? 'filtro activo' : 'filtros activos'}: ${parts.slice(0, 3).join(' · ')}${parts.length > 3 ? ' · ...' : ''}`
+      : 'Sin filtros activos';
+  }
+  if (toggle) {
+    toggle.textContent = parts.length
+      ? `Filtros (${parts.length})`
+      : 'Filtros';
+    toggle.setAttribute('aria-expanded', panel?.classList.contains('filters-open') ? 'true' : 'false');
+  }
+}
+
+function toggleCatalogMobileFilters(force) {
+  const panel = document.getElementById('panel-catalogo');
+  if (!panel) return;
+  const open = force === undefined ? !panel.classList.contains('filters-open') : !!force;
+  panel.classList.toggle('filters-open', open);
+  updateCatalogMobileFilters();
+}
+
 function setSortCatalogo(s) {
   sortCatalogo = s;
   resetCatalogoLimit();
@@ -4233,6 +4335,7 @@ function renderCatalogo() {
   const onlyOpen = document.getElementById('filter-open-cat').checked;
   const hideDone = document.getElementById('filter-hide-done-cat').checked;
   showOnlyFavs = !!document.getElementById('filter-fav-cat')?.checked;
+  updateCatalogMobileFilters();
 
   let f = CATALOGO.filter(c => {
     const groupState = groupStateFor(c);
