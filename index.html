@@ -332,6 +332,10 @@
   .profile-group-meta{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;line-height:1.5;margin-bottom:8px;}
   .profile-group-actions{display:flex;gap:6px;flex-wrap:wrap;}
   .profile-group-rooms{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px;}
+  .profile-group-stats-mini{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:9px 0 2px;}
+  .profile-group-mini{border:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.11);padding:6px 7px;min-width:0;}
+  .profile-group-mini strong{display:block;font-family:'Cinzel',serif;font-size:.95rem;color:var(--amber);line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .profile-group-mini span{display:block;font-family:'Share Tech Mono',monospace;font-size:.48rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-top:3px;}
   .group-room-control{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.02);padding:11px 12px;margin-top:10px;}
   .group-room-title{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--text3);letter-spacing:.13em;text-transform:uppercase;margin-bottom:8px;}
   .group-room-list{display:flex;gap:7px;flex-wrap:wrap;}
@@ -359,6 +363,12 @@
   .group-room-name{font-family:'Cinzel',serif;font-size:.95rem;color:var(--text);line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .group-room-sub{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;line-height:1.5;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .group-room-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;}
+  .group-room-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;}
+  .group-insights-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px;}
+  .group-insight{border:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.12);padding:9px 10px;min-width:0;}
+  .group-insight-label{font-family:'Share Tech Mono',monospace;font-size:.53rem;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;}
+  .group-insight-main{font-family:'Rajdhani',sans-serif;font-size:.9rem;color:var(--text2);line-height:1.35;}
+  .group-insight-list{display:flex;gap:5px;flex-wrap:wrap;}
   /* ── DETAIL MODAL ── */
   .detail-modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);}
   .detail-modal.open{display:flex;}
@@ -714,7 +724,10 @@
     .group-stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
     .group-room-row{grid-template-columns:44px minmax(0,1fr);}
     .group-room-thumb{width:44px;}
-    .group-room-actions{grid-column:1/-1;justify-content:flex-start;}    .assistant-grid{grid-template-columns:1fr;}
+    .group-room-actions{grid-column:1/-1;justify-content:flex-start;}
+    .group-room-tags{grid-column:1/-1;}
+    .group-insights-grid{grid-template-columns:1fr;}
+    .assistant-grid{grid-template-columns:1fr;}
   }
 </style>
 </head>
@@ -819,6 +832,7 @@
         <select class="filter-select" id="filter-ciudad-mine" onchange="updateGeoFilters('mine');renderMisHechos()"><option value="">Ciudad</option></select>
         <select class="filter-select" id="filter-jugadores-mine" onchange="renderMisHechos()"><option value="">Jugadores</option></select>
         <select class="filter-select" id="filter-dif-mine" onchange="renderMisHechos()"><option value="">Dificultad</option></select>
+        <select class="filter-select" id="filter-group-mine" onchange="renderMisHechos()"><option value="">Grupo</option></select>
         <label class="filter-check"><input type="checkbox" id="filter-abierto-mine" onchange="renderMisHechos()"> Abiertos</label>
         <button class="clear-btn" onclick="clearFilters('mine')">✕ Limpiar</button>
       </div>
@@ -1475,7 +1489,8 @@ function roomFromGroupRecord(key, record) {
     web: record.web || '',
     duracion: record.duration || record.duracion || '',
     dificultad: record.difficulty || record.dificultad || '',
-    _groupDone: true
+    _groupDone: true,
+    _groupRoomKey: key
   };
 }
 
@@ -1487,7 +1502,20 @@ function groupDoneEntriesForKey(key) {
 }
 
 function groupDoneEntriesForRoom(room) {
-  return groupDoneEntriesForKey(userRoomKey(room));
+  return groupDoneEntriesForKey(room?._groupRoomKey || userRoomKey(room));
+}
+
+function mineGroupMatches(room, selectedGroup) {
+  if (!selectedGroup) return true;
+  if (selectedGroup === '__personal') return !!userStateFor(room).done;
+  const key = room?._groupRoomKey || userRoomKey(room);
+  return !!(GROUP_ROOMS[selectedGroup] && GROUP_ROOMS[selectedGroup][key]);
+}
+
+function groupLabelForFilter(value) {
+  if (!value) return '';
+  if (value === '__personal') return 'hechos por mi';
+  return groupName(value);
 }
 
 function groupDoneRooms() {
@@ -1681,13 +1709,53 @@ function groupRoomEntries(groupId) {
     .sort((a, b) => String(a.room.nombre || '').localeCompare(String(b.room.nombre || '')));
 }
 
+function topGroupValues(entries, getter, limit = 4) {
+  const counts = new Map();
+  entries.forEach(item => {
+    const value = String(getter(item) || '').trim();
+    if (!value) return;
+    counts.set(value, (counts.get(value) || 0) + 1);
+  });
+  return [...counts.entries()]
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .slice(0, limit)
+    .map(([label, count]) => ({ label, count }));
+}
+
 function groupStats(groupId) {
   const entries = groupRoomEntries(groupId);
   const minutes = entries.reduce((sum, item) => sum + (parseInt(item.room.duracion) || parseInt(item.record.duration) || 0), 0);
   const hours = minutes >= 60 ? `${Math.floor(minutes / 60)}h ${minutes % 60 ? `${minutes % 60}m` : ''}` : `${minutes}m`;
   const communityVotes = entries.map(item => voteStatsForRoom(item.room).avg).filter(Boolean);
   const communityAvg = communityVotes.length ? (communityVotes.reduce((sum, val) => sum + val, 0) / communityVotes.length * 2).toFixed(1) : '-';
-  return { rooms: entries.length, members: groupMemberCount(groupId), hours, communityAvg };
+  const cities = topGroupValues(entries, item => item.room.ciudad || item.record.city, 3);
+  const difficulties = topGroupValues(entries, item => item.room.dificultad || item.record.difficulty, 3);
+  const companies = topGroupValues(entries, item => item.room.empresa || item.record.company, 3);
+  return { rooms: entries.length, members: groupMemberCount(groupId), hours, communityAvg, cities, difficulties, companies };
+}
+
+function groupMiniStatsHtml(groupId) {
+  const stats = groupStats(groupId);
+  return `<div class="profile-group-stats-mini">
+    <div class="profile-group-mini"><strong>${stats.rooms}</strong><span>Salas</span></div>
+    <div class="profile-group-mini"><strong>${stats.members}</strong><span>Miembros</span></div>
+    <div class="profile-group-mini"><strong>${stats.hours}</strong><span>Horas</span></div>
+  </div>`;
+}
+
+function groupInsightListHtml(items, empty = 'Sin datos') {
+  if (!items.length) return `<span class="tag tag-muted">${empty}</span>`;
+  return `<div class="group-insight-list">${items.map(item => `<span class="tag tag-feature">${escapeHtml(item.label)} ${item.count > 1 ? `<span style="opacity:.62">x${item.count}</span>` : ''}</span>`).join('')}</div>`;
+}
+
+function groupInsightsHtml(groupId) {
+  const stats = groupStats(groupId);
+  if (!stats.rooms) return '';
+  return `<div class="group-insights-grid">
+    <div class="group-insight"><div class="group-insight-label">Ciudades top</div><div class="group-insight-main">${groupInsightListHtml(stats.cities, 'Sin ciudad')}</div></div>
+    <div class="group-insight"><div class="group-insight-label">Dificultad top</div><div class="group-insight-main">${groupInsightListHtml(stats.difficulties, 'Sin dificultad')}</div></div>
+    <div class="group-insight"><div class="group-insight-label">Empresas top</div><div class="group-insight-main">${groupInsightListHtml(stats.companies, 'Sin empresa')}</div></div>
+  </div>`;
 }
 
 function groupMembersHtml(groupId) {
@@ -1718,6 +1786,12 @@ function groupRoomsListHtml(groupId) {
       <div class="group-room-main">
         <div class="group-room-name">${escapeHtml(room.nombre || record.roomName || 'Sala')}</div>
         <div class="group-room-sub">${escapeHtml(meta || 'Sin ubicacion')}</div>
+        <div class="group-room-tags">
+          ${room.dificultad ? `<span class="tag tag-tipo">${escapeHtml(room.dificultad)}</span>` : ''}
+          ${room.duracion ? `<span class="tag tag-muted">${escapeHtml(room.duracion)} min</span>` : ''}
+          ${voteStatsForRoom(room).count ? `<span class="tag tag-feature">Comunidad ${(voteStatsForRoom(room).avg * 2).toFixed(1)}/10</span>` : ''}
+          ${record.addedByName ? `<span class="tag tag-muted">Por ${escapeHtml(record.addedByName)}</span>` : ''}
+        </div>
       </div>
       <div class="group-room-actions">
         <button class="auth-btn secondary" type="button" onclick="openGroupRoomDetail('${ref.kind}','${jsString(ref.key)}')">Ver sala</button>
@@ -1745,7 +1819,8 @@ function renderGroupDetail(groupId, message = '') {
           <div class="profile-group-meta">${escapeHtml(group.role || 'member')} - privado</div>
         </div>
         <div class="profile-group-actions">
-          <button class="auth-btn" type="button" onclick="createGroupInvite('${groupId}')">Copiar invitacion</button>
+          <button class="auth-btn" type="button" onclick="openMineGroupFilter('${groupId}')">Ver en mis hechos</button>
+          <button class="auth-btn secondary" type="button" onclick="createGroupInvite('${groupId}')">Copiar invitacion</button>
           ${group.role === 'owner' ? `<button class="auth-btn secondary" type="button" onclick="deleteEscapistGroup('${groupId}')">Eliminar grupo</button>` : ''}
         </div>
       </div>
@@ -1755,6 +1830,7 @@ function renderGroupDetail(groupId, message = '') {
         <div class="group-stat"><div class="group-stat-value">${stats.hours}</div><div class="group-stat-label">Horas</div></div>
         <div class="group-stat"><div class="group-stat-value">${stats.communityAvg}</div><div class="group-stat-label">Comunidad</div></div>
       </div>
+      ${groupInsightsHtml(groupId)}
       <div class="profile-status-msg" id="profile-status">${message || ''}</div>
     </div>
     <div class="profile-section">
@@ -1801,6 +1877,14 @@ async function deleteEscapistGroup(groupId) {
 function openGroupRoomDetail(kind, key) {
   closeProfile();
   setTimeout(() => openDetail(kind, key), 0);
+}
+
+function openMineGroupFilter(groupId) {
+  closeProfile();
+  switchTab('mis-hechos');
+  const filter = document.getElementById('filter-group-mine');
+  if (filter) filter.value = groupId;
+  renderMisHechos();
 }
 
 async function removeRoomFromGroup(groupId, roomKeyValue) {
@@ -1898,6 +1982,7 @@ function renderProfile(message = '') {
         ${groups.length ? groups.map(([groupId, group]) => `<article class="profile-group-card">
           <div class="profile-group-name">${escapeHtml(group.name || 'Grupo escapista')}</div>
           <div class="profile-group-meta">${groupMemberCount(groupId)} miembros | ${groupRoomCount(groupId)} salas hechas | ${escapeHtml(group.role || 'member')}</div>
+          ${groupMiniStatsHtml(groupId)}
           <div class="profile-group-actions">
             <button class="auth-btn secondary" type="button" onclick="renderGroupDetail('${groupId}')">Ver grupo</button><button class="auth-btn secondary" type="button" onclick="createGroupInvite('${groupId}')">Copiar invitacion</button>${group.role === 'owner' ? `<button class="auth-btn secondary" type="button" onclick="deleteEscapistGroup('${groupId}')">Eliminar</button>` : ''}
           </div>
@@ -2813,6 +2898,7 @@ function populateFilters() {
   fill('filter-ciudad-mine', [...new Set(doneRooms.map(p=>p.ciudad).filter(Boolean))].sort(), 'Ciudad');
   fill('filter-jugadores-mine', ['1','2','3','4','5','6','7','8','9','10'].filter(n => doneRooms.some(p => supportsPlayers(p, n))).map(n => `${n} jugador${n === '1' ? '' : 'es'}`), 'Jugadores');
   fill('filter-dif-mine',    [...new Set(doneRooms.map(p=>p.dificultad).filter(Boolean))].sort(), 'Dificultad');
+  populateMineGroupFilter();
   fill('filter-dif-hecho',   [...new Set(reviews.map(h=>h.dificultad).filter(Boolean))].sort(), 'Dificultad');
   fill('filter-comunidad-cat', [...new Set(CATALOGO.map(c=>communityOf(c)).filter(Boolean))].sort(), 'Comunidad autonoma');
   fill('filter-prov-cat',    [...new Set(CATALOGO.map(c=>c.provincia).filter(Boolean))].sort(), 'Provincia');
@@ -2824,6 +2910,20 @@ function populateFilters() {
   document.getElementById('badge-hecho').textContent = reviews.length;
   document.getElementById('badge-cat').textContent = CATALOGO.length;
   syncNavigationForAuth();
+}
+
+function populateMineGroupFilter() {
+  const select = document.getElementById('filter-group-mine');
+  if (!select) return;
+  const current = select.value;
+  select.innerHTML = '<option value="">Grupo</option>';
+  if (personalRoomSources().some(room => userStateFor(room).done)) {
+    select.appendChild(new Option('Hecho por mi', '__personal'));
+  }
+  activeUserGroups().forEach(([groupId, group]) => {
+    select.appendChild(new Option(group.name || 'Grupo escapista', groupId));
+  });
+  select.value = [...select.options].some(option => option.value === current) ? current : '';
 }
 
 function renderStats() {
@@ -3048,7 +3148,7 @@ function clearFilters(w) {
     renderPendientes();
   } else {
     if (w === 'mine') {
-      ['search-mine','filter-comunidad-mine','filter-prov-mine','filter-ciudad-mine','filter-jugadores-mine','filter-dif-mine']
+      ['search-mine','filter-comunidad-mine','filter-prov-mine','filter-ciudad-mine','filter-jugadores-mine','filter-dif-mine','filter-group-mine']
         .forEach(id => { document.getElementById(id).value = ''; });
       document.getElementById('filter-abierto-mine').checked = false;
       updateGeoFilters('mine');
@@ -3895,6 +3995,7 @@ function renderMisHechos() {
   const prov = document.getElementById('filter-prov-mine')?.value || '';
   const players = document.getElementById('filter-jugadores-mine')?.value || '';
   const dificultad = document.getElementById('filter-dif-mine')?.value || '';
+  const groupFilter = document.getElementById('filter-group-mine')?.value || '';
   const onlyOpen = !!document.getElementById('filter-abierto-mine')?.checked;
 
   let f = doneRooms.filter(p => {
@@ -3904,6 +4005,7 @@ function renderMisHechos() {
     if (prov && String(p.provincia || '').trim() !== prov) return false;
     if (!supportsPlayers(p, players)) return false;
     if (dificultad && p.dificultad !== dificultad) return false;
+    if (groupFilter && !mineGroupMatches(p, groupFilter)) return false;
     if (onlyOpen && !isTruthyFlag(p.abierto)) return false;
     return true;
   });
@@ -3913,7 +4015,8 @@ function renderMisHechos() {
   else if (sortMine==='dur')    f.sort((a,b)=>parseInt(b.duracion||0)-parseInt(a.duracion||0));
   else if (sortMine==='dif')    f.sort((a,b)=>do_(b.dificultad)-do_(a.dificultad));
 
-  document.getElementById('result-info-mine').textContent = `Mostrando ${f.length} de ${doneRooms.length} hechos personales y de grupos`;
+  const groupSuffix = groupFilter ? ` · ${groupLabelForFilter(groupFilter)}` : '';
+  document.getElementById('result-info-mine').textContent = `Mostrando ${f.length} de ${doneRooms.length} hechos personales y de grupos${groupSuffix}`;
   document.getElementById('grid-mis-hechos').innerHTML = f.length
     ? f.map(cardPend).join('')
     : `<div class="empty-state"><div class="lock">✓</div><p>AÚN NO TIENES HECHOS — MARCA SALAS DESDE EL CATÁLOGO</p></div>`;
