@@ -369,6 +369,12 @@
   .group-insight-label{font-family:'Share Tech Mono',monospace;font-size:.53rem;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;}
   .group-insight-main{font-family:'Rajdhani',sans-serif;font-size:.9rem;color:var(--text2);line-height:1.35;}
   .group-insight-list{display:flex;gap:5px;flex-wrap:wrap;}
+  .group-list-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:12px;}
+  .group-list-tab{min-height:46px;border:1px solid var(--border);background:rgba(255,255,255,.025);color:var(--text3);font-family:'Share Tech Mono',monospace;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;}
+  .group-list-tab:hover{border-color:rgba(245,166,35,.38);color:var(--amber);background:rgba(245,166,35,.04);}
+  .group-list-tab.active{border-color:var(--amber);color:var(--amber);background:rgba(245,166,35,.09);}
+  .group-list-tab .count-badge{font-size:.58rem;margin-left:0;}
+  .group-list-panel-title{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;}
   /* ── DETAIL MODAL ── */
   .detail-modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);}
   .detail-modal.open{display:flex;}
@@ -1896,7 +1902,7 @@ function groupPendingRoomsListHtml(groupId) {
   }).join('')}</div>`;
 }
 
-function renderGroupDetail(groupId, message = '') {
+function renderGroupDetail(groupId, message = '', activeList = 'done') {
   const root = document.getElementById('profile-content');
   const group = USER_GROUPS[groupId];
   if (!root || !group) {
@@ -1904,6 +1910,11 @@ function renderGroupDetail(groupId, message = '') {
     return;
   }
   const stats = groupStats(groupId);
+  const selectedList = activeList === 'pending' ? 'pending' : 'done';
+  const doneCount = groupRoomCount(groupId);
+  const pendingCount = groupPendingRoomCount(groupId);
+  const listTitle = selectedList === 'pending' ? 'Pendientes del grupo' : 'Escape rooms hechos por el grupo';
+  const listHtml = selectedList === 'pending' ? groupPendingRoomsListHtml(groupId) : groupRoomsListHtml(groupId);
   root.innerHTML = `
     <button class="auth-btn secondary profile-back" type="button" onclick="renderProfile('${jsString(message)}')">Volver a mis grupos</button>
     <div class="group-hero">
@@ -1934,12 +1945,12 @@ function renderGroupDetail(groupId, message = '') {
       ${groupMembersHtml(groupId)}
     </div>
     <div class="profile-section">
-      <div class="profile-section-title">Pendientes del grupo</div>
-      ${groupPendingRoomsListHtml(groupId)}
-    </div>
-    <div class="profile-section">
-      <div class="profile-section-title">Escape rooms hechos por el grupo</div>
-      ${groupRoomsListHtml(groupId)}
+      <div class="group-list-tabs">
+        <button class="group-list-tab ${selectedList === 'done' ? 'active' : ''}" type="button" onclick="renderGroupDetail('${groupId}','','done')">Hechos <span class="count-badge">${doneCount}</span></button>
+        <button class="group-list-tab ${selectedList === 'pending' ? 'active' : ''}" type="button" onclick="renderGroupDetail('${groupId}','','pending')">Pendientes <span class="count-badge">${pendingCount}</span></button>
+      </div>
+      <div class="group-list-panel-title">${listTitle}</div>
+      ${listHtml}
     </div>`;
 }
 
@@ -1998,10 +2009,10 @@ async function removeRoomFromGroup(groupId, roomKeyValue) {
     await fbDelete(`groupRooms/${groupId}/${roomKeyValue}`);
     if (GROUP_ROOMS[groupId]) delete GROUP_ROOMS[groupId][roomKeyValue];
     populateFilters(); renderStats(); renderMisHechos(); renderCatalogo();
-    renderGroupDetail(groupId, 'Sala quitada del grupo.');
+    renderGroupDetail(groupId, 'Sala quitada del grupo.', 'done');
   } catch (e) {
     console.error(e);
-    renderGroupDetail(groupId, `No se pudo quitar la sala. ${escapeHtml(e.message)}`);
+    renderGroupDetail(groupId, `No se pudo quitar la sala. ${escapeHtml(e.message)}`, 'done');
   }
 }
 
@@ -2012,10 +2023,10 @@ async function removePendingRoomFromGroup(groupId, roomKeyValue) {
     await fbDelete(`groupPendingRooms/${groupId}/${roomKeyValue}`);
     if (GROUP_PENDING_ROOMS[groupId]) delete GROUP_PENDING_ROOMS[groupId][roomKeyValue];
     populateFilters(); renderStats(); renderPendientes(); renderCatalogo();
-    renderGroupDetail(groupId, 'Sala quitada de pendientes.');
+    renderGroupDetail(groupId, 'Sala quitada de pendientes.', 'pending');
   } catch (e) {
     console.error(e);
-    renderGroupDetail(groupId, `No se pudo quitar el pendiente. ${escapeHtml(e.message)}`);
+    renderGroupDetail(groupId, `No se pudo quitar el pendiente. ${escapeHtml(e.message)}`, 'pending');
   }
 }
 
@@ -2032,10 +2043,10 @@ async function markGroupPendingAsDone(groupId, roomKeyValue) {
     GROUP_ROOMS[groupId][roomKeyValue] = record;
     delete GROUP_PENDING_ROOMS[groupId][roomKeyValue];
     populateFilters(); renderStats(); renderPendientes(); renderMisHechos(); renderCatalogo();
-    renderGroupDetail(groupId, 'Sala marcada como hecha por el grupo.');
+    renderGroupDetail(groupId, 'Sala marcada como hecha por el grupo.', 'done');
   } catch (e) {
     console.error(e);
-    renderGroupDetail(groupId, `No se pudo marcar como hecha. ${escapeHtml(e.message)}`);
+    renderGroupDetail(groupId, `No se pudo marcar como hecha. ${escapeHtml(e.message)}`, 'pending');
   }
 }
 async function openProfile(message = '', refresh = true) {
