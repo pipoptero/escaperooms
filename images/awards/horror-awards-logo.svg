@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-labelledby="title desc">
+  <title id="title">Horror Awards</title>
+  <desc id="desc">Insignia circular roja y dorada para Horror Awards</desc>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="58%">
+      <stop offset="0" stop-color="#3b1116"/>
+      <stop offset="0.6" stop-color="#13070a"/>
+      <stop offset="1" stop-color="#050305"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="20%" x2="82%" y1="12%" y2="90%">
+      <stop offset="0" stop-color="#ffe27a"/>
+      <stop offset="0.45" stop-color="#f5a623"/>
+      <stop offset="1" stop-color="#8a4d07"/>
+    </linearGradient>
+    <linearGradient id="red" x1="26%" x2="75%" y1="10%" y2="95%">
+      <stop offset="0" stop-color="#ff4d5d"/>
+      <stop offset="1" stop-color="#8f1420"/>
+    </linearGradient>
+  </defs>
+  <circle cx="48" cy="48" r="44" fill="url(#bg)" stroke="url(#gold)" stroke-width="4"/>
+  <path fill="url(#red)" d="M48 16c11 9 19 21 19 36 0 14-8 25-19 30-11-5-19-16-19-30 0-15 8-27 19-36Z"/>
+  <path fill="#080407" d="M38 48c0-8 4-15 10-21 6 6 10 13 10 21 0 9-4 15-10 19-6-4-10-10-10-19Z"/>
+  <path fill="url(#gold)" d="M28 70h40v8H28zM25 65l7-34h8l-3 13h22l-3-13h8l7 34h-9l-2-13H35l-2 13h-8Z"/>
+  <path fill="#080407" d="M42 34h12v8H42zM39 55h18v7H39z"/>
+</svg>

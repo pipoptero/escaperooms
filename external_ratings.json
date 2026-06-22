@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-06-22T09:43:01",
+    "generated_at": "2026-06-22T14:33:50",
     "sources": {
       "escape_collector": {
         "label": "Escape Collector",
@@ -5196,10 +5196,10 @@
       "sources": {
         "escape_collector": {
           "score": 8.39,
-          "weight": 1.25,
+          "weight": 1.26,
           "url": "https://escapecollector.com/escape-rooms",
           "updated_at": "2026-06-22",
-          "votes": 14
+          "votes": 15
         },
         "giba": {
           "score": 8.0,

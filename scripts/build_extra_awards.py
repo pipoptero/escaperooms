@@ -5,6 +5,7 @@ import html
 import json
 import re
 import unicodedata
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from io import BytesIO
 from pathlib import Path
 from urllib.request import Request, urlopen
@@ -16,6 +17,7 @@ OUT_FILE = ROOT / "extra_awards.json"
 CATALOG_FILE = ROOT / "catalog.json"
 USER_AGENT = "scaperooms-extra-awards/1.0"
 GIBA_AWARDS_URL = "https://www.gibaescape.com/proyectos/escape-room-giba-awards"
+HORROR_AWARDS_CATEGORY_URL = "https://ocioterror.es/category/horror-awards/"
 
 TEN_ESCAPES_URLS = {
     2025: "https://10escapes.com/ganadores25/",
@@ -103,6 +105,8 @@ def fetch_text(url):
 
 
 def html_to_lines(page):
+    page = re.sub(r"(?is)<script[^>]*>.*?</script>", " ", page)
+    page = re.sub(r"(?is)<style[^>]*>.*?</style>", " ", page)
     page = re.sub(r"(?i)<br\s*/?>", "\n", page)
     page = re.sub(r"(?i)</(?:p|div|h[1-6]|li|tr)>", "\n", page)
     page = re.sub(r"<[^>]+>", " ", page)
@@ -197,6 +201,152 @@ def split_giba_room_company(text):
     if match:
         return match.group(1).strip(), match.group(2).strip()
     return text, ""
+
+
+def discover_horror_awards_posts(max_pages=4):
+    posts = {}
+    urls = [
+        HORROR_AWARDS_CATEGORY_URL if page_num == 1 else f"{HORROR_AWARDS_CATEGORY_URL}page/{page_num}/"
+        for page_num in range(1, max_pages + 1)
+    ]
+
+    def fetch_archive(url):
+        try:
+            return url, fetch_text(url)
+        except Exception as exc:
+            print(f"[WARN] No se pudo leer el archivo Horror Awards {url}: {exc}")
+            return url, ""
+
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        pages = [future.result() for future in as_completed(executor.submit(fetch_archive, url) for url in urls)]
+
+    for _, page in pages:
+        for match in re.finditer(r"<a[^>]+href=[\"']([^\"']+)[\"'][^>]*>(.*?)</a>", page, flags=re.I | re.S):
+            href = html.unescape(match.group(1)).split("#", 1)[0]
+            title = re.sub(r"<[^>]+>", " ", match.group(2))
+            title = html.unescape(re.sub(r"\s+", " ", title)).strip()
+            key = slug_key(title)
+            if "horror awards" not in key:
+                continue
+            if "ganadores" not in key and "nominados" not in key:
+                continue
+            if "novedades" in key or "llega" in key:
+                continue
+            year_match = re.search(r"(20\d{2})", title)
+            if not year_match:
+                continue
+            posts[href] = {
+                "url": href,
+                "title": title,
+                "year": int(year_match.group(1)),
+                "kind": "winners" if "ganadores" in key else "nominees",
+            }
+    return list(posts.values())
+
+
+def horror_category_from_line(line):
+    key = slug_key(line)
+    if "horror awards" in key and ("ganadores" in key or "nominados" in key):
+        return ""
+    if "premio horrorifico" in key:
+        return "Premio Horrorifico"
+    if ("best " in key or key.startswith("best ") or "mejor " in key or key.startswith("mejor ") or "nominados best" in key or "nominados mejor" in key) and not key.startswith(("ganador", "2o", "3er")):
+        category = re.sub(r"(?i)^nominados\s+", "", line).strip()
+        category = re.sub(r"\s*\(.*?\)\s*", " ", category)
+        category = re.sub(r"\b20\d{2}\b", "", category)
+        return re.sub(r"\s+", " ", category).strip(" :-")
+    return ""
+
+
+def split_horror_room_company(text):
+    text = re.sub(r"(?i)^(ganador|2[ºo]\s*premio|3(?:er|º|o)\s*premio)\s*:\s*", "", text).strip()
+    text = clean_room(text)
+    parts = re.split(r"\s*[\u2013\u2014-]\s*", text, maxsplit=1)
+    if len(parts) == 1:
+        return parts[0].strip(), ""
+    return parts[0].strip(), parts[1].strip()
+
+
+def horror_winner_rank(line):
+    key = slug_key(line)
+    if key.startswith("ganador"):
+        return 1
+    if key.startswith("2o premio") or key.startswith("2 premio"):
+        return 2
+    if key.startswith("3er premio") or key.startswith("3o premio") or key.startswith("3 premio"):
+        return 3
+    return None
+
+
+def parse_horror_awards(awards, catalog_rooms):
+    posts = discover_horror_awards_posts()
+
+    def fetch_post(post):
+        try:
+            return post, html_to_lines(fetch_text(post["url"]))
+        except Exception as exc:
+            print(f"[WARN] No se pudo leer Horror Awards {post['url']}: {exc}")
+            return post, []
+
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        fetched_posts = [future.result() for future in as_completed(executor.submit(fetch_post, post) for post in posts)]
+
+    for post, lines in fetched_posts:
+        category = ""
+        ex_aequo = False
+        horrorifico_pending = False
+        for line in lines:
+            key = slug_key(line)
+            if key in {"relacionado", "descubre mas desde ocioterror"} or key.startswith("publicado por"):
+                break
+            maybe_category = horror_category_from_line(line)
+            if maybe_category:
+                category = maybe_category
+                ex_aequo = False
+                horrorifico_pending = "premio horrorifico" in slug_key(category)
+                continue
+            if not category:
+                continue
+            if "premio ex aequo" in key:
+                ex_aequo = True
+                continue
+            if key.startswith(("enhorabuena", "si quieres", "entra en este enlace", "encuesta", "video del anuncio", "la encuesta")):
+                continue
+
+            rank = horror_winner_rank(line) if post["kind"] == "winners" else None
+            status = "nominee"
+            if post["kind"] == "winners":
+                if rank is None and not ex_aequo and not horrorifico_pending:
+                    continue
+                rank = rank or 1
+                status = "winner" if rank == 1 else "runner_up"
+
+            room, company = split_horror_room_company(line)
+            if not room or len(room) < 3:
+                continue
+            if any(noise in slug_key(room) for noise in ["horror awards", "suscribete", "correo electronico", "youtube", "instagram"]):
+                continue
+
+            catalog_room = match_catalog_room(f"{room} {company}", catalog_rooms) or match_catalog_room(room, catalog_rooms)
+            if catalog_room:
+                room = catalog_room["name"]
+                if catalog_room.get("company"):
+                    company = catalog_room["company"]
+
+            add_award(
+                awards,
+                "horror_awards",
+                "Horror Awards",
+                post["url"],
+                post["year"],
+                category,
+                status,
+                room,
+                company,
+                rank or "",
+            )
+            if horrorifico_pending:
+                horrorifico_pending = False
 
 
 def parse_giba_awards(awards, catalog_rooms):
@@ -337,6 +487,7 @@ def build():
     catalog_rooms = load_catalog_rooms()
     parse_10escapes(awards)
     parse_giba_awards(awards, catalog_rooms)
+    parse_horror_awards(awards, catalog_rooms)
     for spec in ERA_PDFS:
         parse_era_pdf(awards, spec, catalog_rooms)
     awards = dedupe(awards)
@@ -353,12 +504,14 @@ def build():
                 "https://10escapes.com/",
                 "https://escaperoomawardsoficial.com/",
                 GIBA_AWARDS_URL,
+                HORROR_AWARDS_CATEGORY_URL,
             ],
             "count": len(awards),
             "by_source": {
                 "10escapes": sum(1 for item in awards if item["source_id"] == "10escapes"),
                 "escape_room_awards": sum(1 for item in awards if item["source_id"] == "escape_room_awards"),
                 "giba_awards": sum(1 for item in awards if item["source_id"] == "giba_awards"),
+                "horror_awards": sum(1 for item in awards if item["source_id"] == "horror_awards"),
             },
         },
         "awards": awards,

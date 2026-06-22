@@ -212,6 +212,7 @@
   .award-seal.award-10escapes{border-color:rgba(76,201,240,.38);}
   .award-seal.award-era{border-color:rgba(6,214,160,.32);}
   .award-seal.award-giba{border-color:rgba(245,166,35,.38);}
+  .award-seal.award-horror{border-color:rgba(230,57,70,.42);}
   .award-seal img{width:24px!important;height:24px!important;object-fit:contain!important;background:transparent!important;filter:none!important;transform:none!important;}
   .award-seal .award-logo-wide{width:34px!important;height:24px!important;}
   .award-seal .award-logo-square{width:26px!important;height:26px!important;}
@@ -955,6 +956,7 @@
           <option value="10escapes">10Escapes</option>
           <option value="escape_room_awards">Escape Room Awards</option>
           <option value="giba_awards">Giba Awards</option>
+          <option value="horror_awards">Horror Awards</option>
           <option value="winners">Ganadoras</option>
           <option value="nominees">Nominadas / finalistas</option>
         </select>
@@ -3602,6 +3604,7 @@ const TERPECA_LOGO = 'data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUND
 const TEN_ESCAPES_LOGO = 'images/awards/10escapes-logo.png';
 const ESCAPE_ROOM_AWARDS_LOGO = 'images/awards/escape-room-awards-logo.png';
 const GIBA_AWARDS_LOGO = 'images/awards/giba-awards-logo.svg';
+const HORROR_AWARDS_LOGO = 'images/awards/horror-awards-logo.svg';
 
 function terpecaBadge(pos) {
   if (!pos) return '';
@@ -3728,7 +3731,8 @@ function awardSealHtml(award) {
   const sourceMeta = {
     '10escapes': { cls: 'award-10escapes', logo: TEN_ESCAPES_LOGO, alt: '10Escapes' },
     'escape_room_awards': { cls: 'award-era', logo: ESCAPE_ROOM_AWARDS_LOGO, alt: 'Escape Room Awards' },
-    'giba_awards': { cls: 'award-giba', logo: GIBA_AWARDS_LOGO, alt: 'Giba Awards', logoClass: 'award-logo-square' }
+    'giba_awards': { cls: 'award-giba', logo: GIBA_AWARDS_LOGO, alt: 'Giba Awards', logoClass: 'award-logo-square' },
+    'horror_awards': { cls: 'award-horror', logo: HORROR_AWARDS_LOGO, alt: 'Horror Awards', logoClass: 'award-logo-square' }
   }[award.source_id] || { cls: 'award-era', logo: ESCAPE_ROOM_AWARDS_LOGO, alt: 'Premio' };
   const cls = sourceMeta.cls;
   const logo = sourceMeta.logo;
@@ -3743,16 +3747,18 @@ function awardSealHtml(award) {
 function awardSeals(room, limit = 3) {
   const awards = publicAwardsFor(room);
   const visible = awards.slice(0, limit);
-  const giba = awards.find(a => a.source_id === 'giba_awards');
-  if (giba && limit > 0 && !visible.some(a => a.source_id === 'giba_awards')) {
-    visible[Math.max(0, limit - 1)] = giba;
-  }
+  ['giba_awards', 'horror_awards'].forEach((sourceId, index) => {
+    const preferred = awards.find(a => a.source_id === sourceId);
+    if (preferred && limit > 0 && !visible.some(a => a.source_id === sourceId)) {
+      visible[Math.max(0, limit - 1 - index)] = preferred;
+    }
+  });
   return visible.map(awardSealHtml).join('');
 }
 
 function awardTags(room, limit = 4) {
   return publicAwardsFor(room).slice(0, limit).map(award => {
-    const source = award.source_id === '10escapes' ? '10Escapes' : award.source_id === 'terpeca' ? 'TERPECA' : award.source_id === 'giba_awards' ? 'Giba' : 'Awards';
+    const source = award.source_id === '10escapes' ? '10Escapes' : award.source_id === 'terpeca' ? 'TERPECA' : award.source_id === 'giba_awards' ? 'Giba' : award.source_id === 'horror_awards' ? 'Horror Awards' : 'Awards';
     return `<span class="tag tag-feature">${escapeHtml(source)} ${escapeHtml(award.label || '')}</span>`;
   }).join('');
 }
@@ -3761,7 +3767,7 @@ function awardMatchesFilter(room, filter) {
   if (!filter) return true;
   const awards = publicAwardsFor(room);
   if (filter === 'any') return awards.length > 0;
-  if (['terpeca','10escapes','escape_room_awards','giba_awards'].includes(filter)) {
+  if (['terpeca','10escapes','escape_room_awards','giba_awards','horror_awards'].includes(filter)) {
     return awards.some(award => award.source_id === filter);
   }
   if (filter === 'winners') {
@@ -3780,6 +3786,7 @@ function awardFilterLabel(filter) {
     '10escapes': '10Escapes',
     escape_room_awards: 'Escape Room Awards',
     giba_awards: 'Giba Awards',
+    horror_awards: 'Horror Awards',
     winners: 'ganadoras',
     nominees: 'nominadas/finalistas'
   }[filter] || '';
@@ -3883,6 +3890,7 @@ function awardSourceLabel(award) {
   return award.source_id === '10escapes' ? '10Escapes'
     : award.source_id === 'terpeca' ? 'TERPECA'
     : award.source_id === 'giba_awards' ? 'Giba Awards'
+    : award.source_id === 'horror_awards' ? 'Horror Awards'
     : award.source_id === 'escape_room_awards' ? 'Escape Room Awards'
     : award.source_name || 'Premio';
 }
@@ -3894,7 +3902,8 @@ function detailAwardLogoHtml(award) {
   const logos = {
     '10escapes': { src: TEN_ESCAPES_LOGO, alt: '10Escapes', cls: 'award-logo-wide' },
     'escape_room_awards': { src: ESCAPE_ROOM_AWARDS_LOGO, alt: 'Escape Room Awards', cls: 'award-logo-wide' },
-    'giba_awards': { src: GIBA_AWARDS_LOGO, alt: 'Giba Awards', cls: 'award-logo-square' }
+    'giba_awards': { src: GIBA_AWARDS_LOGO, alt: 'Giba Awards', cls: 'award-logo-square' },
+    'horror_awards': { src: HORROR_AWARDS_LOGO, alt: 'Horror Awards', cls: 'award-logo-square' }
   };
   const logo = logos[award.source_id];
   if (!logo) return `<span>${escapeHtml((awardSourceLabel(award) || '?').slice(0, 1))}</span>`;
