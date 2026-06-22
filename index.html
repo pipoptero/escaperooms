@@ -3605,6 +3605,8 @@ const TEN_ESCAPES_LOGO = 'images/awards/10escapes-logo.png';
 const ESCAPE_ROOM_AWARDS_LOGO = 'images/awards/escape-room-awards-logo.png';
 const GIBA_AWARDS_LOGO = 'images/awards/giba-awards-logo.svg';
 const HORROR_AWARDS_LOGO = 'images/awards/horror-awards-logo.svg';
+const ESCAPE_COLLECTOR_SOURCE_LOGO = 'images/brand/escape-collector-icon.png';
+const THE_VAULT_SOURCE_LOGO = 'images/brand/the-vault-icon.svg';
 
 function terpecaBadge(pos) {
   if (!pos) return '';
@@ -4507,6 +4509,16 @@ function globalScoreMeta(room) {
   return global.score ? metaItem('Global', `★ ${global.score.toFixed(1)}/10 (${global.sourceCount})`) : '';
 }
 
+function globalSourceLogoHtml(source) {
+  const logo = {
+    escape_collector: { src: ESCAPE_COLLECTOR_SOURCE_LOGO, alt: 'Escape Collector' },
+    giba: { src: GIBA_AWARDS_LOGO, alt: 'Giba' },
+    the_vault_community: { src: THE_VAULT_SOURCE_LOGO, alt: 'Comunidad The Vault' }
+  }[source.id];
+  if (!logo) return '<span>★</span>';
+  return `<img class="award-logo-square" src="${logo.src}" alt="${logo.alt}">`;
+}
+
 function globalSourcesDetailHtml(room) {
   const { sources } = globalRatingForRoom(room);
   if (!sources.length) return '';
@@ -4517,7 +4529,7 @@ function globalSourcesDetailHtml(room) {
         const votes = source.votes ? ` · ${source.votes} votos` : '';
         const stale = source.stale ? ' · pendiente de refresco' : '';
         return `<div class="detail-award">
-          <div class="detail-award-logo"><span>★</span></div>
+          <div class="detail-award-logo">${globalSourceLogoHtml(source)}</div>
           <div class="detail-award-main">
             <div class="detail-award-name">${escapeHtml(source.label)}</div>
             <div class="detail-award-line">${source.score.toFixed(1)}/10${votes}${stale}</div>
