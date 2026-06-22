@@ -623,6 +623,10 @@
   .rank-score-community .comm-avg{color:var(--amber);font-family:'Cinzel',serif;font-size:.95rem;}
   .rank-score-community .comm-count{color:var(--text3);font-size:.68rem;margin-left:4px;}
   .rank-score-community .comm-empty{color:var(--text3);font-size:.68rem;}
+  .rank-global-score{font-family:'Cinzel',serif;color:var(--amber);font-size:1.08rem;font-weight:700;white-space:nowrap;}
+  .rank-source-list{display:flex;gap:4px;flex-wrap:wrap;max-width:280px;}
+  .rank-source-pill{font-family:'Share Tech Mono',monospace;font-size:.56rem;letter-spacing:.05em;text-transform:uppercase;border:1px solid rgba(245,166,35,.18);background:rgba(245,166,35,.05);color:var(--text2);padding:2px 6px;white-space:nowrap;}
+  .rank-source-pill.stale{border-color:rgba(230,57,70,.24);color:var(--text3);}
 
   /* Ranking responsive: en móvil la tabla pasa a tarjetas verticales */
   @media(max-width:760px){
@@ -924,10 +928,8 @@
     <!-- RANKING -->
     <div id="panel-ranking" class="panel" style="display:none">
       <div class="sort-row">
-        <span class="filter-label">Ordenar:</span>
-        <button class="sort-btn" id="sort-rank-escapistas" onclick="setSortRank('escapistas')">★ Escapistas</button>
-        <button class="sort-btn active" id="sort-rank-grupo" onclick="setSortRank('grupo')">★ The Vault</button>
-        <button class="sort-btn" id="sort-rank-comunidad" onclick="setSortRank('comunidad')">★ Comunidad</button>
+        <span class="filter-label">Ranking global:</span>
+        <span class="tag tag-feature">Media de fuentes externas y comunidad</span>
       </div>
       <div class="divider-line" style="margin-top:18px"></div>
       <div class="result-info" id="result-info-rank"></div>
@@ -1131,7 +1133,7 @@ const REVIEW_CATEGORIES = [
   ['gamemaster', 'Game Master']
 ];
 
-let PENDIENTES = [], HECHOS = [], CATALOGO = [], TERPECA_AWARDS = [], EXTRA_AWARDS = [], sortPend = 'rating', sortMine = 'rating', sortCatalogo = 'rating', sortRank = 'grupo';
+let PENDIENTES = [], HECHOS = [], CATALOGO = [], TERPECA_AWARDS = [], EXTRA_AWARDS = [], EXTERNAL_RATINGS = {}, EXTERNAL_RATINGS_META = {}, sortPend = 'rating', sortMine = 'rating', sortCatalogo = 'rating', sortRank = 'global';
 const CATALOG_PAGE_SIZE = 120;
 let catalogVisibleCount = CATALOG_PAGE_SIZE;
 let GROUP_ROOM_INDEX = { pendientes: new Set(), hechos: new Set() };
@@ -3011,6 +3013,20 @@ async function loadExtraAwards() {
   }
 }
 
+async function loadExternalRatings() {
+  try {
+    const r = await fetch('external_ratings.json?v=' + Date.now());
+    if (!r.ok) return;
+    const d = await r.json();
+    EXTERNAL_RATINGS = d.ratings || {};
+    EXTERNAL_RATINGS_META = d.meta || {};
+  } catch(e) {
+    console.warn('No se pudo cargar external_ratings.json:', e.message);
+    EXTERNAL_RATINGS = {};
+    EXTERNAL_RATINGS_META = {};
+  }
+}
+
 async function loadData() {
   try {
     const r = await fetch('data.json?v=' + Date.now());
@@ -3035,6 +3051,7 @@ async function loadData() {
     await loadCatalogo();
     await loadTerpecaAwards();
     await loadExtraAwards();
+    await loadExternalRatings();
     await loadUserGroups();
 
     document.getElementById('loading').style.display = 'none';
@@ -4015,6 +4032,7 @@ function openDetail(kind, key) {
       ${reviewScoreMeta(room)}
       ${kind === 'pendientes' ? metaItem('Opiniones', room.votos ? `🗳 ${room.votos}` : '') : ''}
     </div>
+    ${globalSourcesDetailHtml(room)}
     ${detailAwardsHtml(room)}
     ${synopsis ? `
     <div class="detail-section-title">Sinopsis</div>
@@ -4472,6 +4490,158 @@ function renderRanking() {
         <td data-label="Escapistas">${displayRating(room) ? `★ ${escapeHtml(displayRating(room))}` : '—'}</td>
         <td data-label="The Vault" class="rank-score-group">${room.valoracion ? `★ ${escapeHtml(room.valoracion)}` : '—'}</td>
         <td data-label="Comunidad" class="rank-score-community">${commScore}</td>
+      </tr>`;
+    }).join('')}</tbody>`;
+}
+function globalScoreMeta(room) {
+  const global = globalRatingForRoom(room);
+  return global.score ? metaItem('Global', `★ ${global.score.toFixed(1)}/10 (${global.sourceCount})`) : '';
+}
+
+function globalSourcesDetailHtml(room) {
+  const { sources } = globalRatingForRoom(room);
+  if (!sources.length) return '';
+  return `
+    <div class="detail-section-title">Puntuacion global</div>
+    <div class="detail-awards">
+      ${sources.map(source => {
+        const votes = source.votes ? ` · ${source.votes} votos` : '';
+        const stale = source.stale ? ' · pendiente de refresco' : '';
+        return `<div class="detail-award">
+          <div class="detail-award-logo"><span>★</span></div>
+          <div class="detail-award-main">
+            <div class="detail-award-name">${escapeHtml(source.label)}</div>
+            <div class="detail-award-line">${source.score.toFixed(1)}/10${votes}${stale}</div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+
+function reviewScoreMeta(room) {
+  return [
+    globalScoreMeta(room),
+    metaItem('Escapistas', room.rating ? `★ ${room.rating}` : ''),
+    metaItem('Grupo', room.valoracion ? `★ ${room.valoracion}/10` : ''),
+    communityScoreMeta(room)
+  ].join('');
+}
+
+// Ranking global: fuentes externas + votos de comunidad en vivo.
+function externalRatingForRoom(room) {
+  for (const key of roomVoteKeys(room)) {
+    if (EXTERNAL_RATINGS[key]) return EXTERNAL_RATINGS[key];
+  }
+  return null;
+}
+
+function externalSourceLabel(sourceId) {
+  const meta = EXTERNAL_RATINGS_META.sources || {};
+  return meta[sourceId]?.label || {
+    escape_collector: 'Escape Collector',
+    giba: 'Giba',
+    ocioterror: 'OcioTerror',
+    the_vault_community: 'Comunidad'
+  }[sourceId] || sourceId;
+}
+
+function communitySourceForRoom(room) {
+  const { avg, count } = voteStatsForRoom(room);
+  if (!avg || count <= 0) return null;
+  const rawScore = Math.round(avg * 20) / 10;
+  const priorScore = 8;
+  const priorVotes = 3;
+  const adjustedScore = ((rawScore * count) + (priorScore * priorVotes)) / (count + priorVotes);
+  return {
+    id: 'the_vault_community',
+    label: 'Comunidad',
+    score: Math.round(adjustedScore * 10) / 10,
+    rawScore,
+    weight: count >= 5 ? 1.3 : count >= 2 ? 1 : .8,
+    votes: count
+  };
+}
+
+function globalSourcesForRoom(room) {
+  const sources = [];
+  const external = externalRatingForRoom(room);
+  Object.entries(external?.sources || {}).forEach(([sourceId, source]) => {
+    const score = parseFloat(source.score);
+    if (!score) return;
+    sources.push({
+      id: sourceId,
+      label: externalSourceLabel(sourceId),
+      score,
+      weight: parseFloat(source.weight) || 1,
+      votes: source.votes || 0,
+      stale: !!source.stale
+    });
+  });
+  const community = communitySourceForRoom(room);
+  if (community) sources.push(community);
+  return sources;
+}
+
+function globalRatingForRoom(room) {
+  const sources = globalSourcesForRoom(room);
+  if (!sources.length) return { score: 0, sourceCount: 0, sources: [] };
+  const totalWeight = sources.reduce((sum, source) => sum + source.weight, 0);
+  const score = sources.reduce((sum, source) => sum + source.score * source.weight, 0) / totalWeight;
+  return { score: Math.round(score * 10) / 10, sourceCount: sources.length, sources };
+}
+
+function rankingScore(room) {
+  return globalRatingForRoom(room).score || 0;
+}
+
+function rankingSourcePills(room) {
+  const { sources } = globalRatingForRoom(room);
+  return sources.slice(0, 5).map(source => {
+    const votes = source.votes ? ` ${source.votes}` : '';
+    const title = `${source.label}: ${source.score.toFixed(1)}/10${source.votes ? ` (${source.votes} votos)` : ''}`;
+    return `<span class="rank-source-pill ${source.stale ? 'stale' : ''}" title="${escapeHtml(title)}">${escapeHtml(source.label)} ${source.score.toFixed(1)}${votes}</span>`;
+  }).join('');
+}
+
+function rankingRooms() {
+  return uniqueRooms([...CATALOGO, ...PENDIENTES, ...HECHOS])
+    .filter(room => globalRatingForRoom(room).score > 0);
+}
+
+function renderRanking() {
+  const rows = rankingRooms().sort((a, b) => {
+    const scoreDiff = rankingScore(b) - rankingScore(a);
+    if (scoreDiff) return scoreDiff;
+    const sourceDiff = globalRatingForRoom(b).sourceCount - globalRatingForRoom(a).sourceCount;
+    if (sourceDiff) return sourceDiff;
+    return (a.nombre || '').localeCompare(b.nombre || '');
+  });
+  const medals = ['gold','silver','bronze'], emoji = ['🥇','🥈','🥉'];
+  const votedCount = rows.filter(room => voteStatsForRoom(room).count > 0).length;
+  const multiSourceCount = rows.filter(room => globalRatingForRoom(room).sourceCount > 1).length;
+  const info = document.getElementById('result-info-rank');
+  if (info) info.textContent = `${rows.length} salas con nota global · ${multiSourceCount} con varias fuentes · ${votedCount} con votos de comunidad`;
+
+  document.getElementById('ranking-table').innerHTML = `
+    <thead><tr>
+      <th>#</th><th>Escape Room</th><th>Empresa</th><th>Nota global</th>
+      <th>Fuentes</th><th>Ciudad</th><th>Temática</th>
+    </tr></thead>
+    <tbody>${rows.map((room, i) => {
+      const global = globalRatingForRoom(room);
+      const hasGroupReview = HECHOS.some(item => userRoomKey(item) === userRoomKey(room));
+      const detailRef = detailRefForRoom(room, hasGroupReview ? ['hechos','catalogo','pendientes'] : ['catalogo','hechos','pendientes']);
+      const detailKind = detailRef.kind;
+      const detailKey = jsString(detailRef.key);
+      const location = [cleanValue(room.ciudad), cleanValue(room.provincia)].filter(Boolean).join(' · ') || '—';
+      return `<tr class="rank-clickable" tabindex="0" role="button" onclick="openDetailFromCard(event,'${detailKind}','${detailKey}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetail('${detailKind}','${detailKey}')}">
+        <td data-label="#"><span class="rank-pos ${medals[i]||''}">${emoji[i]||'#'+(i+1)}</span></td>
+        <td data-label="Escape Room"><span class="rank-room-name">${escapeHtml(room.nombre || '—')}</span></td>
+        <td data-label="Empresa">${escapeHtml(room.empresa || '—')}</td>
+        <td data-label="Nota global"><span class="rank-global-score">★ ${global.score.toFixed(1)}</span></td>
+        <td data-label="Fuentes"><div class="rank-source-list">${rankingSourcePills(room)}</div></td>
+        <td data-label="Ciudad">${escapeHtml(location)}</td>
+        <td data-label="Temática"><span class="tag tag-tema" style="font-size:.7rem">${escapeHtml(rankingTheme(room))}</span></td>
       </tr>`;
     }).join('')}</tbody>`;
 }
