@@ -761,7 +761,7 @@
       "jugabilidad": 9,
       "gamemaster": 7,
       "terpeca": "",
-      "ranking": 5
+      "ranking": 7
     },
     {
       "nombre": "K.O.N.G. Protocol",
@@ -795,7 +795,7 @@
       "jugabilidad": 8,
       "gamemaster": 8,
       "terpeca": "",
-      "ranking": 7
+      "ranking": 9
     },
     {
       "nombre": "Jurásico",
@@ -863,7 +863,7 @@
       "jugabilidad": 9,
       "gamemaster": 9,
       "terpeca": "",
-      "ranking": 4
+      "ranking": 5
     },
     {
       "nombre": "Catacumbas",
@@ -897,7 +897,7 @@
       "jugabilidad": 8,
       "gamemaster": 8,
       "terpeca": "",
-      "ranking": 8
+      "ranking": 10
     },
     {
       "nombre": "Exorcista",
@@ -931,7 +931,7 @@
       "jugabilidad": 7,
       "gamemaster": 9,
       "terpeca": "",
-      "ranking": 10
+      "ranking": 12
     },
     {
       "nombre": "Jaipur",
@@ -965,7 +965,7 @@
       "jugabilidad": 9,
       "gamemaster": 8,
       "terpeca": "",
-      "ranking": 6
+      "ranking": 8
     },
     {
       "nombre": "encryptroom",
@@ -999,7 +999,7 @@
       "jugabilidad": 7,
       "gamemaster": 8,
       "terpeca": "",
-      "ranking": 11
+      "ranking": 13
     },
     {
       "nombre": "Bank of Thaqar",
@@ -1033,7 +1033,7 @@
       "jugabilidad": 7,
       "gamemaster": 6,
       "terpeca": "",
-      "ranking": 13
+      "ranking": 15
     },
     {
       "nombre": "Roomions",
@@ -1067,7 +1067,7 @@
       "jugabilidad": 8,
       "gamemaster": 8.5,
       "terpeca": "",
-      "ranking": 9
+      "ranking": 11
     },
     {
       "nombre": "Tao Room Escape",
@@ -1101,7 +1101,7 @@
       "jugabilidad": 7.5,
       "gamemaster": 7.5,
       "terpeca": "",
-      "ranking": 12
+      "ranking": 14
     },
     {
       "nombre": "El secreto de los Krugger",
@@ -1155,7 +1155,7 @@
       "votos": "",
       "web": "https://willyeltuertoescaperoom.com/",
       "imagen": "images/willy-el-tuerto.webp",
-      "valoracion": 6,
+      "valoracion": 8.75,
       "descripcion": "Este fin de semana visitamos **Willy el Tuerto** en familia (2 adultos y dos peques de 10 y 6 años) y lo pasamos en grande.\n\nUn consejo: si podéis, ved **Los Goonies** unos días antes. Nosotros lo hicimos y ayuda muchísimo a entrar en el ambiente y disfrutar de todos los guiños que esconde el juego.\n\nLa ambientación está muy conseguida, especialmente teniendo en cuenta que es una sala con unos años a sus espaldas. Está llena de referencias a la película y transmite perfectamente ese espíritu de aventura y búsqueda del tesoro.\n\nEn cuanto a jugadores, para nosotros 4 personas fue el número ideal. Todos participamos activamente en las pruebas y nadie se quedó mirando. Con grupos más grandes quizá podría quedarse algo corto.\n\nEntre la introducción, la partida y la charla final con el GM estuvimos cerca de una hora y media disfrutando de la experiencia.\n\nUn escape room muy recomendable para familias y para cualquier fan de **Los Goonies**. ¡Los Goonies nunca dicen muerto!",
       "min_personas": "",
       "max_personas": "",
@@ -1169,12 +1169,46 @@
       "jugabilidad": 8,
       "gamemaster": 8,
       "terpeca": "",
-      "ranking": 14
+      "ranking": 6
+    },
+    {
+      "nombre": "Nightshift",
+      "empresa": "Crupont Legacy",
+      "ciudad": "Sabadell",
+      "provincia": "",
+      "comunidad": "",
+      "tematica": "Terror",
+      "generos": "",
+      "tipo": "Terror",
+      "publico": "",
+      "caracteristicas": "",
+      "duracion": 120,
+      "dificultad": "Media",
+      "rating": 8.62,
+      "rating_collector": "",
+      "votos": "",
+      "web": "https://www.crupontlegacy.com/",
+      "imagen": "",
+      "valoracion": 9.25,
+      "descripcion": "Visitamos Nightshift en Sabadell y salimos encantados. Fuimos 4 adultos, dos de ellos con más de 50 escapes a sus espaldas, y aun así ha conseguido entrar directamente en nuestro TOP de salas.\n\nUna experiencia muy inmersiva, con momentos de tensión, situaciones de soledad, pruebas de valentía y alguna sorpresa que no habíamos visto en ningún otro escape room. Los juegos de luces, la música, los efectos y la ambientación están perfectamente medidos para mantener la tensión durante toda la partida. Esos pasillos largos y oscuros, las puertas cerradas... o quizá no tanto... hacen que nunca te relajes del todo.\n\nLas 2 horas de juego se nos pasaron volando.\n\nMención especial para nuestra GM, Laura, que estuvo fantástica de principio a fin. Muy amable, totalmente implicada en la experiencia y con una charla final genial. Toda una artista.\n\nAdemás, al estar ubicado en un polígono industrial, aparcar es muy fácil.\n\nSi os gustan las experiencias inmersivas y las emociones fuertes, Nightshift es una apuesta segura.",
+      "min_personas": "",
+      "max_personas": "",
+      "precio_min": "",
+      "precio_max": "",
+      "precio": "",
+      "abierto": "",
+      "verificado": "",
+      "historia": 9,
+      "ambientacion": 9,
+      "jugabilidad": 9,
+      "gamemaster": 10,
+      "terpeca": "",
+      "ranking": 4
     }
   ],
   "meta": {
     "source": "escape_rooms_tracker_mejorado.xlsx",
     "pendientes_count": 21,
-    "hechos_count": 14
+    "hechos_count": 15
   }
 }
