@@ -938,6 +938,12 @@
         <span class="filter-label">Ranking global:</span>
         <span class="tag tag-feature">Media de fuentes externas y comunidad</span>
       </div>
+      <div class="sort-row">
+        <span class="filter-label">Tipo:</span>
+        <button class="sort-btn active" id="rank-terror-all" onclick="setRankTerrorFilter('all')">Todos</button>
+        <button class="sort-btn" id="rank-terror-no" onclick="setRankTerrorFilter('no')">Sin terror</button>
+        <button class="sort-btn" id="rank-terror-only" onclick="setRankTerrorFilter('only')">Solo terror</button>
+      </div>
       <div class="divider-line" style="margin-top:18px"></div>
       <div class="result-info" id="result-info-rank"></div>
       <table class="ranking-table" id="ranking-table"></table>
@@ -1142,7 +1148,7 @@ const REVIEW_CATEGORIES = [
   ['gamemaster', 'Game Master']
 ];
 
-let PENDIENTES = [], HECHOS = [], CATALOGO = [], TERPECA_AWARDS = [], EXTRA_AWARDS = [], EXTERNAL_RATINGS = {}, EXTERNAL_RATINGS_META = {}, REVIEW_PHOTOS = {}, sortPend = 'rating', sortMine = 'rating', sortCatalogo = 'rating', sortRank = 'global';
+let PENDIENTES = [], HECHOS = [], CATALOGO = [], TERPECA_AWARDS = [], EXTRA_AWARDS = [], EXTERNAL_RATINGS = {}, EXTERNAL_RATINGS_META = {}, REVIEW_PHOTOS = {}, sortPend = 'rating', sortMine = 'rating', sortCatalogo = 'rating', sortRank = 'global', rankTerrorFilter = 'all';
 const CATALOG_PAGE_SIZE = 120;
 let catalogVisibleCount = CATALOG_PAGE_SIZE;
 let GROUP_ROOM_INDEX = { pendientes: new Set(), hechos: new Set() };
@@ -3414,6 +3420,13 @@ function setSortRank(s) {
   renderRanking();
 }
 
+function setRankTerrorFilter(filter) {
+  rankTerrorFilter = filter;
+  document.querySelectorAll('[id^="rank-terror-"]').forEach(b => b.classList.remove('active'));
+  document.getElementById('rank-terror-' + filter)?.classList.add('active');
+  renderRanking();
+}
+
 function resetCatalogoLimit() {
   catalogVisibleCount = CATALOG_PAGE_SIZE;
 }
@@ -4657,7 +4670,7 @@ function renderRanking() {
 
   document.getElementById('ranking-table').innerHTML = `
     <thead><tr>
-      <th>#</th><th>Escape Room</th><th>Empresa</th><th>Temática</th>
+      <th>#</th><th>Escape Room</th><th>Empresa</th>
       <th>Dificultad</th><th>⏱ Min</th><th>★ Escapistas</th><th>★ The Vault</th><th>★ Comunidad</th>
     </tr></thead>
     <tbody>${rows.map((room, i) => {
@@ -4674,7 +4687,6 @@ function renderRanking() {
         <td data-label="#"><span class="rank-pos ${medals[i]||''}">${emoji[i]||'#'+(i+1)}</span></td>
         <td data-label="Escape Room"><span class="rank-room-name">${escapeHtml(room.nombre || '—')}</span></td>
         <td data-label="Empresa">${escapeHtml(room.empresa || '—')}</td>
-        <td data-label="Temática"><span class="tag tag-tema" style="font-size:.7rem">${escapeHtml(rankingTheme(room))}</span></td>
         <td data-label="Dificultad"><span class="meta-val ${dc(room.dificultad)}" style="font-size:.82rem">⚠ ${escapeHtml(room.dificultad || '—')}</span></td>
         <td data-label="Duración">${room.duracion ? `${escapeHtml(room.duracion)} min` : '—'}</td>
         <td data-label="Escapistas">${displayRating(room) ? `★ ${escapeHtml(displayRating(room))}` : '—'}</td>
@@ -4874,6 +4886,11 @@ function rankingSourcePills(room) {
 
 function rankingRooms() {
   return uniqueRooms([...CATALOGO, ...PENDIENTES, ...HECHOS])
+    .filter(room => {
+      if (rankTerrorFilter === 'only') return !!room.terror;
+      if (rankTerrorFilter === 'no') return !room.terror;
+      return true;
+    })
     .filter(room => globalRatingForRoom(room).score > 0);
 }
 
@@ -4893,12 +4910,13 @@ function renderRanking() {
   const votedCount = rows.filter(({ room }) => voteStatsForRoom(room).count > 0).length;
   const multiSourceCount = rows.filter(({ global }) => global.sourceCount > 1).length;
   const info = document.getElementById('result-info-rank');
-  if (info) info.textContent = `${rows.length} salas con nota global · ${multiSourceCount} con varias fuentes · ${votedCount} con votos de comunidad`;
+  const terrorLabel = rankTerrorFilter === 'only' ? 'solo terror' : rankTerrorFilter === 'no' ? 'sin terror' : 'todos';
+  if (info) info.textContent = `${rows.length} salas con nota global · ${terrorLabel} · ${multiSourceCount} con varias fuentes · ${votedCount} con votos de comunidad`;
 
   document.getElementById('ranking-table').innerHTML = `
     <thead><tr>
       <th>#</th><th>Escape Room</th><th>Empresa</th><th>Nota global</th>
-      <th>Fuentes</th><th>Ciudad</th><th>Temática</th>
+      <th>Fuentes</th><th>Ciudad</th>
     </tr></thead>
     <tbody>${rows.map(({ room, global }, i) => {
       const hasGroupReview = HECHOS.some(item => userRoomKey(item) === userRoomKey(room));
@@ -4913,7 +4931,6 @@ function renderRanking() {
         <td data-label="Nota global"><span class="rank-global-score">★ ${global.score.toFixed(1)}</span></td>
         <td data-label="Fuentes"><div class="rank-source-list">${rankingSourcePills(room)}</div></td>
         <td data-label="Ciudad">${escapeHtml(location)}</td>
-        <td data-label="Temática"><span class="tag tag-tema" style="font-size:.7rem">${escapeHtml(rankingTheme(room))}</span></td>
       </tr>`;
     }).join('')}</tbody>`;
 }
