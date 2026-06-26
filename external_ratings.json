@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-06-26T11:24:09",
+    "generated_at": "2026-06-26T14:00:49",
     "sources": {
       "escape_collector": {
         "label": "Escape Collector",
@@ -1486,10 +1486,10 @@
       "sources": {
         "escape_collector": {
           "score": 9.31,
-          "weight": 1.32,
+          "weight": 1.33,
           "url": "https://escapecollector.com/escape-rooms",
           "updated_at": "2026-06-26",
-          "votes": 24
+          "votes": 26
         },
         "giba": {
           "score": 10.0,
@@ -1507,7 +1507,7 @@
           "source_title": "HORROR ASYLUM - Arenaxcape"
         }
       },
-      "global_score": 9.7,
+      "global_score": 9.69,
       "source_count": 3
     },
     "una_aventura_de_leyenda": {
@@ -1546,10 +1546,10 @@
       "sources": {
         "escape_collector": {
           "score": 9.36,
-          "weight": 1.27,
+          "weight": 1.29,
           "url": "https://escapecollector.com/escape-rooms",
           "updated_at": "2026-06-26",
-          "votes": 16
+          "votes": 19
         },
         "giba": {
           "score": 10.0,
@@ -1575,7 +1575,7 @@
           "weight": 1.5,
           "url": "https://escapecollector.com/escape-rooms",
           "updated_at": "2026-06-26",
-          "votes": 223
+          "votes": 225
         },
         "giba": {
           "score": 10.0,
@@ -1799,7 +1799,7 @@
           "weight": 1.5,
           "url": "https://escapecollector.com/escape-rooms",
           "updated_at": "2026-06-26",
-          "votes": 282
+          "votes": 278
         },
         "giba": {
           "score": 10.0,
@@ -1922,7 +1922,7 @@
           "weight": 1.5,
           "url": "https://escapecollector.com/escape-rooms",
           "updated_at": "2026-06-26",
-          "votes": 203
+          "votes": 204
         },
         "giba": {
           "score": 10.0,
@@ -2043,7 +2043,7 @@
           "weight": 1.42,
           "url": "https://escapecollector.com/escape-rooms",
           "updated_at": "2026-06-26",
-          "votes": 53
+          "votes": 55
         },
         "giba": {
           "score": 10.0,
@@ -2401,7 +2401,7 @@
           "weight": 1.5,
           "url": "https://escapecollector.com/escape-rooms",
           "updated_at": "2026-06-26",
-          "votes": 161
+          "votes": 163
         },
         "giba": {
           "score": 10.0,
@@ -2542,7 +2542,7 @@
           "weight": 1.5,
           "url": "https://escapecollector.com/escape-rooms",
           "updated_at": "2026-06-26",
-          "votes": 206
+          "votes": 207
         },
         "giba": {
           "score": 10.0,
@@ -2714,7 +2714,7 @@
           "weight": 1.5,
           "url": "https://escapecollector.com/escape-rooms",
           "updated_at": "2026-06-26",
-          "votes": 206
+          "votes": 207
         },
         "giba": {
           "score": 10.0,
@@ -2956,7 +2956,7 @@
           "weight": 1.5,
           "url": "https://escapecollector.com/escape-rooms",
           "updated_at": "2026-06-26",
-          "votes": 113
+          "votes": 115
         },
         "giba": {
           "score": 9.4,
@@ -3001,7 +3001,7 @@
           "weight": 1.47,
           "url": "https://escapecollector.com/escape-rooms",
           "updated_at": "2026-06-26",
-          "votes": 78
+          "votes": 79
         },
         "giba": {
           "score": 10.0,
@@ -3765,32 +3765,6 @@
       "global_score": 9.13,
       "source_count": 3
     },
-    "sanatorium_2": {
-      "room": {
-        "nombre": "Sanatorium 2",
-        "empresa": "Sanatorium",
-        "ciudad": "Alicante",
-        "provincia": "Alicante/Alacant"
-      },
-      "sources": {
-        "escape_collector": {
-          "score": 8.61,
-          "weight": 1.35,
-          "url": "https://escapecollector.com/escape-rooms",
-          "updated_at": "2026-06-26",
-          "votes": 31
-        },
-        "giba": {
-          "score": 9.8,
-          "weight": 1.0,
-          "url": "https://www.gibaescape.com/ranking/ranking-salas-de-escape",
-          "updated_at": "2026-06-26",
-          "source_title": "SANATORIUM 2"
-        }
-      },
-      "global_score": 9.12,
-      "source_count": 2
-    },
     "achijira": {
       "room": {
         "nombre": "Achijira",
@@ -3824,6 +3798,32 @@
       },
       "global_score": 9.12,
       "source_count": 3
+    },
+    "sanatorium_2": {
+      "room": {
+        "nombre": "Sanatorium 2",
+        "empresa": "Sanatorium",
+        "ciudad": "Alicante",
+        "provincia": "Alicante/Alacant"
+      },
+      "sources": {
+        "escape_collector": {
+          "score": 8.61,
+          "weight": 1.36,
+          "url": "https://escapecollector.com/escape-rooms",
+          "updated_at": "2026-06-26",
+          "votes": 32
+        },
+        "giba": {
+          "score": 9.8,
+          "weight": 1.0,
+          "url": "https://www.gibaescape.com/ranking/ranking-salas-de-escape",
+          "updated_at": "2026-06-26",
+          "source_title": "SANATORIUM 2"
+        }
+      },
+      "global_score": 9.11,
+      "source_count": 2
     },
     "arcanum": {
       "room": {
@@ -4304,7 +4304,7 @@
           "weight": 1.43,
           "url": "https://escapecollector.com/escape-rooms",
           "updated_at": "2026-06-26",
-          "votes": 57
+          "votes": 58
         },
         "giba": {
           "score": 9.8,
@@ -4515,10 +4515,10 @@
       "sources": {
         "escape_collector": {
           "score": 9.04,
-          "weight": 1.31,
+          "weight": 1.32,
           "url": "https://escapecollector.com/escape-rooms",
           "updated_at": "2026-06-26",
-          "votes": 23
+          "votes": 24
         }
       },
       "global_score": 9.04,
@@ -4706,7 +4706,7 @@
           "weight": 1.41,
           "url": "https://escapecollector.com/escape-rooms",
           "updated_at": "2026-06-26",
-          "votes": 50
+          "votes": 51
         },
         "giba": {
           "score": 8.8,
@@ -7519,7 +7519,7 @@
           "weight": 1.48,
           "url": "https://escapecollector.com/escape-rooms",
           "updated_at": "2026-06-26",
-          "votes": 87
+          "votes": 88
         }
       },
       "global_score": 8.78,
@@ -10018,7 +10018,7 @@
           "weight": 1.38,
           "url": "https://escapecollector.com/escape-rooms",
           "updated_at": "2026-06-26",
-          "votes": 40
+          "votes": 39
         },
         "giba": {
           "score": 9.8,
