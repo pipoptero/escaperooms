@@ -24,6 +24,8 @@ ROOT = Path(__file__).resolve().parents[1]
 CATALOG_FILE = ROOT / "catalog.json"
 DATA_FILE = ROOT / "data.json"
 RATINGS_FILE = ROOT / "external_ratings.json"
+TERPECA_FILE = ROOT / "terpeca_awards.json"
+EXTRA_AWARDS_FILE = ROOT / "extra_awards.json"
 
 USER_AGENT = "the-vault-ratings-builder/1.0 (+local personal maintenance)"
 GIBA_URL = "https://www.gibaescape.com/ranking/ranking-salas-de-escape"
@@ -57,6 +59,9 @@ SOURCE_META = {
         "url": TODOESCAPEROOMS_INDEX_URL,
     },
 }
+
+RATING_BASELINE = 8.0
+STRONG_RATING_SOURCES = {"escape_collector", "giba", "ocioterror"}
 
 
 class TextParser(HTMLParser):
@@ -95,6 +100,10 @@ def normalized(text: str) -> str:
 
 def compact(text: str) -> str:
     return normalized(text).replace(" ", "")
+
+
+def clamp(value: float, minimum: float, maximum: float) -> float:
+    return max(minimum, min(maximum, value))
 
 
 def parse_score(value) -> float | None:
@@ -188,6 +197,124 @@ def build_room_index(rooms: list[dict]) -> tuple[dict[str, dict], dict[str, set[
         for token in room_tokens(room):
             token_to_keys.setdefault(token, set()).add(key)
     return by_key, token_to_keys
+
+
+def company_matches(room_company: str, award_company: str) -> bool:
+    room_key = compact(room_company)
+    award_key = compact(award_company)
+    if not room_key or not award_key:
+        return True
+    if award_key in room_key or room_key in award_key:
+        return True
+    room_tokens = set(normalized(room_company).split())
+    award_tokens = {token for token in normalized(award_company).split() if len(token) > 3}
+    return bool(room_tokens & award_tokens)
+
+
+def award_matches_room(award: dict, room: dict) -> bool:
+    room_name = normalized(room.get("nombre", ""))
+    award_name = normalized(award.get("room") or award.get("room_key") or "")
+    if not room_name or not award_name:
+        return False
+    room_compact = compact(room_name)
+    award_compact = compact(award_name)
+    name_matches = (
+        room_compact == award_compact
+        or room_compact in award_compact
+        or award_compact in room_compact
+    )
+    if not name_matches:
+        return False
+    return company_matches(room.get("empresa", ""), award.get("company") or award.get("company_key") or "")
+
+
+def load_awards() -> list[dict]:
+    awards: list[dict] = []
+    for award in load_json(TERPECA_FILE, {"awards": []}).get("awards", []) or []:
+        awards.append({"source_id": "terpeca", **award})
+    awards.extend(load_json(EXTRA_AWARDS_FILE, {"awards": []}).get("awards", []) or [])
+    return awards
+
+
+def awards_by_room(by_key: dict[str, dict]) -> dict[str, list[dict]]:
+    result = {key: [] for key in by_key}
+    awards = load_awards()
+    exact_index: dict[str, list[dict]] = {}
+    token_index: dict[str, list[dict]] = {}
+    for award in awards:
+        award_name = award.get("room") or award.get("room_key") or ""
+        award_compact = compact(award_name)
+        if not award_compact:
+            continue
+        exact_index.setdefault(award_compact, []).append(award)
+        for token in normalized(award_name).split():
+            if len(token) > 3:
+                token_index.setdefault(token, []).append(award)
+
+    for key, room in by_key.items():
+        room_name = room.get("nombre", "")
+        room_compact = compact(room_name)
+        candidates: list[dict] = []
+        seen = set()
+        for award in exact_index.get(room_compact, []):
+            marker = id(award)
+            if marker not in seen:
+                candidates.append(award)
+                seen.add(marker)
+        for token in normalized(room_name).split():
+            if len(token) <= 3:
+                continue
+            for award in token_index.get(token, []):
+                marker = id(award)
+                if marker not in seen:
+                    candidates.append(award)
+                    seen.add(marker)
+        result[key] = [award for award in candidates if award_matches_room(award, room)]
+    return result
+
+
+def award_bonus(awards: list[dict]) -> float:
+    if not awards:
+        return 0.0
+    status_bonus = {
+        "best_of_best": 0.22,
+        "winner": 0.20,
+        "runner_up": 0.14,
+        "finalist": 0.10,
+        "nominee": 0.06,
+    }
+    total = 0.0
+    seen_sources = set()
+    for award in awards:
+        status = award.get("status")
+        if status == "ranked":
+            continue
+        bonus = status_bonus.get(status, 0.08)
+        rank = parse_int(award.get("rank"))
+        if rank:
+            bonus += clamp((12 - min(rank, 12)) * 0.007, 0, 0.07)
+        source_id = award.get("source_id") or "award"
+        if source_id in seen_sources:
+            bonus *= 0.35
+        seen_sources.add(source_id)
+        total += bonus
+    return round(clamp(total, 0, 0.35), 2)
+
+
+def rating_confidence(sources: dict[str, dict]) -> float:
+    source_ids = [source_id for source_id, source in sources.items() if parse_score(source.get("score"))]
+    count = len(source_ids)
+    if not count:
+        return 0.0
+    confidence = {1: 0.72, 2: 0.88, 3: 0.96}.get(count, 1.0)
+    if count == 1 and source_ids[0] == "todoescaperooms":
+        confidence = 0.62
+    if any(source_id in STRONG_RATING_SOURCES for source_id in source_ids):
+        confidence += 0.03
+    votes = [parse_int(sources[source_id].get("votes")) or 0 for source_id in source_ids]
+    if count == 1 and votes and max(votes) < 10:
+        confidence -= 0.08
+    return round(clamp(confidence, 0.55, 1.0), 2)
 
 
 def split_external_title(title: str) -> tuple[str, str]:
@@ -431,8 +558,8 @@ def merge_previous(payload: dict, generated: dict, statuses: dict) -> dict:
     return generated
 
 
-def compute_global_scores(ratings: dict[str, dict]) -> None:
-    for item in ratings.values():
+def compute_global_scores(ratings: dict[str, dict], awards_index: dict[str, list[dict]]) -> None:
+    for key, item in ratings.items():
         sources = item.get("sources", {})
         weighted = []
         for source in sources.values():
@@ -445,7 +572,15 @@ def compute_global_scores(ratings: dict[str, dict]) -> None:
             item["source_count"] = 0
             continue
         total_weight = sum(weight for _, weight in weighted)
-        item["global_score"] = round(sum(score * weight for score, weight in weighted) / total_weight, 2)
+        raw_score = sum(score * weight for score, weight in weighted) / total_weight
+        confidence = rating_confidence(sources)
+        bonus = award_bonus(awards_index.get(key, []))
+        adjusted_score = RATING_BASELINE + (raw_score - RATING_BASELINE) * confidence
+        item["raw_score"] = round(raw_score, 2)
+        item["confidence"] = confidence
+        item["award_bonus"] = bonus
+        item["award_count"] = len([award for award in awards_index.get(key, []) if award.get("status") != "ranked"])
+        item["global_score"] = round(clamp(adjusted_score + bonus, 0, 10), 2)
         item["source_count"] = len(weighted)
 
 
@@ -495,7 +630,8 @@ def build():
 
     ratings = merge_previous(previous_payload, ratings, statuses)
     ratings = {key: value for key, value in ratings.items() if value.get("sources")}
-    compute_global_scores(ratings)
+    awards_index = awards_by_room(by_key)
+    compute_global_scores(ratings, awards_index)
 
     payload = {
         "meta": {
@@ -504,6 +640,12 @@ def build():
             "statuses": statuses,
             "count": len(ratings),
             "with_multiple_sources": sum(1 for item in ratings.values() if item.get("source_count", 0) > 1),
+            "with_award_bonus": sum(1 for item in ratings.values() if item.get("award_bonus", 0) > 0),
+            "scoring": {
+                "baseline": RATING_BASELINE,
+                "method": "weighted_average_with_confidence_and_award_bonus",
+                "award_bonus_cap": 0.35,
+            },
         },
         "ratings": dict(sorted(ratings.items(), key=lambda item: (item[1].get("global_score") or 0), reverse=True)),
     }

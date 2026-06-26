@@ -1,0 +1,147 @@
+{
+  "meta": {
+    "generated_at": "2026-06-26T14:13:54",
+    "source": "images/Hechos",
+    "groups": 10,
+    "photos": 21,
+    "unmatched": [
+      "Experiment.jpeg"
+    ]
+  },
+  "photos": {
+    "catacumbas": {
+      "room": "Catacumbas",
+      "photos": [
+        {
+          "src": "images/Hechos/Catacumbas.jpeg",
+          "alt": "Catacumbas - foto del grupo"
+        }
+      ]
+    },
+    "el_secreto_de_los_krugger": {
+      "room": "El secreto de los Krugger",
+      "photos": [
+        {
+          "src": "images/Hechos/El Secreto de los Krugger 1.jpeg",
+          "alt": "El secreto de los Krugger - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/El Secreto de los Krugger 2.jpeg",
+          "alt": "El secreto de los Krugger - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/El Secreto de los Krugger 3.jpeg",
+          "alt": "El secreto de los Krugger - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/El Secreto de los Krugger 4.jpeg",
+          "alt": "El secreto de los Krugger - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/El Secreto de los Krugger 5.jpeg",
+          "alt": "El secreto de los Krugger - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/El Secreto de los Krugger 6.jpeg",
+          "alt": "El secreto de los Krugger - foto del grupo"
+        }
+      ]
+    },
+    "exorcista": {
+      "room": "Exorcista",
+      "photos": [
+        {
+          "src": "images/Hechos/Sección Esoterismo Exorcista.jpeg",
+          "alt": "Exorcista - foto del grupo"
+        }
+      ]
+    },
+    "experiment": {
+      "room": "Experiment",
+      "photos": [
+        {
+          "src": "images/Hechos/Experiment.jpeg",
+          "alt": "Experiment - foto del grupo"
+        }
+      ]
+    },
+    "jurasico": {
+      "room": "Jurásico",
+      "photos": [
+        {
+          "src": "images/Hechos/Jurasico.jpeg",
+          "alt": "Jurásico - foto del grupo"
+        }
+      ]
+    },
+    "k_o_n_g_protocol": {
+      "room": "K.O.N.G. Protocol",
+      "photos": [
+        {
+          "src": "images/Hechos/K.O.N.G Protocol 1.jpeg",
+          "alt": "K.O.N.G. Protocol - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/K.O.N.G Protocol 2.jpeg",
+          "alt": "K.O.N.G. Protocol - foto del grupo"
+        }
+      ]
+    },
+    "nightshift": {
+      "room": "Nightshift",
+      "photos": [
+        {
+          "src": "images/Hechos/Nightshift 1.jpeg",
+          "alt": "Nightshift - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/Nightshift 2.jpeg",
+          "alt": "Nightshift - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/Nightshift 3.jpeg",
+          "alt": "Nightshift - foto del grupo"
+        }
+      ]
+    },
+    "roomions": {
+      "room": "Roomions",
+      "photos": [
+        {
+          "src": "images/Hechos/Roomions 1.jpeg",
+          "alt": "Roomions - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/Roomions 2.jpeg",
+          "alt": "Roomions - foto del grupo"
+        }
+      ]
+    },
+    "tao_room_escape": {
+      "room": "Tao Room Escape",
+      "photos": [
+        {
+          "src": "images/Hechos/Tao.jpeg",
+          "alt": "Tao Room Escape - foto del grupo"
+        }
+      ]
+    },
+    "willy_el_tuerto": {
+      "room": "Willy el Tuerto",
+      "photos": [
+        {
+          "src": "images/Hechos/Willy el Tuerto 1.jpeg",
+          "alt": "Willy el Tuerto - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/Willy el Tuerto 2.jpeg",
+          "alt": "Willy el Tuerto - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/Willy el tuerto 3.jpeg",
+          "alt": "Willy el Tuerto - foto del grupo"
+        }
+      ]
+    }
+  }
+}

@@ -514,6 +514,11 @@
   .rv-opinion-label::after{content:'';flex:1;height:1px;background:var(--border);}
   .rv-opinion-text{font-family:'Rajdhani',sans-serif;font-size:.95rem;font-weight:400;color:var(--text2);line-height:1.7;flex:1;}
   .rv-opinion-text.empty{color:var(--text3);font-style:italic;font-size:.85rem;}
+  .review-photo-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:8px;margin-top:2px;}
+  .review-photo{position:relative;display:block;overflow:hidden;border:1px solid rgba(245,166,35,.18);background:rgba(0,0,0,.18);aspect-ratio:4/3;}
+  .review-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .22s ease,filter .22s ease;}
+  .review-photo:hover img{transform:scale(1.035);filter:brightness(1.08);}
+  .detail-review .review-photo-gallery{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));margin-top:12px;}
   .rv-web{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--text3);text-decoration:none;letter-spacing:.07em;text-transform:uppercase;transition:color .2s;margin-top:auto;align-self:flex-start;}
   .rv-web:hover{color:var(--amber);} .rv-web::before{content:'→ ';}
 
@@ -763,9 +768,10 @@
     .detail-award-logo{width:38px;height:38px;}
     .detail-award-logo img{max-width:32px;max-height:32px;}
     .detail-award-name{font-size:.78rem;white-space:normal;}
-    .detail-review{padding:10px 11px;}
-    .detail-review-text{font-size:.9rem;line-height:1.48;}
-    .detail-cats{grid-template-columns:1fr;}
+  .detail-review{padding:10px 11px;}
+  .detail-review-text{font-size:.9rem;line-height:1.48;}
+  .review-photo-gallery{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .detail-cats{grid-template-columns:1fr;}
     .detail-personal-grid{grid-template-columns:1fr;}
     .detail-account-head{align-items:flex-start;flex-direction:column;}
     .review-summary-grid{grid-template-columns:1fr 1fr;}
@@ -1076,8 +1082,6 @@
     <div class="profile-body" id="profile-content"></div>
   </div>
 </div>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <script src="firebase-config.js"></script>
 <script>
 // ════════════════════════════════════════════════════════════
@@ -1087,6 +1091,9 @@
 // ════════════════════════════════════════════════════════════
 const FIREBASE_CONFIG = window.THE_VAULT_FIREBASE_CONFIG || {};
 const FIREBASE_URL = String(FIREBASE_CONFIG.databaseURL || '').trim();
+const FIREBASE_APP_SDK = 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js';
+const FIREBASE_AUTH_SDK = 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js';
+let FIREBASE_SDK_PROMISE = null;
 // ════════════════════════════════════════════════════════════
 
 const FIREBASE_ENABLED = FIREBASE_URL.trim() !== '';
@@ -1135,11 +1142,15 @@ const REVIEW_CATEGORIES = [
   ['gamemaster', 'Game Master']
 ];
 
-let PENDIENTES = [], HECHOS = [], CATALOGO = [], TERPECA_AWARDS = [], EXTRA_AWARDS = [], EXTERNAL_RATINGS = {}, EXTERNAL_RATINGS_META = {}, sortPend = 'rating', sortMine = 'rating', sortCatalogo = 'rating', sortRank = 'global';
+let PENDIENTES = [], HECHOS = [], CATALOGO = [], TERPECA_AWARDS = [], EXTRA_AWARDS = [], EXTERNAL_RATINGS = {}, EXTERNAL_RATINGS_META = {}, REVIEW_PHOTOS = {}, sortPend = 'rating', sortMine = 'rating', sortCatalogo = 'rating', sortRank = 'global';
 const CATALOG_PAGE_SIZE = 120;
 let catalogVisibleCount = CATALOG_PAGE_SIZE;
 let GROUP_ROOM_INDEX = { pendientes: new Set(), hechos: new Set() };
 let ACTIVE_TAB = 'catalogo';
+const AWARD_CACHE = new Map();
+const GLOBAL_RATING_CACHE = new Map();
+const TERPECA_AWARD_INDEX = new Map();
+const EXTRA_AWARD_INDEX = new Map();
 
 // Preparado para el siguiente paso con Google/Firebase Auth:
 // users/{uid}/roomStates/{roomKey} -> { pendiente, hecho, favorito, descartado, updatedAt }
@@ -1366,6 +1377,39 @@ function firebaseAuthConfigured() {
   return !!FIREBASE_AUTH_ENABLED;
 }
 
+function loadScriptOnce(src) {
+  const existing = document.querySelector(`script[src="${src}"]`);
+  if (existing?.dataset.loaded === 'true') return Promise.resolve();
+  if (existing?.dataset.loading === 'true') {
+    return new Promise((resolve, reject) => {
+      existing.addEventListener('load', resolve, { once: true });
+      existing.addEventListener('error', reject, { once: true });
+    });
+  }
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = src;
+    script.async = true;
+    script.dataset.loading = 'true';
+    script.onload = () => {
+      script.dataset.loaded = 'true';
+      resolve();
+    };
+    script.onerror = () => reject(new Error(`No se pudo cargar ${src}`));
+    document.head.appendChild(script);
+  });
+}
+
+async function ensureFirebaseSdk() {
+  if (!firebaseAuthConfigured()) return false;
+  if (window.firebase?.auth) return true;
+  if (!FIREBASE_SDK_PROMISE) {
+    FIREBASE_SDK_PROMISE = loadScriptOnce(FIREBASE_APP_SDK).then(() => loadScriptOnce(FIREBASE_AUTH_SDK));
+  }
+  await FIREBASE_SDK_PROMISE;
+  return !!window.firebase?.auth;
+}
+
 function renderAuthStatus() {
   const loginBtn = document.getElementById('auth-login');
   const logoutBtn = document.getElementById('auth-logout');
@@ -1419,7 +1463,9 @@ function renderAuthStatus() {
 
 async function initFirebaseAuth() {
   renderAuthStatus();
-  if (!firebaseAuthConfigured() || !window.firebase) return;
+  if (!firebaseAuthConfigured()) return;
+  const sdkReady = await ensureFirebaseSdk();
+  if (!sdkReady) return;
   if (!FIREBASE_APP) {
     FIREBASE_APP = firebase.apps.length ? firebase.app() : firebase.initializeApp(FIREBASE_CONFIG);
     FIREBASE_AUTH = firebase.auth();
@@ -2494,6 +2540,7 @@ async function migrateAnonymousDataToAccount() {
     if (!users || !users[LOCAL_USER_ID]) continue;
     votesCache[slug][USER_ID] = users[LOCAL_USER_ID];
     delete votesCache[slug][LOCAL_USER_ID];
+    GLOBAL_RATING_CACHE.clear();
     await fbPut(`votes/${slug}/${USER_ID}`, votesCache[slug][USER_ID]);
     try {
       await fbDelete(`votes/${slug}/${LOCAL_USER_ID}`);
@@ -2508,10 +2555,6 @@ async function migrateAnonymousDataToAccount() {
 async function signInGoogle() {
   if (!firebaseAuthConfigured()) {
     alert('Falta rellenar FIREBASE_CONFIG en index.html.');
-    return;
-  }
-  if (!window.firebase) {
-    alert('No se ha cargado el SDK de Firebase desde gstatic.com. Prueba con Ctrl+F5, revisa conexion/extensiones del navegador o abre la web en Chrome/Edge normal.');
     return;
   }
   if (!FIREBASE_AUTH || !GOOGLE_PROVIDER) {
@@ -2708,6 +2751,7 @@ async function castVote(slug, stars, widgetId = slug) {
   if (!FIREBASE_ENABLED) return;
   if (!votesCache[slug]) votesCache[slug] = {};
   votesCache[slug][USER_ID] = stars;
+  GLOBAL_RATING_CACHE.clear();
 
   for (let i = 1; i <= 5; i++) {
     const fg = document.getElementById(`sfg_${widgetId}_${i}`);
@@ -2760,6 +2804,7 @@ async function loadVotes() {
   try {
     const data = await fbGet('votes');
     votesCache = data || {};
+    GLOBAL_RATING_CACHE.clear();
   } catch(e) {
     console.warn('No se pudieron cargar los votos de Firebase:', e.message);
   }
@@ -2999,6 +3044,7 @@ async function loadTerpecaAwards() {
     if (!r.ok) return;
     const d = await r.json();
     TERPECA_AWARDS = d.awards || [];
+    rebuildAwardIndexes();
   } catch(e) {
     console.warn('No se pudo cargar terpeca_awards.json:', e.message);
   }
@@ -3010,6 +3056,7 @@ async function loadExtraAwards() {
     if (!r.ok) return;
     const d = await r.json();
     EXTRA_AWARDS = d.awards || [];
+    rebuildAwardIndexes();
   } catch(e) {
     console.warn('No se pudo cargar extra_awards.json:', e.message);
   }
@@ -3022,10 +3069,68 @@ async function loadExternalRatings() {
     const d = await r.json();
     EXTERNAL_RATINGS = d.ratings || {};
     EXTERNAL_RATINGS_META = d.meta || {};
+    GLOBAL_RATING_CACHE.clear();
   } catch(e) {
     console.warn('No se pudo cargar external_ratings.json:', e.message);
     EXTERNAL_RATINGS = {};
     EXTERNAL_RATINGS_META = {};
+  }
+}
+
+async function loadReviewPhotos() {
+  try {
+    const r = await fetch('review_photos.json?v=' + Date.now());
+    if (!r.ok) return;
+    const d = await r.json();
+    REVIEW_PHOTOS = d.photos || {};
+  } catch(e) {
+    console.warn('No se pudo cargar review_photos.json:', e.message);
+    REVIEW_PHOTOS = {};
+  }
+}
+
+async function loadLiveDataAfterInitialRender() {
+  try {
+    await initFirebaseAuth();
+    await loadUserRoomStates();
+    await loadUserProfile();
+    await saveUserProfile();
+    renderAuthStatus();
+    await loadVotes();
+    await loadRoomReviews();
+    await loadUserGroups();
+    populateFilters();
+    renderStats();
+    renderPendientes();
+    renderMisHechos();
+    renderHechos();
+    if (ACTIVE_TAB === 'ranking') renderRanking();
+    renderCatalogo();
+    updateFavCount();
+    await handlePendingInvite();
+    loadLikes().then(() => refreshAllLikeCounts());
+  } catch (e) {
+    console.warn('No se pudieron cargar los datos en vivo:', e.message);
+  }
+}
+
+function scheduleLiveDataAfterInitialRender() {
+  const start = () => setTimeout(() => loadLiveDataAfterInitialRender(), 250);
+  if (document.readyState === 'complete') start();
+  else window.addEventListener('load', start, { once: true });
+}
+
+async function loadStaticEnhancementsAfterInitialRender() {
+  try {
+    await loadTerpecaAwards();
+    await loadExtraAwards();
+    await loadExternalRatings();
+    await loadReviewPhotos();
+    renderCatalogo();
+    renderHechos();
+    if (ACTIVE_TAB === 'ranking') renderRanking();
+  } catch (e) {
+    console.warn('No se pudieron cargar los datos complementarios:', e.message);
   }
 }
 
@@ -3042,30 +3147,16 @@ async function loadData() {
       document.getElementById('update-date').textContent =
         new Date(lastMod).toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'numeric'});
     }
-    await initFirebaseAuth();
-    await loadUserRoomStates();
-    await loadUserProfile();
-    await saveUserProfile();
-    renderAuthStatus();
-    // Cargar votos primero (bloquea hasta tener datos para el ranking)
-    await loadVotes();
-    await loadRoomReviews();
     await loadCatalogo();
-    await loadTerpecaAwards();
-    await loadExtraAwards();
-    await loadExternalRatings();
-    await loadUserGroups();
 
     document.getElementById('loading').style.display = 'none';
     document.getElementById('app').style.display = 'block';
     if (!FIREBASE_ENABLED) document.getElementById('setup-banner').style.display = 'block';
 
-    populateFilters(); renderStats(); renderPendientes(); renderMisHechos(); renderHechos(); renderRanking(); renderCatalogo();
+    populateFilters(); renderStats(); renderPendientes(); renderMisHechos(); renderHechos(); renderCatalogo();
     updateFavCount();
-    await handlePendingInvite();
-
-    // Cargar likes DESPUÉS de pintar la UI y actualizar contadores
-    loadLikes().then(() => refreshAllLikeCounts());
+    loadStaticEnhancementsAfterInitialRender();
+    scheduleLiveDataAfterInitialRender();
   } catch(err) {
     document.getElementById('loading').style.display = 'none';
     const es = document.getElementById('error-screen');
@@ -3616,11 +3707,62 @@ function terpecaBadge(pos) {
   </div>`;
 }
 
+function pushAwardIndex(index, key, award) {
+  if (!key) return;
+  if (!index.has(key)) index.set(key, []);
+  index.get(key).push(award);
+}
+
+function indexAward(index, award) {
+  const name = award.room || award.room_key || '';
+  const normalized = normalizedKey(name);
+  const compact = compactKey(name);
+  pushAwardIndex(index, normalized, award);
+  pushAwardIndex(index, compact, award);
+  normalized.split(' ').filter(token => token.length > 3).forEach(token => pushAwardIndex(index, token, award));
+}
+
+function rebuildAwardIndexes() {
+  TERPECA_AWARD_INDEX.clear();
+  EXTRA_AWARD_INDEX.clear();
+  TERPECA_AWARDS.forEach(award => indexAward(TERPECA_AWARD_INDEX, award));
+  EXTRA_AWARDS.forEach(award => indexAward(EXTRA_AWARD_INDEX, award));
+  AWARD_CACHE.clear();
+  GLOBAL_RATING_CACHE.clear();
+}
+
+function indexedAwardsForRoom(index, room) {
+  const roomName = room.nombre || '';
+  const lookupKeys = [
+    normalizedKey(roomName),
+    compactKey(roomName),
+    ...normalizedKey(roomName).split(' ').filter(token => token.length > 3)
+  ];
+  const seen = new Set();
+  const candidates = [];
+  lookupKeys.forEach(key => {
+    (index.get(key) || []).forEach(award => {
+      const marker = `${award.source_id || 'terpeca'}|${award.year || ''}|${award.room_key || award.room || ''}|${award.company_key || award.company || ''}|${award.category || ''}|${award.status || ''}|${award.rank || ''}`;
+      if (!seen.has(marker)) {
+        seen.add(marker);
+        candidates.push(award);
+      }
+    });
+  });
+  return candidates;
+}
+
+function awardNameMatchesRoom(award, room) {
+  const roomName = compactKey(room.nombre || '');
+  const awardName = compactKey(award.room || award.room_key || '');
+  return !!roomName && !!awardName && (roomName === awardName || awardName.includes(roomName) || roomName.includes(awardName));
+}
+
 function terpecaAwardFor(room) {
   const roomKey = normalizedKey(room.nombre || '');
   const companyKey = compactKey(room.empresa || '');
   if (!roomKey || !companyKey) return null;
-  const candidates = TERPECA_AWARDS.filter(a => a.room_key === roomKey);
+  const candidates = indexedAwardsForRoom(TERPECA_AWARD_INDEX, room).filter(a => awardNameMatchesRoom(a, room));
   return candidates.find(a => {
     const awardCompany = compactKey(a.company || '');
     return awardCompany && (awardCompany.includes(companyKey) || companyKey.includes(awardCompany));
@@ -3677,9 +3819,8 @@ function companyMatchesAward(roomCompany, awardCompany) {
 
 function extraAwardsFor(room) {
   const roomKey = normalizedKey(room.nombre || '');
-  const roomCompactKey = compactKey(room.nombre || '');
   if (!roomKey) return [];
-  const candidates = EXTRA_AWARDS.filter(a => a.room_key === roomKey || compactKey(a.room || a.room_key || '') === roomCompactKey);
+  const candidates = indexedAwardsForRoom(EXTRA_AWARD_INDEX, room).filter(a => awardNameMatchesRoom(a, room));
   if (!candidates.length) return [];
   const matched = candidates.filter(a => companyMatchesAward(room.empresa || '', a.company || ''));
   const usable = matched.length ? matched : (
@@ -3703,7 +3844,13 @@ function extraAwardLabel(award) {
   return award.category || 'Premio';
 }
 
+function roomAwardCacheKey(room) {
+  return `${userRoomKey(room)}|${compactKey(room.empresa || '')}`;
+}
+
 function publicAwardsFor(room) {
+  const cacheKey = roomAwardCacheKey(room);
+  if (AWARD_CACHE.has(cacheKey)) return AWARD_CACHE.get(cacheKey);
   const awards = [];
   const terpeca = terpecaAwardFor(room);
   if (terpeca) {
@@ -3718,7 +3865,9 @@ function publicAwardsFor(room) {
     });
   }
   extraAwardsFor(room).forEach(a => awards.push({ ...a, label: extraAwardLabel(a) }));
-  return awards.sort((a, b) => awardPriority(b) - awardPriority(a));
+  const sorted = awards.sort((a, b) => awardPriority(b) - awardPriority(a));
+  AWARD_CACHE.set(cacheKey, sorted);
+  return sorted;
 }
 
 function awardSealHtml(award) {
@@ -3851,6 +4000,32 @@ function detailImageHtml(room, kind) {
   return `<img src="${src}" alt="${escapeHtml(room.nombre || 'Escape room')}" onerror="this.replaceWith(this.nextElementSibling)">${fallback}`;
 }
 
+function reviewPhotosFor(room) {
+  const keys = [
+    slugify(room.nombre || ''),
+    slugify(room.id || ''),
+    slugify(`${room.nombre || ''} ${room.empresa || ''}`)
+  ].filter(Boolean);
+  for (const key of keys) {
+    if (REVIEW_PHOTOS[key]?.photos?.length) return REVIEW_PHOTOS[key].photos;
+  }
+  return [];
+}
+
+function reviewPhotosHtml(room) {
+  const photos = reviewPhotosFor(room);
+  if (!photos.length) return '';
+  return `
+    <div class="rv-opinion-label" style="margin-top:12px">Fotos del grupo</div>
+    <div class="review-photo-gallery">
+      ${photos.map(photo => `
+        <a class="review-photo" href="${escapeHtml(photo.src)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+          <img src="${escapeHtml(photo.src)}" alt="${escapeHtml(photo.alt || room.nombre || 'Foto del grupo')}" loading="lazy">
+        </a>
+      `).join('')}
+    </div>`;
+}
+
 function metaItem(label, value, extraClass = '') {
   if (value === '' || value === null || value === undefined) return '';
   return `<div class="meta-item"><span class="meta-key">${label}</span><span class="meta-val ${extraClass}">${value}</span></div>`;
@@ -3885,6 +4060,7 @@ function reviewBlockHtml(room) {
         ${catStars('Jugabilidad', room.jugabilidad)}
         ${catStars('Game Master', room.gamemaster)}
       </div>` : ''}
+      ${reviewPhotosHtml(room)}
     </div>`;
 }
 
@@ -4203,6 +4379,7 @@ function cardHecho(h, rank) {
         ${catStars('Jugabilidad',  h.jugabilidad)}
         ${catStars('Game Master',  h.gamemaster)}
       </div>` : ''}
+      ${reviewPhotosHtml(h)}
       ${h.web ? `<a class="rv-web" href="${h.web}" target="_blank">Ver web</a>` : ''}
       <div style="margin-top:12px">${personalActionsHtml(h, detailKind)}</div>
     </div>
@@ -4460,7 +4637,9 @@ function rankingTheme(room) {
 }
 
 function renderRanking() {
-  const rows = rankingRooms().sort((a, b) => {
+  const rows = rankingRooms()
+    .map(room => ({ room, global: globalRatingForRoom(room) }))
+    .sort((a, b) => {
     const primary = rankingScore(b, sortRank) - rankingScore(a, sortRank);
     if (primary) return primary;
     const community = rankingScore(b, 'comunidad') - rankingScore(a, 'comunidad');
@@ -4604,12 +4783,76 @@ function globalSourcesForRoom(room) {
   return sources;
 }
 
+function clampNumber(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function ratingConfidenceForSources(sources) {
+  const usable = sources.filter(source => source.score > 0);
+  const count = usable.length;
+  if (!count) return 0;
+  let confidence = count === 1 ? .72 : count === 2 ? .88 : count === 3 ? .96 : 1;
+  if (count === 1 && usable[0].id === 'todoescaperooms') confidence = .62;
+  if (usable.some(source => ['escape_collector','giba','ocioterror','the_vault_community'].includes(source.id))) {
+    confidence += .03;
+  }
+  const votes = usable.map(source => parseInt(source.votes || 0, 10) || 0);
+  if (count === 1 && votes.length && Math.max(...votes) < 10) confidence -= .08;
+  return Math.round(clampNumber(confidence, .55, 1) * 100) / 100;
+}
+
+function ratingAwardBonusForRoom(room) {
+  const awards = publicAwardsFor(room).filter(award => award.status !== 'ranked');
+  if (!awards.length) return { bonus: 0, count: 0 };
+  const statusBonus = {
+    best_of_best: .22,
+    winner: .20,
+    runner_up: .14,
+    finalist: .10,
+    nominee: .06
+  };
+  const seenSources = new Set();
+  const total = awards.reduce((sum, award) => {
+    let bonus = statusBonus[award.status] ?? .08;
+    const rank = parseInt(award.rank, 10);
+    if (rank) bonus += clampNumber((12 - Math.min(rank, 12)) * .007, 0, .07);
+    const sourceId = award.source_id || 'award';
+    if (seenSources.has(sourceId)) bonus *= .35;
+    seenSources.add(sourceId);
+    return sum + bonus;
+  }, 0);
+  return { bonus: Math.round(clampNumber(total, 0, .35) * 10) / 10, count: awards.length };
+}
+
+function globalRatingCacheKey(room) {
+  return `${userRoomKey(room)}|${compactKey(room.empresa || '')}`;
+}
+
 function globalRatingForRoom(room) {
+  const cacheKey = globalRatingCacheKey(room);
+  if (GLOBAL_RATING_CACHE.has(cacheKey)) return GLOBAL_RATING_CACHE.get(cacheKey);
   const sources = globalSourcesForRoom(room);
-  if (!sources.length) return { score: 0, sourceCount: 0, sources: [] };
+  if (!sources.length) {
+    const empty = { score: 0, rawScore: 0, confidence: 0, awardBonus: 0, awardCount: 0, sourceCount: 0, sources: [] };
+    GLOBAL_RATING_CACHE.set(cacheKey, empty);
+    return empty;
+  }
   const totalWeight = sources.reduce((sum, source) => sum + source.weight, 0);
-  const score = sources.reduce((sum, source) => sum + source.score * source.weight, 0) / totalWeight;
-  return { score: Math.round(score * 10) / 10, sourceCount: sources.length, sources };
+  const rawScore = sources.reduce((sum, source) => sum + source.score * source.weight, 0) / totalWeight;
+  const confidence = ratingConfidenceForSources(sources);
+  const awards = ratingAwardBonusForRoom(room);
+  const adjustedScore = 8 + (rawScore - 8) * confidence + awards.bonus;
+  const result = {
+    score: Math.round(clampNumber(adjustedScore, 0, 10) * 10) / 10,
+    rawScore: Math.round(rawScore * 10) / 10,
+    confidence,
+    awardBonus: awards.bonus,
+    awardCount: awards.count,
+    sourceCount: sources.length,
+    sources
+  };
+  GLOBAL_RATING_CACHE.set(cacheKey, result);
+  return result;
 }
 
 function rankingScore(room) {
@@ -4617,12 +4860,16 @@ function rankingScore(room) {
 }
 
 function rankingSourcePills(room) {
-  const { sources } = globalRatingForRoom(room);
-  return sources.slice(0, 5).map(source => {
+  const global = globalRatingForRoom(room);
+  const sourcePills = global.sources.slice(0, 5).map(source => {
     const votes = source.votes ? ` ${source.votes}` : '';
     const title = `${source.label}: ${source.score.toFixed(1)}/10${source.votes ? ` (${source.votes} votos)` : ''}`;
     return `<span class="rank-source-pill ${source.stale ? 'stale' : ''}" title="${escapeHtml(title)}">${escapeHtml(source.label)} ${source.score.toFixed(1)}${votes}</span>`;
-  }).join('');
+  });
+  if (global.awardBonus > 0) {
+    sourcePills.push(`<span class="rank-source-pill" title="Bonus limitado por premios o nominaciones">Premios +${global.awardBonus.toFixed(1)}</span>`);
+  }
+  return sourcePills.join('');
 }
 
 function rankingRooms() {
@@ -4631,16 +4878,20 @@ function rankingRooms() {
 }
 
 function renderRanking() {
-  const rows = rankingRooms().sort((a, b) => {
-    const scoreDiff = rankingScore(b) - rankingScore(a);
+  const rows = rankingRooms()
+    .map(room => ({ room, global: globalRatingForRoom(room) }))
+    .sort((a, b) => {
+    const scoreDiff = b.global.score - a.global.score;
     if (scoreDiff) return scoreDiff;
-    const sourceDiff = globalRatingForRoom(b).sourceCount - globalRatingForRoom(a).sourceCount;
+    const awardDiff = b.global.awardCount - a.global.awardCount;
+    if (awardDiff) return awardDiff;
+    const sourceDiff = b.global.sourceCount - a.global.sourceCount;
     if (sourceDiff) return sourceDiff;
-    return (a.nombre || '').localeCompare(b.nombre || '');
+    return (a.room.nombre || '').localeCompare(b.room.nombre || '');
   });
   const medals = ['gold','silver','bronze'], emoji = ['🥇','🥈','🥉'];
-  const votedCount = rows.filter(room => voteStatsForRoom(room).count > 0).length;
-  const multiSourceCount = rows.filter(room => globalRatingForRoom(room).sourceCount > 1).length;
+  const votedCount = rows.filter(({ room }) => voteStatsForRoom(room).count > 0).length;
+  const multiSourceCount = rows.filter(({ global }) => global.sourceCount > 1).length;
   const info = document.getElementById('result-info-rank');
   if (info) info.textContent = `${rows.length} salas con nota global · ${multiSourceCount} con varias fuentes · ${votedCount} con votos de comunidad`;
 
@@ -4649,8 +4900,7 @@ function renderRanking() {
       <th>#</th><th>Escape Room</th><th>Empresa</th><th>Nota global</th>
       <th>Fuentes</th><th>Ciudad</th><th>Temática</th>
     </tr></thead>
-    <tbody>${rows.map((room, i) => {
-      const global = globalRatingForRoom(room);
+    <tbody>${rows.map(({ room, global }, i) => {
       const hasGroupReview = HECHOS.some(item => userRoomKey(item) === userRoomKey(room));
       const detailRef = detailRefForRoom(room, hasGroupReview ? ['hechos','catalogo','pendientes'] : ['catalogo','hechos','pendientes']);
       const detailKind = detailRef.kind;
