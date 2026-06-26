@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-06-26T15:49:22",
+    "generated_at": "2026-06-26T21:38:58",
     "sources": {
       "escape_collector": {
         "label": "Escape Collector",
@@ -26551,12 +26551,12 @@
       "global_score": 7.74,
       "source_count": 1
     },
-    "rat_zombie": {
+    "el_rey_de_amarillo": {
       "room": {
-        "nombre": "Rat Zombie",
-        "empresa": "Puzzle",
-        "ciudad": "Rentería",
-        "provincia": "Gipuzkoa"
+        "nombre": "El Rey de Amarillo",
+        "empresa": "Mindescape",
+        "ciudad": "Murcia",
+        "provincia": "Murcia"
       },
       "sources": {
         "escape_collector": {
@@ -26574,20 +26574,20 @@
       "global_score": 7.74,
       "source_count": 1
     },
-    "el_rey_de_amarillo": {
+    "rat_zombie": {
       "room": {
-        "nombre": "El Rey de Amarillo",
-        "empresa": "Mindescape",
-        "ciudad": "Murcia",
-        "provincia": "Murcia"
+        "nombre": "Rat Zombie",
+        "empresa": "Puzzle",
+        "ciudad": "Rentería",
+        "provincia": "Gipuzkoa"
       },
       "sources": {
         "escape_collector": {
           "score": 7.61,
-          "weight": 0.99,
+          "weight": 1.04,
           "url": "https://escapecollector.com/escape-rooms",
           "updated_at": "2026-06-26",
-          "votes": 1
+          "votes": 2
         }
       },
       "raw_score": 7.61,
