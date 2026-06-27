@@ -633,6 +633,7 @@
   .rank-source-list{display:flex;gap:4px;flex-wrap:wrap;max-width:280px;}
   .rank-source-pill{font-family:'Share Tech Mono',monospace;font-size:.56rem;letter-spacing:.05em;text-transform:uppercase;border:1px solid rgba(245,166,35,.18);background:rgba(245,166,35,.05);color:var(--text2);padding:2px 6px;white-space:nowrap;}
   .rank-source-pill.stale{border-color:rgba(230,57,70,.24);color:var(--text3);}
+  .rank-mobile-title,.rank-mobile-company,.rank-mobile-score{display:none;}
 
   /* Ranking responsive: en móvil la tabla pasa a tarjetas verticales */
   @media(max-width:760px){
@@ -651,10 +652,10 @@
       margin-top:12px;
     }
     .ranking-table thead{display:none;}
-    .ranking-table tbody{display:flex;flex-direction:column;gap:12px;}
+    .ranking-table tbody{display:flex;flex-direction:column;gap:9px;}
     .ranking-table tr{
       position:relative;
-      padding:14px;
+      padding:10px 12px;
       border:1px solid var(--border);
       background:var(--bg2);
       animation:fadeUp .25s ease both;
@@ -664,8 +665,8 @@
       display:flex;
       align-items:flex-start;
       justify-content:space-between;
-      gap:14px;
-      padding:7px 0;
+      gap:10px;
+      padding:6px 0;
       border-bottom:1px solid rgba(255,255,255,.035);
       text-align:right;
       min-width:0;
@@ -683,40 +684,57 @@
       color:var(--text3);
     }
     .ranking-table td[data-label="#"]{
-      justify-content:center;
-      padding:0 0 10px;
-      margin-bottom:4px;
+      display:grid;
+      grid-template-columns:auto minmax(0,1fr) auto;
+      column-gap:10px;
+      align-items:center;
+      justify-content:start;
+      padding:0 0 8px;
+      margin-bottom:2px;
       border-bottom:1px solid var(--border);
-      text-align:center;
+      text-align:left;
     }
     .ranking-table td[data-label="#"]::before{display:none;}
-    .ranking-table td[data-label="#"] .rank-pos{font-size:1.45rem;}
-    .ranking-table td[data-label="Escape Room"]{
+    .ranking-table td[data-label="#"] .rank-pos{font-size:1.25rem;min-width:34px;text-align:center;}
+    .rank-mobile-head{min-width:0;}
+    .rank-mobile-title{
       display:block;
-      text-align:center;
-      padding:4px 0 12px;
-      border-bottom:1px solid var(--border);
-    }
-    .ranking-table td[data-label="Escape Room"]::before{
-      display:block;
-      width:100%;
-      margin-bottom:5px;
-      text-align:center;
-    }
-    .ranking-table td[data-label="Escape Room"] .rank-room-name{
-      display:block;
-      font-size:1rem;
+      font-family:'Cinzel',serif;
+      font-size:.98rem;
       line-height:1.25;
+      color:var(--text);
+      overflow-wrap:anywhere;
     }
+    .rank-mobile-company{
+      display:block;
+      margin-top:2px;
+      font-size:.78rem;
+      line-height:1.1;
+      color:var(--text3);
+      overflow-wrap:anywhere;
+    }
+    .rank-mobile-score{
+      display:block;
+      align-self:center;
+      font-family:'Cinzel',serif;
+      font-size:1rem;
+      font-weight:700;
+      color:var(--amber);
+      white-space:nowrap;
+    }
+    .ranking-table td[data-label="Escape Room"],
+    .ranking-table td[data-label="Empresa"],
+    .ranking-table td[data-label="Nota global"]{display:none;}
     .ranking-table td .tag{
       max-width:100%;
       white-space:normal;
       text-align:right;
     }
+    .rank-source-list{justify-content:flex-end;max-width:none;}
   }
 
   @media(max-width:420px){
-    .ranking-table tr{padding:12px;}
+    .ranking-table tr{padding:9px 10px;}
     .ranking-table td{gap:10px;font-size:.86rem;}
     .ranking-table td::before{flex-basis:88px;font-size:.52rem;}
     .rank-score-group{font-size:.95rem;}
@@ -943,6 +961,9 @@
         <button class="sort-btn active" id="rank-terror-all" onclick="setRankTerrorFilter('all')">Todos</button>
         <button class="sort-btn" id="rank-terror-no" onclick="setRankTerrorFilter('no')">Sin terror</button>
         <button class="sort-btn" id="rank-terror-only" onclick="setRankTerrorFilter('only')">Solo terror</button>
+        <select class="filter-select" id="filter-comunidad-rank" onchange="setRankCommunityFilter(this.value)">
+          <option value="">Comunidad</option>
+        </select>
       </div>
       <div class="divider-line" style="margin-top:18px"></div>
       <div class="result-info" id="result-info-rank"></div>
@@ -1148,7 +1169,7 @@ const REVIEW_CATEGORIES = [
   ['gamemaster', 'Game Master']
 ];
 
-let PENDIENTES = [], HECHOS = [], CATALOGO = [], TERPECA_AWARDS = [], EXTRA_AWARDS = [], EXTERNAL_RATINGS = {}, EXTERNAL_RATINGS_META = {}, REVIEW_PHOTOS = {}, sortPend = 'rating', sortMine = 'rating', sortCatalogo = 'rating', sortRank = 'global', rankTerrorFilter = 'all';
+let PENDIENTES = [], HECHOS = [], CATALOGO = [], TERPECA_AWARDS = [], EXTRA_AWARDS = [], EXTERNAL_RATINGS = {}, EXTERNAL_RATINGS_META = {}, REVIEW_PHOTOS = {}, sortPend = 'rating', sortMine = 'rating', sortCatalogo = 'rating', sortRank = 'global', rankTerrorFilter = 'all', rankCommunityFilter = '';
 const CATALOG_PAGE_SIZE = 120;
 let catalogVisibleCount = CATALOG_PAGE_SIZE;
 let GROUP_ROOM_INDEX = { pendientes: new Set(), hechos: new Set() };
@@ -3250,6 +3271,8 @@ function populateFilters() {
   fill('filter-ciudad-cat',  [...new Set(CATALOGO.map(c=>c.ciudad).filter(Boolean))].sort(), 'Ciudad');
   fill('filter-jugadores-cat', ['1','2','3','4','5','6','7','8','9','10'].filter(n => CATALOGO.some(c => supportsPlayers(c, n))).map(n => `${n} jugador${n === '1' ? '' : 'es'}`), 'Jugadores');
   fill('filter-dif-cat',     [...new Set(CATALOGO.map(c=>c.dificultad).filter(Boolean))].sort(), 'Dificultad');
+  fill('filter-comunidad-rank', [...new Set(uniqueRooms([...CATALOGO, ...PENDIENTES, ...HECHOS]).map(c=>communityOf(c)).filter(Boolean))].sort(), 'Comunidad');
+  rankCommunityFilter = document.getElementById('filter-comunidad-rank')?.value || '';
   document.getElementById('badge-pend').textContent  = pendingRooms.length;
   document.getElementById('badge-mine').textContent = personalDoneRooms().length;
   document.getElementById('badge-hecho').textContent = reviews.length;
@@ -3424,6 +3447,11 @@ function setRankTerrorFilter(filter) {
   rankTerrorFilter = filter;
   document.querySelectorAll('[id^="rank-terror-"]').forEach(b => b.classList.remove('active'));
   document.getElementById('rank-terror-' + filter)?.classList.add('active');
+  renderRanking();
+}
+
+function setRankCommunityFilter(value) {
+  rankCommunityFilter = value || '';
   renderRanking();
 }
 
@@ -4684,7 +4712,7 @@ function renderRanking() {
       const detailKind = detailRef.kind;
       const detailKey = jsString(detailRef.key);
       return `<tr class="rank-clickable" tabindex="0" role="button" onclick="openDetailFromCard(event,'${detailKind}','${detailKey}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetail('${detailKind}','${detailKey}')}">
-        <td data-label="#"><span class="rank-pos ${medals[i]||''}">${emoji[i]||'#'+(i+1)}</span></td>
+        <td data-label="#"><span class="rank-pos ${medals[i]||''}">${emoji[i]||'#'+(i+1)}</span><span class="rank-mobile-head"><span class="rank-mobile-title">${escapeHtml(room.nombre || 'Escape room')}</span><span class="rank-mobile-company">${room.empresa ? `(${escapeHtml(room.empresa)})` : ''}</span></span><span class="rank-mobile-score">★ ${typeof global !== 'undefined' ? global.score.toFixed(1) : (displayRating(room) || room.valoracion || '')}</span></td>
         <td data-label="Escape Room"><span class="rank-room-name">${escapeHtml(room.nombre || '—')}</span></td>
         <td data-label="Empresa">${escapeHtml(room.empresa || '—')}</td>
         <td data-label="Dificultad"><span class="meta-val ${dc(room.dificultad)}" style="font-size:.82rem">⚠ ${escapeHtml(room.dificultad || '—')}</span></td>
@@ -4891,6 +4919,7 @@ function rankingRooms() {
       if (rankTerrorFilter === 'no') return !room.terror;
       return true;
     })
+    .filter(room => !rankCommunityFilter || communityOf(room) === rankCommunityFilter)
     .filter(room => globalRatingForRoom(room).score > 0);
 }
 
@@ -4911,6 +4940,7 @@ function renderRanking() {
   const multiSourceCount = rows.filter(({ global }) => global.sourceCount > 1).length;
   const info = document.getElementById('result-info-rank');
   const terrorLabel = rankTerrorFilter === 'only' ? 'solo terror' : rankTerrorFilter === 'no' ? 'sin terror' : 'todos';
+  const communityLabel = rankCommunityFilter || 'todas las comunidades';
   if (info) info.textContent = `${rows.length} salas con nota global · ${terrorLabel} · ${multiSourceCount} con varias fuentes · ${votedCount} con votos de comunidad`;
 
   document.getElementById('ranking-table').innerHTML = `
@@ -4925,7 +4955,7 @@ function renderRanking() {
       const detailKey = jsString(detailRef.key);
       const location = [cleanValue(room.ciudad), cleanValue(room.provincia)].filter(Boolean).join(' · ') || '—';
       return `<tr class="rank-clickable" tabindex="0" role="button" onclick="openDetailFromCard(event,'${detailKind}','${detailKey}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetail('${detailKind}','${detailKey}')}">
-        <td data-label="#"><span class="rank-pos ${medals[i]||''}">${emoji[i]||'#'+(i+1)}</span></td>
+        <td data-label="#"><span class="rank-pos ${medals[i]||''}">${emoji[i]||'#'+(i+1)}</span><span class="rank-mobile-head"><span class="rank-mobile-title">${escapeHtml(room.nombre || 'Escape room')}</span><span class="rank-mobile-company">${room.empresa ? `(${escapeHtml(room.empresa)})` : ''}</span></span><span class="rank-mobile-score">★ ${typeof global !== 'undefined' ? global.score.toFixed(1) : (displayRating(room) || room.valoracion || '')}</span></td>
         <td data-label="Escape Room"><span class="rank-room-name">${escapeHtml(room.nombre || '—')}</span></td>
         <td data-label="Empresa">${escapeHtml(room.empresa || '—')}</td>
         <td data-label="Nota global"><span class="rank-global-score">★ ${global.score.toFixed(1)}</span></td>
@@ -4933,6 +4963,7 @@ function renderRanking() {
         <td data-label="Ciudad">${escapeHtml(location)}</td>
       </tr>`;
     }).join('')}</tbody>`;
+  if (info) info.textContent = `${rows.length} salas con nota global - ${terrorLabel} - ${communityLabel} - ${multiSourceCount} con varias fuentes - ${votedCount} con votos de comunidad`;
 }
 </script>
 </body>
