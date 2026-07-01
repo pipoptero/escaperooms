@@ -1217,6 +1217,10 @@ let GROUP_PENDING_ROOMS = {};
 let PENDING_INVITE_ID = new URLSearchParams(window.location.search).get('invite') || '';
 let INVITE_NOTICE_SHOWN = false;
 let SETTINGS_TAB = 'profile';
+let LAST_LIVE_REFRESH_AT = 0;
+let LIVE_REFRESH_IN_PROGRESS = false;
+let LIVE_REFRESH_EVENTS_READY = false;
+const LIVE_REFRESH_MIN_INTERVAL = 5 * 60 * 1000;
 
 // ── Utilidades ────────────────────────────────────────────────────────────────
 function slugify(str) {
@@ -3678,7 +3682,11 @@ async function loadReviewPhotos() {
   }
 }
 
-async function loadLiveDataAfterInitialRender() {
+async function refreshLiveData({ force = false, reason = 'auto' } = {}) {
+  if (!FIREBASE_ENABLED || LIVE_REFRESH_IN_PROGRESS) return false;
+  const now = Date.now();
+  if (!force && now - LAST_LIVE_REFRESH_AT < LIVE_REFRESH_MIN_INTERVAL) return false;
+  LIVE_REFRESH_IN_PROGRESS = true;
   try {
     await initFirebaseAuth();
     await loadUserRoomStates();
@@ -3691,6 +3699,8 @@ async function loadLiveDataAfterInitialRender() {
     await loadVotes();
     await loadRoomReviews();
     await loadUserGroups();
+    await loadLikes();
+    refreshAllLikeCounts();
     populateFilters();
     renderStats();
     renderPendientes();
@@ -3699,17 +3709,38 @@ async function loadLiveDataAfterInitialRender() {
     if (ACTIVE_TAB === 'ranking') renderRanking();
     renderCatalogo();
     updateFavCount();
-    await handlePendingInvite();
-    loadLikes().then(() => refreshAllLikeCounts());
+    LAST_LIVE_REFRESH_AT = Date.now();
+    if (reason === 'initial') await handlePendingInvite();
+    return true;
   } catch (e) {
-    console.warn('No se pudieron cargar los datos en vivo:', e.message);
+    console.warn('No se pudieron refrescar los datos en vivo:', e.message);
+    return false;
+  } finally {
+    LIVE_REFRESH_IN_PROGRESS = false;
   }
+}
+
+async function loadLiveDataAfterInitialRender() {
+  await refreshLiveData({ force: true, reason: 'initial' });
 }
 
 function scheduleLiveDataAfterInitialRender() {
   const start = () => setTimeout(() => loadLiveDataAfterInitialRender(), 250);
   if (document.readyState === 'complete') start();
   else window.addEventListener('load', start, { once: true });
+}
+
+function setupAutomaticLiveRefresh() {
+  if (LIVE_REFRESH_EVENTS_READY) return;
+  LIVE_REFRESH_EVENTS_READY = true;
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      refreshLiveData({ reason: 'visible' });
+    }
+  });
+  window.addEventListener('online', () => {
+    refreshLiveData({ force: true, reason: 'online' });
+  });
 }
 
 async function loadStaticEnhancementsAfterInitialRender() {
@@ -3749,6 +3780,7 @@ async function loadData() {
     updateFavCount();
     loadStaticEnhancementsAfterInitialRender();
     scheduleLiveDataAfterInitialRender();
+    setupAutomaticLiveRefresh();
   } catch(err) {
     document.getElementById('loading').style.display = 'none';
     const es = document.getElementById('error-screen');
