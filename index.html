@@ -314,6 +314,9 @@
   .profile-title{font-family:'Share Tech Mono',monospace;color:var(--amber);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;}
   .profile-close{width:32px;height:32px;border:1px solid var(--border);background:rgba(255,255,255,.025);color:var(--text3);cursor:pointer;}
   .profile-body{padding:16px 18px;overflow:auto;min-height:0;}
+  .settings-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:13px;border-bottom:1px solid var(--border);padding-bottom:10px;}
+  .settings-tab{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--border);background:rgba(255,255,255,.025);color:var(--text3);padding:8px 12px;cursor:pointer;}
+  .settings-tab.active{color:var(--amber);border-color:rgba(245,166,35,.42);background:rgba(245,166,35,.07);}
   .profile-section{border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);padding:13px 14px;margin-bottom:13px;}
   .profile-section-title{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--text3);letter-spacing:.13em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
   .profile-section-title::after{content:'';height:1px;background:var(--border);flex:1;}
@@ -328,6 +331,15 @@
   .profile-preview{display:flex;align-items:center;gap:10px;border:1px solid rgba(245,166,35,.14);background:rgba(245,166,35,.035);padding:10px 12px;margin-bottom:12px;}
   .profile-preview-name{font-family:'Cinzel',serif;color:var(--text);font-weight:700;line-height:1.1;}
   .profile-preview-meta{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;margin-top:3px;}
+  .profile-admin-badge{display:inline-flex;align-items:center;gap:6px;margin-top:7px;border:1px solid rgba(245,166,35,.28);background:rgba(245,166,35,.07);color:var(--amber);font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;padding:4px 7px;}
+  .admin-note{border:1px solid rgba(245,166,35,.16);background:rgba(245,166,35,.035);padding:10px 11px;color:var(--text2);font-size:.9rem;line-height:1.45;}
+  .admin-note code{color:var(--amber);font-family:'Share Tech Mono',monospace;font-size:.78rem;overflow-wrap:anywhere;}
+  .admin-review-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 12px;margin-top:10px;}
+  .admin-review-grid .wide{grid-column:1/-1;}
+  .admin-draft-list{display:flex;flex-direction:column;gap:7px;margin-top:12px;}
+  .admin-draft-item{border:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.12);padding:9px 10px;}
+  .admin-draft-title{font-family:'Cinzel',serif;color:var(--text);font-size:.9rem;}
+  .admin-draft-meta{font-family:'Share Tech Mono',monospace;font-size:.55rem;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;margin-top:3px;}
   .profile-status-msg{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;line-height:1.5;margin-top:9px;overflow-wrap:anywhere;}
   .profile-groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;}
   .profile-group-card{border:1px solid rgba(245,166,35,.14);background:rgba(245,166,35,.035);padding:11px 12px;min-width:0;}
@@ -806,11 +818,15 @@
     .profile-title{font-size:.68rem;letter-spacing:.1em;}
     .profile-close{width:38px;height:38px;background:rgba(10,10,15,.86);}
     .profile-body{flex:1;padding:14px;overflow:auto;}
+    .settings-tabs{gap:6px;margin-bottom:11px;padding-bottom:9px;}
+    .settings-tab{flex:1 1 auto;padding:9px 10px;}
     .profile-section{padding:11px 12px;margin-bottom:11px;}
     .profile-input{min-width:0;flex-basis:100%;}
     .profile-row .auth-btn{flex:1 1 auto;}
     .profile-groups{grid-template-columns:1fr;}
     .group-stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .admin-review-grid{grid-template-columns:1fr;}
+    .admin-review-grid .wide{grid-column:auto;}
     .group-room-row{grid-template-columns:44px minmax(0,1fr);}
     .group-room-thumb{width:44px;}
     .group-room-actions{grid-column:1/-1;justify-content:flex-start;}
@@ -866,7 +882,7 @@
         <span class="auth-name" id="auth-name">Sin iniciar sesion</span>
       </div>
       <button class="auth-btn" id="auth-login" type="button" onclick="signInGoogle()">Entrar con Google</button>
-      <button class="auth-btn secondary" id="auth-profile" type="button" onclick="openProfile()" style="display:none">Perfil</button>
+      <button class="auth-btn secondary" id="auth-profile" type="button" onclick="openProfile()" style="display:none">Ajustes</button>
       <button class="auth-btn secondary" id="auth-logout" type="button" onclick="signOutGoogle()" style="display:none">Salir</button>
     </div>
   </div>
@@ -1103,7 +1119,7 @@
 <div class="profile-modal" id="profile-modal" aria-hidden="true" onclick="closeProfile(event)">
   <div class="profile-dialog" role="dialog" aria-modal="true" aria-labelledby="profile-title" onclick="event.stopPropagation()">
     <div class="profile-head">
-      <div class="profile-title" id="profile-title">Perfil escapista</div>
+      <div class="profile-title" id="profile-title">Ajustes</div>
       <button class="profile-close" type="button" onclick="closeProfile()" aria-label="Cerrar perfil">X</button>
     </div>
     <div class="profile-body" id="profile-content"></div>
@@ -1184,12 +1200,19 @@ const EXTRA_AWARD_INDEX = new Map();
 let CURRENT_USER = null;
 let USER_ROOM_STATES = {};
 let USER_PROFILE = {};
+let IS_ADMIN = false;
+let ADMIN_ROLE_ERROR = '';
+let ADMIN_ROLE_RAW = null;
+let ADMIN_REVIEW_DRAFTS = {};
+let ADMIN_EDITING_DRAFT_ID = '';
+let ADMIN_PUBLISHED_REVIEWS = {};
 let USER_GROUPS = {};
 let GROUP_MEMBERS = {};
 let GROUP_ROOMS = {};
 let GROUP_PENDING_ROOMS = {};
 let PENDING_INVITE_ID = new URLSearchParams(window.location.search).get('invite') || '';
 let INVITE_NOTICE_SHOWN = false;
+let SETTINGS_TAB = 'profile';
 
 // ── Utilidades ────────────────────────────────────────────────────────────────
 function slugify(str) {
@@ -1362,7 +1385,7 @@ function uniqueRooms(rooms) {
 }
 
 function personalRoomSources() {
-  return uniqueRooms([...CATALOGO, ...PENDIENTES, ...HECHOS]);
+  return uniqueRooms([...CATALOGO, ...PENDIENTES, ...reviewRooms()]);
 }
 
 function personalPendingRooms() {
@@ -1387,8 +1410,37 @@ function currentDoneRooms() {
   return AUTH_USER ? personalDoneRooms() : HECHOS;
 }
 
+function publishedReviewRooms() {
+  return Object.entries(ADMIN_PUBLISHED_REVIEWS || {}).map(([id, record]) => {
+    const review = record?.review || record || {};
+    if (!review || (record.status && record.status !== 'published')) return null;
+    const key = record.roomKey || review.roomKey || userRoomKey(review) || id;
+    const local = [...CATALOGO, ...PENDIENTES, ...HECHOS].find(room => userRoomKey(room) === key) || {};
+    const merged = {
+      ...local,
+      ...review,
+      id: review.id || local.id || key,
+      roomKey: key,
+      _adminPublished: true,
+      _adminReviewId: id,
+      publishedAt: record.publishedAt || review.publishedAt || '',
+      updatedAt: record.updatedAt || review.updatedAt || ''
+    };
+    return merged.nombre ? merged : null;
+  }).filter(Boolean);
+}
+
 function reviewRooms() {
-  return HECHOS;
+  const byKey = new Map();
+  HECHOS.forEach(room => {
+    const key = userRoomKey(room);
+    if (key) byKey.set(key, room);
+  });
+  publishedReviewRooms().forEach(room => {
+    const key = userRoomKey(room);
+    if (key) byKey.set(key, room);
+  });
+  return [...byKey.values()];
 }
 
 function allPendingRooms() {
@@ -1515,6 +1567,9 @@ async function refreshSignedSession() {
   if (AUTH_USER) AUTH_TOKEN = await AUTH_USER.getIdToken();
   await loadUserRoomStates();
   await loadUserProfile();
+  await loadAdminRole();
+  await loadAdminReviewDrafts();
+  await loadAdminPublishedReviews();
   await saveUserProfile();
   renderAuthStatus();
   await loadUserGroups();
@@ -1615,7 +1670,7 @@ function groupName(groupId) {
 }
 
 function findRoomByUserKey(key) {
-  return [...CATALOGO, ...PENDIENTES, ...HECHOS].find(room => userRoomKey(room) === key) || null;
+  return [...CATALOGO, ...PENDIENTES, ...reviewRooms()].find(room => userRoomKey(room) === key) || null;
 }
 
 function roomFromGroupRecord(key, record) {
@@ -1756,6 +1811,50 @@ async function loadUserProfile() {
       bio: ''
     };
   }
+}
+
+async function loadAdminRole() {
+  IS_ADMIN = false;
+  ADMIN_ROLE_ERROR = '';
+  ADMIN_ROLE_RAW = null;
+  if (!AUTH_USER || !FIREBASE_ENABLED) return false;
+  try {
+    const role = await fbGet(`admins/${USER_ID}`);
+    ADMIN_ROLE_RAW = role;
+    const normalizedRole = String(role?.role || role?.enabled || role || '').trim().toLowerCase();
+    IS_ADMIN = role === true || normalizedRole === 'true' || normalizedRole === 'admin';
+  } catch (e) {
+    console.warn('No se pudo comprobar el rol admin:', e.message);
+    ADMIN_ROLE_ERROR = e.message;
+    IS_ADMIN = false;
+  }
+  return IS_ADMIN;
+}
+
+async function loadAdminReviewDrafts() {
+  ADMIN_REVIEW_DRAFTS = {};
+  if (!AUTH_USER || !FIREBASE_ENABLED || !IS_ADMIN) return {};
+  try {
+    ADMIN_REVIEW_DRAFTS = await fbGet('adminReviewDrafts') || {};
+    if (ADMIN_EDITING_DRAFT_ID && !ADMIN_REVIEW_DRAFTS[ADMIN_EDITING_DRAFT_ID]) ADMIN_EDITING_DRAFT_ID = '';
+  } catch (e) {
+    console.warn('No se pudieron cargar borradores admin:', e.message);
+    ADMIN_REVIEW_DRAFTS = {};
+    ADMIN_EDITING_DRAFT_ID = '';
+  }
+  return ADMIN_REVIEW_DRAFTS;
+}
+
+async function loadAdminPublishedReviews() {
+  ADMIN_PUBLISHED_REVIEWS = {};
+  if (!FIREBASE_ENABLED) return {};
+  try {
+    ADMIN_PUBLISHED_REVIEWS = await fbGet('adminPublishedReviews') || {};
+  } catch (e) {
+    console.warn('No se pudieron cargar reviews publicadas admin:', e.message);
+    ADMIN_PUBLISHED_REVIEWS = {};
+  }
+  return ADMIN_PUBLISHED_REVIEWS;
 }
 
 async function saveUserProfile(extra = {}) {
@@ -2190,10 +2289,13 @@ async function openProfile(message = '', refresh = true) {
   document.body.style.overflow = 'hidden';
 
   if (AUTH_USER && FIREBASE_ENABLED && refresh) {
-    if (root) root.innerHTML = '<div class="profile-section"><div class="profile-section-title">Perfil escapista</div><div class="review-empty">Actualizando grupos...</div></div>';
+    if (root) root.innerHTML = '<div class="profile-section"><div class="profile-section-title">Ajustes</div><div class="review-empty">Actualizando datos...</div></div>';
     try {
+      await loadAdminRole();
+      await loadAdminReviewDrafts();
       await loadUserGroups();
       populateFilters();
+      renderAuthStatus();
       renderStats();
       renderMisHechos();
       renderCatalogo();
@@ -2218,13 +2320,433 @@ function setProfileStatus(message) {
   if (node) node.innerHTML = message || '';
 }
 
-function renderProfile(message = '') {
-  const root = document.getElementById('profile-content');
-  if (!root) return;
-  if (!AUTH_USER) {
-    root.innerHTML = `<div class="profile-section"><div class="profile-section-title">Cuenta</div><div class="review-empty">Entra con Google para crear y compartir grupos escapistas.</div></div>`;
+function setSettingsTab(tab) {
+  SETTINGS_TAB = tab === 'edit' && IS_ADMIN ? 'edit' : 'profile';
+  renderProfile();
+}
+
+function settingsTabsHtml() {
+  return `<div class="settings-tabs">
+    <button class="settings-tab ${SETTINGS_TAB === 'profile' ? 'active' : ''}" type="button" onclick="setSettingsTab('profile')">Perfil</button>
+    ${IS_ADMIN ? `<button class="settings-tab ${SETTINGS_TAB === 'edit' ? 'active' : ''}" type="button" onclick="setSettingsTab('edit')">Edicion</button>` : ''}
+  </div>`;
+}
+
+function adminReviewRoomSources() {
+  return uniqueRooms([...reviewRooms(), ...CATALOGO, ...PENDIENTES])
+    .filter(room => room.nombre)
+    .sort((a, b) => String(a.nombre || '').localeCompare(String(b.nombre || '')));
+}
+
+function adminReviewRoomLabel(room) {
+  return [room.nombre, room.empresa, room.ciudad].filter(Boolean).join(' | ');
+}
+
+function adminReviewOptionsHtml() {
+  return adminReviewRoomSources().map(room => `<option value="${escapeHtml(adminReviewRoomLabel(room))}"></option>`).join('');
+}
+
+function adminFindRoomByLabel(label) {
+  const query = String(label || '').trim();
+  const normalized = normalizedKey(query);
+  if (!normalized) return null;
+  const sources = adminReviewRoomSources();
+  const exactLabel = sources.find(room => adminReviewRoomLabel(room) === query);
+  if (exactLabel) return exactLabel;
+  const exactName = sources.find(room => normalizedKey(room.nombre) === normalized);
+  if (exactName) return exactName;
+  const startsName = sources.find(room => normalizedKey(room.nombre).startsWith(normalized));
+  if (startsName) return startsName;
+  const containsName = sources.find(room => normalizedKey(room.nombre).includes(normalized));
+  if (containsName) return containsName;
+  const words = normalized.split(/\s+/).filter(Boolean);
+  const scored = sources.map(room => {
+    const name = normalizedKey(room.nombre);
+    const haystack = normalizedKey([room.nombre, room.empresa, room.ciudad, room.provincia].filter(Boolean).join(' '));
+    const score = words.reduce((sum, word) => sum + (name.includes(word) ? 3 : haystack.includes(word) ? 1 : 0), 0);
+    return { room, score };
+  }).filter(item => item.score > 0).sort((a, b) => b.score - a.score || String(a.room.nombre || '').localeCompare(String(b.room.nombre || '')));
+  return scored[0]?.room || null;
+}
+
+function fillAdminReviewFromRoom() {
+  const input = document.getElementById('admin-review-room-search');
+  const room = adminFindRoomByLabel(input?.value || '');
+  const status = document.getElementById('admin-review-status');
+  if (!room) {
+    if (status) status.textContent = 'No se encontro una sala con ese texto.';
     return;
   }
+  const set = (id, value) => {
+    const node = document.getElementById(id);
+    if (node) node.value = value || '';
+  };
+  set('admin-review-name', room.nombre);
+  set('admin-review-company', room.empresa);
+  set('admin-review-city', room.ciudad);
+  set('admin-review-province', room.provincia);
+  set('admin-review-duration', room.duracion);
+  set('admin-review-difficulty', room.dificultad);
+  set('admin-review-rating', room.valoracion || room.rating || '');
+  if (input) input.value = adminReviewRoomLabel(room);
+  if (status) status.textContent = `Campos rellenados desde: ${room.nombre || 'sala encontrada'}`;
+}
+
+function adminDraftsListHtml() {
+  const drafts = Object.entries(ADMIN_REVIEW_DRAFTS || {})
+    .map(([id, draft]) => ({ id, ...draft }))
+    .sort((a, b) => (b.updatedAt || b.createdAt || 0) - (a.updatedAt || a.createdAt || 0))
+    .slice(0, 10);
+  if (!drafts.length) return '<div class="review-empty">Todavia no hay borradores admin.</div>';
+  return `<div class="admin-draft-list">${drafts.map(draft => {
+    const review = draft.review || {};
+    const date = draft.updatedAt ? formatReviewDate(draft.updatedAt) : '';
+    const ready = draft.status === 'ready';
+    const published = !!ADMIN_PUBLISHED_REVIEWS[draft.roomKey || userRoomKey(review)];
+    const statusLabel = published ? 'publicada' : ready ? 'revisado' : 'borrador';
+    return `<article class="admin-draft-item">
+      <div class="admin-draft-title">${escapeHtml(review.nombre || draft.roomName || 'Review sin titulo')}</div>
+      <div class="admin-draft-meta">${escapeHtml(review.empresa || '')}${review.ciudad ? ` | ${escapeHtml(review.ciudad)}` : ''}${date ? ` | ${date}` : ''} | ${statusLabel}</div>
+      <div class="profile-group-actions" style="margin-top:8px">
+        <button class="auth-btn secondary" type="button" onclick="loadAdminReviewDraft('${jsString(draft.id)}')">Editar</button>
+        <button class="auth-btn secondary" type="button" onclick="setAdminReviewDraftStatus('${jsString(draft.id)}','${ready ? 'draft' : 'ready'}')">${ready ? 'Volver a borrador' : 'Revisado'}</button>
+        <button class="auth-btn secondary" type="button" onclick="deleteAdminReviewDraft('${jsString(draft.id)}')">Eliminar</button>
+      </div>
+    </article>`;
+  }).join('')}</div>`;
+}
+
+function adminPublishedListHtml() {
+  const published = Object.entries(ADMIN_PUBLISHED_REVIEWS || {})
+    .map(([id, record]) => ({ id, ...record, review: record.review || record }))
+    .filter(item => item.review?.nombre && (!item.status || item.status === 'published'))
+    .sort((a, b) => (b.updatedAt || b.publishedAt || 0) - (a.updatedAt || a.publishedAt || 0))
+    .slice(0, 12);
+  if (!published.length) return '<div class="review-empty">Todavia no hay reviews publicadas desde el panel admin.</div>';
+  return `<div class="admin-draft-list">${published.map(item => {
+    const review = item.review || {};
+    const date = item.updatedAt ? formatReviewDate(item.updatedAt) : item.publishedAt ? formatReviewDate(item.publishedAt) : '';
+    return `<article class="admin-draft-item">
+      <div class="admin-draft-title">${escapeHtml(review.nombre || item.roomName || 'Review sin titulo')}</div>
+      <div class="admin-draft-meta">${escapeHtml(review.empresa || '')}${review.ciudad ? ` | ${escapeHtml(review.ciudad)}` : ''}${date ? ` | ${date}` : ''} | publicada</div>
+      <div class="profile-group-actions" style="margin-top:8px">
+        <button class="auth-btn secondary" type="button" onclick="loadAdminPublishedReview('${jsString(item.roomKey || item.id)}')">Editar</button>
+        <button class="auth-btn secondary" type="button" onclick="unpublishAdminReview('${jsString(item.roomKey || item.id)}')">Despublicar</button>
+      </div>
+    </article>`;
+  }).join('')}</div>`;
+}
+
+function adminEditingDraft() {
+  return ADMIN_EDITING_DRAFT_ID ? ADMIN_REVIEW_DRAFTS[ADMIN_EDITING_DRAFT_ID] || null : null;
+}
+
+function newAdminReviewDraft() {
+  ADMIN_EDITING_DRAFT_ID = '';
+  SETTINGS_TAB = 'edit';
+  renderProfile();
+}
+
+function loadAdminReviewDraft(draftId) {
+  if (!ADMIN_REVIEW_DRAFTS[draftId]) return;
+  ADMIN_EDITING_DRAFT_ID = draftId;
+  SETTINGS_TAB = 'edit';
+  renderProfile();
+}
+
+function loadAdminPublishedReview(roomKey) {
+  const record = ADMIN_PUBLISHED_REVIEWS[roomKey];
+  if (!record) return;
+  const review = record.review || record;
+  const draftId = `published_${roomKey}`;
+  ADMIN_REVIEW_DRAFTS[draftId] = {
+    status: 'ready',
+    createdAt: record.publishedAt || record.updatedAt || Date.now(),
+    updatedAt: record.updatedAt || Date.now(),
+    createdBy: record.publishedBy || USER_ID,
+    createdByName: record.publishedByName || '',
+    sourceRoomKey: record.sourceRoomKey || '',
+    roomKey,
+    roomName: review.nombre || record.roomName || '',
+    review
+  };
+  ADMIN_EDITING_DRAFT_ID = draftId;
+  SETTINGS_TAB = 'edit';
+  renderProfile('Review publicada cargada para editar.');
+}
+
+function setAdminEditStatus(message) {
+  const node = document.getElementById('admin-review-status');
+  if (node) node.innerHTML = message || '';
+}
+
+async function setAdminReviewDraftStatus(draftId, status) {
+  if (!AUTH_USER || !IS_ADMIN || !FIREBASE_ENABLED || !ADMIN_REVIEW_DRAFTS[draftId]) return;
+  const draft = {
+    ...ADMIN_REVIEW_DRAFTS[draftId],
+    status,
+    updatedAt: Date.now(),
+    statusUpdatedBy: USER_ID
+  };
+  setAdminEditStatus('Actualizando borrador...');
+  try {
+    if (AUTH_USER) AUTH_TOKEN = await AUTH_USER.getIdToken(true);
+    await fbPut(`adminReviewDrafts/${draftId}`, draft);
+    ADMIN_REVIEW_DRAFTS[draftId] = draft;
+    SETTINGS_TAB = 'edit';
+    renderProfile(status === 'ready' ? 'Borrador marcado como revisado.' : 'Borrador devuelto a edicion.');
+  } catch (e) {
+    console.error(e);
+    setAdminEditStatus(`No se pudo actualizar el borrador. ${escapeHtml(e.message)}`);
+  }
+}
+
+async function deleteAdminReviewDraft(draftId) {
+  if (!AUTH_USER || !IS_ADMIN || !FIREBASE_ENABLED || !ADMIN_REVIEW_DRAFTS[draftId]) return;
+  if (!confirm('Eliminar este borrador de review?')) return;
+  setAdminEditStatus('Eliminando borrador...');
+  try {
+    if (AUTH_USER) AUTH_TOKEN = await AUTH_USER.getIdToken(true);
+    await fbDelete(`adminReviewDrafts/${draftId}`);
+    delete ADMIN_REVIEW_DRAFTS[draftId];
+    if (ADMIN_EDITING_DRAFT_ID === draftId) ADMIN_EDITING_DRAFT_ID = '';
+    SETTINGS_TAB = 'edit';
+    renderProfile('Borrador eliminado.');
+  } catch (e) {
+    console.error(e);
+    setAdminEditStatus(`No se pudo eliminar el borrador. ${escapeHtml(e.message)}`);
+  }
+}
+
+function adminReviewField(id, label, placeholder = '', wide = false, attrs = '', value = '') {
+  return `<div class="${wide ? 'wide' : ''}">
+    <label class="profile-field-label" for="${id}">${label}</label>
+    <input class="profile-input" id="${id}" ${attrs} value="${escapeHtml(value)}" placeholder="${escapeHtml(placeholder)}">
+  </div>`;
+}
+
+function renderSettingsEditHtml(message = '') {
+  if (!IS_ADMIN) return '';
+  const editingDraft = adminEditingDraft();
+  const editingReview = editingDraft?.review || {};
+  const editingLabel = editingDraft ? `Editando: ${escapeHtml(editingReview.nombre || editingDraft.roomName || 'borrador')}` : 'Nuevo borrador';
+  const searchValue = editingReview.nombre ? [editingReview.nombre, editingReview.empresa, editingReview.ciudad].filter(Boolean).join(' | ') : '';
+  const isPublished = !!currentAdminPublishedReview();
+  return `<div class="profile-section">
+    <div class="profile-section-title">Administracion de reviews</div>
+    <div class="admin-note">${editingLabel}. Las reviews publicadas aqui se guardan en Firebase y aparecen directamente en la pestaña Reviews.</div>
+    <datalist id="admin-review-room-list">${adminReviewOptionsHtml()}</datalist>
+    <div class="admin-review-grid">
+      <div class="wide">
+        <label class="profile-field-label" for="admin-review-room-search">Buscar sala del catalogo</label>
+        <div class="profile-row">
+          <input class="profile-input" id="admin-review-room-search" list="admin-review-room-list" value="${escapeHtml(searchValue)}" placeholder="Escribe nombre, empresa o ciudad" onchange="fillAdminReviewFromRoom()" onkeydown="if(event.key==='Enter'){event.preventDefault();fillAdminReviewFromRoom()}">
+          <button class="auth-btn secondary" type="button" onclick="fillAdminReviewFromRoom()">Rellenar</button>
+        </div>
+      </div>
+      ${adminReviewField('admin-review-name', 'Nombre sala', 'Nombre del escape', false, '', editingReview.nombre || '')}
+      ${adminReviewField('admin-review-company', 'Empresa', 'Empresa', false, '', editingReview.empresa || '')}
+      ${adminReviewField('admin-review-city', 'Ciudad', 'Ciudad', false, '', editingReview.ciudad || '')}
+      ${adminReviewField('admin-review-province', 'Provincia', 'Provincia', false, '', editingReview.provincia || '')}
+      ${adminReviewField('admin-review-duration', 'Duracion', '60', false, 'inputmode="numeric"', editingReview.duracion || '')}
+      ${adminReviewField('admin-review-difficulty', 'Dificultad', 'Media', false, '', editingReview.dificultad || '')}
+      ${adminReviewField('admin-review-rating', 'Valoracion grupo', '8.5', false, 'inputmode="decimal"', editingReview.valoracion || '')}
+      ${adminReviewField('admin-review-history', 'Historia', '0-10', false, 'inputmode="decimal"', editingReview.historia || '')}
+      ${adminReviewField('admin-review-ambient', 'Ambientacion', '0-10', false, 'inputmode="decimal"', editingReview.ambientacion || '')}
+      ${adminReviewField('admin-review-gameplay', 'Jugabilidad', '0-10', false, 'inputmode="decimal"', editingReview.jugabilidad || '')}
+      ${adminReviewField('admin-review-gamemaster', 'Game Master', '0-10', false, 'inputmode="decimal"', editingReview.gamemaster || '')}
+      <div class="wide">
+        <label class="profile-field-label" for="admin-review-text">Texto review</label>
+        <textarea class="profile-textarea" id="admin-review-text" maxlength="3000" placeholder="Review del grupo, sin spoilers.">${escapeHtml(editingReview.descripcion || '')}</textarea>
+      </div>
+    </div>
+    <div class="profile-row" style="margin-top:10px">
+      <button class="auth-btn" type="button" onclick="saveAdminReviewDraft()">${editingDraft ? 'Guardar cambios' : 'Guardar borrador'}</button>
+      <button class="auth-btn secondary" type="button" onclick="newAdminReviewDraft()">Nuevo borrador</button>
+      <span class="profile-status-msg" id="admin-review-status">${message || ''}</span>
+    </div>
+    <div class="profile-section-title" style="margin-top:14px">Publicacion</div>
+    <div class="admin-note">${isPublished ? 'Esta sala ya tiene una review publicada desde el panel admin. Si publicas de nuevo, se actualizara.' : 'Publica esta review para que aparezca al momento en la pestaña Reviews.'}</div>
+    <div class="profile-row" style="margin-top:10px">
+      <button class="auth-btn" type="button" onclick="publishAdminReview()">${isPublished ? 'Actualizar review publicada' : 'Publicar review'}</button>
+      <button class="auth-btn secondary" type="button" onclick="unpublishAdminReview()" ${isPublished ? '' : 'disabled'}>Despublicar</button>
+    </div>
+    <div class="profile-section-title" style="margin-top:14px">Borradores recientes</div>
+    ${adminDraftsListHtml()}
+    <div class="profile-section-title" style="margin-top:14px">Reviews publicadas</div>
+    ${adminPublishedListHtml()}
+  </div>`;
+}
+
+function adminReviewValue(id) {
+  return (document.getElementById(id)?.value || '').trim();
+}
+
+function parseAdminScore(value) {
+  const score = parseFloat(String(value || '').replace(',', '.'));
+  if (!Number.isFinite(score)) return '';
+  return Math.max(0, Math.min(10, Math.round(score * 10) / 10));
+}
+
+function currentAdminReviewKey() {
+  const name = adminReviewValue('admin-review-name') || adminEditingDraft()?.review?.nombre || '';
+  return slugify(name);
+}
+
+function currentAdminPublishedReview() {
+  const key = currentAdminReviewKey();
+  return key ? ADMIN_PUBLISHED_REVIEWS[key] || null : null;
+}
+
+function adminReviewFromForm() {
+  const selectedRoom = adminFindRoomByLabel(adminReviewValue('admin-review-room-search'));
+  const nombre = adminReviewValue('admin-review-name');
+  if (!nombre) return { error: 'Falta nombre de sala.' };
+  const review = {
+    nombre,
+    empresa: adminReviewValue('admin-review-company'),
+    ciudad: adminReviewValue('admin-review-city'),
+    provincia: adminReviewValue('admin-review-province'),
+    duracion: adminReviewValue('admin-review-duration'),
+    dificultad: adminReviewValue('admin-review-difficulty'),
+    valoracion: parseAdminScore(adminReviewValue('admin-review-rating')),
+    historia: parseAdminScore(adminReviewValue('admin-review-history')),
+    ambientacion: parseAdminScore(adminReviewValue('admin-review-ambient')),
+    jugabilidad: parseAdminScore(adminReviewValue('admin-review-gameplay')),
+    gamemaster: parseAdminScore(adminReviewValue('admin-review-gamemaster')),
+    descripcion: adminReviewValue('admin-review-text')
+  };
+  return {
+    selectedRoom,
+    review,
+    roomKey: userRoomKey(review)
+  };
+}
+
+async function saveAdminReviewDraft() {
+  if (!AUTH_USER || !IS_ADMIN || !FIREBASE_ENABLED) return;
+  const status = document.getElementById('admin-review-status');
+  const form = adminReviewFromForm();
+  if (form.error) {
+    if (status) status.textContent = form.error;
+    return;
+  }
+  const { selectedRoom, review, roomKey } = form;
+  const now = Date.now();
+  const previousDraft = adminEditingDraft();
+  const draftId = ADMIN_EDITING_DRAFT_ID || randomId('reviewdraft');
+  const draft = {
+    status: previousDraft?.status || 'draft',
+    createdAt: previousDraft?.createdAt || now,
+    updatedAt: now,
+    createdBy: previousDraft?.createdBy || USER_ID,
+    createdByName: previousDraft?.createdByName || shortDisplayName(),
+    sourceRoomKey: selectedRoom ? userRoomKey(selectedRoom) : previousDraft?.sourceRoomKey || '',
+    roomKey,
+    roomName: review.nombre,
+    review
+  };
+  if (status) status.textContent = 'Guardando borrador...';
+  try {
+    if (AUTH_USER) AUTH_TOKEN = await AUTH_USER.getIdToken(true);
+    await fbPut(`adminReviewDrafts/${draftId}`, draft);
+    ADMIN_REVIEW_DRAFTS[draftId] = draft;
+    ADMIN_EDITING_DRAFT_ID = draftId;
+    SETTINGS_TAB = 'edit';
+    renderProfile(previousDraft ? 'Borrador actualizado.' : 'Borrador admin guardado.');
+  } catch (e) {
+    console.error(e);
+    if (status) status.textContent = 'No se pudo guardar.';
+    setProfileStatus(`No se pudo guardar el borrador. Revisa reglas para adminReviewDrafts. ${escapeHtml(e.message)}`);
+  }
+}
+
+function refreshAfterAdminPublishedReview() {
+  populateFilters();
+  renderStats();
+  renderHechos();
+  renderRanking();
+  renderCatalogo();
+  updateFavCount();
+}
+
+async function publishAdminReview() {
+  if (!AUTH_USER || !IS_ADMIN || !FIREBASE_ENABLED) return;
+  const status = document.getElementById('admin-review-status');
+  const form = adminReviewFromForm();
+  if (form.error) {
+    if (status) status.textContent = form.error;
+    return;
+  }
+  const now = Date.now();
+  const { selectedRoom, review, roomKey } = form;
+  const previous = ADMIN_PUBLISHED_REVIEWS[roomKey] || {};
+  const payload = {
+    status: 'published',
+    roomKey,
+    sourceRoomKey: selectedRoom ? userRoomKey(selectedRoom) : previous.sourceRoomKey || '',
+    roomName: review.nombre,
+    review,
+    publishedAt: previous.publishedAt || now,
+    updatedAt: now,
+    publishedBy: previous.publishedBy || USER_ID,
+    updatedBy: USER_ID,
+    publishedByName: previous.publishedByName || shortDisplayName()
+  };
+  if (status) status.textContent = 'Publicando review...';
+  try {
+    if (AUTH_USER) AUTH_TOKEN = await AUTH_USER.getIdToken(true);
+    await fbPut(`adminPublishedReviews/${roomKey}`, payload);
+    ADMIN_PUBLISHED_REVIEWS[roomKey] = payload;
+    await saveAdminReviewDraft();
+    refreshAfterAdminPublishedReview();
+    SETTINGS_TAB = 'edit';
+    renderProfile('Review publicada. Ya aparece en la pestaña Reviews.');
+  } catch (e) {
+    console.error(e);
+    if (status) status.textContent = 'No se pudo publicar.';
+    setAdminEditStatus(`No se pudo publicar la review. Revisa reglas para adminPublishedReviews. ${escapeHtml(e.message)}`);
+  }
+}
+
+async function unpublishAdminReview(explicitRoomKey = '') {
+  if (!AUTH_USER || !IS_ADMIN || !FIREBASE_ENABLED) return;
+  const roomKey = explicitRoomKey || currentAdminReviewKey();
+  if (!roomKey || !ADMIN_PUBLISHED_REVIEWS[roomKey]) {
+    setAdminEditStatus('Esta review no esta publicada.');
+    return;
+  }
+  if (!confirm('Despublicar esta review? Dejaria de verse en Reviews si no existe en el Excel.')) return;
+  setAdminEditStatus('Despublicando review...');
+  try {
+    if (AUTH_USER) AUTH_TOKEN = await AUTH_USER.getIdToken(true);
+    await fbDelete(`adminPublishedReviews/${roomKey}`);
+    delete ADMIN_PUBLISHED_REVIEWS[roomKey];
+    refreshAfterAdminPublishedReview();
+    SETTINGS_TAB = 'edit';
+    renderProfile('Review despublicada.');
+  } catch (e) {
+    console.error(e);
+    setAdminEditStatus(`No se pudo despublicar la review. ${escapeHtml(e.message)}`);
+  }
+}
+
+function accountRoleInfoHtml() {
+  if (IS_ADMIN) return '';
+  const rawRole = ADMIN_ROLE_RAW === null ? 'null' : JSON.stringify(ADMIN_ROLE_RAW);
+  return `<div class="profile-section">
+    <div class="profile-section-title">Cuenta Firebase</div>
+    <div class="admin-note">
+      UID de esta sesion:<br><code>${escapeHtml(USER_ID)}</code>
+      ${ADMIN_ROLE_ERROR ? `<br><br>No se pudo leer <code>admins/${escapeHtml(USER_ID)}</code>:<br><code>${escapeHtml(ADMIN_ROLE_ERROR)}</code>` : `<br><br>Valor leido en <code>admins/${escapeHtml(USER_ID)}</code>:<br><code>${escapeHtml(rawRole)}</code><br><br>Para activar admin debe ser <code>true</code>.`}
+      <div class="profile-row" style="margin-top:10px">
+        <button class="auth-btn secondary" type="button" onclick="copyTextToClipboard('${jsString(USER_ID)}').then(ok => setProfileStatus(ok ? 'UID copiado.' : 'No se pudo copiar el UID.'))">Copiar UID</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function profileSettingsHtml(message = '') {
   const groups = activeUserGroups();
   const publicName = escapeHtml(shortDisplayName());
   const city = escapeHtml(USER_PROFILE.baseCity || '');
@@ -2232,12 +2754,12 @@ function renderProfile(message = '') {
   const bio = escapeHtml(USER_PROFILE.bio || '');
   const photo = publicPhotoURL();
   const place = [USER_PROFILE.baseCity, USER_PROFILE.baseProvince].filter(Boolean).join(' - ') || 'Sin ubicacion base';
-  root.innerHTML = `
+  return `
     <div class="profile-section">
       <div class="profile-section-title">Mi perfil escapista</div>
       <div class="profile-preview">
         ${photo ? `<img class="auth-avatar" src="${escapeHtml(photo)}" alt="" referrerpolicy="no-referrer">` : '<div class="auth-avatar"></div>'}
-        <div><div class="profile-preview-name">${publicName}</div><div class="profile-preview-meta">${escapeHtml(place)}</div></div>
+        <div><div class="profile-preview-name">${publicName}</div><div class="profile-preview-meta">${escapeHtml(place)}</div>${IS_ADMIN ? '<span class="profile-admin-badge">Admin web</span>' : ''}</div>
       </div>
       <label class="profile-field-label" for="profile-public-name">Nombre publico</label>
       <div class="profile-row"><input class="profile-input" id="profile-public-name" maxlength="40" value="${publicName}" placeholder="Tu alias escapista"></div>
@@ -2251,6 +2773,7 @@ function renderProfile(message = '') {
       <div class="profile-row" style="margin-top:10px"><button class="auth-btn" type="button" onclick="saveProfileSettings()">Guardar perfil</button></div>
       <div class="profile-status-msg" id="profile-status">${message || ''}</div>
     </div>
+    ${accountRoleInfoHtml()}
     <div class="profile-section">
       <div class="profile-section-title">Crear grupo escapista</div>
       <div class="profile-row">
@@ -2273,6 +2796,18 @@ function renderProfile(message = '') {
         </article>`).join('') : '<div class="review-empty">Todavia no tienes grupos. Crea uno y comparte la invitacion.</div>'}
       </div>
     </div>`;
+}
+
+function renderProfile(message = '') {
+  const root = document.getElementById('profile-content');
+  if (!root) return;
+  if (!AUTH_USER) {
+    root.innerHTML = `<div class="profile-section"><div class="profile-section-title">Cuenta</div><div class="review-empty">Entra con Google para crear y compartir grupos escapistas.</div></div>`;
+    return;
+  }
+  if (SETTINGS_TAB === 'edit' && !IS_ADMIN) SETTINGS_TAB = 'profile';
+  const content = SETTINGS_TAB === 'edit' ? renderSettingsEditHtml(message) : profileSettingsHtml(message);
+  root.innerHTML = `${settingsTabsHtml()}${content}`;
 }
 
 async function saveProfileSettings() {
@@ -2304,6 +2839,7 @@ async function saveProfileSettings() {
   renderHechos();
   renderRanking();
   renderCatalogo();
+  SETTINGS_TAB = 'profile';
   renderProfile('Perfil actualizado.');
 }
 
@@ -2604,6 +3140,7 @@ async function signInGoogle() {
   AUTH_USER = result.user || FIREBASE_AUTH.currentUser;
   USER_ID = AUTH_USER ? AUTH_USER.uid : LOCAL_USER_ID;
   AUTH_TOKEN = AUTH_USER ? await AUTH_USER.getIdToken() : '';
+  await loadAdminRole();
   renderAuthStatus();
 
   try {
@@ -2621,6 +3158,7 @@ async function signOutGoogle() {
   AUTH_USER = null;
   AUTH_TOKEN = '';
   USER_ID = LOCAL_USER_ID;
+  IS_ADMIN = false;
   FAVS = readStoredFavs('er_favs');
   USER_PROFILE = {};
   USER_GROUPS = {};
@@ -3121,6 +3659,9 @@ async function loadLiveDataAfterInitialRender() {
     await initFirebaseAuth();
     await loadUserRoomStates();
     await loadUserProfile();
+    await loadAdminRole();
+    await loadAdminReviewDrafts();
+    await loadAdminPublishedReviews();
     await saveUserProfile();
     renderAuthStatus();
     await loadVotes();
@@ -3271,7 +3812,7 @@ function populateFilters() {
   fill('filter-ciudad-cat',  [...new Set(CATALOGO.map(c=>c.ciudad).filter(Boolean))].sort(), 'Ciudad');
   fill('filter-jugadores-cat', ['1','2','3','4','5','6','7','8','9','10'].filter(n => CATALOGO.some(c => supportsPlayers(c, n))).map(n => `${n} jugador${n === '1' ? '' : 'es'}`), 'Jugadores');
   fill('filter-dif-cat',     [...new Set(CATALOGO.map(c=>c.dificultad).filter(Boolean))].sort(), 'Dificultad');
-  fill('filter-comunidad-rank', [...new Set(uniqueRooms([...CATALOGO, ...PENDIENTES, ...HECHOS]).map(c=>communityOf(c)).filter(Boolean))].sort(), 'Comunidad');
+  fill('filter-comunidad-rank', [...new Set(uniqueRooms([...CATALOGO, ...PENDIENTES, ...reviewRooms()]).map(c=>communityOf(c)).filter(Boolean))].sort(), 'Comunidad');
   rankCommunityFilter = document.getElementById('filter-comunidad-rank')?.value || '';
   document.getElementById('badge-pend').textContent  = pendingRooms.length;
   document.getElementById('badge-mine').textContent = personalDoneRooms().length;
@@ -3307,7 +3848,7 @@ function renderStats() {
   const total = doneRooms.length + pendingRooms.length;
 
   // Media grupo (solo los que tienen valoración)
-  const conVal = HECHOS.filter(h => parseFloat(h.valoracion) > 0);
+  const conVal = reviewRooms().filter(h => parseFloat(h.valoracion) > 0);
   const avgGrupo = conVal.length
     ? (conVal.reduce((s,h) => s + parseFloat(h.valoracion), 0) / conVal.length).toFixed(1) : '—';
 
@@ -4014,12 +4555,12 @@ function roomKey(room) {
 }
 
 function findDetailRoom(kind, key) {
-  const list = kind === 'catalogo' ? CATALOGO : kind === 'hechos' ? HECHOS : PENDIENTES;
+  const list = kind === 'catalogo' ? CATALOGO : kind === 'hechos' ? reviewRooms() : PENDIENTES;
   return list.find(room => roomKey(room) === key) || null;
 }
 
 function detailRefForRoom(room, order = ['catalogo', 'pendientes', 'hechos']) {
-  const lists = { catalogo: CATALOGO, pendientes: PENDIENTES, hechos: HECHOS };
+  const lists = { catalogo: CATALOGO, pendientes: PENDIENTES, hechos: reviewRooms() };
   const exactKey = roomKey(room);
   for (const kind of order) {
     if ((lists[kind] || []).some(item => roomKey(item) === exactKey)) return { kind, key: exactKey };
@@ -4358,7 +4899,7 @@ function cardPend(p, i) {
 
 function cardHecho(h, rank) {
   const slug    = roomVoteSlug(h);
-  const detailKind = HECHOS.some(room => userRoomKey(room) === userRoomKey(h))
+  const detailKind = reviewRooms().some(room => userRoomKey(room) === userRoomKey(h))
     ? 'hechos'
     : CATALOGO.some(room => userRoomKey(room) === userRoomKey(h)) ? 'catalogo' : 'pendientes';
   const medals  = ['gold','silver','bronze'];
@@ -4648,10 +5189,10 @@ function rankingRooms() {
     byKey.set(key, merged);
   };
 
-  uniqueRooms([...CATALOGO, ...PENDIENTES, ...HECHOS]).forEach(room => {
+  uniqueRooms([...CATALOGO, ...PENDIENTES, ...reviewRooms()]).forEach(room => {
     if (voteStatsForRoom(room).count > 0) mergeRoom(room, 'comunidad');
   });
-  HECHOS.forEach(room => mergeRoom(room, 'grupo'));
+  reviewRooms().forEach(room => mergeRoom(room, 'grupo'));
 
   return [...byKey.values()];
 }
@@ -4707,7 +5248,7 @@ function renderRanking() {
       const commScore = count > 0
         ? `<span class="comm-avg">★ ${(avg * 2).toFixed(1)}</span> <span class="comm-count">(${count})</span>`
         : `<span class="comm-empty">—</span>`;
-      const hasGroupReview = HECHOS.some(item => userRoomKey(item) === userRoomKey(room));
+      const hasGroupReview = reviewRooms().some(item => userRoomKey(item) === userRoomKey(room));
       const detailRef = detailRefForRoom(room, hasGroupReview ? ['hechos','catalogo','pendientes'] : ['catalogo','hechos','pendientes']);
       const detailKind = detailRef.kind;
       const detailKey = jsString(detailRef.key);
@@ -4913,7 +5454,7 @@ function rankingSourcePills(room) {
 }
 
 function rankingRooms() {
-  return uniqueRooms([...CATALOGO, ...PENDIENTES, ...HECHOS])
+  return uniqueRooms([...CATALOGO, ...PENDIENTES, ...reviewRooms()])
     .filter(room => {
       if (rankTerrorFilter === 'only') return !!room.terror;
       if (rankTerrorFilter === 'no') return !room.terror;
@@ -4949,7 +5490,7 @@ function renderRanking() {
       <th>Fuentes</th><th>Ciudad</th>
     </tr></thead>
     <tbody>${rows.map(({ room, global }, i) => {
-      const hasGroupReview = HECHOS.some(item => userRoomKey(item) === userRoomKey(room));
+      const hasGroupReview = reviewRooms().some(item => userRoomKey(item) === userRoomKey(room));
       const detailRef = detailRefForRoom(room, hasGroupReview ? ['hechos','catalogo','pendientes'] : ['catalogo','hechos','pendientes']);
       const detailKind = detailRef.kind;
       const detailKey = jsString(detailRef.key);
