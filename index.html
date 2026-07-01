@@ -7,6 +7,10 @@
 <meta name="description" content="The Vault es un catalogo de escape rooms con reviews, ranking, premios y seguimiento personal de salas pendientes, hechas y favoritas.">
 <meta name="theme-color" content="#0a0a0f">
 <meta name="application-name" content="The Vault">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="The Vault">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="icon" href="images/brand/favicon.svg" type="image/svg+xml">
 <link rel="alternate icon" href="images/brand/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="images/brand/apple-touch-icon.png">
@@ -2623,6 +2627,25 @@ function adminReviewFromForm() {
   };
 }
 
+function validateAdminReviewForPublish(form) {
+  if (form.error) return form.error;
+  const { review, roomKey } = form;
+  if (!review.nombre) return 'Falta nombre de sala.';
+  if (review.valoracion === '') return 'Falta la valoracion grupo.';
+  if (review.valoracion < 0 || review.valoracion > 10) return 'La valoracion grupo debe estar entre 0 y 10.';
+  if (!String(review.descripcion || '').trim()) {
+    const ok = confirm('La review no tiene texto. Publicar solo con puntuaciones?');
+    if (!ok) return 'Publicacion cancelada: falta texto de review.';
+  }
+  const historicalReview = HECHOS.find(room => userRoomKey(room) === roomKey);
+  const alreadyPublished = !!ADMIN_PUBLISHED_REVIEWS[roomKey];
+  if (historicalReview && !alreadyPublished) {
+    const ok = confirm('Esta sala ya tiene review historica en el Excel. Si publicas desde Firebase, esta version tendra prioridad visual. Continuar?');
+    if (!ok) return 'Publicacion cancelada.';
+  }
+  return '';
+}
+
 async function saveAdminReviewDraft() {
   if (!AUTH_USER || !IS_ADMIN || !FIREBASE_ENABLED) return;
   const status = document.getElementById('admin-review-status');
@@ -2674,8 +2697,9 @@ async function publishAdminReview() {
   if (!AUTH_USER || !IS_ADMIN || !FIREBASE_ENABLED) return;
   const status = document.getElementById('admin-review-status');
   const form = adminReviewFromForm();
-  if (form.error) {
-    if (status) status.textContent = form.error;
+  const validationError = validateAdminReviewForPublish(form);
+  if (validationError) {
+    if (status) status.textContent = validationError;
     return;
   }
   const now = Date.now();
@@ -5506,6 +5530,16 @@ function renderRanking() {
     }).join('')}</tbody>`;
   if (info) info.textContent = `${rows.length} salas con nota global - ${terrorLabel} - ${communityLabel} - ${multiSourceCount} con varias fuentes - ${votedCount} con votos de comunidad`;
 }
+
+function registerServiceWorker() {
+  if (!('serviceWorker' in navigator)) return;
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js')
+      .catch(error => console.warn('No se pudo registrar la PWA:', error.message));
+  });
+}
+
+registerServiceWorker();
 </script>
 </body>
 </html>
