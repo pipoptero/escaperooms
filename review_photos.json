@@ -1,11 +1,13 @@
 {
   "meta": {
-    "generated_at": "2026-06-26T13:49:56",
+    "generated_at": "2026-07-02T12:45:13",
     "source": "images/Hechos",
-    "groups": 10,
-    "photos": 21,
+    "groups": 14,
+    "photos": 27,
     "unmatched": [
-      "Experiment.jpeg"
+      "Experiment.jpeg",
+      "La Historia de Charlotte 1.jpeg",
+      "La Historia de Charlotte 2.jpeg"
     ]
   },
   "photos": {
@@ -44,6 +46,15 @@
         {
           "src": "images/Hechos/El Secreto de los Krugger 6.jpeg",
           "alt": "El secreto de los Krugger - foto del grupo"
+        }
+      ]
+    },
+    "encryptroom": {
+      "room": "encryptroom",
+      "photos": [
+        {
+          "src": "images/Hechos/encryptroom.jpeg",
+          "alt": "encryptroom - foto del grupo"
         }
       ]
     },
@@ -87,6 +98,37 @@
         }
       ]
     },
+    "la_historia_de_charlotte": {
+      "room": "La Historia de Charlotte",
+      "photos": [
+        {
+          "src": "images/Hechos/La Historia de Charlotte 1.jpeg",
+          "alt": "La Historia de Charlotte - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/La Historia de Charlotte 2.jpeg",
+          "alt": "La Historia de Charlotte - foto del grupo"
+        }
+      ]
+    },
+    "la_taberna": {
+      "room": "La Taberna",
+      "photos": [
+        {
+          "src": "images/Hechos/La Taberna.jpeg",
+          "alt": "La Taberna - foto del grupo"
+        }
+      ]
+    },
+    "londium": {
+      "room": "Londium",
+      "photos": [
+        {
+          "src": "images/Hechos/Londium.jpeg",
+          "alt": "Londium - foto del grupo"
+        }
+      ]
+    },
     "nightshift": {
       "room": "Nightshift",
       "photos": [
@@ -100,6 +142,10 @@
         },
         {
           "src": "images/Hechos/Nightshift 3.jpeg",
+          "alt": "Nightshift - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/Nightshift 4.jpeg",
           "alt": "Nightshift - foto del grupo"
         }
       ]
