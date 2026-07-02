@@ -535,6 +535,21 @@
   .review-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .22s ease,filter .22s ease;}
   .review-photo:hover img{transform:scale(1.035);filter:brightness(1.08);}
   .detail-review .review-photo-gallery{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));margin-top:12px;}
+  .photo-lightbox{position:fixed;inset:0;z-index:260;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.86);backdrop-filter:blur(10px);}
+  .photo-lightbox.open{display:flex;}
+  .photo-lightbox-dialog{position:relative;width:min(1120px,100%);height:min(88vh,820px);display:grid;grid-template-rows:minmax(0,1fr) auto;align-items:center;justify-items:center;gap:10px;}
+  .photo-lightbox-frame{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid rgba(245,166,35,.26);background:rgba(8,8,12,.82);box-shadow:0 24px 80px rgba(0,0,0,.72);}
+  .photo-lightbox-img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block;}
+  .photo-lightbox-close,.photo-lightbox-nav{border:1px solid rgba(245,166,35,.36);background:rgba(13,13,20,.86);color:var(--amber);font-family:'Share Tech Mono',monospace;cursor:pointer;transition:background .18s,border-color .18s,transform .18s;}
+  .photo-lightbox-close:hover,.photo-lightbox-nav:hover{background:rgba(245,166,35,.12);border-color:var(--amber);}
+  .photo-lightbox-close{position:absolute;top:10px;right:10px;z-index:3;width:42px;height:42px;font-size:1rem;}
+  .photo-lightbox-nav{position:absolute;top:50%;z-index:3;width:48px;height:64px;margin-top:-32px;font-size:1.7rem;}
+  .photo-lightbox-prev{left:10px;}
+  .photo-lightbox-next{right:10px;}
+  .photo-lightbox-nav[hidden]{display:none;}
+  .photo-lightbox-meta{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;}
+  .photo-lightbox-caption{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2);}
+  .photo-lightbox-count{white-space:nowrap;color:var(--amber);}
   .rv-web{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--text3);text-decoration:none;letter-spacing:.07em;text-transform:uppercase;transition:color .2s;margin-top:auto;align-self:flex-start;}
   .rv-web:hover{color:var(--amber);} .rv-web::before{content:'→ ';}
 
@@ -649,7 +664,7 @@
   .rank-source-list{display:flex;gap:4px;flex-wrap:wrap;max-width:280px;}
   .rank-source-pill{font-family:'Share Tech Mono',monospace;font-size:.56rem;letter-spacing:.05em;text-transform:uppercase;border:1px solid rgba(245,166,35,.18);background:rgba(245,166,35,.05);color:var(--text2);padding:2px 6px;white-space:nowrap;}
   .rank-source-pill.stale{border-color:rgba(230,57,70,.24);color:var(--text3);}
-  .rank-mobile-title,.rank-mobile-company,.rank-mobile-score,.rank-mobile-thumb{display:none;}
+  .rank-mobile-title,.rank-mobile-title-line,.rank-mobile-company,.rank-mobile-score,.rank-mobile-thumb{display:none;}
 
   /* Ranking responsive: en móvil la tabla pasa a tarjetas verticales */
   @media(max-width:760px){
@@ -751,9 +766,18 @@
       color:rgba(245,166,35,.55);
     }
     .rank-mobile-thumb img + .rank-mobile-thumb-fallback{display:none;}
-    .rank-mobile-head{min-width:0;}
+    .rank-mobile-head{min-width:0;display:flex;flex-direction:column;gap:3px;}
+    .rank-mobile-title-line{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:8px;
+      min-width:0;
+    }
     .rank-mobile-title{
       display:block;
+      flex:1 1 auto;
+      min-width:0;
       font-family:'Cinzel',serif;
       font-size:.98rem;
       line-height:1.25;
@@ -769,16 +793,19 @@
       overflow-wrap:anywhere;
     }
     .rank-mobile-score{
-      display:block;
-      align-self:center;
+      display:inline-flex;
+      flex:0 0 auto;
+      align-items:center;
+      align-self:flex-start;
       font-family:'Cinzel',serif;
-      font-size:1.08rem;
+      font-size:.95rem;
+      line-height:1;
       font-weight:700;
       color:var(--amber);
       white-space:nowrap;
       border:1px solid rgba(245,166,35,.2);
       background:rgba(245,166,35,.06);
-      padding:4px 7px;
+      padding:5px 7px;
     }
     .ranking-table td[data-label="Escape Room"],
     .ranking-table td[data-label="Empresa"],
@@ -807,11 +834,12 @@
     .ranking-table td{gap:10px;font-size:.86rem;}
     .ranking-table td::before{flex-basis:88px;font-size:.52rem;}
     .rank-score-group{font-size:.95rem;}
-    .ranking-table td[data-label="#"]{grid-template-columns:auto 46px minmax(0,1fr);grid-template-areas:"pos thumb head" "score score score";row-gap:7px;}
+    .ranking-table td[data-label="#"]{grid-template-columns:auto 46px minmax(0,1fr);grid-template-areas:"pos thumb head";row-gap:7px;}
     .ranking-table td[data-label="#"] .rank-pos{grid-area:pos;}
     .rank-mobile-thumb{grid-area:thumb;width:46px;}
     .rank-mobile-head{grid-area:head;}
-    .rank-mobile-score{grid-area:score;justify-self:start;}
+    .rank-mobile-title{font-size:.92rem;line-height:1.22;}
+    .rank-mobile-score{font-size:.86rem;padding:5px 6px;}
   }
 
   @media(max-width:640px){
@@ -863,6 +891,15 @@
   .detail-review{padding:10px 11px;}
   .detail-review-text{font-size:.9rem;line-height:1.48;}
   .review-photo-gallery{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .photo-lightbox{padding:10px;}
+  .photo-lightbox-dialog{height:88dvh;gap:8px;}
+  .photo-lightbox-frame{border-left:none;border-right:none;}
+  .photo-lightbox-close{top:8px;right:8px;width:40px;height:40px;background:rgba(8,8,12,.92);}
+  .photo-lightbox-nav{width:42px;height:58px;margin-top:-29px;background:rgba(8,8,12,.82);}
+  .photo-lightbox-prev{left:8px;}
+  .photo-lightbox-next{right:8px;}
+  .photo-lightbox-meta{font-size:.62rem;align-items:flex-start;flex-direction:column;gap:4px;}
+  .photo-lightbox-caption{white-space:normal;line-height:1.35;}
   .detail-cats{grid-template-columns:1fr;}
     .detail-personal-grid{grid-template-columns:1fr;}
     .detail-account-head{align-items:flex-start;flex-direction:column;}
@@ -1187,6 +1224,21 @@
     <div class="profile-body" id="profile-content"></div>
   </div>
 </div>
+
+<div class="photo-lightbox" id="photo-lightbox" aria-hidden="true" onclick="closePhotoLightbox(event)">
+  <div class="photo-lightbox-dialog" role="dialog" aria-modal="true" aria-label="Fotos del escape" onclick="event.stopPropagation()">
+    <div class="photo-lightbox-frame">
+      <button class="photo-lightbox-close" type="button" onclick="closePhotoLightbox()" aria-label="Cerrar foto">X</button>
+      <button class="photo-lightbox-nav photo-lightbox-prev" id="photo-lightbox-prev" type="button" onclick="stepPhotoLightbox(-1)" aria-label="Foto anterior">&lt;</button>
+      <img class="photo-lightbox-img" id="photo-lightbox-img" src="" alt="">
+      <button class="photo-lightbox-nav photo-lightbox-next" id="photo-lightbox-next" type="button" onclick="stepPhotoLightbox(1)" aria-label="Foto siguiente">&gt;</button>
+    </div>
+    <div class="photo-lightbox-meta">
+      <div class="photo-lightbox-caption" id="photo-lightbox-caption"></div>
+      <div class="photo-lightbox-count" id="photo-lightbox-count"></div>
+    </div>
+  </div>
+</div>
 <script src="firebase-config.js"></script>
 <script>
 // ════════════════════════════════════════════════════════════
@@ -1251,6 +1303,8 @@ let PENDIENTES = [], HECHOS = [], CATALOGO = [], TERPECA_AWARDS = [], EXTRA_AWAR
 const CATALOG_PAGE_SIZE = 120;
 let catalogVisibleCount = CATALOG_PAGE_SIZE;
 let GROUP_ROOM_INDEX = { pendientes: new Set(), hechos: new Set() };
+let PHOTO_LIGHTBOX_ITEMS = [];
+let PHOTO_LIGHTBOX_INDEX = 0;
 let ACTIVE_TAB = 'catalogo';
 const AWARD_CACHE = new Map();
 const GLOBAL_RATING_CACHE = new Map();
@@ -4696,30 +4750,89 @@ function detailImageHtml(room, kind) {
   return `<img src="${src}" alt="${escapeHtml(room.nombre || 'Escape room')}" onerror="this.replaceWith(this.nextElementSibling)">${fallback}`;
 }
 
-function reviewPhotosFor(room) {
+function reviewPhotosEntryFor(room) {
   const keys = [
     slugify(room.nombre || ''),
     slugify(room.id || ''),
     slugify(`${room.nombre || ''} ${room.empresa || ''}`)
   ].filter(Boolean);
   for (const key of keys) {
-    if (REVIEW_PHOTOS[key]?.photos?.length) return REVIEW_PHOTOS[key].photos;
+    if (REVIEW_PHOTOS[key]?.photos?.length) return { key, photos: REVIEW_PHOTOS[key].photos };
   }
-  return [];
+  return null;
+}
+
+function reviewPhotosFor(room) {
+  return reviewPhotosEntryFor(room)?.photos || [];
 }
 
 function reviewPhotosHtml(room) {
-  const photos = reviewPhotosFor(room);
+  const entry = reviewPhotosEntryFor(room);
+  const photos = entry?.photos || [];
   if (!photos.length) return '';
+  const galleryKey = jsString(entry.key);
   return `
     <div class="rv-opinion-label" style="margin-top:12px">Fotos del grupo</div>
     <div class="review-photo-gallery">
-      ${photos.map(photo => `
-        <a class="review-photo" href="${escapeHtml(photo.src)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+      ${photos.map((photo, index) => `
+        <a class="review-photo" href="${escapeHtml(photo.src)}" target="_blank" rel="noopener" onclick="openPhotoLightbox(event, '${galleryKey}', ${index})">
           <img src="${escapeHtml(photo.src)}" alt="${escapeHtml(photo.alt || room.nombre || 'Foto del grupo')}" loading="lazy">
         </a>
       `).join('')}
     </div>`;
+}
+
+function openPhotoLightbox(event, galleryKey, index = 0) {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  const photos = REVIEW_PHOTOS[galleryKey]?.photos || [];
+  if (!photos.length) return;
+  PHOTO_LIGHTBOX_ITEMS = photos;
+  PHOTO_LIGHTBOX_INDEX = Math.max(0, Math.min(Number(index) || 0, photos.length - 1));
+  renderPhotoLightbox();
+  const modal = document.getElementById('photo-lightbox');
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+
+function renderPhotoLightbox() {
+  const modal = document.getElementById('photo-lightbox');
+  if (!modal) return;
+  const photo = PHOTO_LIGHTBOX_ITEMS[PHOTO_LIGHTBOX_INDEX];
+  const img = document.getElementById('photo-lightbox-img');
+  const caption = document.getElementById('photo-lightbox-caption');
+  const count = document.getElementById('photo-lightbox-count');
+  const prev = document.getElementById('photo-lightbox-prev');
+  const next = document.getElementById('photo-lightbox-next');
+  if (!photo) return;
+  img.src = photo.src || '';
+  img.alt = photo.alt || 'Foto del grupo';
+  caption.textContent = photo.alt || 'Foto del grupo';
+  count.textContent = `${PHOTO_LIGHTBOX_INDEX + 1} / ${PHOTO_LIGHTBOX_ITEMS.length}`;
+  const single = PHOTO_LIGHTBOX_ITEMS.length < 2;
+  prev.hidden = single;
+  next.hidden = single;
+}
+
+function stepPhotoLightbox(delta) {
+  if (!PHOTO_LIGHTBOX_ITEMS.length) return;
+  PHOTO_LIGHTBOX_INDEX = (PHOTO_LIGHTBOX_INDEX + delta + PHOTO_LIGHTBOX_ITEMS.length) % PHOTO_LIGHTBOX_ITEMS.length;
+  renderPhotoLightbox();
+}
+
+function closePhotoLightbox(event) {
+  if (event && event.target !== document.getElementById('photo-lightbox')) return;
+  const modal = document.getElementById('photo-lightbox');
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden', 'true');
+  PHOTO_LIGHTBOX_ITEMS = [];
+  PHOTO_LIGHTBOX_INDEX = 0;
+  if (!document.getElementById('detail-modal')?.classList.contains('open') && !document.getElementById('profile-modal')?.classList.contains('open')) {
+    document.body.style.overflow = '';
+  }
 }
 
 function metaItem(label, value, extraClass = '') {
@@ -4942,6 +5055,12 @@ function closeDetail(event) {
 }
 
 document.addEventListener('keydown', event => {
+  if (document.getElementById('photo-lightbox')?.classList.contains('open')) {
+    if (event.key === 'Escape') closePhotoLightbox();
+    if (event.key === 'ArrowLeft') stepPhotoLightbox(-1);
+    if (event.key === 'ArrowRight') stepPhotoLightbox(1);
+    return;
+  }
   if (event.key === 'Escape' && document.getElementById('detail-modal')?.classList.contains('open')) {
     closeDetail();
   }
@@ -5367,7 +5486,7 @@ function renderRanking() {
       const detailKind = detailRef.kind;
       const detailKey = jsString(detailRef.key);
       return `<tr class="rank-clickable" tabindex="0" role="button" onclick="openDetailFromCard(event,'${detailKind}','${detailKey}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetail('${detailKind}','${detailKey}')}">
-        <td data-label="#"><span class="rank-pos ${medals[i]||''}">${emoji[i]||'#'+(i+1)}</span>${rankingThumbHtml(room)}<span class="rank-mobile-head"><span class="rank-mobile-title">${escapeHtml(room.nombre || 'Escape room')}</span><span class="rank-mobile-company">${room.empresa ? `(${escapeHtml(room.empresa)})` : ''}</span></span><span class="rank-mobile-score">★ ${typeof global !== 'undefined' ? global.score.toFixed(1) : (displayRating(room) || room.valoracion || '')}</span></td>
+        <td data-label="#"><span class="rank-pos ${medals[i]||''}">${emoji[i]||'#'+(i+1)}</span>${rankingThumbHtml(room)}<span class="rank-mobile-head"><span class="rank-mobile-title-line"><span class="rank-mobile-title">${escapeHtml(room.nombre || 'Escape room')}</span><span class="rank-mobile-score">★ ${typeof global !== 'undefined' ? global.score.toFixed(1) : (displayRating(room) || room.valoracion || '')}</span></span><span class="rank-mobile-company">${room.empresa ? `(${escapeHtml(room.empresa)})` : ''}</span></span></td>
         <td data-label="Escape Room"><span class="rank-room-name">${escapeHtml(room.nombre || '—')}</span></td>
         <td data-label="Empresa">${escapeHtml(room.empresa || '—')}</td>
         <td data-label="Dificultad"><span class="meta-val ${dc(room.dificultad)}" style="font-size:.82rem">⚠ ${escapeHtml(room.dificultad || '—')}</span></td>
@@ -5619,7 +5738,7 @@ function renderRanking() {
       const detailKey = jsString(detailRef.key);
       const location = [cleanValue(room.ciudad), cleanValue(room.provincia)].filter(Boolean).join(' · ') || '—';
       return `<tr class="rank-clickable" tabindex="0" role="button" onclick="openDetailFromCard(event,'${detailKind}','${detailKey}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetail('${detailKind}','${detailKey}')}">
-        <td data-label="#"><span class="rank-pos ${medals[i]||''}">${emoji[i]||'#'+(i+1)}</span>${rankingThumbHtml(room)}<span class="rank-mobile-head"><span class="rank-mobile-title">${escapeHtml(room.nombre || 'Escape room')}</span><span class="rank-mobile-company">${room.empresa ? `(${escapeHtml(room.empresa)})` : ''}</span></span><span class="rank-mobile-score">★ ${typeof global !== 'undefined' ? global.score.toFixed(1) : (displayRating(room) || room.valoracion || '')}</span></td>
+        <td data-label="#"><span class="rank-pos ${medals[i]||''}">${emoji[i]||'#'+(i+1)}</span>${rankingThumbHtml(room)}<span class="rank-mobile-head"><span class="rank-mobile-title-line"><span class="rank-mobile-title">${escapeHtml(room.nombre || 'Escape room')}</span><span class="rank-mobile-score">★ ${typeof global !== 'undefined' ? global.score.toFixed(1) : (displayRating(room) || room.valoracion || '')}</span></span><span class="rank-mobile-company">${room.empresa ? `(${escapeHtml(room.empresa)})` : ''}</span></span></td>
         <td data-label="Escape Room"><span class="rank-room-name">${escapeHtml(room.nombre || '—')}</span></td>
         <td data-label="Empresa">${escapeHtml(room.empresa || '—')}</td>
         <td data-label="Nota global"><span class="rank-global-score">★ ${global.score.toFixed(1)}</span></td>
