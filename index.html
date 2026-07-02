@@ -649,7 +649,7 @@
   .rank-source-list{display:flex;gap:4px;flex-wrap:wrap;max-width:280px;}
   .rank-source-pill{font-family:'Share Tech Mono',monospace;font-size:.56rem;letter-spacing:.05em;text-transform:uppercase;border:1px solid rgba(245,166,35,.18);background:rgba(245,166,35,.05);color:var(--text2);padding:2px 6px;white-space:nowrap;}
   .rank-source-pill.stale{border-color:rgba(230,57,70,.24);color:var(--text3);}
-  .rank-mobile-title,.rank-mobile-company,.rank-mobile-score{display:none;}
+  .rank-mobile-title,.rank-mobile-company,.rank-mobile-score,.rank-mobile-thumb{display:none;}
 
   /* Ranking responsive: en móvil la tabla pasa a tarjetas verticales */
   @media(max-width:760px){
@@ -671,10 +671,21 @@
     .ranking-table tbody{display:flex;flex-direction:column;gap:9px;}
     .ranking-table tr{
       position:relative;
-      padding:10px 12px;
+      padding:10px 12px 11px;
       border:1px solid var(--border);
-      background:var(--bg2);
+      background:linear-gradient(135deg,rgba(245,166,35,.045),rgba(255,255,255,.018) 38%,rgba(0,0,0,.12));
       animation:fadeUp .25s ease both;
+      overflow:hidden;
+    }
+    .ranking-table tr::before{
+      content:'';
+      position:absolute;
+      left:0;
+      top:0;
+      bottom:0;
+      width:3px;
+      background:linear-gradient(180deg,var(--amber),transparent);
+      opacity:.7;
     }
     .ranking-table tr:hover td{background:transparent;}
     .ranking-table td{
@@ -701,7 +712,7 @@
     }
     .ranking-table td[data-label="#"]{
       display:grid;
-      grid-template-columns:auto minmax(0,1fr) auto;
+      grid-template-columns:auto 52px minmax(0,1fr) auto;
       column-gap:10px;
       align-items:center;
       justify-content:start;
@@ -711,7 +722,35 @@
       text-align:left;
     }
     .ranking-table td[data-label="#"]::before{display:none;}
-    .ranking-table td[data-label="#"] .rank-pos{font-size:1.25rem;min-width:34px;text-align:center;}
+    .ranking-table td[data-label="#"] .rank-pos{font-size:1.22rem;min-width:34px;text-align:center;}
+    .rank-mobile-thumb{
+      display:block;
+      width:52px;
+      aspect-ratio:2/3;
+      border:1px solid rgba(245,166,35,.2);
+      background:linear-gradient(135deg,#171927,#2a1b0d 60%,#101018);
+      overflow:hidden;
+      position:relative;
+      box-shadow:0 8px 20px rgba(0,0,0,.28);
+    }
+    .rank-mobile-thumb img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .rank-mobile-thumb-fallback{
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family:'Cinzel',serif;
+      font-weight:900;
+      font-size:1.35rem;
+      color:rgba(245,166,35,.55);
+    }
+    .rank-mobile-thumb img + .rank-mobile-thumb-fallback{display:none;}
     .rank-mobile-head{min-width:0;}
     .rank-mobile-title{
       display:block;
@@ -733,10 +772,13 @@
       display:block;
       align-self:center;
       font-family:'Cinzel',serif;
-      font-size:1rem;
+      font-size:1.08rem;
       font-weight:700;
       color:var(--amber);
       white-space:nowrap;
+      border:1px solid rgba(245,166,35,.2);
+      background:rgba(245,166,35,.06);
+      padding:4px 7px;
     }
     .ranking-table td[data-label="Escape Room"],
     .ranking-table td[data-label="Empresa"],
@@ -746,7 +788,18 @@
       white-space:normal;
       text-align:right;
     }
-    .rank-source-list{justify-content:flex-end;max-width:none;}
+    .ranking-table td[data-label="Fuentes"]{
+      display:block;
+      text-align:left;
+      padding-top:8px;
+    }
+    .ranking-table td[data-label="Fuentes"]::before{
+      display:block;
+      margin-bottom:6px;
+      flex-basis:auto;
+    }
+    .rank-source-list{justify-content:flex-start;max-width:none;}
+    .rank-source-pill{font-size:.54rem;padding:3px 6px;}
   }
 
   @media(max-width:420px){
@@ -754,6 +807,11 @@
     .ranking-table td{gap:10px;font-size:.86rem;}
     .ranking-table td::before{flex-basis:88px;font-size:.52rem;}
     .rank-score-group{font-size:.95rem;}
+    .ranking-table td[data-label="#"]{grid-template-columns:auto 46px minmax(0,1fr);grid-template-areas:"pos thumb head" "score score score";row-gap:7px;}
+    .ranking-table td[data-label="#"] .rank-pos{grid-area:pos;}
+    .rank-mobile-thumb{grid-area:thumb;width:46px;}
+    .rank-mobile-head{grid-area:head;}
+    .rank-mobile-score{grid-area:score;justify-self:start;}
   }
 
   @media(max-width:640px){
@@ -5309,7 +5367,7 @@ function renderRanking() {
       const detailKind = detailRef.kind;
       const detailKey = jsString(detailRef.key);
       return `<tr class="rank-clickable" tabindex="0" role="button" onclick="openDetailFromCard(event,'${detailKind}','${detailKey}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetail('${detailKind}','${detailKey}')}">
-        <td data-label="#"><span class="rank-pos ${medals[i]||''}">${emoji[i]||'#'+(i+1)}</span><span class="rank-mobile-head"><span class="rank-mobile-title">${escapeHtml(room.nombre || 'Escape room')}</span><span class="rank-mobile-company">${room.empresa ? `(${escapeHtml(room.empresa)})` : ''}</span></span><span class="rank-mobile-score">★ ${typeof global !== 'undefined' ? global.score.toFixed(1) : (displayRating(room) || room.valoracion || '')}</span></td>
+        <td data-label="#"><span class="rank-pos ${medals[i]||''}">${emoji[i]||'#'+(i+1)}</span>${rankingThumbHtml(room)}<span class="rank-mobile-head"><span class="rank-mobile-title">${escapeHtml(room.nombre || 'Escape room')}</span><span class="rank-mobile-company">${room.empresa ? `(${escapeHtml(room.empresa)})` : ''}</span></span><span class="rank-mobile-score">★ ${typeof global !== 'undefined' ? global.score.toFixed(1) : (displayRating(room) || room.valoracion || '')}</span></td>
         <td data-label="Escape Room"><span class="rank-room-name">${escapeHtml(room.nombre || '—')}</span></td>
         <td data-label="Empresa">${escapeHtml(room.empresa || '—')}</td>
         <td data-label="Dificultad"><span class="meta-val ${dc(room.dificultad)}" style="font-size:.82rem">⚠ ${escapeHtml(room.dificultad || '—')}</span></td>
@@ -5509,6 +5567,15 @@ function rankingSourcePills(room) {
   return sourcePills.join('');
 }
 
+function rankingThumbHtml(room) {
+  const initial = escapeHtml((room.nombre || '?').trim().slice(0, 1).toUpperCase());
+  const src = room.imagen || `images/${slugify(room.nombre || '')}.webp`;
+  return `<span class="rank-mobile-thumb">
+    <img src="${escapeHtml(src)}" alt="" loading="lazy" onerror="this.remove()">
+    <span class="rank-mobile-thumb-fallback">${initial}</span>
+  </span>`;
+}
+
 function rankingRooms() {
   return uniqueRooms([...CATALOGO, ...PENDIENTES, ...reviewRooms()])
     .filter(room => {
@@ -5552,7 +5619,7 @@ function renderRanking() {
       const detailKey = jsString(detailRef.key);
       const location = [cleanValue(room.ciudad), cleanValue(room.provincia)].filter(Boolean).join(' · ') || '—';
       return `<tr class="rank-clickable" tabindex="0" role="button" onclick="openDetailFromCard(event,'${detailKind}','${detailKey}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetail('${detailKind}','${detailKey}')}">
-        <td data-label="#"><span class="rank-pos ${medals[i]||''}">${emoji[i]||'#'+(i+1)}</span><span class="rank-mobile-head"><span class="rank-mobile-title">${escapeHtml(room.nombre || 'Escape room')}</span><span class="rank-mobile-company">${room.empresa ? `(${escapeHtml(room.empresa)})` : ''}</span></span><span class="rank-mobile-score">★ ${typeof global !== 'undefined' ? global.score.toFixed(1) : (displayRating(room) || room.valoracion || '')}</span></td>
+        <td data-label="#"><span class="rank-pos ${medals[i]||''}">${emoji[i]||'#'+(i+1)}</span>${rankingThumbHtml(room)}<span class="rank-mobile-head"><span class="rank-mobile-title">${escapeHtml(room.nombre || 'Escape room')}</span><span class="rank-mobile-company">${room.empresa ? `(${escapeHtml(room.empresa)})` : ''}</span></span><span class="rank-mobile-score">★ ${typeof global !== 'undefined' ? global.score.toFixed(1) : (displayRating(room) || room.valoracion || '')}</span></td>
         <td data-label="Escape Room"><span class="rank-room-name">${escapeHtml(room.nombre || '—')}</span></td>
         <td data-label="Empresa">${escapeHtml(room.empresa || '—')}</td>
         <td data-label="Nota global"><span class="rank-global-score">★ ${global.score.toFixed(1)}</span></td>
