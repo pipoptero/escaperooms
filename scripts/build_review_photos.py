@@ -18,6 +18,9 @@ DATA_FILE = ROOT / "data.json"
 PHOTOS_DIR = ROOT / "images" / "Hechos"
 OUT_FILE = ROOT / "review_photos.json"
 EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".avif"}
+PHOTO_ROOM_ALIASES = {
+    "la_historia_de_charlotte": "whitechapel",
+}
 
 
 def slugify(text: str) -> str:
@@ -51,6 +54,7 @@ def load_done_rooms() -> list[dict]:
 def match_room_key(base: str, done_rooms: list[dict]) -> tuple[str, str]:
     base_compact = compact(base)
     base_tokens = tokens(base)
+    alias_slug = PHOTO_ROOM_ALIASES.get(slugify(base))
     exact = []
     scored = []
     single_token_matches = []
@@ -61,6 +65,8 @@ def match_room_key(base: str, done_rooms: list[dict]) -> tuple[str, str]:
         room_slug = slugify(name)
         if not room_slug:
             continue
+        if alias_slug and room_slug == alias_slug:
+            return room_slug, name
         if compact(name) == base_compact:
             exact.append((room_slug, name))
             continue
