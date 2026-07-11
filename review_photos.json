@@ -1,9 +1,9 @@
 {
   "meta": {
-    "generated_at": "2026-07-02T10:50:46",
+    "generated_at": "2026-07-11T18:29:32",
     "source": "images/Hechos",
-    "groups": 14,
-    "photos": 27,
+    "groups": 15,
+    "photos": 30,
     "unmatched": [
       "Experiment.jpeg"
     ]
@@ -18,32 +18,45 @@
         }
       ]
     },
-    "el_secreto_de_los_krugger": {
-      "room": "El secreto de los Krugger",
+    "d4rk_protocol_el_casco_alado_ii": {
+      "room": "D4RK PROTOCOL: El Casco Alado II",
+      "photos": [
+        {
+          "src": "images/Hechos/K.O.N.G Protocol 1.jpeg",
+          "alt": "D4RK PROTOCOL: El Casco Alado II - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/K.O.N.G Protocol 2.jpeg",
+          "alt": "D4RK PROTOCOL: El Casco Alado II - foto del grupo"
+        }
+      ]
+    },
+    "el_secreto_de_los_magos": {
+      "room": "El Secreto de los Magos",
       "photos": [
         {
           "src": "images/Hechos/El Secreto de los Krugger 1.jpeg",
-          "alt": "El secreto de los Krugger - foto del grupo"
+          "alt": "El Secreto de los Magos - foto del grupo"
         },
         {
           "src": "images/Hechos/El Secreto de los Krugger 2.jpeg",
-          "alt": "El secreto de los Krugger - foto del grupo"
+          "alt": "El Secreto de los Magos - foto del grupo"
         },
         {
           "src": "images/Hechos/El Secreto de los Krugger 3.jpeg",
-          "alt": "El secreto de los Krugger - foto del grupo"
+          "alt": "El Secreto de los Magos - foto del grupo"
         },
         {
           "src": "images/Hechos/El Secreto de los Krugger 4.jpeg",
-          "alt": "El secreto de los Krugger - foto del grupo"
+          "alt": "El Secreto de los Magos - foto del grupo"
         },
         {
           "src": "images/Hechos/El Secreto de los Krugger 5.jpeg",
-          "alt": "El secreto de los Krugger - foto del grupo"
+          "alt": "El Secreto de los Magos - foto del grupo"
         },
         {
           "src": "images/Hechos/El Secreto de los Krugger 6.jpeg",
-          "alt": "El secreto de los Krugger - foto del grupo"
+          "alt": "El Secreto de los Magos - foto del grupo"
         }
       ]
     },
@@ -56,15 +69,6 @@
         }
       ]
     },
-    "exorcista": {
-      "room": "Exorcista",
-      "photos": [
-        {
-          "src": "images/Hechos/Sección Esoterismo Exorcista.jpeg",
-          "alt": "Exorcista - foto del grupo"
-        }
-      ]
-    },
     "experiment": {
       "room": "Experiment",
       "photos": [
@@ -74,34 +78,21 @@
         }
       ]
     },
-    "jurasico": {
-      "room": "Jurásico",
-      "photos": [
-        {
-          "src": "images/Hechos/Jurasico.jpeg",
-          "alt": "Jurásico - foto del grupo"
-        }
-      ]
-    },
-    "k_o_n_g_protocol": {
-      "room": "K.O.N.G. Protocol",
-      "photos": [
-        {
-          "src": "images/Hechos/K.O.N.G Protocol 1.jpeg",
-          "alt": "K.O.N.G. Protocol - foto del grupo"
-        },
-        {
-          "src": "images/Hechos/K.O.N.G Protocol 2.jpeg",
-          "alt": "K.O.N.G. Protocol - foto del grupo"
-        }
-      ]
-    },
     "la_taberna": {
       "room": "La Taberna",
       "photos": [
         {
           "src": "images/Hechos/La Taberna.jpeg",
           "alt": "La Taberna - foto del grupo"
+        }
+      ]
+    },
+    "laboratorio_jurasico": {
+      "room": "Laboratorio Jurásico",
+      "photos": [
+        {
+          "src": "images/Hechos/Jurasico.jpeg",
+          "alt": "Laboratorio Jurásico - foto del grupo"
         }
       ]
     },
@@ -148,6 +139,32 @@
         }
       ]
     },
+    "scubick_doo": {
+      "room": "Scubick-Doo",
+      "photos": [
+        {
+          "src": "images/Hechos/scubick doo 1.jpeg",
+          "alt": "Scubick-Doo - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/scubick doo 2.jpeg",
+          "alt": "Scubick-Doo - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/scubick doo 3.jpeg",
+          "alt": "Scubick-Doo - foto del grupo"
+        }
+      ]
+    },
+    "seccion_esoterica_exorcista": {
+      "room": "Sección Esotérica: Exorcista",
+      "photos": [
+        {
+          "src": "images/Hechos/Sección Esoterismo Exorcista.jpeg",
+          "alt": "Sección Esotérica: Exorcista - foto del grupo"
+        }
+      ]
+    },
     "tao_room_escape": {
       "room": "Tao Room Escape",
       "photos": [
@@ -183,7 +200,7 @@
         },
         {
           "src": "images/Hechos/Willy el tuerto 3.jpeg",
-          "alt": "Willy el Tuerto - foto del grupo"
+          "alt": "Willy el tuerto - foto del grupo"
         }
       ]
     }

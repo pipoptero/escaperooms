@@ -15,6 +15,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_FILE = ROOT / "data.json"
+CATALOG_FILE = ROOT / "catalog.json"
 PHOTOS_DIR = ROOT / "images" / "Hechos"
 OUT_FILE = ROOT / "review_photos.json"
 EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".avif"}
@@ -49,6 +50,15 @@ def load_done_rooms() -> list[dict]:
         return []
     payload = json.loads(DATA_FILE.read_text(encoding="utf-8"))
     return payload.get("hechos", []) if isinstance(payload, dict) else []
+
+
+def load_catalog_rooms() -> list[dict]:
+    if not CATALOG_FILE.exists():
+        return []
+    payload = json.loads(CATALOG_FILE.read_text(encoding="utf-8"))
+    if not isinstance(payload, dict):
+        return []
+    return payload.get("salas") or payload.get("catalogo") or []
 
 
 def match_room_key(base: str, done_rooms: list[dict]) -> tuple[str, str]:
@@ -91,6 +101,7 @@ def match_room_key(base: str, done_rooms: list[dict]) -> tuple[str, str]:
 
 def build() -> dict:
     done_rooms = load_done_rooms()
+    match_rooms = done_rooms + load_catalog_rooms()
     groups: dict[str, dict] = {}
     unmatched = []
 
@@ -99,8 +110,8 @@ def build() -> dict:
             if not path.is_file() or path.suffix.lower() not in EXTENSIONS:
                 continue
             base = photo_base(path)
-            key, room_name = match_room_key(base, done_rooms)
-            if key == slugify(base) and compact(base) not in {compact(room.get("nombre")) for room in done_rooms}:
+            key, room_name = match_room_key(base, match_rooms)
+            if key == slugify(base) and compact(base) not in {compact(room.get("nombre")) for room in match_rooms}:
                 unmatched.append(path.name)
             group = groups.setdefault(key, {"room": room_name, "photos": []})
             group["photos"].append({
