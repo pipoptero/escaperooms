@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-07-11T16:30:51",
+    "generated_at": "2026-07-11T21:21:53",
     "source": "images/Hechos",
     "groups": 15,
     "photos": 30,
@@ -18,45 +18,32 @@
         }
       ]
     },
-    "d4rk_protocol_el_casco_alado_ii": {
-      "room": "D4RK PROTOCOL: El Casco Alado II",
-      "photos": [
-        {
-          "src": "images/Hechos/K.O.N.G Protocol 1.jpeg",
-          "alt": "D4RK PROTOCOL: El Casco Alado II - foto del grupo"
-        },
-        {
-          "src": "images/Hechos/K.O.N.G Protocol 2.jpeg",
-          "alt": "D4RK PROTOCOL: El Casco Alado II - foto del grupo"
-        }
-      ]
-    },
-    "el_secreto_de_los_magos": {
-      "room": "El Secreto de los Magos",
+    "el_secreto_de_los_krugger": {
+      "room": "El secreto de los Krugger",
       "photos": [
         {
           "src": "images/Hechos/El Secreto de los Krugger 1.jpeg",
-          "alt": "El Secreto de los Magos - foto del grupo"
+          "alt": "El secreto de los Krugger - foto del grupo"
         },
         {
           "src": "images/Hechos/El Secreto de los Krugger 2.jpeg",
-          "alt": "El Secreto de los Magos - foto del grupo"
+          "alt": "El secreto de los Krugger - foto del grupo"
         },
         {
           "src": "images/Hechos/El Secreto de los Krugger 3.jpeg",
-          "alt": "El Secreto de los Magos - foto del grupo"
+          "alt": "El secreto de los Krugger - foto del grupo"
         },
         {
           "src": "images/Hechos/El Secreto de los Krugger 4.jpeg",
-          "alt": "El Secreto de los Magos - foto del grupo"
+          "alt": "El secreto de los Krugger - foto del grupo"
         },
         {
           "src": "images/Hechos/El Secreto de los Krugger 5.jpeg",
-          "alt": "El Secreto de los Magos - foto del grupo"
+          "alt": "El secreto de los Krugger - foto del grupo"
         },
         {
           "src": "images/Hechos/El Secreto de los Krugger 6.jpeg",
-          "alt": "El Secreto de los Magos - foto del grupo"
+          "alt": "El secreto de los Krugger - foto del grupo"
         }
       ]
     },
@@ -69,6 +56,15 @@
         }
       ]
     },
+    "exorcista": {
+      "room": "Exorcista",
+      "photos": [
+        {
+          "src": "images/Hechos/Sección Esoterismo Exorcista.jpeg",
+          "alt": "Exorcista - foto del grupo"
+        }
+      ]
+    },
     "experiment": {
       "room": "Experiment",
       "photos": [
@@ -78,21 +74,34 @@
         }
       ]
     },
+    "jurasico": {
+      "room": "Jurásico",
+      "photos": [
+        {
+          "src": "images/Hechos/Jurasico.jpeg",
+          "alt": "Jurásico - foto del grupo"
+        }
+      ]
+    },
+    "k_o_n_g_protocol": {
+      "room": "K.O.N.G. Protocol",
+      "photos": [
+        {
+          "src": "images/Hechos/K.O.N.G Protocol 1.jpeg",
+          "alt": "K.O.N.G. Protocol - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/K.O.N.G Protocol 2.jpeg",
+          "alt": "K.O.N.G. Protocol - foto del grupo"
+        }
+      ]
+    },
     "la_taberna": {
       "room": "La Taberna",
       "photos": [
         {
           "src": "images/Hechos/La Taberna.jpeg",
           "alt": "La Taberna - foto del grupo"
-        }
-      ]
-    },
-    "laboratorio_jurasico": {
-      "room": "Laboratorio Jurásico",
-      "photos": [
-        {
-          "src": "images/Hechos/Jurasico.jpeg",
-          "alt": "Laboratorio Jurásico - foto del grupo"
         }
       ]
     },
@@ -156,15 +165,6 @@
         }
       ]
     },
-    "seccion_esoterica_exorcista": {
-      "room": "Sección Esotérica: Exorcista",
-      "photos": [
-        {
-          "src": "images/Hechos/Sección Esoterismo Exorcista.jpeg",
-          "alt": "Sección Esotérica: Exorcista - foto del grupo"
-        }
-      ]
-    },
     "tao_room_escape": {
       "room": "Tao Room Escape",
       "photos": [
@@ -200,7 +200,7 @@
         },
         {
           "src": "images/Hechos/Willy el tuerto 3.jpeg",
-          "alt": "Willy el tuerto - foto del grupo"
+          "alt": "Willy el Tuerto - foto del grupo"
         }
       ]
     }

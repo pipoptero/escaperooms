@@ -101,7 +101,7 @@ def match_room_key(base: str, done_rooms: list[dict]) -> tuple[str, str]:
 
 def build() -> dict:
     done_rooms = load_done_rooms()
-    match_rooms = done_rooms + load_catalog_rooms()
+    catalog_rooms = load_catalog_rooms()
     groups: dict[str, dict] = {}
     unmatched = []
 
@@ -110,9 +110,13 @@ def build() -> dict:
             if not path.is_file() or path.suffix.lower() not in EXTENSIONS:
                 continue
             base = photo_base(path)
-            key, room_name = match_room_key(base, match_rooms)
-            if key == slugify(base) and compact(base) not in {compact(room.get("nombre")) for room in match_rooms}:
-                unmatched.append(path.name)
+            key, room_name = match_room_key(base, done_rooms)
+            done_compacts = {compact(room.get("nombre")) for room in done_rooms}
+            if key == slugify(base) and compact(base) not in done_compacts:
+                key, room_name = match_room_key(base, catalog_rooms)
+                catalog_compacts = {compact(room.get("nombre")) for room in catalog_rooms}
+                if key == slugify(base) and compact(base) not in catalog_compacts:
+                    unmatched.append(path.name)
             group = groups.setdefault(key, {"room": room_name, "photos": []})
             group["photos"].append({
                 "src": path.relative_to(ROOT).as_posix(),
