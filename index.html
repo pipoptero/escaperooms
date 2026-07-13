@@ -1400,6 +1400,16 @@ function normalizedKey(text) {
 function compactKey(text) {
   return normalizedKey(text).replace(/\s+/g, '');
 }
+function textMatchesSearch(values, rawQuery) {
+  const query = normalizedKey(rawQuery);
+  if (!query) return true;
+  const compactQuery = compactKey(rawQuery);
+  return values.some(value => {
+    const normalized = normalizedKey(value);
+    if (normalized.includes(query)) return true;
+    return compactQuery && compactKey(value).includes(compactQuery);
+  });
+}
 function stateKey(room) {
   return normalizedKey(room.nombre || room.id || '');
 }
@@ -5262,7 +5272,7 @@ function cardCatalogo(c, i) {
 // ── Renders principales ───────────────────────────────────────────────────────
 function renderPendientes() {
   const pendingRooms = allPendingRooms();
-  const s = document.getElementById('search-pend').value.toLowerCase();
+  const s = document.getElementById('search-pend').value;
   const c = document.getElementById('filter-ciudad-pend').value;
   const comunidad = document.getElementById('filter-comunidad-pend').value;
   const prov = document.getElementById('filter-prov-pend').value;
@@ -5274,7 +5284,7 @@ function renderPendientes() {
   const onlyOpen = document.getElementById('filter-abierto-pend').checked;
   const onlyVerified = document.getElementById('filter-verificado-pend').checked;
   let f = pendingRooms.filter(p => {
-    if (s && ![p.nombre,p.empresa,p.ciudad,p.provincia,communityOf(p),p.tematica,p.generos,p.tipo,p.publico,p.caracteristicas].some(x=>(x||'').toLowerCase().includes(s))) return false;
+    if (!textMatchesSearch([p.nombre,p.empresa,p.ciudad,p.provincia,communityOf(p),p.tematica,p.generos,p.tipo,p.publico,p.caracteristicas], s)) return false;
     if (comunidad && communityOf(p) !== comunidad) return false;
     if (c && String(p.ciudad || '').trim() !== c) return false;
     if (prov && String(p.provincia || '').trim() !== prov) return false;
@@ -5299,7 +5309,7 @@ function renderPendientes() {
 
 function renderMisHechos() {
   const doneRooms = personalDoneRooms();
-  const s = document.getElementById('search-mine')?.value.toLowerCase() || '';
+  const s = document.getElementById('search-mine')?.value || '';
   const ciudad = document.getElementById('filter-ciudad-mine')?.value || '';
   const comunidad = document.getElementById('filter-comunidad-mine')?.value || '';
   const prov = document.getElementById('filter-prov-mine')?.value || '';
@@ -5309,7 +5319,7 @@ function renderMisHechos() {
   const onlyOpen = !!document.getElementById('filter-abierto-mine')?.checked;
 
   let f = doneRooms.filter(p => {
-    if (s && ![p.nombre,p.empresa,p.ciudad,p.provincia,communityOf(p),p.tematica,p.generos,p.tipo,p.publico,p.caracteristicas].some(x=>(x||'').toLowerCase().includes(s))) return false;
+    if (!textMatchesSearch([p.nombre,p.empresa,p.ciudad,p.provincia,communityOf(p),p.tematica,p.generos,p.tipo,p.publico,p.caracteristicas], s)) return false;
     if (comunidad && communityOf(p) !== comunidad) return false;
     if (ciudad && String(p.ciudad || '').trim() !== ciudad) return false;
     if (prov && String(p.provincia || '').trim() !== prov) return false;
@@ -5334,10 +5344,10 @@ function renderMisHechos() {
 
 function renderHechos() {
   const doneRooms = reviewRooms();
-  const s = document.getElementById('search-hecho').value.toLowerCase();
+  const s = document.getElementById('search-hecho').value;
   const d = document.getElementById('filter-dif-hecho').value;
   let f = doneRooms.filter(h => {
-    if (s && ![h.nombre,h.empresa].some(x=>(x||'').toLowerCase().includes(s))) return false;
+    if (!textMatchesSearch([h.nombre,h.empresa], s)) return false;
     if (d && h.dificultad !== d) return false;
     return true;
   });
@@ -5354,7 +5364,7 @@ function renderHechos() {
 }
 
 function renderCatalogo() {
-  const s = document.getElementById('search-cat').value.toLowerCase();
+  const s = document.getElementById('search-cat').value;
   const comunidad = document.getElementById('filter-comunidad-cat').value;
   const prov = document.getElementById('filter-prov-cat').value;
   const ciudad = document.getElementById('filter-ciudad-cat').value;
@@ -5370,7 +5380,7 @@ function renderCatalogo() {
   let f = CATALOGO.filter(c => {
     const groupState = groupStateFor(c);
     const userState = userStateFor(c);
-    if (s && ![c.nombre, c.empresa, c.ciudad, c.provincia, communityOf(c), c.pais].some(x => (x || '').toLowerCase().includes(s))) return false;
+    if (!textMatchesSearch([c.nombre, c.empresa, c.ciudad, c.provincia, communityOf(c), c.pais], s)) return false;
     if (comunidad && communityOf(c) !== comunidad) return false;
     if (prov && String(c.provincia || '').trim() !== prov) return false;
     if (ciudad && String(c.ciudad || '').trim() !== ciudad) return false;
