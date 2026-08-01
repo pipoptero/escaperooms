@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Vault — Escape Room Chronicles</title>
-<meta name="description" content="The Vault es un catalogo de escape rooms con reviews, ranking, premios y seguimiento personal de salas pendientes, hechas y favoritas.">
+<meta name="description" content="The Vault Escape es un archivo vivo de escape rooms en Espana: catalogo, reviews propias, ranking ponderado, premios, listas personales y grupos escapistas.">
 <link rel="canonical" href="https://thevaultescape.com/">
 <meta name="theme-color" content="#0a0a0f">
 <meta name="application-name" content="The Vault">
@@ -18,16 +18,16 @@
 <link rel="manifest" href="site.webmanifest">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="The Vault">
-<meta property="og:title" content="The Vault - Escape Room Chronicles">
-<meta property="og:description" content="Catalogo, reviews, ranking y seguimiento personal de escape rooms.">
+<meta property="og:title" content="The Vault Escape - Escape Room Chronicles">
+<meta property="og:description" content="Descubre salas, lee reviews, compara rankings y organiza tus pendientes, hechos, favoritos y grupos escapistas.">
 <meta property="og:url" content="https://thevaultescape.com/">
 <meta property="og:image" content="https://thevaultescape.com/images/brand/social-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="The Vault - Escape Room Chronicles">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="The Vault - Escape Room Chronicles">
-<meta name="twitter:description" content="Catalogo, reviews, ranking y seguimiento personal de escape rooms.">
+<meta name="twitter:title" content="The Vault Escape - Escape Room Chronicles">
+<meta name="twitter:description" content="Catalogo nacional, reviews propias, ranking ponderado y listas personales para escapistas.">
 <meta name="twitter:image" content="https://thevaultescape.com/images/brand/social-card.png">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
@@ -180,16 +180,20 @@
   .vault-guest-title{font-family:'Cinzel',serif;color:var(--text);font-size:1rem;line-height:1.2;}
   .vault-guest-text{color:var(--text2);font-size:.92rem;line-height:1.35;margin-top:4px;}
   .vault-guest-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
-  .vault-guide-hero{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(240px,.8fr);gap:18px;align-items:stretch;margin-bottom:18px;}
+  .vault-guide-hero{position:relative;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(250px,.8fr);gap:20px;align-items:stretch;margin-bottom:18px;padding:20px;border:1px solid rgba(245,166,35,.18);background:linear-gradient(135deg,rgba(245,166,35,.08),rgba(255,255,255,.018));overflow:hidden;}
+  .vault-guide-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(18,18,30,.82),rgba(18,18,30,.58));pointer-events:none;}
+  .vault-guide-hero > *{position:relative;z-index:1;}
   .vault-guide-kicker{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--amber);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px;}
-  .vault-guide-title{font-family:'Cinzel',serif;font-size:clamp(1.65rem,3vw,2.65rem);line-height:1.05;color:var(--text);letter-spacing:.05em;margin-bottom:10px;}
+  .vault-guide-title{font-family:'Cinzel',serif;font-size:clamp(1.85rem,3vw,2.85rem);line-height:1.05;color:var(--text);letter-spacing:.05em;margin-bottom:10px;max-width:760px;}
   .vault-guide-copy{color:var(--text2);font-size:1rem;line-height:1.55;max-width:760px;}
+  .vault-guide-proof{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px;}
+  .vault-guide-proof span{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--text2);letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.18);padding:5px 8px;}
   .vault-guide-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px;}
   .vault-guide-action{font-family:'Share Tech Mono',monospace;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(245,166,35,.32);background:rgba(245,166,35,.07);color:var(--amber);padding:9px 12px;cursor:pointer;}
   .vault-guide-action.secondary{border-color:var(--border);background:rgba(255,255,255,.025);color:var(--text3);}
   .vault-guide-action:hover{border-color:var(--amber);color:var(--amber);}
   .vault-guide-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
-  .vault-guide-stat{border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.025);padding:11px 12px;min-width:0;}
+  .vault-guide-stat{border:1px solid rgba(255,255,255,.09);background:rgba(18,18,30,.82);padding:11px 12px;min-width:0;box-shadow:0 8px 24px rgba(0,0,0,.22);}
   .vault-guide-stat strong{display:block;font-family:'Cinzel',serif;font-size:1.55rem;color:var(--amber);line-height:1;}
   .vault-guide-stat span{display:block;font-family:'Share Tech Mono',monospace;font-size:.54rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-top:5px;line-height:1.35;}
   .vault-guide-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px;}
@@ -202,6 +206,24 @@
   .vault-guide-step-num{width:25px;height:25px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(245,166,35,.35);color:var(--amber);font-family:'Share Tech Mono',monospace;font-size:.68rem;}
   .vault-guide-step strong{display:block;font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--text);letter-spacing:.08em;text-transform:uppercase;line-height:1.35;}
   .vault-guide-step span{display:block;color:var(--text3);font-size:.84rem;line-height:1.32;margin-top:3px;}
+  .vault-section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:20px 0 10px;}
+  .vault-section-title{font-family:'Cinzel',serif;color:var(--text);font-size:1.05rem;letter-spacing:.08em;text-transform:uppercase;}
+  .vault-section-note{font-family:'Share Tech Mono',monospace;color:var(--text3);font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;text-align:right;}
+  .vault-latest-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+  .vault-latest-card{display:grid;grid-template-columns:78px minmax(0,1fr);gap:11px;align-items:center;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.02);padding:10px;cursor:pointer;transition:border-color .2s,background .2s,transform .2s;}
+  .vault-latest-card:hover{border-color:rgba(245,166,35,.38);background:rgba(245,166,35,.04);transform:translateY(-1px);}
+  .vault-latest-img{width:78px;aspect-ratio:3/4;border:1px solid rgba(245,166,35,.18);background:rgba(0,0,0,.18);overflow:hidden;display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;color:var(--amber);font-size:1.4rem;}
+  .vault-latest-img img{width:100%;height:100%;object-fit:cover;display:block;}
+  .vault-latest-kicker{font-family:'Share Tech Mono',monospace;font-size:.54rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .vault-latest-name{font-family:'Cinzel',serif;font-size:.98rem;color:var(--text);line-height:1.15;margin-bottom:3px;}
+  .vault-latest-meta{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--text3);letter-spacing:.05em;text-transform:uppercase;line-height:1.35;}
+  .vault-latest-score{display:inline-flex;margin-top:7px;font-family:'Cinzel',serif;color:var(--amber);font-size:1rem;line-height:1;border:1px solid rgba(245,166,35,.22);padding:5px 8px;background:rgba(245,166,35,.06);}
+  .vault-community-band{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,.8fr);gap:14px;margin-top:14px;border:1px solid rgba(6,214,160,.14);background:rgba(6,214,160,.035);padding:14px;}
+  .vault-community-title{font-family:'Cinzel',serif;color:var(--text);font-size:1.05rem;line-height:1.2;margin-bottom:6px;}
+  .vault-community-copy{color:var(--text2);font-size:.93rem;line-height:1.45;}
+  .vault-mini-list{display:grid;gap:7px;}
+  .vault-mini-item{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.12);padding:8px 9px;font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;}
+  .vault-mini-item strong{color:var(--amber);font-size:.68rem;}
 
   /* ── FILTERS ── */
   .filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
@@ -902,8 +924,12 @@
     .vault-guest-strip{grid-template-columns:1fr;margin-top:12px;padding:11px 12px;gap:10px;}
     .vault-guest-actions{justify-content:flex-start;}
     .vault-guide-hero{grid-template-columns:1fr;gap:14px;margin-bottom:14px;}
+    .vault-guide-hero{padding:15px;background-position:center right;background-size:auto 100%;}
+    .vault-guide-hero::after{background:rgba(18,18,30,.91);}
     .vault-guide-title{font-size:1.5rem;line-height:1.12;}
     .vault-guide-copy{font-size:.92rem;line-height:1.45;}
+    .vault-guide-proof{gap:6px;}
+    .vault-guide-proof span{font-size:.52rem;padding:4px 6px;}
     .vault-guide-actions{gap:7px;}
     .vault-guide-action{flex:1 1 auto;text-align:center;padding:9px 10px;}
     .vault-guide-stats{grid-template-columns:repeat(2,minmax(0,1fr));}
@@ -912,6 +938,13 @@
     .vault-guide-grid{grid-template-columns:1fr;gap:9px;}
     .vault-guide-card{padding:11px 12px;}
     .vault-guide-flow{grid-template-columns:1fr;gap:7px;margin-top:14px;padding-top:13px;}
+    .vault-section-head{align-items:flex-start;flex-direction:column;margin:16px 0 9px;}
+    .vault-section-note{text-align:left;}
+    .vault-latest-grid{grid-template-columns:1fr;gap:8px;}
+    .vault-latest-card{grid-template-columns:64px minmax(0,1fr);padding:9px;}
+    .vault-latest-img{width:64px;}
+    .vault-latest-name{font-size:.9rem;}
+    .vault-community-band{grid-template-columns:1fr;padding:12px;}
     .updated-badge{top:auto;bottom:16px;right:50%;transform:translateX(50%);text-align:center;}
     .auth-bar{justify-content:flex-end;flex-wrap:nowrap;}
     .auth-status{max-width:100%;}
@@ -1059,15 +1092,20 @@
     <div id="panel-thevault" class="panel" style="display:none">
       <div class="vault-guide-hero">
         <div>
-          <div class="vault-guide-kicker">Escape Room Chronicles</div>
-          <div class="vault-guide-title">The Vault organiza tu vida escapista sin perder el misterio.</div>
+          <div class="vault-guide-kicker">The Vault Escape</div>
+          <div class="vault-guide-title">Un archivo vivo para descubrir, comparar y recordar escape rooms.</div>
           <p class="vault-guide-copy">
-            Un catalogo de salas de escape en Espana con reviews propias, ranking ponderado,
-            premios, favoritos, pendientes personales y grupos privados para organizar partidas con tus companeros.
+            Catalogo nacional, reviews propias, ranking ponderado, premios y herramientas personales
+            para guardar pendientes, hechos, favoritos y grupos escapistas.
           </p>
+          <div class="vault-guide-proof">
+            <span>Reviews con criterio propio</span>
+            <span>Ranking con varias fuentes</span>
+            <span>Grupos privados</span>
+          </div>
           <div class="vault-guide-actions">
             <button class="vault-guide-action" type="button" onclick="switchTab('catalogo')">Explorar catalogo</button>
-            <button class="vault-guide-action secondary" type="button" onclick="switchTab('ranking')">Ver ranking</button>
+            <button class="vault-guide-action secondary" type="button" onclick="switchTab('hechos')">Leer reviews</button>
             <button class="vault-guide-action secondary guest-only" type="button" onclick="signInGoogle()">Crear cuenta</button>
             <button class="vault-guide-action secondary auth-only" type="button" onclick="openProfile()" style="display:none">Abrir ajustes</button>
           </div>
@@ -1079,6 +1117,12 @@
           <div class="vault-guide-stat"><strong id="vault-stat-groups">0</strong><span>tus grupos activos</span></div>
         </div>
       </div>
+
+      <div class="vault-section-head">
+        <div class="vault-section-title">Ultimas reviews</div>
+        <div class="vault-section-note">Listas para abrir y compartir</div>
+      </div>
+      <div class="vault-latest-grid" id="vault-latest-reviews"></div>
 
       <div class="vault-guide-grid">
         <div class="vault-guide-card">
@@ -1110,6 +1154,21 @@
           <div class="vault-guide-icon">06</div>
           <h3>Recomendador</h3>
           <p>El asistente flotante ayuda a encontrar salas por zona, jugadores, estilo, terror o premios cuando no sabes por donde empezar.</p>
+        </div>
+      </div>
+
+      <div class="vault-community-band">
+        <div>
+          <div class="vault-community-title">Pensado para escapistas que juegan solos, en pareja o en varios grupos.</div>
+          <p class="vault-community-copy">
+            Puedes tener tu lista personal y, a la vez, separar lo que haces con cada grupo.
+            Asi The Vault no solo guarda salas: guarda con quien las viviste y que queda por jugar.
+          </p>
+        </div>
+        <div class="vault-mini-list">
+          <div class="vault-mini-item"><span>Pendientes personales</span><strong id="vault-mini-pending">0</strong></div>
+          <div class="vault-mini-item"><span>Hechos personales</span><strong id="vault-mini-done">0</strong></div>
+          <div class="vault-mini-item"><span>Favoritos guardados</span><strong id="vault-mini-favs">0</strong></div>
         </div>
       </div>
 
@@ -4268,6 +4327,38 @@ function renderVaultGuide() {
   setText('vault-stat-reviews', reviewRooms().length || 0);
   setText('vault-stat-ranking', ranked || 0);
   setText('vault-stat-groups', AUTH_USER ? activeUserGroups().length : '-');
+  setText('vault-mini-pending', AUTH_USER ? currentPendingRooms().length : '-');
+  setText('vault-mini-done', AUTH_USER ? currentDoneRooms().length : '-');
+  setText('vault-mini-favs', AUTH_USER ? FAVS.size : '-');
+  const latest = document.getElementById('vault-latest-reviews');
+  if (latest) latest.innerHTML = vaultLatestReviewsHtml();
+}
+
+function vaultLatestReviewsHtml() {
+  const items = reviewRooms()
+    .filter(room => room && room.nombre)
+    .slice(-3)
+    .reverse();
+  if (!items.length) return '<div class="review-empty">Aun no hay reviews publicadas.</div>';
+  return items.map(room => {
+    const key = jsString(roomKey(room));
+    const initial = escapeHtml((room.nombre || '?').trim().slice(0, 1).toUpperCase());
+    const imgSrc = room.imagen || `images/${slugify(room.nombre || '')}.webp`;
+    const img = imgSrc
+      ? `<img src="${escapeHtml(imgSrc)}" alt="" loading="lazy" onerror="this.replaceWith(document.createTextNode('${initial}'))">`
+      : initial;
+    const meta = [room.empresa, room.ciudad, room.provincia].filter(Boolean).join(' - ');
+    const score = room.valoracion ? Number(room.valoracion).toFixed(1).replace('.0', '') : '';
+    return `<article class="vault-latest-card" tabindex="0" role="button" onclick="openDetail('hechos','${key}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetail('hechos','${key}')}">
+      <div class="vault-latest-img">${img}</div>
+      <div>
+        <div class="vault-latest-kicker">Review The Vault</div>
+        <div class="vault-latest-name">${escapeHtml(room.nombre)}</div>
+        <div class="vault-latest-meta">${escapeHtml(meta || 'Escape room')}</div>
+        ${score ? `<div class="vault-latest-score">★ ${escapeHtml(score)}</div>` : ''}
+      </div>
+    </article>`;
+  }).join('');
 }
 
 function syncNavigationForAuth() {
