@@ -458,7 +458,11 @@
   .detail-cats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 14px;margin-top:8px;}
   .detail-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
   .detail-link{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--amber);text-decoration:none;letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(245,166,35,.28);padding:9px 13px;}
+  button.detail-link{background:transparent;cursor:pointer;}
   .detail-link:hover{border-color:var(--amber);background:rgba(245,166,35,.06);}
+  .detail-share-status{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;align-self:center;min-height:1em;}
+  .detail-share-status.ok{color:var(--green);}
+  .detail-share-status.error{color:var(--red);}
   .detail-account{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.025);padding:12px 14px;margin-top:14px;}
   .detail-account-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;}
   .detail-account-title{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--text3);letter-spacing:.14em;text-transform:uppercase;}
@@ -1426,6 +1430,7 @@ let GROUP_ROOM_INDEX = { pendientes: new Set(), hechos: new Set() };
 let PHOTO_LIGHTBOX_ITEMS = [];
 let PHOTO_LIGHTBOX_INDEX = 0;
 let ACTIVE_TAB = 'catalogo';
+let CURRENT_DETAIL_HASH = '';
 const AWARD_CACHE = new Map();
 const GLOBAL_RATING_CACHE = new Map();
 const TERPECA_AWARD_INDEX = new Map();
@@ -3953,6 +3958,7 @@ async function refreshLiveData({ force = false, reason = 'auto' } = {}) {
     if (ACTIVE_TAB === 'ranking') renderRanking();
     renderCatalogo();
     renderVaultGuide();
+    openDeepLinkFromHash();
     updateFavCount();
     LAST_LIVE_REFRESH_AT = Date.now();
     if (reason === 'initial') await handlePendingInvite();
@@ -3986,6 +3992,9 @@ function setupAutomaticLiveRefresh() {
   window.addEventListener('online', () => {
     refreshLiveData({ force: true, reason: 'online' });
   });
+  window.addEventListener('hashchange', () => {
+    openDeepLinkFromHash();
+  });
 }
 
 async function loadStaticEnhancementsAfterInitialRender() {
@@ -3998,6 +4007,7 @@ async function loadStaticEnhancementsAfterInitialRender() {
     renderHechos();
     if (ACTIVE_TAB === 'ranking') renderRanking();
     renderVaultGuide();
+    openDeepLinkFromHash();
   } catch (e) {
     console.warn('No se pudieron cargar los datos complementarios:', e.message);
   }
@@ -4023,6 +4033,7 @@ async function loadData() {
     if (!FIREBASE_ENABLED) document.getElementById('setup-banner').style.display = 'block';
 
     populateFilters(); renderStats(); renderPendientes(); renderMisHechos(); renderHechos(); renderCatalogo();
+    openDeepLinkFromHash();
     updateFavCount();
     loadStaticEnhancementsAfterInitialRender();
     scheduleLiveDataAfterInitialRender();
@@ -4893,6 +4904,82 @@ function detailRefForRoom(room, order = ['catalogo', 'pendientes', 'hechos']) {
   return { kind: 'catalogo', key: exactKey };
 }
 
+function detailHashFor(kind, room) {
+  const key = userRoomKey(room).replace(/_/g, '-');
+  if (!key) return '';
+  return `${kind === 'hechos' ? 'review' : 'room'}/${encodeURIComponent(key)}`;
+}
+
+function detailUrlFor(kind, room) {
+  const hash = detailHashFor(kind, room);
+  if (!hash) return '';
+  const url = new URL(window.location.href);
+  url.hash = hash;
+  return url.toString();
+}
+
+function setDetailHash(kind, room) {
+  const hash = detailHashFor(kind, room);
+  if (!hash) return;
+  CURRENT_DETAIL_HASH = hash;
+  if (window.location.hash.slice(1) !== hash) {
+    history.replaceState(null, '', `#${hash}`);
+  }
+}
+
+function clearDetailHashIfCurrent() {
+  if (!CURRENT_DETAIL_HASH) return;
+  if (window.location.hash.slice(1) === CURRENT_DETAIL_HASH) {
+    history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
+  }
+  CURRENT_DETAIL_HASH = '';
+}
+
+async function copyDetailLink(kind, key) {
+  const room = findDetailRoom(kind, key);
+  const status = document.getElementById('detail-share-status');
+  if (!room || !status) return;
+  const url = detailUrlFor(kind, room);
+  const copied = await copyTextToClipboard(url);
+  status.textContent = copied ? 'Enlace copiado' : url;
+  status.className = `detail-share-status ${copied ? 'ok' : 'error'}`;
+}
+
+function parseDetailHash() {
+  const hash = decodeURIComponent(window.location.hash.replace(/^#/, '')).trim();
+  const match = hash.match(/^(review|room)\/(.+)$/);
+  if (!match) return null;
+  return { type: match[1], key: slugify(match[2]) };
+}
+
+function findDeepLinkTarget(type, key) {
+  if (!key) return null;
+  const byUserKey = room => userRoomKey(room) === key || roomKey(room) === key;
+  if (type === 'review') {
+    const review = reviewRooms().find(byUserKey);
+    return review ? { kind: 'hechos', key: roomKey(review) } : null;
+  }
+  const catalog = CATALOGO.find(byUserKey);
+  if (catalog) return { kind: 'catalogo', key: roomKey(catalog) };
+  const review = reviewRooms().find(byUserKey);
+  if (review) return { kind: 'hechos', key: roomKey(review) };
+  const pending = PENDIENTES.find(byUserKey);
+  return pending ? { kind: 'pendientes', key: roomKey(pending) } : null;
+}
+
+function openDeepLinkFromHash() {
+  const parsed = parseDetailHash();
+  if (!parsed) return false;
+  const target = findDeepLinkTarget(parsed.type, parsed.key);
+  if (!target) return false;
+  if (target.kind === 'hechos') switchTab('hechos');
+  else if (target.kind === 'catalogo') switchTab('catalogo');
+  else if (target.kind === 'pendientes') switchTab(AUTH_USER ? 'pendientes' : 'catalogo');
+  openDetail(target.kind, target.key, { updateHash: false });
+  CURRENT_DETAIL_HASH = window.location.hash.slice(1);
+  return true;
+}
+
 function detailImageHtml(room, kind) {
   const initial = escapeHtml((room.nombre || '?').trim().slice(0, 1).toUpperCase());
   const fallback = `<div class="card-media-fallback">${initial}</div>`;
@@ -5151,7 +5238,7 @@ function openDetailFromCard(event, kind, key) {
   openDetail(kind, key);
 }
 
-function openDetail(kind, key) {
+function openDetail(kind, key, options = {}) {
   const room = findDetailRoom(kind, key);
   if (!room) return;
   const rating = displayRating(room);
@@ -5189,13 +5276,16 @@ function openDetail(kind, key) {
     ${detailAccountHtml(room, kind)}
     ${communityReviewsHtml(room, kind)}
     <div class="detail-actions">
+      <button class="detail-link" type="button" onclick="copyDetailLink('${kind}','${jsString(key)}')">${kind === 'hechos' ? 'Copiar enlace review' : 'Copiar enlace'}</button>
       ${room.web ? `<a class="detail-link" href="${room.web}" target="_blank">Ver web oficial</a>` : ''}
+      <span class="detail-share-status" id="detail-share-status"></span>
       ${kind === 'catalogo' ? `<span class="tag tag-muted">Catálogo</span>` : kind === 'hechos' ? `<span class="tag tag-feature">Review grupo</span>` : `<span class="tag tag-feature">Pendiente</span>`}
     </div>`;
 
   modal.classList.add('open');
   modal.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
+  if (options.updateHash !== false) setDetailHash(kind, room);
 }
 
 function closeDetail(event) {
@@ -5204,6 +5294,7 @@ function closeDetail(event) {
   modal.classList.remove('open');
   modal.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
+  clearDetailHashIfCurrent();
 }
 
 document.addEventListener('keydown', event => {
