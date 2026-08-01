@@ -22279,10 +22279,10 @@
       "category": "BEST HORROR EXPERIENCE",
       "status": "nominee",
       "rank": "",
-      "room": "La Fuga",
-      "room_key": "la fuga",
-      "company": "RoomsTGN Escape",
-      "company_key": "roomstgn escape"
+      "room": "La Monja",
+      "room_key": "la monja",
+      "company": "Parque Warner",
+      "company_key": "parque warner"
     },
     {
       "source_id": "horror_awards",
@@ -22292,10 +22292,10 @@
       "category": "BEST HORROR EXPERIENCE",
       "status": "nominee",
       "rank": "",
-      "room": "La Monja",
-      "room_key": "la monja",
-      "company": "Parque Warner",
-      "company_key": "parque warner"
+      "room": "La fuga",
+      "room_key": "la fuga",
+      "company": "Lucus",
+      "company_key": "lucus"
     },
     {
       "source_id": "horror_awards",
