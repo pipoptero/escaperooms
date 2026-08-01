@@ -20,6 +20,7 @@ PHOTOS_DIR = ROOT / "images" / "Hechos"
 OUT_FILE = ROOT / "review_photos.json"
 EXTENSIONS = {".jpg", ".jpeg", ".jfif", ".png", ".webp", ".avif"}
 PHOTO_ROOM_ALIASES = {
+    "experiment": "el_secreto_de_los_krugger",
     "la_historia_de_charlotte": "whitechapel",
 }
 
