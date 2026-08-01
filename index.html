@@ -175,6 +175,33 @@
   /* ── CONTENT / PANEL ── */
   .content{position:relative;z-index:1;padding:0 32px 56px;max-width:1400px;margin:0 auto;}
   .panel{background:var(--card);border:1px solid var(--border);border-top:none;padding:22px;margin-bottom:20px;}
+  .vault-guest-strip{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;margin:18px 0 0;padding:12px 14px;border:1px solid rgba(245,166,35,.16);background:linear-gradient(135deg,rgba(245,166,35,.07),rgba(255,255,255,.018));}
+  .vault-guest-kicker{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+  .vault-guest-title{font-family:'Cinzel',serif;color:var(--text);font-size:1rem;line-height:1.2;}
+  .vault-guest-text{color:var(--text2);font-size:.92rem;line-height:1.35;margin-top:4px;}
+  .vault-guest-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
+  .vault-guide-hero{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(240px,.8fr);gap:18px;align-items:stretch;margin-bottom:18px;}
+  .vault-guide-kicker{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--amber);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px;}
+  .vault-guide-title{font-family:'Cinzel',serif;font-size:clamp(1.65rem,3vw,2.65rem);line-height:1.05;color:var(--text);letter-spacing:.05em;margin-bottom:10px;}
+  .vault-guide-copy{color:var(--text2);font-size:1rem;line-height:1.55;max-width:760px;}
+  .vault-guide-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px;}
+  .vault-guide-action{font-family:'Share Tech Mono',monospace;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(245,166,35,.32);background:rgba(245,166,35,.07);color:var(--amber);padding:9px 12px;cursor:pointer;}
+  .vault-guide-action.secondary{border-color:var(--border);background:rgba(255,255,255,.025);color:var(--text3);}
+  .vault-guide-action:hover{border-color:var(--amber);color:var(--amber);}
+  .vault-guide-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+  .vault-guide-stat{border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.025);padding:11px 12px;min-width:0;}
+  .vault-guide-stat strong{display:block;font-family:'Cinzel',serif;font-size:1.55rem;color:var(--amber);line-height:1;}
+  .vault-guide-stat span{display:block;font-family:'Share Tech Mono',monospace;font-size:.54rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-top:5px;line-height:1.35;}
+  .vault-guide-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px;}
+  .vault-guide-card{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.02);padding:13px 14px;min-width:0;}
+  .vault-guide-icon{font-family:'Cinzel',serif;color:var(--amber);font-size:1.25rem;line-height:1;margin-bottom:9px;}
+  .vault-guide-card h3{font-family:'Cinzel',serif;color:var(--text);font-size:.98rem;line-height:1.22;margin-bottom:7px;}
+  .vault-guide-card p{color:var(--text2);font-size:.91rem;line-height:1.42;}
+  .vault-guide-flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:18px;padding-top:16px;border-top:1px solid var(--border);}
+  .vault-guide-step{display:grid;grid-template-columns:auto minmax(0,1fr);gap:9px;align-items:start;border:1px solid rgba(245,166,35,.12);background:rgba(245,166,35,.035);padding:10px;}
+  .vault-guide-step-num{width:25px;height:25px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(245,166,35,.35);color:var(--amber);font-family:'Share Tech Mono',monospace;font-size:.68rem;}
+  .vault-guide-step strong{display:block;font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--text);letter-spacing:.08em;text-transform:uppercase;line-height:1.35;}
+  .vault-guide-step span{display:block;color:var(--text3);font-size:.84rem;line-height:1.32;margin-top:3px;}
 
   /* ── FILTERS ── */
   .filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
@@ -868,6 +895,19 @@
     .tabs-container{padding:18px 14px 0;gap:0;flex-wrap:wrap;justify-content:stretch;}
     .tab{flex:1 1 50%;min-width:0;padding:9px 10px;font-size:.72rem;text-align:center;}
     .panel{padding:14px;}.rooms-grid{grid-template-columns:1fr;}
+    .vault-guest-strip{grid-template-columns:1fr;margin-top:12px;padding:11px 12px;gap:10px;}
+    .vault-guest-actions{justify-content:flex-start;}
+    .vault-guide-hero{grid-template-columns:1fr;gap:14px;margin-bottom:14px;}
+    .vault-guide-title{font-size:1.5rem;line-height:1.12;}
+    .vault-guide-copy{font-size:.92rem;line-height:1.45;}
+    .vault-guide-actions{gap:7px;}
+    .vault-guide-action{flex:1 1 auto;text-align:center;padding:9px 10px;}
+    .vault-guide-stats{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .vault-guide-stat{padding:9px 10px;}
+    .vault-guide-stat strong{font-size:1.25rem;}
+    .vault-guide-grid{grid-template-columns:1fr;gap:9px;}
+    .vault-guide-card{padding:11px 12px;}
+    .vault-guide-flow{grid-template-columns:1fr;gap:7px;margin-top:14px;padding-top:13px;}
     .updated-badge{top:auto;bottom:16px;right:50%;transform:translateX(50%);text-align:center;}
     .auth-bar{justify-content:flex-end;flex-wrap:nowrap;}
     .auth-status{max-width:100%;}
@@ -990,6 +1030,7 @@
   <div style="max-width:1400px;margin:0 auto;padding:0 32px;">
     <div class="tabs-container">
       <button class="tab active" id="tab-cat"   onclick="switchTab('catalogo')">🗂 Catálogo <span class="count-badge" id="badge-cat">0</span></button>
+      <button class="tab"        id="tab-vault" onclick="switchTab('thevault')">The Vault</button>
       <button class="tab auth-tab" id="tab-pend"  onclick="switchTab('pendientes')" style="display:none">🔒 Pendientes <span class="count-badge" id="badge-pend">0</span></button>
       <button class="tab auth-tab" id="tab-mine" onclick="switchTab('mis-hechos')" style="display:none">✅ Hechos <span class="count-badge" id="badge-mine">0</span></button>
       <button class="tab"        id="tab-hecho" onclick="switchTab('hechos')">✍ Reviews <span class="count-badge" id="badge-hecho">0</span></button>
@@ -998,6 +1039,84 @@
   </div>
 
   <div class="content">
+    <div class="vault-guest-strip guest-only" id="vault-guest-strip">
+      <div>
+        <div class="vault-guest-kicker">The Vault</div>
+        <div class="vault-guest-title">Tu archivo de escape rooms, rankings y grupos escapistas.</div>
+        <div class="vault-guest-text">Explora el catalogo sin cuenta o entra con Google para guardar pendientes, hechos, favoritos y grupos privados.</div>
+      </div>
+      <div class="vault-guest-actions">
+        <button class="vault-guide-action secondary" type="button" onclick="switchTab('thevault')">Como funciona</button>
+        <button class="vault-guide-action" type="button" onclick="signInGoogle()">Entrar con Google</button>
+      </div>
+    </div>
+
+    <!-- THE VAULT -->
+    <div id="panel-thevault" class="panel" style="display:none">
+      <div class="vault-guide-hero">
+        <div>
+          <div class="vault-guide-kicker">Escape Room Chronicles</div>
+          <div class="vault-guide-title">The Vault organiza tu vida escapista sin perder el misterio.</div>
+          <p class="vault-guide-copy">
+            Un catalogo de salas de escape en Espana con reviews propias, ranking ponderado,
+            premios, favoritos, pendientes personales y grupos privados para organizar partidas con tus companeros.
+          </p>
+          <div class="vault-guide-actions">
+            <button class="vault-guide-action" type="button" onclick="switchTab('catalogo')">Explorar catalogo</button>
+            <button class="vault-guide-action secondary" type="button" onclick="switchTab('ranking')">Ver ranking</button>
+            <button class="vault-guide-action secondary guest-only" type="button" onclick="signInGoogle()">Crear cuenta</button>
+            <button class="vault-guide-action secondary auth-only" type="button" onclick="openProfile()" style="display:none">Abrir ajustes</button>
+          </div>
+        </div>
+        <div class="vault-guide-stats">
+          <div class="vault-guide-stat"><strong id="vault-stat-catalog">0</strong><span>salas en catalogo</span></div>
+          <div class="vault-guide-stat"><strong id="vault-stat-reviews">0</strong><span>reviews publicadas</span></div>
+          <div class="vault-guide-stat"><strong id="vault-stat-ranking">0</strong><span>salas con ranking</span></div>
+          <div class="vault-guide-stat"><strong id="vault-stat-groups">0</strong><span>tus grupos activos</span></div>
+        </div>
+      </div>
+
+      <div class="vault-guide-grid">
+        <div class="vault-guide-card">
+          <div class="vault-guide-icon">01</div>
+          <h3>Catalogo vivo</h3>
+          <p>Busca por comunidad, provincia, ciudad, jugadores, dificultad, terror y premios. Cada sala abre una ficha completa con sinopsis, datos y acciones personales.</p>
+        </div>
+        <div class="vault-guide-card">
+          <div class="vault-guide-icon">02</div>
+          <h3>Ranking con contexto</h3>
+          <p>La nota global mezcla fuentes externas, comunidad y reconocimiento en premios para que una sala con varias senales pese mejor que una nota aislada.</p>
+        </div>
+        <div class="vault-guide-card">
+          <div class="vault-guide-icon">03</div>
+          <h3>Reviews The Vault</h3>
+          <p>Las reviews del grupo mantienen la memoria de lo jugado: opinion, puntuacion, fotos, datos utiles y acceso al detalle de cada experiencia.</p>
+        </div>
+        <div class="vault-guide-card">
+          <div class="vault-guide-icon">04</div>
+          <h3>Cuenta personal</h3>
+          <p>Al entrar con Google puedes guardar favoritos, pendientes y hechos, escribir resenas publicas y conservar tu lista entre movil, PC y app instalada.</p>
+        </div>
+        <div class="vault-guide-card">
+          <div class="vault-guide-icon">05</div>
+          <h3>Grupos escapistas</h3>
+          <p>Crea grupos privados, invita companeros y separa que salas teneis pendientes o hechas juntos, incluso si perteneces a varios grupos diferentes.</p>
+        </div>
+        <div class="vault-guide-card">
+          <div class="vault-guide-icon">06</div>
+          <h3>Recomendador</h3>
+          <p>El asistente flotante ayuda a encontrar salas por zona, jugadores, estilo, terror o premios cuando no sabes por donde empezar.</p>
+        </div>
+      </div>
+
+      <div class="vault-guide-flow">
+        <div class="vault-guide-step"><div class="vault-guide-step-num">1</div><div><strong>Explora</strong><span>Filtra el catalogo y abre fichas de sala.</span></div></div>
+        <div class="vault-guide-step"><div class="vault-guide-step-num">2</div><div><strong>Guarda</strong><span>Marca favoritos, pendientes y hechos.</span></div></div>
+        <div class="vault-guide-step"><div class="vault-guide-step-num">3</div><div><strong>Comparte</strong><span>Crea grupos e invita a tus companeros.</span></div></div>
+        <div class="vault-guide-step"><div class="vault-guide-step-num">4</div><div><strong>Recuerda</strong><span>Consulta reviews, fotos, notas y ranking.</span></div></div>
+      </div>
+    </div>
+
     <!-- PENDIENTES -->
     <div id="panel-pendientes" class="panel" style="display:none">
       <div class="filters">
@@ -3703,6 +3822,7 @@ async function saveRoomReview(kind, key) {
     renderHechos();
     renderMisHechos();
     renderCatalogo();
+    renderVaultGuide();
     openDetail(kind, key);
   } catch (err) {
     console.error(err);
@@ -3723,6 +3843,7 @@ async function deleteRoomReview(kind, key) {
     renderHechos();
     renderMisHechos();
     renderCatalogo();
+    renderVaultGuide();
     openDetail(kind, key);
   } catch (err) {
     console.error(err);
@@ -3831,6 +3952,7 @@ async function refreshLiveData({ force = false, reason = 'auto' } = {}) {
     renderHechos();
     if (ACTIVE_TAB === 'ranking') renderRanking();
     renderCatalogo();
+    renderVaultGuide();
     updateFavCount();
     LAST_LIVE_REFRESH_AT = Date.now();
     if (reason === 'initial') await handlePendingInvite();
@@ -3875,6 +3997,7 @@ async function loadStaticEnhancementsAfterInitialRender() {
     renderCatalogo();
     renderHechos();
     if (ACTIVE_TAB === 'ranking') renderRanking();
+    renderVaultGuide();
   } catch (e) {
     console.warn('No se pudieron cargar los datos complementarios:', e.message);
   }
@@ -4047,10 +4170,26 @@ function renderStats() {
     </div>`;
 }
 
+function renderVaultGuide() {
+  const setText = (id, value) => {
+    const node = document.getElementById(id);
+    if (node) node.textContent = value;
+  };
+  let ranked = 0;
+  try { ranked = rankingRooms().length; } catch (e) { ranked = 0; }
+  setText('vault-stat-catalog', CATALOGO.length || 0);
+  setText('vault-stat-reviews', reviewRooms().length || 0);
+  setText('vault-stat-ranking', ranked || 0);
+  setText('vault-stat-groups', AUTH_USER ? activeUserGroups().length : '-');
+}
+
 function syncNavigationForAuth() {
   const signed = !!AUTH_USER;
   document.querySelectorAll('.auth-tab,.auth-only').forEach(el => {
     el.style.display = signed ? '' : 'none';
+  });
+  document.querySelectorAll('.guest-only').forEach(el => {
+    el.style.display = signed ? 'none' : '';
   });
   const pendTab = document.getElementById('tab-pend');
   if (pendTab) {
@@ -4062,14 +4201,15 @@ function syncNavigationForAuth() {
     if (favFilter) favFilter.checked = false;
     if (ACTIVE_TAB === 'mis-hechos' || ACTIVE_TAB === 'pendientes') switchTab('catalogo');
   }
+  renderVaultGuide();
 }
 
 function switchTab(t) {
   if ((t === 'mis-hechos' || t === 'pendientes') && !AUTH_USER) t = 'catalogo';
   ACTIVE_TAB = t;
-  ['pendientes','mis-hechos','hechos','ranking','catalogo'].forEach(x => {
+  ['pendientes','mis-hechos','hechos','ranking','catalogo','thevault'].forEach(x => {
     document.getElementById('panel-' + x).style.display = x === t ? 'block' : 'none';
-    const id = x==='pendientes'?'pend':x==='mis-hechos'?'mine':x==='hechos'?'hecho':x==='ranking'?'rank':'cat';
+    const id = x==='pendientes'?'pend':x==='mis-hechos'?'mine':x==='hechos'?'hecho':x==='ranking'?'rank':x==='thevault'?'vault':'cat';
     document.getElementById('tab-' + id).classList.toggle('active', x === t);
   });
   if (t === 'ranking') renderRanking();
@@ -4077,6 +4217,7 @@ function switchTab(t) {
   else if (t === 'hechos') renderHechos();
   else if (t === 'mis-hechos') renderMisHechos();
   else if (t === 'pendientes') renderPendientes();
+  else if (t === 'thevault') renderVaultGuide();
 }
 
 function setSortPend(s) {
