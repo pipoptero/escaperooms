@@ -18,7 +18,7 @@ DATA_FILE = ROOT / "data.json"
 CATALOG_FILE = ROOT / "catalog.json"
 PHOTOS_DIR = ROOT / "images" / "Hechos"
 OUT_FILE = ROOT / "review_photos.json"
-EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".avif"}
+EXTENSIONS = {".jpg", ".jpeg", ".jfif", ".png", ".webp", ".avif"}
 PHOTO_ROOM_ALIASES = {
     "la_historia_de_charlotte": "whitechapel",
 }
