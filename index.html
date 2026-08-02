@@ -1486,8 +1486,8 @@
 
   <div style="max-width:1400px;margin:0 auto;padding:0 32px;">
     <div class="tabs-container">
-      <button class="tab active" id="tab-cat"   onclick="switchTab('catalogo')">🗂 Catálogo <span class="count-badge" id="badge-cat">0</span></button>
-      <button class="tab"        id="tab-vault" onclick="switchTab('thevault')">The Vault</button>
+      <button class="tab active" id="tab-vault" onclick="switchTab('thevault')">The Vault</button>
+      <button class="tab"        id="tab-cat"   onclick="switchTab('catalogo')">🗂 Catálogo <span class="count-badge" id="badge-cat">0</span></button>
       <button class="tab auth-tab" id="tab-pend"  onclick="switchTab('pendientes')" style="display:none">🔒 Pendientes <span class="count-badge" id="badge-pend">0</span></button>
       <button class="tab auth-tab" id="tab-mine" onclick="switchTab('mis-hechos')" style="display:none">✅ Hechos <span class="count-badge" id="badge-mine">0</span></button>
       <button class="tab"        id="tab-hecho" onclick="switchTab('hechos')">✍ Reviews <span class="count-badge" id="badge-hecho">0</span></button>
@@ -1509,7 +1509,7 @@
     </div>
 
     <!-- THE VAULT -->
-    <div id="panel-thevault" class="panel" style="display:none">
+    <div id="panel-thevault" class="panel">
       <div class="vault-guide-hero">
         <div>
           <div class="vault-guide-kicker">The Vault Escape</div>
@@ -1689,7 +1689,7 @@
     </div>
 
     <!-- CATALOGO -->
-    <div id="panel-catalogo" class="panel">
+    <div id="panel-catalogo" class="panel" style="display:none">
       <button class="mobile-filter-toggle" id="mobile-filter-toggle-cat" type="button" onclick="toggleCatalogMobileFilters()" aria-expanded="false">Filtros</button>
       <div class="mobile-filter-summary" id="mobile-filter-summary-cat">Sin filtros activos</div>
       <div class="filters">
@@ -1927,7 +1927,7 @@ let catalogVisibleCount = CATALOG_PAGE_SIZE;
 let GROUP_ROOM_INDEX = { pendientes: new Set(), hechos: new Set() };
 let PHOTO_LIGHTBOX_ITEMS = [];
 let PHOTO_LIGHTBOX_INDEX = 0;
-let ACTIVE_TAB = 'catalogo';
+let ACTIVE_TAB = 'thevault';
 let CURRENT_DETAIL_HASH = '';
 const AWARD_CACHE = new Map();
 const GLOBAL_RATING_CACHE = new Map();
@@ -4797,7 +4797,7 @@ async function loadData() {
     document.getElementById('app').style.display = 'block';
     if (!FIREBASE_ENABLED) document.getElementById('setup-banner').style.display = 'block';
 
-    populateFilters(); renderStats(); renderPendientes(); renderMisHechos(); renderHechos(); renderCatalogo();
+    populateFilters(); renderStats(); renderPendientes(); renderMisHechos(); renderHechos(); renderCatalogo(); renderVaultGuide(); updateGuestStripVisibility();
     openDeepLinkFromHash();
     updateFavCount();
     loadStaticEnhancementsAfterInitialRender();
@@ -4992,6 +4992,12 @@ function vaultLatestReviewsHtml() {
   }).join('');
 }
 
+function updateGuestStripVisibility() {
+  const strip = document.getElementById('vault-guest-strip');
+  if (!strip) return;
+  strip.style.display = (!AUTH_USER && ACTIVE_TAB !== 'thevault') ? '' : 'none';
+}
+
 function syncNavigationForAuth() {
   const signed = !!AUTH_USER;
   document.querySelectorAll('.auth-tab,.auth-only').forEach(el => {
@@ -5008,13 +5014,14 @@ function syncNavigationForAuth() {
     showOnlyFavs = false;
     const favFilter = document.getElementById('filter-fav-cat');
     if (favFilter) favFilter.checked = false;
-    if (ACTIVE_TAB === 'mis-hechos' || ACTIVE_TAB === 'pendientes') switchTab('catalogo');
+    if (ACTIVE_TAB === 'mis-hechos' || ACTIVE_TAB === 'pendientes') switchTab('thevault');
   }
+  updateGuestStripVisibility();
   renderVaultGuide();
 }
 
 function switchTab(t) {
-  if ((t === 'mis-hechos' || t === 'pendientes') && !AUTH_USER) t = 'catalogo';
+  if ((t === 'mis-hechos' || t === 'pendientes') && !AUTH_USER) t = 'thevault';
   ACTIVE_TAB = t;
   ['pendientes','mis-hechos','hechos','ranking','catalogo','thevault'].forEach(x => {
     document.getElementById('panel-' + x).style.display = x === t ? 'block' : 'none';
@@ -5027,6 +5034,7 @@ function switchTab(t) {
   else if (t === 'mis-hechos') renderMisHechos();
   else if (t === 'pendientes') renderPendientes();
   else if (t === 'thevault') renderVaultGuide();
+  updateGuestStripVisibility();
 }
 
 function setSortPend(s) {
