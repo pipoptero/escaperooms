@@ -1917,6 +1917,9 @@ const ARKKADIA_REVIEW_PRIORITY = [
   { label: 'Judit O.', aliases: ['judit o', 'judit o.'] },
   { label: 'Darkdem7', aliases: ['darkdem7'] }
 ];
+const REVIEW_ROOM_ALIASES = {
+  whitechapel: 'la_historia_de_charlotte'
+};
 
 let PENDIENTES = [], HECHOS = [], CATALOGO = [], TERPECA_AWARDS = [], EXTRA_AWARDS = [], EXTERNAL_RATINGS = {}, EXTERNAL_RATINGS_META = {}, REVIEW_PHOTOS = {}, sortPend = 'rating', sortMine = 'rating', sortCatalogo = 'rating', sortRank = 'global', rankTerrorFilter = 'all', rankCommunityFilter = '';
 const CATALOG_PAGE_SIZE = 120;
@@ -2052,6 +2055,41 @@ function roomVoteKeys(room) {
     slugify(room.empresa || '')
   ].filter(Boolean))];
 }
+function canonicalReviewRoomKey(value) {
+  const key = slugify(value || '');
+  return REVIEW_ROOM_ALIASES[key] || key;
+}
+function reviewIdentityKeys(room) {
+  return [...new Set([
+    userRoomKey(room),
+    slugify(room.id || ''),
+    slugify(room.nombre || ''),
+    room.roomKey || ''
+  ].map(canonicalReviewRoomKey).filter(Boolean))];
+}
+function reviewRoomKey(room) {
+  return reviewIdentityKeys(room)[0] || userRoomKey(room);
+}
+function roomMatchesReviewSlug(room, slug) {
+  const key = canonicalReviewRoomKey(slug);
+  return !!key && reviewIdentityKeys(room).includes(key);
+}
+function reviewCacheKeysForSlug(slug) {
+  const key = slugify(slug || '');
+  const canonical = canonicalReviewRoomKey(key);
+  const keys = new Set([key, canonical].filter(Boolean));
+  Object.entries(REVIEW_ROOM_ALIASES).forEach(([alias, target]) => {
+    if (target === canonical) keys.add(alias);
+  });
+  return [...keys];
+}
+function reviewsForSlug(slug) {
+  const merged = {};
+  reviewCacheKeysForSlug(slug).forEach(key => {
+    Object.assign(merged, roomReviewsCache[key] || {});
+  });
+  return merged;
+}
 function catalogRoomFor(room) {
   const key = userRoomKey(room);
   const exactId = roomKey(room);
@@ -2180,7 +2218,7 @@ function publishedReviewRooms() {
     const review = record?.review || record || {};
     if (!review || (record.status && record.status !== 'published')) return null;
     const key = record.roomKey || review.roomKey || userRoomKey(review) || id;
-    const local = [...CATALOGO, ...PENDIENTES, ...HECHOS].find(room => userRoomKey(room) === key) || {};
+    const local = [...CATALOGO, ...PENDIENTES, ...HECHOS].find(room => roomMatchesReviewSlug(room, key)) || {};
     const merged = {
       ...local,
       ...review,
@@ -2228,8 +2266,8 @@ function scoreStarsToTenValue(value) {
 function localRoomForReviewSlug(slug, review = {}, sources = null) {
   const key = slugify(review.roomName || review.nombre || '');
   const candidates = sources || uniqueRooms([...CATALOGO, ...PENDIENTES, ...HECHOS, ...publishedReviewRooms()]);
-  return candidates.find(room => roomVoteKeys(room).includes(slug))
-    || candidates.find(room => key && roomVoteKeys(room).includes(key))
+  return candidates.find(room => roomMatchesReviewSlug(room, slug))
+    || candidates.find(room => key && roomMatchesReviewSlug(room, key))
     || null;
 }
 
@@ -2274,15 +2312,15 @@ function reviewRooms() {
   const roomSources = uniqueRooms([...CATALOGO, ...PENDIENTES, ...HECHOS, ...publishedRooms]);
   const byKey = new Map();
   HECHOS.forEach(room => {
-    const key = userRoomKey(room);
+    const key = reviewRoomKey(room);
     if (key) byKey.set(key, room);
   });
   publishedRooms.forEach(room => {
-    const key = userRoomKey(room);
+    const key = reviewRoomKey(room);
     if (key) byKey.set(key, room);
   });
   arkkadiaCommunityReviewRooms(roomSources).forEach(room => {
-    const key = userRoomKey(room);
+    const key = reviewRoomKey(room);
     if (key && !byKey.has(key)) byKey.set(key, room);
   });
   REVIEW_ROOMS_CACHE = [...byKey.values()];
@@ -2546,7 +2584,8 @@ function groupName(groupId) {
 }
 
 function findRoomByUserKey(key) {
-  return [...CATALOGO, ...PENDIENTES, ...reviewRooms()].find(room => userRoomKey(room) === key) || null;
+  return [...CATALOGO, ...PENDIENTES, ...reviewRooms()]
+    .find(room => userRoomKey(room) === key || roomMatchesReviewSlug(room, key)) || null;
 }
 
 function roomFromGroupRecord(key, record) {
@@ -4184,11 +4223,13 @@ function reviewPrimaryScore(room) {
 
 function voteStatsForRoom(room) {
   const byUser = {};
-  roomVoteKeys(room).forEach(slug => {
+  const keys = new Set(roomVoteKeys(room));
+  reviewIdentityKeys(room).forEach(key => reviewCacheKeysForSlug(key).forEach(alias => keys.add(alias)));
+  keys.forEach(slug => {
     Object.entries(votesCache[slug] || {}).forEach(([uid, value]) => {
       if (value > 0) byUser[uid] = value;
     });
-    Object.entries(roomReviewsCache[slug] || {}).forEach(([uid, review]) => {
+    Object.entries(reviewsForSlug(slug) || {}).forEach(([uid, review]) => {
       const value = reviewScoreAsVote(review);
       if (value > 0 && !byUser[uid]) byUser[uid] = value;
     });
@@ -4357,7 +4398,7 @@ function scoreToTen(stars) {
 }
 
 function reviewStats(slug) {
-  const reviews = Object.values(roomReviewsCache[slug] || {});
+  const reviews = Object.values(reviewsForSlug(slug) || {});
   return REVIEW_CATEGORIES.map(([id, label]) => {
     const vals = reviews.map(review => Number(review?.scores?.[id]) || 0).filter(Boolean);
     const avg = vals.length ? vals.reduce((sum, val) => sum + val, 0) / vals.length : 0;
@@ -4404,7 +4445,7 @@ function setReviewCategoryScoreFromPointer(event, widgetId, category) {
 }
 
 function myRoomReview(slug) {
-  return AUTH_USER ? (roomReviewsCache[slug] || {})[USER_ID] || null : null;
+  return AUTH_USER ? (reviewsForSlug(slug) || {})[USER_ID] || null : null;
 }
 
 function reviewFormHtml(room, kind, slug) {
@@ -4443,7 +4484,7 @@ function reviewSummaryHtml(slug) {
 }
 
 function reviewListHtml(slug) {
-  const reviews = Object.entries(roomReviewsCache[slug] || {}).map(([uid, review]) => ({ uid, ...review })).sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+  const reviews = Object.entries(reviewsForSlug(slug) || {}).map(([uid, review]) => ({ uid, ...review })).sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
   if (!reviews.length) return '<div class="review-empty">Todavía no hay reseñas de la comunidad.</div>';
   return `<div class="review-list">${reviews.map(review => {
     const scores = REVIEW_CATEGORIES.filter(([id]) => review.scores?.[id]).map(([id, label]) => `<span class="review-score-pill">${label}: ${scoreToTen(review.scores[id]).toFixed(1)}/10</span>`).join('');
@@ -4477,6 +4518,7 @@ async function saveRoomReview(kind, key) {
     return;
   }
   const slug = slugify(room.nombre || room.empresa || roomKey(room));
+  const storageSlug = canonicalReviewRoomKey(slug);
   const status = document.getElementById(`review-status-${cssSafe(slug)}`);
   if (status) status.textContent = 'Guardando resena...';
   const widgetId = `${slug}_${USER_ID}_review`;
@@ -4505,9 +4547,15 @@ async function saveRoomReview(kind, key) {
   };
   try {
     if (AUTH_USER) AUTH_TOKEN = await AUTH_USER.getIdToken(true);
-    await fbPut(`roomReviews/${slug}/${USER_ID}`, review);
-    if (!roomReviewsCache[slug]) roomReviewsCache[slug] = {};
-    roomReviewsCache[slug][USER_ID] = review;
+    await fbPut(`roomReviews/${storageSlug}/${USER_ID}`, review);
+    if (!roomReviewsCache[storageSlug]) roomReviewsCache[storageSlug] = {};
+    roomReviewsCache[storageSlug][USER_ID] = review;
+    for (const oldSlug of reviewCacheKeysForSlug(slug)) {
+      if (oldSlug !== storageSlug && roomReviewsCache[oldSlug]?.[USER_ID]) {
+        await fbDelete(`roomReviews/${oldSlug}/${USER_ID}`);
+        delete roomReviewsCache[oldSlug][USER_ID];
+      }
+    }
     invalidateReviewRoomsCache();
     if (status) status.textContent = 'Resena guardada';
     renderRanking();
@@ -4528,9 +4576,15 @@ async function deleteRoomReview(kind, key) {
   const room = findDetailRoom(kind, key);
   if (!room) return;
   const slug = slugify(room.nombre || room.empresa || roomKey(room));
+  const storageSlug = canonicalReviewRoomKey(slug);
   try {
-    await fbDelete(`roomReviews/${slug}/${USER_ID}`);
-    if (roomReviewsCache[slug]) delete roomReviewsCache[slug][USER_ID];
+    const deleteSlugs = new Set([storageSlug, ...reviewCacheKeysForSlug(slug)]);
+    for (const deleteSlug of deleteSlugs) {
+      if (roomReviewsCache[deleteSlug]?.[USER_ID]) {
+        await fbDelete(`roomReviews/${deleteSlug}/${USER_ID}`);
+        delete roomReviewsCache[deleteSlug][USER_ID];
+      }
+    }
     invalidateReviewRoomsCache();
     renderRanking();
     renderHechos();
@@ -5617,7 +5671,7 @@ function roomKey(room) {
 
 function findDetailRoom(kind, key) {
   const list = kind === 'catalogo' ? CATALOGO : kind === 'hechos' ? reviewRooms() : PENDIENTES;
-  return list.find(room => roomKey(room) === key) || null;
+  return list.find(room => roomKey(room) === key || (kind === 'hechos' && roomMatchesReviewSlug(room, key))) || null;
 }
 
 function detailRefForRoom(room, order = ['catalogo', 'pendientes', 'hechos']) {
@@ -5628,7 +5682,7 @@ function detailRefForRoom(room, order = ['catalogo', 'pendientes', 'hechos']) {
   }
   const state = userRoomKey(room);
   for (const kind of order) {
-    const match = (lists[kind] || []).find(item => userRoomKey(item) === state);
+    const match = (lists[kind] || []).find(item => userRoomKey(item) === state || (kind === 'hechos' && roomMatchesReviewSlug(item, state)));
     if (match) return { kind, key: roomKey(match) };
   }
   return { kind: 'catalogo', key: exactKey };
@@ -5684,7 +5738,7 @@ function parseDetailHash() {
 
 function findDeepLinkTarget(type, key) {
   if (!key) return null;
-  const byUserKey = room => userRoomKey(room) === key || roomKey(room) === key;
+  const byUserKey = room => userRoomKey(room) === key || roomKey(room) === key || roomMatchesReviewSlug(room, key);
   if (type === 'review') {
     const review = reviewRooms().find(byUserKey);
     return review ? { kind: 'hechos', key: roomKey(review) } : null;
@@ -5723,7 +5777,8 @@ function reviewPhotosEntryFor(room) {
   const keys = [
     slugify(room.nombre || ''),
     slugify(room.id || ''),
-    slugify(`${room.nombre || ''} ${room.empresa || ''}`)
+    slugify(`${room.nombre || ''} ${room.empresa || ''}`),
+    ...reviewIdentityKeys(room)
   ].filter(Boolean);
   for (const key of keys) {
     if (REVIEW_PHOTOS[key]?.photos?.length) return { key, photos: REVIEW_PHOTOS[key].photos };
@@ -6109,9 +6164,9 @@ function cardPend(p, i) {
 
 function cardHecho(h, rank) {
   const slug    = roomVoteSlug(h);
-  const detailKind = reviewRooms().some(room => userRoomKey(room) === userRoomKey(h))
+  const detailKind = reviewRooms().some(room => reviewRoomKey(room) === reviewRoomKey(h))
     ? 'hechos'
-    : CATALOGO.some(room => userRoomKey(room) === userRoomKey(h)) ? 'catalogo' : 'pendientes';
+    : CATALOGO.some(room => reviewRoomKey(room) === reviewRoomKey(h)) ? 'catalogo' : 'pendientes';
   const medals  = ['gold','silver','bronze'];
   const emoji   = ['🥇','🥈','🥉'];
   const rankDisp = emoji[rank - 1]
@@ -6471,7 +6526,7 @@ function renderRanking() {
       const commScore = count > 0
         ? `<span class="comm-avg">★ ${(avg * 2).toFixed(1)}</span> <span class="comm-count">(${count})</span>`
         : `<span class="comm-empty">—</span>`;
-      const hasGroupReview = reviewRooms().some(item => userRoomKey(item) === userRoomKey(room));
+      const hasGroupReview = reviewRooms().some(item => reviewRoomKey(item) === reviewRoomKey(room));
       const detailRef = detailRefForRoom(room, hasGroupReview ? ['hechos','catalogo','pendientes'] : ['catalogo','hechos','pendientes']);
       const detailKind = detailRef.kind;
       const detailKey = jsString(detailRef.key);
@@ -6722,7 +6777,7 @@ function renderRanking() {
       <th>Fuentes</th><th>Ciudad</th>
     </tr></thead>
     <tbody>${rows.map(({ room, global }, i) => {
-      const hasGroupReview = reviewRooms().some(item => userRoomKey(item) === userRoomKey(room));
+      const hasGroupReview = reviewRooms().some(item => reviewRoomKey(item) === reviewRoomKey(room));
       const detailRef = detailRefForRoom(room, hasGroupReview ? ['hechos','catalogo','pendientes'] : ['catalogo','hechos','pendientes']);
       const detailKind = detailRef.kind;
       const detailKey = jsString(detailRef.key);
