@@ -1639,6 +1639,17 @@ function roomVoteKeys(room) {
     slugify(room.empresa || '')
   ].filter(Boolean))];
 }
+function catalogRoomFor(room) {
+  const key = userRoomKey(room);
+  const exactId = roomKey(room);
+  return CATALOGO.find(c => roomKey(c) === exactId || userRoomKey(c) === key) || null;
+}
+function roomImageSrc(room, withLocalFallback = true) {
+  if (room?.imagen) return room.imagen;
+  const catalogRoom = catalogRoomFor(room || {});
+  if (catalogRoom?.imagen) return catalogRoom.imagen;
+  return withLocalFallback ? `images/${slugify(room?.nombre || '')}.webp` : '';
+}
 function cleanValue(text) {
   return String(text || '').trim();
 }
@@ -1662,8 +1673,7 @@ function catalogImageHtml(p) {
 }
 function imageHtml(p) {
   const initial = (p.nombre || '?').trim().slice(0, 1).toUpperCase();
-  const localSrc = `images/${slugify(p.nombre || '')}.webp`;
-  const src = p.imagen || localSrc;
+  const src = roomImageSrc(p);
   const fallback = `<div class="card-media-fallback">${initial}</div>`;
   return `<img src="${src}" alt="${p.nombre || 'Escape room'}" loading="lazy" onerror="this.replaceWith(this.nextElementSibling)">${fallback}`;
 }
@@ -5049,14 +5059,16 @@ function awardFilterLabel(filter) {
   }[filter] || '';
 }
 
-function faviconHtml(webUrl, cssClass) {
-  if (!webUrl) return `<div class="${cssClass}"><span class="logo-emoji">🔐</span></div>`;
+function faviconHtml(webUrl, cssClass, room = null) {
+  const fallbackSrc = roomImageSrc(room || {}, false) || 'images/brand/icon-round-192.png';
+  const fallbackImg = `<img src="${escapeHtml(fallbackSrc)}" alt="" style="display:${webUrl ? 'none' : 'block'}">`;
+  if (!webUrl) return `<div class="${cssClass}">${fallbackImg}</div>`;
   try {
     const domain = new URL(webUrl).hostname;
     const src = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
-    return `<div class="${cssClass}"><img src="${src}" alt="" onerror="this.parentElement.innerHTML='<span class=\\'logo-emoji\\'>🔐</span>'"></div>`;
+    return `<div class="${cssClass}"><img src="${src}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">${fallbackImg}</div>`;
   } catch {
-    return `<div class="${cssClass}"><span class="logo-emoji">🔐</span></div>`;
+    return `<div class="${cssClass}">${fallbackImg}</div>`;
   }
 }
 
@@ -5518,7 +5530,7 @@ function cardPend(p, i) {
   <div class="card-media">
     ${imageHtml(p)}
     <div class="card-media-top">
-      ${faviconHtml(p.web, 'card-logo')}
+        ${faviconHtml(p.web, 'card-logo', p)}
       <div style="display:flex;gap:8px;align-items:flex-start">
         ${terpecaBadge(p.terpeca)}
       </div>
@@ -5592,7 +5604,7 @@ function cardHecho(h, rank) {
 
     <div class="rv-info">
       <div class="rv-title-row">
-        ${faviconHtml(h.web, 'rv-logo')}
+        ${faviconHtml(h.web, 'rv-logo', h)}
         <div>
           <div class="rv-name">${h.nombre}</div>
           <div class="rv-empresa">${h.empresa}</div>
@@ -5652,7 +5664,7 @@ function cardCatalogo(c, i) {
   <div class="card-media">
     ${catalogImageHtml(c)}
     <div class="card-media-top">
-      ${faviconHtml(c.web, 'card-logo')}
+      ${faviconHtml(c.web, 'card-logo', c)}
       <div class="award-stack">
         ${awardSeal}
       </div>
