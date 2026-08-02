@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE_URL = "https://thevaultescape.com"
 SITE_NAME = "The Vault Escape"
 TODAY = date.today().isoformat()
+FEATURED_ROOM_LIMIT = 50
 
 
 def read_json(path, fallback):
@@ -89,6 +90,73 @@ def photo_entries(room, photos_data):
     key = slugify(room.get("nombre"), "_")
     entry = photos_data.get(key, {})
     return entry.get("photos") or []
+
+
+def room_identity(room):
+    return slugify(room.get("nombre"), "_")
+
+
+def room_url_slug(room):
+    return slugify(room.get("nombre"))
+
+
+def source_label(source_id, meta):
+    labels = meta.get("sources", {}) if isinstance(meta, dict) else {}
+    return labels.get(source_id, {}).get("label") or {
+        "escape_collector": "Escape Collector",
+        "giba": "Giba Escape",
+        "ocioterror": "OcioTerror",
+        "todoescaperooms": "TodoEscapeRooms",
+        "the_vault_community": "Comunidad The Vault",
+    }.get(source_id, source_id)
+
+
+def merge_room_data(base, extra):
+    merged = dict(base or {})
+    for key, value in (extra or {}).items():
+        if text(value) and not text(merged.get(key)):
+            merged[key] = value
+    return merged
+
+
+def build_room_lookup(data):
+    lookup = {}
+    for collection in ("hechos", "pendientes"):
+        for room in data.get(collection, []) or []:
+            key = room_identity(room)
+            if key:
+                lookup[key] = merge_room_data(lookup.get(key, {}), room)
+    catalog = read_json(ROOT / "catalog.json", [])
+    if isinstance(catalog, dict):
+        catalog = catalog.get("rooms") or catalog.get("catalog") or []
+    for room in catalog or []:
+        key = room_identity(room)
+        if key:
+            lookup[key] = merge_room_data(lookup.get(key, {}), room)
+    return lookup
+
+
+def ranked_rooms(data):
+    external = read_json(ROOT / "external_ratings.json", {})
+    ratings = external.get("ratings", {})
+    meta = external.get("meta", {})
+    lookup = build_room_lookup(data)
+    rows = []
+    for key, rating in ratings.items():
+        rating_room = rating.get("room") or {}
+        room = merge_room_data(rating_room, lookup.get(room_identity(rating_room) or key, {}))
+        if not text(room.get("nombre")):
+            room["nombre"] = key.replace("_", " ").title()
+        rows.append({"key": key, "room": room, "rating": rating, "meta": meta})
+    rows.sort(
+        key=lambda item: (
+            -decimal(item["rating"].get("global_score")),
+            -int(item["rating"].get("source_count") or 0),
+            -int(item["rating"].get("award_count") or 0),
+            text(item["room"].get("nombre")).lower(),
+        )
+    )
+    return rows
 
 
 def json_ld(data):
@@ -339,12 +407,208 @@ def reviews_index_page(rooms):
 """
 
 
-def sitemap_xml(review_rooms):
+def ranking_index_page(rows):
+    top_rows = rows[:FEATURED_ROOM_LIMIT]
+    canonical = site_url("/ranking/")
+    description = "Ranking ponderado de escape rooms en Espana segun fuentes externas, comunidad y premios recopilados por The Vault Escape."
+    image = site_url("/images/brand/social-card.png")
+    title = f"Ranking de escape rooms en Espana | {SITE_NAME}"
+    items = []
+    list_items = []
+    for idx, item in enumerate(top_rows, 1):
+        room = item["room"]
+        rating = item["rating"]
+        name = text(room.get("nombre")) or "Escape room"
+        url = site_url(f"/salas/{room_url_slug(room)}/")
+        score = decimal(rating.get("global_score"))
+        location = room_location(room)
+        items.append(
+            f'<a class="rank-link" href="{escape(url)}">'
+            f'<span class="pos">#{idx}</span><strong>{escape(name)}</strong>'
+            f'<span>{escape(text(room.get("empresa")))}{(" - " + escape(location)) if location else ""}</span>'
+            f'<em>{score:.1f}/10 · {int(rating.get("source_count") or 0)} fuentes</em></a>'
+        )
+        list_items.append({"@type": "ListItem", "position": idx, "name": name, "url": url})
+    schema = {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": title,
+        "url": canonical,
+        "description": description,
+        "mainEntity": {"@type": "ItemList", "itemListElement": list_items},
+    }
+    return f"""<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{escape(title)}</title>
+<meta name="description" content="{escape(description)}">
+<link rel="canonical" href="{escape(canonical)}">
+<link rel="icon" href="../images/brand/favicon-round-32.png" sizes="32x32" type="image/png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{SITE_NAME}">
+<meta property="og:title" content="{escape(title)}">
+<meta property="og:description" content="{escape(description)}">
+<meta property="og:url" content="{escape(canonical)}">
+<meta property="og:image" content="{escape(image)}">
+<script type="application/ld+json">
+{json_ld(schema)}
+</script>
+<style>
+  body{{margin:0;background:#0a0a0f;color:#f0f0ea;font-family:Arial,Helvetica,sans-serif;}}
+  main{{width:min(980px,calc(100% - 32px));margin:0 auto;padding:32px 0 48px;}}
+  a{{color:#7dbb3f;}}
+  .brand{{display:flex;align-items:center;gap:12px;text-decoration:none;text-transform:uppercase;letter-spacing:.12em;color:#9a9ab6;font-size:.72rem;margin-bottom:24px;}}
+  .brand img{{width:42px;height:42px;border-radius:50%;}}
+  h1{{font-family:Georgia,serif;font-size:clamp(2rem,5vw,3.5rem);line-height:1.05;margin:0 0 10px;}}
+  p{{color:#b8b8c8;line-height:1.6;}}
+  .list{{display:grid;gap:10px;margin-top:24px;}}
+  .rank-link{{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:8px 12px;align-items:center;border:1px solid rgba(125,187,63,.2);background:rgba(255,255,255,.025);padding:13px;text-decoration:none;}}
+  .pos{{grid-row:1/3;color:#7dbb3f;font-weight:700;font-size:1.1rem;}}
+  .rank-link strong{{color:#f0f0ea;font-family:Georgia,serif;font-size:1.15rem;}}
+  .rank-link span:not(.pos){{color:#9a9ab6;}}
+  .rank-link em{{grid-column:3;grid-row:1/3;color:#7dbb3f;font-style:normal;font-weight:700;white-space:nowrap;}}
+  @media(max-width:680px){{.rank-link{{grid-template-columns:44px minmax(0,1fr);}}.rank-link em{{grid-column:2;grid-row:auto;}}}}
+</style>
+</head>
+<body>
+<main>
+  <a class="brand" href="../"><img src="../images/brand/icon-round-192.png" alt="">The Vault Escape</a>
+  <h1>Ranking de escape rooms en Espana</h1>
+  <p>Ranking ponderado con fuentes externas, comunidad y premios. Esta pagina estatica ayuda a Google a descubrir salas destacadas y enlaza con sus fichas SEO.</p>
+  <div class="list">
+    {''.join(items)}
+  </div>
+</main>
+</body>
+</html>
+"""
+
+
+def source_pills(rating, meta):
+    items = []
+    for source_id, source in (rating.get("sources") or {}).items():
+        score = decimal(source.get("score"))
+        votes = f" · {int(source.get('votes'))} votos" if source.get("votes") else ""
+        items.append(f'<span class="pill">{escape(source_label(source_id, meta))}: {score:.1f}/10{votes}</span>')
+    if decimal(rating.get("award_bonus")):
+        items.append(f'<span class="pill">Premios +{decimal(rating.get("award_bonus")):.1f}</span>')
+    return "\n".join(items)
+
+
+def room_page(item, position):
+    room = item["room"]
+    rating = item["rating"]
+    meta = item["meta"]
+    name = text(room.get("nombre")) or "Escape room"
+    company = text(room.get("empresa"))
+    slug = room_url_slug(room)
+    canonical = site_url(f"/salas/{slug}/")
+    app_link = site_url(f"/#room/{app_hash_key(room)}")
+    score = decimal(rating.get("global_score"))
+    description = short_description({
+        **room,
+        "descripcion": text(room.get("descripcion")) or (
+            f"{name} aparece en el ranking ponderado de The Vault Escape con una nota global de {score:.1f}/10 "
+            f"calculada a partir de {int(rating.get('source_count') or 0)} fuentes."
+        ),
+    })
+    image = asset_url(room.get("imagen") or "images/brand/social-card.png")
+    cover = page_asset(room.get("imagen") or "images/brand/social-card.png")
+    title = f"{name}: ranking y puntuaciones | {SITE_NAME}"
+    location = room_location(room)
+    meta_values = [
+        location,
+        text(room.get("tematica")),
+        text(room.get("tipo")),
+        f'{text(room.get("duracion"))} min' if text(room.get("duracion")) else "",
+        text(room.get("dificultad")),
+    ]
+    meta_html = "\n".join(f'<span class="pill">{escape(value)}</span>' for value in meta_values if value)
+    sources_html = source_pills(rating, meta)
+    schema = {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "WebPage",
+                "@id": canonical,
+                "url": canonical,
+                "name": title,
+                "description": description,
+                "isPartOf": {"@id": site_url("/#website")},
+                "primaryImageOfPage": image,
+            },
+            {
+                "@type": "EntertainmentBusiness",
+                "name": f"{name}{' - ' + company if company else ''}",
+                "image": image,
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": text(room.get("ciudad")),
+                    "addressRegion": text(room.get("provincia")),
+                    "addressCountry": "ES",
+                },
+                "aggregateRating": {
+                    "@type": "AggregateRating",
+                    "ratingValue": f"{score:.1f}",
+                    "bestRating": "10",
+                    "worstRating": "0",
+                    "ratingCount": max(1, int(rating.get("source_count") or 1)),
+                },
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {"@type": "ListItem", "position": 1, "name": "Inicio", "item": site_url("/")},
+                    {"@type": "ListItem", "position": 2, "name": "Ranking", "item": site_url("/ranking/")},
+                    {"@type": "ListItem", "position": 3, "name": name, "item": canonical},
+                ],
+            },
+        ],
+    }
+    return base_head(title, description, canonical, image) + f"""
+<script type="application/ld+json">
+{json_ld(schema)}
+</script>
+</head>
+<body>
+<main class="wrap">
+  <a class="brand" href="../../"><img src="../../images/brand/icon-round-192.png" alt="">The Vault Escape</a>
+  <article class="hero">
+    <img class="cover" src="{escape(cover)}" alt="Cartel de {escape(name)}">
+    <div>
+      <div class="kicker">Sala destacada #{position}</div>
+      <h1>{escape(name)}</h1>
+      <div class="company">{escape(company)}</div>
+      <div class="meta">{meta_html}</div>
+      <div class="score">Nota global: {score:.1f}/10</div>
+      <p>{escape(description)}</p>
+      <div class="actions">
+        <a class="btn" href="{escape(app_link)}">Abrir ficha interactiva</a>
+        <a class="btn secondary" href="../../ranking/">Ver ranking completo</a>
+      </div>
+    </div>
+  </article>
+  <section class="section">
+    <h2>Fuentes del ranking</h2>
+    <div class="meta">{sources_html}</div>
+  </section>
+  {f'<section class="section"><h2>Sinopsis</h2><div class="review">{escape(text(room.get("descripcion")))}</div></section>' if text(room.get("descripcion")) else ''}
+</main>
+</body>
+</html>
+"""
+
+
+def sitemap_xml(review_rooms, ranking_rows):
     entries = [
         (site_url("/"), "daily", "1.0"),
         (site_url("/reviews/"), "weekly", "0.8"),
+        (site_url("/ranking/"), "weekly", "0.9"),
     ]
     entries.extend((site_url(f"/reviews/{slugify(room.get('nombre'))}/"), "monthly", "0.7") for room in review_rooms)
+    entries.extend((site_url(f"/salas/{room_url_slug(item['room'])}/"), "monthly", "0.7") for item in ranking_rows[:FEATURED_ROOM_LIMIT])
     body = "\n".join(
         f"  <url><loc>{escape(url)}</loc><lastmod>{TODAY}</lastmod><changefreq>{freq}</changefreq><priority>{priority}</priority></url>"
         for url, freq, priority in entries
@@ -365,6 +629,7 @@ def main():
     photos_data = read_json(ROOT / "review_photos.json", {}).get("photos", {})
     rooms = [room for room in data.get("hechos", []) if text(room.get("nombre"))]
     rooms.sort(key=lambda room: (int(decimal(room.get("ranking")) or 999), text(room.get("nombre")).lower()))
+    ranking_rows = ranked_rooms(data)
 
     reviews_dir = ROOT / "reviews"
     reviews_dir.mkdir(exist_ok=True)
@@ -376,9 +641,20 @@ def main():
         (page_dir / "index.html").write_text(review_page(room, photos), encoding="utf-8", newline="\n")
 
     (reviews_dir / "index.html").write_text(reviews_index_page(rooms), encoding="utf-8", newline="\n")
-    (ROOT / "sitemap.xml").write_text(sitemap_xml(rooms), encoding="utf-8", newline="\n")
+    ranking_dir = ROOT / "ranking"
+    ranking_dir.mkdir(exist_ok=True)
+    (ranking_dir / "index.html").write_text(ranking_index_page(ranking_rows), encoding="utf-8", newline="\n")
+
+    salas_dir = ROOT / "salas"
+    salas_dir.mkdir(exist_ok=True)
+    for position, item in enumerate(ranking_rows[:FEATURED_ROOM_LIMIT], 1):
+        page_dir = salas_dir / room_url_slug(item["room"])
+        page_dir.mkdir(parents=True, exist_ok=True)
+        (page_dir / "index.html").write_text(room_page(item, position), encoding="utf-8", newline="\n")
+
+    (ROOT / "sitemap.xml").write_text(sitemap_xml(rooms, ranking_rows), encoding="utf-8", newline="\n")
     (ROOT / "robots.txt").write_text(robots_txt(), encoding="utf-8", newline="\n")
-    print(f"SEO generado: {len(rooms)} reviews, sitemap.xml y robots.txt")
+    print(f"SEO generado: {len(rooms)} reviews, {min(FEATURED_ROOM_LIMIT, len(ranking_rows))} salas, ranking, sitemap.xml y robots.txt")
 
 
 if __name__ == "__main__":
