@@ -8,3 +8,10 @@ __pycache__/
 *.pyc
 scripts/update_catalog_and_awards.py
 run-maintenance-local.ps1
+
+# Local marketing workspace
+marketing/
+scripts/generate_marketing_assets.ps1
+scripts/generate_review_carousel.ps1
+scripts/generate_all_review_carousels.ps1
+scripts/generate_story_review_assets.ps1
