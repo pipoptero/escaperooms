@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'the-vault-v2';
+const CACHE_VERSION = 'the-vault-v6';
 const APP_SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -6,11 +6,14 @@ const APP_SHELL = [
   './',
   './index.html',
   './site.webmanifest',
-  './images/brand/favicon.svg',
-  './images/brand/favicon-32.png',
-  './images/brand/apple-touch-icon.png',
-  './images/brand/icon-192.png',
-  './images/brand/icon-512.png'
+  './images/brand/favicon-round-32.png',
+  './images/brand/apple-touch-icon-round.png',
+  './images/brand/icon-round-192.png',
+  './images/brand/icon-round-512.png',
+  './images/brand/the-vault-round-logo.jpg',
+  './images/brand/the-vault-wordmark.jpg',
+  './images/brand/the-vault-wordmark-transparent.png',
+  './images/brand/social-card.png'
 ];
 
 const DATA_FILES = [
