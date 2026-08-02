@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Vault — Escape Room Chronicles</title>
 <meta name="description" content="The Vault Escape es un archivo vivo de escape rooms en Espana: catalogo, reviews propias, ranking ponderado, premios, listas personales y grupos escapistas.">
+<meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://thevaultescape.com/">
 <meta name="theme-color" content="#0a0a0f">
 <meta name="application-name" content="The Vault">
@@ -16,6 +17,7 @@
 <link rel="apple-touch-icon" href="images/brand/apple-touch-icon-round.png">
 <link rel="manifest" href="site.webmanifest">
 <meta property="og:type" content="website">
+<meta property="og:locale" content="es_ES">
 <meta property="og:site_name" content="The Vault">
 <meta property="og:title" content="The Vault Escape - Escape Room Chronicles">
 <meta property="og:description" content="Descubre salas, lee reviews, compara rankings y organiza tus pendientes, hechos, favoritos y grupos escapistas.">
@@ -28,6 +30,51 @@
 <meta name="twitter:title" content="The Vault Escape - Escape Room Chronicles">
 <meta name="twitter:description" content="Catalogo nacional, reviews propias, ranking ponderado y listas personales para escapistas.">
 <meta name="twitter:image" content="https://thevaultescape.com/images/brand/social-card.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://thevaultescape.com/#organization",
+      "name": "The Vault Escape",
+      "url": "https://thevaultescape.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://thevaultescape.com/images/brand/icon-round-512.png",
+        "width": 512,
+        "height": 512
+      },
+      "sameAs": [
+        "https://www.instagram.com/thevault_escape/"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://thevaultescape.com/#website",
+      "url": "https://thevaultescape.com/",
+      "name": "The Vault Escape",
+      "description": "Catalogo nacional de escape rooms, reviews propias, ranking ponderado, premios, listas personales y grupos escapistas.",
+      "publisher": {
+        "@id": "https://thevaultescape.com/#organization"
+      },
+      "inLanguage": "es"
+    },
+    {
+      "@type": "WebApplication",
+      "@id": "https://thevaultescape.com/#app",
+      "name": "The Vault Escape",
+      "url": "https://thevaultescape.com/",
+      "applicationCategory": "LifestyleApplication",
+      "operatingSystem": "Web, Android, iOS",
+      "description": "Aplicacion web para descubrir escape rooms, guardar pendientes, marcar hechos, crear grupos escapistas y consultar reviews y rankings.",
+      "publisher": {
+        "@id": "https://thevaultescape.com/#organization"
+      }
+    }
+  ]
+}
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -244,6 +291,10 @@
   .vault-mini-list{display:grid;gap:7px;}
   .vault-mini-item{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.12);padding:8px 9px;font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;}
   .vault-mini-item strong{color:var(--amber);font-size:.68rem;}
+  .seo-footer{max-width:1400px;margin:0 auto 28px;padding:0 32px;color:var(--text3);font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;}
+  .seo-footer-inner{border-top:1px solid rgba(255,255,255,.06);padding-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center;}
+  .seo-footer a{color:var(--amber);text-decoration:none;border:1px solid rgba(125,187,63,.2);padding:5px 8px;background:rgba(125,187,63,.035);}
+  .seo-footer a:hover{border-color:var(--amber);}
 
   /* ── FILTERS ── */
   .filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
@@ -969,6 +1020,8 @@
     .vault-latest-img{width:64px;}
     .vault-latest-name{font-size:.9rem;}
     .vault-community-band{grid-template-columns:1fr;padding:12px;}
+    .seo-footer{padding:0 14px;margin-bottom:22px;}
+    .seo-footer-inner{justify-content:flex-start;}
     .updated-badge{top:auto;bottom:16px;right:50%;transform:translateX(50%);text-align:center;}
     .auth-bar{justify-content:flex-end;flex-wrap:nowrap;}
     .auth-status{max-width:100%;}
@@ -1680,6 +1733,13 @@
     </div>
   </div>
   </div>
+
+  <footer class="seo-footer" aria-label="Enlaces de reviews">
+    <div class="seo-footer-inner">
+      <span>Reviews de escape rooms con URL propia</span>
+      <a href="reviews/">Ver indice de reviews</a>
+    </div>
+  </footer>
 
 <button class="assistant-toggle" id="assistant-toggle" type="button" onclick="toggleAssistant()" title="Recomendador">🧭</button>
 <div class="assistant-panel" id="assistant-panel" aria-hidden="true">
