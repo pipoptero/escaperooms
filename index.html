@@ -1911,6 +1911,12 @@ const REVIEW_CATEGORIES = [
   ['jugabilidad', 'Jugabilidad'],
   ['gamemaster', 'Game Master']
 ];
+const ARKKADIA_REVIEW_PRIORITY = [
+  { label: 'Isaac B.', aliases: ['isaac b', 'isaac b.', 'isaac borras', 'isaac borras martinez'] },
+  { label: 'Anna T.', aliases: ['anna t', 'anna t.'] },
+  { label: 'Judit O.', aliases: ['judit o', 'judit o.'] },
+  { label: 'Darkdem7', aliases: ['darkdem7'] }
+];
 
 let PENDIENTES = [], HECHOS = [], CATALOGO = [], TERPECA_AWARDS = [], EXTRA_AWARDS = [], EXTERNAL_RATINGS = {}, EXTERNAL_RATINGS_META = {}, REVIEW_PHOTOS = {}, sortPend = 'rating', sortMine = 'rating', sortCatalogo = 'rating', sortRank = 'global', rankTerrorFilter = 'all', rankCommunityFilter = '';
 const CATALOG_PAGE_SIZE = 120;
@@ -1936,6 +1942,7 @@ let ADMIN_ROLE_RAW = null;
 let ADMIN_REVIEW_DRAFTS = {};
 let ADMIN_EDITING_DRAFT_ID = '';
 let ADMIN_PUBLISHED_REVIEWS = {};
+let REVIEW_ROOMS_CACHE = null;
 let USER_GROUPS = {};
 let GROUP_MEMBERS = {};
 let GROUP_ROOMS = {};
@@ -1947,6 +1954,10 @@ let LAST_LIVE_REFRESH_AT = 0;
 let LIVE_REFRESH_IN_PROGRESS = false;
 let LIVE_REFRESH_EVENTS_READY = false;
 const LIVE_REFRESH_MIN_INTERVAL = 5 * 60 * 1000;
+
+function invalidateReviewRoomsCache() {
+  REVIEW_ROOMS_CACHE = null;
+}
 
 // ── Utilidades ────────────────────────────────────────────────────────────────
 function slugify(str) {
@@ -2184,17 +2195,98 @@ function publishedReviewRooms() {
   }).filter(Boolean);
 }
 
+function reviewAuthorName(review) {
+  return String(review?.userName || review?.publicName || review?.displayName || review?.name || '').trim();
+}
+
+function arkkadiaPriorityForReview(review) {
+  const name = reviewAuthorName(review);
+  if (!name) return null;
+  const normalized = normalizedKey(name);
+  const compact = compactKey(name);
+  const priority = ARKKADIA_REVIEW_PRIORITY.findIndex(author =>
+    author.aliases.some(alias => {
+      const normalizedAlias = normalizedKey(alias);
+      const compactAlias = compactKey(alias);
+      return normalized === normalizedAlias
+        || normalized.startsWith(`${normalizedAlias} `)
+        || compact === compactAlias;
+    })
+  );
+  return priority >= 0 ? priority : null;
+}
+
+function arkkadiaReviewText(review) {
+  return String(review?.text || review?.descripcion || review?.comentario || '').trim();
+}
+
+function scoreStarsToTenValue(value) {
+  const stars = Number(value) || 0;
+  return stars > 0 ? scoreToTen(stars).toFixed(1).replace('.0', '') : '';
+}
+
+function localRoomForReviewSlug(slug, review = {}, sources = null) {
+  const key = slugify(review.roomName || review.nombre || '');
+  const candidates = sources || uniqueRooms([...CATALOGO, ...PENDIENTES, ...HECHOS, ...publishedReviewRooms()]);
+  return candidates.find(room => roomVoteKeys(room).includes(slug))
+    || candidates.find(room => key && roomVoteKeys(room).includes(key))
+    || null;
+}
+
+function arkkadiaCommunityReviewRooms(sources = null) {
+  return Object.entries(roomReviewsCache || {}).map(([slug, reviewsByUser]) => {
+    const candidates = Object.values(reviewsByUser || {})
+      .map(review => ({ review, priority: arkkadiaPriorityForReview(review) }))
+      .filter(item => item.priority !== null && arkkadiaReviewText(item.review))
+      .sort((a, b) => a.priority - b.priority || (b.review.updatedAt || 0) - (a.review.updatedAt || 0));
+    const selected = candidates[0]?.review;
+    if (!selected) return null;
+
+    const base = localRoomForReviewSlug(slug, selected, sources) || {};
+    const authorName = reviewAuthorName(selected)
+      || ARKKADIA_REVIEW_PRIORITY[candidates[0].priority]?.label
+      || 'Arkkadia';
+    const scores = selected.scores || {};
+    const avgStars = reviewScoreAsVote(selected);
+    const merged = {
+      ...base,
+      id: base.id || slug,
+      roomKey: userRoomKey(base) || slug,
+      nombre: selected.roomName || base.nombre || slug.replace(/_/g, ' '),
+      empresa: selected.company || base.empresa || '',
+      descripcion: arkkadiaReviewText(selected),
+      valoracion: avgStars ? scoreToTen(avgStars).toFixed(1).replace('.0', '') : base.valoracion || '',
+      historia: scoreStarsToTenValue(scores.historia) || base.historia || '',
+      ambientacion: scoreStarsToTenValue(scores.ambientacion) || base.ambientacion || '',
+      jugabilidad: scoreStarsToTenValue(scores.jugabilidad) || base.jugabilidad || '',
+      gamemaster: scoreStarsToTenValue(scores.gamemaster) || base.gamemaster || '',
+      updatedAt: selected.updatedAt || base.updatedAt || '',
+      _arkkadiaCommunityReview: true,
+      _reviewAuthorName: authorName
+    };
+    return merged.nombre ? merged : null;
+  }).filter(Boolean);
+}
+
 function reviewRooms() {
+  if (REVIEW_ROOMS_CACHE) return REVIEW_ROOMS_CACHE;
+  const publishedRooms = publishedReviewRooms();
+  const roomSources = uniqueRooms([...CATALOGO, ...PENDIENTES, ...HECHOS, ...publishedRooms]);
   const byKey = new Map();
   HECHOS.forEach(room => {
     const key = userRoomKey(room);
     if (key) byKey.set(key, room);
   });
-  publishedReviewRooms().forEach(room => {
+  publishedRooms.forEach(room => {
     const key = userRoomKey(room);
     if (key) byKey.set(key, room);
   });
-  return [...byKey.values()];
+  arkkadiaCommunityReviewRooms(roomSources).forEach(room => {
+    const key = userRoomKey(room);
+    if (key && !byKey.has(key)) byKey.set(key, room);
+  });
+  REVIEW_ROOMS_CACHE = [...byKey.values()];
+  return REVIEW_ROOMS_CACHE;
 }
 
 function allPendingRooms() {
@@ -2631,6 +2723,7 @@ async function loadAdminReviewDrafts() {
 
 async function loadAdminPublishedReviews() {
   ADMIN_PUBLISHED_REVIEWS = {};
+  invalidateReviewRoomsCache();
   if (!FIREBASE_ENABLED) return {};
   try {
     ADMIN_PUBLISHED_REVIEWS = await fbGet('adminPublishedReviews') || {};
@@ -2638,6 +2731,7 @@ async function loadAdminPublishedReviews() {
     console.warn('No se pudieron cargar reviews publicadas admin:', e.message);
     ADMIN_PUBLISHED_REVIEWS = {};
   }
+  invalidateReviewRoomsCache();
   return ADMIN_PUBLISHED_REVIEWS;
 }
 
@@ -3465,6 +3559,7 @@ async function saveAdminReviewDraft() {
 }
 
 function refreshAfterAdminPublishedReview() {
+  invalidateReviewRoomsCache();
   populateFilters();
   renderStats();
   renderHechos();
@@ -4395,6 +4490,7 @@ async function saveRoomReview(kind, key) {
     await fbPut(`roomReviews/${slug}/${USER_ID}`, review);
     if (!roomReviewsCache[slug]) roomReviewsCache[slug] = {};
     roomReviewsCache[slug][USER_ID] = review;
+    invalidateReviewRoomsCache();
     if (status) status.textContent = 'Resena guardada';
     renderRanking();
     renderHechos();
@@ -4417,6 +4513,7 @@ async function deleteRoomReview(kind, key) {
   try {
     await fbDelete(`roomReviews/${slug}/${USER_ID}`);
     if (roomReviewsCache[slug]) delete roomReviewsCache[slug][USER_ID];
+    invalidateReviewRoomsCache();
     renderRanking();
     renderHechos();
     renderMisHechos();
@@ -4432,6 +4529,7 @@ async function deleteRoomReview(kind, key) {
 async function loadRoomReviews() {
   if (!FIREBASE_ENABLED) {
     roomReviewsCache = {};
+    invalidateReviewRoomsCache();
     return;
   }
   try {
@@ -4441,6 +4539,7 @@ async function loadRoomReviews() {
     console.warn('No se pudieron cargar las reseñas', err);
     roomReviewsCache = {};
   }
+  invalidateReviewRoomsCache();
 }
 async function loadCatalogo() {
   try {
@@ -4448,6 +4547,7 @@ async function loadCatalogo() {
     if (!r.ok) return;
     const d = await r.json();
     CATALOGO = d.catalogo || [];
+    invalidateReviewRoomsCache();
   } catch(e) {
     console.warn('No se pudo cargar catalog.json:', e.message);
   }
@@ -4593,6 +4693,7 @@ async function loadData() {
     const d = await r.json();
     PENDIENTES = d.pendientes || [];
     HECHOS     = d.hechos     || [];
+    invalidateReviewRoomsCache();
     rebuildGroupIndexes();
     const lastMod = r.headers.get('last-modified');
     if (lastMod) {
@@ -4787,10 +4888,11 @@ function vaultLatestReviewsHtml() {
       : initial;
     const meta = [room.empresa, room.ciudad, room.provincia].filter(Boolean).join(' - ');
     const score = room.valoracion ? Number(room.valoracion).toFixed(1).replace('.0', '') : '';
+    const kicker = room._arkkadiaCommunityReview ? 'Review Arkkadia' : 'Review The Vault';
     return `<article class="vault-latest-card" tabindex="0" role="button" onclick="openDetail('hechos','${key}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetail('hechos','${key}')}">
       <div class="vault-latest-img">${img}</div>
       <div>
-        <div class="vault-latest-kicker">Review The Vault</div>
+        <div class="vault-latest-kicker">${kicker}</div>
         <div class="vault-latest-name">${escapeHtml(room.nombre)}</div>
         <div class="vault-latest-meta">${escapeHtml(meta || 'Escape room')}</div>
         ${score ? `<div class="vault-latest-score">★ ${escapeHtml(score)}</div>` : ''}
@@ -5706,8 +5808,11 @@ function reviewScoreMeta(room) {
 function reviewBlockHtml(room) {
   const hasReview = !!(room.descripcion || room.historia || room.ambientacion || room.jugabilidad || room.gamemaster);
   if (!hasReview) return '';
+  const title = room._arkkadiaCommunityReview
+    ? `Review Arkkadia${room._reviewAuthorName ? ` - ${escapeHtml(room._reviewAuthorName)}` : ''}`
+    : 'Review del grupo';
   return `
-    <div class="detail-section-title">Review del grupo</div>
+    <div class="detail-section-title">${title}</div>
     <div class="detail-review">
       <div class="detail-review-text ${!room.descripcion ? 'empty' : ''}">${escapeHtml(room.descripcion || 'Sin opinión añadida aún.')}</div>
       ${(room.historia || room.ambientacion || room.jugabilidad || room.gamemaster) ? `
@@ -5854,7 +5959,7 @@ function openDetail(kind, key, options = {}) {
   const rating = displayRating(room);
   const players = playerLabel(room);
   const price = priceLabel(room);
-  const sourceLabel = kind === 'catalogo' ? 'Catalogo general' : kind === 'hechos' ? 'Review del grupo' : 'Pendiente';
+  const sourceLabel = kind === 'catalogo' ? 'Catalogo general' : kind === 'hechos' ? (room._arkkadiaCommunityReview ? 'Review Arkkadia' : 'Review del grupo') : 'Pendiente';
   const location = [cleanValue(room.ciudad), cleanValue(room.provincia), cleanValue(communityOf(room))].filter(Boolean).join(' - ');
   const isReview = kind === 'hechos';
   const synopsis = !isReview && room.descripcion ? escapeHtml(room.descripcion) : '';
@@ -5889,7 +5994,7 @@ function openDetail(kind, key, options = {}) {
       <button class="detail-link" type="button" onclick="copyDetailLink('${kind}','${jsString(key)}')">${kind === 'hechos' ? 'Copiar enlace review' : 'Copiar enlace'}</button>
       ${room.web ? `<a class="detail-link" href="${room.web}" target="_blank">Ver web oficial</a>` : ''}
       <span class="detail-share-status" id="detail-share-status"></span>
-      ${kind === 'catalogo' ? `<span class="tag tag-muted">Catálogo</span>` : kind === 'hechos' ? `<span class="tag tag-feature">Review grupo</span>` : `<span class="tag tag-feature">Pendiente</span>`}
+      ${kind === 'catalogo' ? `<span class="tag tag-muted">Catálogo</span>` : kind === 'hechos' ? `<span class="tag tag-feature">${room._arkkadiaCommunityReview ? 'Review Arkkadia' : 'Review grupo'}</span>` : `<span class="tag tag-feature">Pendiente</span>`}
     </div>`;
 
   modal.classList.add('open');
@@ -6000,6 +6105,9 @@ function cardHecho(h, rank) {
     : '';
 
   const detailKey = jsString(roomKey(h));
+  const opinionLabel = h._arkkadiaCommunityReview
+    ? `Opinión Arkkadia${h._reviewAuthorName ? ` · ${escapeHtml(h._reviewAuthorName)}` : ''}`
+    : 'Opinión personal';
 
   return `<div class="review-row" tabindex="0" role="button" onclick="openDetailFromCard(event,'${detailKind}','${detailKey}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetail('${detailKind}','${detailKey}')}" style="animation-delay:${(rank-1)*.05}s">
 
@@ -6035,7 +6143,7 @@ function cardHecho(h, rank) {
     </div>
 
     <div class="rv-opinion">
-      <div class="rv-opinion-label">Opinión personal</div>
+      <div class="rv-opinion-label">${opinionLabel}</div>
       <div class="rv-opinion-text ${!h.descripcion ? 'empty' : ''}">
         ${h.descripcion || 'Sin descripción añadida aún.'}
       </div>
