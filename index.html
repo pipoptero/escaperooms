@@ -966,7 +966,57 @@
     .rank-mobile-thumb{grid-area:thumb;width:46px;}
     .rank-mobile-head{grid-area:head;}
     .rank-mobile-title{font-size:.92rem;line-height:1.22;}
-    .rank-mobile-score{font-size:.86rem;padding:5px 6px;}
+  .rank-mobile-score{font-size:.86rem;padding:5px 6px;}
+  }
+
+  @media(min-width:641px) and (max-width:1220px){
+    .status-strip{
+      grid-template-columns:minmax(0,1fr) auto;
+      gap:14px;
+      padding:10px 26px;
+    }
+    .stats-bar{
+      grid-column:1;
+      justify-self:center;
+      width:100%;
+    }
+    .stats-top{
+      flex-wrap:nowrap;
+    }
+    .stat-item{
+      padding:4px 13px;
+    }
+    .stat-num{
+      font-size:1.32rem;
+    }
+    .auth-bar{
+      grid-column:2;
+    }
+    .auth-label{
+      display:none;
+    }
+    .auth-name{
+      max-width:120px;
+    }
+    .auth-btn{
+      padding:8px 10px;
+    }
+  }
+
+  @media(min-width:641px) and (max-width:860px){
+    .status-strip{
+      grid-template-columns:1fr;
+      gap:8px;
+    }
+    .stats-bar,
+    .auth-bar{
+      grid-column:1;
+      justify-self:center;
+    }
+    .auth-bar{
+      justify-content:center;
+      flex-wrap:wrap;
+    }
   }
 
   @media(max-width:640px){
