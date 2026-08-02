@@ -1917,7 +1917,7 @@ const ARKKADIA_REVIEW_PRIORITY = [
   { label: 'Judit O.', aliases: ['judit o', 'judit o.'] },
   { label: 'Darkdem7', aliases: ['darkdem7'] }
 ];
-const REVIEW_ROOM_ALIASES = {
+let REVIEW_ROOM_ALIASES = {
   whitechapel: 'la_historia_de_charlotte'
 };
 
@@ -4676,6 +4676,23 @@ async function loadReviewPhotos() {
   }
 }
 
+async function loadRoomAliases() {
+  try {
+    const r = await fetch('room_aliases.json?v=' + Date.now());
+    if (!r.ok) return;
+    const data = await r.json();
+    const aliases = data.aliases || {};
+    REVIEW_ROOM_ALIASES = Object.fromEntries(
+      Object.entries({ ...REVIEW_ROOM_ALIASES, ...aliases })
+        .map(([alias, target]) => [slugify(alias), slugify(target)])
+        .filter(([alias, target]) => alias && target)
+    );
+    invalidateReviewRoomsCache();
+  } catch (e) {
+    console.warn('No se pudo cargar room_aliases.json:', e.message);
+  }
+}
+
 async function refreshLiveData({ force = false, reason = 'auto' } = {}) {
   if (!FIREBASE_ENABLED || LIVE_REFRESH_IN_PROGRESS) return false;
   const now = Date.now();
@@ -4744,6 +4761,7 @@ function setupAutomaticLiveRefresh() {
 
 async function loadStaticEnhancementsAfterInitialRender() {
   try {
+    await loadRoomAliases();
     await loadTerpecaAwards();
     await loadExtraAwards();
     await loadExternalRatings();
@@ -4773,6 +4791,7 @@ async function loadData() {
         new Date(lastMod).toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'numeric'});
     }
     await loadCatalogo();
+    await loadRoomAliases();
 
     document.getElementById('loading').style.display = 'none';
     document.getElementById('app').style.display = 'block';

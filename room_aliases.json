@@ -1,0 +1,28 @@
+{
+  "aliases": {
+    "exorcista": "seccion_esoterica_exorcista",
+    "whitechapel": "la_historia_de_charlotte"
+  },
+  "rooms": {
+    "seccion_esoterica_exorcista": {
+      "canonical_name": "Sección Esotérica: Exorcista",
+      "canonical_company": "Terror Stories",
+      "aliases": [
+        "Exorcista",
+        "Seccion Esoterica: Exorcista",
+        "Sección Esotérica: Exorcista"
+      ],
+      "notes": "La review historica se publico como Exorcista; el catalogo recoge el nombre completo de la sala."
+    },
+    "la_historia_de_charlotte": {
+      "canonical_name": "La Historia de Charlotte",
+      "canonical_company": "Whitechapel",
+      "aliases": [
+        "WHITECHAPEL",
+        "Room Whitechapel",
+        "La Historia de Charlotte"
+      ],
+      "notes": "La review historica se publico como WHITECHAPEL, pero la sala del catalogo es La Historia de Charlotte."
+    }
+  }
+}

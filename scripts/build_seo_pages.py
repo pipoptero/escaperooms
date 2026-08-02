@@ -28,8 +28,68 @@ def slugify(text, separator="-"):
     return text or "escape-room"
 
 
+ROOM_ALIASES = {}
+ROOM_ALIAS_ROOMS = {}
+
+
+def load_room_aliases():
+    data = read_json(ROOT / "room_aliases.json", {})
+    aliases = data.get("aliases") or {}
+    rooms = data.get("rooms") or {}
+    for alias, target in aliases.items():
+        alias_key = slugify(alias, "_")
+        target_key = slugify(target, "_")
+        if alias_key and target_key:
+            ROOM_ALIASES[alias_key] = target_key
+    for key, meta in rooms.items():
+        target_key = slugify(key, "_")
+        if not target_key:
+            continue
+        ROOM_ALIAS_ROOMS[target_key] = meta or {}
+        for alias in (meta or {}).get("aliases") or []:
+            alias_key = slugify(alias, "_")
+            if alias_key:
+                ROOM_ALIASES[alias_key] = target_key
+
+
+load_room_aliases()
+
+
+def canonical_room_identity(value):
+    key = slugify(value, "_")
+    return ROOM_ALIASES.get(key, key)
+
+
+def canonical_room_name(room):
+    meta = ROOM_ALIAS_ROOMS.get(room_identity(room), {})
+    return text(meta.get("canonical_name")) or text(room.get("nombre"))
+
+
+def canonical_room_company(room):
+    meta = ROOM_ALIAS_ROOMS.get(room_identity(room), {})
+    return text(meta.get("canonical_company")) or text(room.get("empresa"))
+
+
+def room_alias_keys(room):
+    identity = room_identity(room)
+    keys = {
+        identity,
+        canonical_room_identity(room.get("id")),
+        canonical_room_identity(room.get("nombre")),
+        slugify(room.get("id"), "_"),
+        slugify(room.get("nombre"), "_"),
+    }
+    meta = ROOM_ALIAS_ROOMS.get(identity, {})
+    for alias in meta.get("aliases") or []:
+        keys.add(slugify(alias, "_"))
+    for alias, target in ROOM_ALIASES.items():
+        if target == identity:
+            keys.add(alias)
+    return [key for key in keys if key and key != "escape_room"]
+
+
 def app_hash_key(room):
-    return slugify(room.get("nombre"), "_").replace("_", "-")
+    return slugify(canonical_room_name(room), "_").replace("_", "-")
 
 
 def text(value):
@@ -87,17 +147,19 @@ def room_location(room):
 
 
 def photo_entries(room, photos_data):
-    key = slugify(room.get("nombre"), "_")
-    entry = photos_data.get(key, {})
-    return entry.get("photos") or []
+    for key in room_alias_keys(room):
+        entry = photos_data.get(key, {})
+        if entry.get("photos"):
+            return entry.get("photos") or []
+    return []
 
 
 def room_identity(room):
-    return slugify(room.get("nombre"), "_")
+    return canonical_room_identity(room.get("id") or room.get("nombre"))
 
 
 def room_url_slug(room):
-    return slugify(room.get("nombre"))
+    return slugify(canonical_room_name(room))
 
 
 def source_label(source_id, meta):
@@ -117,6 +179,31 @@ def merge_room_data(base, extra):
         if text(value) and not text(merged.get(key)):
             merged[key] = value
     return merged
+
+
+def apply_canonical_room_fields(room):
+    merged = dict(room or {})
+    name = canonical_room_name(merged)
+    company = canonical_room_company(merged)
+    if name:
+        merged["nombre"] = name
+    if company:
+        merged["empresa"] = company
+    return merged
+
+
+def review_rooms(data):
+    by_key = {}
+    for room in data.get("hechos", []) or []:
+        if not text(room.get("nombre")):
+            continue
+        key = room_identity(room)
+        if not key:
+            continue
+        by_key[key] = merge_room_data(by_key.get(key, {}), room)
+    rooms = [apply_canonical_room_fields(room) for room in by_key.values()]
+    rooms.sort(key=lambda room: (int(decimal(room.get("ranking")) or 999), text(room.get("nombre")).lower()))
+    return rooms
 
 
 def build_room_lookup(data):
@@ -141,13 +228,28 @@ def ranked_rooms(data):
     ratings = external.get("ratings", {})
     meta = external.get("meta", {})
     lookup = build_room_lookup(data)
-    rows = []
+    by_identity = {}
     for key, rating in ratings.items():
         rating_room = rating.get("room") or {}
-        room = merge_room_data(rating_room, lookup.get(room_identity(rating_room) or key, {}))
+        identity = room_identity(rating_room) if text(rating_room.get("nombre")) or text(rating_room.get("id")) else canonical_room_identity(key)
+        room = apply_canonical_room_fields(merge_room_data(rating_room, lookup.get(identity, {})))
         if not text(room.get("nombre")):
             room["nombre"] = key.replace("_", " ").title()
-        rows.append({"key": key, "room": room, "rating": rating, "meta": meta})
+        item = {"key": key, "room": room, "rating": rating, "meta": meta}
+        current = by_identity.get(identity)
+        item_score = (
+            decimal(rating.get("global_score")),
+            int(rating.get("source_count") or 0),
+            int(rating.get("award_count") or 0),
+        )
+        current_score = (
+            decimal(current["rating"].get("global_score")),
+            int(current["rating"].get("source_count") or 0),
+            int(current["rating"].get("award_count") or 0),
+        ) if current else (-1, -1, -1)
+        if not current or item_score > current_score:
+            by_identity[identity] = item
+    rows = list(by_identity.values())
     rows.sort(
         key=lambda item: (
             -decimal(item["rating"].get("global_score")),
@@ -219,9 +321,9 @@ def base_head(title, description, canonical, image):
 
 
 def review_page(room, photos):
-    name = text(room.get("nombre")) or "Escape room"
-    company = text(room.get("empresa"))
-    slug = slugify(name)
+    name = canonical_room_name(room) or "Escape room"
+    company = canonical_room_company(room)
+    slug = room_url_slug(room)
     canonical = site_url(f"/reviews/{slug}/")
     app_link = site_url(f"/#review/{app_hash_key(room)}")
     description = short_description(room)
@@ -345,12 +447,12 @@ def reviews_index_page(rooms):
     items = []
     list_items = []
     for idx, room in enumerate(rooms, 1):
-        name = text(room.get("nombre")) or "Escape room"
-        slug = slugify(name)
+        name = canonical_room_name(room) or "Escape room"
+        slug = room_url_slug(room)
         url = site_url(f"/reviews/{slug}/")
         items.append(
             f'<a class="review-link" href="{escape(url)}"><strong>{escape(name)}</strong>'
-            f'<span>{escape(text(room.get("empresa")))}{(" - " + escape(room_location(room))) if room_location(room) else ""}</span></a>'
+            f'<span>{escape(canonical_room_company(room))}{(" - " + escape(room_location(room))) if room_location(room) else ""}</span></a>'
         )
         list_items.append({"@type": "ListItem", "position": idx, "name": name, "url": url})
     schema = {
@@ -418,14 +520,14 @@ def ranking_index_page(rows):
     for idx, item in enumerate(top_rows, 1):
         room = item["room"]
         rating = item["rating"]
-        name = text(room.get("nombre")) or "Escape room"
+        name = canonical_room_name(room) or "Escape room"
         url = site_url(f"/salas/{room_url_slug(room)}/")
         score = decimal(rating.get("global_score"))
         location = room_location(room)
         items.append(
             f'<a class="rank-link" href="{escape(url)}">'
             f'<span class="pos">#{idx}</span><strong>{escape(name)}</strong>'
-            f'<span>{escape(text(room.get("empresa")))}{(" - " + escape(location)) if location else ""}</span>'
+            f'<span>{escape(canonical_room_company(room))}{(" - " + escape(location)) if location else ""}</span>'
             f'<em>{score:.1f}/10 · {int(rating.get("source_count") or 0)} fuentes</em></a>'
         )
         list_items.append({"@type": "ListItem", "position": idx, "name": name, "url": url})
@@ -501,8 +603,8 @@ def room_page(item, position):
     room = item["room"]
     rating = item["rating"]
     meta = item["meta"]
-    name = text(room.get("nombre")) or "Escape room"
-    company = text(room.get("empresa"))
+    name = canonical_room_name(room) or "Escape room"
+    company = canonical_room_company(room)
     slug = room_url_slug(room)
     canonical = site_url(f"/salas/{slug}/")
     app_link = site_url(f"/#room/{app_hash_key(room)}")
@@ -607,11 +709,18 @@ def sitemap_xml(review_rooms, ranking_rows):
         (site_url("/reviews/"), "weekly", "0.8"),
         (site_url("/ranking/"), "weekly", "0.9"),
     ]
-    entries.extend((site_url(f"/reviews/{slugify(room.get('nombre'))}/"), "monthly", "0.7") for room in review_rooms)
+    entries.extend((site_url(f"/reviews/{room_url_slug(room)}/"), "monthly", "0.7") for room in review_rooms)
     entries.extend((site_url(f"/salas/{room_url_slug(item['room'])}/"), "monthly", "0.7") for item in ranking_rows[:FEATURED_ROOM_LIMIT])
+    unique_entries = []
+    seen_urls = set()
+    for entry in entries:
+        if entry[0] in seen_urls:
+            continue
+        unique_entries.append(entry)
+        seen_urls.add(entry[0])
     body = "\n".join(
         f"  <url><loc>{escape(url)}</loc><lastmod>{TODAY}</lastmod><changefreq>{freq}</changefreq><priority>{priority}</priority></url>"
-        for url, freq, priority in entries
+        for url, freq, priority in unique_entries
     )
     return f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{body}\n</urlset>\n'
 
@@ -627,8 +736,7 @@ Sitemap: {site_url('/sitemap.xml')}
 def main():
     data = read_json(ROOT / "data.json", {})
     photos_data = read_json(ROOT / "review_photos.json", {}).get("photos", {})
-    rooms = [room for room in data.get("hechos", []) if text(room.get("nombre"))]
-    rooms.sort(key=lambda room: (int(decimal(room.get("ranking")) or 999), text(room.get("nombre")).lower()))
+    rooms = review_rooms(data)
     ranking_rows = ranked_rooms(data)
 
     reviews_dir = ROOT / "reviews"
