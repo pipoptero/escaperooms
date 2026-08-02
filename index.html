@@ -4164,6 +4164,24 @@ function reviewScoreAsVote(review) {
   return Math.round(avg * 10) / 10;
 }
 
+function reviewCategoryScore(room) {
+  const values = ['historia', 'ambientacion', 'jugabilidad', 'gamemaster']
+    .map(key => Number(room?.[key]) || 0)
+    .filter(Boolean);
+  if (!values.length) return 0;
+  const avg = values.reduce((sum, value) => sum + value, 0) / values.length;
+  return Math.round(avg * 10) / 10;
+}
+
+function reviewPrimaryScore(room) {
+  const ownScore = Number(room?.valoracion) || 0;
+  if (ownScore > 0) return ownScore;
+  const categoryScore = reviewCategoryScore(room);
+  if (categoryScore > 0) return categoryScore;
+  const community = voteStatsForRoom(room);
+  return community.avg ? Math.round(community.avg * 20) / 10 : 0;
+}
+
 function voteStatsForRoom(room) {
   const byUser = {};
   roomVoteKeys(room).forEach(slug => {
@@ -5798,9 +5816,10 @@ function communityScoreMeta(room) {
 }
 
 function reviewScoreMeta(room) {
+  const categoryScore = reviewCategoryScore(room);
   return [
     metaItem('Escapistas', room.rating ? `★ ${room.rating}` : ''),
-    metaItem('Grupo', room.valoracion ? `★ ${room.valoracion}/10` : ''),
+    metaItem(room.valoracion ? 'Grupo' : 'Review', room.valoracion ? `★ ${room.valoracion}/10` : categoryScore ? `★ ${categoryScore.toFixed(1).replace('.0', '')}/10` : ''),
     communityScoreMeta(room)
   ].join('');
 }
@@ -6103,6 +6122,12 @@ function cardHecho(h, rank) {
   const commPill = FIREBASE_ENABLED && count > 0
     ? `<span class="rv-score-pill rv-score-comunidad">🗳 ${(avg*2).toFixed(1)}/10 <span style="opacity:.6">(${count})</span></span>`
     : '';
+  const categoryScore = reviewCategoryScore(h);
+  const reviewScorePill = h.valoracion
+    ? `<span class="rv-score-pill rv-score-grupo">Grupo ★ ${h.valoracion}/10</span>`
+    : categoryScore
+      ? `<span class="rv-score-pill rv-score-grupo">Review ★ ${categoryScore.toFixed(1).replace('.0', '')}/10</span>`
+      : '';
 
   const detailKey = jsString(roomKey(h));
   const opinionLabel = h._arkkadiaCommunityReview
@@ -6136,7 +6161,7 @@ function cardHecho(h, rank) {
       </div>
       <div class="rv-scores">
         ${h.rating     ? `<span class="rv-score-pill rv-score-escapistas">Escapistas ★ ${h.rating}</span>` : ''}
-        ${h.valoracion ? `<span class="rv-score-pill rv-score-grupo">Grupo ★ ${h.valoracion}/10</span>`    : ''}
+        ${reviewScorePill}
         ${commPill}
       </div>
       ${voteWidget(slug)}
@@ -6303,11 +6328,15 @@ function renderHechos() {
     return true;
   });
 
-  // Ordenar por nota media de comunidad (Firebase), fallback 0 si sin votos
+  // Ordenar por la nota propia de la review mostrada; la comunidad queda como desempate.
   f.sort((a, b) => {
-    const avgA = voteStatsForRoom(a).avg || 0;
-    const avgB = voteStatsForRoom(b).avg || 0;
-    return avgB - avgA;
+    const scoreA = reviewPrimaryScore(a);
+    const scoreB = reviewPrimaryScore(b);
+    if (scoreB !== scoreA) return scoreB - scoreA;
+    const communityA = voteStatsForRoom(a).avg || 0;
+    const communityB = voteStatsForRoom(b).avg || 0;
+    if (communityB !== communityA) return communityB - communityA;
+    return (a.nombre || '').localeCompare(b.nombre || '');
   });
 
   document.getElementById('result-info-hecho').textContent = `${f.length} reviews del grupo`;
