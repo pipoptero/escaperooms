@@ -333,6 +333,8 @@
   .card-logo .logo-emoji{font-size:1.2rem;line-height:1;}
   .rv-logo{width:38px;height:38px;border-radius:50%;background:rgba(125,187,63,.06);border:2px solid rgba(125,187,63,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;padding:4px;box-shadow:0 0 8px rgba(125,187,63,.08);}
   .rv-logo img{width:100%;height:100%;object-fit:contain;}
+  .card-logo.room-logo,.rv-logo.room-logo{padding:0;background:rgba(0,0,0,.35);}
+  .card-logo.room-logo img,.rv-logo.room-logo img{object-fit:cover;}
 
   /* ── TERPECA BADGE ── */
   .terpeca-badge{display:flex;flex-direction:column;align-items:center;gap:2px;flex-shrink:0;cursor:default;}
@@ -5060,8 +5062,11 @@ function awardFilterLabel(filter) {
 }
 
 function faviconHtml(webUrl, cssClass, room = null) {
-  const fallbackSrc = roomImageSrc(room || {}, false) || 'images/brand/icon-round-192.png';
-  const fallbackImg = `<img src="${escapeHtml(fallbackSrc)}" alt="" style="display:${webUrl ? 'none' : 'block'}">`;
+  const localSrc = roomImageSrc(room || {}, false);
+  if (localSrc) {
+    return `<div class="${cssClass} room-logo"><img src="${escapeHtml(localSrc)}" alt="" onerror="this.src='images/brand/icon-round-192.png'"></div>`;
+  }
+  const fallbackImg = `<img src="images/brand/icon-round-192.png" alt="" style="display:${webUrl ? 'none' : 'block'}">`;
   if (!webUrl) return `<div class="${cssClass}">${fallbackImg}</div>`;
   try {
     const domain = new URL(webUrl).hostname;
