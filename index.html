@@ -478,6 +478,33 @@
   .profile-group-mini{border:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.11);padding:6px 7px;min-width:0;}
   .profile-group-mini strong{display:block;font-family:'Cinzel',serif;font-size:.95rem;color:var(--amber);line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .profile-group-mini span{display:block;font-family:'Share Tech Mono',monospace;font-size:.48rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-top:3px;}
+  .escapist-map-wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(220px,.9fr);gap:12px;align-items:stretch;}
+  .escapist-map-canvas{position:relative;min-height:330px;border:1px solid rgba(125,187,63,.16);background:radial-gradient(circle at 50% 45%,rgba(125,187,63,.08),transparent 44%),linear-gradient(135deg,rgba(255,255,255,.024),rgba(0,0,0,.12));overflow:hidden;}
+  .escapist-map-svg{position:absolute;inset:0;width:100%;height:100%;opacity:.42;}
+  .escapist-map-svg path,.escapist-map-svg ellipse{fill:rgba(255,255,255,.035);stroke:rgba(125,187,63,.24);stroke-width:1.2;}
+  .escapist-map-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:42px 42px;opacity:.23;}
+  .escapist-map-point{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);min-width:24px;height:24px;border-radius:999px;border:1px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:.58rem;font-weight:700;color:#fff;cursor:pointer;box-shadow:0 0 0 3px rgba(0,0,0,.22),0 8px 22px rgba(0,0,0,.36);z-index:2;}
+  .escapist-map-point.personal{background:rgba(230,57,70,.9);border-color:rgba(230,57,70,.98);}
+  .escapist-map-point.group{background:rgba(6,214,160,.86);border-color:rgba(6,214,160,.95);color:#07120f;}
+  .escapist-map-point.mixed{background:linear-gradient(135deg,rgba(230,57,70,.92) 0 48%,rgba(6,214,160,.9) 52% 100%);border-color:rgba(255,255,255,.34);}
+  .escapist-map-point.active{outline:2px solid var(--amber);outline-offset:3px;}
+  .escapist-map-legend{position:absolute;left:10px;bottom:10px;display:flex;gap:7px;flex-wrap:wrap;z-index:3;}
+  .escapist-map-legend span{font-family:'Share Tech Mono',monospace;font-size:.52rem;color:var(--text2);letter-spacing:.06em;text-transform:uppercase;border:1px solid rgba(255,255,255,.08);background:rgba(10,10,15,.7);padding:5px 7px;}
+  .escapist-map-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle;}
+  .escapist-map-dot.personal{background:var(--red);}
+  .escapist-map-dot.group{background:var(--green);}
+  .escapist-map-side{border:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.12);padding:11px 12px;min-width:0;}
+  .escapist-map-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-bottom:10px;}
+  .escapist-map-stat{border:1px solid rgba(125,187,63,.12);background:rgba(125,187,63,.035);padding:8px 9px;min-width:0;}
+  .escapist-map-stat strong{display:block;font-family:'Cinzel',serif;color:var(--amber);font-size:1.05rem;line-height:1;}
+  .escapist-map-stat span{display:block;font-family:'Share Tech Mono',monospace;font-size:.48rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-top:4px;}
+  .escapist-map-city{font-family:'Cinzel',serif;font-size:1.08rem;color:var(--text);line-height:1.15;margin-bottom:4px;}
+  .escapist-map-meta{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;line-height:1.45;margin-bottom:10px;}
+  .escapist-map-list{display:flex;flex-direction:column;gap:7px;max-height:270px;overflow:auto;padding-right:2px;}
+  .escapist-map-room{border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.022);padding:8px 9px;}
+  .escapist-map-room-name{font-family:'Cinzel',serif;color:var(--text);font-size:.86rem;line-height:1.16;}
+  .escapist-map-room-sub{font-family:'Share Tech Mono',monospace;font-size:.52rem;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;margin-top:3px;line-height:1.35;}
+  .escapist-map-empty{font-family:'Share Tech Mono',monospace;color:var(--text3);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;line-height:1.55;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);padding:12px;}
   .group-room-control{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.02);padding:11px 12px;margin-top:10px;}
   .group-room-title{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--text3);letter-spacing:.13em;text-transform:uppercase;margin-bottom:8px;}
   .group-room-list{display:flex;gap:7px;flex-wrap:wrap;}
@@ -1138,6 +1165,11 @@
     .profile-input{min-width:0;flex-basis:100%;}
     .profile-row .auth-btn{flex:1 1 auto;}
     .profile-groups{grid-template-columns:1fr;}
+    .escapist-map-wrap{grid-template-columns:1fr;}
+    .escapist-map-canvas{min-height:280px;}
+    .escapist-map-side{padding:10px;}
+    .escapist-map-stats{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .escapist-map-point{min-width:22px;height:22px;font-size:.52rem;}
     .group-stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
     .admin-review-grid{grid-template-columns:1fr;}
     .admin-review-grid .wide{grid-column:auto;}
@@ -2013,6 +2045,7 @@ let GROUP_PENDING_ROOMS = {};
 let PENDING_INVITE_ID = new URLSearchParams(window.location.search).get('invite') || '';
 let INVITE_NOTICE_SHOWN = false;
 let SETTINGS_TAB = 'profile';
+let PROFILE_MAP_ACTIVE_KEY = '';
 let LAST_LIVE_REFRESH_AT = 0;
 let LIVE_REFRESH_IN_PROGRESS = false;
 let LIVE_REFRESH_EVENTS_READY = false;
@@ -2079,6 +2112,45 @@ const COMMUNITY_BY_PROVINCE = {
   'huesca':'Aragon','teruel':'Aragon','zaragoza':'Aragon',
   'rioja la':'La Rioja','la rioja':'La Rioja','madrid':'Comunidad de Madrid','murcia':'Region de Murcia','navarra':'Comunidad Foral de Navarra',
   'asturias':'Asturias','palmas las':'Canarias','las palmas':'Canarias','santa cruz de tenerife':'Canarias','cantabria':'Cantabria','ceuta':'Ceuta','melilla':'Melilla'
+};
+const MAP_CITY_COORDS = {
+  'madrid':[40.4168,-3.7038],'barcelona':[41.3874,2.1686],'valencia':[39.4699,-0.3763],'sevilla':[37.3891,-5.9845],
+  'bilbao':[43.263,-2.935],'alicante':[38.3452,-0.481],'zaragoza':[41.6488,-0.8891],'malaga':[36.7213,-4.4214],
+  'murcia':[37.9922,-1.1307],'granada':[37.1773,-3.5986],'valladolid':[41.6523,-4.7245],'gijon':[43.5322,-5.6611],
+  'terrassa':[41.5632,2.0089],'santander':[43.4623,-3.8099],'mataro':[41.5381,2.4445],'elche':[38.2699,-0.7126],
+  'sabadell':[41.5463,2.1086],'granollers':[41.608,2.2877],'a coruna':[43.3623,-8.4115],'hospitalet de llobregat':[41.3662,2.1165],
+  'berga':[42.1043,1.8463],'vitoria':[42.8467,-2.6727],'vitoria gasteiz':[42.8467,-2.6727],'alcantarilla':[37.9694,-1.2171],
+  'sant fruitos de bages':[41.75,1.8736],'castellon':[39.9864,-0.0513],'castello':[39.9864,-0.0513],'esplugues':[41.3773,2.0881],
+  'montcada i reixach':[41.4833,2.1833],'telde':[27.9955,-15.4167],'parla':[40.2375,-3.7743],'rubi':[41.4923,2.0311],
+  'elizondo':[43.1465,-1.5185],'cornella de llobregat':[41.3556,2.0704],'cordoba':[37.8882,-4.7794],'pamplona':[42.8125,-1.6458],
+  'logrono':[42.4627,-2.4449],'san sebastian':[43.3183,-1.9812],'donostia':[43.3183,-1.9812],'burgos':[42.3439,-3.6969],
+  'leon':[42.5987,-5.5671],'salamanca':[40.9701,-5.6635],'toledo':[39.8628,-4.0273],'albacete':[38.9943,-1.8585],
+  'ciudad real':[38.9848,-3.9274],'cuenca':[40.0704,-2.1374],'guadalajara':[40.6333,-3.1667],'cadiz':[36.5271,-6.2886],
+  'huelva':[37.2614,-6.9447],'jaen':[37.7796,-3.7849],'almeria':[36.834,-2.4637],'merida':[38.9161,-6.3437],
+  'badajoz':[38.8794,-6.9707],'caceres':[39.4753,-6.3724],'oviedo':[43.3619,-5.8494],'palma':[39.5696,2.6502],
+  'palma de mallorca':[39.5696,2.6502],'ibiza':[38.9067,1.4206],'girona':[41.9794,2.8214],'lleida':[41.6176,0.62],
+  'tarragona':[41.1189,1.2445],'pontevedra':[42.431,-8.6444],'vigo':[42.2406,-8.7207],'lugo':[43.0097,-7.5568],
+  'ourense':[42.3358,-7.8639],'huesca':[42.1401,-0.4089],'teruel':[40.3456,-1.1065],'soria':[41.7666,-2.479],
+  'segovia':[40.9429,-4.1088],'avila':[40.6565,-4.6818],'zamora':[41.5035,-5.7446],'palencia':[42.0097,-4.5288],
+  'santa cruz de tenerife':[28.4636,-16.2518],'las palmas':[28.1235,-15.4363],'las palmas de gran canaria':[28.1235,-15.4363],
+  'ceuta':[35.8894,-5.3213],'melilla':[35.2923,-2.9381]
+};
+const MAP_PROVINCE_COORDS = {
+  'madrid':[40.4168,-3.7038],'barcelona':[41.3874,2.1686],'valencia':[39.4699,-0.3763],'valencia valencia':[39.4699,-0.3763],
+  'sevilla':[37.3891,-5.9845],'bizkaia':[43.263,-2.935],'alicante':[38.3452,-0.481],'alicante alacant':[38.3452,-0.481],
+  'zaragoza':[41.6488,-0.8891],'malaga':[36.7213,-4.4214],'murcia':[37.9922,-1.1307],'granada':[37.1773,-3.5986],
+  'valladolid':[41.6523,-4.7245],'asturias':[43.3619,-5.8494],'cantabria':[43.4623,-3.8099],'coruna a':[43.3623,-8.4115],
+  'a coruna':[43.3623,-8.4115],'araba':[42.8467,-2.6727],'araba alava':[42.8467,-2.6727],'alava':[42.8467,-2.6727],'palmas las':[28.1235,-15.4363],
+  'las palmas':[28.1235,-15.4363],'castellon':[39.9864,-0.0513],'castellon castello':[39.9864,-0.0513],'navarra':[42.8125,-1.6458],
+  'gipuzkoa':[43.3183,-1.9812],'burgos':[42.3439,-3.6969],'leon':[42.5987,-5.5671],'salamanca':[40.9701,-5.6635],
+  'toledo':[39.8628,-4.0273],'albacete':[38.9943,-1.8585],'ciudad real':[38.9848,-3.9274],'cuenca':[40.0704,-2.1374],
+  'guadalajara':[40.6333,-3.1667],'cadiz':[36.5271,-6.2886],'huelva':[37.2614,-6.9447],'jaen':[37.7796,-3.7849],
+  'almeria':[36.834,-2.4637],'badajoz':[38.8794,-6.9707],'caceres':[39.4753,-6.3724],'balears illes':[39.5696,2.6502],
+  'girona':[41.9794,2.8214],'lleida':[41.6176,0.62],'tarragona':[41.1189,1.2445],'pontevedra':[42.431,-8.6444],
+  'lugo':[43.0097,-7.5568],'ourense':[42.3358,-7.8639],'huesca':[42.1401,-0.4089],'teruel':[40.3456,-1.1065],
+  'soria':[41.7666,-2.479],'segovia':[40.9429,-4.1088],'avila':[40.6565,-4.6818],'zamora':[41.5035,-5.7446],
+  'palencia':[42.0097,-4.5288],'santa cruz de tenerife':[28.4636,-16.2518],'rioja la':[42.4627,-2.4449],
+  'la rioja':[42.4627,-2.4449],'ceuta':[35.8894,-5.3213],'melilla':[35.2923,-2.9381]
 };
 function normalizedKey(text) {
   return String(text || '').toLowerCase()
@@ -3033,6 +3105,184 @@ function groupPendingPreviewHtml(groupId) {
   return rooms.map(([, room]) => `<span class="tag tag-tipo">${escapeHtml(room.roomName || 'Sala')}</span>`).join('');
 }
 
+function coordLookupKey(value) {
+  return normalizedKey(String(value || '').split('/')[0]);
+}
+
+function fallbackOffset(seed) {
+  let hash = 0;
+  String(seed || '').split('').forEach(ch => { hash = ((hash << 5) - hash) + ch.charCodeAt(0); hash |= 0; });
+  return {
+    x: ((Math.abs(hash) % 9) - 4) * .85,
+    y: ((Math.abs(hash >> 4) % 7) - 3) * .75
+  };
+}
+
+function coordForRoomLocation(room) {
+  const cityKey = coordLookupKey(room?.ciudad);
+  if (MAP_CITY_COORDS[cityKey]) return { lat: MAP_CITY_COORDS[cityKey][0], lon: MAP_CITY_COORDS[cityKey][1], fallback: false };
+  const provinceKey = coordLookupKey(room?.provincia);
+  if (MAP_PROVINCE_COORDS[provinceKey]) return { lat: MAP_PROVINCE_COORDS[provinceKey][0], lon: MAP_PROVINCE_COORDS[provinceKey][1], fallback: true, seed: cityKey || provinceKey };
+  const communityKey = coordLookupKey(communityOf(room));
+  if (MAP_PROVINCE_COORDS[communityKey]) return { lat: MAP_PROVINCE_COORDS[communityKey][0], lon: MAP_PROVINCE_COORDS[communityKey][1], fallback: true, seed: cityKey || communityKey };
+  return { lat: 40.2, lon: -3.7, fallback: true, seed: cityKey || userRoomKey(room) };
+}
+
+function projectMapPoint(coord) {
+  let x, y;
+  if (coord.lon < -12) {
+    x = 9 + ((coord.lon + 18.2) / 5.4) * 20;
+    y = 78 + ((29.4 - coord.lat) / 2.2) * 12;
+  } else if (coord.lat < 36.2) {
+    x = 43 + ((coord.lon + 6) / 4.2) * 18;
+    y = 88;
+  } else if (coord.lon > 1 && coord.lat < 40.4) {
+    x = 78 + ((coord.lon - 1) / 3.8) * 11;
+    y = 58 + ((40.2 - coord.lat) / 1.8) * 9;
+  } else {
+    x = 15 + ((coord.lon + 9.6) / 13.8) * 70;
+    y = 9 + ((43.9 - coord.lat) / 8.25) * 68;
+  }
+  if (coord.fallback) {
+    const offset = fallbackOffset(coord.seed);
+    x += offset.x;
+    y += offset.y;
+  }
+  return { x: Math.max(5, Math.min(95, x)), y: Math.max(5, Math.min(94, y)) };
+}
+
+function escapistDoneRoomItems() {
+  const byKey = new Map();
+  const ensure = (key, room) => {
+    if (!key) return null;
+    if (!byKey.has(key)) byKey.set(key, { key, room, personal: false, groups: [] });
+    const item = byKey.get(key);
+    if (room && (!item.room?.ciudad || !item.room?.provincia || room.imagen)) item.room = { ...item.room, ...room };
+    return item;
+  };
+  personalRoomSources().forEach(room => {
+    if (!userStateFor(room).done) return;
+    const item = ensure(userRoomKey(room), room);
+    if (item) item.personal = true;
+  });
+  activeUserGroups().forEach(([groupId, group]) => {
+    Object.entries(GROUP_ROOMS[groupId] || {}).forEach(([key, record]) => {
+      const item = ensure(key, roomFromGroupRecord(key, record));
+      if (!item) return;
+      const name = group.name || groupName(groupId);
+      if (!item.groups.some(g => g.groupId === groupId)) item.groups.push({ groupId, name });
+    });
+  });
+  return [...byKey.values()].filter(item => item.personal || item.groups.length);
+}
+
+function escapistMapLocations() {
+  const locations = new Map();
+  escapistDoneRoomItems().forEach(item => {
+    const room = item.room || {};
+    const city = cleanValue(room.ciudad) || 'Sin ciudad';
+    const province = cleanValue(room.provincia) || cleanValue(communityOf(room)) || 'Sin provincia';
+    const key = normalizedKey(`${city} ${province}`) || userRoomKey(room) || item.key;
+    if (!locations.has(key)) {
+      const coord = coordForRoomLocation(room);
+      locations.set(key, {
+        key,
+        city,
+        province,
+        community: communityOf(room) || '',
+        point: projectMapPoint(coord),
+        rooms: []
+      });
+    }
+    locations.get(key).rooms.push(item);
+  });
+  return [...locations.values()].sort((a, b) => b.rooms.length - a.rooms.length || a.city.localeCompare(b.city));
+}
+
+function escapistMapBaseSvg() {
+  return `<svg class="escapist-map-svg" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+    <path d="M20 20 L31 12 L47 10 L63 14 L73 25 L77 39 L69 52 L61 67 L48 75 L35 72 L23 63 L17 48 L14 34 Z"></path>
+    <ellipse cx="83" cy="62" rx="6" ry="3"></ellipse>
+    <ellipse cx="15" cy="85" rx="12" ry="5"></ellipse>
+    <ellipse cx="52" cy="91" rx="5" ry="2"></ellipse>
+  </svg>`;
+}
+
+function escapistMapRoomHtml(item) {
+  const room = item.room || {};
+  const ref = detailRefForRoom(room, ['catalogo', 'hechos', 'pendientes']);
+  const sources = [
+    item.personal ? '<span class="tag tag-feature">Personal</span>' : '',
+    ...item.groups.map(group => `<span class="tag tag-tipo">${escapeHtml(group.name || 'Grupo')}</span>`)
+  ].filter(Boolean).join('');
+  return `<article class="escapist-map-room">
+    <div class="escapist-map-room-name">${escapeHtml(room.nombre || item.key || 'Sala')}</div>
+    <div class="escapist-map-room-sub">${escapeHtml([room.empresa, room.ciudad].filter(Boolean).join(' - ') || 'Escape room')}</div>
+    <div class="profile-group-rooms">${sources}</div>
+    <div class="profile-group-actions" style="margin-top:7px">
+      <button class="auth-btn secondary" type="button" onclick="openProfileRoomDetail('${ref.kind}','${jsString(ref.key)}')">Ver sala</button>
+    </div>
+  </article>`;
+}
+
+function escapistMapHtml() {
+  const locations = escapistMapLocations();
+  if (!locations.length) {
+    PROFILE_MAP_ACTIVE_KEY = '';
+    return `<div class="profile-section">
+      <div class="profile-section-title">Mi mapa escapista</div>
+      <div class="escapist-map-empty">Marca salas como hechas, personales o de grupo, para empezar a llenar tu mapa.</div>
+    </div>`;
+  }
+  if (!locations.some(location => location.key === PROFILE_MAP_ACTIVE_KEY)) PROFILE_MAP_ACTIVE_KEY = locations[0].key;
+  const active = locations.find(location => location.key === PROFILE_MAP_ACTIVE_KEY) || locations[0];
+  const items = escapistDoneRoomItems();
+  const personalRooms = items.filter(item => item.personal).length;
+  const groupRooms = items.filter(item => item.groups.length).length;
+  const points = locations.map(location => {
+    const hasPersonal = location.rooms.some(item => item.personal);
+    const hasGroup = location.rooms.some(item => item.groups.length);
+    const cls = hasPersonal && hasGroup ? 'mixed' : hasGroup ? 'group' : 'personal';
+    const label = location.rooms.length > 1 ? location.rooms.length : '';
+    return `<button class="escapist-map-point ${cls} ${location.key === active.key ? 'active' : ''}" type="button" style="--x:${location.point.x.toFixed(2)}%;--y:${location.point.y.toFixed(2)}%" title="${escapeHtml(location.city)} - ${location.rooms.length} salas" onclick="openEscapistMapLocation('${jsString(location.key)}')">${label}</button>`;
+  }).join('');
+  return `<div class="profile-section">
+    <div class="profile-section-title">Mi mapa escapista</div>
+    <div class="escapist-map-wrap">
+      <div class="escapist-map-canvas">
+        <div class="escapist-map-grid"></div>
+        ${escapistMapBaseSvg()}
+        ${points}
+        <div class="escapist-map-legend">
+          <span><i class="escapist-map-dot personal"></i>Hecho personal</span>
+          <span><i class="escapist-map-dot group"></i>Hecho por grupo</span>
+        </div>
+      </div>
+      <div class="escapist-map-side">
+        <div class="escapist-map-stats">
+          <div class="escapist-map-stat"><strong>${locations.length}</strong><span>Ciudades</span></div>
+          <div class="escapist-map-stat"><strong>${items.length}</strong><span>Salas</span></div>
+          <div class="escapist-map-stat"><strong>${personalRooms}</strong><span>Personal</span></div>
+          <div class="escapist-map-stat"><strong>${groupRooms}</strong><span>Grupo</span></div>
+        </div>
+        <div class="escapist-map-city">${escapeHtml(active.city)}</div>
+        <div class="escapist-map-meta">${escapeHtml([active.province, active.community].filter(Boolean).join(' - '))} - ${active.rooms.length} sala${active.rooms.length !== 1 ? 's' : ''}</div>
+        <div class="escapist-map-list">${active.rooms.map(escapistMapRoomHtml).join('')}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function openEscapistMapLocation(locationKey) {
+  PROFILE_MAP_ACTIVE_KEY = locationKey;
+  renderProfile();
+}
+
+function openProfileRoomDetail(kind, key) {
+  closeProfile();
+  setTimeout(() => openDetail(kind, key), 0);
+}
+
 function groupRecordFromRoom(room) {
   const now = Date.now();
   return {
@@ -3845,6 +4095,7 @@ function profileSettingsHtml(message = '') {
       <div class="profile-status-msg" id="profile-status">${message || ''}</div>
     </div>
     ${accountRoleInfoHtml()}
+    ${escapistMapHtml()}
     <div class="profile-section">
       <div class="profile-section-title">Crear grupo escapista</div>
       <div class="profile-row">
