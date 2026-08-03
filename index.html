@@ -570,6 +570,16 @@
   .detail-personal-btn.active.favorite{border-color:rgba(230,57,70,.48);background:rgba(230,57,70,.08);color:var(--red);}
   .detail-account .vote-section{margin-top:10px;margin-bottom:0;}
   .detail-login-hint{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;line-height:1.5;}
+  .completion-time-box{border:1px solid rgba(6,214,160,.13);background:rgba(6,214,160,.035);padding:10px 11px;margin-top:10px;}
+  .completion-time-box.compact{padding:8px 9px;margin:8px 0 0;}
+  .completion-time-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px;}
+  .completion-time-title{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;}
+  .completion-time-current{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--green);letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis;text-align:right;}
+  .completion-time-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px;align-items:center;}
+  .completion-time-input{width:100%;min-width:0;font-family:'Rajdhani',sans-serif;font-size:.9rem;font-weight:600;background:rgba(0,0,0,.18);color:var(--text);border:1px solid var(--border);padding:7px 9px;outline:none;}
+  .completion-time-input:focus{border-color:rgba(6,214,160,.36);}
+  .completion-time-save{font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(6,214,160,.28);background:rgba(6,214,160,.06);color:var(--green);padding:8px 10px;cursor:pointer;}
+  .completion-time-help{font-family:'Share Tech Mono',monospace;font-size:.54rem;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;line-height:1.35;margin-top:6px;}
   .community-reviews{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.02);padding:13px 14px;margin-top:14px;}
   .review-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:12px;}
   .review-summary-item{border:1px solid rgba(125,187,63,.14);background:rgba(125,187,63,.035);padding:8px 9px;min-width:0;}
@@ -1985,7 +1995,7 @@ const TERPECA_AWARD_INDEX = new Map();
 const EXTRA_AWARD_INDEX = new Map();
 
 // Preparado para el siguiente paso con Google/Firebase Auth:
-// users/{uid}/roomStates/{roomKey} -> { pendiente, hecho, favorito, descartado, updatedAt }
+// users/{uid}/roomStates/{roomKey} -> { pending, done, completedMinutes, updatedAt }
 let CURRENT_USER = null;
 let USER_ROOM_STATES = {};
 let USER_PROFILE = {};
@@ -2196,6 +2206,42 @@ function groupStateFor(room) {
 
 function userStateFor(room) {
   return USER_ROOM_STATES[userRoomKey(room)] || {};
+}
+
+function parsePositiveMinutes(value) {
+  const raw = String(value ?? '').trim();
+  if (!raw) return 0;
+  const match = raw.replace(',', '.').match(/\d+(?:\.\d+)?/);
+  const n = match ? Number(match[0]) : 0;
+  if (!Number.isFinite(n) || n <= 0) return 0;
+  return Math.round(n);
+}
+
+function officialMinutesForRoom(room) {
+  return parsePositiveMinutes(room?.duracion || room?.duration);
+}
+
+function completedMinutesForRoom(room) {
+  const state = userStateFor(room);
+  if (!state.done) return 0;
+  return parsePositiveMinutes(state.completedMinutes);
+}
+
+function playedMinutesForRoom(room) {
+  return completedMinutesForRoom(room) || officialMinutesForRoom(room);
+}
+
+function formatPlayedMinutes(minutes) {
+  const total = parsePositiveMinutes(minutes);
+  if (!total) return '0m';
+  if (total < 60) return `${total}m`;
+  const hours = Math.floor(total / 60);
+  const rest = total % 60;
+  return `${hours}h${rest ? ` ${rest}m` : ''}`;
+}
+
+function completionInputId(room, context = 'detail') {
+  return `completion-time-${cssSafe(context)}-${cssSafe(userRoomKey(room))}`;
 }
 
 function groupStateTags(room) {
@@ -2584,6 +2630,12 @@ async function saveUserRoomState(room, patch) {
   };
   if (next.done) next.pending = false;
   if (next.pending) next.done = false;
+  if (!next.done) delete next.completedMinutes;
+  else {
+    const completed = parsePositiveMinutes(next.completedMinutes);
+    if (completed) next.completedMinutes = completed;
+    else delete next.completedMinutes;
+  }
   if (!next.pending && !next.done) {
     delete USER_ROOM_STATES[key];
     await fbDelete(`users/${USER_ID}/roomStates/${key}`);
@@ -2614,6 +2666,37 @@ async function setPersonalRoomState(kind, key, state) {
   } catch(e) {
     console.error('No se pudo guardar tu estado personal:', e);
     alert(`No se pudo guardar en tu cuenta.\n\nDetalle: ${e.message}\n\nRevisa las reglas de Firebase para users/{uid}/roomStates.`);
+  }
+}
+
+async function saveCompletedMinutes(kind, key, context = 'detail') {
+  const room = findDetailRoom(kind, key);
+  if (!room) return;
+  const state = userStateFor(room);
+  if (!state.done) {
+    alert('Marca primero esta sala como Hecho por mi para guardar el tiempo completado.');
+    return;
+  }
+  const input = document.getElementById(completionInputId(room, context));
+  const raw = input?.value.trim() || '';
+  const completed = parsePositiveMinutes(raw);
+  if (raw && (!completed || completed > 999)) {
+    alert('Indica el tiempo en minutos, entre 1 y 999.');
+    input?.focus();
+    return;
+  }
+  try {
+    await saveUserRoomState(room, { completedMinutes: raw ? completed : null });
+    renderStats();
+    renderMisHechos();
+    renderCatalogo();
+    renderVaultGuide();
+    if (document.getElementById('detail-modal')?.classList.contains('open')) {
+      openDetail(kind, key);
+    }
+  } catch(e) {
+    console.error('No se pudo guardar el tiempo completado:', e);
+    alert(`No se pudo guardar el tiempo completado.\n\nDetalle: ${e.message}`);
   }
 }
 
@@ -4980,11 +5063,9 @@ function renderStats() {
   const avgGrupo = conVal.length
     ? (conVal.reduce((s,h) => s + parseFloat(h.valoracion), 0) / conVal.length).toFixed(1) : '—';
 
-  // Horas jugadas (hechos)
-  const minsJugados = doneRooms.reduce((s,h) => s + (parseInt(h.duracion) || 0), 0);
-  const hrsJugados  = minsJugados >= 60
-    ? `${Math.floor(minsJugados/60)}h ${minsJugados%60 > 0 ? minsJugados%60+'m' : ''}`
-    : `${minsJugados}m`;
+  // Horas jugadas: usa tiempo real personal si existe; si no, duración oficial.
+  const minsJugados = doneRooms.reduce((s,h) => s + playedMinutesForRoom(h), 0);
+  const hrsJugados = formatPlayedMinutes(minsJugados);
 
   statsBar.innerHTML = `
     <div class="stats-top">
@@ -6065,6 +6146,32 @@ function personalActionsHtml(room, kind) {
   </div>`;
 }
 
+function completionTimeHtml(room, kind, context = 'detail') {
+  const state = userStateFor(room);
+  if (!AUTH_USER || !state.done) return '';
+  const key = jsString(roomKey(room));
+  const inputId = completionInputId(room, context);
+  const completed = completedMinutesForRoom(room);
+  const official = officialMinutesForRoom(room);
+  const current = completed
+    ? `Tiempo real: ${formatPlayedMinutes(completed)}`
+    : official ? `Usando duracion: ${formatPlayedMinutes(official)}` : 'Sin tiempo calculado';
+  const help = completed
+    ? `Dejalo vacio y guarda para volver a sumar la duracion oficial${official ? ` (${formatPlayedMinutes(official)})` : ''}.`
+    : official ? `Si lo dejas vacio, el contador suma la duracion oficial (${formatPlayedMinutes(official)}).` : 'Indica minutos para sumarlos al contador personal.';
+  return `<div class="completion-time-box ${context === 'card' ? 'compact' : ''}">
+    <div class="completion-time-head">
+      <div class="completion-time-title">Tiempo completado</div>
+      <div class="completion-time-current">${escapeHtml(current)}</div>
+    </div>
+    <div class="completion-time-row">
+      <input class="completion-time-input" id="${inputId}" type="number" min="1" max="999" step="1" inputmode="numeric" value="${completed || ''}" placeholder="${official || '60'}" onkeydown="if(event.key==='Enter') saveCompletedMinutes('${kind}','${key}','${jsString(context)}')">
+      <button class="completion-time-save" type="button" onclick="saveCompletedMinutes('${kind}','${key}','${jsString(context)}')">Guardar</button>
+    </div>
+    <div class="completion-time-help">${escapeHtml(help)}</div>
+  </div>`;
+}
+
 function detailAccountHtml(room, kind) {
   const key = jsString(roomKey(room));
   const slug = roomVoteSlug(room);
@@ -6095,6 +6202,7 @@ function detailAccountHtml(room, kind) {
       <button class="detail-personal-btn done ${state.done ? 'active' : ''}" type="button" onclick="setPersonalRoomState('${kind}','${key}','done')">${state.done ? '✓ Hecho' : 'Hecho por mi'}</button>
       <button class="detail-personal-btn favorite ${favorite ? 'active' : ''}" data-slug="${slug}" type="button" onclick="toggleFav('${slug}',this)">${favorite ? '♥ Favorito' : '♡ Favorito'} <span class="fav-likes">${likeCount(slug)}</span></button>
     </div>
+    ${completionTimeHtml(room, kind, 'detail')}
     ${groupRoomControlsHtml(room, kind)}
   </div>`;
 }
@@ -6231,6 +6339,7 @@ function cardPend(p, i) {
       ${p.votos         ? `<div class="meta-item"><span class="meta-key">Opiniones</span><span class="meta-val">🗳 ${p.votos}</span></div>` : ''}
     </div>
     ${voteWidget(slug)}
+    ${completionTimeHtml(p, detailKind, 'card')}
     <div class="card-footer">
       ${p.web ? `<a class="web-link" href="${p.web}" target="_blank">Ver web</a>` : '<span></span>'}
       ${personalActionsHtml(p, detailKind)}
