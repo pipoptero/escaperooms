@@ -3130,7 +3130,7 @@ function coordForRoomLocation(room) {
 }
 
 function projectMapPoint(coord) {
-  const bounds = { lonMin: -18.4, lonMax: 4.7, latMin: 27.2, latMax: 44.5 };
+  const bounds = { lonMin: -9.8, lonMax: 4.6, latMin: 35.7, latMax: 44.3 };
   let x = ((coord.lon - bounds.lonMin) / (bounds.lonMax - bounds.lonMin)) * 100;
   let y = ((bounds.latMax - coord.lat) / (bounds.latMax - bounds.latMin)) * 100;
   if (coord.fallback) {
@@ -3190,7 +3190,7 @@ function escapistMapLocations() {
 }
 
 function escapistMapBaseSvg() {
-  return '<img class="escapist-map-img" src="images/maps/spain-natural-earth.svg" alt="Mapa de España">';
+  return '<img class="escapist-map-img" src="images/maps/spain-peninsula-balearic-natural-earth.svg" alt="Mapa de España peninsular y Baleares">';
 }
 
 function escapistMapRoomHtml(item) {
