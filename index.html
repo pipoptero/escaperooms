@@ -488,6 +488,7 @@
   .escapist-map-point.personal{background:rgba(230,57,70,.9);border-color:rgba(230,57,70,.98);}
   .escapist-map-point.group{background:rgba(6,214,160,.86);border-color:rgba(6,214,160,.95);color:#07120f;}
   .escapist-map-point.mixed{background:linear-gradient(135deg,rgba(230,57,70,.92) 0 48%,rgba(6,214,160,.9) 52% 100%);border-color:rgba(255,255,255,.34);}
+  .escapist-map-point.cluster{min-width:34px;height:34px;font-size:.7rem;border-width:2px;}
   .escapist-map-point.active{outline:2px solid var(--amber);outline-offset:3px;}
   .escapist-map-legend{position:absolute;left:10px;bottom:10px;display:flex;gap:7px;flex-wrap:wrap;z-index:3;}
   .escapist-map-legend span{font-family:'Share Tech Mono',monospace;font-size:.52rem;color:var(--text2);letter-spacing:.06em;text-transform:uppercase;border:1px solid rgba(255,255,255,.08);background:rgba(10,10,15,.7);padding:5px 7px;}
@@ -502,6 +503,9 @@
   .escapist-map-city{font-family:'Cinzel',serif;font-size:1.08rem;color:var(--text);line-height:1.15;margin-bottom:4px;}
   .escapist-map-meta{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;line-height:1.45;margin-bottom:10px;}
   .escapist-map-list{display:flex;flex-direction:column;gap:7px;max-height:270px;overflow:auto;padding-right:2px;}
+  .escapist-map-city-block{border-top:1px solid rgba(255,255,255,.06);padding-top:8px;margin-top:8px;}
+  .escapist-map-city-block:first-child{border-top:none;padding-top:0;margin-top:0;}
+  .escapist-map-city-heading{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px;}
   .escapist-map-room{border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.022);padding:8px 9px;}
   .escapist-map-room-name{font-family:'Cinzel',serif;color:var(--text);font-size:.86rem;line-height:1.16;}
   .escapist-map-room-sub{font-family:'Share Tech Mono',monospace;font-size:.52rem;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;margin-top:3px;line-height:1.35;}
@@ -1171,6 +1175,7 @@
     .escapist-map-side{padding:10px;}
     .escapist-map-stats{grid-template-columns:repeat(2,minmax(0,1fr));}
     .escapist-map-point{min-width:22px;height:22px;font-size:.52rem;}
+    .escapist-map-point.cluster{min-width:30px;height:30px;font-size:.62rem;}
     .group-stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
     .admin-review-grid{grid-template-columns:1fr;}
     .admin-review-grid .wide{grid-column:auto;}
@@ -3189,6 +3194,67 @@ function escapistMapLocations() {
   return [...locations.values()].sort((a, b) => b.rooms.length - a.rooms.length || a.city.localeCompare(b.city));
 }
 
+function distanceBetweenPoints(a, b) {
+  return Math.hypot((a.x || 0) - (b.x || 0), (a.y || 0) - (b.y || 0));
+}
+
+function escapistMapClusters(locations) {
+  const threshold = locations.length > 8 ? 7.2 : 6.2;
+  const clusters = [];
+  locations.forEach(location => {
+    let target = clusters
+      .filter(cluster => distanceBetweenPoints(cluster.point, location.point) <= threshold)
+      .sort((a, b) => distanceBetweenPoints(a.point, location.point) - distanceBetweenPoints(b.point, location.point))[0];
+    if (!target) {
+      target = { locations: [], rooms: [], point: { ...location.point }, weight: 0 };
+      clusters.push(target);
+    }
+    const weight = Math.max(1, location.rooms.length);
+    target.locations.push(location);
+    target.rooms.push(...location.rooms);
+    target.point = {
+      x: ((target.point.x * target.weight) + (location.point.x * weight)) / (target.weight + weight),
+      y: ((target.point.y * target.weight) + (location.point.y * weight)) / (target.weight + weight)
+    };
+    target.weight += weight;
+  });
+  return clusters.map(cluster => {
+    cluster.locations.sort((a, b) => b.rooms.length - a.rooms.length || a.city.localeCompare(b.city));
+    cluster.rooms.sort((a, b) => String(a.room?.nombre || '').localeCompare(String(b.room?.nombre || '')));
+    cluster.key = cluster.locations.length === 1
+      ? cluster.locations[0].key
+      : `cluster_${cluster.locations.map(location => location.key).sort().join('__')}`;
+    return cluster;
+  }).sort((a, b) => b.rooms.length - a.rooms.length || mapClusterTitle(a).localeCompare(mapClusterTitle(b)));
+}
+
+function mapClusterTitle(cluster) {
+  if (!cluster) return '';
+  if (cluster.locations.length === 1) return cluster.locations[0].city;
+  const communities = new Map();
+  const provinces = new Map();
+  cluster.locations.forEach(location => {
+    if (location.community) communities.set(location.community, (communities.get(location.community) || 0) + location.rooms.length);
+    if (location.province) provinces.set(location.province, (provinces.get(location.province) || 0) + location.rooms.length);
+  });
+  const topCommunity = [...communities.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0]?.[0];
+  const topProvince = [...provinces.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0]?.[0];
+  return `Zona ${topProvince || topCommunity || cluster.locations[0].city}`;
+}
+
+function mapClusterMeta(cluster) {
+  if (!cluster) return '';
+  const cities = cluster.locations.length;
+  const rooms = cluster.rooms.length;
+  if (cluster.locations.length === 1) {
+    const location = cluster.locations[0];
+    return `${[location.province, location.community].filter(Boolean).join(' - ')} - ${rooms} sala${rooms !== 1 ? 's' : ''}`;
+  }
+  const names = cluster.locations.slice(0, 4).map(location => location.city).join(', ');
+  const more = cluster.locations.length > 4 ? ` +${cluster.locations.length - 4}` : '';
+  return `${cities} ciudades - ${rooms} salas - ${names}${more}`;
+}
+
 function escapistMapBaseSvg() {
   return '<img class="escapist-map-img" src="images/maps/spain-peninsula-balearic-natural-earth.svg" alt="Mapa de España peninsular y Baleares">';
 }
@@ -3210,6 +3276,13 @@ function escapistMapRoomHtml(item) {
   </article>`;
 }
 
+function escapistMapClusterListHtml(cluster) {
+  return cluster.locations.map(location => `<section class="escapist-map-city-block">
+    <div class="escapist-map-city-heading">${escapeHtml(location.city)} <span style="opacity:.62">(${location.rooms.length})</span></div>
+    ${location.rooms.map(escapistMapRoomHtml).join('')}
+  </section>`).join('');
+}
+
 function escapistMapHtml() {
   const locations = escapistMapLocations();
   if (!locations.length) {
@@ -3219,17 +3292,22 @@ function escapistMapHtml() {
       <div class="escapist-map-empty">Marca salas como hechas, personales o de grupo, para empezar a llenar tu mapa.</div>
     </div>`;
   }
-  if (!locations.some(location => location.key === PROFILE_MAP_ACTIVE_KEY)) PROFILE_MAP_ACTIVE_KEY = locations[0].key;
-  const active = locations.find(location => location.key === PROFILE_MAP_ACTIVE_KEY) || locations[0];
+  const clusters = escapistMapClusters(locations);
+  if (!clusters.some(cluster => cluster.key === PROFILE_MAP_ACTIVE_KEY)) {
+    const containing = clusters.find(cluster => cluster.locations.some(location => location.key === PROFILE_MAP_ACTIVE_KEY));
+    PROFILE_MAP_ACTIVE_KEY = containing?.key || clusters[0].key;
+  }
+  const active = clusters.find(cluster => cluster.key === PROFILE_MAP_ACTIVE_KEY) || clusters[0];
   const items = escapistDoneRoomItems();
   const personalRooms = items.filter(item => item.personal).length;
   const groupRooms = items.filter(item => item.groups.length).length;
-  const points = locations.map(location => {
-    const hasPersonal = location.rooms.some(item => item.personal);
-    const hasGroup = location.rooms.some(item => item.groups.length);
+  const points = clusters.map(cluster => {
+    const hasPersonal = cluster.rooms.some(item => item.personal);
+    const hasGroup = cluster.rooms.some(item => item.groups.length);
     const cls = hasPersonal && hasGroup ? 'mixed' : hasGroup ? 'group' : 'personal';
-    const label = location.rooms.length > 1 ? location.rooms.length : '';
-    return `<button class="escapist-map-point ${cls} ${location.key === active.key ? 'active' : ''}" type="button" style="--x:${location.point.x.toFixed(2)}%;--y:${location.point.y.toFixed(2)}%" title="${escapeHtml(location.city)} - ${location.rooms.length} salas" onclick="openEscapistMapLocation('${jsString(location.key)}')">${label}</button>`;
+    const isCluster = cluster.locations.length > 1;
+    const label = isCluster || cluster.rooms.length > 1 ? cluster.rooms.length : '';
+    return `<button class="escapist-map-point ${cls} ${isCluster ? 'cluster' : ''} ${cluster.key === active.key ? 'active' : ''}" type="button" style="--x:${cluster.point.x.toFixed(2)}%;--y:${cluster.point.y.toFixed(2)}%" title="${escapeHtml(mapClusterTitle(cluster))} - ${cluster.rooms.length} salas" onclick="openEscapistMapLocation('${jsString(cluster.key)}')">${label}</button>`;
   }).join('');
   return `<div class="profile-section">
     <div class="profile-section-title">Mi mapa escapista</div>
@@ -3250,9 +3328,9 @@ function escapistMapHtml() {
           <div class="escapist-map-stat"><strong>${personalRooms}</strong><span>Personal</span></div>
           <div class="escapist-map-stat"><strong>${groupRooms}</strong><span>Grupo</span></div>
         </div>
-        <div class="escapist-map-city">${escapeHtml(active.city)}</div>
-        <div class="escapist-map-meta">${escapeHtml([active.province, active.community].filter(Boolean).join(' - '))} - ${active.rooms.length} sala${active.rooms.length !== 1 ? 's' : ''}</div>
-        <div class="escapist-map-list">${active.rooms.map(escapistMapRoomHtml).join('')}</div>
+        <div class="escapist-map-city">${escapeHtml(mapClusterTitle(active))}</div>
+        <div class="escapist-map-meta">${escapeHtml(mapClusterMeta(active))}</div>
+        <div class="escapist-map-list">${escapistMapClusterListHtml(active)}</div>
       </div>
     </div>
   </div>`;
