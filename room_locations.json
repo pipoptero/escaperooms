@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "description": "Ubicaciones exactas opcionales para el mapa escapista. Las claves son slugs de sala o alias conocidos. Si una sala no aparece aqui, la web usa una posicion aproximada por ciudad/provincia.",
+    "schema": {
+      "address": "Direccion visible opcional",
+      "lat": "Latitud decimal",
+      "lon": "Longitud decimal",
+      "source": "Fuente de la coordenada",
+      "updated_at": "Fecha ISO de ultima revision"
+    }
+  },
+  "locations": {}
+}

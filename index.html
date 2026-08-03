@@ -499,6 +499,7 @@
   .escapist-leaflet-marker.group{background:rgba(6,214,160,.88);border-color:rgba(6,214,160,.95);color:#07120f;}
   .escapist-leaflet-marker.mixed{background:linear-gradient(135deg,rgba(230,57,70,.94) 0 48%,rgba(6,214,160,.9) 52% 100%);border-color:rgba(255,255,255,.36);}
   .escapist-leaflet-marker.cluster{width:34px;height:34px;font-size:.72rem;border-width:2px;}
+  .escapist-leaflet-marker.approx{border-style:dashed;}
   .escapist-leaflet-marker.active{box-shadow:0 0 0 4px rgba(0,0,0,.34),0 0 0 8px rgba(125,187,63,.24),0 0 32px rgba(125,187,63,.46),0 10px 28px rgba(0,0,0,.46);}
   .escapist-map-fallback{position:absolute;inset:0;}
   .escapist-map-img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;opacity:.9;}
@@ -510,6 +511,7 @@
   .escapist-map-point.group{background:rgba(6,214,160,.86);border-color:rgba(6,214,160,.95);color:#07120f;}
   .escapist-map-point.mixed{background:linear-gradient(135deg,rgba(230,57,70,.92) 0 48%,rgba(6,214,160,.9) 52% 100%);border-color:rgba(255,255,255,.34);}
   .escapist-map-point.cluster{min-width:34px;height:34px;font-size:.7rem;border-width:2px;}
+  .escapist-map-point.approx{border-style:dashed;}
   .escapist-map-point.active{transform:translate(-50%,-50%) scale(1.13);border-color:rgba(255,255,255,.8);box-shadow:0 0 0 3px rgba(0,0,0,.34),0 0 0 7px rgba(125,187,63,.22),0 0 30px rgba(125,187,63,.46),0 10px 28px rgba(0,0,0,.44);z-index:5;}
   .escapist-map-legend{position:absolute;left:10px;bottom:10px;display:flex;gap:7px;flex-wrap:wrap;z-index:3;}
   .escapist-map-legend span{font-family:'Share Tech Mono',monospace;font-size:.52rem;color:var(--text2);letter-spacing:.06em;text-transform:uppercase;border:1px solid rgba(255,255,255,.08);background:rgba(10,10,15,.7);padding:5px 7px;}
@@ -2049,7 +2051,7 @@ let REVIEW_ROOM_ALIASES = {
   whitechapel: 'la_historia_de_charlotte'
 };
 
-let PENDIENTES = [], HECHOS = [], CATALOGO = [], TERPECA_AWARDS = [], EXTRA_AWARDS = [], EXTERNAL_RATINGS = {}, EXTERNAL_RATINGS_META = {}, REVIEW_PHOTOS = {}, sortPend = 'rating', sortMine = 'rating', sortCatalogo = 'rating', sortRank = 'global', rankTerrorFilter = 'all', rankCommunityFilter = '';
+let PENDIENTES = [], HECHOS = [], CATALOGO = [], TERPECA_AWARDS = [], EXTRA_AWARDS = [], EXTERNAL_RATINGS = {}, EXTERNAL_RATINGS_META = {}, REVIEW_PHOTOS = {}, ROOM_LOCATIONS = {}, sortPend = 'rating', sortMine = 'rating', sortCatalogo = 'rating', sortRank = 'global', rankTerrorFilter = 'all', rankCommunityFilter = '';
 const CATALOG_PAGE_SIZE = 120;
 let catalogVisibleCount = CATALOG_PAGE_SIZE;
 let GROUP_ROOM_INDEX = { pendientes: new Set(), hechos: new Set() };
@@ -3157,7 +3159,32 @@ function fallbackOffset(seed) {
   };
 }
 
+function roomLocationKeys(room) {
+  return [...new Set([
+    room?.id,
+    room?.nombre,
+    room?.nombre ? slugify(room.nombre) : '',
+    room?.empresa ? `${room.nombre || ''} ${room.empresa}` : '',
+    userRoomKey(room),
+    ...reviewIdentityKeys(room || {})
+  ].map(slugify).filter(Boolean))];
+}
+
+function exactLocationForRoom(room) {
+  for (const key of roomLocationKeys(room)) {
+    const entry = ROOM_LOCATIONS[key];
+    const lat = Number(entry?.lat);
+    const lon = Number(entry?.lon);
+    if (Number.isFinite(lat) && Number.isFinite(lon)) {
+      return { ...entry, lat, lon };
+    }
+  }
+  return null;
+}
+
 function coordForRoomLocation(room) {
+  const exact = exactLocationForRoom(room);
+  if (exact) return { lat: exact.lat, lon: exact.lon, fallback: false, exact: true, address: exact.address || '' };
   const cityKey = coordLookupKey(room?.ciudad);
   if (MAP_CITY_COORDS[cityKey]) return { lat: MAP_CITY_COORDS[cityKey][0], lon: MAP_CITY_COORDS[cityKey][1], fallback: false };
   const provinceKey = coordLookupKey(room?.provincia);
@@ -3225,6 +3252,8 @@ function escapistMapLocations(items) {
         province,
         community: communityOf(room) || '',
         coord,
+        exact: coord.exact === true,
+        address: coord.address || '',
         point: projectMapPoint(coord),
         rooms: []
       });
@@ -3290,13 +3319,16 @@ function mapClusterMeta(cluster) {
   if (!cluster) return '';
   const cities = cluster.locations.length;
   const rooms = cluster.rooms.length;
+  const exactCount = cluster.locations.filter(location => location.exact).length;
+  const precision = exactCount === cluster.locations.length ? 'exacto' : exactCount ? `${exactCount} exactas` : 'aprox. ciudad';
   if (cluster.locations.length === 1) {
     const location = cluster.locations[0];
-    return `${[location.province, location.community].filter(Boolean).join(' - ')} - ${rooms} sala${rooms !== 1 ? 's' : ''}`;
+    const base = location.address || [location.province, location.community].filter(Boolean).join(' - ');
+    return `${base} - ${rooms} sala${rooms !== 1 ? 's' : ''} - ${precision}`;
   }
   const names = cluster.locations.slice(0, 4).map(location => location.city).join(', ');
   const more = cluster.locations.length > 4 ? ` +${cluster.locations.length - 4}` : '';
-  return `${cities} ciudades - ${rooms} salas - ${names}${more}`;
+  return `${cities} ciudades - ${rooms} salas - ${precision} - ${names}${more}`;
 }
 
 function escapistMapBaseSvg() {
@@ -3352,7 +3384,9 @@ function escapistMapClusterMarkerClass(cluster) {
   const hasPersonal = cluster.rooms.some(item => item.personal);
   const hasGroup = cluster.rooms.some(item => item.groups.length);
   const sourceClass = hasPersonal && hasGroup ? 'mixed' : hasGroup ? 'group' : 'personal';
-  return `${sourceClass} ${cluster.locations.length > 1 || cluster.rooms.length > 1 ? 'cluster' : ''}`.trim();
+  const scaleClass = cluster.locations.length > 1 || cluster.rooms.length > 1 ? 'cluster' : '';
+  const precisionClass = cluster.locations.every(location => location.exact) ? 'exact' : 'approx';
+  return `${sourceClass} ${scaleClass} ${precisionClass}`.trim();
 }
 
 function escapistMapHtml() {
@@ -5273,6 +5307,18 @@ async function loadReviewPhotos() {
   }
 }
 
+async function loadRoomLocations() {
+  try {
+    const r = await fetch('room_locations.json?v=' + Date.now());
+    if (!r.ok) return;
+    const data = await r.json();
+    ROOM_LOCATIONS = data.locations || {};
+  } catch(e) {
+    console.warn('No se pudo cargar room_locations.json:', e.message);
+    ROOM_LOCATIONS = {};
+  }
+}
+
 async function loadRoomAliases() {
   try {
     const r = await fetch('room_aliases.json?v=' + Date.now());
@@ -5363,6 +5409,7 @@ async function loadStaticEnhancementsAfterInitialRender() {
     await loadExtraAwards();
     await loadExternalRatings();
     await loadReviewPhotos();
+    await loadRoomLocations();
     renderCatalogo();
     renderHechos();
     if (ACTIVE_TAB === 'ranking') renderRanking();
@@ -5389,6 +5436,7 @@ async function loadData() {
     }
     await loadCatalogo();
     await loadRoomAliases();
+    await loadRoomLocations();
 
     document.getElementById('loading').style.display = 'none';
     document.getElementById('app').style.display = 'block';
