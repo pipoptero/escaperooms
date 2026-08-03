@@ -484,24 +484,32 @@
   .escapist-map-svg{position:absolute;inset:0;width:100%;height:100%;opacity:.42;}
   .escapist-map-svg path,.escapist-map-svg ellipse{fill:rgba(255,255,255,.035);stroke:rgba(125,187,63,.24);stroke-width:1.2;}
   .escapist-map-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:42px 42px;opacity:.23;}
-  .escapist-map-point{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);min-width:24px;height:24px;border-radius:999px;border:1px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:.58rem;font-weight:700;color:#fff;cursor:pointer;box-shadow:0 0 0 3px rgba(0,0,0,.22),0 8px 22px rgba(0,0,0,.36);z-index:2;}
+  .escapist-map-point{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);min-width:24px;height:24px;border-radius:999px;border:1px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:.58rem;font-weight:700;color:#fff;cursor:pointer;box-shadow:0 0 0 3px rgba(0,0,0,.22),0 8px 22px rgba(0,0,0,.36);z-index:2;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;}
   .escapist-map-point.personal{background:rgba(230,57,70,.9);border-color:rgba(230,57,70,.98);}
   .escapist-map-point.group{background:rgba(6,214,160,.86);border-color:rgba(6,214,160,.95);color:#07120f;}
   .escapist-map-point.mixed{background:linear-gradient(135deg,rgba(230,57,70,.92) 0 48%,rgba(6,214,160,.9) 52% 100%);border-color:rgba(255,255,255,.34);}
   .escapist-map-point.cluster{min-width:34px;height:34px;font-size:.7rem;border-width:2px;}
-  .escapist-map-point.active{outline:2px solid var(--amber);outline-offset:3px;}
+  .escapist-map-point.active{transform:translate(-50%,-50%) scale(1.13);border-color:rgba(255,255,255,.8);box-shadow:0 0 0 3px rgba(0,0,0,.34),0 0 0 7px rgba(125,187,63,.22),0 0 30px rgba(125,187,63,.46),0 10px 28px rgba(0,0,0,.44);z-index:5;}
   .escapist-map-legend{position:absolute;left:10px;bottom:10px;display:flex;gap:7px;flex-wrap:wrap;z-index:3;}
   .escapist-map-legend span{font-family:'Share Tech Mono',monospace;font-size:.52rem;color:var(--text2);letter-spacing:.06em;text-transform:uppercase;border:1px solid rgba(255,255,255,.08);background:rgba(10,10,15,.7);padding:5px 7px;}
   .escapist-map-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle;}
   .escapist-map-dot.personal{background:var(--red);}
   .escapist-map-dot.group{background:var(--green);}
   .escapist-map-side{border:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.12);padding:11px 12px;min-width:0;}
+  .escapist-map-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+  .escapist-map-filter{font-family:'Share Tech Mono',monospace;font-size:.56rem;letter-spacing:.09em;text-transform:uppercase;color:var(--text3);border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.025);padding:7px 9px;cursor:pointer;}
+  .escapist-map-filter.active{border-color:rgba(125,187,63,.62);background:rgba(125,187,63,.1);color:var(--green);}
   .escapist-map-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-bottom:10px;}
   .escapist-map-stat{border:1px solid rgba(125,187,63,.12);background:rgba(125,187,63,.035);padding:8px 9px;min-width:0;}
   .escapist-map-stat strong{display:block;font-family:'Cinzel',serif;color:var(--amber);font-size:1.05rem;line-height:1;}
   .escapist-map-stat span{display:block;font-family:'Share Tech Mono',monospace;font-size:.48rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-top:4px;}
   .escapist-map-city{font-family:'Cinzel',serif;font-size:1.08rem;color:var(--text);line-height:1.15;margin-bottom:4px;}
   .escapist-map-meta{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;line-height:1.45;margin-bottom:10px;}
+  .escapist-map-zones{display:grid;grid-template-columns:repeat(auto-fit,minmax(126px,1fr));gap:6px;max-height:118px;overflow:auto;margin-bottom:10px;padding-right:2px;}
+  .escapist-map-zone{border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.018);text-align:left;padding:7px 8px;cursor:pointer;min-width:0;}
+  .escapist-map-zone.active{border-color:rgba(125,187,63,.42);background:linear-gradient(135deg,rgba(125,187,63,.11),rgba(255,255,255,.02));}
+  .escapist-map-zone strong{display:block;font-family:'Cinzel',serif;font-size:.76rem;color:var(--text);line-height:1.16;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .escapist-map-zone span{display:block;font-family:'Share Tech Mono',monospace;font-size:.48rem;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .escapist-map-list{display:flex;flex-direction:column;gap:7px;max-height:270px;overflow:auto;padding-right:2px;}
   .escapist-map-city-block{border-top:1px solid rgba(255,255,255,.06);padding-top:8px;margin-top:8px;}
   .escapist-map-city-block:first-child{border-top:none;padding-top:0;margin-top:0;}
@@ -2052,6 +2060,7 @@ let PENDING_INVITE_ID = new URLSearchParams(window.location.search).get('invite'
 let INVITE_NOTICE_SHOWN = false;
 let SETTINGS_TAB = 'profile';
 let PROFILE_MAP_ACTIVE_KEY = '';
+let PROFILE_MAP_FILTER = 'all';
 let LAST_LIVE_REFRESH_AT = 0;
 let LIVE_REFRESH_IN_PROGRESS = false;
 let LIVE_REFRESH_EVENTS_READY = false;
@@ -3171,9 +3180,15 @@ function escapistDoneRoomItems() {
   return [...byKey.values()].filter(item => item.personal || item.groups.length);
 }
 
-function escapistMapLocations() {
+function escapistMapFilteredItems(items) {
+  if (PROFILE_MAP_FILTER === 'personal') return items.filter(item => item.personal);
+  if (PROFILE_MAP_FILTER === 'group') return items.filter(item => item.groups.length);
+  return items;
+}
+
+function escapistMapLocations(items) {
   const locations = new Map();
-  escapistDoneRoomItems().forEach(item => {
+  items.forEach(item => {
     const room = item.room || {};
     const city = cleanValue(room.ciudad) || 'Sin ciudad';
     const province = cleanValue(room.provincia) || cleanValue(communityOf(room)) || 'Sin provincia';
@@ -3283,13 +3298,37 @@ function escapistMapClusterListHtml(cluster) {
   </section>`).join('');
 }
 
+function escapistMapFilterHtml() {
+  const filters = [
+    ['all', 'Todos'],
+    ['personal', 'Personal'],
+    ['group', 'Grupo']
+  ];
+  return `<div class="escapist-map-filters">${filters.map(([value, label]) => `
+    <button class="escapist-map-filter ${PROFILE_MAP_FILTER === value ? 'active' : ''}" type="button" onclick="setEscapistMapFilter('${value}')">${label}</button>
+  `).join('')}</div>`;
+}
+
+function escapistMapZoneListHtml(clusters, activeKey) {
+  if (clusters.length < 2) return '';
+  return `<div class="escapist-map-zones">${clusters.map(cluster => `
+    <button class="escapist-map-zone ${cluster.key === activeKey ? 'active' : ''}" type="button" onclick="openEscapistMapLocation('${jsString(cluster.key)}')">
+      <strong>${escapeHtml(mapClusterTitle(cluster))}</strong>
+      <span>${cluster.rooms.length} sala${cluster.rooms.length !== 1 ? 's' : ''} · ${cluster.locations.length} ciudad${cluster.locations.length !== 1 ? 'es' : ''}</span>
+    </button>
+  `).join('')}</div>`;
+}
+
 function escapistMapHtml() {
-  const locations = escapistMapLocations();
+  const allItems = escapistDoneRoomItems();
+  const items = escapistMapFilteredItems(allItems);
+  const locations = escapistMapLocations(items);
   if (!locations.length) {
     PROFILE_MAP_ACTIVE_KEY = '';
     return `<div class="profile-section">
       <div class="profile-section-title">Mi mapa escapista</div>
-      <div class="escapist-map-empty">Marca salas como hechas, personales o de grupo, para empezar a llenar tu mapa.</div>
+      ${escapistMapFilterHtml()}
+      <div class="escapist-map-empty">${allItems.length ? 'No hay salas para este filtro.' : 'Marca salas como hechas, personales o de grupo, para empezar a llenar tu mapa.'}</div>
     </div>`;
   }
   const clusters = escapistMapClusters(locations);
@@ -3298,9 +3337,8 @@ function escapistMapHtml() {
     PROFILE_MAP_ACTIVE_KEY = containing?.key || clusters[0].key;
   }
   const active = clusters.find(cluster => cluster.key === PROFILE_MAP_ACTIVE_KEY) || clusters[0];
-  const items = escapistDoneRoomItems();
-  const personalRooms = items.filter(item => item.personal).length;
-  const groupRooms = items.filter(item => item.groups.length).length;
+  const personalRooms = allItems.filter(item => item.personal).length;
+  const groupRooms = allItems.filter(item => item.groups.length).length;
   const points = clusters.map(cluster => {
     const hasPersonal = cluster.rooms.some(item => item.personal);
     const hasGroup = cluster.rooms.some(item => item.groups.length);
@@ -3322,12 +3360,14 @@ function escapistMapHtml() {
         </div>
       </div>
       <div class="escapist-map-side">
+        ${escapistMapFilterHtml()}
         <div class="escapist-map-stats">
           <div class="escapist-map-stat"><strong>${locations.length}</strong><span>Ciudades</span></div>
           <div class="escapist-map-stat"><strong>${items.length}</strong><span>Salas</span></div>
           <div class="escapist-map-stat"><strong>${personalRooms}</strong><span>Personal</span></div>
           <div class="escapist-map-stat"><strong>${groupRooms}</strong><span>Grupo</span></div>
         </div>
+        ${escapistMapZoneListHtml(clusters, active.key)}
         <div class="escapist-map-city">${escapeHtml(mapClusterTitle(active))}</div>
         <div class="escapist-map-meta">${escapeHtml(mapClusterMeta(active))}</div>
         <div class="escapist-map-list">${escapistMapClusterListHtml(active)}</div>
@@ -3340,6 +3380,15 @@ function openEscapistMapLocation(locationKey) {
   PROFILE_MAP_ACTIVE_KEY = locationKey;
   renderProfile();
 }
+
+function setEscapistMapFilter(filter) {
+  PROFILE_MAP_FILTER = ['all', 'personal', 'group'].includes(filter) ? filter : 'all';
+  PROFILE_MAP_ACTIVE_KEY = '';
+  renderProfile();
+}
+
+window.openEscapistMapLocation = openEscapistMapLocation;
+window.setEscapistMapFilter = setEscapistMapFilter;
 
 function openProfileRoomDetail(kind, key) {
   closeProfile();
