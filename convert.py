@@ -12,6 +12,9 @@ import re
 import unicodedata
 import openpyxl
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 # ── Buscar el archivo Excel en el repo ───────────────────────────────────────
 xlsx_files = glob.glob("*.xlsx") + glob.glob("*.xls")
 if not xlsx_files:
@@ -119,6 +122,9 @@ def slugify(text):
 
 def local_image_for(nombre):
     slug = slugify(nombre)
+    generated_path = os.path.join("images", "generated-catalog", slug + ".png")
+    if os.path.exists(generated_path):
+        return generated_path.replace("\\", "/")
     for ext in [".jpg", ".jpeg", ".png", ".webp", ".avif"]:
         path = os.path.join("images", slug + ext)
         if os.path.exists(path):
