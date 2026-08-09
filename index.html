@@ -2279,7 +2279,7 @@ function roomImageSrc(room, withLocalFallback = true) {
   if (room?.imagen) return room.imagen;
   const catalogRoom = catalogRoomFor(room || {});
   if (catalogRoom?.imagen) return catalogRoom.imagen;
-  return withLocalFallback ? `images/${slugify(room?.nombre || '')}.webp` : '';
+  return '';
 }
 function cleanValue(text) {
   return String(text || '').trim();
@@ -3544,7 +3544,7 @@ function groupRecordFromRoom(room) {
     city: room.ciudad || '',
     province: room.provincia || '',
     community: communityOf(room) || '',
-    image: room.imagen || `images/${slugify(room.nombre || '')}.webp`,
+    image: room.imagen || '',
     web: room.web || '',
     duration: room.duracion || '',
     difficulty: room.dificultad || '',
@@ -5662,7 +5662,7 @@ function vaultLatestReviewsHtml() {
   return items.map(room => {
     const key = jsString(roomKey(room));
     const initial = escapeHtml((room.nombre || '?').trim().slice(0, 1).toUpperCase());
-    const imgSrc = room.imagen || `images/${slugify(room.nombre || '')}.webp`;
+    const imgSrc = room.imagen || '';
     const img = imgSrc
       ? `<img src="${escapeHtml(imgSrc)}" alt="" loading="lazy" onerror="this.replaceWith(document.createTextNode('${initial}'))">`
       : initial;
@@ -6492,8 +6492,7 @@ function openDeepLinkFromHash() {
 function detailImageHtml(room, kind) {
   const initial = escapeHtml((room.nombre || '?').trim().slice(0, 1).toUpperCase());
   const fallback = `<div class="card-media-fallback">${initial}</div>`;
-  const localSrc = `images/${slugify(room.nombre || '')}.webp`;
-  const src = room.imagen || (kind === 'pendientes' || kind === 'hechos' ? localSrc : '');
+  const src = room.imagen || '';
   if (!src) return fallback;
   return `<img src="${src}" alt="${escapeHtml(room.nombre || 'Escape room')}" onerror="this.replaceWith(this.nextElementSibling)">${fallback}`;
 }
@@ -7497,7 +7496,8 @@ function rankingSourcePills(room) {
 
 function rankingThumbHtml(room) {
   const initial = escapeHtml((room.nombre || '?').trim().slice(0, 1).toUpperCase());
-  const src = room.imagen || `images/${slugify(room.nombre || '')}.webp`;
+  const src = room.imagen || '';
+  if (!src) return `<span class="rank-mobile-thumb"><span class="rank-mobile-thumb-fallback">${initial}</span></span>`;
   return `<span class="rank-mobile-thumb">
     <img src="${escapeHtml(src)}" alt="" loading="lazy" onerror="this.remove()">
     <span class="rank-mobile-thumb-fallback">${initial}</span>
