@@ -6135,6 +6135,8 @@ const ESCAPE_ROOM_AWARDS_LOGO = 'images/awards/escape-room-awards-logo.png';
 const GIBA_AWARDS_LOGO = 'images/awards/giba-awards-logo.svg';
 const HORROR_AWARDS_LOGO = 'images/awards/horror-awards-logo.svg';
 const THE_VAULT_SOURCE_LOGO = 'images/brand/icon-round-192.png';
+const OCIOTERROR_SOURCE_LOGO = 'images/brand/ocioterror-icon.svg';
+const TODOESCAPEROOMS_SOURCE_LOGO = 'images/brand/todoescaperooms-icon.svg';
 
 function terpecaBadge(pos) {
   if (!pos) return '';
@@ -7342,6 +7344,8 @@ function globalScoreMeta(room) {
 function globalSourceLogoHtml(source) {
   const logo = {
     giba: { src: GIBA_AWARDS_LOGO, alt: 'Giba' },
+    ocioterror: { src: OCIOTERROR_SOURCE_LOGO, alt: 'OcioTerror' },
+    todoescaperooms: { src: TODOESCAPEROOMS_SOURCE_LOGO, alt: 'TodoEscapeRooms' },
     the_vault_review: { src: THE_VAULT_SOURCE_LOGO, alt: 'Review The Vault' }
   }[source.id];
   if (!logo) return '<span>★</span>';

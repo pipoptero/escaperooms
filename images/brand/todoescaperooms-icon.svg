@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-labelledby="title">
+  <title>TodoEscapeRooms</title>
+  <rect width="96" height="96" rx="14" fill="#050507"/>
+  <circle cx="48" cy="48" r="30" fill="none" stroke="#f2f2ee" stroke-width="7"/>
+  <path d="M48 18v60M18 48h60" stroke="#f2f2ee" stroke-width="4" stroke-linecap="round" opacity=".72"/>
+  <path d="M48 19c9 8.5 13.5 18.1 13.5 29S57 68.5 48 77M48 19C39 27.5 34.5 37.1 34.5 48S39 68.5 48 77" stroke="#7dbb3f" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <path d="M29 69l40-40" stroke="#7dbb3f" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="67" cy="29" r="7" fill="#7dbb3f"/>
+</svg>
