@@ -1682,7 +1682,7 @@
         <div class="vault-guide-card">
           <div class="vault-guide-icon">02</div>
           <h3>Ranking con contexto</h3>
-          <p>La nota global mezcla fuentes externas, comunidad y reconocimiento en premios para que una sala con varias senales pese mejor que una nota aislada.</p>
+          <p>La nota global mezcla fuentes externas, reviews The Vault y reconocimiento en premios para que una sala con varias senales pese mejor que una nota aislada.</p>
         </div>
         <div class="vault-guide-card">
           <div class="vault-guide-icon">03</div>
@@ -1801,7 +1801,7 @@
     <div id="panel-ranking" class="panel" style="display:none">
       <div class="sort-row">
         <span class="filter-label">Ranking global:</span>
-        <span class="tag tag-feature">Media de fuentes externas y comunidad</span>
+        <span class="tag tag-feature">Media de fuentes externas y reviews The Vault</span>
       </div>
       <div class="sort-row">
         <span class="filter-label">Tipo:</span>
@@ -1848,7 +1848,8 @@
       </div>
       <div class="sort-row">
         <span class="filter-label">Ordenar:</span>
-        <button class="sort-btn active" id="sort-cat-rating" onclick="setSortCatalogo('rating')">★ Rating</button>
+        <button class="sort-btn active" id="sort-cat-awards" onclick="setSortCatalogo('awards')">🏆 Premios</button>
+        <button class="sort-btn" id="sort-cat-rating" onclick="setSortCatalogo('rating')">★ Rating</button>
         <button class="sort-btn" id="sort-cat-votes" onclick="setSortCatalogo('votes')">🗳 Votos</button>
         <button class="sort-btn" id="sort-cat-name" onclick="setSortCatalogo('name')">A→Z</button>
       </div>
@@ -1865,9 +1866,14 @@
 
   <footer class="seo-footer" aria-label="Enlaces de reviews">
     <div class="seo-footer-inner">
+      <span class="rights">&copy; 2026 The Vault Escape. Todos los derechos reservados.</span>
       <span>Reviews de escape rooms con URL propia</span>
       <a href="reviews/">Ver indice de reviews</a>
       <a href="ranking/">Ver ranking SEO</a>
+      <a href="privacidad/">Privacidad</a>
+      <a href="cookies/">Cookies</a>
+      <a href="aviso-legal/">Aviso legal</a>
+      <a href="condiciones/">Condiciones</a>
     </div>
   </footer>
 
@@ -2051,7 +2057,7 @@ let REVIEW_ROOM_ALIASES = {
   whitechapel: 'la_historia_de_charlotte'
 };
 
-let PENDIENTES = [], HECHOS = [], CATALOGO = [], TERPECA_AWARDS = [], EXTRA_AWARDS = [], EXTERNAL_RATINGS = {}, EXTERNAL_RATINGS_META = {}, REVIEW_PHOTOS = {}, ROOM_LOCATIONS = {}, sortPend = 'rating', sortMine = 'rating', sortCatalogo = 'rating', sortRank = 'global', rankTerrorFilter = 'all', rankCommunityFilter = '';
+let PENDIENTES = [], HECHOS = [], CATALOGO = [], TERPECA_AWARDS = [], EXTRA_AWARDS = [], EXTERNAL_RATINGS = {}, EXTERNAL_RATINGS_META = {}, REVIEW_PHOTOS = {}, ROOM_LOCATIONS = {}, sortPend = 'rating', sortMine = 'rating', sortCatalogo = 'awards', sortRank = 'global', rankTerrorFilter = 'all', rankCommunityFilter = '';
 const CATALOG_PAGE_SIZE = 120;
 let catalogVisibleCount = CATALOG_PAGE_SIZE;
 let GROUP_ROOM_INDEX = { pendientes: new Set(), hechos: new Set() };
@@ -2094,11 +2100,12 @@ const LIVE_REFRESH_MIN_INTERVAL = 5 * 60 * 1000;
 
 function invalidateReviewRoomsCache() {
   REVIEW_ROOMS_CACHE = null;
+  GLOBAL_RATING_CACHE.clear();
 }
 
 // ── Utilidades ────────────────────────────────────────────────────────────────
 function slugify(str) {
-  return str.toLowerCase()
+  return String(str || '').toLowerCase()
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
 }
@@ -3834,23 +3841,34 @@ async function openProfile(message = '', refresh = true) {
   modal.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
 
+  renderProfile(message);
   if (AUTH_USER && FIREBASE_ENABLED && refresh) {
-    if (root) root.innerHTML = '<div class="profile-section"><div class="profile-section-title">Ajustes</div><div class="review-empty">Actualizando datos...</div></div>';
-    try {
-      await loadAdminRole();
-      await loadAdminReviewDrafts();
-      await loadUserGroups();
-      populateFilters();
-      renderAuthStatus();
-      renderStats();
-      renderMisHechos();
-      renderCatalogo();
-    } catch (e) {
-      console.warn('No se pudieron refrescar los grupos al abrir perfil:', e.message);
-      message = message || 'No se pudieron actualizar los grupos. Revisa conexion o reglas Firebase.';
+    refreshProfileDataForSettings();
+  }
+}
+
+async function refreshProfileDataForSettings() {
+  const root = document.getElementById('profile-content');
+  const status = document.getElementById('profile-status');
+  if (status) status.textContent = 'Actualizando datos...';
+  try {
+    await loadAdminRole();
+    await loadAdminReviewDrafts();
+    await loadUserGroups();
+    populateFilters();
+    renderAuthStatus();
+    renderStats();
+    renderMisHechos();
+    renderCatalogo();
+    if (document.getElementById('profile-modal')?.classList.contains('open')) {
+      renderProfile();
+    }
+  } catch (e) {
+    console.warn('No se pudieron refrescar los grupos al abrir perfil:', e.message);
+    if (root && document.getElementById('profile-modal')?.classList.contains('open')) {
+      renderProfile('No se pudieron actualizar todos los datos. Revisa conexion o reglas Firebase.');
     }
   }
-  renderProfile(message);
 }
 
 function closeProfile(event) {
@@ -4374,9 +4392,25 @@ function renderProfile(message = '') {
     return;
   }
   if (SETTINGS_TAB === 'edit' && !IS_ADMIN) SETTINGS_TAB = 'profile';
-  const content = SETTINGS_TAB === 'edit' ? renderSettingsEditHtml(message) : profileSettingsHtml(message);
-  root.innerHTML = `${settingsTabsHtml()}${content}`;
-  if (SETTINGS_TAB === 'profile') requestAnimationFrame(() => initEscapistLeafletMap());
+  try {
+    const content = SETTINGS_TAB === 'edit' ? renderSettingsEditHtml(message) : profileSettingsHtml(message);
+    root.innerHTML = `${settingsTabsHtml()}${content}`;
+    if (SETTINGS_TAB === 'profile') {
+      requestAnimationFrame(() => {
+        try {
+          initEscapistLeafletMap();
+        } catch (e) {
+          console.warn('No se pudo inicializar el mapa escapista:', e.message);
+        }
+      });
+    }
+  } catch (e) {
+    console.error('No se pudo pintar Ajustes:', e);
+    root.innerHTML = `${settingsTabsHtml()}<div class="profile-section">
+      <div class="profile-section-title">Ajustes</div>
+      <div class="review-empty">No se pudo cargar esta seccion. ${escapeHtml(e.message || '')}</div>
+    </div>`;
+  }
 }
 
 async function saveProfileSettings() {
@@ -4843,13 +4877,25 @@ function reviewCategoryScore(room) {
   return Math.round(avg * 10) / 10;
 }
 
+function scoreNumber(value) {
+  const score = parseFloat(String(value ?? '').replace(',', '.'));
+  return Number.isFinite(score) ? score : 0;
+}
+
 function reviewPrimaryScore(room) {
-  const ownScore = Number(room?.valoracion) || 0;
+  const ownScore = scoreNumber(room?.valoracion);
   if (ownScore > 0) return ownScore;
   const categoryScore = reviewCategoryScore(room);
   if (categoryScore > 0) return categoryScore;
   const community = voteStatsForRoom(room);
   return community.avg ? Math.round(community.avg * 20) / 10 : 0;
+}
+
+function reviewOnlyScore(room) {
+  const ownScore = scoreNumber(room?.valoracion);
+  if (ownScore > 0) return Math.round(ownScore * 10) / 10;
+  const categoryScore = reviewCategoryScore(room);
+  return categoryScore > 0 ? Math.round(categoryScore * 10) / 10 : 0;
 }
 
 function voteStatsForRoom(room) {
@@ -6058,7 +6104,6 @@ const TEN_ESCAPES_LOGO = 'images/awards/10escapes-logo.png';
 const ESCAPE_ROOM_AWARDS_LOGO = 'images/awards/escape-room-awards-logo.png';
 const GIBA_AWARDS_LOGO = 'images/awards/giba-awards-logo.svg';
 const HORROR_AWARDS_LOGO = 'images/awards/horror-awards-logo.svg';
-const ESCAPE_COLLECTOR_SOURCE_LOGO = 'images/brand/escape-collector-icon.png';
 const THE_VAULT_SOURCE_LOGO = 'images/brand/icon-round-192.png';
 
 function terpecaBadge(pos) {
@@ -6230,6 +6275,16 @@ function publicAwardsFor(room) {
   const sorted = awards.sort((a, b) => awardPriority(b) - awardPriority(a));
   AWARD_CACHE.set(cacheKey, sorted);
   return sorted;
+}
+
+function catalogAwardSortScore(room) {
+  const awards = publicAwardsFor(room).filter(award => award.status !== 'ranked');
+  if (!awards.length) return 0;
+  return awards.reduce((sum, award, index) => {
+    const sourceBonus = award.source_id === 'terpeca' ? 18 : 0;
+    const positionWeight = 1 / (index + 1);
+    return sum + (awardPriority(award) + sourceBonus) * positionWeight;
+  }, awards.length * 12);
 }
 
 function awardSealHtml(award) {
@@ -6733,7 +6788,7 @@ function openDetail(kind, key, options = {}) {
   const sourceLabel = kind === 'catalogo' ? 'Catalogo general' : kind === 'hechos' ? (room._arkkadiaCommunityReview ? 'Review Arkkadia' : 'Review del grupo') : 'Pendiente';
   const location = [cleanValue(room.ciudad), cleanValue(room.provincia), cleanValue(communityOf(room))].filter(Boolean).join(' - ');
   const isReview = kind === 'hechos';
-  const synopsis = !isReview && room.descripcion ? escapeHtml(room.descripcion) : '';
+  const synopsis = !isReview ? escapeHtml(room.descripcion || 'Sin sinopsis') : '';
   const modal = document.getElementById('detail-modal');
 
   document.getElementById('detail-media').innerHTML = detailImageHtml(room, kind);
@@ -6755,7 +6810,7 @@ function openDetail(kind, key, options = {}) {
     </div>
     ${globalSourcesDetailHtml(room)}
     ${detailAwardsHtml(room)}
-    ${synopsis ? `
+    ${!isReview ? `
     <div class="detail-section-title">Sinopsis</div>
     <div class="detail-desc">${synopsis}</div>` : ''}
     ${isReview ? reviewBlockHtml(room) : ''}
@@ -7127,7 +7182,17 @@ function renderCatalogo() {
     return true;
   });
 
-  if (sortCatalogo === 'rating') {
+  if (sortCatalogo === 'awards') {
+    f.sort((a, b) => {
+      const awardDiff = catalogAwardSortScore(b) - catalogAwardSortScore(a);
+      if (awardDiff) return awardDiff;
+      const globalDiff = (globalRatingForRoom(b).score || 0) - (globalRatingForRoom(a).score || 0);
+      if (globalDiff) return globalDiff;
+      const ratingDiff = (parseFloat(displayRating(b)) || 0) - (parseFloat(displayRating(a)) || 0);
+      if (ratingDiff) return ratingDiff;
+      return (a.nombre || '').localeCompare(b.nombre || '');
+    });
+  } else if (sortCatalogo === 'rating') {
     f.sort((a, b) => (parseFloat(displayRating(b)) || 0) - (parseFloat(displayRating(a)) || 0));
   } else if (sortCatalogo === 'votes') {
     f.sort((a, b) => (parseInt(b.votos) || 0) - (parseInt(a.votos) || 0));
@@ -7211,7 +7276,7 @@ function renderRanking() {
   const medals = ['gold','silver','bronze'], emoji = ['🥇','🥈','🥉'];
   const votedCount = rows.filter(room => voteStatsForRoom(room).count > 0).length;
   const info = document.getElementById('result-info-rank');
-  if (info) info.textContent = `${rows.length} salas en ranking · ${votedCount} con votos de comunidad · ordenado por ${rankingSortLabel()}`;
+  if (info) info.textContent = `${rows.length} salas en ranking · ordenado por ${rankingSortLabel()}`;
 
   document.getElementById('ranking-table').innerHTML = `
     <thead><tr>
@@ -7247,9 +7312,8 @@ function globalScoreMeta(room) {
 
 function globalSourceLogoHtml(source) {
   const logo = {
-    escape_collector: { src: ESCAPE_COLLECTOR_SOURCE_LOGO, alt: 'Escape Collector' },
     giba: { src: GIBA_AWARDS_LOGO, alt: 'Giba' },
-    the_vault_community: { src: THE_VAULT_SOURCE_LOGO, alt: 'Comunidad The Vault' }
+    the_vault_review: { src: THE_VAULT_SOURCE_LOGO, alt: 'Review The Vault' }
   }[source.id];
   if (!logo) return '<span>★</span>';
   return `<img class="award-logo-square" src="${logo.src}" alt="${logo.alt}">`;
@@ -7284,7 +7348,7 @@ function reviewScoreMeta(room) {
   ].join('');
 }
 
-// Ranking global: fuentes externas + votos de comunidad en vivo.
+// Ranking global: fuentes externas + reviews The Vault.
 function externalRatingForRoom(room) {
   for (const key of roomVoteKeys(room)) {
     if (EXTERNAL_RATINGS[key]) return EXTERNAL_RATINGS[key];
@@ -7295,28 +7359,30 @@ function externalRatingForRoom(room) {
 function externalSourceLabel(sourceId) {
   const meta = EXTERNAL_RATINGS_META.sources || {};
   return meta[sourceId]?.label || {
-    escape_collector: 'Escape Collector',
     giba: 'Giba',
     ocioterror: 'OcioTerror',
     todoescaperooms: 'TodoEscapeRooms',
-    the_vault_community: 'Comunidad'
+    the_vault_review: 'The Vault'
   }[sourceId] || sourceId;
 }
 
-function communitySourceForRoom(room) {
-  const { avg, count } = voteStatsForRoom(room);
-  if (!avg || count <= 0) return null;
-  const rawScore = Math.round(avg * 20) / 10;
-  const priorScore = 8;
-  const priorVotes = 3;
-  const adjustedScore = ((rawScore * count) + (priorScore * priorVotes)) / (count + priorVotes);
+function theVaultReviewRoomFor(room) {
+  const keys = new Set(reviewIdentityKeys(room));
+  return reviewRooms().find(reviewRoom =>
+    reviewIdentityKeys(reviewRoom).some(key => keys.has(key))
+  ) || null;
+}
+
+function theVaultReviewSourceForRoom(room) {
+  const reviewRoom = theVaultReviewRoomFor(room) || room;
+  const score = reviewOnlyScore(reviewRoom);
+  if (!score) return null;
   return {
-    id: 'the_vault_community',
-    label: 'Comunidad',
-    score: Math.round(adjustedScore * 10) / 10,
-    rawScore,
-    weight: count >= 5 ? 1.3 : count >= 2 ? 1 : .8,
-    votes: count
+    id: 'the_vault_review',
+    label: 'The Vault',
+    score,
+    rawScore: score,
+    weight: reviewRoom?._arkkadiaCommunityReview ? 1.05 : 1.25
   };
 }
 
@@ -7335,8 +7401,8 @@ function globalSourcesForRoom(room) {
       stale: !!source.stale
     });
   });
-  const community = communitySourceForRoom(room);
-  if (community) sources.push(community);
+  const vaultReview = theVaultReviewSourceForRoom(room);
+  if (vaultReview) sources.push(vaultReview);
   return sources;
 }
 
@@ -7350,7 +7416,7 @@ function ratingConfidenceForSources(sources) {
   if (!count) return 0;
   let confidence = count === 1 ? .72 : count === 2 ? .88 : count === 3 ? .96 : 1;
   if (count === 1 && usable[0].id === 'todoescaperooms') confidence = .62;
-  if (usable.some(source => ['escape_collector','giba','ocioterror','the_vault_community'].includes(source.id))) {
+  if (usable.some(source => ['giba','ocioterror','the_vault_review'].includes(source.id))) {
     confidence += .03;
   }
   const votes = usable.map(source => parseInt(source.votes || 0, 10) || 0);
@@ -7462,12 +7528,12 @@ function renderRanking() {
     return (a.room.nombre || '').localeCompare(b.room.nombre || '');
   });
   const medals = ['gold','silver','bronze'], emoji = ['🥇','🥈','🥉'];
-  const votedCount = rows.filter(({ room }) => voteStatsForRoom(room).count > 0).length;
+  const vaultReviewCount = rows.filter(({ global }) => global.sources.some(source => source.id === 'the_vault_review')).length;
   const multiSourceCount = rows.filter(({ global }) => global.sourceCount > 1).length;
   const info = document.getElementById('result-info-rank');
   const terrorLabel = rankTerrorFilter === 'only' ? 'solo terror' : rankTerrorFilter === 'no' ? 'sin terror' : 'todos';
   const communityLabel = rankCommunityFilter || 'todas las comunidades';
-  if (info) info.textContent = `${rows.length} salas con nota global · ${terrorLabel} · ${multiSourceCount} con varias fuentes · ${votedCount} con votos de comunidad`;
+  if (info) info.textContent = `${rows.length} salas con nota global · ${terrorLabel} · ${multiSourceCount} con varias fuentes · ${vaultReviewCount} con review The Vault`;
 
   document.getElementById('ranking-table').innerHTML = `
     <thead><tr>
@@ -7489,7 +7555,7 @@ function renderRanking() {
         <td data-label="Ciudad">${escapeHtml(location)}</td>
       </tr>`;
     }).join('')}</tbody>`;
-  if (info) info.textContent = `${rows.length} salas con nota global - ${terrorLabel} - ${communityLabel} - ${multiSourceCount} con varias fuentes - ${votedCount} con votos de comunidad`;
+  if (info) info.textContent = `${rows.length} salas con nota global - ${terrorLabel} - ${communityLabel} - ${multiSourceCount} con varias fuentes - ${vaultReviewCount} con review The Vault`;
 }
 
 function registerServiceWorker() {

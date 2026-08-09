@@ -57,7 +57,8 @@ Firebase
 ├── escape_rooms_tracker_mejorado.xlsx
 ├── convert.py
 ├── images/
-│   ├── ec-all/
+│   ├── Hechos/
+│   ├── brand/
 │   └── awards/
 │       ├── 10escapes-logo.png
 │       ├── escape-room-awards-logo.png
@@ -66,8 +67,9 @@ Firebase
 │   ├── build_catalog.py
 │   ├── build_terpeca_awards.py
 │   ├── build_extra_awards.py
-│   ├── download_escape_collector_catalog.py
-│   └── download_images.py
+│   ├── build_external_ratings.py
+│   ├── build_seo_pages.py
+│   └── sanitize_public_data.py
 └── .github/
     └── workflows/
         └── update-data.yml
@@ -231,12 +233,13 @@ Fuentes actuales:
 - https://escaperoomawardsoficial.com/
 - https://www.gibaescape.com/proyectos/escape-room-giba-awards
 
-## Imágenes
+## Imagenes
 
-Las imágenes de salas se guardan localmente en:
+Las imagenes de catalogo se mantienen vacias salvo origen propio o autorizacion expresa.
+Las fotos propias de reviews se guardan en:
 
 ```text
-images/ec-all/
+images/Hechos/
 ```
 
 Los logos de premios se guardan en:
@@ -245,7 +248,7 @@ Los logos de premios se guardan en:
 images/awards/
 ```
 
-Si una sala no tiene imagen, la web muestra un fallback visual con la inicial.
+Si una sala no tiene imagen, la web muestra un fallback visual propio.
 
 ## Recomendador
 
@@ -482,23 +485,16 @@ http://localhost:8765/
 python convert.py
 ```
 
-### Regenerar catálogo
+### Catalogo
 
 ```bash
 python scripts/build_catalog.py
 ```
 
-### Descargar/actualizar catálogo desde Escape Collector
-
-```bash
-python scripts/download_escape_collector_catalog.py
-```
-
-### Descargar imágenes desde CSV
-
-```bash
-python scripts/download_images.py image_sources.ec-all.csv
-```
+El catalogo publicable no se regenera desde agregadores. Se reconstruye y valida
+en `C:\Users\Isaac\Documents\SCAPEROOMS\thevault-reconstruction-700` usando
+fuentes oficiales. Tras pasar `scripts\validate_reconstruction.py`, se copia
+`catalog.json` validado a esta carpeta.
 
 ### Regenerar TERPECA
 

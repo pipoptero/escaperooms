@@ -165,7 +165,6 @@ def room_url_slug(room):
 def source_label(source_id, meta):
     labels = meta.get("sources", {}) if isinstance(meta, dict) else {}
     return labels.get(source_id, {}).get("label") or {
-        "escape_collector": "Escape Collector",
         "giba": "Giba Escape",
         "ocioterror": "OcioTerror",
         "todoescaperooms": "TodoEscapeRooms",

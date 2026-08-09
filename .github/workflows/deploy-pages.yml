@@ -34,7 +34,8 @@ jobs:
 
       - name: Generate Firebase config
         run: |
-          cat > firebase-config.js <<'EOF'
+          mkdir -p public-site
+          cat > public-site/firebase-config.js <<'EOF'
           window.THE_VAULT_FIREBASE_CONFIG = {
             apiKey: '${{ secrets.FIREBASE_API_KEY }}',
             authDomain: '${{ secrets.FIREBASE_AUTH_DOMAIN }}',
@@ -44,13 +45,28 @@ jobs:
           };
           EOF
 
+      - name: Prepare public site artifact
+        run: |
+          mkdir -p public-site
+          cp index.html public-site/
+          cp CNAME data.json catalog.json external_ratings.json extra_awards.json terpeca_awards.json public-site/
+          cp review_photos.json room_aliases.json room_locations.json robots.txt sitemap.xml public-site/
+          cp site.webmanifest service-worker.js public-site/
+          cp -R aviso-legal condiciones cookies privacidad ranking reviews salas public-site/
+          mkdir -p public-site/images
+          rsync -a --delete \
+            --exclude 'ec-all/' \
+            --exclude '*.psd' \
+            --exclude '*.ai' \
+            images/ public-site/images/
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: public-site
 
       - name: Deploy to GitHub Pages
         id: deployment
