@@ -1,7 +1,16 @@
 {
   "aliases": {
     "exorcista": "seccion_esoterica_exorcista",
-    "whitechapel": "la_historia_de_charlotte"
+    "whitechapel": "la_historia_de_charlotte",
+    "room_whitechapel": "la_historia_de_charlotte",
+    "jaipur": "el_secreto_de_jaipur",
+    "room_angie": "roomangie_2",
+    "room_angie_2": "roomangie_2",
+    "tao_room_escape": "tao",
+    "aradia": "el_secreto_de_los_krugger",
+    "aradia_insomnia_hotel": "el_secreto_de_los_krugger",
+    "xperiment": "el_secreto_de_los_krugger",
+    "xperiment_insomnia_hotel": "el_secreto_de_los_krugger"
   },
   "rooms": {
     "seccion_esoterica_exorcista": {
@@ -23,6 +32,48 @@
         "La Historia de Charlotte"
       ],
       "notes": "La review historica se publico como WHITECHAPEL, pero la sala del catalogo es La Historia de Charlotte."
+    },
+    "el_secreto_de_jaipur": {
+      "canonical_name": "El Secreto de Jaipur",
+      "canonical_company": "Kadabra Escape",
+      "aliases": [
+        "Jaipur",
+        "El Secreto de Jaipur"
+      ],
+      "notes": "La review historica se publico como Jaipur; el catalogo recoge el nombre completo."
+    },
+    "roomangie_2": {
+      "canonical_name": "Room Angie 2",
+      "canonical_company": "Ilusium Room Escape",
+      "aliases": [
+        "Room Angie",
+        "Room Angie 2",
+        "room-angie",
+        "roomangie-2"
+      ],
+      "notes": "Unifica variantes con y sin guion del mismo juego."
+    },
+    "tao": {
+      "canonical_name": "Tao",
+      "canonical_company": "Virus Room Escape",
+      "aliases": [
+        "Tao",
+        "Tao Room Escape"
+      ],
+      "notes": "La review historica se publico como Tao Room Escape; el catalogo usa Tao."
+    },
+    "el_secreto_de_los_krugger": {
+      "canonical_name": "El Secreto de los Krugger",
+      "canonical_company": "Insomnia Corporation",
+      "aliases": [
+        "El secreto de los Krugger",
+        "El Secreto de los Krugger",
+        "Aradia",
+        "Aradia (Insomnia Hotel)",
+        "Xperiment",
+        "Xperiment (Insomnia Hotel)"
+      ],
+      "notes": "Aradia y Xperiment forman parte de la experiencia global El Secreto de los Krugger."
     }
   }
 }

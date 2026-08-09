@@ -2056,6 +2056,7 @@ const ARKKADIA_REVIEW_PRIORITY = [
 let REVIEW_ROOM_ALIASES = {
   whitechapel: 'la_historia_de_charlotte'
 };
+let REVIEW_ROOM_META = {};
 
 let PENDIENTES = [], HECHOS = [], CATALOGO = [], TERPECA_AWARDS = [], EXTRA_AWARDS = [], EXTERNAL_RATINGS = {}, EXTERNAL_RATINGS_META = {}, REVIEW_PHOTOS = {}, ROOM_LOCATIONS = {}, sortPend = 'rating', sortMine = 'rating', sortCatalogo = 'awards', sortRank = 'global', rankTerrorFilter = 'all', rankCommunityFilter = '';
 const CATALOG_PAGE_SIZE = 120;
@@ -2250,6 +2251,20 @@ function reviewIdentityKeys(room) {
 function reviewRoomKey(room) {
   return reviewIdentityKeys(room)[0] || userRoomKey(room);
 }
+function canonicalReviewRoomMeta(value) {
+  const key = canonicalReviewRoomKey(value);
+  return REVIEW_ROOM_META[key] || {};
+}
+function canonicalizeReviewRoom(room) {
+  if (!room) return room;
+  const meta = canonicalReviewRoomMeta(reviewRoomKey(room));
+  if (!meta.canonical_name && !meta.canonical_company) return room;
+  return {
+    ...room,
+    nombre: meta.canonical_name || room.nombre,
+    empresa: meta.canonical_company || room.empresa
+  };
+}
 function roomMatchesReviewSlug(room, slug) {
   const key = canonicalReviewRoomKey(slug);
   return !!key && reviewIdentityKeys(room).includes(key);
@@ -2382,10 +2397,10 @@ function userStateTags(room) {
 }
 
 function mergeRooms(primary, extra, predicate) {
-  const seen = new Set(primary.map(userRoomKey));
+  const seen = new Set(primary.map(reviewRoomKey));
   const result = [...primary];
   extra.filter(predicate).forEach(room => {
-    const key = userRoomKey(room);
+    const key = reviewRoomKey(room);
     if (!key || seen.has(key)) return;
     result.push(room);
     seen.add(key);
@@ -2396,7 +2411,7 @@ function mergeRooms(primary, extra, predicate) {
 function uniqueRooms(rooms) {
   const seen = new Set();
   return rooms.filter(room => {
-    const key = userRoomKey(room);
+    const key = reviewRoomKey(room);
     if (!key || seen.has(key)) return false;
     seen.add(key);
     return true;
@@ -2518,7 +2533,7 @@ function arkkadiaCommunityReviewRooms(sources = null) {
       _arkkadiaCommunityReview: true,
       _reviewAuthorName: authorName
     };
-    return merged.nombre ? merged : null;
+    return merged.nombre ? canonicalizeReviewRoom(merged) : null;
   }).filter(Boolean);
 }
 
@@ -2529,15 +2544,15 @@ function reviewRooms() {
   const byKey = new Map();
   HECHOS.forEach(room => {
     const key = reviewRoomKey(room);
-    if (key) byKey.set(key, room);
+    if (key) byKey.set(key, canonicalizeReviewRoom(room));
   });
   publishedRooms.forEach(room => {
     const key = reviewRoomKey(room);
-    if (key) byKey.set(key, room);
+    if (key) byKey.set(key, canonicalizeReviewRoom(room));
   });
   arkkadiaCommunityReviewRooms(roomSources).forEach(room => {
     const key = reviewRoomKey(room);
-    if (key && !byKey.has(key)) byKey.set(key, room);
+    if (key && !byKey.has(key)) byKey.set(key, canonicalizeReviewRoom(room));
   });
   REVIEW_ROOMS_CACHE = [...byKey.values()];
   return REVIEW_ROOMS_CACHE;
@@ -5371,11 +5386,26 @@ async function loadRoomAliases() {
     if (!r.ok) return;
     const data = await r.json();
     const aliases = data.aliases || {};
+    const rooms = data.rooms || {};
     REVIEW_ROOM_ALIASES = Object.fromEntries(
       Object.entries({ ...REVIEW_ROOM_ALIASES, ...aliases })
         .map(([alias, target]) => [slugify(alias), slugify(target)])
         .filter(([alias, target]) => alias && target)
     );
+    REVIEW_ROOM_META = Object.fromEntries(
+      Object.entries(rooms)
+        .map(([key, meta]) => [slugify(key), meta || {}])
+        .filter(([key]) => key)
+    );
+    Object.entries(rooms).forEach(([target, meta]) => {
+      const targetKey = slugify(target);
+      if (!targetKey) return;
+      REVIEW_ROOM_ALIASES[targetKey] = targetKey;
+      (meta?.aliases || []).forEach(alias => {
+        const aliasKey = slugify(alias);
+        if (aliasKey) REVIEW_ROOM_ALIASES[aliasKey] = targetKey;
+      });
+    });
     invalidateReviewRoomsCache();
   } catch (e) {
     console.warn('No se pudo cargar room_aliases.json:', e.message);
