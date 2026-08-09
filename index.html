@@ -4136,7 +4136,7 @@ function renderSettingsEditHtml(message = '') {
       ${adminReviewField('admin-review-gamemaster', 'Game Master', '0-10', false, 'inputmode="decimal"', editingReview.gamemaster || '')}
       <div class="wide">
         <label class="profile-field-label" for="admin-review-text">Texto review</label>
-        <textarea class="profile-textarea" id="admin-review-text" maxlength="3000" placeholder="Review del grupo, sin spoilers.">${escapeHtml(editingReview.descripcion || '')}</textarea>
+        <textarea class="profile-textarea" id="admin-review-text" maxlength="4000" placeholder="Review del grupo, sin spoilers.">${escapeHtml(editingReview.descripcion || '')}</textarea>
       </div>
     </div>
     <div class="profile-row" style="margin-top:10px">
@@ -5160,7 +5160,7 @@ function reviewFormHtml(room, kind, slug) {
     <div class="review-score-grid">
       ${REVIEW_CATEGORIES.map(([id, label]) => `<div class="review-score-row"><span class="review-score-label">${label}</span>${reviewStarsHtml(widgetId, id, review.scores?.[id] || 0, true)}</div>`).join('')}
     </div>
-    <textarea class="review-textarea" id="review-text-${cssSafe(slug)}" maxlength="1200" placeholder="Tu opinión, sin spoilers. Opcional.">${escapeHtml(review.text || '')}</textarea>
+    <textarea class="review-textarea" id="review-text-${cssSafe(slug)}" maxlength="4000" placeholder="Tu opinión, sin spoilers. Opcional.">${escapeHtml(review.text || '')}</textarea>
     <div class="review-form-actions">
       <span class="review-form-status" id="review-status-${cssSafe(slug)}"></span>
       <button class="auth-btn" type="button" onclick="saveRoomReview('${kind}','${key}')">Guardar reseña</button>
