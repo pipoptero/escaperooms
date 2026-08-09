@@ -2418,8 +2418,43 @@ function uniqueRooms(rooms) {
   });
 }
 
+function labelFromUserRoomKey(key) {
+  return String(key || '')
+    .split('_')
+    .filter(Boolean)
+    .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+}
+
+function personalStateRooms() {
+  return Object.entries(USER_ROOM_STATES || {})
+    .filter(([, state]) => state && (state.pending || state.done))
+    .map(([key, state]) => ({
+      id: state.id || key,
+      nombre: state.nombre || state.name || labelFromUserRoomKey(key),
+      empresa: state.empresa || state.company || '',
+      ciudad: state.ciudad || state.city || '',
+      provincia: state.provincia || state.province || '',
+      comunidad: state.comunidad || state.community || '',
+      pais: state.pais || state.country || 'España',
+      web: state.web || '',
+      duracion: state.duracion || state.duration || '',
+      min_personas: state.min_personas || state.minPeople || '',
+      max_personas: state.max_personas || state.maxPeople || '',
+      dificultad: state.dificultad || state.difficulty || '',
+      terror: state.terror ?? null,
+      descripcion: 'Ficha personal recuperada desde tu cuenta. La sala no está disponible en el catálogo público actual hasta que podamos verificarla con fuentes propias.',
+      imagen: '',
+      rating: null,
+      votos: null,
+      verificado: false,
+      estado_verificacion: 'recuperada_personal',
+      _personalRecovered: true
+    }));
+}
+
 function personalRoomSources() {
-  return uniqueRooms([...CATALOGO, ...PENDIENTES, ...reviewRooms()]);
+  return uniqueRooms([...CATALOGO, ...PENDIENTES, ...reviewRooms(), ...personalStateRooms()]);
 }
 
 function personalPendingRooms() {
@@ -2756,8 +2791,19 @@ async function saveUserRoomState(room, patch) {
   const previous = USER_ROOM_STATES[key] || {};
   const next = {
     ...previous,
+    id: room.id || previous.id || key,
     nombre: room.nombre || previous.nombre || '',
     empresa: room.empresa || previous.empresa || '',
+    ciudad: room.ciudad || previous.ciudad || '',
+    provincia: room.provincia || previous.provincia || '',
+    comunidad: room.comunidad || previous.comunidad || '',
+    pais: room.pais || previous.pais || 'España',
+    web: room.web || previous.web || '',
+    duracion: room.duracion || previous.duracion || '',
+    min_personas: room.min_personas || previous.min_personas || '',
+    max_personas: room.max_personas || previous.max_personas || '',
+    dificultad: room.dificultad || previous.dificultad || '',
+    terror: room.terror ?? previous.terror ?? null,
     pending: !!previous.pending,
     done: !!previous.done,
     ...patch,
@@ -6427,12 +6473,20 @@ function roomKey(room) {
 }
 
 function findDetailRoom(kind, key) {
-  const list = kind === 'catalogo' ? CATALOGO : kind === 'hechos' ? reviewRooms() : PENDIENTES;
+  const recovered = personalStateRooms();
+  const list = kind === 'catalogo' ? [...CATALOGO, ...recovered]
+    : kind === 'hechos' ? [...reviewRooms(), ...recovered]
+    : [...PENDIENTES, ...recovered];
   return list.find(room => roomKey(room) === key || (kind === 'hechos' && roomMatchesReviewSlug(room, key))) || null;
 }
 
 function detailRefForRoom(room, order = ['catalogo', 'pendientes', 'hechos']) {
-  const lists = { catalogo: CATALOGO, pendientes: PENDIENTES, hechos: reviewRooms() };
+  const recovered = personalStateRooms();
+  const lists = {
+    catalogo: [...CATALOGO, ...recovered],
+    pendientes: [...PENDIENTES, ...recovered],
+    hechos: [...reviewRooms(), ...recovered]
+  };
   const exactKey = roomKey(room);
   for (const kind of order) {
     if ((lists[kind] || []).some(item => roomKey(item) === exactKey)) return { kind, key: exactKey };
