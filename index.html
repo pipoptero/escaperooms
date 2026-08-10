@@ -2098,6 +2098,7 @@ let ESCAPIST_LEAFLET_MAP = null;
 let LAST_LIVE_REFRESH_AT = 0;
 let LIVE_REFRESH_IN_PROGRESS = false;
 let LIVE_REFRESH_EVENTS_READY = false;
+let PHOTO_LIGHTBOX_GALLERIES = {};
 const LIVE_REFRESH_MIN_INTERVAL = 5 * 60 * 1000;
 
 function invalidateReviewRoomsCache() {
@@ -6644,14 +6645,27 @@ function detailImageHtml(room, kind) {
 }
 
 function reviewPhotosEntryFor(room) {
-  const keys = [
+  const seedKeys = [
     slugify(room.nombre || ''),
     slugify(room.id || ''),
     slugify(`${room.nombre || ''} ${room.empresa || ''}`),
     ...reviewIdentityKeys(room)
   ].filter(Boolean);
-  for (const key of keys) {
-    if (REVIEW_PHOTOS[key]?.photos?.length) return { key, photos: REVIEW_PHOTOS[key].photos };
+  const keys = [...new Set(seedKeys.flatMap(key => reviewCacheKeysForSlug(key)))];
+  const photos = [];
+  const seen = new Set();
+  keys.forEach(key => {
+    (REVIEW_PHOTOS[key]?.photos || []).forEach(photo => {
+      const src = photo?.src || '';
+      if (!src || seen.has(src)) return;
+      seen.add(src);
+      photos.push(photo);
+    });
+  });
+  if (photos.length) {
+    const key = `review_${reviewRoomKey(room) || keys[0] || 'gallery'}`;
+    PHOTO_LIGHTBOX_GALLERIES[key] = photos;
+    return { key, photos };
   }
   return null;
 }
@@ -6681,7 +6695,7 @@ function openPhotoLightbox(event, galleryKey, index = 0) {
     event.preventDefault();
     event.stopPropagation();
   }
-  const photos = REVIEW_PHOTOS[galleryKey]?.photos || [];
+  const photos = PHOTO_LIGHTBOX_GALLERIES[galleryKey] || REVIEW_PHOTOS[galleryKey]?.photos || [];
   if (!photos.length) return;
   PHOTO_LIGHTBOX_ITEMS = photos;
   PHOTO_LIGHTBOX_INDEX = Math.max(0, Math.min(Number(index) || 0, photos.length - 1));
