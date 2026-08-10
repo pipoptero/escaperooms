@@ -2516,6 +2516,7 @@ function publishedReviewRooms() {
       roomKey: key,
       _adminPublished: true,
       _adminReviewId: id,
+      createdAt: record.createdAt || review.createdAt || '',
       publishedAt: record.publishedAt || review.publishedAt || '',
       updatedAt: record.updatedAt || review.updatedAt || ''
     };
@@ -2559,6 +2560,20 @@ function scoreStarsToTenValue(value) {
   return stars > 0 ? scoreToTen(stars).toFixed(1).replace('.0', '') : '';
 }
 
+function reviewTimeValue(review) {
+  const candidates = [review?._latestReviewAt, review?.updatedAt, review?.publishedAt, review?.createdAt, review?.fecha, review?.date];
+  for (const value of candidates) {
+    if (value === null || value === undefined || value === '') continue;
+    if (typeof value === 'number' || /^\d+$/.test(String(value))) {
+      const n = Number(value);
+      if (Number.isFinite(n) && n > 0) return n < 10000000000 ? n * 1000 : n;
+    }
+    const parsed = Date.parse(String(value));
+    if (Number.isFinite(parsed)) return parsed;
+  }
+  return 0;
+}
+
 function localRoomForReviewSlug(slug, review = {}, sources = null) {
   const key = slugify(review.roomName || review.nombre || '');
   const candidates = sources || uniqueRooms([...CATALOGO, ...PENDIENTES, ...HECHOS, ...publishedReviewRooms()]);
@@ -2575,6 +2590,7 @@ function arkkadiaCommunityReviewRooms(sources = null) {
       .sort((a, b) => a.priority - b.priority || (b.review.updatedAt || 0) - (a.review.updatedAt || 0));
     const selected = candidates[0]?.review;
     if (!selected) return null;
+    const latestReviewAt = candidates.reduce((max, item) => Math.max(max, reviewTimeValue(item.review)), 0);
 
     const base = localRoomForReviewSlug(slug, selected, sources) || {};
     const authorName = reviewAuthorName(selected)
@@ -2594,7 +2610,9 @@ function arkkadiaCommunityReviewRooms(sources = null) {
       ambientacion: scoreStarsToTenValue(scores.ambientacion) || base.ambientacion || '',
       jugabilidad: scoreStarsToTenValue(scores.jugabilidad) || base.jugabilidad || '',
       gamemaster: scoreStarsToTenValue(scores.gamemaster) || base.gamemaster || '',
+      createdAt: selected.createdAt || base.createdAt || '',
       updatedAt: selected.updatedAt || base.updatedAt || '',
+      _latestReviewAt: latestReviewAt || selected.updatedAt || selected.createdAt || base.updatedAt || '',
       _arkkadiaCommunityReview: true,
       _reviewAuthorName: authorName
     };
@@ -2607,9 +2625,9 @@ function reviewRooms() {
   const publishedRooms = publishedReviewRooms();
   const roomSources = uniqueRooms([...CATALOGO, ...PENDIENTES, ...HECHOS, ...publishedRooms]);
   const byKey = new Map();
-  HECHOS.forEach(room => {
+  HECHOS.forEach((room, index) => {
     const key = reviewRoomKey(room);
-    if (key) byKey.set(key, canonicalizeReviewRoom(room));
+    if (key) byKey.set(key, canonicalizeReviewRoom({ ...room, _reviewOrder: index + 1 }));
   });
   publishedRooms.forEach(room => {
     const key = reviewRoomKey(room);
@@ -5790,11 +5808,19 @@ function renderVaultGuide() {
   if (latest) latest.innerHTML = vaultLatestReviewsHtml();
 }
 
+function reviewPublishedTime(room) {
+  return reviewTimeValue(room);
+}
+
 function vaultLatestReviewsHtml() {
   const items = reviewRooms()
     .filter(room => room && room.nombre)
-    .slice(-3)
-    .reverse();
+    .sort((a, b) => {
+      const timeDiff = reviewPublishedTime(b) - reviewPublishedTime(a);
+      if (timeDiff) return timeDiff;
+      return (Number(b._reviewOrder) || 0) - (Number(a._reviewOrder) || 0);
+    })
+    .slice(0, 3);
   if (!items.length) return '<div class="review-empty">Aun no hay reviews publicadas.</div>';
   return items.map(room => {
     const key = jsString(roomKey(room));
