@@ -2056,6 +2056,7 @@ const ARKKADIA_REVIEW_PRIORITY = [
 let REVIEW_ROOM_ALIASES = {
   whitechapel: 'la_historia_de_charlotte'
 };
+let REVIEW_ROOM_ALIAS_GROUPS = {};
 let REVIEW_ROOM_META = {};
 
 let PENDIENTES = [], HECHOS = [], CATALOGO = [], TERPECA_AWARDS = [], EXTRA_AWARDS = [], EXTERNAL_RATINGS = {}, EXTERNAL_RATINGS_META = {}, REVIEW_PHOTOS = {}, ROOM_LOCATIONS = {}, sortPend = 'rating', sortMine = 'rating', sortCatalogo = 'awards', sortRank = 'global', rankTerrorFilter = 'all', rankCommunityFilter = '';
@@ -2233,7 +2234,8 @@ function roomVoteKeys(room) {
     roomVoteSlug(room),
     slugify(room.nombre || ''),
     slugify(room.id || ''),
-    slugify(room.empresa || '')
+    slugify(room.empresa || ''),
+    ...reviewIdentityKeys(room)
   ].filter(Boolean))];
 }
 function canonicalReviewRoomKey(value) {
@@ -2245,6 +2247,7 @@ function reviewIdentityKeys(room) {
     userRoomKey(room),
     slugify(room.id || ''),
     slugify(room.nombre || ''),
+    slugify(`${room.nombre || ''} ${room.empresa || ''}`),
     room.roomKey || ''
   ].map(canonicalReviewRoomKey).filter(Boolean))];
 }
@@ -2255,14 +2258,36 @@ function canonicalReviewRoomMeta(value) {
   const key = canonicalReviewRoomKey(value);
   return REVIEW_ROOM_META[key] || {};
 }
+function catalogRoomForReview(room) {
+  if (!room || !Array.isArray(CATALOGO) || !CATALOGO.length) return null;
+  const keys = new Set(reviewIdentityKeys(room));
+  return CATALOGO.find(candidate =>
+    reviewIdentityKeys(candidate).some(key => keys.has(key))
+  ) || null;
+}
 function canonicalizeReviewRoom(room) {
   if (!room) return room;
-  const meta = canonicalReviewRoomMeta(reviewRoomKey(room));
-  if (!meta.canonical_name && !meta.canonical_company) return room;
-  return {
+  const catalogRoom = catalogRoomForReview(room);
+  const enriched = catalogRoom ? {
+    ...catalogRoom,
     ...room,
-    nombre: meta.canonical_name || room.nombre,
-    empresa: meta.canonical_company || room.empresa
+    id: room.id || catalogRoom.id,
+    imagen: room.imagen || catalogRoom.imagen,
+    image: room.image || catalogRoom.image,
+    web: room.web || catalogRoom.web,
+    provincia: room.provincia || catalogRoom.provincia,
+    comunidad: room.comunidad || catalogRoom.comunidad,
+    min_personas: room.min_personas || catalogRoom.min_personas,
+    max_personas: room.max_personas || catalogRoom.max_personas,
+    duracion_min: room.duracion_min || catalogRoom.duracion_min,
+    dificultad: room.dificultad || catalogRoom.dificultad
+  } : room;
+  const meta = canonicalReviewRoomMeta(reviewRoomKey(enriched));
+  if (!meta.canonical_name && !meta.canonical_company) return enriched;
+  return {
+    ...enriched,
+    nombre: meta.canonical_name || enriched.nombre,
+    empresa: meta.canonical_company || enriched.empresa
   };
 }
 function roomMatchesReviewSlug(room, slug) {
@@ -2272,10 +2297,7 @@ function roomMatchesReviewSlug(room, slug) {
 function reviewCacheKeysForSlug(slug) {
   const key = slugify(slug || '');
   const canonical = canonicalReviewRoomKey(key);
-  const keys = new Set([key, canonical].filter(Boolean));
-  Object.entries(REVIEW_ROOM_ALIASES).forEach(([alias, target]) => {
-    if (target === canonical) keys.add(alias);
-  });
+  const keys = new Set([key, canonical, ...(REVIEW_ROOM_ALIAS_GROUPS[canonical] || [])].filter(Boolean));
   return [...keys];
 }
 function reviewsForSlug(slug) {
@@ -2480,9 +2502,10 @@ function currentDoneRooms() {
 }
 
 function publishedReviewRooms() {
-  return Object.entries(ADMIN_PUBLISHED_REVIEWS || {}).map(([id, record]) => {
+  const byKey = new Map();
+  Object.entries(ADMIN_PUBLISHED_REVIEWS || {}).forEach(([id, record]) => {
     const review = record?.review || record || {};
-    if (!review || (record.status && record.status !== 'published')) return null;
+    if (!review || (record.status && record.status !== 'published')) return;
     const key = record.roomKey || review.roomKey || userRoomKey(review) || id;
     const local = [...CATALOGO, ...PENDIENTES, ...HECHOS].find(room => roomMatchesReviewSlug(room, key)) || {};
     const merged = {
@@ -2495,8 +2518,14 @@ function publishedReviewRooms() {
       publishedAt: record.publishedAt || review.publishedAt || '',
       updatedAt: record.updatedAt || review.updatedAt || ''
     };
-    return merged.nombre ? merged : null;
-  }).filter(Boolean);
+    if (!merged.nombre) return;
+    const canonicalKey = reviewRoomKey(merged);
+    const previous = byKey.get(canonicalKey);
+    const previousTime = Number(previous?.updatedAt || previous?.publishedAt || 0);
+    const mergedTime = Number(merged.updatedAt || merged.publishedAt || 0);
+    if (!previous || mergedTime >= previousTime) byKey.set(canonicalKey, merged);
+  });
+  return [...byKey.values()];
 }
 
 function reviewAuthorName(review) {
@@ -4215,12 +4244,16 @@ function parseAdminScore(value) {
 
 function currentAdminReviewKey() {
   const name = adminReviewValue('admin-review-name') || adminEditingDraft()?.review?.nombre || '';
-  return slugify(name);
+  return canonicalReviewRoomKey(name);
 }
 
 function currentAdminPublishedReview() {
   const key = currentAdminReviewKey();
-  return key ? ADMIN_PUBLISHED_REVIEWS[key] || null : null;
+  if (!key) return null;
+  for (const candidateKey of reviewCacheKeysForSlug(key)) {
+    if (ADMIN_PUBLISHED_REVIEWS[candidateKey]) return ADMIN_PUBLISHED_REVIEWS[candidateKey];
+  }
+  return null;
 }
 
 function adminReviewFromForm() {
@@ -4244,7 +4277,7 @@ function adminReviewFromForm() {
   return {
     selectedRoom,
     review,
-    roomKey: userRoomKey(review)
+    roomKey: selectedRoom ? reviewRoomKey(selectedRoom) : canonicalReviewRoomKey(userRoomKey(review))
   };
 }
 
@@ -5357,10 +5390,36 @@ async function loadCatalogo() {
     if (!r.ok) return;
     const d = await r.json();
     CATALOGO = d.catalogo || [];
+    buildAutomaticReviewAliasesFromCatalog();
     invalidateReviewRoomsCache();
   } catch(e) {
     console.warn('No se pudo cargar catalog.json:', e.message);
   }
+}
+
+function buildAutomaticReviewAliasesFromCatalog() {
+  CATALOGO.forEach(room => {
+    const idKey = slugify(room.id || '');
+    const nameKey = slugify(room.nombre || '');
+    if (!idKey || !nameKey || idKey === nameKey) return;
+    if (idKey.replace(/_/g, '') !== nameKey.replace(/_/g, '')) return;
+    REVIEW_ROOM_ALIASES[idKey] = REVIEW_ROOM_ALIASES[idKey] || idKey;
+    REVIEW_ROOM_ALIASES[nameKey] = REVIEW_ROOM_ALIASES[idKey] || idKey;
+  });
+  rebuildReviewAliasGroups();
+}
+
+function rebuildReviewAliasGroups() {
+  const groups = {};
+  Object.entries(REVIEW_ROOM_ALIASES).forEach(([alias, target]) => {
+    const canonical = canonicalReviewRoomKey(target);
+    if (!canonical) return;
+    groups[canonical] = groups[canonical] || new Set([canonical]);
+    if (alias) groups[canonical].add(alias);
+  });
+  REVIEW_ROOM_ALIAS_GROUPS = Object.fromEntries(
+    Object.entries(groups).map(([key, values]) => [key, [...values]])
+  );
 }
 
 async function loadTerpecaAwards() {
@@ -5452,6 +5511,7 @@ async function loadRoomAliases() {
         if (aliasKey) REVIEW_ROOM_ALIASES[aliasKey] = targetKey;
       });
     });
+    rebuildReviewAliasGroups();
     invalidateReviewRoomsCache();
   } catch (e) {
     console.warn('No se pudo cargar room_aliases.json:', e.message);
@@ -7303,7 +7363,7 @@ function renderCatalogo() {
 function rankingRooms() {
   const byKey = new Map();
   const mergeRoom = (room, source) => {
-    const key = userRoomKey(room) || slugify(room.nombre || room.empresa || source);
+    const key = reviewRoomKey(room) || slugify(room.nombre || room.empresa || source);
     if (!key) return;
     const current = byKey.get(key) || { _rankSources: new Set() };
     const merged = { ...current };
@@ -7437,10 +7497,26 @@ function reviewScoreMeta(room) {
 
 // Ranking global: fuentes externas + reviews The Vault.
 function externalRatingForRoom(room) {
-  for (const key of roomVoteKeys(room)) {
-    if (EXTERNAL_RATINGS[key]) return EXTERNAL_RATINGS[key];
+  const keys = new Set(roomVoteKeys(room));
+  reviewIdentityKeys(room).forEach(key => reviewCacheKeysForSlug(key).forEach(aliasKey => keys.add(aliasKey)));
+  const merged = { sources: {} };
+  let found = false;
+  for (const key of keys) {
+    const rating = EXTERNAL_RATINGS[key];
+    if (!rating?.sources) continue;
+    found = true;
+    Object.entries(rating.sources).forEach(([sourceId, source]) => {
+      const current = merged.sources[sourceId];
+      const currentVotes = parseInt(current?.votes || 0, 10) || 0;
+      const nextVotes = parseInt(source?.votes || 0, 10) || 0;
+      const currentScore = parseFloat(current?.score || 0) || 0;
+      const nextScore = parseFloat(source?.score || 0) || 0;
+      if (!current || nextVotes > currentVotes || (nextVotes === currentVotes && nextScore > currentScore)) {
+        merged.sources[sourceId] = source;
+      }
+    });
   }
-  return null;
+  return found ? merged : null;
 }
 
 function externalSourceLabel(sourceId) {
@@ -7535,7 +7611,7 @@ function ratingAwardBonusForRoom(room) {
 }
 
 function globalRatingCacheKey(room) {
-  return `${userRoomKey(room)}|${compactKey(room.empresa || '')}`;
+  return `${reviewRoomKey(room)}|${compactKey(room.empresa || '')}`;
 }
 
 function globalRatingForRoom(room) {

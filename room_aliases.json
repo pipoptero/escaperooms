@@ -1,16 +1,47 @@
 {
   "aliases": {
     "exorcista": "seccion_esoterica_exorcista",
+    "exorcista_terror_stories": "seccion_esoterica_exorcista",
+    "seccion_esoterismo_exorcista": "seccion_esoterica_exorcista",
+    "seccion_esoterismo_exorcista_terror_stories": "seccion_esoterica_exorcista",
+    "seccion_esoterica_exorcista_terror_stories": "seccion_esoterica_exorcista",
     "whitechapel": "la_historia_de_charlotte",
     "room_whitechapel": "la_historia_de_charlotte",
     "jaipur": "el_secreto_de_jaipur",
+    "jaipur_kadabra": "el_secreto_de_jaipur",
+    "el_secreto_de_jaipur_kadabra_escape": "el_secreto_de_jaipur",
     "room_angie": "roomangie_2",
     "room_angie_2": "roomangie_2",
+    "room_angie_ilusium_room_escape": "roomangie_2",
+    "room_angie_2_ilusium_room_escape": "roomangie_2",
+    "roomangie_2_ilusium_room_escape": "roomangie_2",
     "tao_room_escape": "tao",
+    "tao_virus_games": "tao",
+    "tao_room_escape_virus_games": "tao",
+    "roomions_virus_games": "roomions",
+    "night_shift": "nightshift",
+    "nightshift_crupont_legacy": "nightshift",
+    "night_shift_crupont_legacy": "nightshift",
+    "high_school": "highschool",
+    "high_school_unreal_room_escape": "highschool",
+    "highschool_unreal_room_escape": "highschool",
     "aradia": "el_secreto_de_los_krugger",
     "aradia_insomnia_hotel": "el_secreto_de_los_krugger",
     "xperiment": "el_secreto_de_los_krugger",
-    "xperiment_insomnia_hotel": "el_secreto_de_los_krugger"
+    "xperiment_insomnia_hotel": "el_secreto_de_los_krugger",
+    "el_secreto_de_los_krugger_insomnia_corp": "el_secreto_de_los_krugger",
+    "el_secreto_de_los_krugger_insomnia_corporation": "el_secreto_de_los_krugger",
+    "londium_saga_escape_room": "londium",
+    "londium_londium_escape_room": "londium",
+    "la_taberna_the_city_escape": "la_taberna",
+    "k_o_n_g_protocol_escape_barcelona": "k_o_n_g_protocol",
+    "jurasico_golden_pop": "jurasico",
+    "whitechapel_room_whitechapel": "la_historia_de_charlotte",
+    "la_historia_de_charlotte_room_whitechapel": "la_historia_de_charlotte",
+    "catacumbas_golden_pop": "catacumbas",
+    "encryptroom_encrypt": "encryptroom",
+    "encrypt_encrypt_escape_room_barcelona": "encryptroom",
+    "willy_el_tuerto_willy_el_tuerto_escape_room": "willy_el_tuerto"
   },
   "rooms": {
     "seccion_esoterica_exorcista": {
@@ -18,10 +49,22 @@
       "canonical_company": "Terror Stories",
       "aliases": [
         "Exorcista",
+        "Seccion Esoterismo: Exorcista",
+        "Sección Esoterismo: Exorcista",
         "Seccion Esoterica: Exorcista",
         "Sección Esotérica: Exorcista"
       ],
       "notes": "La review historica se publico como Exorcista; el catalogo recoge el nombre completo de la sala."
+    },
+    "highschool": {
+      "canonical_name": "High School",
+      "canonical_company": "Unreal Room Escape",
+      "aliases": [
+        "High School",
+        "HighSchool",
+        "highschool"
+      ],
+      "notes": "Unifica variantes con y sin espacio para evitar duplicados entre catalogo, reviews y Firebase."
     },
     "la_historia_de_charlotte": {
       "canonical_name": "La Historia de Charlotte",
@@ -61,6 +104,15 @@
         "Tao Room Escape"
       ],
       "notes": "La review historica se publico como Tao Room Escape; el catalogo usa Tao."
+    },
+    "nightshift": {
+      "canonical_name": "Night Shift",
+      "canonical_company": "Crupont Legacy",
+      "aliases": [
+        "Nightshift",
+        "Night Shift"
+      ],
+      "notes": "Unifica la review historica Nightshift con el nombre de catalogo Night Shift."
     },
     "el_secreto_de_los_krugger": {
       "canonical_name": "El Secreto de los Krugger",

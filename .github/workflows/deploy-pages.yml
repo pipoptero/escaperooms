@@ -55,7 +55,6 @@ jobs:
           cp -R aviso-legal condiciones cookies privacidad ranking reviews salas public-site/
           mkdir -p public-site/images
           rsync -a --delete \
-            --exclude 'ec-all/' \
             --exclude '*.psd' \
             --exclude '*.ai' \
             images/ public-site/images/

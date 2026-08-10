@@ -6,6 +6,7 @@
 firebase-config.js
 *.local.js
 reports/
+private/
 public-site/
 __pycache__/
 *.pyc
@@ -25,6 +26,7 @@ scripts/download_*.py
 scripts/enrich_*.py
 scripts/run_consensus_*.py
 scripts/sanitize_*.py
+scripts/optimize_catalog_covers.ps1
 image_sources*.csv
 
 # Local marketing workspace

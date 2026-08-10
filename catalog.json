@@ -40,14 +40,15 @@
       "fuente_tipo": "web_oficial_reescrita",
       "fuente_url": "https://obscuraexperiences.com/",
       "fuente_revisada": "2026-08-09",
-      "imagen": "images/generated-catalog/dark-city.png",
+      "imagen": "images/catalgo_propio_web_escape/optimized/dark-city.jpg",
       "rating": null,
       "votos": null,
       "verificado": true,
       "estado_verificacion": "verificada",
-      "imagen_fuente_tipo": "ia_generada",
-      "imagen_revisada": "2026-08-09",
-      "imagen_prompt_policy": "imagen original generada desde sinopsis/historia propia; sin logos reales ni texto legible"
+      "imagen_fuente_tipo": "web_oficial_manual_optimizada",
+      "imagen_revisada": "2026-08-10",
+      "imagen_policy": "Portada optimizada para el formato de tarjeta a partir de imagen incorporada manualmente desde web oficial o material autorizado.",
+      "imagen_original": "images/catalgo_propio_web_escape/dark_city.jpeg"
     },
     {
       "id": "el-secreto-de-jaipur",
@@ -92,11 +93,15 @@
       "fuente_tipo": "web_oficial_reescrita",
       "fuente_url": "https://www.escapebarcelona.com/kong-protocol.php",
       "fuente_revisada": "2026-08-09",
-      "imagen": "",
+      "imagen": "images/catalgo_propio_web_escape/optimized/k-o-n-g-protocol.jpg",
       "rating": null,
       "votos": null,
       "verificado": true,
-      "estado_verificacion": "verificada"
+      "estado_verificacion": "verificada",
+      "imagen_fuente_tipo": "web_oficial_manual_optimizada",
+      "imagen_revisada": "2026-08-10",
+      "imagen_policy": "Portada optimizada para el formato de tarjeta a partir de imagen incorporada manualmente desde web oficial o material autorizado.",
+      "imagen_original": "images/catalgo_propio_web_escape/KONG protocol.jpeg"
     },
     {
       "id": "la-historia-de-charlotte",
@@ -142,11 +147,15 @@
       "fuente_tipo": "web_oficial",
       "fuente_url": "https://thecityescaperoom.com/barcelona/la-taberna/",
       "fuente_revisada": "2026-08-07",
-      "imagen": "",
+      "imagen": "images/catalgo_propio_web_escape/optimized/la-taberna.jpg",
       "rating": null,
       "votos": null,
       "verificado": true,
-      "estado_verificacion": "verificada"
+      "estado_verificacion": "verificada",
+      "imagen_fuente_tipo": "web_oficial_manual_optimizada",
+      "imagen_revisada": "2026-08-10",
+      "imagen_policy": "Portada optimizada para el formato de tarjeta a partir de imagen incorporada manualmente desde web oficial o material autorizado.",
+      "imagen_original": "images/catalgo_propio_web_escape/La_taberna.jpeg"
     },
     {
       "id": "londium",
@@ -165,11 +174,15 @@
       "fuente_tipo": "web_oficial",
       "fuente_url": "https://londiumescaperoom.com/",
       "fuente_revisada": "2026-08-07",
-      "imagen": "",
+      "imagen": "images/catalgo_propio_web_escape/optimized/londium.jpg",
       "rating": null,
       "votos": null,
       "verificado": true,
-      "estado_verificacion": "verificada"
+      "estado_verificacion": "verificada",
+      "imagen_fuente_tipo": "web_oficial_manual_optimizada",
+      "imagen_revisada": "2026-08-10",
+      "imagen_policy": "Portada optimizada para el formato de tarjeta a partir de imagen incorporada manualmente desde web oficial o material autorizado.",
+      "imagen_original": "images/catalgo_propio_web_escape/Londium.jpeg"
     },
     {
       "id": "roomangie-2",
@@ -187,14 +200,15 @@
       "fuente_tipo": "web_oficial",
       "fuente_url": "https://ilusiumroomescape.es/roomangie/",
       "fuente_revisada": "2026-08-07",
-      "imagen": "images/generated-catalog/roomangie-2.png",
+      "imagen": "images/catalgo_propio_web_escape/optimized/roomangie-2.jpg",
       "rating": null,
       "votos": null,
       "verificado": true,
       "estado_verificacion": "verificada",
-      "imagen_fuente_tipo": "ia_generada",
-      "imagen_revisada": "2026-08-09",
-      "imagen_prompt_policy": "imagen original generada desde sinopsis/historia propia; sin logos reales ni texto legible"
+      "imagen_fuente_tipo": "web_oficial_manual_optimizada",
+      "imagen_revisada": "2026-08-10",
+      "imagen_policy": "Portada optimizada para el formato de tarjeta a partir de imagen incorporada manualmente desde web oficial o material autorizado.",
+      "imagen_original": "images/catalgo_propio_web_escape/RoomAngie2.jpeg"
     },
     {
       "id": "roomions",
@@ -214,11 +228,15 @@
       "fuente_tipo": "web_oficial",
       "fuente_url": "https://virusroomescape.com/es/escape-room-calella-roomions/",
       "fuente_revisada": "2026-08-07",
-      "imagen": "",
+      "imagen": "images/catalgo_propio_web_escape/optimized/roomions.jpg",
       "rating": null,
       "votos": null,
       "verificado": true,
-      "estado_verificacion": "verificada"
+      "estado_verificacion": "verificada",
+      "imagen_fuente_tipo": "web_oficial_manual_optimizada",
+      "imagen_revisada": "2026-08-10",
+      "imagen_policy": "Portada optimizada para el formato de tarjeta a partir de imagen incorporada manualmente desde web oficial o material autorizado.",
+      "imagen_original": "images/catalgo_propio_web_escape/Roomions.jpeg"
     },
     {
       "id": "scubick-doo",
@@ -237,14 +255,15 @@
       "fuente_tipo": "web_oficial",
       "fuente_url": "https://mataro.cubickroomescape.es/scubick-doo/",
       "fuente_revisada": "2026-08-07",
-      "imagen": "images/generated-catalog/scubick-doo.png",
+      "imagen": "images/catalgo_propio_web_escape/optimized/scubick-doo.jpg",
       "rating": null,
       "votos": null,
       "verificado": true,
       "estado_verificacion": "verificada",
-      "imagen_fuente_tipo": "ia_generada",
-      "imagen_revisada": "2026-08-09",
-      "imagen_prompt_policy": "imagen original generada desde sinopsis/historia propia; sin logos reales ni texto legible"
+      "imagen_fuente_tipo": "web_oficial_manual_optimizada",
+      "imagen_revisada": "2026-08-10",
+      "imagen_policy": "Portada optimizada para el formato de tarjeta a partir de imagen incorporada manualmente desde web oficial o material autorizado.",
+      "imagen_original": "images/catalgo_propio_web_escape/scubick-doo.jpeg"
     },
     {
       "id": "seccion-esoterica-exorcista",
@@ -339,11 +358,15 @@
       "fuente_tipo": "web_oficial",
       "fuente_url": "https://goldenpop.es/juegos/catacumbas/",
       "fuente_revisada": "2026-08-07",
-      "imagen": "",
+      "imagen": "images/catalgo_propio_web_escape/optimized/catacumbas.jpg",
       "rating": null,
       "votos": null,
       "verificado": true,
-      "estado_verificacion": "verificada"
+      "estado_verificacion": "verificada",
+      "imagen_fuente_tipo": "web_oficial_manual_optimizada",
+      "imagen_revisada": "2026-08-10",
+      "imagen_policy": "Portada optimizada para el formato de tarjeta a partir de imagen incorporada manualmente desde web oficial o material autorizado.",
+      "imagen_original": "images/catalgo_propio_web_escape/Catacumbas.jpeg"
     },
     {
       "id": "jurasico",
@@ -386,11 +409,15 @@
       "fuente_tipo": "web_oficial",
       "fuente_url": "https://www.insomniacorp.com/escapes/secreto-krugger",
       "fuente_revisada": "2026-08-07",
-      "imagen": "",
+      "imagen": "images/catalgo_propio_web_escape/optimized/el-secreto-de-los-krugger.jpg",
       "rating": null,
       "votos": null,
       "verificado": true,
-      "estado_verificacion": "verificada"
+      "estado_verificacion": "verificada",
+      "imagen_fuente_tipo": "web_oficial_manual_optimizada",
+      "imagen_revisada": "2026-08-10",
+      "imagen_policy": "Portada optimizada para el formato de tarjeta a partir de imagen incorporada manualmente desde web oficial o material autorizado.",
+      "imagen_original": "images/catalgo_propio_web_escape/El Secreto de los Krugger.jpeg"
     },
     {
       "id": "highschool",
@@ -409,14 +436,15 @@
       "fuente_tipo": "web_oficial_reescrita",
       "fuente_url": "https://unrealroomescape.es/mataro/",
       "fuente_revisada": "2026-08-09",
-      "imagen": "images/generated-catalog/highschool.png",
+      "imagen": "images/catalgo_propio_web_escape/optimized/highschool.jpg",
       "rating": null,
       "votos": null,
       "verificado": true,
       "estado_verificacion": "verificada",
-      "imagen_fuente_tipo": "ia_generada",
-      "imagen_revisada": "2026-08-09",
-      "imagen_prompt_policy": "imagen original generada desde sinopsis/historia propia; sin logos reales ni texto legible"
+      "imagen_fuente_tipo": "web_oficial_manual_optimizada",
+      "imagen_revisada": "2026-08-10",
+      "imagen_policy": "Portada optimizada para el formato de tarjeta a partir de imagen incorporada manualmente desde web oficial o material autorizado.",
+      "imagen_original": "images/catalgo_propio_web_escape/High_school.jpeg"
     },
     {
       "id": "achijira",
@@ -6420,14 +6448,15 @@
       "fuente_tipo": "web_oficial",
       "fuente_url": "https://ilusiumroomescape.es/fq",
       "fuente_revisada": "2026-08-08",
-      "imagen": "images/generated-catalog/roomangie-2.png",
+      "imagen": "images/catalgo_propio_web_escape/optimized/room-angie.jpg",
       "rating": null,
       "votos": null,
       "verificado": true,
       "estado_verificacion": "verificada",
-      "imagen_fuente_tipo": "ia_generada",
-      "imagen_revisada": "2026-08-09",
-      "imagen_prompt_policy": "imagen original generada desde sinopsis/historia propia; sin logos reales ni texto legible"
+      "imagen_fuente_tipo": "web_oficial_manual_optimizada",
+      "imagen_revisada": "2026-08-10",
+      "imagen_policy": "Portada optimizada para el formato de tarjeta a partir de imagen incorporada manualmente desde web oficial o material autorizado.",
+      "imagen_original": "images/catalgo_propio_web_escape/RoomAngie2.jpeg"
     },
     {
       "id": "operacion-beta",

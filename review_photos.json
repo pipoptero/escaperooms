@@ -1,9 +1,9 @@
 {
   "meta": {
-    "generated_at": "2026-08-09T10:13:23",
+    "generated_at": "2026-08-10T10:23:16",
     "source": "images/Hechos",
-    "groups": 15,
-    "photos": 34,
+    "groups": 17,
+    "photos": 42,
     "unmatched": []
   },
   "photos": {
@@ -83,8 +83,33 @@
       "room": "Exorcista",
       "photos": [
         {
+          "src": "images/Hechos/Sección Esoterismo Exorcista 3.jpg",
+          "alt": "Exorcista - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/Sección Esoterismo Exorcista 4.jpg",
+          "alt": "Exorcista - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/Sección Esoterismo Exorcista 5.jpg",
+          "alt": "Exorcista - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/Sección Esoterismo Exorcista 6.jpg",
+          "alt": "Exorcista - foto del grupo"
+        },
+        {
           "src": "images/Hechos/Sección Esoterismo Exorcista.jpeg",
           "alt": "Exorcista - foto del grupo"
+        }
+      ]
+    },
+    "high_school": {
+      "room": "High School",
+      "photos": [
+        {
+          "src": "images/Hechos/high_school 1.jpg",
+          "alt": "High School - foto del grupo"
         }
       ]
     },
@@ -146,6 +171,23 @@
         {
           "src": "images/Hechos/Nightshift 4.jpeg",
           "alt": "Nightshift - foto del grupo"
+        }
+      ]
+    },
+    "parasomnia_bajo_2": {
+      "room": "Parasomnia Bajo 2ª",
+      "photos": [
+        {
+          "src": "images/Hechos/parasomnia_bajo_2_1.jpg",
+          "alt": "Parasomnia Bajo 2ª - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/parasomnia_bajo_2_2.jpg",
+          "alt": "Parasomnia Bajo 2ª - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/parasomnia_bajo_2_3.jpg",
+          "alt": "Parasomnia Bajo 2ª - foto del grupo"
         }
       ]
     },
