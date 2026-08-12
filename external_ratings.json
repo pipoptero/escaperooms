@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-08-12T17:00:23",
+    "generated_at": "2026-08-12T21:07:33",
     "sources": {
       "giba": {
         "label": "Giba Escape",
@@ -51,7 +51,7 @@
       "method": "weighted_average_with_confidence_and_award_bonus",
       "award_bonus_cap": 0.35
     },
-    "sanitized_at": "2026-08-12T17:00:23"
+    "sanitized_at": "2026-08-12T21:07:34"
   },
   "ratings": {
     "la_historia_de_charlotte": {

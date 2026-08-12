@@ -29,6 +29,7 @@ scripts/sanitize_*.py
 scripts/scrape_*.py
 scripts/import_*_to_synopsis_sources.py
 scripts/build_synopsis_from_private_db.py
+scripts/research_new_room_candidates.py
 scripts/optimize_catalog_covers.ps1
 scripts/process_catalog_covers.ps1
 scripts/plan_catalog_covers.py
