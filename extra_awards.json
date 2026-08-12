@@ -6,12 +6,12 @@
       "https://www.gibaescape.com/proyectos/escape-room-giba-awards",
       "https://ocioterror.es/category/horror-awards/"
     ],
-    "count": 1941,
+    "count": 1946,
     "by_source": {
       "10escapes": 1365,
-      "escape_room_awards": 86,
-      "giba_awards": 191,
-      "horror_awards": 299
+      "escape_room_awards": 89,
+      "giba_awards": 192,
+      "horror_awards": 300
     }
   },
   "awards": [
@@ -17845,6 +17845,19 @@
       "year": 2024,
       "category": "Mejor acting",
       "status": "nominee",
+      "rank": 9,
+      "room": "Infected",
+      "room_key": "infected",
+      "company": "The Freak Factory",
+      "company_key": "the freak factory"
+    },
+    {
+      "source_id": "escape_room_awards",
+      "source_name": "Escape Room Awards",
+      "source_url": "https://escaperoomawardsoficial.com/wp-content/uploads/2025/04/RESULTADOS-NOMINACIONES-ESCAPE-ROOM-AWARDS-2024.pdf",
+      "year": 2024,
+      "category": "Mejor acting",
+      "status": "nominee",
       "rank": 12,
       "room": "Backstab",
       "room_key": "backstab",
@@ -18303,8 +18316,8 @@
       "rank": 23,
       "room": "La Ofrenda",
       "room_key": "la ofrenda",
-      "company": "Top Secret Barcelona",
-      "company_key": "top secret barcelona"
+      "company": "Top Secret",
+      "company_key": "top secret"
     },
     {
       "source_id": "escape_room_awards",
@@ -18482,6 +18495,19 @@
       "year": 2024,
       "category": "Mejor experiencia de terror",
       "status": "nominee",
+      "rank": 8,
+      "room": "Infected",
+      "room_key": "infected",
+      "company": "The Freak Factory",
+      "company_key": "the freak factory"
+    },
+    {
+      "source_id": "escape_room_awards",
+      "source_name": "Escape Room Awards",
+      "source_url": "https://escaperoomawardsoficial.com/wp-content/uploads/2025/04/RESULTADOS-NOMINACIONES-ESCAPE-ROOM-AWARDS-2024.pdf",
+      "year": 2024,
+      "category": "Mejor experiencia de terror",
+      "status": "nominee",
       "rank": 9,
       "room": "Forbidden Room",
       "room_key": "forbidden room",
@@ -18591,6 +18617,19 @@
       "room_key": "backstab",
       "company": "Bizarre Escape Room Barcelona",
       "company_key": "bizarre escape room barcelona"
+    },
+    {
+      "source_id": "escape_room_awards",
+      "source_name": "Escape Room Awards",
+      "source_url": "https://escaperoomawardsoficial.com/wp-content/uploads/2025/04/RESULTADOS-NOMINACIONES-ESCAPE-ROOM-AWARDS-2024.pdf",
+      "year": 2024,
+      "category": "Mejor marketing inauguracion",
+      "status": "nominee",
+      "rank": 13,
+      "room": "Infected",
+      "room_key": "infected",
+      "company": "The Freak Factory",
+      "company_key": "the freak factory"
     },
     {
       "source_id": "escape_room_awards",
@@ -19288,6 +19327,19 @@
       "year": 2024,
       "category": "MEJOR GM",
       "status": "runner_up",
+      "rank": 2,
+      "room": "Infected",
+      "room_key": "infected",
+      "company": "The Freak Factory",
+      "company_key": "the freak factory"
+    },
+    {
+      "source_id": "giba_awards",
+      "source_name": "Giba Awards",
+      "source_url": "https://www.gibaescape.com/proyectos/escape-room-giba-awards",
+      "year": 2024,
+      "category": "MEJOR GM",
+      "status": "runner_up",
       "rank": 3,
       "room": "Inmortum 2",
       "room_key": "inmortum 2",
@@ -19731,9 +19783,9 @@
       "category": "MEJOR SALA DE TERROR",
       "status": "winner",
       "rank": 1,
-      "room": "BLACKOUT CYDONIA PROJECT",
+      "room": "Blackout Cydonia Project",
       "room_key": "blackout cydonia project",
-      "company": "HANGAR 18",
+      "company": "Hangar 18",
       "company_key": "hangar 18"
     },
     {
@@ -19965,9 +20017,9 @@
       "category": "MEJOR GAME MASTER (Interpretación)",
       "status": "winner",
       "rank": 1,
-      "room": "LA POSESIÓN",
+      "room": "La Posesión",
       "room_key": "la posesion",
-      "company": "ARCANUM",
+      "company": "Arcanum",
       "company_key": "arcanum"
     },
     {
@@ -20004,10 +20056,10 @@
       "category": "MEJOR HISTORIA",
       "status": "winner",
       "rank": 1,
-      "room": "CRIOGENIC",
+      "room": "Criogenic",
       "room_key": "criogenic",
-      "company": "LOCKED",
-      "company_key": "locked"
+      "company": "Criogenic",
+      "company_key": "criogenic"
     },
     {
       "source_id": "giba_awards",
@@ -20017,10 +20069,10 @@
       "category": "MEJOR HISTORIA",
       "status": "runner_up",
       "rank": 2,
-      "room": "LA AVALANCHA",
+      "room": "La Avalancha",
       "room_key": "la avalancha",
-      "company": "MAXIMUM ANDORRA",
-      "company_key": "maximum andorra"
+      "company": "Maximum Escape",
+      "company_key": "maximum escape"
     },
     {
       "source_id": "giba_awards",
@@ -20108,9 +20160,9 @@
       "category": "MEJOR SALA DE TERROR",
       "status": "runner_up",
       "rank": 3,
-      "room": "LA POSESIÓN",
+      "room": "La Posesión",
       "room_key": "la posesion",
-      "company": "ARCANUM",
+      "company": "Arcanum",
       "company_key": "arcanum"
     },
     {
@@ -20251,9 +20303,9 @@
       "category": "SALA DEL PÚBLICO DE TERROR",
       "status": "runner_up",
       "rank": 2,
-      "room": "LA POSESIÓN",
+      "room": "La Posesión",
       "room_key": "la posesion",
-      "company": "ARCANUM",
+      "company": "Arcanum",
       "company_key": "arcanum"
     },
     {
@@ -20654,10 +20706,10 @@
       "category": "MEJOR AMBIENTACIÓN",
       "status": "runner_up",
       "rank": 3,
-      "room": "LA CASA",
+      "room": "La Casa",
       "room_key": "la casa",
-      "company": "INSOMNIA",
-      "company_key": "insomnia"
+      "company": "Insomnia Corporation",
+      "company_key": "insomnia corporation"
     },
     {
       "source_id": "giba_awards",
@@ -20667,10 +20719,10 @@
       "category": "MEJOR EXPERIENCIA DE TERROR",
       "status": "winner",
       "rank": 1,
-      "room": "LA CASA",
+      "room": "La Casa",
       "room_key": "la casa",
-      "company": "INSOMNIA",
-      "company_key": "insomnia"
+      "company": "Insomnia Corporation",
+      "company_key": "insomnia corporation"
     },
     {
       "source_id": "giba_awards",
@@ -20732,10 +20784,10 @@
       "category": "MEJOR GAME MASTER",
       "status": "runner_up",
       "rank": 3,
-      "room": "ARCANUM",
+      "room": "Arcanum",
       "room_key": "arcanum",
-      "company": "",
-      "company_key": ""
+      "company": "Arcanum",
+      "company_key": "arcanum"
     },
     {
       "source_id": "giba_awards",
@@ -20758,10 +20810,10 @@
       "category": "MEJOR HISTORIA",
       "status": "runner_up",
       "rank": 2,
-      "room": "ARCANUM",
+      "room": "Arcanum",
       "room_key": "arcanum",
-      "company": "",
-      "company_key": ""
+      "company": "Arcanum",
+      "company_key": "arcanum"
     },
     {
       "source_id": "giba_awards",
@@ -20836,10 +20888,10 @@
       "category": "MEJORES JUEGOS",
       "status": "runner_up",
       "rank": 2,
-      "room": "CÓDIGO ROJO",
+      "room": "Código Rojo",
       "room_key": "codigo rojo",
-      "company": "UNREAL",
-      "company_key": "unreal"
+      "company": "The City by Experiencity",
+      "company_key": "the city by experiencity"
     },
     {
       "source_id": "giba_awards",
@@ -20914,10 +20966,10 @@
       "category": "SALA DEL PÚBLICO TERROR",
       "status": "runner_up",
       "rank": 2,
-      "room": "ARCANUM",
+      "room": "Arcanum",
       "room_key": "arcanum",
-      "company": "",
-      "company_key": ""
+      "company": "Arcanum",
+      "company_key": "arcanum"
     },
     {
       "source_id": "giba_awards",
@@ -20927,10 +20979,10 @@
       "category": "SALA DEL PÚBLICO TERROR",
       "status": "runner_up",
       "rank": 3,
-      "room": "LA CASA",
+      "room": "La Casa",
       "room_key": "la casa",
-      "company": "INSOMNIA",
-      "company_key": "insomnia"
+      "company": "Insomnia Corporation",
+      "company_key": "insomnia corporation"
     },
     {
       "source_id": "giba_awards",
@@ -21878,8 +21930,8 @@
       "rank": "",
       "room": "El Corredor de la Muerte",
       "room_key": "el corredor de la muerte",
-      "company": "Cronos Valencia",
-      "company_key": "cronos valencia"
+      "company": "Cronos",
+      "company_key": "cronos"
     },
     {
       "source_id": "horror_awards",
@@ -21889,10 +21941,10 @@
       "category": "BEST EXTREME EXPERIENCE",
       "status": "nominee",
       "rank": "",
-      "room": "Matadero Exxxtreme",
-      "room_key": "matadero exxxtreme",
-      "company": "Horrorland",
-      "company_key": "horrorland"
+      "room": "Matadero",
+      "room_key": "matadero",
+      "company": "The SafeKey",
+      "company_key": "the safekey"
     },
     {
       "source_id": "horror_awards",
@@ -21971,6 +22023,19 @@
       "room_key": "ganadores premios horrorificos",
       "company": "",
       "company_key": ""
+    },
+    {
+      "source_id": "horror_awards",
+      "source_name": "Horror Awards",
+      "source_url": "https://ocioterror.es/nominados-horror-awards-vii-edicion-2024/",
+      "year": 2024,
+      "category": "BEST HORROR ESCAPE",
+      "status": "nominee",
+      "rank": "",
+      "room": "Infected",
+      "room_key": "infected",
+      "company": "The Freak Factory",
+      "company_key": "the freak factory"
     },
     {
       "source_id": "horror_awards",
@@ -22149,10 +22214,10 @@
       "category": "BEST HORROR EXPERIENCE",
       "status": "nominee",
       "rank": "",
-      "room": "La Casa dels Àngels Halloween Edition",
-      "room_key": "la casa dels angels halloween edition",
-      "company": "La Casa dels Àngels",
-      "company_key": "la casa dels angels"
+      "room": "La Casa",
+      "room_key": "la casa",
+      "company": "Insomnia Corporation",
+      "company_key": "insomnia corporation"
     },
     {
       "source_id": "horror_awards",
@@ -22292,10 +22357,10 @@
       "category": "MEJOR EXTREME EXPERIENCE",
       "status": "runner_up",
       "rank": 3,
-      "room": "MATADERO EXXXTREME",
-      "room_key": "matadero exxxtreme",
-      "company": "Horrorland",
-      "company_key": "horrorland"
+      "room": "Matadero",
+      "room_key": "matadero",
+      "company": "The SafeKey",
+      "company_key": "the safekey"
     },
     {
       "source_id": "horror_awards",
@@ -23893,8 +23958,8 @@
       "rank": "",
       "room": "Kalinikta",
       "room_key": "kalinikta",
-      "company": "Átropos Escape Room",
-      "company_key": "atropos escape room"
+      "company": "Atropos",
+      "company_key": "atropos"
     },
     {
       "source_id": "horror_awards",
@@ -23904,10 +23969,10 @@
       "category": "Best Horror Escape",
       "status": "nominee",
       "rank": "",
-      "room": "La Casa del Miedo en la Quinta de Melque : un espectáculo veterano de terror en una casa rural de Toledo que está a punto de cumplir 20 años.",
-      "room_key": "la casa del miedo en la quinta de melque un espectaculo veterano de terror en una casa rural de toledo que esta a punto de cumplir 20 anos",
-      "company": "",
-      "company_key": ""
+      "room": "La Casa",
+      "room_key": "la casa",
+      "company": "Insomnia Corporation",
+      "company_key": "insomnia corporation"
     },
     {
       "source_id": "horror_awards",
@@ -24023,8 +24088,8 @@
       "rank": "",
       "room": "The Last Show",
       "room_key": "the last show",
-      "company": "Cuarta Dimensión",
-      "company_key": "cuarta dimension"
+      "company": "Unlock 2",
+      "company_key": "unlock 2"
     },
     {
       "source_id": "horror_awards",
@@ -24177,19 +24242,6 @@
       "category": "BEST HORROR ESCAPE",
       "status": "nominee",
       "rank": "",
-      "room": "LA CASA",
-      "room_key": "la casa",
-      "company": "Insomnia Corporation",
-      "company_key": "insomnia corporation"
-    },
-    {
-      "source_id": "horror_awards",
-      "source_name": "Horror Awards",
-      "source_url": "https://ocioterror.es/nominados-horror-awards-iii-edicion-2020/",
-      "year": 2020,
-      "category": "BEST HORROR ESCAPE",
-      "status": "nominee",
-      "rank": "",
       "room": "LA ZONA",
       "room_key": "la zona",
       "company": "El Búho Games",
@@ -24207,6 +24259,19 @@
       "room_key": "la cabana de valdemar",
       "company": "The Dome",
       "company_key": "the dome"
+    },
+    {
+      "source_id": "horror_awards",
+      "source_name": "Horror Awards",
+      "source_url": "https://ocioterror.es/nominados-horror-awards-iii-edicion-2020/",
+      "year": 2020,
+      "category": "BEST HORROR ESCAPE",
+      "status": "nominee",
+      "rank": "",
+      "room": "La Casa",
+      "room_key": "la casa",
+      "company": "Insomnia Corporation",
+      "company_key": "insomnia corporation"
     },
     {
       "source_id": "horror_awards",
@@ -24372,10 +24437,10 @@
       "category": "BEST ONLINE HORROR ESCAPE",
       "status": "nominee",
       "rank": "",
-      "room": "PARANORMAL",
+      "room": "Paranormal",
       "room_key": "paranormal",
-      "company": "Insomnia Corporation",
-      "company_key": "insomnia corporation"
+      "company": "Skpa2",
+      "company_key": "skpa2"
     },
     {
       "source_id": "horror_awards",
@@ -24424,10 +24489,10 @@
       "category": "BEST ONLINE HORROR EXPERIENCE",
       "status": "nominee",
       "rank": "",
-      "room": "EN LA MENTE DEL ASESINO",
+      "room": "En la Mente del Asesino",
       "room_key": "en la mente del asesino",
-      "company": "Hysterica Games",
-      "company_key": "hysterica games"
+      "company": "Encrypt",
+      "company_key": "encrypt"
     },
     {
       "source_id": "horror_awards",
@@ -24606,10 +24671,10 @@
       "category": "BEST HORROR ATTRACTION estrenada en",
       "status": "nominee",
       "rank": "",
-      "room": "La Casa del Bosque",
-      "room_key": "la casa del bosque",
-      "company": "Horrorland Park",
-      "company_key": "horrorland park"
+      "room": "La Casa",
+      "room_key": "la casa",
+      "company": "Insomnia Corporation",
+      "company_key": "insomnia corporation"
     },
     {
       "source_id": "horror_awards",
@@ -24723,9 +24788,9 @@
       "category": "BEST HORROR ESCAPE GAME estrenado en",
       "status": "nominee",
       "rank": "",
-      "room": "FREAK SHOW",
+      "room": "Freak show",
       "room_key": "freak show",
-      "company": "Juegos Maníacos",
+      "company": "Juegos Maniacos",
       "company_key": "juegos maniacos"
     },
     {
@@ -24892,10 +24957,10 @@
       "category": "MEJOR ESCAPE ROOM estrenado en",
       "status": "nominee",
       "rank": "",
-      "room": "Arcanum Escape Room",
-      "room_key": "arcanum escape room",
-      "company": "",
-      "company_key": ""
+      "room": "Arcanum",
+      "room_key": "arcanum",
+      "company": "Arcanum",
+      "company_key": "arcanum"
     },
     {
       "source_id": "horror_awards",
@@ -24918,19 +24983,6 @@
       "category": "MEJOR ESCAPE ROOM estrenado en",
       "status": "nominee",
       "rank": "",
-      "room": "EMILY’S ROOM",
-      "room_key": "emily s room",
-      "company": "Juegos Maníacos",
-      "company_key": "juegos maniacos"
-    },
-    {
-      "source_id": "horror_awards",
-      "source_name": "Horror Awards",
-      "source_url": "https://ocioterror.es/nominados-horror-awards-2018/",
-      "year": 2018,
-      "category": "MEJOR ESCAPE ROOM estrenado en",
-      "status": "nominee",
-      "rank": "",
       "room": "El Diamante de Almas",
       "room_key": "el diamante de almas",
       "company": "Inmortal Room",
@@ -24944,10 +24996,23 @@
       "category": "MEJOR ESCAPE ROOM estrenado en",
       "status": "nominee",
       "rank": "",
-      "room": "EllebannA Room Escape",
-      "room_key": "ellebanna room escape",
+      "room": "Ellebanna",
+      "room_key": "ellebanna",
       "company": "Estrategy",
       "company_key": "estrategy"
+    },
+    {
+      "source_id": "horror_awards",
+      "source_name": "Horror Awards",
+      "source_url": "https://ocioterror.es/nominados-horror-awards-2018/",
+      "year": 2018,
+      "category": "MEJOR ESCAPE ROOM estrenado en",
+      "status": "nominee",
+      "rank": "",
+      "room": "Emily’s Room",
+      "room_key": "emily s room",
+      "company": "Juegos Maniacos",
+      "company_key": "juegos maniacos"
     },
     {
       "source_id": "horror_awards",
@@ -24996,10 +25061,10 @@
       "category": "MEJOR ESCAPE ROOM estrenado en",
       "status": "nominee",
       "rank": "",
-      "room": "La casa del Caníbal",
+      "room": "La Casa del Caníbal",
       "room_key": "la casa del canibal",
-      "company": "Escape Room",
-      "company_key": "escape room"
+      "company": "La Casa del Caníbal",
+      "company_key": "la casa del canibal"
     },
     {
       "source_id": "horror_awards",
@@ -25087,10 +25152,10 @@
       "category": "MEJOR ESPECTÁCULO estrenado en",
       "status": "nominee",
       "rank": "",
-      "room": "APOCALIPSIS",
+      "room": "Apocalipsis",
       "room_key": "apocalipsis",
-      "company": "Circo de los Horrores",
-      "company_key": "circo de los horrores"
+      "company": "Xcapate",
+      "company_key": "xcapate"
     },
     {
       "source_id": "horror_awards",
@@ -25126,10 +25191,10 @@
       "category": "MEJOR HAUNTED HOUSE estrenada en",
       "status": "nominee",
       "rank": "",
-      "room": "APOCALIPSIS MAYA",
-      "room_key": "apocalipsis maya",
-      "company": "PortAventura",
-      "company_key": "portaventura"
+      "room": "Apocalipsis",
+      "room_key": "apocalipsis",
+      "company": "Xcapate",
+      "company_key": "xcapate"
     },
     {
       "source_id": "horror_awards",
@@ -25139,10 +25204,10 @@
       "category": "MEJOR HAUNTED HOUSE estrenada en",
       "status": "nominee",
       "rank": "",
-      "room": "BLACKOUT",
-      "room_key": "blackout",
-      "company": "Horrorland Park",
-      "company_key": "horrorland park"
+      "room": "Black Out",
+      "room_key": "black out",
+      "company": "Playday",
+      "company_key": "playday"
     },
     {
       "source_id": "horror_awards",
@@ -25178,19 +25243,6 @@
       "category": "MEJOR HAUNTED HOUSE estrenada en",
       "status": "nominee",
       "rank": "",
-      "room": "LA CASA BEAUCHENNE",
-      "room_key": "la casa beauchenne",
-      "company": "Scream Nights Park",
-      "company_key": "scream nights park"
-    },
-    {
-      "source_id": "horror_awards",
-      "source_name": "Horror Awards",
-      "source_url": "https://ocioterror.es/nominados-horror-awards-2018/",
-      "year": 2018,
-      "category": "MEJOR HAUNTED HOUSE estrenada en",
-      "status": "nominee",
-      "rank": "",
       "room": "LA TÉRMICA",
       "room_key": "la termica",
       "company": "Horrorland Park",
@@ -25204,10 +25256,23 @@
       "category": "MEJOR HAUNTED HOUSE estrenada en",
       "status": "nominee",
       "rank": "",
-      "room": "MATADERO",
+      "room": "La Casa",
+      "room_key": "la casa",
+      "company": "Insomnia Corporation",
+      "company_key": "insomnia corporation"
+    },
+    {
+      "source_id": "horror_awards",
+      "source_name": "Horror Awards",
+      "source_url": "https://ocioterror.es/nominados-horror-awards-2018/",
+      "year": 2018,
+      "category": "MEJOR HAUNTED HOUSE estrenada en",
+      "status": "nominee",
+      "rank": "",
+      "room": "Matadero",
       "room_key": "matadero",
-      "company": "Horrorland Park",
-      "company_key": "horrorland park"
+      "company": "The SafeKey",
+      "company_key": "the safekey"
     },
     {
       "source_id": "horror_awards",

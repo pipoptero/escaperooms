@@ -328,6 +328,9 @@
   .room-card:hover::before{opacity:1;}
   .card-media{position:relative;aspect-ratio:2/3;max-height:430px;background:linear-gradient(135deg,#171927,#2a1b0d 55%,#101018);overflow:hidden;border-bottom:1px solid rgba(255,255,255,.06);}
   .card-media img{width:100%;height:100%;object-fit:contain;display:block;background:radial-gradient(ellipse at center,rgba(255,255,255,.05),rgba(0,0,0,.26));filter:saturate(.98) contrast(1.03);transition:transform .35s ease;}
+  .card-media img.card-cover-img{object-fit:cover;object-position:center;}
+  .card-media img.card-cover-la-taberna{object-position:center 58%;}
+  .card-media img.card-cover-k-o-n-g-protocol{object-position:center 52%;}
   .room-card:hover .card-media img{transform:scale(1.035);}
   .card-media::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.08) 0%,rgba(0,0,0,.22) 45%,rgba(0,0,0,.82) 100%);pointer-events:none;}
   .card-media-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:3.2rem;font-weight:900;color:rgba(125,187,63,.42);letter-spacing:.08em;text-shadow:0 0 28px rgba(125,187,63,.18);}
@@ -2334,17 +2337,24 @@ function priceLabel(p) {
   if (min || max) return `${min || max} €`;
   return '';
 }
+function cardImageFitClass(room) {
+  const src = String(room?.imagen || '').replace(/\\/g, '/').toLowerCase();
+  if (!src.includes('images/catalgo_propio_web_escape/optimized/')) return '';
+  return `card-cover-img card-cover-${cssSafe(roomKey(room) || slugify(room?.nombre || 'room'))}`;
+}
 function catalogImageHtml(p) {
   const initial = (p.nombre || '?').trim().slice(0, 1).toUpperCase();
   const fallback = `<div class="card-media-fallback">${initial}</div>`;
   if (!p.imagen) return fallback;
-  return `<img src="${p.imagen}" alt="${p.nombre || 'Escape room'}" loading="lazy" onerror="this.replaceWith(this.nextElementSibling)">${fallback}`;
+  const fitClass = cardImageFitClass(p);
+  return `<img class="${fitClass}" src="${p.imagen}" alt="${p.nombre || 'Escape room'}" loading="lazy" onerror="this.replaceWith(this.nextElementSibling)">${fallback}`;
 }
 function imageHtml(p) {
   const initial = (p.nombre || '?').trim().slice(0, 1).toUpperCase();
   const src = roomImageSrc(p);
   const fallback = `<div class="card-media-fallback">${initial}</div>`;
-  return `<img src="${src}" alt="${p.nombre || 'Escape room'}" loading="lazy" onerror="this.replaceWith(this.nextElementSibling)">${fallback}`;
+  const fitClass = cardImageFitClass({ ...p, imagen: src });
+  return `<img class="${fitClass}" src="${src}" alt="${p.nombre || 'Escape room'}" loading="lazy" onerror="this.replaceWith(this.nextElementSibling)">${fallback}`;
 }
 
 function rebuildGroupIndexes() {
@@ -6667,7 +6677,8 @@ function detailImageHtml(room, kind) {
   const fallback = `<div class="card-media-fallback">${initial}</div>`;
   const src = room.imagen || '';
   if (!src) return fallback;
-  return `<img src="${src}" alt="${escapeHtml(room.nombre || 'Escape room')}" onerror="this.replaceWith(this.nextElementSibling)">${fallback}`;
+  const fitClass = cardImageFitClass({ ...room, imagen: src });
+  return `<img class="${fitClass}" src="${src}" alt="${escapeHtml(room.nombre || 'Escape room')}" onerror="this.replaceWith(this.nextElementSibling)">${fallback}`;
 }
 
 function reviewPhotosEntryFor(room) {

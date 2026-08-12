@@ -26,8 +26,16 @@ scripts/download_*.py
 scripts/enrich_*.py
 scripts/run_consensus_*.py
 scripts/sanitize_*.py
+scripts/scrape_*.py
+scripts/import_*_to_synopsis_sources.py
+scripts/build_synopsis_from_private_db.py
 scripts/optimize_catalog_covers.ps1
+scripts/process_catalog_covers.ps1
+scripts/plan_catalog_covers.py
 image_sources*.csv
+images/catalgo_propio_web_escape/*
+!images/catalgo_propio_web_escape/optimized/
+!images/catalgo_propio_web_escape/optimized/**
 
 # Local marketing workspace
 marketing/
