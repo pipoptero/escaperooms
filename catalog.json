@@ -16516,8 +16516,8 @@
       "dificultad": "Alta",
       "terror": true,
       "web": "https://www.insomniacorp.com/escapes/6",
-      "descripcion": "La Casa es una experiencia de escape room de Insomnia Corporation con una propuesta centrada en una atmósfera oscura e inquietante. La misión apuesta por la tensión: el equipo tendrá que localizar el objetivo principal y salir con éxito de la misión, gestionando el miedo y la presión del entorno. La propuesta combina un enfoque accesible para grupos variados y momentos de tensión. Está orientada a equipos de 2 a 6 jugadores y una duración aproximada de 70 minutos.",
-      "fuente_tipo": "redaccion_propia_con_fuentes_publicas",
+      "descripcion": "En mitad del bosque, lejos del ruido, de las carreteras y de cualquier vecino en varios kilómetros a la redonda, se encuentra una aparentemente tranquila **casa de turismo rural**. Un lugar perfecto para escapar de la rutina, respirar aire puro y desconectar durante unos días. O al menos, eso es lo que asegura su propietario. La casa fue completamente reformada después de un **grave incidente ocurrido hace más de 40 años en uno de los pozos de la propiedad**. Desde entonces, aquel episodio pertenece al pasado y el alojamiento se ha convertido en una de las casas rurales mejor valoradas de toda la comarca. Todo está preparado para vuestra llegada. Una casa aislada. Un bosque inmenso. Nadie cerca que pueda molestaros. ¿Qué podría salir mal? Quizá solo haya una cosa que convenga recordar antes de instalarse:",
+      "fuente_tipo": "edicion_manual_panel_local",
       "fuente_url": "https://www.roomescapes.es/barcelona/berga/insomnia-corporation/la-casa.html",
       "fuente_revisada": "2026-08-13",
       "imagen": "images/catalgo_propio_web_escape/optimized/la-casa.jpg",
@@ -16526,7 +16526,9 @@
       "verificado": false,
       "estado_verificacion": "verificada",
       "restauracion_motivo": "recuperada_para_compatibilidad_con_listas_personales",
-      "imagen_original": "images/catalgo_propio_web_escape/La casa.jpeg"
+      "imagen_original": "images/catalgo_propio_web_escape/La casa.jpeg",
+      "sinopsis_editada_manualmente": true,
+      "sinopsis_editada_fecha": "2026-08-13"
     },
     {
       "id": "xperiment-insomnia-hotel",
@@ -42868,7 +42870,7 @@
   ],
   "meta": {
     "generated_at": "2026-08-08",
-    "updated_at": "2026-08-13T15:11:06",
+    "updated_at": "2026-08-13T15:47:20",
     "source": "webs oficiales verificadas",
     "source_policy": "webs oficiales exclusivamente",
     "images_policy": "placeholder",
