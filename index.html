@@ -1806,6 +1806,7 @@
         <span class="filter-label">Ranking global:</span>
         <span class="tag tag-feature">Media de fuentes externas y reviews The Vault</span>
       </div>
+      <div class="result-info">Ranking orientativo con fuentes ponderadas, comunidad, reviews y premios. <a href="condiciones/#criterio-ranking">Ver criterio</a></div>
       <div class="sort-row">
         <span class="filter-label">Tipo:</span>
         <button class="sort-btn active" id="rank-terror-all" onclick="setRankTerrorFilter('all')">Todos</button>
@@ -2167,6 +2168,31 @@ const COMMUNITY_BY_PROVINCE = {
   'rioja la':'La Rioja','la rioja':'La Rioja','madrid':'Comunidad de Madrid','murcia':'Region de Murcia','navarra':'Comunidad Foral de Navarra',
   'asturias':'Asturias','palmas las':'Canarias','las palmas':'Canarias','santa cruz de tenerife':'Canarias','cantabria':'Cantabria','ceuta':'Ceuta','melilla':'Melilla'
 };
+const COMMUNITY_LABELS_BY_KEY = {
+  'andalucia': 'Andalucía',
+  'aragon': 'Aragón',
+  'asturias': 'Principado de Asturias',
+  'canarias': 'Canarias',
+  'cantabria': 'Cantabria',
+  'castilla la mancha': 'Castilla-La Mancha',
+  'castilla y leon': 'Castilla y León',
+  'catalunya': 'Catalunya',
+  'ceuta': 'Ceuta',
+  'comunidad de madrid': 'Comunidad de Madrid',
+  'comunidad foral de navarra': 'Comunidad Foral de Navarra',
+  'comunidad valenciana': 'Comunitat Valenciana',
+  'comunitat valenciana': 'Comunitat Valenciana',
+  'extremadura': 'Extremadura',
+  'euskadi': 'País Vasco',
+  'galicia': 'Galicia',
+  'illes balears': 'Illes Balears',
+  'la rioja': 'La Rioja',
+  'melilla': 'Melilla',
+  'pais vasco': 'País Vasco',
+  'navarra': 'Comunidad Foral de Navarra',
+  'principado de asturias': 'Principado de Asturias',
+  'region de murcia': 'Región de Murcia'
+};
 const MAP_CITY_COORDS = {
   'madrid':[40.4168,-3.7038],'barcelona':[41.3874,2.1686],'valencia':[39.4699,-0.3763],'sevilla':[37.3891,-5.9845],
   'bilbao':[43.263,-2.935],'alicante':[38.3452,-0.481],'zaragoza':[41.6488,-0.8891],'malaga':[36.7213,-4.4214],
@@ -2325,8 +2351,12 @@ function roomImageSrc(room, withLocalFallback = true) {
 function cleanValue(text) {
   return String(text || '').trim();
 }
+function normalizeCommunityLabel(value) {
+  const key = normalizedKey(value);
+  return COMMUNITY_LABELS_BY_KEY[key] || cleanValue(value);
+}
 function communityOf(p) {
-  return p.comunidad || COMMUNITY_BY_PROVINCE[normalizedKey(p.provincia)] || '';
+  return normalizeCommunityLabel(p.comunidad || COMMUNITY_BY_PROVINCE[normalizedKey(p.provincia)] || '');
 }
 function priceLabel(p) {
   const direct = String(p.precio || '').trim();

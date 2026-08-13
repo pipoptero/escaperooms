@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'the-vault-v6';
+const CACHE_VERSION = 'the-vault-v7';
 const APP_SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -22,7 +22,9 @@ const DATA_FILES = [
   'terpeca_awards.json',
   'extra_awards.json',
   'external_ratings.json',
-  'review_photos.json'
+  'review_photos.json',
+  'room_aliases.json',
+  'room_locations.json'
 ];
 
 self.addEventListener('install', event => {

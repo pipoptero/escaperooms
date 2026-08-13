@@ -21991,10 +21991,10 @@
       "max_personas": 6,
       "terror": false,
       "edad_recomendada": 14,
-      "descripcion": "Aventura arqueológica en la que el equipo sigue los pasos de un investigador desaparecido para localizar un cuerno tallado de marfil y descubrir los secretos que rodean el tesoro de Petra. La sala pone el foco en observación, lógica y trabajo en equipo.",
-      "fuente_tipo": "web_oficial",
+      "descripcion": "# Petra, el Reino Perdido Durante años, el reconocido arqueólogo **Jean Louis Burckhardt** ha dedicado sus investigaciones a uno de los mayores misterios ocultos entre las ruinas de Petra. Finalmente, parece haberlo conseguido. Sus pesquisas le han llevado hasta el paradero de un antiguo tesoro escondido por los beduinos siglos atrás: **un cuerno tallado en marfil de valor incalculable**, una reliquia rodeada de secretos cuya importancia podría ir mucho más allá de su valor material. Pero algo ha ocurrido. Hace varios días Burckhardt envió una última carta. En ella aseguraba que alguien le seguía, que no podía confiar en nadie y que, si las comunicaciones se interrumpían, debía enviarse un equipo para continuar su investigación. Desde entonces, **nadie ha vuelto a saber de él**. Ahora ha llegado el momento de seguir sus pasos. Vuestra expedición deberá adentrarse en Petra, reconstruir la investigación de Burckhardt y superar los enigmas que protegen el camino hasta la reliquia. Dispondréis de **120 minutos** para descubrir qué sucedió, localizar el legendario cuerno de marfil y, con suerte, averiguar también qué ha sido de vuestro compañero desaparecido. Pero una expedición de este calibre no se supera con fuerza bruta. Necesitaréis observación, lógica, comunicación y, sobre todo, trabajar como un auténtico equipo. **Petra lleva siglos guardando sus secretos. ¿Seréis vosotros quienes consigáis descubrirlos?** **Información adicional** * **Jugadores:** 3–6 expedicionarios * **Duración:** 120 minutos * Experiencia especialmente recomendada para jugadores que ya hayan participado anteriormente en algún escape room. * **TERPECA Top Room** en 2022, 2023 y 2024, una distinción reservada a algunas de las salas mejor valoradas del mundo. * **10 Escapes Top:** 6.º puesto de España en 2023 y 8.º puesto en 2024.",
+      "fuente_tipo": "edicion_manual_panel_local",
       "fuente_url": "https://petraescaperoom.com/",
-      "fuente_revisada": "2026-08-07",
+      "fuente_revisada": "2026-08-13",
       "imagen": "images/catalgo_propio_web_escape/optimized/el-reino-perdido.jpg",
       "rating": null,
       "votos": null,
@@ -22003,7 +22003,9 @@
       "imagen_fuente_tipo": "ia_generada",
       "imagen_revisada": "2026-08-09",
       "imagen_prompt_policy": "imagen original generada desde sinopsis/historia propia; sin logos reales ni texto legible",
-      "imagen_original": "images/catalgo_propio_web_escape/Petra el Reino Perdido.png"
+      "imagen_original": "images/catalgo_propio_web_escape/Petra el Reino Perdido.png",
+      "sinopsis_editada_manualmente": true,
+      "sinopsis_editada_fecha": "2026-08-13"
     },
     {
       "id": "piratas-la-busqueda-del-caliz-de-la-vida-eterna",
@@ -42870,7 +42872,7 @@
   ],
   "meta": {
     "generated_at": "2026-08-08",
-    "updated_at": "2026-08-13T15:47:20",
+    "updated_at": "2026-08-13T20:31:16",
     "source": "webs oficiales verificadas",
     "source_policy": "webs oficiales exclusivamente",
     "images_policy": "placeholder",
