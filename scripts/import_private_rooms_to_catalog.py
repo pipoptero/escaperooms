@@ -27,6 +27,7 @@ import enrich_catalog_missing_content as enrich
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG_FILE = ROOT / "catalog.json"
 PRIVATE_DB = ROOT / "private" / "synopsis_sources.sqlite"
+CLOSED_ROOMS_FILE = ROOT / "private" / "closed_rooms.json"
 REPORTS_DIR = ROOT / "reports"
 OUT_JSON = REPORTS_DIR / "private-rooms-to-catalog.json"
 OUT_MD = REPORTS_DIR / "private-rooms-to-catalog.md"
@@ -52,6 +53,12 @@ AGGREGATOR_DOMAINS = {
 def load_catalog_payload() -> dict:
     payload = json.loads(CATALOG_FILE.read_text(encoding="utf-8"))
     return {"catalogo": payload} if isinstance(payload, list) else payload
+
+
+def load_json(path: Path, default):
+    if not path.exists():
+        return default
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def clean(value) -> str:
@@ -125,6 +132,23 @@ def catalog_keys(rooms: list[dict]) -> dict[str, set[str]]:
     return keys
 
 
+def closed_room_keys() -> dict[str, set[str]]:
+    payload = load_json(CLOSED_ROOMS_FILE, {"rooms": []})
+    keys = {"id": set(), "name_company_city": set(), "name_company": set()}
+    for room in payload.get("rooms", []) or []:
+        rid = clean(room.get("id"))
+        name = compact(room.get("nombre") or room.get("name"))
+        company = compact(room.get("empresa") or room.get("company"))
+        city = compact(room.get("ciudad") or room.get("city"))
+        if rid:
+            keys["id"].add(rid)
+        if name and company and city:
+            keys["name_company_city"].add(f"{name}|{company}|{city}")
+        if name and company:
+            keys["name_company"].add(f"{name}|{company}")
+    return keys
+
+
 def private_room_known(row: sqlite3.Row, keys: dict[str, set[str]]) -> bool:
     rid = clean(row["room_id"])
     name = compact(row["nombre"])
@@ -136,6 +160,18 @@ def private_room_known(row: sqlite3.Row, keys: dict[str, set[str]]) -> bool:
         or (name and company and city and f"{name}|{company}|{city}" in keys["name_company_city"])
         or (name and company and f"{name}|{company}" in keys["name_company"])
         or (web and web in keys["web"])
+    )
+
+
+def private_room_closed(row: sqlite3.Row, keys: dict[str, set[str]]) -> bool:
+    rid = clean(row["room_id"])
+    name = compact(row["nombre"])
+    company = compact(row["empresa"])
+    city = compact(row["ciudad"])
+    return (
+        (rid and rid in keys["id"])
+        or (name and company and city and f"{name}|{company}|{city}" in keys["name_company_city"])
+        or (name and company and f"{name}|{company}" in keys["name_company"])
     )
 
 
@@ -214,11 +250,13 @@ def main() -> int:
     payload = load_catalog_payload()
     rooms = payload.get("catalogo", [])
     keys = catalog_keys(rooms)
+    closed_keys = closed_room_keys()
     used_ids = {clean(room.get("id")) for room in rooms if clean(room.get("id"))}
     today = datetime.now().date().isoformat()
 
     added: list[dict] = []
     skipped_known: list[dict] = []
+    skipped_closed: list[dict] = []
     candidates: list[dict] = []
 
     with sqlite3.connect(args.db) as conn:
@@ -231,6 +269,16 @@ def main() -> int:
             """
         ).fetchall()
         for row in private_rooms:
+            if private_room_closed(row, closed_keys):
+                skipped_closed.append(
+                    {
+                        "room_id": row["room_id"],
+                        "nombre": row["nombre"],
+                        "empresa": row["empresa"],
+                        "ciudad": row["ciudad"],
+                    }
+                )
+                continue
             if private_room_known(row, keys):
                 continue
             source = best_source(conn, row["room_id"])
@@ -274,6 +322,7 @@ def main() -> int:
         "private_candidates_not_in_catalog": len(candidates),
         "added": added,
         "skipped_known": skipped_known,
+        "skipped_closed": skipped_closed,
     }
     OUT_JSON.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     lines = [
@@ -283,6 +332,7 @@ def main() -> int:
         f"Modo: {'aplicado' if args.apply else 'dry-run'}",
         f"Candidatas privadas no publicadas: {len(candidates)}",
         f"Fichas new creadas: {len(added)}",
+        f"Omitidas por cerradas: {len(skipped_closed)}",
         "",
     ]
     for room in added:
@@ -291,6 +341,7 @@ def main() -> int:
 
     print(f"Candidatas privadas no publicadas: {len(candidates)}")
     print(f"Fichas new creadas: {len(added)}")
+    print(f"Omitidas por cerradas: {len(skipped_closed)}")
     print(f"Informe: {OUT_MD.relative_to(ROOT)}")
     if not args.apply:
         print("Dry-run: usa --apply para modificar catalog.json.")
