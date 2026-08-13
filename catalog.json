@@ -42804,15 +42804,17 @@
       "max_personas_por_equipo": 4,
       "terror": true,
       "edad_recomendada": 16,
-      "descripcion": "Experiencia inmersiva de ciencia ficción en la estación USS. Los participantes forman equipos civiles de hasta cuatro personas y deben recolectar muestras antes de que se agoten el oxígeno y el tiempo de exposición a la radiación. Combina exploración libre, numerosas pruebas, acción, tensión y terror espacial.",
-      "fuente_tipo": "web_oficial",
+      "descripcion": "# Space Base: Extermination Habéis sido seleccionados como **personal civil cualificado de la compañía UAC** para participar en una misión en la **Estación USS**, una base espacial cuya situación se ha vuelto crítica. Vuestro viaje comenzará a bordo de la lanzadera **K-16**. El trayecto no será precisamente tranquilo, por lo que deberéis permanecer con el cinturón abrochado durante todo el ascenso, especialmente al atravesar la atmósfera terrestre. Mientras os aproximáis a vuestro destino, iréis recibiendo actualizaciones sobre el estado de la misión. La Estación USS está formada por diferentes cubiertas, sectores y módulos técnicos. Una vez a bordo, todos los equipos seréis conducidos hasta el **módulo central**, donde recibiréis las instrucciones definitivas antes de comenzar la operación. Vuestra misión será explorar la estación y **recolectar el mayor número posible de muestras**, pero las condiciones en su interior están lejos de ser seguras. Los niveles de oxígeno son limitados. La radiación supone una amenaza constante.\\ Para manteneros con vida tendréis que administrar vuestros recursos, completar diferentes tareas y decidir qué zonas merece la pena explorar. La estación alberga **más de 70 pruebas principales**, además de distintos objetivos y acciones necesarias para garantizar vuestra supervivencia. No sois soldados ni un equipo de rescate. Sois civiles enviados a una estación espacial en estado crítico. **Cumplid la misión, recuperad las muestras y encontrad la forma de regresar con vida.** **Se recomienda extremar la precaución.** **Información adicional** * **Duración:** 80 minutos * Participación simultánea de **1 a 4 equipos** * Experiencia de ciencia ficción, supervivencia y terror * Exploración de diferentes sectores de la estación * Más de **70 pruebas principales** * Incluye objetivos y tareas secundarias relacionadas con la supervivencia * Sistema de juego que permite afrontar la experiencia de distintas formas en diferentes partidas",
+      "fuente_tipo": "edicion_manual_panel_local",
       "fuente_url": "https://spacebase-extermination.es/",
-      "fuente_revisada": "2026-08-07",
+      "fuente_revisada": "2026-08-13",
       "imagen": "",
       "rating": null,
       "votos": null,
       "verificado": true,
-      "estado_verificacion": "verificada"
+      "estado_verificacion": "verificada",
+      "sinopsis_editada_manualmente": true,
+      "sinopsis_editada_fecha": "2026-08-13"
     },
     {
       "id": "tu-tambien-sonaras",
@@ -42874,7 +42876,7 @@
   ],
   "meta": {
     "generated_at": "2026-08-08",
-    "updated_at": "2026-08-13T20:36:06",
+    "updated_at": "2026-08-13T20:39:36",
     "source": "webs oficiales verificadas",
     "source_policy": "webs oficiales exclusivamente",
     "images_policy": "placeholder",
