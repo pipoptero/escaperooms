@@ -15,6 +15,7 @@ scripts/update_catalog_and_awards.py
 run-maintenance-local.ps1
 scripts/apply_*.py
 scripts/audit_*.py
+scripts/backfill_private_source_room_data.py
 scripts/build_catalog*.py
 scripts/build_external_*.py
 scripts/build_extra_*.py
@@ -28,6 +29,7 @@ scripts/run_consensus_*.py
 scripts/sanitize_*.py
 scripts/scrape_*.py
 scripts/import_*_to_synopsis_sources.py
+scripts/private_db_schema.py
 scripts/build_synopsis_from_private_db.py
 scripts/research_new_room_candidates.py
 scripts/optimize_catalog_covers.ps1
