@@ -42751,10 +42751,10 @@
       "max_personas": 8,
       "terror": true,
       "edad_recomendada": 18,
-      "descripcion": "Experiencia inmersiva de terror situada en el psiquiátrico McArthur. Durante dos horas, el grupo investiga el oscuro secreto relacionado con uno de sus pacientes en un recorrido de más de 350 m² con puzzles, acting y situaciones de miedo psicológico.",
-      "fuente_tipo": "web_oficial",
+      "descripcion": "Habéis recibido una inquietante carta procedente del manicomio McArthur. La gerencia del centro solicita vuestra presencia para visitar a uno de sus pacientes más longevos, un hombre que asegura mantener con vosotros un vínculo familiar que desconocíais por completo. Según explica en la carta, su tiempo se agota y tiene una última voluntad: reunirse con vosotros antes de morir para revelaros un secreto que lleva demasiado tiempo ocultando. La historia resulta difícil de creer, pero hay algo que consigue despertar vuestra curiosidad. Si realmente pertenece a vuestra familia, quizá no solo haya secretos esperando al otro lado de esas puertas. También podría existir una herencia de la que nadie os había hablado. Así que aceptáis la invitación. Vuestro destino es el hospital psiquiátrico McArthur, un lugar marcado por décadas de historias, pacientes y acontecimientos que pocos se atreven a recordar. Una vez allí, vuestro objetivo parece sencillo: localizar a vuestro supuesto familiar, escuchar aquello que necesita contaros y descubrir qué relación guarda realmente con vosotros. Pero dentro de McArthur las cosas rara vez son tan sencillas como parecen. Algunos secretos permanecen encerrados durante años por una razón. Información adicional Jugadores: 2–8 personas Duración: 120 minutos Experiencia de terror psicológico e inmersivo Ambientada en un antiguo hospital psiquiátrico Combina narrativa, enigmas y elementos de interpretación",
+      "fuente_tipo": "edicion_manual_panel_local",
       "fuente_url": "https://horrorasylum.es/",
-      "fuente_revisada": "2026-08-07",
+      "fuente_revisada": "2026-08-13",
       "imagen": "images/catalgo_propio_web_escape/optimized/horror-asylum.jpg",
       "rating": null,
       "votos": null,
@@ -42762,7 +42762,9 @@
       "estado_verificacion": "verificada",
       "imagen_fuente_tipo": "ia_generada",
       "imagen_revisada": "2026-08-09",
-      "imagen_prompt_policy": "imagen original generada desde sinopsis/historia propia; sin logos reales ni texto legible"
+      "imagen_prompt_policy": "imagen original generada desde sinopsis/historia propia; sin logos reales ni texto legible",
+      "sinopsis_editada_manualmente": true,
+      "sinopsis_editada_fecha": "2026-08-13"
     },
     {
       "id": "la-camara-del-espiritu-y-el-tiempo",
@@ -42872,7 +42874,7 @@
   ],
   "meta": {
     "generated_at": "2026-08-08",
-    "updated_at": "2026-08-13T20:31:16",
+    "updated_at": "2026-08-13T20:36:06",
     "source": "webs oficiales verificadas",
     "source_policy": "webs oficiales exclusivamente",
     "images_policy": "placeholder",
