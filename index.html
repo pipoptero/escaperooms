@@ -2451,6 +2451,45 @@ function uniqueRooms(rooms) {
   });
 }
 
+function canonicalMetaForRoom(room) {
+  for (const key of reviewIdentityKeys(room || {})) {
+    if (REVIEW_ROOM_META[key]) return { key, ...REVIEW_ROOM_META[key] };
+  }
+  return null;
+}
+
+function canonicalCatalogRoomForMeta(meta) {
+  if (!meta?.canonical_name || !Array.isArray(CATALOGO) || !CATALOGO.length) return null;
+  const nameKey = compactKey(meta.canonical_name);
+  const companyKey = compactKey(meta.canonical_company || '');
+  return CATALOGO.find(candidate => {
+    if (compactKey(candidate.nombre || '') !== nameKey) return false;
+    return !companyKey || compactKey(candidate.empresa || '') === companyKey;
+  }) || CATALOGO.find(candidate => compactKey(candidate.nombre || '') === nameKey) || null;
+}
+
+function canonicalRoomForListing(room) {
+  const meta = canonicalMetaForRoom(room);
+  const canonicalCatalogRoom = canonicalCatalogRoomForMeta(meta);
+  if (!meta && !canonicalCatalogRoom) return room;
+  const merged = canonicalCatalogRoom ? { ...canonicalCatalogRoom, ...room } : { ...room };
+  return {
+    ...merged,
+    id: canonicalCatalogRoom?.id || merged.id,
+    nombre: meta?.canonical_name || canonicalCatalogRoom?.nombre || merged.nombre,
+    empresa: meta?.canonical_company || canonicalCatalogRoom?.empresa || merged.empresa,
+    ciudad: canonicalCatalogRoom?.ciudad || merged.ciudad,
+    provincia: canonicalCatalogRoom?.provincia || merged.provincia,
+    comunidad: canonicalCatalogRoom?.comunidad || merged.comunidad,
+    pais: canonicalCatalogRoom?.pais || merged.pais,
+    web: canonicalCatalogRoom?.web || merged.web,
+    imagen: canonicalCatalogRoom?.imagen || merged.imagen,
+    image: canonicalCatalogRoom?.image || merged.image,
+    descripcion: canonicalCatalogRoom?.descripcion || merged.descripcion,
+    terror: canonicalCatalogRoom?.terror ?? merged.terror
+  };
+}
+
 function labelFromUserRoomKey(key) {
   return String(key || '')
     .split('_')
@@ -6337,7 +6376,10 @@ function indexedAwardsForRoom(index, room) {
 function awardNameMatchesRoom(award, room) {
   const roomName = compactKey(room.nombre || '');
   const awardName = compactKey(award.room || award.room_key || '');
-  return !!roomName && !!awardName && (roomName === awardName || awardName.includes(roomName) || roomName.includes(awardName));
+  if (!roomName || !awardName) return false;
+  if (roomName === awardName) return true;
+  if (roomName.length < 5 || awardName.length < 5) return false;
+  return awardName.includes(roomName) || roomName.includes(awardName);
 }
 
 function terpecaAwardFor(room) {
@@ -7720,7 +7762,7 @@ function rankingThumbHtml(room) {
 }
 
 function rankingRooms() {
-  return uniqueRooms([...CATALOGO, ...PENDIENTES, ...reviewRooms()])
+  return uniqueRooms([...CATALOGO, ...PENDIENTES, ...reviewRooms()].map(canonicalRoomForListing))
     .filter(room => {
       if (rankTerrorFilter === 'only') return !!room.terror;
       if (rankTerrorFilter === 'no') return !room.terror;
