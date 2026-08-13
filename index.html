@@ -7772,13 +7772,26 @@ function rankingRooms() {
     .filter(room => globalRatingForRoom(room).score > 0);
 }
 
+function rankingComparableSourceCount(row, otherRow) {
+  const sources = row.global.sources || [];
+  const bothTerror = !!row.room.terror && !!otherRow?.room?.terror;
+  if (rankTerrorFilter === 'only' || bothTerror) return row.global.sourceCount;
+  return sources.filter(source => source.id !== 'ocioterror').length;
+}
+
+function rankingSourceTieDiff(a, b) {
+  const comparableDiff = rankingComparableSourceCount(b, a) - rankingComparableSourceCount(a, b);
+  if (comparableDiff) return comparableDiff;
+  return b.global.sourceCount - a.global.sourceCount;
+}
+
 function renderRanking() {
   const rows = rankingRooms()
     .map(room => ({ room, global: globalRatingForRoom(room) }))
     .sort((a, b) => {
     const scoreDiff = b.global.score - a.global.score;
     if (scoreDiff) return scoreDiff;
-    const sourceDiff = b.global.sourceCount - a.global.sourceCount;
+    const sourceDiff = rankingSourceTieDiff(a, b);
     if (sourceDiff) return sourceDiff;
     const awardDiff = b.global.awardCount - a.global.awardCount;
     if (awardDiff) return awardDiff;
