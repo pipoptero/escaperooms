@@ -7778,10 +7778,10 @@ function renderRanking() {
     .sort((a, b) => {
     const scoreDiff = b.global.score - a.global.score;
     if (scoreDiff) return scoreDiff;
-    const awardDiff = b.global.awardCount - a.global.awardCount;
-    if (awardDiff) return awardDiff;
     const sourceDiff = b.global.sourceCount - a.global.sourceCount;
     if (sourceDiff) return sourceDiff;
+    const awardDiff = b.global.awardCount - a.global.awardCount;
+    if (awardDiff) return awardDiff;
     return (a.room.nombre || '').localeCompare(b.room.nombre || '');
   });
   const medals = ['gold','silver','bronze'], emoji = ['🥇','🥈','🥉'];
