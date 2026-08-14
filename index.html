@@ -603,6 +603,17 @@
   .detail-section-title{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--text3);letter-spacing:.13em;text-transform:uppercase;margin:12px 0 7px;display:flex;align-items:center;gap:10px;}
   .detail-section-title::after{content:'';height:1px;background:var(--border);flex:1;}
   .detail-desc{font-size:.95rem;line-height:1.55;color:var(--text2);white-space:pre-line;}
+  .detail-video-card{position:relative;aspect-ratio:16/9;border:1px solid rgba(125,187,63,.22);background:#050609;overflow:hidden;margin:8px 0 14px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.025);}
+  .detail-video-preview,.detail-video-frame{position:absolute;inset:0;width:100%;height:100%;}
+  .detail-video-preview{border:0;background:radial-gradient(circle at center,rgba(125,187,63,.14),rgba(5,6,9,.98));cursor:pointer;color:var(--text);padding:0;display:block;text-align:left;}
+  .detail-video-preview img{width:100%;height:100%;object-fit:cover;display:block;opacity:.68;filter:saturate(.9) contrast(1.08);}
+  .detail-video-preview::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,.62));}
+  .detail-video-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;width:64px;height:64px;border:1px solid rgba(125,187,63,.62);background:rgba(5,6,9,.78);color:var(--amber);display:flex;align-items:center;justify-content:center;font-size:1.55rem;box-shadow:0 12px 34px rgba(0,0,0,.55);}
+  .detail-video-meta{position:absolute;left:12px;right:12px;bottom:10px;z-index:2;display:flex;justify-content:space-between;gap:10px;align-items:end;}
+  .detail-video-label{font-family:'Cinzel',serif;font-size:.9rem;color:var(--text);line-height:1.15;text-shadow:0 2px 8px rgba(0,0,0,.8);}
+  .detail-video-source{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--green);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;}
+  .detail-video-frame{border:0;background:#000;}
+  video.detail-video-frame{object-fit:contain;}
   .detail-awards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;margin-bottom:12px;}
   .detail-award{display:grid;grid-template-columns:44px minmax(0,1fr);gap:10px;align-items:center;border:1px solid rgba(125,187,63,.16);background:rgba(125,187,63,.035);padding:9px 10px;min-width:0;}
   .detail-award-logo{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.2);overflow:hidden;}
@@ -2063,7 +2074,7 @@ let REVIEW_ROOM_ALIASES = {
 let REVIEW_ROOM_ALIAS_GROUPS = {};
 let REVIEW_ROOM_META = {};
 
-let PENDIENTES = [], HECHOS = [], CATALOGO = [], TERPECA_AWARDS = [], EXTRA_AWARDS = [], EXTERNAL_RATINGS = {}, EXTERNAL_RATINGS_META = {}, REVIEW_PHOTOS = {}, ROOM_LOCATIONS = {}, sortPend = 'rating', sortMine = 'rating', sortCatalogo = 'awards', sortRank = 'global', rankTerrorFilter = 'all', rankCommunityFilter = '';
+let PENDIENTES = [], HECHOS = [], CATALOGO = [], TERPECA_AWARDS = [], EXTRA_AWARDS = [], EXTERNAL_RATINGS = {}, EXTERNAL_RATINGS_META = {}, REVIEW_PHOTOS = {}, OFFICIAL_VIDEOS = {}, ROOM_LOCATIONS = {}, sortPend = 'rating', sortMine = 'rating', sortCatalogo = 'awards', sortRank = 'global', rankTerrorFilter = 'all', rankCommunityFilter = '';
 const CATALOG_PAGE_SIZE = 120;
 let catalogVisibleCount = CATALOG_PAGE_SIZE;
 let GROUP_ROOM_INDEX = { pendientes: new Set(), hechos: new Set() };
@@ -5571,6 +5582,18 @@ async function loadReviewPhotos() {
   }
 }
 
+async function loadOfficialVideos() {
+  try {
+    const r = await fetch('official_videos.json?v=' + Date.now());
+    if (!r.ok) return;
+    const d = await r.json();
+    OFFICIAL_VIDEOS = d.videos || {};
+  } catch(e) {
+    console.warn('No se pudo cargar official_videos.json:', e.message);
+    OFFICIAL_VIDEOS = {};
+  }
+}
+
 async function loadRoomLocations() {
   try {
     const r = await fetch('room_locations.json?v=' + Date.now());
@@ -5689,6 +5712,7 @@ async function loadStaticEnhancementsAfterInitialRender() {
     await loadExtraAwards();
     await loadExternalRatings();
     await loadReviewPhotos();
+    await loadOfficialVideos();
     await loadRoomLocations();
     renderCatalogo();
     renderHechos();
@@ -6799,6 +6823,73 @@ function reviewPhotosHtml(room) {
     </div>`;
 }
 
+function officialVideoForRoom(room) {
+  if (!room || !OFFICIAL_VIDEOS || !Object.keys(OFFICIAL_VIDEOS).length) return null;
+  const catalogRoom = catalogRoomForReview(room);
+  const keys = [
+    roomKey(room),
+    room.id,
+    userRoomKey(room),
+    slugify(room.nombre || ''),
+    slugify(`${room.nombre || ''} ${room.empresa || ''}`),
+    ...(catalogRoom ? [roomKey(catalogRoom), catalogRoom.id, userRoomKey(catalogRoom), slugify(catalogRoom.nombre || '')] : []),
+    ...reviewIdentityKeys(room)
+  ].filter(Boolean);
+  for (const key of [...new Set(keys)]) {
+    if (OFFICIAL_VIDEOS[key]) return OFFICIAL_VIDEOS[key];
+  }
+  return null;
+}
+
+function safeExternalVideoUrl(url) {
+  const value = String(url || '').trim();
+  return /^https?:\/\//i.test(value) ? value : '';
+}
+
+function videoProviderLabel(provider) {
+  return provider === 'youtube' ? 'YouTube oficial'
+    : provider === 'vimeo' ? 'Vimeo oficial'
+    : 'Video oficial';
+}
+
+function officialVideoHtml(room) {
+  const video = officialVideoForRoom(room);
+  if (!video) return '';
+  const embedUrl = safeExternalVideoUrl(video.embed_url || video.video_url);
+  if (!embedUrl) return '';
+  const provider = String(video.provider || '').toLowerCase();
+  const cardId = `detail-video-${cssSafe(roomKey(room) || slugify(room.nombre || 'room'))}`;
+  const thumb = safeExternalVideoUrl(video.thumbnail) || room.imagen || '';
+  const thumbHtml = thumb ? `<img src="${escapeHtml(thumb)}" alt="${escapeHtml(`Intro oficial de ${room.nombre || 'escape room'}`)}" loading="lazy">` : '';
+  return `
+    <div class="detail-section-title">Intro oficial</div>
+    <div class="detail-video-card" id="${cardId}">
+      <button class="detail-video-preview" type="button" onclick="playOfficialVideo('${jsString(cardId)}','${jsString(provider)}','${jsString(embedUrl)}')" aria-label="Reproducir intro oficial">
+        ${thumbHtml}
+        <span class="detail-video-play">▶</span>
+        <span class="detail-video-meta">
+          <span class="detail-video-label">${escapeHtml(video.label || 'Ver intro oficial')}</span>
+          <span class="detail-video-source">${escapeHtml(videoProviderLabel(provider))}</span>
+        </span>
+      </button>
+    </div>`;
+}
+
+function playOfficialVideo(cardId, provider, embedUrl) {
+  const card = document.getElementById(cardId);
+  const safeUrl = safeExternalVideoUrl(embedUrl);
+  if (!card || !safeUrl) return;
+  if (provider === 'direct') {
+    card.innerHTML = `<video class="detail-video-frame" src="${escapeHtml(safeUrl)}" controls autoplay playsinline></video>`;
+    return;
+  }
+  const sep = safeUrl.includes('?') ? '&' : '?';
+  const src = provider === 'youtube' || provider === 'vimeo'
+    ? `${safeUrl}${sep}autoplay=1`
+    : safeUrl;
+  card.innerHTML = `<iframe class="detail-video-frame" src="${escapeHtml(src)}" title="Intro oficial" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>`;
+}
+
 function openPhotoLightbox(event, galleryKey, index = 0) {
   if (event) {
     event.preventDefault();
@@ -7082,6 +7173,7 @@ function openDetail(kind, key, options = {}) {
     <div class="detail-section-title">Sinopsis</div>
     <div class="detail-desc">${synopsis}</div>` : ''}
     ${isReview ? reviewBlockHtml(room) : ''}
+    ${officialVideoHtml(room)}
     ${detailAccountHtml(room, kind)}
     ${communityReviewsHtml(room, kind)}
     <div class="detail-actions">

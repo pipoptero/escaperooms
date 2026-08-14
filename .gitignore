@@ -25,6 +25,7 @@ scripts/collect_*.py
 scripts/detect_*.py
 scripts/download_*.py
 scripts/enrich_*.py
+scripts/export_official_videos.py
 scripts/run_consensus_*.py
 scripts/sanitize_*.py
 scripts/scrape_*.py

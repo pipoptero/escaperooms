@@ -1,0 +1,2160 @@
+{
+  "meta": {
+    "generated_at": "2026-08-14T09:01:56",
+    "rooms": 239,
+    "source": "official_web_high_confidence"
+  },
+  "videos": {
+    "abduccion-alien": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/QqikNE8I7Hw",
+      "video_url": "https://www.youtube.com/watch?v=QqikNE8I7Hw",
+      "thumbnail": "https://i.ytimg.com/vi/QqikNE8I7Hw/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.elsecretoescaperoom.com/latapadera",
+      "score": 106
+    },
+    "academia-de-magia": {
+      "provider": "direct",
+      "embed_url": "https://bcn.aventurico.com/content/image/static/17/quest/1737540278_academia-de-magia.mp4",
+      "video_url": "https://bcn.aventurico.com/content/image/static/17/quest/1737540278_academia-de-magia.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://bcn.aventurico.com/juegos/academia",
+      "score": 124
+    },
+    "after-party": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/Oj7vhLYvpIg",
+      "video_url": "https://www.youtube.com/embed/Oj7vhLYvpIg",
+      "thumbnail": "https://i.ytimg.com/vi/Oj7vhLYvpIg/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://lock-clock.com/es/game/after-party",
+      "score": 124
+    },
+    "agencia-360": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/zjUDhXZXyTc",
+      "video_url": "https://www.youtube.com/embed/zjUDhXZXyTc",
+      "thumbnail": "https://i.ytimg.com/vi/zjUDhXZXyTc/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://arroyoescaperoom.es/agencia-360/",
+      "score": 124
+    },
+    "alcatraz": {
+      "provider": "direct",
+      "embed_url": "https://gcp-repackager.wixmp.com/video.wixstatic.com/video/eeb48a_610b495ea63941b7864da7e161453ec9/,480p,720p,1080p,/mp4/file.mp4",
+      "video_url": "https://gcp-repackager.wixmp.com/video.wixstatic.com/video/eeb48a_610b495ea63941b7864da7e161453ec9/,480p,720p,1080p,/mp4/file.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.alcatraztenerife.com/el-juego",
+      "score": 104
+    },
+    "alicia-en-el-pais-de-las-maravillas": {
+      "provider": "direct",
+      "embed_url": "https://bcn.aventurico.com/content/image/static/17/quest/1737539822_Alicia en el Pais de las Maravillas.mp4",
+      "video_url": "https://bcn.aventurico.com/content/image/static/17/quest/1737539822_Alicia en el Pais de las Maravillas.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://bcn.aventurico.com/juegos/alice",
+      "score": 124
+    },
+    "alicia-y-la-llave-del-tiempo": {
+      "provider": "direct",
+      "embed_url": "https://bcn.aventurico.com/content/image/static/17/quest/1737540341_alicia-y-la-llave-del-tiempo.mp4",
+      "video_url": "https://bcn.aventurico.com/content/image/static/17/quest/1737540341_alicia-y-la-llave-del-tiempo.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://bcn.aventurico.com/juegos/alice-kids",
+      "score": 124
+    },
+    "alicia-y-la-llave-del-tiempo-489241": {
+      "provider": "direct",
+      "embed_url": "https://aventurico.com/content/image/static/18/quest/1706283472_alicia-y-la-llave-del-tiempo.mp4",
+      "video_url": "https://aventurico.com/content/image/static/18/quest/1706283472_alicia-y-la-llave-del-tiempo.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://aventurico.com/juegos/alice-kids1",
+      "score": 124
+    },
+    "aliens": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/J006ZIhOX7Q",
+      "video_url": "https://www.youtube.com/watch?v=J006ZIhOX7Q",
+      "thumbnail": "https://i.ytimg.com/vi/J006ZIhOX7Q/hqdefault.jpg",
+      "label": "Ver Trailer",
+      "source_page_url": "https://www.escapemania.es/",
+      "score": 83
+    },
+    "alkatraz-classic": {
+      "provider": "direct",
+      "embed_url": "https://playescaperoom.es/wp-content/uploads/WhatsApp-Video-2026-03-25-at-16.56.17.mp4",
+      "video_url": "https://playescaperoom.es/wp-content/uploads/WhatsApp-Video-2026-03-25-at-16.56.17.mp4",
+      "thumbnail": "",
+      "label": "elementor-video",
+      "source_page_url": "https://playescaperoom.es/room/escape-room-alcatraz/",
+      "score": 124
+    },
+    "alkatraz-medieval": {
+      "provider": "direct",
+      "embed_url": "https://playescaperoom.es/wp-content/uploads/video-medieval.mp4",
+      "video_url": "https://playescaperoom.es/wp-content/uploads/video-medieval.mp4",
+      "thumbnail": "",
+      "label": "elementor-video",
+      "source_page_url": "https://playescaperoom.es/room/escape-room-medieval/",
+      "score": 124
+    },
+    "alkatraz-medieval-santiago-de-compostela": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/RT5Ty4aGQZo",
+      "video_url": "https://www.youtube.com/embed/RT5Ty4aGQZo",
+      "thumbnail": "https://i.ytimg.com/vi/RT5Ty4aGQZo/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://compostela.eskapark.com/detalle/juego/3",
+      "score": 106
+    },
+    "almacen-oculto": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/KUD7Vo2IEnY",
+      "video_url": "https://www.youtube.com/embed/KUD7Vo2IEnY?rel=0&controls=0&showinfo=0",
+      "thumbnail": "https://i.ytimg.com/vi/KUD7Vo2IEnY/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.faunaroomescape.com/",
+      "score": 106
+    },
+    "ambar-la-visita": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/pjeNHSksAGs",
+      "video_url": "https://www.youtube.com/embed/pjeNHSksAGs?rel=0&controls=0&showinfo=0",
+      "thumbnail": "https://i.ytimg.com/vi/pjeNHSksAGs/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cocoroom.es/ambar/",
+      "score": 106
+    },
+    "ambar-la-visita-2-0": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/pjeNHSksAGs",
+      "video_url": "https://www.youtube.com/embed/pjeNHSksAGs?rel=0&controls=0&showinfo=0",
+      "thumbnail": "https://i.ytimg.com/vi/pjeNHSksAGs/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cocoroom.es/ambar/",
+      "score": 106
+    },
+    "apophis": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/aL7IfJSMth8",
+      "video_url": "https://www.youtube.com/watch?v=aL7IfJSMth8",
+      "thumbnail": "https://i.ytimg.com/vi/aL7IfJSMth8/hqdefault.jpg",
+      "label": "documental",
+      "source_page_url": "https://vortexescape.com/apophis",
+      "score": 101
+    },
+    "arcade-invaders": {
+      "provider": "direct",
+      "embed_url": "https://arcadeinvaders.es/wp-content/uploads/2024/10/misterio-finito-VIMEO.mp4",
+      "video_url": "https://arcadeinvaders.es/wp-content/uploads/2024/10/misterio-finito-VIMEO.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://arcadeinvaders.es/#eljuego",
+      "score": 142
+    },
+    "area-51": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/E4fL7YpuZXY",
+      "video_url": "https://www.youtube.com/watch?v=E4fL7YpuZXY",
+      "thumbnail": "https://i.ytimg.com/vi/E4fL7YpuZXY/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.mindclue.es/",
+      "score": 83
+    },
+    "armageroom": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/9fBhUDxRlOI",
+      "video_url": "https://www.youtube.com/embed/9fBhUDxRlOI?si=xdicZ1Op-Gs6TdG_",
+      "thumbnail": "https://i.ytimg.com/vi/9fBhUDxRlOI/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cocoroom.es/armageroom/",
+      "score": 124
+    },
+    "asesinato-en-el-orient-express": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/WGigXXk2Eqk",
+      "video_url": "https://www.youtube.com/embed/WGigXXk2Eqk?rel=0&controls=0",
+      "thumbnail": "https://i.ytimg.com/vi/WGigXXk2Eqk/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://malaga.escapegameover.es/es/rooms/orient-express-the-murder",
+      "score": 106
+    },
+    "asesinato-en-el-tren": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/uAk39coySj8",
+      "video_url": "https://www.youtube.com/embed/uAk39coySj8?feature=oembed&rel=0&mute=0&loop=0&controls=1&playsinline=0&cc_load_policy=0",
+      "thumbnail": "https://i.ytimg.com/vi/uAk39coySj8/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cluehunter.es/asesinato-en-el-tren/",
+      "score": 89
+    },
+    "atrapado-en-el-museo": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/9hCT_8zk3hc",
+      "video_url": "https://www.youtube.com/watch?v=9hCT_8zk3hc",
+      "thumbnail": "https://i.ytimg.com/vi/9hCT_8zk3hc/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://lasalida.net/escape-room-atrapado-en-el-museo/",
+      "score": 101
+    },
+    "atrapados-en-el-sotano": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/47VfPySyxIo",
+      "video_url": "https://www.youtube.com/embed/47VfPySyxIo?feature=oembed&rel=0&mute=0&loop=0&controls=1&playsinline=0&cc_load_policy=0",
+      "thumbnail": "https://i.ytimg.com/vi/47VfPySyxIo/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cluehunter.es/atrapados-en-el-sotano/",
+      "score": 89
+    },
+    "atrapados-en-el-sotano-251831": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/47VfPySyxIo",
+      "video_url": "https://www.youtube.com/embed/47VfPySyxIo?feature=oembed&rel=0&mute=0&loop=0&controls=1&playsinline=0&cc_load_policy=0",
+      "thumbnail": "https://i.ytimg.com/vi/47VfPySyxIo/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cluehunter.es/atrapados-en-el-sotano/",
+      "score": 89
+    },
+    "atrapados-en-el-sotano-a-coruna": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/47VfPySyxIo",
+      "video_url": "https://www.youtube.com/embed/47VfPySyxIo?feature=oembed&rel=0&mute=0&loop=0&controls=1&playsinline=0&cc_load_policy=0",
+      "thumbnail": "https://i.ytimg.com/vi/47VfPySyxIo/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cluehunter.es/atrapados-en-el-sotano/",
+      "score": 89
+    },
+    "atrapados-en-el-sotano-murcia": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/47VfPySyxIo",
+      "video_url": "https://www.youtube.com/embed/47VfPySyxIo?feature=oembed&rel=0&mute=0&loop=0&controls=1&playsinline=0&cc_load_policy=0",
+      "thumbnail": "https://i.ytimg.com/vi/47VfPySyxIo/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cluehunter.es/atrapados-en-el-sotano/",
+      "score": 89
+    },
+    "atrapados-en-sotano": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/47VfPySyxIo",
+      "video_url": "https://www.youtube.com/embed/47VfPySyxIo?feature=oembed&rel=0&mute=0&loop=0&controls=1&playsinline=0&cc_load_policy=0",
+      "thumbnail": "https://i.ytimg.com/vi/47VfPySyxIo/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cluehunter.es/atrapados-en-el-sotano/",
+      "score": 89
+    },
+    "aventura-medieval": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/bqLUp7GuUTg",
+      "video_url": "https://www.youtube.com/embed/bqLUp7GuUTg?rel=0&autoplay=0&showinfo=0&controls=0",
+      "thumbnail": "https://i.ytimg.com/vi/bqLUp7GuUTg/hqdefault.jpg",
+      "label": "Find out why a good domain name is important",
+      "source_page_url": "https://www.escapesbd.com/",
+      "score": 106
+    },
+    "bajo-segunda": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/23v_99lH0GQ",
+      "video_url": "https://www.youtube.com/embed/23v_99lH0GQ?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/23v_99lH0GQ/hqdefault.jpg",
+      "label": "Parasomnia Bajo 2a - Horror Escape Room (trailer 2021)",
+      "source_page_url": "https://bajosegunda.com/",
+      "score": 106
+    },
+    "beyond-medusa": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/mC_ZT23km-4",
+      "video_url": "https://www.youtube.com/embed/mC_ZT23km-4?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/mC_ZT23km-4/hqdefault.jpg",
+      "label": "UBISOFT ESCAPE GAMES | BEYOND MEDUSA'S GATE - TEASER",
+      "source_page_url": "https://escapesecretcode.com/sala/escape-beyond-medusa-gate/#bookingForm",
+      "score": 124
+    },
+    "boom-escape": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/6UAzV8Gj7wo",
+      "video_url": "https://www.youtube.com/embed/6UAzV8Gj7wo?si=nlDZQ2VAHFhS8Yg0?wmode=opaque&controls=0&rel=0&enablejsapi=1&origin=https://runawayescaperoom.com&iv_load_policy=3",
+      "thumbnail": "https://i.ytimg.com/vi/6UAzV8Gj7wo/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://runawayescaperoom.com/producto/boom-escape/",
+      "score": 89
+    },
+    "c-s-i-95": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/iavZdzQiugw",
+      "video_url": "https://www.youtube.com/embed/iavZdzQiugw?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/iavZdzQiugw/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://paraparkmalaga.es/escape-room-escena-del-crimen-95/",
+      "score": 106
+    },
+    "caesaraugusta": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/pfzi9Vw0Muk",
+      "video_url": "https://www.youtube.com/embed/pfzi9Vw0Muk?rel=0&controls=0&showinfo=0",
+      "thumbnail": "https://i.ytimg.com/vi/pfzi9Vw0Muk/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cocoroom.es/imperio-romano/",
+      "score": 124
+    },
+    "caos": {
+      "provider": "direct",
+      "embed_url": "https://escaperoomcaos.es/wp-content/uploads/2019/12/Trailer_Caos_MIN.mp4",
+      "video_url": "https://escaperoomcaos.es/wp-content/uploads/2019/12/Trailer_Caos_MIN.mp4",
+      "thumbnail": "",
+      "label": "elementor-video",
+      "source_page_url": "https://escaperoomcaos.es/",
+      "score": 142
+    },
+    "catacumbas": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/KlzgSS8TSSA",
+      "video_url": "https://www.youtube.com/embed/KlzgSS8TSSA?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/KlzgSS8TSSA/hqdefault.jpg",
+      "label": "GOLDEN POP - CATACUMBAS - EL ESCAPE ROOM MÁS GRANDE DE ESPAÑA",
+      "source_page_url": "https://goldenpop.es/juegos/catacumbas/",
+      "score": 124
+    },
+    "chernobil": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/S8V9FhIERL4",
+      "video_url": "https://www.youtube.com/embed/S8V9FhIERL4?rel=0&controls=0",
+      "thumbnail": "https://i.ytimg.com/vi/S8V9FhIERL4/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://malaga.escapegameover.es/es/rooms/chernobyl",
+      "score": 106
+    },
+    "circo-maldito": {
+      "provider": "direct",
+      "embed_url": "https://aventurico.com/content/image/static/18/quest/1706283572_circo-maldito.mp4",
+      "video_url": "https://aventurico.com/content/image/static/18/quest/1706283572_circo-maldito.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://aventurico.com/juegos/circus",
+      "score": 124
+    },
+    "conquista-de-troya": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/y3VwYksChgc",
+      "video_url": "https://youtu.be/y3VwYksChgc?si=asO_9cIDqmUYa1k2 ",
+      "thumbnail": "https://i.ytimg.com/vi/y3VwYksChgc/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://neverlandescape.com/",
+      "score": 88
+    },
+    "contagio": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/cpEUQ5dlj8s",
+      "video_url": "https://youtube.com/shorts/cpEUQ5dlj8s?feature=share\"",
+      "thumbnail": "https://i.ytimg.com/vi/cpEUQ5dlj8s/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://escapegamecastellon.com/rooms/contagio/",
+      "score": 89
+    },
+    "crimen-en-sant-pere": {
+      "provider": "direct",
+      "embed_url": "http://nuevo.gymkhana-barcelona.com/wp-content/uploads/2015/09/Crimen-en-Sant-Pere-Crime-in-Sant-Pere-SD.mp4?_=1",
+      "video_url": "http://nuevo.gymkhana-barcelona.com/wp-content/uploads/2015/09/Crimen-en-Sant-Pere-Crime-in-Sant-Pere-SD.mp4?_=1",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://gymkhana-barcelona.com/es/crimen-en-sant-pere/",
+      "score": 104
+    },
+    "criogenic-609591": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/IhhLIRSTKZk",
+      "video_url": "https://www.youtube.com/embed/IhhLIRSTKZk",
+      "thumbnail": "https://i.ytimg.com/vi/IhhLIRSTKZk/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://criogenicescaperoom.com/",
+      "score": 89
+    },
+    "crisys-rivas-vaciamadrid": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/rBrgUseWEYk",
+      "video_url": "https://www.youtube.com/watch?v=rBrgUseWEYk\"",
+      "thumbnail": "https://i.ytimg.com/vi/rBrgUseWEYk/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.shockescaperoom.com/escape-room-hall-escape-crisys/#jupiterx-main",
+      "score": 89
+    },
+    "crupier": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/J7GcqxDcRtA",
+      "video_url": "https://www.youtube.com/embed/J7GcqxDcRtA?autoplay=1&loop=1&controls=0&modestbranding=1&rel=0&playlist=J7GcqxDcRtA",
+      "thumbnail": "https://i.ytimg.com/vi/J7GcqxDcRtA/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://quimeraescape.com/crupier/",
+      "score": 124
+    },
+    "daemonium": {
+      "provider": "vimeo",
+      "embed_url": "https://player.vimeo.com/video/125996955",
+      "video_url": "https://vimeo.com/125996955",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://salalaclave.es/daemonium-2/",
+      "score": 101
+    },
+    "dark-city": {
+      "provider": "direct",
+      "embed_url": "https://obscuraexperiences.com/wp-content/uploads/2026/02/Dark-City-2.mp4",
+      "video_url": "https://obscuraexperiences.com/wp-content/uploads/2026/02/Dark-City-2.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://obscuraexperiences.com/",
+      "score": 124
+    },
+    "del-born-al-raval": {
+      "provider": "direct",
+      "embed_url": "http://nuevo.gymkhana-barcelona.com/wp-content/uploads/2015/09/Gymkhana-Artemis-Del-Born-al-Raval-version-teambuilding-SD.mp4?_=1",
+      "video_url": "http://nuevo.gymkhana-barcelona.com/wp-content/uploads/2015/09/Gymkhana-Artemis-Del-Born-al-Raval-version-teambuilding-SD.mp4?_=1",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://gymkhana-barcelona.com/es/del-born-al-raval/",
+      "score": 104
+    },
+    "dementia": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/_BPULSjvvUc",
+      "video_url": "https://www.youtube.com/embed/_BPULSjvvUc",
+      "thumbnail": "https://i.ytimg.com/vi/_BPULSjvvUc/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://sinequanon.com.es/salas.html",
+      "score": 106
+    },
+    "depths-of-osiris": {
+      "provider": "direct",
+      "embed_url": "https://videos.files.wordpress.com/CShpayzz/new-video-osiris_trim.mp4",
+      "video_url": "https://videos.files.wordpress.com/CShpayzz/new-video-osiris_trim.mp4",
+      "thumbnail": "",
+      "label": "elementor-video",
+      "source_page_url": "https://vroomescape.com/en/depths-of-osiris/",
+      "score": 104
+    },
+    "descendientes-de-sokar": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/_MsEHAiHWn4",
+      "video_url": "https://www.youtube.com/embed/_MsEHAiHWn4?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/_MsEHAiHWn4/hqdefault.jpg",
+      "label": "Descendientes de Sokar - Trailer - Illusion Escape Room",
+      "source_page_url": "https://www.illusionescaperoom.com/rooms/descendientes-sokar/",
+      "score": 106
+    },
+    "el-4-elemento": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/peCUlVuY38s",
+      "video_url": "https://www.youtube.com/embed/peCUlVuY38s?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/peCUlVuY38s/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://paraparkmalaga.es/escape-room-el-cuarto-elemento/",
+      "score": 106
+    },
+    "el-bosque-de-blair": {
+      "provider": "direct",
+      "embed_url": "https://uyquemiedo.com/wp-content/uploads/2025/01/teasser-01.mp4",
+      "video_url": "https://uyquemiedo.com/wp-content/uploads/2025/01/teasser-01.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://uyquemiedo.com/el-bosque-de-blair/",
+      "score": 142
+    },
+    "el-camerino": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/Gk47ugIktAI",
+      "video_url": "https://www.youtube.com/watch?v=Gk47ugIktAI\"",
+      "thumbnail": "https://i.ytimg.com/vi/Gk47ugIktAI/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://esfinge-escape.com/juegos/el-camerino-escape-room",
+      "score": 89
+    },
+    "el-caso-ridel": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/Sr1QVdsXwyI",
+      "video_url": "https://www.youtube.com/embed/Sr1QVdsXwyI",
+      "thumbnail": "https://i.ytimg.com/vi/Sr1QVdsXwyI/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://rubikescaperoom.com/juegos/1-el-caso-ridel.html",
+      "score": 124
+    },
+    "el-caso-w-e-n": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/KyTNKcdGRmY",
+      "video_url": "https://www.youtube.com/embed/KyTNKcdGRmY?feature=oembed&rel=0&mute=0&loop=0&controls=1&playsinline=0&cc_load_policy=0",
+      "thumbnail": "https://i.ytimg.com/vi/KyTNKcdGRmY/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cluehunter.es/el-caso-wen/",
+      "score": 89
+    },
+    "el-caso-w-e-n-murcia": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/KyTNKcdGRmY",
+      "video_url": "https://www.youtube.com/embed/KyTNKcdGRmY?feature=oembed&rel=0&mute=0&loop=0&controls=1&playsinline=0&cc_load_policy=0",
+      "thumbnail": "https://i.ytimg.com/vi/KyTNKcdGRmY/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cluehunter.es/el-caso-wen/",
+      "score": 89
+    },
+    "el-club-de-los-viajes-extraordinarios": {
+      "provider": "vimeo",
+      "embed_url": "https://player.vimeo.com/video/33025136",
+      "video_url": "https://vimeo.com/33025136",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://salalaclave.es/el-club-de-los-viajes-extraordinarios/",
+      "score": 101
+    },
+    "el-destino-del-embajador": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/tZc3wN-JE34",
+      "video_url": "https://www.youtube.com/embed/tZc3wN-JE34?disablekb=1",
+      "thumbnail": "https://i.ytimg.com/vi/tZc3wN-JE34/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.evasionrebelde.com/escape-room-oviedo-el-destino-del-embajador/",
+      "score": 89
+    },
+    "el-diario-de-miko": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/CtWP8xmh4Io",
+      "video_url": "https://www.youtube.com/embed/CtWP8xmh4Io?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/CtWP8xmh4Io/hqdefault.jpg",
+      "label": "El Diario de Miko ...",
+      "source_page_url": "https://www.xcaperoombcn.com/room/el-diario-de-miko/",
+      "score": 124
+    },
+    "el-enigma-de-goya": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/NgMTMT2qsqU",
+      "video_url": "https://www.youtube.com/embed/NgMTMT2qsqU",
+      "thumbnail": "https://i.ytimg.com/vi/NgMTMT2qsqU/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cocoroom.es/enigmadegoya/",
+      "score": 106
+    },
+    "el-enigma-de-goya-sevilla": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/NgMTMT2qsqU",
+      "video_url": "https://www.youtube.com/embed/NgMTMT2qsqU",
+      "thumbnail": "https://i.ytimg.com/vi/NgMTMT2qsqU/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cocoroom.es/enigmadegoya/",
+      "score": 106
+    },
+    "el-enigma-de-goya-zaragoza": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/NgMTMT2qsqU",
+      "video_url": "https://www.youtube.com/embed/NgMTMT2qsqU",
+      "thumbnail": "https://i.ytimg.com/vi/NgMTMT2qsqU/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cocoroom.es/enigmadegoya/",
+      "score": 106
+    },
+    "el-espiritu-de-la-movida": {
+      "provider": "direct",
+      "embed_url": "https://elsecretodemadrid.es/wp-content/uploads/2025/12/Trailer-para-web-2025.mp4",
+      "video_url": "https://elsecretodemadrid.es/wp-content/uploads/2025/12/Trailer-para-web-2025.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://elsecretodemadrid.es/soho",
+      "score": 124
+    },
+    "el-hechizo-de-la-dama-oscura": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/-kTbvaK_nL4",
+      "video_url": "https://www.youtube.com/watch?v=-kTbvaK_nL4\"",
+      "thumbnail": "https://i.ytimg.com/vi/-kTbvaK_nL4/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://escapethebox.es/escape-rooms/escape-room-magia-el-hechizo-de-la-dama-oscura/",
+      "score": 89
+    },
+    "el-hijo-perdido-del-posadero": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/479hktaG3CM",
+      "video_url": "https://www.youtube.com/embed/479hktaG3CM?feature=oembed&start&end&wmode=opaque&loop=0&controls=1&mute=0&rel=0&modestbranding=0",
+      "thumbnail": "https://i.ytimg.com/vi/479hktaG3CM/hqdefault.jpg",
+      "label": "Reproductor de vídeo youtube",
+      "source_page_url": "https://dragonbornvitoria.es/dragonborn/",
+      "score": 106
+    },
+    "el-hospital": {
+      "provider": "vimeo",
+      "embed_url": "https://player.vimeo.com/video/470664161",
+      "video_url": "https://player.vimeo.com/video/470664161?autoplay=1\"",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://linked-minds.com/services/el-hospital/",
+      "score": 89
+    },
+    "el-imperio-romano": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/pfzi9Vw0Muk",
+      "video_url": "https://www.youtube.com/embed/pfzi9Vw0Muk?rel=0&controls=0&showinfo=0",
+      "thumbnail": "https://i.ytimg.com/vi/pfzi9Vw0Muk/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cocoroom.es/imperio-romano/",
+      "score": 124
+    },
+    "el-invernadero-by-resident-riddle": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/OL0msjX7Z3s",
+      "video_url": "https://www.youtube.com/embed/OL0msjX7Z3s?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/OL0msjX7Z3s/hqdefault.jpg",
+      "label": "Trailer El Invernadero Escape Room",
+      "source_page_url": "https://goodlock.es/el-invernadero/",
+      "score": 106
+    },
+    "el-laberinto-del-tiempo": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/yP59YK_Inck",
+      "video_url": "https://www.youtube.com/embed/yP59YK_Inck",
+      "thumbnail": "https://i.ytimg.com/vi/yP59YK_Inck/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://lock-clock.com/es/game/el-laberinto-del-tiempo",
+      "score": 124
+    },
+    "el-lechero": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/zt58jFRaP-c",
+      "video_url": "https://www.youtube.com/embed/zt58jFRaP-c?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/zt58jFRaP-c/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://sabotajerooms.com/el-lechero/",
+      "score": 89
+    },
+    "el-malvado-troll": {
+      "provider": "direct",
+      "embed_url": "https://code258.com/wp-content/uploads/troll-video.mp4",
+      "video_url": "https://code258.com/wp-content/uploads/troll-video.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://code258.com/el-malvado-troll/#content",
+      "score": 107
+    },
+    "el-metro": {
+      "provider": "direct",
+      "embed_url": "http://www.roomiaescape.com/wp-content/uploads/2024/04/elmetro-1.mp4",
+      "video_url": "http://www.roomiaescape.com/wp-content/uploads/2024/04/elmetro-1.mp4",
+      "thumbnail": "",
+      "label": "elementor-video",
+      "source_page_url": "https://www.roomiaescape.com/el-metro/#content",
+      "score": 142
+    },
+    "el-misterio-de-don-quijote": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/-nend7wr1i0",
+      "video_url": "https://www.youtube.com/watch?time_continue=1&v=-nend7wr1i0",
+      "thumbnail": "https://i.ytimg.com/vi/-nend7wr1i0/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://therombocode.es/sevilla/juegos/el-misterio-de-don-quijote/",
+      "score": 101
+    },
+    "el-misterio-de-la-marina": {
+      "provider": "direct",
+      "embed_url": "https://www.tangramescaperoom.com/wp-content/uploads/2019/09/intro_web.mp4",
+      "video_url": "https://www.tangramescaperoom.com/wp-content/uploads/2019/09/intro_web.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.tangramescaperoom.com/salas/el-secreto-de-la-marina/",
+      "score": 124
+    },
+    "el-misterio-de-la-sagra": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/fyZ83d00m0E",
+      "video_url": "https://www.youtube.com/embed/fyZ83d00m0E",
+      "thumbnail": "https://i.ytimg.com/vi/fyZ83d00m0E/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.illusionescaperoom.com/rooms/el-misterio-de-la-sagra/",
+      "score": 124
+    },
+    "el-mundo-magico-de-las-lamias": {
+      "provider": "direct",
+      "embed_url": "https://www.mitologik.com/mitologik-home.mp4",
+      "video_url": "https://www.mitologik.com/mitologik-home.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.mitologik.com/",
+      "score": 124
+    },
+    "el-rescate-alicante": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/Hrtuax4CzQM",
+      "video_url": "https://www.youtube.com/embed/Hrtuax4CzQM?wmode=transparent&autoplay=0",
+      "thumbnail": "https://i.ytimg.com/vi/Hrtuax4CzQM/hqdefault.jpg",
+      "label": "YouTube video player 1",
+      "source_page_url": "https://secrethunter.es/el-rescate/",
+      "score": 124
+    },
+    "el-secret-de-la-torre": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/87ICF_YZd_g",
+      "video_url": "https://www.youtube.com/embed/87ICF_YZd_g",
+      "thumbnail": "https://i.ytimg.com/vi/87ICF_YZd_g/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.visitgironella.cat/room-escape-el-secret-de-la-torre/",
+      "score": 124
+    },
+    "el-secreto-de-alcatraz": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/ormiUqUVpYI",
+      "video_url": "https://www.youtube.com/embed/ormiUqUVpYI?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/ormiUqUVpYI/hqdefault.jpg",
+      "label": "El Secreto de Alcatraz ESCAPE ROOM - Trailer",
+      "source_page_url": "https://excapexperience.com/el-secreto-de-alcatraz/",
+      "score": 124
+    },
+    "el-secreto-de-la-jungla": {
+      "provider": "direct",
+      "embed_url": "https://bcn.aventurico.com/content/image/static/17/quest/1786620680_el-secreto-de-la-jungla (1).mp4",
+      "video_url": "https://bcn.aventurico.com/content/image/static/17/quest/1786620680_el-secreto-de-la-jungla (1).mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://bcn.aventurico.com/juegos/jungle",
+      "score": 124
+    },
+    "el-secreto-de-los-magos": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/ytp0TzZeIcI",
+      "video_url": "https://www.youtube.com/embed/ytp0TzZeIcI?wmode=opaque&controls=0&rel=0&enablejsapi=1&origin=https://maytokingdom.es&iv_load_policy=3",
+      "thumbnail": "https://i.ytimg.com/vi/ytp0TzZeIcI/hqdefault.jpg",
+      "label": "bricks-lazy-hidden",
+      "source_page_url": "https://maytokingdom.es/juegos/secreto-de-los-magos/#reservas",
+      "score": 106
+    },
+    "el-sombrerero-de-alicia": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/6d3Uq-uzgg0",
+      "video_url": "https://www.youtube.com/embed/6d3Uq-uzgg0?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/6d3Uq-uzgg0/hqdefault.jpg",
+      "label": "El sombrero de Alicia XCAPEROOM FINESTRAT",
+      "source_page_url": "https://xcaperoomfinestrat.com/el-sombrerero-de-alicia",
+      "score": 124
+    },
+    "el-tesoro-de-barba-verde": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/7RU2uof2-LE",
+      "video_url": "https://www.youtube.com/embed/7RU2uof2-LE?wmode=opaque",
+      "thumbnail": "https://i.ytimg.com/vi/7RU2uof2-LE/hqdefault.jpg",
+      "label": "scale-with-grid",
+      "source_page_url": "https://www.roomescapesalamanca.com/",
+      "score": 106
+    },
+    "el-tesoro-de-calatravo": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/D6vagI_M_hc",
+      "video_url": "https://www.youtube.com/embed/D6vagI_M_hc?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/D6vagI_M_hc/hqdefault.jpg",
+      "label": "El Tesoro Calatravo",
+      "source_page_url": "https://www.escapateruel.com/room/escapa-teruel-el-tesoro-calatravo/",
+      "score": 106
+    },
+    "el-tesoro-de-calico-jack": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/h-plC2yhk0A",
+      "video_url": "https://www.youtube.com/embed/h-plC2yhk0A?feature=oembed&rel=0&mute=0&loop=0&controls=1&playsinline=0&cc_load_policy=0",
+      "thumbnail": "https://i.ytimg.com/vi/h-plC2yhk0A/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cluehunter.es/el-tesoro-de-calico-jack/",
+      "score": 89
+    },
+    "el-tesoro-de-calico-jack-a-coruna": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/h-plC2yhk0A",
+      "video_url": "https://www.youtube.com/embed/h-plC2yhk0A?feature=oembed&rel=0&mute=0&loop=0&controls=1&playsinline=0&cc_load_policy=0",
+      "thumbnail": "https://i.ytimg.com/vi/h-plC2yhk0A/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cluehunter.es/el-tesoro-de-calico-jack/",
+      "score": 89
+    },
+    "el-tesoro-de-calico-jack-murcia": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/h-plC2yhk0A",
+      "video_url": "https://www.youtube.com/embed/h-plC2yhk0A?feature=oembed&rel=0&mute=0&loop=0&controls=1&playsinline=0&cc_load_policy=0",
+      "thumbnail": "https://i.ytimg.com/vi/h-plC2yhk0A/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cluehunter.es/el-tesoro-de-calico-jack/",
+      "score": 89
+    },
+    "el-tesoro-de-calico-jack-zaragoza": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/h-plC2yhk0A",
+      "video_url": "https://www.youtube.com/embed/h-plC2yhk0A?feature=oembed&rel=0&mute=0&loop=0&controls=1&playsinline=0&cc_load_policy=0",
+      "thumbnail": "https://i.ytimg.com/vi/h-plC2yhk0A/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cluehunter.es/el-tesoro-de-calico-jack/",
+      "score": 89
+    },
+    "el-testamento-de-mr-collins": {
+      "provider": "direct",
+      "embed_url": "https://123actionbarcelona.com/wp-content/uploads/2026/04/cluedovideo2.mp4",
+      "video_url": "https://123actionbarcelona.com/wp-content/uploads/2026/04/cluedovideo2.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://123actionbarcelona.com/cluedo-en-vivo/",
+      "score": 89
+    },
+    "el-ultimo-vikingo": {
+      "provider": "vimeo",
+      "embed_url": "https://player.vimeo.com/video/470665844",
+      "video_url": "https://player.vimeo.com/video/470665844?autoplay=1\"",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://linked-minds.com/services/el-ultimo-vikingo/",
+      "score": 89
+    },
+    "emisario": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/ZlQrBJJivWc",
+      "video_url": "https://www.youtube.com/embed/ZlQrBJJivWc?feature=oembed&controls=1",
+      "thumbnail": "https://i.ytimg.com/vi/ZlQrBJJivWc/hqdefault.jpg",
+      "label": "Epikana escape room exterior",
+      "source_page_url": "https://epikana.com/escape-room-bilbao-exterior-emisario/",
+      "score": 124
+    },
+    "en-la-mente-del-genio": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/zg_F4FJRba8",
+      "video_url": "https://www.youtube.com/embed/zg_F4FJRba8?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/zg_F4FJRba8/hqdefault.jpg",
+      "label": "En la mente de un genio Trailer",
+      "source_page_url": "https://www.protagonist.es/escape-room-mente-de-un-genio/",
+      "score": 106
+    },
+    "escape-bus-sevilla-transporte-de-prisioneros": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/js_wBPOGnck",
+      "video_url": "https://www.youtube.com/watch?v=js_wBPOGnck",
+      "thumbnail": "https://i.ytimg.com/vi/js_wBPOGnck/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://therombocode.es/sevilla/juegos/escape-bus-sevilla/",
+      "score": 83
+    },
+    "escape-room-portatil": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/AdH9N7waIrs",
+      "video_url": "https://www.youtube.com/embed/AdH9N7waIrs",
+      "thumbnail": "https://i.ytimg.com/vi/AdH9N7waIrs/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.proyecto-c.com/escape-room-portatil",
+      "score": 124
+    },
+    "escape-room-vr-ubisoft": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/CmpxujeTEVw",
+      "video_url": "https://www.youtube.com/embed/CmpxujeTEVw?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/CmpxujeTEVw/hqdefault.jpg",
+      "label": "Escape The Lost Pyramid Trailer",
+      "source_page_url": "https://incognitoescape.es/escape-the-lost-pyramid-vr/",
+      "score": 124
+    },
+    "escape-story": {
+      "provider": "direct",
+      "embed_url": "https://fugitivosroomescape.com/wp-content/uploads/2026/07/2026-07-09-231052159.mp4",
+      "video_url": "https://fugitivosroomescape.com/wp-content/uploads/2026/07/2026-07-09-231052159.mp4",
+      "thumbnail": "",
+      "label": "elementor-video",
+      "source_page_url": "https://fugitivosroomescape.com/juegos/escapestory/",
+      "score": 142
+    },
+    "escape-the-lost-pyramid": {
+      "provider": "vimeo",
+      "embed_url": "https://player.vimeo.com/video/687619903",
+      "video_url": "https://player.vimeo.com/video/687619903?dnt=1&app_id=122963",
+      "thumbnail": "",
+      "label": "VR ESCAPEGAMES",
+      "source_page_url": "https://escapesecretcode.com/sala/escape-the-lost-pyramid/",
+      "score": 124
+    },
+    "escondite-en-la-oscuridad": {
+      "provider": "direct",
+      "embed_url": "https://aventurico.com/content/image/static/18/quest/1737542364_escondite.mp4",
+      "video_url": "https://aventurico.com/content/image/static/18/quest/1737542364_escondite.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://aventurico.com/juegos/escondite",
+      "score": 124
+    },
+    "escuela-de-magia-161321": {
+      "provider": "direct",
+      "embed_url": "https://aventurico.com/content/image/static/18/quest/1737542804_academia-de-magia.mp4",
+      "video_url": "https://aventurico.com/content/image/static/18/quest/1737542804_academia-de-magia.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://aventurico.com/juegos/academia2?gclid=CjwKCAjw8IfABhBXEiwAxRHlsCGUgeYOlbHuG2pihFBslOXH0fCIztHlUirp5ZzOtKcCck3TQ3cdHBoCBE0QAvD_BwE",
+      "score": 124
+    },
+    "estacion-del-ferrocarril": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/iq_iVL5nrh4",
+      "video_url": "https://www.youtube.com/embed/iq_iVL5nrh4?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/iq_iVL5nrh4/hqdefault.jpg",
+      "label": "Sala de escape Santander Xkapa ( Room Escape )",
+      "source_page_url": "https://xkapa.com/",
+      "score": 106
+    },
+    "expediente-paranormal": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/uEcX1pGqvSU",
+      "video_url": "https://www.youtube.com/embed/uEcX1pGqvSU?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/uEcX1pGqvSU/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.madridterror.com/expediente-paranormal/",
+      "score": 89
+    },
+    "fabrica-ambar-la-visita-zaragoza": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/pjeNHSksAGs",
+      "video_url": "https://www.youtube.com/embed/pjeNHSksAGs?rel=0&controls=0&showinfo=0",
+      "thumbnail": "https://i.ytimg.com/vi/pjeNHSksAGs/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cocoroom.es/ambar/",
+      "score": 106
+    },
+    "fiesta-de-los-sentidos": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/fcKtsphcxxY",
+      "video_url": "https://www.youtube.com/embed/fcKtsphcxxY?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/fcKtsphcxxY/hqdefault.jpg",
+      "label": "Fiesta de los sentidos",
+      "source_page_url": "https://www.laultimaescapada.es/fiesta-de-los-sentidos/",
+      "score": 124
+    },
+    "final-code-bermudas": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/U-rkPsWAWZ4",
+      "video_url": "https://www.youtube.com/embed/U-rkPsWAWZ4?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/U-rkPsWAWZ4/hqdefault.jpg",
+      "label": "Atrévete a adentrarte en el TRIANGULO DE LAS BERMUDAS",
+      "source_page_url": "https://finalcodeescaperoom.com/",
+      "score": 106
+    },
+    "fortaleza-de-lobos": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/499L7L_zmzA",
+      "video_url": "https://www.youtube.com/embed/499L7L_zmzA?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/499L7L_zmzA/hqdefault.jpg",
+      "label": "Fortaleza de Lobos - Komnata Elche Escape",
+      "source_page_url": "https://elmisteriescaperoomelche.es/fortaleza-de-lobos/#wp--skip-link--target",
+      "score": 124
+    },
+    "fugitivos": {
+      "provider": "direct",
+      "embed_url": "https://fugitivosroomescape.com/wp-content/uploads/2026/04/video-fugitivos.mp4",
+      "video_url": "https://fugitivosroomescape.com/wp-content/uploads/2026/04/video-fugitivos.mp4",
+      "thumbnail": "",
+      "label": "elementor-video",
+      "source_page_url": "https://fugitivosroomescape.com/juegos/la-fortaleza/",
+      "score": 142
+    },
+    "galeria-de-cadaveres": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/92fwoeINXeA",
+      "video_url": "https://www.youtube.com/embed/92fwoeINXeA?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/92fwoeINXeA/hqdefault.jpg",
+      "label": "Galeria de Cadaveres - Castellano",
+      "source_page_url": "https://www.xcaperoombcn.com/room/galeria-de-cadaveres/",
+      "score": 124
+    },
+    "gymkhabar": {
+      "provider": "direct",
+      "embed_url": "http://nuevo.gymkhana-barcelona.com/wp-content/uploads/2015/09/GYMKHABAR-SD.mp4?_=1",
+      "video_url": "http://nuevo.gymkhana-barcelona.com/wp-content/uploads/2015/09/GYMKHABAR-SD.mp4?_=1",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://gymkhana-barcelona.com/es/gymkhabar/",
+      "score": 104
+    },
+    "harrison-jones-y-el-6-elemento": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/J006ZIhOX7Q",
+      "video_url": "https://www.youtube.com/watch?v=J006ZIhOX7Q",
+      "thumbnail": "https://i.ytimg.com/vi/J006ZIhOX7Q/hqdefault.jpg",
+      "label": "Ver Trailer",
+      "source_page_url": "https://www.escapemania.es/",
+      "score": 83
+    },
+    "haunted-house": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/fG3bdo-FwgM",
+      "video_url": "https://www.youtube.com/embed/fG3bdo-FwgM?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/fG3bdo-FwgM/hqdefault.jpg",
+      "label": "Haunted House - Run Rabbit Escape Room",
+      "source_page_url": "https://runrabbit.es/haunted-house/#modos-de-juego",
+      "score": 124
+    },
+    "horror-asylum": {
+      "provider": "direct",
+      "embed_url": "https://horrorasylum.es/wp-content/uploads/2026/05/Promo-video.mp4",
+      "video_url": "https://horrorasylum.es/wp-content/uploads/2026/05/Promo-video.mp4",
+      "thumbnail": "",
+      "label": "elementor-video",
+      "source_page_url": "https://horrorasylum.es/",
+      "score": 142
+    },
+    "horror-club": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/Dzn2-MsRsC0",
+      "video_url": "https://www.youtube.com/embed/Dzn2-MsRsC0?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/Dzn2-MsRsC0/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.madridterror.com/horror-club/",
+      "score": 89
+    },
+    "indiana-y-el-idolo-maldito": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/-bTpp8PQSog",
+      "video_url": "https://www.youtube.com/embed/-bTpp8PQSog?feature=oembed&rel=0&mute=0&loop=0&controls=1&playsinline=0&cc_load_policy=0",
+      "thumbnail": "https://i.ytimg.com/vi/-bTpp8PQSog/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cluehunter.es/indiana-y-el-idolo-maldito/",
+      "score": 89
+    },
+    "infiltracion-espacial": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/aTZtYuFqF_Q",
+      "video_url": "https://www.youtube.com/embed/aTZtYuFqF_Q?autoplay=0&mute=0&playlist=aTZtYuFqF_Q&loop=1&modestbranding=0&rel=0&enablejsapi=1&",
+      "thumbnail": "https://i.ytimg.com/vi/aTZtYuFqF_Q/hqdefault.jpg",
+      "label": "h-video-main",
+      "source_page_url": "https://www.insolitoescaperoom.com/juegos/infiltracion-espacial/",
+      "score": 124
+    },
+    "inframundo": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/KUlcsjPTYrA",
+      "video_url": "https://www.youtube.com/embed/KUlcsjPTYrA?feature=oembed&modestbranding=1&showinfo=0&rel=0",
+      "thumbnail": "https://i.ytimg.com/vi/KUlcsjPTYrA/hqdefault.jpg",
+      "label": "Inframundo trailer v2",
+      "source_page_url": "https://amazein60.com/room/inframundo/",
+      "score": 124
+    },
+    "insepulta": {
+      "provider": "vimeo",
+      "embed_url": "https://player.vimeo.com/video/831209187",
+      "video_url": "https://player.vimeo.com/video/831209187?color&autopause=0&loop=0&muted=0&title=1&portrait=1&byline=1",
+      "thumbnail": "",
+      "label": "Reproductor de vídeo vimeo",
+      "source_page_url": "https://salalaclave.es/insepulta/",
+      "score": 124
+    },
+    "intracorpus": {
+      "provider": "direct",
+      "embed_url": "https://vortexg.com/wp-content/uploads/2025/06/teaser-intra.mp4",
+      "video_url": "https://vortexg.com/wp-content/uploads/2025/06/teaser-intra.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://vortexescape.com/intracorpus",
+      "score": 104
+    },
+    "jigsaw": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/4CYyV_PpbUQ",
+      "video_url": "https://www.youtube.com/embed/4CYyV_PpbUQ?si=lkqhUbhNahqChHKh",
+      "thumbnail": "https://i.ytimg.com/vi/4CYyV_PpbUQ/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://horrorbox.es/jigsaw-escape-room/",
+      "score": 89
+    },
+    "jolly-roger-el-cofre-fantasma": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/8T0f94o5sDw",
+      "video_url": "https://www.youtube.com/embed/8T0f94o5sDw?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/8T0f94o5sDw/hqdefault.jpg",
+      "label": "Jolly Roger - El cofre fantasma. Komnata Quest Elche",
+      "source_page_url": "https://elmisteriescaperoomelche.es/jolly-roger/#wp--skip-link--target",
+      "score": 106
+    },
+    "jurasico": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/wVcgkHAwKxU",
+      "video_url": "https://www.youtube.com/embed/wVcgkHAwKxU?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/wVcgkHAwKxU/hqdefault.jpg",
+      "label": "JURASICO @ Golden Pop",
+      "source_page_url": "https://goldenpop.es/jurasico/",
+      "score": 124
+    },
+    "katrina": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/hKON-baAwXU",
+      "video_url": "https://www.youtube.com/embed/hKON-baAwXU?si=j0mue_-NnO6umxF9",
+      "thumbnail": "https://i.ytimg.com/vi/hKON-baAwXU/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.elementsescaperoom.com/katrina/",
+      "score": 124
+    },
+    "kgb-mision-madrid": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/BqpyV81UJuI",
+      "video_url": "https://www.youtube.com/embed/BqpyV81UJuI",
+      "thumbnail": "https://i.ytimg.com/vi/BqpyV81UJuI/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://monkey-donkey.es/kgb-mision-madrid/",
+      "score": 124
+    },
+    "la-agencia": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/isoT2XNB93A",
+      "video_url": "https://www.youtube.com/embed/isoT2XNB93A?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/isoT2XNB93A/hqdefault.jpg",
+      "label": "La Agencia, Wayout Escape Room",
+      "source_page_url": "https://wayoutlaspalmas.com/la-agencia/",
+      "score": 124
+    },
+    "la-cabana-889251": {
+      "provider": "direct",
+      "embed_url": "https://tematicworldescape.com/wp-content/uploads/2023/09/Diseno-sin-titulo-1-2.mp4",
+      "video_url": "https://tematicworldescape.com/wp-content/uploads/2023/09/Diseno-sin-titulo-1-2.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://tematicworldescape.com/index.php/la-cabana/",
+      "score": 142
+    },
+    "la-cabana-de-hagrid": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/TLujWiZTrzc",
+      "video_url": "https://www.youtube.com/embed/TLujWiZTrzc?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/TLujWiZTrzc/hqdefault.jpg",
+      "label": "La Cabaña de Hagrid. Hall Escape",
+      "source_page_url": "https://xcaperoomfinestrat.com/la-cabana-de-hagrid",
+      "score": 124
+    },
+    "la-caja-diabolica": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/0dM4o8bkpBI",
+      "video_url": "https://www.youtube.com/embed/0dM4o8bkpBI",
+      "thumbnail": "https://i.ytimg.com/vi/0dM4o8bkpBI/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://compostela.eskapark.com/detalle/juego/19",
+      "score": 106
+    },
+    "la-caja-diabolica-99981": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/0dM4o8bkpBI",
+      "video_url": "https://www.youtube.com/embed/0dM4o8bkpBI",
+      "thumbnail": "https://i.ytimg.com/vi/0dM4o8bkpBI/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://compostela.eskapark.com/detalle/juego/19",
+      "score": 106
+    },
+    "la-casa-en-piezas-797301": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/DYHqVNXve9M",
+      "video_url": "https://www.youtube.com/embed/DYHqVNXve9M?si=iS0J1bV9nRK2zood",
+      "thumbnail": "https://i.ytimg.com/vi/DYHqVNXve9M/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://terrorstories.com/madrid",
+      "score": 106
+    },
+    "la-casa-maldita-606441": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/fcIyxcXH8DQ",
+      "video_url": "https://www.youtube.com/watch?v=fcIyxcXH8DQ\"",
+      "thumbnail": "https://i.ytimg.com/vi/fcIyxcXH8DQ/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://escapethebox.es/escape-rooms/escape-room-miedo-la-casa-maldita/",
+      "score": 89
+    },
+    "la-casa-sin-ojos": {
+      "provider": "direct",
+      "embed_url": "https://mrwolley.com/wp-content/uploads/2025/06/Trailer-La-Casa-sin-ojos.mp4",
+      "video_url": "https://mrwolley.com/wp-content/uploads/2025/06/Trailer-La-Casa-sin-ojos.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://mrwolley.com/",
+      "score": 124
+    },
+    "la-divina-comedia": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/X2oDK6iDIl8",
+      "video_url": "https://www.youtube.com/embed/X2oDK6iDIl8?disablekb=1",
+      "thumbnail": "https://i.ytimg.com/vi/X2oDK6iDIl8/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.evasionrebelde.com/escape-room-oviedo-la-divina-comedia/",
+      "score": 89
+    },
+    "la-estacion-del-ferrocarril": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/iq_iVL5nrh4",
+      "video_url": "https://www.youtube.com/embed/iq_iVL5nrh4?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/iq_iVL5nrh4/hqdefault.jpg",
+      "label": "Sala de escape Santander Xkapa ( Room Escape )",
+      "source_page_url": "https://xkapa.com/",
+      "score": 106
+    },
+    "la-experiencia-sensorial": {
+      "provider": "direct",
+      "embed_url": "https://sensas.top/wp-content/uploads/2024/06/HOME-PAGE-3.mp4",
+      "video_url": "https://sensas.top/wp-content/uploads/2024/06/HOME-PAGE-3.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://barcelona.sensas.top/",
+      "score": 86
+    },
+    "la-fabula": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/_BPULSjvvUc",
+      "video_url": "https://www.youtube.com/embed/_BPULSjvvUc",
+      "thumbnail": "https://i.ytimg.com/vi/_BPULSjvvUc/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://sinequanon.com.es/salas.html#salas_fabula",
+      "score": 106
+    },
+    "la-familia-van-landen": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/J006ZIhOX7Q",
+      "video_url": "https://www.youtube.com/watch?v=J006ZIhOX7Q",
+      "thumbnail": "https://i.ytimg.com/vi/J006ZIhOX7Q/hqdefault.jpg",
+      "label": "Ver Trailer",
+      "source_page_url": "https://www.escapemania.es/",
+      "score": 83
+    },
+    "la-fortaleza-2-0": {
+      "provider": "direct",
+      "embed_url": "https://fugitivosroomescape.com/wp-content/uploads/2026/04/video-fugitivos.mp4",
+      "video_url": "https://fugitivosroomescape.com/wp-content/uploads/2026/04/video-fugitivos.mp4",
+      "thumbnail": "",
+      "label": "elementor-video",
+      "source_page_url": "https://fugitivosroomescape.com/juegos/la-fortaleza/",
+      "score": 124
+    },
+    "la-fuga-de-casanova": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/-nend7wr1i0",
+      "video_url": "https://www.youtube.com/watch?time_continue=1&v=-nend7wr1i0",
+      "thumbnail": "https://i.ytimg.com/vi/-nend7wr1i0/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://therombocode.es/bilbao/juegos/la-fuga-de-casanova/",
+      "score": 83
+    },
+    "la-galeria": {
+      "provider": "direct",
+      "embed_url": "https://www.elsorteoroomescape.com/wp-content/uploads/PrimerVideo_Small2.mp4",
+      "video_url": "https://www.elsorteoroomescape.com/wp-content/uploads/PrimerVideo_Small2.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.elsorteoroomescape.com/",
+      "score": 124
+    },
+    "la-herencia-988601": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/5WPivzI_5ps",
+      "video_url": "https://www.youtube.com/embed/5WPivzI_5ps?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/5WPivzI_5ps/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://escaperoombadajoz.com/la-herencia/",
+      "score": 89
+    },
+    "la-historia-de-charlotte": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/oAMexiQifDU",
+      "video_url": "https://www.youtube.com/embed/oAMexiQifDU?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/oAMexiQifDU/hqdefault.jpg",
+      "label": "Whitechapel room Escape - La Historia de Charlotte",
+      "source_page_url": "https://roomwhitechapel.com/",
+      "score": 106
+    },
+    "la-historia-del-colegio-midwich": {
+      "provider": "direct",
+      "embed_url": "https://www.azescaperoom.es/escaperoomterror/wp-content/uploads/2025/12/Silent-Town-Trailer.mp4",
+      "video_url": "https://www.azescaperoom.es/escaperoomterror/wp-content/uploads/2025/12/Silent-Town-Trailer.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.azescaperoom.es/escaperoomterror/escaperoom-silenthill-full/",
+      "score": 124
+    },
+    "la-iniciativa": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/JE0WKXhDHOE",
+      "video_url": "https://www.youtube.com/embed/JE0WKXhDHOE?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/JE0WKXhDHOE/hqdefault.jpg",
+      "label": "Teaser La Iniciativa",
+      "source_page_url": "https://lainiciativa.es/",
+      "score": 124
+    },
+    "la-jugueteria-mimitos": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/QTs7JTrdJ84",
+      "video_url": "https://www.youtube.com/watch?v=QTs7JTrdJ84\"",
+      "thumbnail": "https://i.ytimg.com/vi/QTs7JTrdJ84/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://tortugasalafuga.com/la-jugueteria-mimitos/",
+      "score": 89
+    },
+    "la-llamada-arcana": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/Wmv7ruPYp9A",
+      "video_url": "https://www.youtube.com/embed/Wmv7ruPYp9A?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/Wmv7ruPYp9A/hqdefault.jpg",
+      "label": "La Llamada Arcana - Teaser",
+      "source_page_url": "https://lallamadaarcana.es/",
+      "score": 124
+    },
+    "la-mansion": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/0vEgK0cuyCM",
+      "video_url": "https://www.youtube.com/embed/0vEgK0cuyCM?rel=0&start&end&controls=1&mute=0&modestbranding=0&autoplay=1",
+      "thumbnail": "https://i.ytimg.com/vi/0vEgK0cuyCM/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.timeskp.com/es/escape-room/la-mansion",
+      "score": 89
+    },
+    "la-mansion-del-crimen": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/VCKuujBGAEM",
+      "video_url": "https://www.youtube.com/embed/VCKuujBGAEM?autoplay=0&controls=1&loop=1&mute=1&modestbranding=1&rel=0&showinfo=0&playlist=VCKuujBGAEM",
+      "thumbnail": "https://i.ytimg.com/vi/VCKuujBGAEM/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.escapology.com/en/madrid-alcala-spain/escape-games/mansion-murder",
+      "score": 124
+    },
+    "la-masia": {
+      "provider": "direct",
+      "embed_url": "https://canbruna.cat/wp-content/uploads/2023/11/Promo-OC-CAT.mp4",
+      "video_url": "https://canbruna.cat/wp-content/uploads/2023/11/Promo-OC-CAT.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://canbruna.cat/",
+      "score": 124
+    },
+    "la-mazmorra": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/iBfj81l2cVY",
+      "video_url": "https://www.youtube.com/embed/iBfj81l2cVY?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/iBfj81l2cVY/hqdefault.jpg",
+      "label": "La Mazmorra - Run Rabbit Escape Room",
+      "source_page_url": "https://runrabbit.es/la-mazmorra/",
+      "score": 124
+    },
+    "la-mazmorra-de-hood": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/bqLUp7GuUTg",
+      "video_url": "https://www.youtube.com/embed/bqLUp7GuUTg?rel=0&autoplay=0&showinfo=0&controls=0",
+      "thumbnail": "https://i.ytimg.com/vi/bqLUp7GuUTg/hqdefault.jpg",
+      "label": "Find out why a good domain name is important",
+      "source_page_url": "https://www.scapandgo.com/es/",
+      "score": 78
+    },
+    "la-mina": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/McHENnNXlpc",
+      "video_url": "https://www.youtube.com/embed/McHENnNXlpc",
+      "thumbnail": "https://i.ytimg.com/vi/McHENnNXlpc/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://unrealroomescape.es/",
+      "score": 106
+    },
+    "la-misteriosa-herencia-de-cal-pere": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/_-h_vOBoiSg",
+      "video_url": "https://www.youtube.com/embed/_-h_vOBoiSg?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/_-h_vOBoiSg/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://thebunkerescape.com/el-joc/",
+      "score": 78
+    },
+    "la-mussara": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/JiVFlKIwrXk",
+      "video_url": "https://www.youtube.com/embed/JiVFlKIwrXk",
+      "thumbnail": "https://i.ytimg.com/vi/JiVFlKIwrXk/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://escape4room.com/la-mussara/",
+      "score": 124
+    },
+    "la-nave-84311": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/bqLUp7GuUTg",
+      "video_url": "https://www.youtube.com/embed/bqLUp7GuUTg?rel=0&autoplay=0&showinfo=0&controls=0",
+      "thumbnail": "https://i.ytimg.com/vi/bqLUp7GuUTg/hqdefault.jpg",
+      "label": "Find out why a good domain name is important",
+      "source_page_url": "https://www.rkgames.com",
+      "score": 106
+    },
+    "la-nube-151131": {
+      "provider": "direct",
+      "embed_url": "https://www.emotionescape.com/video/introemotion.mp4",
+      "video_url": "https://www.emotionescape.com/video/introemotion.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.emotionescape.com/madrid.html",
+      "score": 124
+    },
+    "la-oficina-de-john-monroe": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/7RU2uof2-LE",
+      "video_url": "https://www.youtube.com/embed/7RU2uof2-LE?wmode=opaque",
+      "thumbnail": "https://i.ytimg.com/vi/7RU2uof2-LE/hqdefault.jpg",
+      "label": "scale-with-grid",
+      "source_page_url": "https://www.roomescapesalamanca.com/",
+      "score": 106
+    },
+    "la-tentacion": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/FoeoFKhIFxo",
+      "video_url": "https://www.youtube.com/embed/FoeoFKhIFxo",
+      "thumbnail": "https://i.ytimg.com/vi/FoeoFKhIFxo/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://escape4room.com/la-tentacion/",
+      "score": 124
+    },
+    "la-tienda-de-munecas-de-lilith": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/J006ZIhOX7Q",
+      "video_url": "https://www.youtube.com/watch?v=J006ZIhOX7Q",
+      "thumbnail": "https://i.ytimg.com/vi/J006ZIhOX7Q/hqdefault.jpg",
+      "label": "Ver Trailer",
+      "source_page_url": "https://www.escapemania.es/",
+      "score": 83
+    },
+    "la-tienda-de-te-del-sr-miyagi": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/sn4_PPkTxdw",
+      "video_url": "https://www.youtube.com/watch?v=sn4_PPkTxdw",
+      "thumbnail": "https://i.ytimg.com/vi/sn4_PPkTxdw/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://donescape.es/",
+      "score": 83
+    },
+    "la-trementinaire": {
+      "provider": "direct",
+      "embed_url": "http://www.roomiaescape.com/wp-content/uploads/2023/08/test2.mp4",
+      "video_url": "http://www.roomiaescape.com/wp-content/uploads/2023/08/test2.mp4",
+      "thumbnail": "",
+      "label": "elementor-video",
+      "source_page_url": "https://www.roomiaescape.com/la-tremantinaire/",
+      "score": 124
+    },
+    "la-varita-de-los-margoro": {
+      "provider": "direct",
+      "embed_url": "https://wizardingescaperooms.com/wp-content/uploads/Poble-Espanyol-de-Barcelona.mp4",
+      "video_url": "https://wizardingescaperooms.com/wp-content/uploads/Poble-Espanyol-de-Barcelona.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://wizardingescaperooms.com/",
+      "score": 124
+    },
+    "la-vitrina": {
+      "provider": "vimeo",
+      "embed_url": "https://player.vimeo.com/video/1167130701",
+      "video_url": "https://player.vimeo.com/video/1167130701?h=HASH&title=0&byline=0&portrait=0",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://malorialexperience.com/",
+      "score": 106
+    },
+    "la-zona": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/Brf8SjIaBDw",
+      "video_url": "https://www.youtube.com/watch?v=Brf8SjIaBDw",
+      "thumbnail": "https://i.ytimg.com/vi/Brf8SjIaBDw/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://terrorstories.com/madrid/la-zona-escape-room",
+      "score": 83
+    },
+    "los-7-pecados-capitales": {
+      "provider": "direct",
+      "embed_url": "https://escapology.ilusiona.com/build/videos/012 Narco Plot Video in Spanish.mp4",
+      "video_url": "https://escapology.ilusiona.com/build/videos/012 Narco Plot Video in Spanish.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://escapology.ilusiona.com/booking/form",
+      "score": 124
+    },
+    "los-castillejos": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/fIlopkNStb0",
+      "video_url": "https://www.youtube.com/embed/fIlopkNStb0",
+      "thumbnail": "https://i.ytimg.com/vi/fIlopkNStb0/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://escape4room.com/los-castillejos/",
+      "score": 124
+    },
+    "los-ultimos-templarios": {
+      "provider": "vimeo",
+      "embed_url": "https://player.vimeo.com/video/1170977928",
+      "video_url": "https://player.vimeo.com/video/1170977928?badge=0&autopause=0&player_id=0&app_id=58479&muted=1",
+      "thumbnail": "",
+      "label": "Escape Room - Los Últimos Templarios",
+      "source_page_url": "https://escapepeniscola.com/escape-room-templarios.html",
+      "score": 106
+    },
+    "mafia": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/8P8D_wc15hI",
+      "video_url": "https://www.youtube.com/embed/8P8D_wc15hI?rel=0",
+      "thumbnail": "https://i.ytimg.com/vi/8P8D_wc15hI/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.chickenbanana.com/room/mafia",
+      "score": 124
+    },
+    "magic-universe": {
+      "provider": "direct",
+      "embed_url": "https://cdn.madlandmadrid.es/Minitrailerweb.mp4",
+      "video_url": "https://cdn.madlandmadrid.es/Minitrailerweb.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://madlandmadrid.es/",
+      "score": 86
+    },
+    "malum": {
+      "provider": "direct",
+      "embed_url": "https://malumescaperoom.com/wp-content/uploads/2025/10/MalumEscapeRoom.mp4",
+      "video_url": "https://malumescaperoom.com/wp-content/uploads/2025/10/MalumEscapeRoom.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://malumescaperoom.com/",
+      "score": 124
+    },
+    "mamba-negra": {
+      "provider": "direct",
+      "embed_url": "https://www.tarregaroomescape.com/wp-content/uploads/2026/01/tarregaroomescape-drac-video.mp4",
+      "video_url": "https://www.tarregaroomescape.com/wp-content/uploads/2026/01/tarregaroomescape-drac-video.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.tarregaroomescape.com/",
+      "score": 89
+    },
+    "manor-of-escape": {
+      "provider": "direct",
+      "embed_url": "https://videos.files.wordpress.com/sEvEEqlm/vroomoween-cat-web_nosaw.mp4",
+      "video_url": "https://videos.files.wordpress.com/sEvEEqlm/vroomoween-cat-web_nosaw.mp4",
+      "thumbnail": "",
+      "label": "elementor-video",
+      "source_page_url": "https://vroomescape.com/en/escape-room-miedo/",
+      "score": 86
+    },
+    "maxx391": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/Qw12t2Oztos",
+      "video_url": "https://www.youtube.com/embed/Qw12t2Oztos?si=eTt1MgXBaED7mZss",
+      "thumbnail": "https://i.ytimg.com/vi/Qw12t2Oztos/hqdefault.jpg",
+      "label": "embed-responsive-item",
+      "source_page_url": "https://www.virtualbilbao.com/sala-escape-bilbao/",
+      "score": 106
+    },
+    "megachef": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/74VTGyZKyxs",
+      "video_url": "https://www.youtube.com/embed/74VTGyZKyxs?feature=oembed&rel=0&mute=0&loop=0&controls=1&playsinline=0&cc_load_policy=0",
+      "thumbnail": "https://i.ytimg.com/vi/74VTGyZKyxs/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cluehunter.es/megachef/",
+      "score": 89
+    },
+    "mental-experiment": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/py_Y0cQkGG4",
+      "video_url": "https://www.youtube.com/embed/py_Y0cQkGG4",
+      "thumbnail": "https://i.ytimg.com/vi/py_Y0cQkGG4/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cocoroom.es/mental-experiment/",
+      "score": 124
+    },
+    "morgana": {
+      "provider": "direct",
+      "embed_url": "https://d3d4l0.es/video/morgana.mp4",
+      "video_url": "https://d3d4l0.es/video/morgana.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://d3d4l0.es/booking-room2.php",
+      "score": 124
+    },
+    "naturia-el-bosque-encantado": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/HGSSgXBBTbE",
+      "video_url": "https://www.youtube.com/embed/HGSSgXBBTbE?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/HGSSgXBBTbE/hqdefault.jpg",
+      "label": "NATURIA, el Bosque Encantado",
+      "source_page_url": "https://excapexperience.com/bosque-encantado-2/",
+      "score": 106
+    },
+    "necronomicon-41811": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/bHPjZ5nlTu0",
+      "video_url": "https://www.youtube.com/watch?v=bHPjZ5nlTu0\"",
+      "thumbnail": "https://i.ytimg.com/vi/bHPjZ5nlTu0/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://macabroescaperoom.com/necronomicon/",
+      "score": 89
+    },
+    "obsesion": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/hhUSrzcx3SE",
+      "video_url": "https://www.youtube.com/embed/hhUSrzcx3SE?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/hhUSrzcx3SE/hqdefault.jpg",
+      "label": "OBSESIÓN",
+      "source_page_url": "https://insideescaperoom.es/obsesion/",
+      "score": 124
+    },
+    "offline": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/ENr7HM_lW1g",
+      "video_url": "https://www.youtube.com/embed/ENr7HM_lW1g?autoplay=1&mute=1&loop=1&playlist=ENr7HM_lW1g&controls=0&modestbranding=1&rel=0",
+      "thumbnail": "https://i.ytimg.com/vi/ENr7HM_lW1g/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.area60.es/",
+      "score": 106
+    },
+    "olimpo": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/d9FUrlNirXc",
+      "video_url": "https://www.youtube-nocookie.com/embed/d9FUrlNirXc?controls=0",
+      "thumbnail": "https://i.ytimg.com/vi/d9FUrlNirXc/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://olimpoescaperoom.com/",
+      "score": 89
+    },
+    "operacion-delawer": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/2l1fSt9NS2g",
+      "video_url": "https://www.youtube.com/embed/2l1fSt9NS2g?si=JArvwJLZr8xNgJWp",
+      "thumbnail": "https://i.ytimg.com/vi/2l1fSt9NS2g/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://rubikescaperoom.com/juegos/23-operacion-delawer---escape-room-temporal.html",
+      "score": 124
+    },
+    "operacion-diamante-712321": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/5_axpYM1wgo",
+      "video_url": "https://www.youtube.com/watch?v=5_axpYM1wgo\"",
+      "thumbnail": "https://i.ytimg.com/vi/5_axpYM1wgo/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://roomescapekids.com/#operaciondiamante",
+      "score": 89
+    },
+    "operacion-diamante-791191": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/W0WtMLoF3hk",
+      "video_url": "https://www.youtube.com/embed/W0WtMLoF3hk",
+      "thumbnail": "https://i.ytimg.com/vi/W0WtMLoF3hk/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://goldenpop.es/",
+      "score": 106
+    },
+    "operacion-diamante-alicante": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/UEdfexKM5Eo",
+      "video_url": "https://www.youtube.com/embed/UEdfexKM5Eo?wmode=transparent&autoplay=0",
+      "thumbnail": "https://i.ytimg.com/vi/UEdfexKM5Eo/hqdefault.jpg",
+      "label": "YouTube video player 1",
+      "source_page_url": "https://secrethunter.es/operacion-diamante/",
+      "score": 124
+    },
+    "operacion-flashback": {
+      "provider": "direct",
+      "embed_url": "https://elsecretodemadrid.es/wp-content/uploads/2025/12/Trailer-para-web-2025.mp4",
+      "video_url": "https://elsecretodemadrid.es/wp-content/uploads/2025/12/Trailer-para-web-2025.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://elsecretodemadrid.es/soho",
+      "score": 124
+    },
+    "operacion-steampunk": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/exfyykmUt2Q",
+      "video_url": "https://www.youtube.com/embed/exfyykmUt2Q?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/exfyykmUt2Q/hqdefault.jpg",
+      "label": "Teaser Escape Room Operación Steampunk",
+      "source_page_url": "https://incognitoescape.es/operacion-steampunk/",
+      "score": 124
+    },
+    "origen-boadilla-del-monte": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/cxMceW0KSTo",
+      "video_url": "https://www.youtube.com/embed/cxMceW0KSTo?feature=oembed&modestbranding=1&showinfo=0&rel=0",
+      "thumbnail": "https://i.ytimg.com/vi/cxMceW0KSTo/hqdefault.jpg",
+      "label": "Escape room ORIGEN, Español",
+      "source_page_url": "https://amazein60.com/room/origen/",
+      "score": 124
+    },
+    "origen-santiago-de-compostela": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/RT5Ty4aGQZo",
+      "video_url": "https://www.youtube.com/embed/RT5Ty4aGQZo",
+      "thumbnail": "https://i.ytimg.com/vi/RT5Ty4aGQZo/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://compostela.eskapark.com/detalle/juego/3",
+      "score": 106
+    },
+    "ouija": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/1fzGr2wokYA",
+      "video_url": "https://www.youtube.com/embed/1fzGr2wokYA?si=JdfsqRfDMAbDXtwu",
+      "thumbnail": "https://i.ytimg.com/vi/1fzGr2wokYA/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://horrorbox.es/ouija-escape-room/",
+      "score": 89
+    },
+    "outline": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/Z6gqECxuTSM",
+      "video_url": "https://www.youtube.com/embed/Z6gqECxuTSM?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/Z6gqECxuTSM/hqdefault.jpg",
+      "label": "Trailer Oficial de OUTLINE Escape Room Cornellà",
+      "source_page_url": "https://outlineescaperoom.es/",
+      "score": 124
+    },
+    "pagana": {
+      "provider": "direct",
+      "embed_url": "https://uyquemiedo.com/wp-content/uploads/2025/01/TeaserPaganaFinal.mp4",
+      "video_url": "https://uyquemiedo.com/wp-content/uploads/2025/01/TeaserPaganaFinal.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://uyquemiedo.com/pagana/",
+      "score": 142
+    },
+    "paranormal-experience": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/ko9K9kTN3VI",
+      "video_url": "https://www.youtube.com/embed/ko9K9kTN3VI",
+      "thumbnail": "https://i.ytimg.com/vi/ko9K9kTN3VI/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.madridterror.com/paranormal-experience/",
+      "score": 89
+    },
+    "pesadillas": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/X_ZFrfdPPVQ",
+      "video_url": "https://www.youtube.com/embed/X_ZFrfdPPVQ?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/X_ZFrfdPPVQ/hqdefault.jpg",
+      "label": "PESADILLAS @ GOLDEN POP",
+      "source_page_url": "https://goldenpop.es/juegos/pesadillas/#reservar",
+      "score": 124
+    },
+    "piratas-la-busqueda-del-caliz-de-la-vida-eterna": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/J006ZIhOX7Q",
+      "video_url": "https://www.youtube.com/watch?v=J006ZIhOX7Q",
+      "thumbnail": "https://i.ytimg.com/vi/J006ZIhOX7Q/hqdefault.jpg",
+      "label": "Ver Trailer",
+      "source_page_url": "https://www.escapemania.es/",
+      "score": 83
+    },
+    "portales-malffoy": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/XHOmBV4js_E",
+      "video_url": "https://www.youtube.com/watch?v=XHOmBV4js_E\"",
+      "thumbnail": "https://i.ytimg.com/vi/XHOmBV4js_E/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://momentescape.es/portalesmalffoy_sala/",
+      "score": 89
+    },
+    "proyecto-dcrisis": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/yLt8waQIfO8",
+      "video_url": "https://www.youtube.com/watch?v=yLt8waQIfO8\"",
+      "thumbnail": "https://i.ytimg.com/vi/yLt8waQIfO8/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://paradisoescaperoom.es/proyecto-dcrisis",
+      "score": 89
+    },
+    "psycho-escape": {
+      "provider": "direct",
+      "embed_url": "https://horrorbox.es/wp-content/uploads/2026/03/MIX_WEB_YTB_3.mp4",
+      "video_url": "https://horrorbox.es/wp-content/uploads/2026/03/MIX_WEB_YTB_3.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://horrorbox.es/",
+      "score": 124
+    },
+    "pulse-up": {
+      "provider": "direct",
+      "embed_url": "https://aventurico.com/content/image/static/18/quest/1737542596_pulse-up.mp4",
+      "video_url": "https://aventurico.com/content/image/static/18/quest/1737542596_pulse-up.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://aventurico.com/juegos/pulseup",
+      "score": 124
+    },
+    "racoon-corporation": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/IdcbLGdX7qo",
+      "video_url": "https://www.youtube.com/embed/IdcbLGdX7qo?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/IdcbLGdX7qo/hqdefault.jpg",
+      "label": "TerrorEscapeRoom, Bienvenidos a nuestra sala de escape Racoon Corporation.",
+      "source_page_url": "https://www.terrorescaperoom.com/escape-room/",
+      "score": 106
+    },
+    "resident-virus-x": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/5KLnsPMJnLI",
+      "video_url": "https://www.youtube.com/embed/5KLnsPMJnLI?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/5KLnsPMJnLI/hqdefault.jpg",
+      "label": "Xcaperoom Finestrat - Sala Resident Virus X",
+      "source_page_url": "https://xcaperoomfinestrat.com/escape-room-virus-x",
+      "score": 106
+    },
+    "resonance": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/r_YtVsIZLn0",
+      "video_url": "https://www.youtube.com/embed/r_YtVsIZLn0",
+      "thumbnail": "https://i.ytimg.com/vi/r_YtVsIZLn0/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://funly.es/game/resonance",
+      "score": 124
+    },
+    "room-foc-destruccio": {
+      "provider": "direct",
+      "embed_url": "https://www.tarregaroomescape.com/wp-content/uploads/2026/01/tarregaroomescape-drac-video.mp4",
+      "video_url": "https://www.tarregaroomescape.com/wp-content/uploads/2026/01/tarregaroomescape-drac-video.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.tarregaroomescape.com/",
+      "score": 89
+    },
+    "roomin-escape": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/Nb0mE0dfL0c",
+      "video_url": "https://www.youtube.com/embed/Nb0mE0dfL0c?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/Nb0mE0dfL0c/hqdefault.jpg",
+      "label": "ROOMIN - DAUVILLE ESCAPE 2017",
+      "source_page_url": "https://roomin.es/dauville-2017-el-juego-de-room-escape-mas-grande-de-europa/",
+      "score": 78
+    },
+    "s-o-s-salacia": {
+      "provider": "direct",
+      "embed_url": "https://www.topoescape.es/onewebmedia/magnific_el-barco-sigue-avanzando-hasta-dejar-totalmente-os_720p_16-9_24fps_97100.mp4?etag=W/\"17c47f-19fada157e0\"&sourceContentType=video/mp4",
+      "video_url": "https://www.topoescape.es/onewebmedia/magnific_el-barco-sigue-avanzando-hasta-dejar-totalmente-os_720p_16-9_24fps_97100.mp4?etag=W/\"17c47f-19fada157e0\"&sourceContentType=video/mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "http://www.topoescape.es/",
+      "score": 124
+    },
+    "samantha": {
+      "provider": "direct",
+      "embed_url": "https://samanthaescape.com/wp-content/uploads/2025/02/Teaser-web-2025_FINAL.mp4",
+      "video_url": "https://samanthaescape.com/wp-content/uploads/2025/02/Teaser-web-2025_FINAL.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://samanthaescape.com/#escaperooms",
+      "score": 142
+    },
+    "secuestro": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/fQzQZz1KAtw",
+      "video_url": "https://youtube.com/shorts/fQzQZz1KAtw?feature=share\"",
+      "thumbnail": "https://i.ytimg.com/vi/fQzQZz1KAtw/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://escapegamecastellon.com/rooms/secuestro/",
+      "score": 89
+    },
+    "seven-the-game": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/NSYJyFJDz70",
+      "video_url": "https://www.youtube.com/embed/NSYJyFJDz70?autoplay=1&loop=1&controls=1&modestbranding=1&rel=0&playlist=NSYJyFJDz70&mute=1",
+      "thumbnail": "https://i.ytimg.com/vi/NSYJyFJDz70/hqdefault.jpg",
+      "label": "test",
+      "source_page_url": "https://quimeraescape.com/",
+      "score": 78
+    },
+    "sherlock-se-viste-de-negro-49191": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/ENr7HM_lW1g",
+      "video_url": "https://www.youtube.com/embed/ENr7HM_lW1g?autoplay=1&mute=1&loop=1&playlist=ENr7HM_lW1g&controls=0&modestbranding=1&rel=0",
+      "thumbnail": "https://i.ytimg.com/vi/ENr7HM_lW1g/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.area60.es/",
+      "score": 106
+    },
+    "sherlock-se-viste-de-negro-vigo": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/ENr7HM_lW1g",
+      "video_url": "https://www.youtube.com/embed/ENr7HM_lW1g?autoplay=1&mute=1&loop=1&playlist=ENr7HM_lW1g&controls=0&modestbranding=1&rel=0",
+      "thumbnail": "https://i.ytimg.com/vi/ENr7HM_lW1g/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.area60.es/",
+      "score": 106
+    },
+    "sopar-de-l": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/L8ZrWPk2seg",
+      "video_url": "https://www.youtube.com/embed/L8ZrWPk2seg",
+      "thumbnail": "https://i.ytimg.com/vi/L8ZrWPk2seg/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.sternalia.com/cena-de-los-sentidos-barcelona.html",
+      "score": 106
+    },
+    "soulbound": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/XiJ3qPXlZQM",
+      "video_url": "https://youtu.be/XiJ3qPXlZQM?si=6reGPWKn3L-3kTZI",
+      "thumbnail": "https://i.ytimg.com/vi/XiJ3qPXlZQM/hqdefault.jpg",
+      "label": "Play Video El cuento de Soulbound",
+      "source_page_url": "https://habitacio13.com/",
+      "score": 83
+    },
+    "space-base-extermination": {
+      "provider": "direct",
+      "embed_url": "https://spacebase-extermination.es/wp-content/uploads/2025/09/capsula-space-base.mp4",
+      "video_url": "https://spacebase-extermination.es/wp-content/uploads/2025/09/capsula-space-base.mp4",
+      "thumbnail": "",
+      "label": "bricks-lazy-hidden",
+      "source_page_url": "https://spacebase-extermination.es/",
+      "score": 124
+    },
+    "space-station-tiberia": {
+      "provider": "direct",
+      "embed_url": "https://videos.files.wordpress.com/l9FUzqlR/space-station-cat_02.mp4",
+      "video_url": "https://videos.files.wordpress.com/l9FUzqlR/space-station-cat_02.mp4",
+      "thumbnail": "",
+      "label": "elementor-video",
+      "source_page_url": "https://vroomescape.com/es/spacestation/",
+      "score": 86
+    },
+    "suite-405": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/hXKx9HrS7Nc",
+      "video_url": "https://www.youtube.com/embed/hXKx9HrS7Nc?wmode=transparent&autoplay=0",
+      "thumbnail": "https://i.ytimg.com/vi/hXKx9HrS7Nc/hqdefault.jpg",
+      "label": "YouTube video player 1",
+      "source_page_url": "https://secrethunter.es/suite-405/",
+      "score": 124
+    },
+    "sunset-boulevard": {
+      "provider": "vimeo",
+      "embed_url": "https://player.vimeo.com/video/489478983",
+      "video_url": "https://player.vimeo.com/video/489478983?autoplay=1\"",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://linked-minds.com/services/sunset-boulevard/",
+      "score": 89
+    },
+    "sustos-s-a": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/wAKowWQNN_Q",
+      "video_url": "https://www.youtube.com/embed/wAKowWQNN_Q?autoplay=1&loop=1&controls=0&modestbranding=1&rel=0&playlist=wAKowWQNN_Q",
+      "thumbnail": "https://i.ytimg.com/vi/wAKowWQNN_Q/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://quimeraescape.com/sustos/",
+      "score": 106
+    },
+    "swat-countdown": {
+      "provider": "direct",
+      "embed_url": "https://123actionbarcelona.com/prueba/wp-content/uploads/2020/07/SWAT_trailer-AUDIO2.mp4",
+      "video_url": "https://123actionbarcelona.com/prueba/wp-content/uploads/2020/07/SWAT_trailer-AUDIO2.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://123actionbarcelona.com/escapeexterior/",
+      "score": 124
+    },
+    "tesoro-azteca": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/Y2mlGHToBHw",
+      "video_url": "https://www.youtube.com/embed/Y2mlGHToBHw",
+      "thumbnail": "https://i.ytimg.com/vi/Y2mlGHToBHw/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://lock-clock.com/es/game/tesoro-azteca",
+      "score": 124
+    },
+    "the-black-proyect": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/j6QtFRd3YdQ",
+      "video_url": "https://www.youtube.com/embed/j6QtFRd3YdQ?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/j6QtFRd3YdQ/hqdefault.jpg",
+      "label": "The Black Project - Cubick Escape Room",
+      "source_page_url": "https://cubickmadrid.es/the-black-project-escape-room/",
+      "score": 106
+    },
+    "the-magic": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/HqZIPeHMBW0",
+      "video_url": "https://www.youtube.com/embed/HqZIPeHMBW0?rel=0&controls=0&showinfo=0",
+      "thumbnail": "https://i.ytimg.com/vi/HqZIPeHMBW0/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cocoroom.es/the-magic/",
+      "score": 106
+    },
+    "the-narcos": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/McHENnNXlpc",
+      "video_url": "https://www.youtube.com/embed/McHENnNXlpc",
+      "thumbnail": "https://i.ytimg.com/vi/McHENnNXlpc/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://unrealroomescape.es/",
+      "score": 106
+    },
+    "the-temple-box": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/ineLAb5zhHk",
+      "video_url": "https://www.youtube.com/watch?v=ineLAb5zhHk\"",
+      "thumbnail": "https://i.ytimg.com/vi/ineLAb5zhHk/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://escapethebox.es/escape-rooms/escape-room-aventura-el-templo-maya/",
+      "score": 89
+    },
+    "time-travel-paradox": {
+      "provider": "direct",
+      "embed_url": "https://videos.files.wordpress.com/6JGEEsDQ/time-travel-paradox-trailer.mp4",
+      "video_url": "https://videos.files.wordpress.com/6JGEEsDQ/time-travel-paradox-trailer.mp4",
+      "thumbnail": "",
+      "label": "elementor-video",
+      "source_page_url": "https://vroomescape.com/en/time-travel/",
+      "score": 86
+    },
+    "tras-el-espejo": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/FjqxCG79aJ8",
+      "video_url": "https://www.youtube.com/watch?v=FjqxCG79aJ8",
+      "thumbnail": "https://i.ytimg.com/vi/FjqxCG79aJ8/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://therombocode.es/bilbao/juegos/tras-el-espejo/",
+      "score": 101
+    },
+    "tras-el-espejo-gines": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/FjqxCG79aJ8",
+      "video_url": "https://www.youtube.com/watch?v=FjqxCG79aJ8",
+      "thumbnail": "https://i.ytimg.com/vi/FjqxCG79aJ8/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://therombocode.es/sevilla/juegos/tras-el-espejo/",
+      "score": 83
+    },
+    "tras-el-ultimo-dragon": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/H-LoRQN4H5M",
+      "video_url": "https://www.youtube.com/embed/H-LoRQN4H5M?feature=oembed",
+      "thumbnail": "https://i.ytimg.com/vi/H-LoRQN4H5M/hqdefault.jpg",
+      "label": "TRAS EL ULTIMO DRAGON",
+      "source_page_url": "https://escapesecretcode.com/sala/tras-el-ultimo-dragon/#bookingForm",
+      "score": 124
+    },
+    "tu-tambien-sonaras": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/xawQc4BwhHA",
+      "video_url": "https://www.youtube.com/embed/xawQc4BwhHA?wmode=opaque&rel=0&enablejsapi=1&origin=https://maytokingdom.es&iv_load_policy=3",
+      "thumbnail": "https://i.ytimg.com/vi/xawQc4BwhHA/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://maytokingdom.es/juegos/tu-tambien-sonaras/",
+      "score": 89
+    },
+    "un-misterio-a-los-postres": {
+      "provider": "direct",
+      "embed_url": "https://elsecretodemadrid.es/wp-content/uploads/2026/02/Trailer-misterio-para-web-2025-2-.mp4",
+      "video_url": "https://elsecretodemadrid.es/wp-content/uploads/2026/02/Trailer-misterio-para-web-2025-2-.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://elsecretodemadrid.es/un-misterio-a-los-postres",
+      "score": 142
+    },
+    "una-aventura-de-leyenda": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/1b0hmcwOhD8",
+      "video_url": "https://www.youtube.com/embed/1b0hmcwOhD8?wmode=opaque&controls=0&rel=0&enablejsapi=1&origin=https://maytokingdom.es&iv_load_policy=3",
+      "thumbnail": "https://i.ytimg.com/vi/1b0hmcwOhD8/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://maytokingdom.es/juegos/una-aventura-de-leyenda/",
+      "score": 89
+    },
+    "una-mision-extraterrestre": {
+      "provider": "direct",
+      "embed_url": "https://elsecretodemadrid.es/wp-content/uploads/2025/12/Trailer-para-web-2025.mp4",
+      "video_url": "https://elsecretodemadrid.es/wp-content/uploads/2025/12/Trailer-para-web-2025.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://elsecretodemadrid.es/soho",
+      "score": 124
+    },
+    "verdun-1916": {
+      "provider": "direct",
+      "embed_url": "https://aventuring.com/wp-content/uploads/Teaser-Templier.mp4",
+      "video_url": "https://aventuring.com/wp-content/uploads/Teaser-Templier.mp4",
+      "thumbnail": "",
+      "label": "elementor-video",
+      "source_page_url": "https://aventuring.com/escape-room-girona-barcelona/",
+      "score": 124
+    },
+    "vikingos": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/McHENnNXlpc",
+      "video_url": "https://www.youtube.com/embed/McHENnNXlpc",
+      "thumbnail": "https://i.ytimg.com/vi/McHENnNXlpc/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://unrealroomescape.es/",
+      "score": 106
+    },
+    "vinoteca": {
+      "provider": "direct",
+      "embed_url": "https://code258.com/wp-content/uploads/vinoteca-video.mp4",
+      "video_url": "https://code258.com/wp-content/uploads/vinoteca-video.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://code258.com/vinoteca/",
+      "score": 89
+    },
+    "vuelo-a-0714": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/OiL1JPAUCTA",
+      "video_url": "https://www.youtube.com/embed/OiL1JPAUCTA?rel=0&controls=0&showinfo=0",
+      "thumbnail": "https://i.ytimg.com/vi/OiL1JPAUCTA/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cocoroom.es/vuelo/",
+      "score": 106
+    },
+    "vuelo-a-0714-521341": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/OiL1JPAUCTA",
+      "video_url": "https://www.youtube.com/embed/OiL1JPAUCTA?rel=0&controls=0&showinfo=0",
+      "thumbnail": "https://i.ytimg.com/vi/OiL1JPAUCTA/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cocoroom.es/vuelo/",
+      "score": 106
+    },
+    "vuelo-a-0714-584461": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/OiL1JPAUCTA",
+      "video_url": "https://www.youtube.com/embed/OiL1JPAUCTA?rel=0&controls=0&showinfo=0",
+      "thumbnail": "https://i.ytimg.com/vi/OiL1JPAUCTA/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cocoroom.es/vuelo/",
+      "score": 106
+    },
+    "vuelo-a-0714-granada": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/OiL1JPAUCTA",
+      "video_url": "https://www.youtube.com/embed/OiL1JPAUCTA?rel=0&controls=0&showinfo=0",
+      "thumbnail": "https://i.ytimg.com/vi/OiL1JPAUCTA/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cocoroom.es/vuelo/",
+      "score": 106
+    },
+    "willy-el-tuerto": {
+      "provider": "vimeo",
+      "embed_url": "https://player.vimeo.com/video/580768611",
+      "video_url": "https://player.vimeo.com/video/580768611?title=0&byline=0&portrait=0&speed=0&badge=0&autopause=0&player_id=0&app_id=58479",
+      "thumbnail": "",
+      "label": "Willy el Tuerto",
+      "source_page_url": "https://willyeltuertoescaperoom.com/",
+      "score": 124
+    },
+    "y-el-gato": {
+      "provider": "direct",
+      "embed_url": "https://www.emotionescape.com/video/introemotion.mp4",
+      "video_url": "https://www.emotionescape.com/video/introemotion.mp4",
+      "thumbnail": "",
+      "label": "Intro oficial",
+      "source_page_url": "https://www.emotionescape.com/barcelona.html",
+      "score": 124
+    },
+    "yucatan-el-ultimo-templo": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/gDCNgae1GeA",
+      "video_url": "https://www.youtube.com/embed/gDCNgae1GeA",
+      "thumbnail": "https://i.ytimg.com/vi/gDCNgae1GeA/hqdefault.jpg",
+      "label": "Intro oficial",
+      "source_page_url": "https://cocoroom.es/yucatan/",
+      "score": 106
+    },
+    "zombie-outbreak": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/UryLw7SY2WQ",
+      "video_url": "https://www.youtube.com/embed/UryLw7SY2WQ?version=3&rel=1&showsearch=0&showinfo=1&iv_load_policy=1&fs=1&hl=es&autohide=2&start=23&wmode=transparent",
+      "thumbnail": "https://i.ytimg.com/vi/UryLw7SY2WQ/hqdefault.jpg",
+      "label": "youtube-player",
+      "source_page_url": "https://fearescapebarcelona.wordpress.com/zombie-outbreak-roomescape/",
+      "score": 124
+    }
+  }
+}
