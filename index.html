@@ -6373,6 +6373,7 @@ const HORROR_AWARDS_LOGO = 'images/awards/horror-awards-logo.svg';
 const THE_VAULT_SOURCE_LOGO = 'images/brand/icon-round-192.png';
 const OCIOTERROR_SOURCE_LOGO = 'images/brand/ocioterror-icon.svg';
 const TODOESCAPEROOMS_SOURCE_LOGO = 'images/brand/todoescaperooms-icon.svg';
+const ROOMESCAPERS_SOURCE_LOGO = 'images/brand/roomescapers-icon.svg';
 
 function terpecaBadge(pos) {
   if (!pos) return '';
@@ -7675,6 +7676,7 @@ function globalSourceLogoHtml(source) {
     giba: { src: GIBA_AWARDS_LOGO, alt: 'Giba' },
     ocioterror: { src: OCIOTERROR_SOURCE_LOGO, alt: 'OcioTerror' },
     todoescaperooms: { src: TODOESCAPEROOMS_SOURCE_LOGO, alt: 'TodoEscapeRooms' },
+    roomescapers: { src: ROOMESCAPERS_SOURCE_LOGO, alt: 'Room Escapers' },
     the_vault_review: { src: THE_VAULT_SOURCE_LOGO, alt: 'Review The Vault' }
   }[source.id];
   if (!logo) return '<span>★</span>';
@@ -7740,6 +7742,7 @@ function externalSourceLabel(sourceId) {
     giba: 'Giba',
     ocioterror: 'OcioTerror',
     todoescaperooms: 'TodoEscapeRooms',
+    roomescapers: 'Room Escapers',
     the_vault_review: 'The Vault'
   }[sourceId] || sourceId;
 }
@@ -7793,7 +7796,8 @@ function ratingConfidenceForSources(sources) {
   const count = usable.length;
   if (!count) return 0;
   let confidence = count === 1 ? .72 : count === 2 ? .88 : count === 3 ? .96 : 1;
-  if (count === 1 && usable[0].id === 'todoescaperooms') confidence = .62;
+  if (count === 1 && ['todoescaperooms','escaperoos'].includes(usable[0].id)) confidence = .62;
+  if (count === 1 && usable[0].id === 'roomescapers') confidence = .68;
   if (usable.some(source => ['giba','ocioterror','the_vault_review'].includes(source.id))) {
     confidence += .03;
   }

@@ -30,6 +30,7 @@ scripts/run_consensus_*.py
 scripts/sanitize_*.py
 scripts/scrape_*.py
 scripts/import_*_to_synopsis_sources.py
+scripts/import_roomescapers_ratings.py
 scripts/private_db_schema.py
 scripts/build_synopsis_from_private_db.py
 scripts/research_new_room_candidates.py
