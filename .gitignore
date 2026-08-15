@@ -31,6 +31,9 @@ scripts/sanitize_*.py
 scripts/scrape_*.py
 scripts/import_*_to_synopsis_sources.py
 scripts/import_roomescapers_ratings.py
+scripts/import_admin_reviews_to_firebase.py
+scripts/prepare_admin_reviews_migration.py
+scripts/prepare_promoted_arkkadia_reviews_migration.py
 scripts/private_db_schema.py
 scripts/build_synopsis_from_private_db.py
 scripts/research_new_room_candidates.py

@@ -2097,6 +2097,7 @@ let ADMIN_ROLE_ERROR = '';
 let ADMIN_ROLE_RAW = null;
 let ADMIN_REVIEW_DRAFTS = {};
 let ADMIN_EDITING_DRAFT_ID = '';
+let STATIC_PUBLISHED_REVIEWS = {};
 let ADMIN_PUBLISHED_REVIEWS = {};
 let REVIEW_ROOMS_CACHE = null;
 let USER_GROUPS = {};
@@ -2592,9 +2593,52 @@ function currentDoneRooms() {
   return AUTH_USER ? personalDoneRooms() : HECHOS;
 }
 
+function normalizePublishedReviewRecord(record, fallbackKey = '') {
+  const review = record?.review || record || {};
+  const key = record?.roomKey || review.roomKey || userRoomKey(review) || fallbackKey;
+  if (!review || !key) return null;
+  return {
+    status: record.status || 'published',
+    roomKey: key,
+    sourceRoomKey: record.sourceRoomKey || review.sourceRoomKey || '',
+    roomName: record.roomName || review.nombre || review.roomName || '',
+    review,
+    publishedAt: record.publishedAt || review.publishedAt || review.createdAt || '',
+    updatedAt: record.updatedAt || review.updatedAt || '',
+    publishedBy: record.publishedBy || review.publishedBy || '',
+    updatedBy: record.updatedBy || review.updatedBy || '',
+    publishedByName: record.publishedByName || review.publishedByName || ''
+  };
+}
+
+function normalizePublishedReviewsPayload(payload) {
+  const source = Array.isArray(payload)
+    ? payload
+    : (payload?.reviews || payload?.publishedReviews || payload?.adminPublishedReviews || payload || {});
+  const entries = Array.isArray(source)
+    ? source.map((record, index) => [record?.roomKey || record?.review?.roomKey || record?.id || String(index), record])
+    : Object.entries(source || {});
+  const normalized = {};
+  entries.forEach(([id, record]) => {
+    const item = normalizePublishedReviewRecord(record, id);
+    if (!item || item.status !== 'published') return;
+    const key = canonicalReviewRoomKey(item.roomKey || id);
+    if (!key) return;
+    normalized[key] = { ...item, roomKey: key };
+  });
+  return normalized;
+}
+
+function publishedReviewRecords() {
+  return {
+    ...STATIC_PUBLISHED_REVIEWS,
+    ...ADMIN_PUBLISHED_REVIEWS
+  };
+}
+
 function publishedReviewRooms() {
   const byKey = new Map();
-  Object.entries(ADMIN_PUBLISHED_REVIEWS || {}).forEach(([id, record]) => {
+  Object.entries(publishedReviewRecords()).forEach(([id, record]) => {
     const review = record?.review || record || {};
     if (!review || (record.status && record.status !== 'published')) return;
     const key = record.roomKey || review.roomKey || userRoomKey(review) || id;
@@ -3212,12 +3256,27 @@ async function loadAdminReviewDrafts() {
   return ADMIN_REVIEW_DRAFTS;
 }
 
+async function loadStaticPublishedReviews() {
+  STATIC_PUBLISHED_REVIEWS = {};
+  try {
+    const r = await fetch('published_reviews.json?v=' + Date.now());
+    if (!r.ok) return {};
+    const data = await r.json();
+    STATIC_PUBLISHED_REVIEWS = normalizePublishedReviewsPayload(data);
+  } catch (e) {
+    console.warn('No se pudo cargar published_reviews.json:', e.message);
+    STATIC_PUBLISHED_REVIEWS = {};
+  }
+  invalidateReviewRoomsCache();
+  return STATIC_PUBLISHED_REVIEWS;
+}
+
 async function loadAdminPublishedReviews() {
   ADMIN_PUBLISHED_REVIEWS = {};
   invalidateReviewRoomsCache();
   if (!FIREBASE_ENABLED) return {};
   try {
-    ADMIN_PUBLISHED_REVIEWS = await fbGet('adminPublishedReviews') || {};
+    ADMIN_PUBLISHED_REVIEWS = normalizePublishedReviewsPayload(await fbGet('adminPublishedReviews') || {});
   } catch (e) {
     console.warn('No se pudieron cargar reviews publicadas admin:', e.message);
     ADMIN_PUBLISHED_REVIEWS = {};
@@ -5708,6 +5767,7 @@ function setupAutomaticLiveRefresh() {
 async function loadStaticEnhancementsAfterInitialRender() {
   try {
     await loadRoomAliases();
+    await loadStaticPublishedReviews();
     await loadTerpecaAwards();
     await loadExtraAwards();
     await loadExternalRatings();
@@ -5741,6 +5801,7 @@ async function loadData() {
     await loadCatalogo();
     await loadRoomAliases();
     await loadRoomLocations();
+    await loadStaticPublishedReviews();
 
     document.getElementById('loading').style.display = 'none';
     document.getElementById('app').style.display = 'block';

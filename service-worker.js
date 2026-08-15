@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'the-vault-v8';
+const CACHE_VERSION = 'the-vault-v9';
 const APP_SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -22,6 +22,7 @@ const DATA_FILES = [
   'terpeca_awards.json',
   'extra_awards.json',
   'external_ratings.json',
+  'published_reviews.json',
   'review_photos.json',
   'official_videos.json',
   'room_aliases.json',
