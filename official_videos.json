@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-08-14T09:01:56",
-    "rooms": 239,
+    "generated_at": "2026-08-17T21:55:22",
+    "rooms": 243,
     "source": "official_web_high_confidence"
   },
   "videos": {
@@ -194,6 +194,15 @@
       "source_page_url": "https://cluehunter.es/asesinato-en-el-tren/",
       "score": 89
     },
+    "atraco-al-compadre": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/JS0XAjmPES8",
+      "video_url": "https://www.youtube.com/watch?v=JS0XAjmPES8",
+      "thumbnail": "https://i.ytimg.com/vi/JS0XAjmPES8/hqdefault.jpg",
+      "label": "TRAILER OFICIAL \"ATRACO AL COMPADRE\"",
+      "source_page_url": "https://startplay.es/escape-room-en-murcia/",
+      "score": 130
+    },
     "atrapado-en-el-museo": {
       "provider": "youtube",
       "embed_url": "https://www.youtube-nocookie.com/embed/9hCT_8zk3hc",
@@ -257,6 +266,15 @@
       "source_page_url": "https://www.escapesbd.com/",
       "score": 106
     },
+    "awaken": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/6rnN-VxMKkQ",
+      "video_url": "https://www.youtube.com/watch?v=6rnN-VxMKkQ",
+      "thumbnail": "https://i.ytimg.com/vi/6rnN-VxMKkQ/hqdefault.jpg",
+      "label": "Awaken Escape Room | Trailer Oficial",
+      "source_page_url": "https://www.reddopamine.com/landing-terror",
+      "score": 124
+    },
     "bajo-segunda": {
       "provider": "youtube",
       "embed_url": "https://www.youtube-nocookie.com/embed/23v_99lH0GQ",
@@ -273,6 +291,15 @@
       "thumbnail": "https://i.ytimg.com/vi/mC_ZT23km-4/hqdefault.jpg",
       "label": "UBISOFT ESCAPE GAMES | BEYOND MEDUSA'S GATE - TEASER",
       "source_page_url": "https://escapesecretcode.com/sala/escape-beyond-medusa-gate/#bookingForm",
+      "score": 124
+    },
+    "bites-motel": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/yfl0v7Qu0-M",
+      "video_url": "https://www.youtube.com/watch?v=yfl0v7Qu0-M",
+      "thumbnail": "https://i.ytimg.com/vi/yfl0v7Qu0-M/hqdefault.jpg",
+      "label": "Bites Motel | Trailer oficial",
+      "source_page_url": "https://www.bitethefly.com/bites-motel",
       "score": 124
     },
     "boom-escape": {
@@ -1580,6 +1607,15 @@
       "source_page_url": "https://macabroescaperoom.com/necronomicon/",
       "score": 89
     },
+    "nightshift": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/O9tlAHvVriA",
+      "video_url": "https://www.youtube.com/watch?v=O9tlAHvVriA",
+      "thumbnail": "https://i.ytimg.com/vi/O9tlAHvVriA/hqdefault.jpg",
+      "label": "TRAILER NIGHTSHIFT",
+      "source_page_url": "https://www.crupontlegacy.com/home",
+      "score": 130
+    },
     "obsesion": {
       "provider": "youtube",
       "embed_url": "https://www.youtube-nocookie.com/embed/hhUSrzcx3SE",
@@ -1745,11 +1781,11 @@
     "proyecto-dcrisis": {
       "provider": "youtube",
       "embed_url": "https://www.youtube-nocookie.com/embed/yLt8waQIfO8",
-      "video_url": "https://www.youtube.com/watch?v=yLt8waQIfO8\"",
+      "video_url": "https://www.youtube.com/watch?v=yLt8waQIfO8",
       "thumbnail": "https://i.ytimg.com/vi/yLt8waQIfO8/hqdefault.jpg",
-      "label": "Intro oficial",
+      "label": "Proyecto DCrisis - Trailer oficial",
       "source_page_url": "https://paradisoescaperoom.es/proyecto-dcrisis",
-      "score": 89
+      "score": 130
     },
     "psycho-escape": {
       "provider": "direct",

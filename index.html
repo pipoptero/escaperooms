@@ -587,8 +587,9 @@
   .detail-modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);}
   .detail-modal.open{display:flex;}
   .detail-dialog{width:min(1380px,100%);height:min(94vh,960px);background:var(--card);border:1px solid rgba(125,187,63,.28);box-shadow:0 24px 80px rgba(0,0,0,.75);display:grid;grid-template-columns:minmax(250px,360px) minmax(0,1fr);overflow:hidden;}
-  .detail-media{position:relative;background:linear-gradient(135deg,#171927,#2a1b0d 55%,#101018);min-height:0;border-right:1px solid var(--border);}
-  .detail-media img{width:100%;height:100%;object-fit:contain;display:block;background:radial-gradient(ellipse at center,rgba(255,255,255,.05),rgba(0,0,0,.28));}
+  .detail-media{position:relative;background:linear-gradient(135deg,#171927,#2a1b0d 55%,#101018);min-height:0;border-right:1px solid var(--border);display:flex;align-items:flex-start;justify-content:center;padding:20px;overflow:hidden;}
+  .detail-media img{display:block;background:radial-gradient(ellipse at center,rgba(255,255,255,.05),rgba(0,0,0,.28));}
+  .detail-media img.detail-cover-img{width:auto;height:auto;max-width:100%;max-height:100%;object-fit:contain;background:transparent;}
   .detail-media img + .card-media-fallback{display:none;}
   .detail-media .card-media-fallback{font-size:4.2rem;}
   .detail-content{padding:20px 22px;overflow:auto;min-height:0;}
@@ -1168,7 +1169,7 @@
     .detail-modal{padding:0;align-items:stretch;background:var(--card);backdrop-filter:none;overflow:hidden;}
     .detail-modal.open{display:block;}
     .detail-dialog{width:100%;height:100dvh;display:block;border:none;box-shadow:none;overflow:auto;background:var(--card);}
-    .detail-media{height:168px;min-height:168px;border-right:none;border-bottom:1px solid var(--border);}
+    .detail-media{height:clamp(238px,62vw,360px);min-height:238px;border-right:none;border-bottom:1px solid var(--border);padding:10px 14px;}
     .detail-close{position:fixed;top:10px;right:10px;width:40px;height:40px;background:rgba(10,10,15,.92);}
     .detail-content{padding:14px 14px 24px;overflow:visible;}
     .detail-title{font-size:1.35rem;}
@@ -6835,7 +6836,7 @@ function detailImageHtml(room, kind) {
   const fallback = `<div class="card-media-fallback">${initial}</div>`;
   const src = room.imagen || '';
   if (!src) return fallback;
-  const fitClass = cardImageFitClass({ ...room, imagen: src });
+  const fitClass = `detail-cover-img ${cardImageFitClass({ ...room, imagen: src }).replace('card-cover-img', '')}`.trim();
   return `<img class="${fitClass}" src="${src}" alt="${escapeHtml(room.nombre || 'Escape room')}" onerror="this.replaceWith(this.nextElementSibling)">${fallback}`;
 }
 
