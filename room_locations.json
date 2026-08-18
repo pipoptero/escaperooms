@@ -1,8 +1,8 @@
 {
   "meta": {
     "description": "Ubicaciones exactas opcionales para el mapa escapista. Las claves son IDs de sala. Si una sala no aparece aqui, la web usa una posicion aproximada por ciudad/provincia.",
-    "generated_at": "2026-08-17T13:49:16",
-    "count": 117,
+    "generated_at": "2026-08-18T09:07:03",
+    "count": 328,
     "schema": {
       "address": "Direccion visible opcional",
       "lat": "Latitud decimal",
@@ -22,7 +22,163 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://hollywoodescapezaragoza.com/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "11s": {
+      "lat": 41.3636399,
+      "lon": 2.0752833,
+      "address": "CORNELLÀ: Calle Travessera, 10, 08940, Cornellá de Llobregat",
+      "city": "Cornellà de Llobregat",
+      "province": "Barcelona",
+      "precision": "source_room_data",
+      "confidence": 75,
+      "source": "official_site",
+      "source_url": "https://openmindroomescape.es/11s-escape-room/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "2076": {
+      "lat": 39.4882114,
+      "lon": 0.3612367,
+      "address": "C/ Salvador Almenar, 4 46020 Valencia España",
+      "city": "Valencia",
+      "province": "Valencia",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://escaperoos.es/escape-room/2076-el-apocalipsis_e56096",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "9-1": {
+      "lat": 38.0544873,
+      "lon": -1.2100856,
+      "address": "Calle Menéndez Pelayo, 60, 30500 Molina de Segura, Murcia",
+      "city": "",
+      "province": "",
+      "precision": "nominatim",
+      "confidence": 65,
+      "source": "official_site",
+      "source_url": "https://theblackoutescape.com/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "abracadabra": {
+      "lat": 40.41123,
+      "lon": 3.7057495,
+      "address": "Calle Encomienda, 12 28012 Madrid España",
+      "city": "",
+      "province": "",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://brainbreak.es/reservas/abracadabra/#content",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "academia-de-magia": {
+      "lat": 41.4006477,
+      "lon": 2.1801827,
+      "address": "Carrer de la Diputació, 455, 08013",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 65,
+      "source": "official_site",
+      "source_url": "https://bcn.aventurico.com/juegos/academia",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "after-party": {
+      "lat": 41.3852047,
+      "lon": 2.1785128,
+      "address": "Carrer de l'Arc de Sant Silvestre, 3, 08003",
+      "city": "",
+      "province": "",
+      "precision": "nominatim",
+      "confidence": 65,
+      "source": "official_site",
+      "source_url": "https://lock-clock.com/es/game/after-party",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "alicia-en-el-pais-de-las-maravillas": {
+      "lat": 41.4006477,
+      "lon": 2.1801827,
+      "address": "Carrer de la Diputació, 455, 08013",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 65,
+      "source": "official_site",
+      "source_url": "https://bcn.aventurico.com/juegos/alice",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "alicia-y-la-llave-del-tiempo": {
+      "lat": 41.4006477,
+      "lon": 2.1801827,
+      "address": "Carrer de la Diputació, 455, 08013",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 65,
+      "source": "official_site",
+      "source_url": "https://bcn.aventurico.com/juegos/alice-kids",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "alicia-y-la-llave-del-tiempo-489241": {
+      "lat": 40.4301654,
+      "lon": 3.6656613,
+      "address": "Calle de Sta Hortensia, 20, Madrid",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "source_room_data",
+      "confidence": 64,
+      "source": "official_site",
+      "source_url": "https://aventurico.com/juegos/alice-kids1",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "alkatraz-classic": {
+      "lat": 41.4037675,
+      "lon": 2.2059664,
+      "address": "Carrer de Llull, 256 local, 08005 Barcelona",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 114,
+      "source": "official_site",
+      "source_url": "https://playescaperoom.es/contacto/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "alkatraz-medieval": {
+      "lat": 41.4037675,
+      "lon": 2.2059664,
+      "address": "Carrer de Llull, 256 local, 08005 Barcelona",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 114,
+      "source": "official_site",
+      "source_url": "https://playescaperoom.es/contacto/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "angora-y-los-4-ancestros": {
+      "lat": 39.4477747,
+      "lon": -0.3877373,
+      "address": "C/ de Tomás de Villarroya, 14, Jesús, 46017 València, Valencia",
+      "city": "Valencia",
+      "province": "Valencia/València",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://momentescape.es/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "apocalipsis": {
+      "lat": 38.3524295,
+      "lon": 0.4770275,
+      "address": "Calle Canónigo Manuel Lorenzo Penalva, 5, Local 3 0313 Alicante España",
+      "city": "Alicante",
+      "province": "Alicante/Alacant",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://escaperoos.es/escape-room/apocalipsis_e56986",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "asalto-a-la-mafia": {
       "lat": 40.4284,
@@ -34,7 +190,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://hermetico.es/asalto-la-mafia/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "asesinato-en-el-orient-express": {
       "lat": 36.7142628,
@@ -46,7 +202,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://malaga.escapegameover.es/es/rooms/orient-express-the-murder",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "asesino-del-zodiaco": {
       "lat": 40.420172,
@@ -58,7 +214,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://foxinaboxmadrid.com/p/rooms/asesino-del-zodiaco/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "asylum": {
       "lat": 37.378046,
@@ -70,7 +226,67 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://experimentaelreto.es/escape-room-asylum/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "atlantis": {
+      "lat": 41.403734,
+      "lon": 2.1809433,
+      "address": "Carrer dels Enamorats 39 08013 BARCELONA",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 100,
+      "source": "official_site",
+      "source_url": "https://www.elementsescaperoom.com/atlantis/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "atraco-a-central-bank": {
+      "lat": 39.4880168,
+      "lon": 0.3612796,
+      "address": "Calle Salvador Almenar, 4 (Valencia)",
+      "city": "Valencia",
+      "province": "Valencia",
+      "precision": "source_room_data",
+      "confidence": 64,
+      "source": "official_site",
+      "source_url": "https://classicescaperoom.com/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "atraco-al-compadre": {
+      "lat": 37.9703755,
+      "lon": -1.2233186,
+      "address": "Calle Velasco 18. Alcantarilla - Murcia",
+      "city": "Murcia",
+      "province": "Murcia",
+      "precision": "nominatim",
+      "confidence": 70,
+      "source": "official_site",
+      "source_url": "https://startplay.es/escape-room-en-murcia/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "atrapado-en-el-cine": {
+      "lat": 40.3869767,
+      "lon": -3.7372416,
+      "address": "Calle Ramón Sainz, 34, Madrid",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 70,
+      "source": "official_site",
+      "source_url": "https://experienciaescape.com/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "atrapado-en-el-museo": {
+      "lat": 40.4248697,
+      "lon": -3.7035495,
+      "address": "C/ Jesús del Valle, 32 28004 Madrid",
+      "city": "",
+      "province": "",
+      "precision": "nominatim",
+      "confidence": 71,
+      "source": "official_site",
+      "source_url": "https://lasalida.net/escape-room-atrapado-en-el-museo/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "atrapado-en-un-cuarto-con-un-zombie": {
       "lat": 40.399115,
@@ -82,7 +298,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://roomescapeadventures.es/project/atrapado-en-un-cuarto-con-un-zombie/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "aventura-submarina": {
       "lat": 28.92732,
@@ -94,7 +310,19 @@
       "confidence": 98,
       "source": "official_site",
       "source_url": "https://www.theescaperoomlanzarote.com/es/submarine-adventure",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "bank-of-thaqar": {
+      "lat": 41.4119153,
+      "lon": 2.1658908,
+      "address": "Ronda del Guinardó, 36 08025 Barcelona España",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://www.missionleak.com/bankofthaqar",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "barceloneta-pecadora": {
       "lat": 41.3825802,
@@ -106,7 +334,31 @@
       "confidence": 85,
       "source": "official_site",
       "source_url": "https://www.roomescapes.es/barcelona/barcelona/komnata/barceloneta-pecadora.html",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "bienvenidos-a-bordo": {
+      "lat": 38.988704,
+      "lon": -1.8586084,
+      "address": "Calle Antonio Machado, 2, Albacete",
+      "city": "Albacete",
+      "province": "Albacete",
+      "precision": "nominatim",
+      "confidence": 70,
+      "source": "official_site",
+      "source_url": "https://www.escapealbacete.com/bienvenidos-a-bordo/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "bilbao-1835": {
+      "lat": 43.2611381,
+      "lon": -2.927991,
+      "address": "Gran Vía 1, 48001 Bilbao, Bizkaia",
+      "city": "Bilbao",
+      "province": "Bizkaia",
+      "precision": "nominatim",
+      "confidence": 74,
+      "source": "official_site",
+      "source_url": "https://streetskp.com/aventuras/bilbao-1835/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "bite-the-party": {
       "lat": 40.3795938,
@@ -118,7 +370,7 @@
       "confidence": 121,
       "source": "official_site",
       "source_url": "https://www.bitethefly.com/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "bites-motel": {
       "lat": 40.3795938,
@@ -130,7 +382,7 @@
       "confidence": 95,
       "source": "official_site",
       "source_url": "https://www.bitethefly.com/bites-motel",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "in-out-escape-room": {
       "lat": 41.0759086,
@@ -142,7 +394,7 @@
       "confidence": 106,
       "source": "official_site",
       "source_url": "https://www.inoutescape.com/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "bunker": {
       "lat": 40.420172,
@@ -154,7 +406,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://foxinaboxmadrid.com/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "cadena-perpetua": {
       "lat": 40.420172,
@@ -166,7 +418,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://foxinaboxmadrid.com/p/rooms/cadena-perpetua/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "calle-de-la-magia": {
       "lat": 41.3825802,
@@ -178,7 +430,79 @@
       "confidence": 85,
       "source": "official_site",
       "source_url": "https://www.roomescapes.es/barcelona/barcelona/get-out/calle-de-la-magia.html",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "caronte": {
+      "lat": 39.4463769,
+      "lon": 0.3906508,
+      "address": "Calle Assagador de Alboraia 16",
+      "city": "Valencia",
+      "province": "Valencia",
+      "precision": "source_room_data",
+      "confidence": 55,
+      "source": "official_site",
+      "source_url": "https://terrorstories.com/valencia/caronte-escape-room",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "casa-del-relojero": {
+      "lat": 40.4417991,
+      "lon": -3.6752208,
+      "address": "Calle Canillas, 12, 28002 Madrid",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://esfinge-escape.com/juegos/casa-del-relojero-escape",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "casanova-la-fuga-de-bcn": {
+      "lat": 41.4103439,
+      "lon": 2.1708831,
+      "address": "Calle Padilla 353, 08025 Barcelona",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://therombocode.es/barcelona/juegos/la-fuga-de-casanova/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "catacumbas": {
+      "lat": 41.3909523,
+      "lon": 2.1760756,
+      "address": "CALLE GIRONA 7, 08010 BARCELONA",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://goldenpop.es/juegos/catacumbas/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "caza-de-brujas": {
+      "lat": 40.4446492,
+      "lon": 3.6716394,
+      "address": "Calle Ros de Olano, 9 28002 Madrid España",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://academiademagiaescaperoom.com/madrid/caza-de-brujas-escape-room",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "chernobyl": {
+      "lat": 38.3468754,
+      "lon": 0.5124435,
+      "address": "Calle Cisne, 39 03006 Alicante España",
+      "city": "Alicante",
+      "province": "Alicante/Alacant",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://escaperoos.es/escape-room/chernobyl_e27951",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "chernobil": {
       "lat": 36.7142628,
@@ -190,7 +514,19 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://malaga.escapegameover.es/es/rooms/chernobyl",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "clandestina": {
+      "lat": 40.4217641,
+      "lon": 3.6078687,
+      "address": "Nos encontramos en el barrio de Las Rosas, Madrid 28022. Calle Sajonia nº23-25, local a pie de calle",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "source_room_data",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://evasionroomsiosi.com/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "clase-de-pociones": {
       "lat": 38.966782,
@@ -202,7 +538,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://www.cronoroom.com/es/escape-room/clase-de-pociones",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "coming-home": {
       "lat": 40.420172,
@@ -214,7 +550,19 @@
       "confidence": 98,
       "source": "official_site",
       "source_url": "https://foxinaboxmadrid.com/en/portable-games/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "conquista-de-troya": {
+      "lat": 41.4492594,
+      "lon": 2.2021247,
+      "address": "Passeig Santa Coloma, 106 Bajos 08030 BARCELONA",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://neverlandescape.com/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "cronodetectives": {
       "lat": 38.966782,
@@ -226,7 +574,67 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://www.cronoroom.com/es/escape-room/cronodetectives",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "da-vinci": {
+      "lat": 41.6552911,
+      "lon": -4.72189,
+      "address": "Calle Piedad nº2, 47003, Valladolid",
+      "city": "Valladolid",
+      "province": "Valladolid",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://thekeyvalladolid.com/da-vinci/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "edison-vs-tesla": {
+      "lat": 40.4210624,
+      "lon": 3.7083538,
+      "address": "C/ San Bernardo 5, pasaje, portal B, entreplanta izquierda. 28013. Madrid",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "source_room_data",
+      "confidence": 86,
+      "source": "official_site",
+      "source_url": "https://escapecollegemadrid.com/room/edisonvstesla/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "aventura-en-egipto": {
+      "lat": 40.4262347,
+      "lon": -3.7026048,
+      "address": "Calle de la Palma 14 28004 Madrid",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 100,
+      "source": "official_site",
+      "source_url": "https://www.scavengerescape.com/en/madrid",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-amuleto-arcano": {
+      "lat": 36.7417677,
+      "lon": 4.0950192,
+      "address": "Calle Isidoro Rivas 3, 29740 Torre del Mar",
+      "city": "Torre del Mar",
+      "province": "Malaga",
+      "precision": "source_room_data",
+      "confidence": 69,
+      "source": "official_site",
+      "source_url": "https://torrenigma.com/en/el-amuleto-arcano-escape-room",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-arca-de-dali": {
+      "lat": 41.4103439,
+      "lon": 2.1708831,
+      "address": "Calle Padilla 353, 08025 Barcelona",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://therombocode.es/barcelona/juegos/el-arca-dedali/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "el-asesino-de-keylock-city": {
       "lat": 41.3825802,
@@ -238,7 +646,31 @@
       "confidence": 85,
       "source": "official_site",
       "source_url": "https://www.roomescapes.es/barcelona/barcelona/enigma/el-asesino-de-keylock-city.html",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-bar": {
+      "lat": 41.3715137,
+      "lon": 2.1327697,
+      "address": "Calle Bonaventura Polles 21, Local 2 08014 Barcelona",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 74,
+      "source": "official_site",
+      "source_url": "https://unrealroomescape.es/sants/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-camerino": {
+      "lat": 40.4417991,
+      "lon": -3.6752208,
+      "address": "Calle Canillas, 12, 28002 Madrid",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://esfinge-escape.com/juegos/el-camerino-escape-room",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "el-camino-del-ninja": {
       "lat": 41.367071,
@@ -250,7 +682,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://www.escapeandfunbarcelona.com/el-camino-del-ninja",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "el-canibal": {
       "lat": 40.4284,
@@ -262,7 +694,55 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://hermetico.es/el-canibal-escape-room-de-terror/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-caso-w-e-n-murcia": {
+      "lat": 42.9100599,
+      "lon": -8.4926757,
+      "address": "A Coruña y Murcia",
+      "city": "Murcia",
+      "province": "Murcia",
+      "precision": "nominatim",
+      "confidence": 70,
+      "source": "official_site",
+      "source_url": "https://cluehunter.es/el-caso-wen/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-caso-w-e-n": {
+      "lat": 42.9100599,
+      "lon": -8.4926757,
+      "address": "A Coruña y Murcia",
+      "city": "A Coruña",
+      "province": "A Coruña",
+      "precision": "nominatim",
+      "confidence": 70,
+      "source": "official_site",
+      "source_url": "https://cluehunter.es/el-caso-wen/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-cetro-de-fuego": {
+      "lat": 41.403734,
+      "lon": 2.1809433,
+      "address": "Carrer dels Enamorats 39 08013 BARCELONA",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 100,
+      "source": "official_site",
+      "source_url": "https://www.elementsescaperoom.com/el-faraon/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-coche": {
+      "lat": 39.4888242,
+      "lon": 0.362272,
+      "address": "Calle Azagador de Alboraya, 16",
+      "city": "Valencia",
+      "province": "Valencia",
+      "precision": "source_room_data",
+      "confidence": 75,
+      "source": "official_site",
+      "source_url": "https://thecityescaperoom.com/valencia/el-coche-escape-room",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "el-coleccionista-de-arte-551": {
       "lat": 41.3878104,
@@ -274,7 +754,55 @@
       "confidence": 95,
       "source": "official_site",
       "source_url": "https://barcelona.roomofriddles.com/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-desafio-de-careme": {
+      "lat": 43.2419396,
+      "lon": -5.5623841,
+      "address": "Calle de los palomares 17 Pola de Laviana",
+      "city": "Pola de Laviana",
+      "province": "Asturias",
+      "precision": "nominatim",
+      "confidence": 65,
+      "source": "official_site",
+      "source_url": "https://www.mindgames.es/eldesafiodecareme/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-destino-del-reino": {
+      "lat": 42.484601,
+      "lon": -1.6555292,
+      "address": "Calle Unzué 1 Olite, 31390 Navarra",
+      "city": "",
+      "province": "Navarra",
+      "precision": "nominatim",
+      "confidence": 90,
+      "source": "official_site",
+      "source_url": "https://oliteescaperoom.com/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-dia-del-cobro": {
+      "lat": 37.891933,
+      "lon": -4.7778581,
+      "address": "Av. de las Ollerías, nº21, Córdoba - 14001",
+      "city": "Córdoba",
+      "province": "Córdoba",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://thelockdownprojects.com/porfolio/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-diario-de-miko": {
+      "lat": 41.412461,
+      "lon": 2.1761542,
+      "address": "Carrer Sant Antoni Maria Claret, 258, local. 08041 Barcelona",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "source_room_data",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://www.xcaperoombcn.com/room/el-diario-de-miko/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "dr-jones-y-la-maldicion-del-templo": {
       "lat": 37.378046,
@@ -286,7 +814,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://experimentaelreto.es/escape-room-dr-jones-y-la-maldicion-del-templo/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "el-elixir-experimento-inmortal": {
       "lat": 36.685504,
@@ -298,7 +826,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://exitescaperoom.es/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "el-estudio-de-sherlock-holmes": {
       "lat": 37.378046,
@@ -310,7 +838,43 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://experimentaelreto.es/escape-room-detectives/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-extrano-camarote": {
+      "lat": 40.4217641,
+      "lon": 3.6078687,
+      "address": "Nos encontramos en el barrio de Las Rosas, Madrid 28022. Calle Sajonia nº23-25, local a pie de calle",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "source_room_data",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://evasionroomsiosi.com/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-gran-golpe-529701": {
+      "lat": 40.431139,
+      "lon": 3.6093883,
+      "address": "Calle de Longares 18, 28022, Las Musas. Madrid",
+      "city": "",
+      "province": "",
+      "precision": "source_room_data",
+      "confidence": 65,
+      "source": "official_site",
+      "source_url": "https://roadoutescaperoom.com/el-gran-golpe/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-guardabosques": {
+      "lat": 40.2958702,
+      "lon": -3.8941038,
+      "address": "C. de Santiago Ramón y Cajal, 55, 28939, Arroyomolinos, Madrid",
+      "city": "Arroyomolinos",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 121,
+      "source": "official_site",
+      "source_url": "https://arroyoescaperoom.es/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "el-hechizo-de-la-dama-oscura": {
       "lat": 40.3955116,
@@ -322,7 +886,79 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://escapethebox.es/escape-rooms/escape-room-magia-el-hechizo-de-la-dama-oscura/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-hospital": {
+      "lat": 40.423772,
+      "lon": -3.7064911,
+      "address": "Calle Andrés Borrego, 19, 28004 Madrid 915 32 21 81",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://linked-minds.com/services/el-hospital/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-hotel-de-los-suicidas": {
+      "lat": 39.4464536,
+      "lon": 0.3907493,
+      "address": "Calle Ingeniero José Sirera 37 46017 Valencia España",
+      "city": "Valencia",
+      "province": "Valencia",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://escaperoos.es/escape-room/el-hotel-de-los-suicidas_e23135",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-jardin": {
+      "lat": 37.196906,
+      "lon": -3.6343445,
+      "address": "Avenida de Andalucia nº27, local 6. Granada",
+      "city": "Granada",
+      "province": "Granada",
+      "precision": "nominatim",
+      "confidence": 70,
+      "source": "official_site",
+      "source_url": "https://13monos.es/nuestros-juegos/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-laberinto-del-minotauro": {
+      "lat": 41.6471497,
+      "lon": -0.8932446,
+      "address": "C/ Cánovas 31 50004 Zaragoza",
+      "city": "",
+      "province": "Zaragoza",
+      "precision": "nominatim",
+      "confidence": 76,
+      "source": "official_site",
+      "source_url": "https://www.protagonist.es/escape-room-laberinto-minotauro/#content",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-laberinto-del-tiempo": {
+      "lat": 41.3852047,
+      "lon": 2.1785128,
+      "address": "Carrer de l'Arc de Sant Silvestre, 3, 08003",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 65,
+      "source": "official_site",
+      "source_url": "https://lock-clock.com/es/game/el-laberinto-del-tiempo",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-lechero": {
+      "lat": 38.2142055,
+      "lon": -0.6834089,
+      "address": "Carrer del Canal, 6, 03294, Elche, Alicante",
+      "city": "Foia d’Elx",
+      "province": "Alicante",
+      "precision": "nominatim",
+      "confidence": 85,
+      "source": "official_site",
+      "source_url": "https://sabotajerooms.com/el-lechero/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "el-legado-de-laozi": {
       "lat": 40.9745042,
@@ -334,7 +970,43 @@
       "confidence": 95,
       "source": "official_site",
       "source_url": "https://fluxusescaperoom.com/el-legado-de-laozi/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-legado-de-verne": {
+      "lat": 41.642037,
+      "lon": -0.8659341,
+      "address": "Calle Belchite 26, 50013, Zaragoza",
+      "city": "Zaragoza",
+      "province": "Zaragoza",
+      "precision": "nominatim",
+      "confidence": 100,
+      "source": "official_site",
+      "source_url": "https://getoutescaperoom.es/zaragoza/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-legado-templario": {
+      "lat": 39.8603345,
+      "lon": -4.0211179,
+      "address": "Calle Armas, 13, 45001, Toledo",
+      "city": "Toledo",
+      "province": "Toledo",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://visitoledo.es/reservas-en-el-legado-templario/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-loco-del-callejon": {
+      "lat": 39.4751585,
+      "lon": 0.3842972,
+      "address": "Calle de Guillem de Castro, 123 46008 Valencia España",
+      "city": "Valencia",
+      "province": "Valencia",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://colorsescaperoom.com/valencia/experiencia-negra-escape-room",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "misterio-de-quijote": {
       "lat": 40.4238,
@@ -346,7 +1018,115 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://therombocode.es/madrid/juegos/el-misterio-de-don-quijote/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-misterio-de-don-quijote": {
+      "lat": 37.38459,
+      "lon": -6.0660241,
+      "address": "Av. de Europa 102 (Gines), 41960 Sevilla",
+      "city": "Sevilla",
+      "province": "Sevilla",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://therombocode.es/sevilla/juegos/el-misterio-de-don-quijote/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-misterio-de-joan": {
+      "lat": 40.4871475,
+      "lon": -3.9640128,
+      "address": "Calle Alameda, 1 - 28229 Villanueva del Pardillo - Madrid",
+      "city": "Villanueva del Pardillo",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 114,
+      "source": "official_site",
+      "source_url": "https://elmisteriodejoan.es/contacto/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "misterio-de-la-mansion": {
+      "lat": 41.4070584,
+      "lon": 2.2028654,
+      "address": "Av. Diagonal 111-113, 08005. Barcelona",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://mysteryescape.es/reservas-el-misterio-de-la-mansion-mystery-escape/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-monasterio": {
+      "lat": 41.6552911,
+      "lon": -4.72189,
+      "address": "Calle Piedad nº2, 47003, Valladolid",
+      "city": "Valladolid",
+      "province": "Valladolid",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://thekeyvalladolid.com/el-monasterio/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-orfanato-sevilla": {
+      "lat": 41.3760963,
+      "lon": 2.1017673,
+      "address": "Carretera de Collblanc, 205, Local 2 08906 Hospitalet de Llobregat España",
+      "city": "",
+      "province": "",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://escaperoomelorfanato.com/reservar/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-orfanato-547501": {
+      "lat": 40.4373704,
+      "lon": -3.62446,
+      "address": "Miguel Yuste, 28037, 40, Madrid",
+      "city": "Benidorm",
+      "province": "Alicante/Alacant",
+      "precision": "exact_with_geo",
+      "confidence": 98,
+      "source": "official_site",
+      "source_url": "https://elpais.com/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-origen": {
+      "lat": 38.3469174,
+      "lon": -0.5116927,
+      "address": "Calle Hércules 03006 ALICANTE",
+      "city": "Alicante",
+      "province": "",
+      "precision": "nominatim",
+      "confidence": 95,
+      "source": "official_site",
+      "source_url": "https://www.sanatoriumescapealicante.com/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-padrino-mafiosos": {
+      "lat": 41.6552911,
+      "lon": -4.72189,
+      "address": "Calle Piedad nº2, 47003, Valladolid",
+      "city": "Valladolid",
+      "province": "Valladolid",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://thekeyvalladolid.com/padrino-mafiosos/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-padrino-policia": {
+      "lat": 41.6552911,
+      "lon": -4.72189,
+      "address": "Calle Piedad nº2, 47003, Valladolid",
+      "city": "Valladolid",
+      "province": "Valladolid",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://thekeyvalladolid.com/padrino-policia-ninos/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "el-pollo-dorado-saloon": {
       "lat": 40.420172,
@@ -358,7 +1138,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://foxinaboxmadrid.com/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "el-proyecto-halley": {
       "lat": 40.3253109,
@@ -370,7 +1150,7 @@
       "confidence": 95,
       "source": "official_site",
       "source_url": "https://reversumroomescape.es/juegos-escape-madrid/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "la-puerta": {
       "lat": 28.471714,
@@ -382,7 +1162,19 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://lapuertaescaperoom.com/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-secuestro-mataro": {
+      "lat": 41.5330783,
+      "lon": 2.4432385,
+      "address": "C/ Cooperativa 77, local 2 (Mataró)",
+      "city": "Mataró",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 65,
+      "source": "official_site",
+      "source_url": "https://mataro.cubickroomescape.es/el-rescate-de-maria/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "el-secreto-de-amerinda": {
       "lat": 40.4441317,
@@ -394,7 +1186,31 @@
       "confidence": 98,
       "source": "official_site",
       "source_url": "https://influxescape.com/amerinda/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-secreto-de-la-jungla": {
+      "lat": 41.4006477,
+      "lon": 2.1801827,
+      "address": "Carrer de la Diputació, 455, 08013",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 65,
+      "source": "official_site",
+      "source_url": "https://bcn.aventurico.com/juegos/jungle",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-secreto-de-malaespera": {
+      "lat": 43.254323,
+      "lon": -2.9277339,
+      "address": "calle Olano) 48003 Bilbao Bizkaia",
+      "city": "Bilbao",
+      "province": "Bizkaia",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://bilbaout.com/juegos-escape-bilbao/escape-secreto-de-malaespera/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "el-secreto-del-camino-madrid": {
       "lat": 40.4238,
@@ -406,7 +1222,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://therombocode.es/madrid/juegos/el-secreto-del-camino/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "el-sotano": {
       "lat": 38.3593728,
@@ -418,7 +1234,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://theworksofmadness.com/elsotano-escape-terror-alicante/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "the-temple-box": {
       "lat": 40.4304917,
@@ -430,7 +1246,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://escapethebox.es/escape-rooms/escape-room-aventura-el-templo-maya/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "el-tesoro-de-barba-negra": {
       "lat": 40.4434682,
@@ -442,7 +1258,7 @@
       "confidence": 86,
       "source": "official_site",
       "source_url": "https://goodlock.es/el-tesoro-de-barba-negra/#erdirector",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "el-tesoro-de-blackstorm": {
       "lat": 41.9166537,
@@ -454,7 +1270,19 @@
       "confidence": 99,
       "source": "official_site",
       "source_url": "https://secretroomescape.com/contacto/?lang=es",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-tesoro-de-calatravo": {
+      "lat": 41.1076778,
+      "lon": -0.2525456,
+      "address": "Calle Mayor 21 Local, Alcañiz, Teruel. CP 44600",
+      "city": "Alcañiz",
+      "province": "Teruel",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://www.escapateruel.com/room/escapa-teruel-el-tesoro-calatravo/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "el-tesoro-del-jaguar": {
       "lat": 38.966782,
@@ -466,7 +1294,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://www.cronoroom.com/es/escape-room/el-tesoro-del-jaguar",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "el-tesoro-invisible-405911": {
       "lat": 40.42105,
@@ -478,7 +1306,43 @@
       "confidence": 95,
       "source": "official_site",
       "source_url": "https://www.goldenescaperoom.es/escape-room-coslada/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-torneo-de-los-3-magos": {
+      "lat": 40.4445496,
+      "lon": -3.6721967,
+      "address": "Calle Ros de Olano, 9 28002, Madrid",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 74,
+      "source": "official_site",
+      "source_url": "https://academiademagiaescaperoom.com/madrid",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-ultimo-robo": {
+      "lat": 41.3807509,
+      "lon": 2.133811,
+      "address": "Carrer de Galileu, 158, 08028 Barcelona",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://questory.es/el-ultimo-robo/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-viaje-y-los-tesoros-de-kokulkan": {
+      "lat": 38.4004919,
+      "lon": -0.4316423,
+      "address": "Calle La Moleta, 34 – 03550, Sant Joan d’Alacant (Alicante)",
+      "city": "Sant Joan d’Alacant",
+      "province": "Alicante",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://spainingame.com/el-viaje-y-los-tesoros-de-kokulkan/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "el-virus": {
       "lat": 41.3825802,
@@ -490,7 +1354,19 @@
       "confidence": 85,
       "source": "official_site",
       "source_url": "https://www.roomescapes.es/barcelona/barcelona/enigma/el-virus.html",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-ultimo-caso-de-max-malone": {
+      "lat": 40.3625473,
+      "lon": 3.5933367,
+      "address": "C/Fernando Chueca Goitia 52 Madrid",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "source_room_data",
+      "confidence": 64,
+      "source": "official_site",
+      "source_url": "https://www.roomescapes.es/madrid/madrid/the-safekey/el-ultimo-caso-de-max-malone.html",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "el-ultimo-hechizo": {
       "lat": 37.378046,
@@ -502,7 +1378,151 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://experimentaelreto.es/escape-room-harry-potter/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-ultimo-vikingo": {
+      "lat": 40.423772,
+      "lon": -3.7064911,
+      "address": "Calle Andrés Borrego, 19, 28004 Madrid 915 32 21 81",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://linked-minds.com/services/el-ultimo-vikingo/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "elisabeth": {
+      "lat": 39.4477747,
+      "lon": -0.3877373,
+      "address": "C/ de Tomás de Villarroya, 14, Jesús, 46017 València, Valencia",
+      "city": "Valencia",
+      "province": "Valencia/València",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://momentescape.es/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "ellebanna": {
+      "lat": 41.5629623,
+      "lon": 2.0100492,
+      "address": "Terrassa",
+      "city": "Terrassa",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://www.roomescapes.es/barcelona/terrassa/estrategy/ellebanna.html",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "en-el-corazon-de-los-cuentos": {
+      "lat": 40.3253109,
+      "lon": -3.8592814,
+      "address": "Calle Ávila 19, 28937, Móstoles, Madrid",
+      "city": "",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 85,
+      "source": "official_site",
+      "source_url": "https://reversumroomescape.es/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "en-la-mente-del-asesino": {
+      "lat": 41.3712461,
+      "lon": 2.1424918,
+      "address": "Carrer del Moianès 20. Barcelona 08014, España",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 86,
+      "source": "official_site",
+      "source_url": "https://www.encryptroom.com/reservas/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "en-la-mente-del-genio": {
+      "lat": 41.6471497,
+      "lon": -0.8932446,
+      "address": "C/ Cánovas 31 50004 Zaragoza Email: Teléfono.: +34 614 19 30 52 Horario: De lunes a domingo. De 10h a 22h",
+      "city": "Zaragoza",
+      "province": "Zaragoza",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://www.protagonist.es/escape-room-mente-de-un-genio/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "encryptroom": {
+      "lat": 41.3712461,
+      "lon": 2.1424918,
+      "address": "Carrer del Moianès 20. Barcelona 08014, España",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 120,
+      "source": "official_site",
+      "source_url": "https://www.encryptroom.com/contacto/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "endurance-ii": {
+      "lat": 41.4376301,
+      "lon": 2.1589059,
+      "address": "Calle Porrera 12 Local - 08031 Barcelona",
+      "city": "",
+      "province": "",
+      "precision": "source_room_data",
+      "confidence": 59,
+      "source": "official_site",
+      "source_url": "https://unrealroomescape.es/horta/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "escape-food-2050": {
+      "lat": 41.3153032,
+      "lon": 2.0831685,
+      "address": "Carrer Riu Anoia 42-54 08820 El Prat de Llobregat",
+      "city": "",
+      "province": "",
+      "precision": "nominatim",
+      "confidence": 65,
+      "source": "official_site",
+      "source_url": "https://escapefood.com/reservar/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "escape-room-vr-ubisoft": {
+      "lat": 40.4134222,
+      "lon": -3.7205541,
+      "address": "Calle Linneo 4, 28005 Madrid Nuestro local se encuentra en el centro de Madrid, pero justo en el exterior del área de tráfico restringido “Madrid Central” por lo que podréis a",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 100,
+      "source": "official_site",
+      "source_url": "https://incognitoescape.es/escape-the-lost-pyramid-vr/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "escuela-de-magia-playa-de-las-americas": {
+      "lat": 38.3595289,
+      "lon": 0.4916389,
+      "address": "Calle San Eugenio Domínguez, 23, Centro Comercial \"IBEROSTAR BOUGANVILLE\"",
+      "city": "",
+      "province": "",
+      "precision": "source_room_data",
+      "confidence": 55,
+      "source": "official_site",
+      "source_url": "https://www.islandphobia.com/es/harry/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "estudios-jackman": {
+      "lat": 41.3549001,
+      "lon": 2.0640424,
+      "address": "Carretera de Sant Boi, 33 08940 Cornella de Llobregat, Barcelona",
+      "city": "Cornellà de Llobregat",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://vexion.es/experiencia/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "euforia": {
       "lat": 40.4434682,
@@ -514,7 +1534,43 @@
       "confidence": 120,
       "source": "official_site",
       "source_url": "https://goodlock.es/contacto/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "exodus": {
+      "lat": 41.369818,
+      "lon": 2.0823816,
+      "address": "Carrer de la Serra del Montsec, 22 08950 Esplugues de Llobregat",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 91,
+      "source": "official_site",
+      "source_url": "https://www.elementsescaperoom.com/donde-estamos/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "expedicion-zero-santander": {
+      "lat": 43.4618932,
+      "lon": -3.8100255,
+      "address": "Santander",
+      "city": "Santander",
+      "province": "Cantabria",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://www.roomescapes.es/cantabria/santander/santand-er/expedicion-zero.html",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "expediente-paranormal": {
+      "lat": 40.3985872,
+      "lon": -3.7023439,
+      "address": "Paseo de la Esperanza, 53 28005 – Madrid",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://www.madridterror.com/expediente-paranormal/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "experiencia-amarilla": {
       "lat": 40.4051549,
@@ -526,7 +1582,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://colorsescaperoom.com/madrid",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "retrobox-escape": {
       "lat": 40.4051549,
@@ -538,7 +1594,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://colorsescaperoom.com/madrid",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "experiencia-azul": {
       "lat": 40.4051549,
@@ -550,7 +1606,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://colorsescaperoom.com/madrid",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "desmadre-en-las-vegas": {
       "lat": 40.4051549,
@@ -562,7 +1618,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://colorsescaperoom.com/madrid",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "experiencia-morada": {
       "lat": 40.4051549,
@@ -574,7 +1630,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://colorsescaperoom.com/madrid",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "experiencia-naranja-aladino": {
       "lat": 40.4051549,
@@ -586,7 +1642,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://colorsescaperoom.com/madrid",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "experiencia-perla": {
       "lat": 40.4051549,
@@ -598,7 +1654,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://colorsescaperoom.com/madrid",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "experiencia-roja": {
       "lat": 40.4051549,
@@ -610,7 +1666,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://colorsescaperoom.com/madrid",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "experiencia-rosa-luz-verde": {
       "lat": 40.4051549,
@@ -622,7 +1678,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://colorsescaperoom.com/madrid",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "experiencia-verde": {
       "lat": 40.4051549,
@@ -634,7 +1690,19 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://colorsescaperoom.com/madrid",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "fantasmas-y-el-misterio-de-la-tabla-esmeralda": {
+      "lat": 38.4004919,
+      "lon": -0.4316423,
+      "address": "Calle La Moleta, 34 – 03550, Sant Joan d’Alacant (Alicante)",
+      "city": "Sant Joan d Alacant",
+      "province": "Alicante",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://spainingame.com/fantasmas-y-el-misterio-de-la-tabla-esmeralda/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "fabrica-de-chocolate": {
       "lat": 40.4284,
@@ -646,7 +1714,31 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://hermetico.es/juego-de-escape-en-madrid-fabrica-de-chocolate/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-celda-de-los-gangsters": {
+      "lat": 40.4262347,
+      "lon": -3.7026048,
+      "address": "Calle de la Palma 14 28004 Madrid",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 100,
+      "source": "official_site",
+      "source_url": "https://www.scavengerescape.com/en/madrid",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "gangsters": {
+      "lat": 41.3918718,
+      "lon": 2.1725793,
+      "address": "Carrer Girona 27, 08010 Barcelona +34 933 180 155",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "source_room_data",
+      "confidence": 74,
+      "source": "official_site",
+      "source_url": "https://maximumescape.com/es/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "hammer-killer": {
       "lat": 38.3593728,
@@ -658,7 +1750,139 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://hammerkiller.com/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "highschool": {
+      "lat": 41.5449565,
+      "lon": 2.4253697,
+      "address": "Ronda Roca Blanca 89 - 08303 Mataró",
+      "city": "Mataró",
+      "province": "Barcelona",
+      "precision": "source_room_data",
+      "confidence": 69,
+      "source": "official_site",
+      "source_url": "https://unrealroomescape.es/mataro/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "hipolita-la-reina-de-las-amazonas": {
+      "lat": 40.3955775,
+      "lon": 3.6975121,
+      "address": "Calle Tomás Borrás, 10 28045 Madrid España",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://laordenescape.com/experiencia-hipolita-escape-room",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "horror-club": {
+      "lat": 40.3985872,
+      "lon": -3.7023439,
+      "address": "Paseo de la Esperanza, 53 28005 – Madrid",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://www.madridterror.com/horror-club/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "hotel-overlook": {
+      "lat": 41.3892038,
+      "lon": 2.175234,
+      "address": "Calle Trafalgar 17, 08010 Barcelona",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 74,
+      "source": "official_site",
+      "source_url": "https://maximumescape.com/es/games/Overlook",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "heroes-576521": {
+      "lat": 38.0012817,
+      "lon": -1.1305281,
+      "address": "Avenida Nuestra Señora de Atocha, 15 30007 Murcia",
+      "city": "Murcia",
+      "province": "Murcia",
+      "precision": "nominatim",
+      "confidence": 100,
+      "source": "official_site",
+      "source_url": "https://audaciaescaperoom.com/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "ignotum": {
+      "lat": 40.423772,
+      "lon": -3.7064911,
+      "address": "Calle Andrés Borrego, 19, 28004 Madrid 915 32 21 81",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://linked-minds.com/services/ignotum/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "in": {
+      "lat": 41.3760963,
+      "lon": 2.1017673,
+      "address": "Carretera de Collblanc, 205, Local 2 08906 Hospitalet de Llobregat España",
+      "city": "",
+      "province": "",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://www.fearfactoryexp.com/copia-de-el-orfanato-1",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "indiana-y-el-idolo-maldito": {
+      "lat": 43.3466447,
+      "lon": -8.4127029,
+      "address": "A Coruña",
+      "city": "A Coruña",
+      "province": "A Coruña",
+      "precision": "nominatim",
+      "confidence": 70,
+      "source": "official_site",
+      "source_url": "https://cluehunter.es/indiana-y-el-idolo-maldito/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "infe-x": {
+      "lat": 41.4120521,
+      "lon": 2.1658479,
+      "address": "Ronda del Guinardó, 36 08025 Barcelona España",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://www.missionleak.com/infe-x",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "informe-kauffman": {
+      "lat": 41.6915847,
+      "lon": -0.9101268,
+      "address": "Zaragoza",
+      "city": "Zaragoza",
+      "province": "Zaragoza",
+      "precision": "nominatim",
+      "confidence": 85,
+      "source": "official_site",
+      "source_url": "https://www.roomescapes.es/zaragoza/zaragoza/room60/informe-kauffman.html",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "inframundo": {
+      "lat": 40.4041785,
+      "lon": -3.8762255,
+      "address": "Calle Garcia Noblejas, 3 28660 Boadilla del Monte, Madrid",
+      "city": "",
+      "province": "",
+      "precision": "nominatim",
+      "confidence": 65,
+      "source": "official_site",
+      "source_url": "https://amazein60.com/room/inframundo/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "inquisicion": {
       "lat": 40.4284,
@@ -670,7 +1894,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://hermetico.es/juego-de-escape-inquisicion/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "jungle-lab": {
       "lat": 28.92732,
@@ -682,7 +1906,43 @@
       "confidence": 98,
       "source": "official_site",
       "source_url": "https://www.theescaperoomlanzarote.com/es/jungle-lab",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "jurasico": {
+      "lat": 41.3909523,
+      "lon": 2.1760756,
+      "address": "CALLE GIRONA 7, 08010 BARCELONA",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://goldenpop.es/jurasico/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "katrina": {
+      "lat": 41.369818,
+      "lon": 2.0823816,
+      "address": "Carrer de la Serra del Montsec, 22 08950 Esplugues de Llobregat",
+      "city": "Esplugues de Llobregat",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 101,
+      "source": "official_site",
+      "source_url": "https://www.elementsescaperoom.com/donde-estamos/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "kennedy-lincon-mision-swat": {
+      "lat": 40.39615,
+      "lon": 3.6975868,
+      "address": "Calle Tomás Borrás, 10 28045 Madrid España",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://laordenescape.com/experiencia-kennedy-escape-room",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "kgb-mision-madrid": {
       "lat": 40.4393928,
@@ -694,7 +1954,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://monkey-donkey.es/kgb-mision-madrid/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "la-abadia-de-atxuri": {
       "lat": 43.2536237,
@@ -706,7 +1966,7 @@
       "confidence": 90,
       "source": "official_site",
       "source_url": "https://abadiadeatxuri.com/en/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "la-beerdad-oculta": {
       "lat": 38.2142055,
@@ -718,7 +1978,19 @@
       "confidence": 95,
       "source": "official_site",
       "source_url": "https://sabotajerooms.com/beerdad-oculta/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-bella-y-la-maldicion-del-principe": {
+      "lat": 36.8423623,
+      "lon": -2.4629712,
+      "address": "Calle Granada, 52, 04003 Almería",
+      "city": "Almería",
+      "province": "Almería",
+      "precision": "nominatim",
+      "confidence": 100,
+      "source": "official_site",
+      "source_url": "https://escaperoomtematicosalmeria.es/reserva-escape-room-almeria/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "la-caja-diabolica-101611": {
       "lat": 40.42105,
@@ -730,7 +2002,31 @@
       "confidence": 95,
       "source": "official_site",
       "source_url": "https://www.goldenescaperoom.es/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-camara-acorazada": {
+      "lat": 41.4070584,
+      "lon": 2.2028654,
+      "address": "Av. Diagonal 111-113, 08005. Barcelona",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://mysteryescape.es/reservas-la-camara-acorazada-mystery-escape/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-casa-de-los-fantasmas": {
+      "lat": 39.4809958,
+      "lon": -0.3801415,
+      "address": "Plaza del Portal Nuevo, 8, Ciutat Vella, 46003 Valencia",
+      "city": "Valencia",
+      "province": "Valencia",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://fobiaescape.com/la-casa-de-los-fantasmas/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "la-casa-en-piezas-797301": {
       "lat": 40.4272906,
@@ -742,7 +2038,19 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://terrorstories.com/madrid",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-casa-encantada": {
+      "lat": 38.3524295,
+      "lon": 0.4770275,
+      "address": "Plaza Mar 2)",
+      "city": "Alicante",
+      "province": "Alicante/Alacant",
+      "precision": "source_room_data",
+      "confidence": 55,
+      "source": "official_site",
+      "source_url": "https://xcapate.com/escape-room-miedo-alicante/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "la-casa-maldita-606441": {
       "lat": 40.4304917,
@@ -754,7 +2062,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://escapethebox.es/escape-rooms/escape-room-miedo-la-casa-maldita/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "la-casita-azul-psycokiller": {
       "lat": 41.4965671,
@@ -766,7 +2074,7 @@
       "confidence": 95,
       "source": "official_site",
       "source_url": "https://nextxzone.com/reserva/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "la-caida-de-troya": {
       "lat": 40.4238,
@@ -778,7 +2086,31 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://therombocode.es/madrid/juegos/la-caida-de-troya/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "estrella-damm-la-cerveseria": {
+      "lat": 41.4098898,
+      "lon": 2.1796826,
+      "address": "Calle Rosselló 508, Bajos 08026 Barcelona",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://www.enigmik.com/ca/escaperoom/la-cerveseria/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-coleccionista": {
+      "lat": 40.2362246,
+      "lon": -3.755579,
+      "address": "C. Turín, 15, Parla, Madrid",
+      "city": "Parla",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 85,
+      "source": "official_site",
+      "source_url": "https://www.kalonescape.com/el-juego/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "la-comisaria": {
       "lat": 38.3589,
@@ -790,7 +2122,31 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://villaindomita.com/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-consulta": {
+      "lat": 41.4526052,
+      "lon": 2.227309,
+      "address": "Calle Ripoll, 5 Badalona (Barcelona), 08917",
+      "city": "Badalona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 74,
+      "source": "official_site",
+      "source_url": "https://www.escapismexperience.es/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-copa-perdida": {
+      "lat": 43.2611381,
+      "lon": -2.927991,
+      "address": "Gran Vía 1, 48001 Bilbao, Bizkaia",
+      "city": "Bilbao",
+      "province": "Bizkaia",
+      "precision": "nominatim",
+      "confidence": 74,
+      "source": "official_site",
+      "source_url": "https://streetskp.com/aventuras/la-copa-coronacion/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "la-cripta-del-vampiro": {
       "lat": 40.4284,
@@ -802,7 +2158,55 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://hermetico.es/la-cripta-del-vampiro/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-cueva": {
+      "lat": 40.1031084,
+      "lon": -3.697966,
+      "address": "Calle Cardenal Cisneros 6 45223, Seseña",
+      "city": "",
+      "province": "",
+      "precision": "nominatim",
+      "confidence": 65,
+      "source": "official_site",
+      "source_url": "https://escaperoomlacueva.com/reservas",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-ducha-fria": {
+      "lat": 41.4109201,
+      "lon": 2.1861986,
+      "address": "Carrer Antic de Bofarull 15, 08026 Barcelona Teléfono: 640 11 87 08 E-mail:",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://prison-experience.com/la-ducha-fria/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-evasion-de-la-madriguera": {
+      "lat": 40.449801,
+      "lon": -3.7011209,
+      "address": "CALLE PALENCIA, 31, 28020, MADRID, MADRID",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 95,
+      "source": "official_site",
+      "source_url": "https://thedarkestroom.com/escape-room-evasion/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-experiencia-sensorial": {
+      "lat": 41.3784085,
+      "lon": 2.1521953,
+      "address": "Carrer Entença 91-93 - Bajos 2 08015 BARCELONA",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://barcelona.sensas.top/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "la-fiesta-erasmus": {
       "lat": 38.3593728,
@@ -814,7 +2218,67 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://www.mutantescape.com/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-fortaleza-2-0": {
+      "lat": 41.4380784,
+      "lon": 2.1946189,
+      "address": "Calle San Narcís número 61 08030 Barcelona",
+      "city": "",
+      "province": "",
+      "precision": "source_room_data",
+      "confidence": 65,
+      "source": "official_site",
+      "source_url": "https://fugitivosroomescape.com/juegos/la-fortaleza/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-fortuna-de-los-addams": {
+      "lat": 41.3825802,
+      "lon": 2.177073,
+      "address": "Barcelona",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 85,
+      "source": "official_site",
+      "source_url": "https://www.roomescapes.es/barcelona/barcelona/addams-house/la-fortuna-de-los-addams.html",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-gran-fuga-2-0": {
+      "lat": 40.4407578,
+      "lon": 3.6542181,
+      "address": "Calle Electronica 6, 28027, Barrio de la Concepción. Madrid",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "source_room_data",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://roadoutescaperoom.com/la-gran-fuga-2-0/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-guarida": {
+      "lat": 38.4004919,
+      "lon": -0.4316423,
+      "address": "Calle La Moleta, 34 – 03550, Sant Joan d’Alacant (Alicante)",
+      "city": "Sant Joan d Alacant",
+      "province": "Alicante",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://spainingame.com/la-guarida/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-guarida-pirata": {
+      "lat": 43.3551176,
+      "lon": -5.8691531,
+      "address": "Av. Julián Clavería, N°4, Bajo, 33006 - Oviedo",
+      "city": "Oviedo",
+      "province": "Asturias",
+      "precision": "nominatim",
+      "confidence": 69,
+      "source": "official_site",
+      "source_url": "https://escapeup.es/escape-room/hora-de-escape/oviedo/la-guarida-pirata/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "la-herencia": {
       "lat": 40.447345,
@@ -826,7 +2290,43 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://www.ncerradosescaperoom.es/Nuestras%20Salas/la-herencia-de-los-balaguer/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-herencia-del-panteon-valencia": {
+      "lat": 39.4477747,
+      "lon": -0.3877373,
+      "address": "C/ de Tomás de Villarroya, 14, Jesús, 46017 València, Valencia",
+      "city": "",
+      "province": "Valencia",
+      "precision": "nominatim",
+      "confidence": 70,
+      "source": "official_site",
+      "source_url": "https://momentescape.es/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-historia-de-charlotte": {
+      "lat": 41.4251716,
+      "lon": 2.178178,
+      "address": "Carrer de les Acàcies, 23-25 08027 La Sagrera – Barcelona. Teléfono: 689922212 Email:",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://roomwhitechapel.com/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-jugueteria-maldita": {
+      "lat": 41.3850024,
+      "lon": 2.1295582,
+      "address": "C/Taquígraf Martí. 6-8, bajos, 08028 - Barcelona",
+      "city": "Barcelona",
+      "province": "",
+      "precision": "nominatim",
+      "confidence": 75,
+      "source": "official_site",
+      "source_url": "https://thebrokenhour.com/es/la-jugueteria-maldita/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "la-jugueteria-mimitos": {
       "lat": 38.3464507,
@@ -838,7 +2338,19 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://tortugasalafuga.com/la-jugueteria-mimitos/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-lavanderia": {
+      "lat": 40.4094074,
+      "lon": 3.70636,
+      "address": "San Cayetano, 3B 28005 Madrid España",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://thecityescaperoom.com/madrid/la-lavanderia-escape-room",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "la-leyenda-del-samurai": {
       "lat": 38.966782,
@@ -850,7 +2362,55 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://www.cronoroom.com/es/escape-room/la-leyenda-del-samurai",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-mafia": {
+      "lat": 40.3152005,
+      "lon": -3.8698121,
+      "address": "Calle Alfonso XII nº 41, Mostoles",
+      "city": "Móstoles",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 65,
+      "source": "official_site",
+      "source_url": "https://www.escaperoomclock60madrid.es/la-mafia/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-maldicion-de-los-balaguer": {
+      "lat": 40.445292,
+      "lon": 3.6127928,
+      "address": "Calle Boltaña, 40, (Nave 1) 28022 Madrid España",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://escapeup.es/escape-room/ncerrados/madrid/la-maldicion-de-los-balaguer/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-mazmorra-la-ultima-partida": {
+      "lat": 41.3918718,
+      "lon": 2.1725793,
+      "address": "Carrer Girona 27, 08010 Barcelona +34 933 180 155",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "source_room_data",
+      "confidence": 74,
+      "source": "official_site",
+      "source_url": "https://maximumescape.com/es/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-mina": {
+      "lat": 41.3624293,
+      "lon": 2.1290745,
+      "address": "Calle Bacardi, 32 08902 Hospitalet de Llobregat España",
+      "city": "",
+      "province": "",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://unrealroomescape.es/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "la-nube-151131": {
       "lat": 40.4266,
@@ -862,7 +2422,79 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://www.emotionescape.com/madrid.html",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-pelicula": {
+      "lat": 39.4886594,
+      "lon": 0.3644924,
+      "address": "Calle Salvador Almenar, 4",
+      "city": "",
+      "province": "",
+      "precision": "source_room_data",
+      "confidence": 49,
+      "source": "official_site",
+      "source_url": "https://thelockroom.com/la-pelicula/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-posesion": {
+      "lat": 41.4306088,
+      "lon": 1.7856002,
+      "address": "C/ Passeig Can Ferrer Del Mas, 24-26 08770 Sant Sadurní d'Anoia España",
+      "city": "Sant Sadurní d'Anoia",
+      "province": "Barcelona",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://www.arcanum.es/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-revolucion-de-los-murcielagos": {
+      "lat": 40.449801,
+      "lon": -3.7011209,
+      "address": "CALLE PALENCIA, 31, 28020, MADRID, MADRID",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 95,
+      "source": "official_site",
+      "source_url": "https://thedarkestroom.com/escape-room-revolucion/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-selva-negra": {
+      "lat": 41.975443,
+      "lon": 2.8229915,
+      "address": "Carrer de la Creu, 6 Girona, 17002",
+      "city": "Girona",
+      "province": "Girona",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://imaginagirona.com/index.php/product/la-selva-negra-escape-room/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-sospecha": {
+      "lat": 38.3638106,
+      "lon": 0.4953956,
+      "address": "Calle Cerdá, 67 03009 Alicante España",
+      "city": "Alicante",
+      "province": "Alicante",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://locusfugae.com/la-sospecha-escape-room",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-sospecha-sabadell": {
+      "lat": 41.5460801,
+      "lon": 2.1083214,
+      "address": "Sabadell",
+      "city": "Sabadell",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://www.roomescapes.es/barcelona/sabadell/escapem/la-sospecha.html",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "la-tienda-de-comics": {
       "lat": 43.4020123,
@@ -874,7 +2506,7 @@
       "confidence": 98,
       "source": "official_site",
       "source_url": "https://www.timeoutescape.com/room/la-tienda-de-comics/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "la-traca-final-ii-el-desenlace": {
       "lat": 38.3589,
@@ -886,7 +2518,31 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://www.villaindomita.es/latracafinal",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-tumba-de-leonora": {
+      "lat": 37.790846,
+      "lon": -3.7296095,
+      "address": "C/ Virgen de los Remedios 8, Cerro Molina, 23009, Jaén",
+      "city": "Jaén",
+      "province": "Jaén",
+      "precision": "nominatim",
+      "confidence": 121,
+      "source": "official_site",
+      "source_url": "https://jaenescaperoom.com/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-ultima-funcion": {
+      "lat": 41.4103439,
+      "lon": 2.1708831,
+      "address": "Calle Padilla 353, 08025 Barcelona",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://therombocode.es/barcelona/juegos/la-ultima-funcion/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "laborstorio-jurasico": {
       "lat": 38.966782,
@@ -898,7 +2554,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://www.cronoroom.com/es/escape-room/laboratorio-jurasico",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "laboratorio-zombie": {
       "lat": 40.420172,
@@ -910,7 +2566,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://foxinaboxmadrid.com/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "lanzadera-alien": {
       "lat": 41.3856269,
@@ -922,7 +2578,55 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://www.resistanceroom.com/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "lara-kroft-el-triangulo-de-luz": {
+      "lat": 41.6915847,
+      "lon": -0.9101268,
+      "address": "Zaragoza",
+      "city": "Zaragoza",
+      "province": "Zaragoza",
+      "precision": "nominatim",
+      "confidence": 70,
+      "source": "official_site",
+      "source_url": "https://cluehunter.es/lara-kroft/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "las-brujas-de-silent-hollow": {
+      "lat": 40.3238525,
+      "lon": -3.8649214,
+      "address": "Móstoles",
+      "city": "Móstoles",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://www.roomescapes.es/madrid/escape-room/clock60/las-brujas-de-silent-hollow.html",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "las-maravillas-de-agrabah": {
+      "lat": 41.4291801,
+      "lon": 2.1651642,
+      "address": "Carrer de Petrarca, 34 - 08031 Barcelona",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 74,
+      "source": "official_site",
+      "source_url": "https://unrealroomescape.es/vilapicina/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "las-maravillas-de-alicia-618021": {
+      "lat": 39.4570573,
+      "lon": 0.3746958,
+      "address": "Avenida Dr. Waksman, 5 46004 Valencia España",
+      "city": "Valencia",
+      "province": "Valencia",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://colorsescaperoom.com/valencia/experiencia-carmin-escape-room",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "las-reliquias-de-judy-692401": {
       "lat": 38.3593728,
@@ -934,7 +2638,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://theworksofmadness.com/reliquias-de-judy/?fbclid=PAZXh0bgNhZW0CMTEAAaaPjyynwHqtNrwu0fNe4z8EWM3eR87UEVm9ckHHTqGpiuX9IG7enYvOKAk_aem_ccM1oVK_yfxI",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "la-semilla-de-la-locura": {
       "lat": 38.3593728,
@@ -946,7 +2650,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://theworksofmadness.com/las-semillas-de-la-locura-escape-room-en-alicante/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "los-crimenes-de-la-abadia-522401": {
       "lat": 40.42105,
@@ -958,7 +2662,31 @@
       "confidence": 95,
       "source": "official_site",
       "source_url": "https://www.goldenescaperoom.es/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "los-misterios-de-egipto": {
+      "lat": 41.6552911,
+      "lon": -4.72189,
+      "address": "Calle Piedad nº2, 47003, Valladolid",
+      "city": "Valladolid",
+      "province": "Valladolid",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://thekeyvalladolid.com/los-misterios-egipto/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "los-mundos-de-alicia": {
+      "lat": 41.6107511,
+      "lon": 2.294207,
+      "address": "Passeig de la Muntanya, 112 08402 Granollers España",
+      "city": "Granollers",
+      "province": "",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://www.keyplay.es/escape-room-granollers-reservas-alicia/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "ciudad-perdida": {
       "lat": 42.5987,
@@ -970,7 +2698,31 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://www.escapology.com/en/leon",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "busqueda-del-tesoro": {
+      "lat": 40.4262347,
+      "lon": -3.7026048,
+      "address": "Calle de la Palma 14 28004 Madrid",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 100,
+      "source": "official_site",
+      "source_url": "https://www.scavengerescape.com/en/madrid",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "magallanes-la-ultima-expedicion": {
+      "lat": 40.396052,
+      "lon": 3.697501,
+      "address": "Calle Tomás Borrás, 10 28045 Madrid España",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://laordenescape.com/experiencia-magallanes-escape-room",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "mastermind": {
       "lat": 40.420172,
@@ -982,7 +2734,19 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://foxinaboxmadrid.com/p/rooms/mastermind/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "mausoleum": {
+      "lat": 37.3808944,
+      "lon": -5.9703124,
+      "address": "Calle San Juan de Dios, 12, 41005 Sevilla",
+      "city": "Sevilla",
+      "province": "Sevilla",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://www.encryptedsevilla.com/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "maxx391": {
       "lat": 43.2595019,
@@ -994,7 +2758,7 @@
       "confidence": 95,
       "source": "official_site",
       "source_url": "https://www.virtualbilbao.com/sala-escape-bilbao/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "mental-experiment-711911": {
       "lat": 41.650928,
@@ -1006,7 +2770,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://hollywoodescapezaragoza.com/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "migas-de-pan": {
       "lat": 36.51,
@@ -1018,7 +2782,115 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://www.arkhamescaperooms.com/en/breadcrumbs-escape-room-marbella",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "mision-casiopea": {
+      "lat": 39.4583321,
+      "lon": -0.375441,
+      "address": "Calle Centelles 58, Valencia 46006",
+      "city": "",
+      "province": "",
+      "precision": "nominatim",
+      "confidence": 65,
+      "source": "official_site",
+      "source_url": "https://action-gates.com/mision-casiopea/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "mision-gaudi": {
+      "lat": 41.3852047,
+      "lon": 2.1785128,
+      "address": "Carrer de l'Arc de Sant Silvestre, 3, 08003",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 65,
+      "source": "official_site",
+      "source_url": "https://lock-clock.com/es/haz-tu-reserva-aqui",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "mision-orion": {
+      "lat": 39.4583321,
+      "lon": -0.375441,
+      "address": "Calle Centelles 58, Valencia 46006",
+      "city": "",
+      "province": "",
+      "precision": "nominatim",
+      "confidence": 65,
+      "source": "official_site",
+      "source_url": "https://action-gates.com/mision-orion/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "mision-elfo-magico": {
+      "lat": 41.4006477,
+      "lon": 2.1801827,
+      "address": "Carrer de la Diputació, 455, 08013",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 65,
+      "source": "official_site",
+      "source_url": "https://bcn.aventurico.com/juegos/hogwarts",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "mision-s-w-a-t": {
+      "lat": 41.3647727,
+      "lon": 2.0775632,
+      "address": "Calle Travessera, 10 08940 Cornella de Llobregat España",
+      "city": "Cornellà de Llobregat",
+      "province": "Barcelona",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://escaperoos.es/escape-room/mision-s-w-a-t_e61019",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "moon": {
+      "lat": 41.423423,
+      "lon": 1.9967579,
+      "address": "Av. de la Generalitat 155 08780, Pallejà Baix Llobregat (Barcelona)",
+      "city": "",
+      "province": "",
+      "precision": "nominatim",
+      "confidence": 65,
+      "source": "official_site",
+      "source_url": "https://zonaroomescape.com/rooms/moon/#bookingForm",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "mystery-escape-box": {
+      "lat": 41.4070584,
+      "lon": 2.2028654,
+      "address": "Av. Diagonal 111-113, 08005. Barcelona",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://mysteryescape.es/2020/06/22/mystery-escape-box-post-covid-19/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "nakatomi-plaza": {
+      "lat": 41.4370398,
+      "lon": 2.1588865,
+      "address": "Calle Porrera 12 Local - 08031 Barcelona",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 74,
+      "source": "official_site",
+      "source_url": "https://unrealroomescape.es/horta/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "nasa-mision-omega": {
+      "lat": 38.1917686,
+      "lon": -0.5716891,
+      "address": "Av. Blasco Ibañez, 43 bajo, Valencia",
+      "city": "Valencia",
+      "province": "Valencia/València",
+      "precision": "nominatim",
+      "confidence": 65,
+      "source": "official_site",
+      "source_url": "https://cluehunter.es/nasa-mision-omega/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "new-hotel-russell": {
       "lat": 36.51,
@@ -1030,7 +2902,31 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://www.arkhamescaperooms.com/en/escape-room-marbella-new-hotel-russell",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "nightshift": {
+      "lat": 41.5339588,
+      "lon": 2.1103774,
+      "address": "Carrer del Bruc, 125 08203 - Sabadell (Barcelona)",
+      "city": "Sabadell",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 74,
+      "source": "official_site",
+      "source_url": "https://www.crupontlegacy.com/home",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "no-respires": {
+      "lat": 39.4570573,
+      "lon": 0.3746958,
+      "address": "Calle Salvador Almenar, 4 (Valencia)",
+      "city": "Valencia",
+      "province": "Valencia",
+      "precision": "source_room_data",
+      "confidence": 90,
+      "source": "official_site",
+      "source_url": "https://classicescaperoom.com/nightmare-escape-room",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "no-te-olvides-de-jesus": {
       "lat": 38.3589,
@@ -1042,7 +2938,31 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://villaindomita.com/noteolvidesdejesus/#reserva",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "nunca-jamas": {
+      "lat": 41.6107511,
+      "lon": 2.294207,
+      "address": "Passeig de la Muntanya, 110 08402 Granollers España",
+      "city": "Granollers",
+      "province": "Barcelona",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://www.keyplay.es/sala-peter-escape-room-granollers/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "offline": {
+      "lat": 42.2281431,
+      "lon": -8.7218018,
+      "address": "Calle Barcelona 49. 36203. Vigo",
+      "city": "Vigo",
+      "province": "Pontevedra",
+      "precision": "nominatim",
+      "confidence": 81,
+      "source": "official_site",
+      "source_url": "https://www.area60.es/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "okiku": {
       "lat": 41.4267,
@@ -1054,7 +2974,103 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://kugutsuescaperoom.com/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "olivanders-tienda-magica": {
+      "lat": 39.4477747,
+      "lon": -0.3877373,
+      "address": "C/ de Tomás de Villarroya, 14, Jesús, 46017 València, Valencia",
+      "city": "Valencia",
+      "province": "Valencia/València",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://momentescape.es/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "open-box-795311": {
+      "lat": 41.423423,
+      "lon": 1.9967579,
+      "address": "Av. de la Generalitat 155 08780, Pallejà Baix Llobregat (Barcelona)",
+      "city": "",
+      "province": "",
+      "precision": "nominatim",
+      "confidence": 65,
+      "source": "official_site",
+      "source_url": "https://zonaroomescape.com/rooms/open-box/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "operacion-diamante-791191": {
+      "lat": 41.3909523,
+      "lon": 2.1760756,
+      "address": "CALLE GIRONA 7, 08010 BARCELONA",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://goldenpop.es/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "operacion-corleone": {
+      "lat": 38.3524295,
+      "lon": 0.4770275,
+      "address": "Plaza Mar 2)",
+      "city": "Alicante",
+      "province": "Alicante/Alacant",
+      "precision": "source_room_data",
+      "confidence": 55,
+      "source": "official_site",
+      "source_url": "https://xcapate.com/reserva-operacion-corleone/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "operativo-boom": {
+      "lat": 41.5407844,
+      "lon": 2.4286728,
+      "address": "Carrer Joan Maragall, 99 08303 Mataró, Barcelona",
+      "city": "Mataró",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://www.effugium.es/operativo-boom/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "organum": {
+      "lat": 41.553292,
+      "lon": 2.0269497,
+      "address": "Calle Guadalhorce, 5 08223 TERRASSA",
+      "city": "Terrassa",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 109,
+      "source": "official_site",
+      "source_url": "https://rowkaescaperoom.com/contacto/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "origen": {
+      "lat": 41.4037509,
+      "lon": 2.2037673,
+      "address": "Carrer de Llull, 256 08005 Barcelona España",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://escaperoos.es/escape-room/origen_e42140",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "paranormal-experience": {
+      "lat": 40.3985872,
+      "lon": -3.7023439,
+      "address": "Paseo de la Esperanza, 53 28005 – Madrid",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://www.madridterror.com/paranormal-experience/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "pais-de-la-fantasia": {
       "lat": 37.378046,
@@ -1066,7 +3082,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://experimentaelreto.es/escape-room-fantasia-aventura/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "pena-de-muerte": {
       "lat": 36.7152739,
@@ -1078,7 +3094,19 @@
       "confidence": 98,
       "source": "official_site",
       "source_url": "https://lacasadelashabitaciones.com/en/escape-room-pena-de-muerte/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "pesadillas": {
+      "lat": 41.3909523,
+      "lon": 2.1760756,
+      "address": "CALLE GIRONA 7, 08010 BARCELONA",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://goldenpop.es/juegos/pesadillas/#reservar",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "picadero-motel": {
       "lat": 41.4075173,
@@ -1090,7 +3118,31 @@
       "confidence": 121,
       "source": "official_site",
       "source_url": "https://www.picaderomotel.com/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "el-retrato-de-picasso": {
+      "lat": 40.4262347,
+      "lon": -3.7026048,
+      "address": "Calle de la Palma 14 28004 Madrid",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 100,
+      "source": "official_site",
+      "source_url": "https://www.scavengerescape.com/en/madrid/room/Picasso%27s%20Portrait",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "pixel-games": {
+      "lat": 41.551746,
+      "lon": 2.4403926,
+      "address": "Pl. Catalunya 33 (Mataró)",
+      "city": "Mataró",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 65,
+      "source": "official_site",
+      "source_url": "https://mataro.cubickroomescape.es/pixel-games/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "pizza-con-pina": {
       "lat": 37.3743968,
@@ -1102,7 +3154,7 @@
       "confidence": 95,
       "source": "official_site",
       "source_url": "https://escaperoomsevilla.es/#reserva",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "plan-de-fuga": {
       "lat": 41.222385,
@@ -1114,7 +3166,31 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://www.escapastic.com/reserva",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "poison": {
+      "lat": 41.532046,
+      "lon": 2.4352891,
+      "address": "Carrer Castaños 118 08302 Mataró, Barcelona",
+      "city": "Mataró",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 114,
+      "source": "official_site",
+      "source_url": "https://www.kadabraescape.com/contacto.html",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "post-mortem": {
+      "lat": 40.4434682,
+      "lon": -3.6984183,
+      "address": "CALLE del Robledillo Nº 7, 28003, Madrid",
+      "city": "",
+      "province": "",
+      "precision": "nominatim",
+      "confidence": 86,
+      "source": "official_site",
+      "source_url": "https://goodlock.es/post-mortem/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "prince-of-persia-the-dagger-of-time": {
       "lat": 40.3795938,
@@ -1126,7 +3202,79 @@
       "confidence": 95,
       "source": "official_site",
       "source_url": "https://www.bitethefly.com/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "profana": {
+      "lat": 41.6213677,
+      "lon": 2.2807104,
+      "address": "Carrer Jules Verne, 12",
+      "city": "Granollers",
+      "province": "Barcelona",
+      "precision": "source_room_data",
+      "confidence": 49,
+      "source": "official_site",
+      "source_url": "https://www.fearfactoryexp.com/copia-de-el-orfanato",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "proyecto-c": {
+      "lat": 39.4880209,
+      "lon": 0.3634683,
+      "address": "Calle Salvador Almenar, 4 (Valencia)",
+      "city": "",
+      "province": "",
+      "precision": "source_room_data",
+      "confidence": 49,
+      "source": "official_site",
+      "source_url": "https://classicescaperoom.com/superheroes-escape-room",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "proyecto-secreto": {
+      "lat": 36.7417677,
+      "lon": 4.0950192,
+      "address": "Calle Isidoro Rivas 3, 29740 Torre del Mar",
+      "city": "Torre del Mar",
+      "province": "Málaga",
+      "precision": "source_room_data",
+      "confidence": 69,
+      "source": "official_site",
+      "source_url": "https://torrenigma.com/proyecto-secreto-escape-room",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "psicopata": {
+      "lat": 36.6878433,
+      "lon": -6.112578,
+      "address": "Av. de Arcos, 107, Jerez de la Frontera, Cádiz, 11405",
+      "city": "",
+      "province": "",
+      "precision": "nominatim",
+      "confidence": 65,
+      "source": "official_site",
+      "source_url": "https://krossmentesvalientes.com/experiencias/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "punalada": {
+      "lat": 40.3795151,
+      "lon": -3.604687,
+      "address": "Calle Fuentespina 13 28031",
+      "city": "",
+      "province": "",
+      "precision": "nominatim",
+      "confidence": 99,
+      "source": "official_site",
+      "source_url": "https://www.frikiescaperoom.com/contacto/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "ratas-de-laboratorio": {
+      "lat": 40.4500521,
+      "lon": -3.6483644,
+      "address": "Calle General Aranaz, 3 Madrid",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 70,
+      "source": "official_site",
+      "source_url": "https://roomescapecorporation.com/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "el-invernadero-by-resident-riddle": {
       "lat": 40.4434682,
@@ -1138,7 +3286,43 @@
       "confidence": 95,
       "source": "official_site",
       "source_url": "https://goodlock.es/el-invernadero/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "refugio-27": {
+      "lat": 41.3918718,
+      "lon": 2.1725793,
+      "address": "Carrer Girona 27, 08010 Barcelona +34 933 180 155",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "source_room_data",
+      "confidence": 74,
+      "source": "official_site",
+      "source_url": "https://maximumescape.com/es/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "regreso-a-la-tierra": {
+      "lat": 40.4110829,
+      "lon": 3.7058353,
+      "address": "Calle Encomienda, 12 28012 Madrid España",
+      "city": "",
+      "province": "",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://brainbreak.es/reservas/regreso-a-la-tierra/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "residence": {
+      "lat": 41.423423,
+      "lon": 1.9967579,
+      "address": "Av. de la Generalitat 155 08780, Pallejà Baix Llobregat (Barcelona)",
+      "city": "",
+      "province": "",
+      "precision": "nominatim",
+      "confidence": 65,
+      "source": "official_site",
+      "source_url": "https://zonaroomescape.com/rooms/residence/#bookingForm",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "residencia-medica": {
       "lat": 40.4379979,
@@ -1150,7 +3334,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://alexcaperoom.com/reservas/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "resonance": {
       "lat": 36.618312,
@@ -1162,7 +3346,7 @@
       "confidence": 88,
       "source": "official_site",
       "source_url": "https://funly.es/game/resonance",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "ritual": {
       "lat": 41.67903,
@@ -1174,7 +3358,127 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://lockedzgz.com/juegos/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "room-213": {
+      "lat": 40.4171433,
+      "lon": 3.7124543,
+      "address": "Calle de la Amnistia, 3 28013 Madrid España",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://www.darkstreet.es/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "roomions": {
+      "lat": 41.6154458,
+      "lon": 2.6584168,
+      "address": "Carrer de Sant Jaume, 440b, 08370 Calella, Barcelona",
+      "city": "Calella",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 74,
+      "source": "official_site",
+      "source_url": "https://virusroomescape.com/es/escape-room-calella-roomions/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "sabotaje-a-candyland": {
+      "lat": 38.2142055,
+      "lon": -0.6834089,
+      "address": "Carrer del Canal, 6, 03294, Elche, Alicante",
+      "city": "Foia d’Elx",
+      "province": "Alicante",
+      "precision": "nominatim",
+      "confidence": 85,
+      "source": "official_site",
+      "source_url": "https://sabotajerooms.com/candyland/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "salomon-museum": {
+      "lat": 36.6760368,
+      "lon": -6.1260121,
+      "address": "Calle Maestro Fernando Sierra, 4, 11401 Jerez de la Frontera",
+      "city": "Jerez de la Frontera",
+      "province": "Cádiz",
+      "precision": "nominatim",
+      "confidence": 69,
+      "source": "official_site",
+      "source_url": "https://unavueltadetuerca.com/salomon-museum-escape-room",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "sanatorium-2": {
+      "lat": 38.3469174,
+      "lon": -0.5116927,
+      "address": "Calle Hércules 03006 ALICANTE",
+      "city": "Alicante",
+      "province": "Alicante",
+      "precision": "nominatim",
+      "confidence": 74,
+      "source": "official_site",
+      "source_url": "https://www.sanatoriumescapealicante.com/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "saw-la-fabrica": {
+      "lat": 39.4477747,
+      "lon": -0.3877373,
+      "address": "C/ de Tomás de Villarroya, 14, Jesús, 46017 València, Valencia",
+      "city": "Valencia",
+      "province": "Valencia/València",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://momentescape.es/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "scubick-doo": {
+      "lat": 41.5330783,
+      "lon": 2.4432385,
+      "address": "C. Cooperativa 77 (Mataró)",
+      "city": "Mataró",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 65,
+      "source": "official_site",
+      "source_url": "https://mataro.cubickroomescape.es/scubick-doo/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-consulta-misteriosa": {
+      "lat": 40.4262347,
+      "lon": -3.7026048,
+      "address": "Calle de la Palma 14 28004 Madrid",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 100,
+      "source": "official_site",
+      "source_url": "https://www.scavengerescape.com/en/madrid",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "secreto-de-la-mafia": {
+      "lat": 41.3744784,
+      "lon": 2.150283,
+      "address": "Plaça d'Espanya, 08004, Barcelona, CT",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 95,
+      "source": "official_site",
+      "source_url": "https://www.plasticrobot.es/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "servicio-secreto": {
+      "lat": 41.3858013,
+      "lon": 2.1737805,
+      "address": "Carrer de l'Arc de Sant Silvestre, 3 08003 Barcelona España",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://escaperoos.es/escape-room/servicio-secreto_e37574",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "sherlock-se-viste-de-negro-92601": {
       "lat": 40.42105,
@@ -1186,7 +3490,31 @@
       "confidence": 95,
       "source": "official_site",
       "source_url": "https://www.goldenescaperoom.es/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "sherlock-se-viste-de-negro-49191": {
+      "lat": 42.2281431,
+      "lon": -8.7218018,
+      "address": "Calle Barcelona 49. 36203. Vigo",
+      "city": "Vigo",
+      "province": "Pontevedra",
+      "precision": "nominatim",
+      "confidence": 81,
+      "source": "official_site",
+      "source_url": "https://www.area60.es/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "sherlock-se-viste-de-negro-vigo": {
+      "lat": 42.2281431,
+      "lon": -8.7218018,
+      "address": "Calle Barcelona 49. 36203. Vigo",
+      "city": "Vigo",
+      "province": "Pontevedra",
+      "precision": "nominatim",
+      "confidence": 81,
+      "source": "official_site",
+      "source_url": "https://www.area60.es/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "siltobark-la-magia-de-oriente": {
       "lat": 40.4441317,
@@ -1198,7 +3526,55 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://influxescape.com/siltobark/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "slasher-party": {
+      "lat": 41.3832685,
+      "lon": 2.1579304,
+      "address": "Calle de la Diputació, 152, 08011 Barcelona",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "source_room_data",
+      "confidence": 74,
+      "source": "official_site",
+      "source_url": "https://openmindroomescape.es/slasher-party-escape-room/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "superheroes": {
+      "lat": 39.4880168,
+      "lon": 0.3634683,
+      "address": "Calle Salvador Almenar, 4 (Valencia)",
+      "city": "",
+      "province": "",
+      "precision": "source_room_data",
+      "confidence": 49,
+      "source": "official_site",
+      "source_url": "https://classicescaperoom.com/superheroes-escape-room",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "sweneey-tott": {
+      "lat": 41.3636234,
+      "lon": 2.0752806,
+      "address": "CORNELLÀ: Calle Travessera, 10, 08940, Cornellá de Llobregat",
+      "city": "Cornellà de Llobregat",
+      "province": "Barcelona",
+      "precision": "source_room_data",
+      "confidence": 75,
+      "source": "official_site",
+      "source_url": "https://openmindroomescape.es/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "tao": {
+      "lat": 41.6154458,
+      "lon": 2.6584168,
+      "address": "Carrer de Sant Jaume, 434, 08370 Calella, Barcelona",
+      "city": "Calella",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 74,
+      "source": "official_site",
+      "source_url": "https://virusroomescape.com/en/games/tao-english/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "tao-massage-center": {
       "lat": 40.3795938,
@@ -1210,7 +3586,31 @@
       "confidence": 95,
       "source": "official_site",
       "source_url": "https://www.bitethefly.com/tao",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "templo-maya": {
+      "lat": 41.3825802,
+      "lon": 2.177073,
+      "address": "Barcelona",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 85,
+      "source": "official_site",
+      "source_url": "https://www.roomescapes.es/barcelona/barcelona/tolok/templo-maya.html",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "tesoro-azteca": {
+      "lat": 41.3852047,
+      "lon": 2.1785128,
+      "address": "Carrer de l'Arc de Sant Silvestre, 3, 08003",
+      "city": "",
+      "province": "",
+      "precision": "nominatim",
+      "confidence": 65,
+      "source": "official_site",
+      "source_url": "https://lock-clock.com/es/game/tesoro-azteca",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "texas-masacre": {
       "lat": 40.4421499,
@@ -1222,7 +3622,55 @@
       "confidence": 95,
       "source": "official_site",
       "source_url": "https://panicoescaperoom.es/escape-room-terror-madrid/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "the-big-show": {
+      "lat": 41.975443,
+      "lon": 2.8229915,
+      "address": "Carrer de la Creu, 6 Girona, 17002",
+      "city": "Girona",
+      "province": "Girona",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://imaginagirona.com/index.php/product/the-big-show/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "the-black-proyect": {
+      "lat": 40.4019766,
+      "lon": -3.6786734,
+      "address": "Calle de Téllez, nº3 MADRID 28007 Teléfono:",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 114,
+      "source": "official_site",
+      "source_url": "https://cubickmadrid.es/contacto/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "the-bunker": {
+      "lat": 41.4098898,
+      "lon": 2.1796826,
+      "address": "Calle Rosselló 508, Bajos 08026 Barcelona",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://www.enigmik.com/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "the-drag-escape-room": {
+      "lat": 40.4134222,
+      "lon": -3.7205541,
+      "address": "Calle Linneo 4, 28005 Madrid Nuestro local se encuentra en el centro de Madrid, pero justo en el exterior del área de tráfico restringido “Madrid Central” por lo que podréis a",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 100,
+      "source": "official_site",
+      "source_url": "https://incognitoescape.es/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "the-haunted-box": {
       "lat": 40.4304917,
@@ -1234,7 +3682,43 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://escapethebox.es/en/box-escape-room/the-haunted-escape-box/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "the-narcos": {
+      "lat": 41.3624293,
+      "lon": 2.1290745,
+      "address": "Calle Bacardi, 32 08902 Hospitalet de Llobregat España",
+      "city": "",
+      "province": "",
+      "precision": "source_room_data",
+      "confidence": 0,
+      "source": "official_site",
+      "source_url": "https://unrealroomescape.es/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "la-camara-de-tortura": {
+      "lat": 40.4262347,
+      "lon": -3.7026048,
+      "address": "Calle de la Palma 14 28004 Madrid",
+      "city": "Madrid",
+      "province": "Madrid",
+      "precision": "nominatim",
+      "confidence": 100,
+      "source": "official_site",
+      "source_url": "https://www.scavengerescape.com/en/madrid",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "tras-el-espejo-233301": {
+      "lat": 41.4103439,
+      "lon": 2.1708831,
+      "address": "Calle Padilla 353, 08025 Barcelona",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://therombocode.es/barcelona/juegos/tras-el-espejo/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "tras-el-espejo-madrid": {
       "lat": 40.4238,
@@ -1246,7 +3730,31 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://therombocode.es/madrid/juegos/tras-el-espejo/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "tras-el-espejo-gines": {
+      "lat": 37.38459,
+      "lon": -6.0660241,
+      "address": "Av. de Europa 102 (Gines), 41960 Sevilla",
+      "city": "Gines",
+      "province": "Sevilla",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://therombocode.es/sevilla/juegos/tras-el-espejo/",
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "tren-bajo-cero": {
+      "lat": 37.3808944,
+      "lon": -5.9703124,
+      "address": "Calle San Juan de Dios, 12, 41005 Sevilla",
+      "city": "Sevilla",
+      "province": "Sevilla",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://www.encryptedsevilla.com/",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "gastroescape-express-train-vagon-americano": {
       "lat": 40.4235,
@@ -1258,7 +3766,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://gastroescaperoom.com/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "gastroescape-express-train-vagon-asiatico": {
       "lat": 40.4235,
@@ -1270,7 +3778,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://gastroescaperoom.com/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "vagon-india-la-boda-de-la-prima": {
       "lat": 40.4235,
@@ -1282,7 +3790,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://gastroescaperoom.com/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "gastroescape-express-train-vagon-italiano": {
       "lat": 40.4235,
@@ -1294,7 +3802,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://gastroescaperoom.com/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "vagon-nueva-york-gastroescape-express-train": {
       "lat": 40.4235,
@@ -1306,7 +3814,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://gastroescaperoom.com/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "vagon-polinesia-gastroescape-express-train": {
       "lat": 40.4235,
@@ -1318,7 +3826,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://gastroescaperoom.com/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "vagon-pub-irlandes": {
       "lat": 40.4235,
@@ -1330,7 +3838,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://gastroescaperoom.com/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "gastroescape-express-train-vagon-cafeteria-ingles": {
       "lat": 40.4235,
@@ -1342,7 +3850,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://gastroescaperoom.com/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "verdun-1916": {
       "lat": 41.7484677,
@@ -1354,7 +3862,19 @@
       "confidence": 95,
       "source": "official_site",
       "source_url": "https://aventuring.com/escape-room-girona-barcelona/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "win-or-lose": {
+      "lat": 41.3825802,
+      "lon": 2.177073,
+      "address": "Barcelona",
+      "city": "Barcelona",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 85,
+      "source": "official_site",
+      "source_url": "https://www.roomescapes.es/barcelona/barcelona/top-secret/win-or-lose.html",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "wolf": {
       "lat": 41.4117449,
@@ -1366,7 +3886,7 @@
       "confidence": 95,
       "source": "official_site",
       "source_url": "https://www.missionleak.com/infe-x",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "worm": {
       "lat": 41.3764605,
@@ -1378,7 +3898,19 @@
       "confidence": 125,
       "source": "official_site",
       "source_url": "https://www.metamorfosisescaperoom.com/contacto/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
+    },
+    "yucatan-el-ultimo-templo-santander": {
+      "lat": 43.4618932,
+      "lon": -3.8100255,
+      "address": "Santander",
+      "city": "Santander",
+      "province": "Cantabria",
+      "precision": "nominatim",
+      "confidence": 80,
+      "source": "official_site",
+      "source_url": "https://www.roomescapes.es/cantabria/santander/santand-er/yucatan-el-ultimo-templo.html",
+      "updated_at": "2026-08-18T09:07:03"
     },
     "zombie-outbreak": {
       "lat": 41.4208812,
@@ -1390,7 +3922,7 @@
       "confidence": 86,
       "source": "official_site",
       "source_url": "https://fearescapebarcelona.wordpress.com/zombie-outbreak-roomescape/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "y-el-gato": {
       "lat": 41.4077678,
@@ -1402,7 +3934,7 @@
       "confidence": 100,
       "source": "official_site",
       "source_url": "https://www.emotionescape.com/barcelona.html",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     },
     "quien-mato-a-don-birlo": {
       "lat": 40.42105,
@@ -1414,7 +3946,7 @@
       "confidence": 95,
       "source": "official_site",
       "source_url": "https://www.goldenescaperoom.es/escape-room-coslada/",
-      "updated_at": "2026-08-17T13:49:16"
+      "updated_at": "2026-08-18T09:07:03"
     }
   }
 }
