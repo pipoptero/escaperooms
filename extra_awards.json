@@ -6,12 +6,12 @@
       "https://www.gibaescape.com/proyectos/escape-room-giba-awards",
       "https://ocioterror.es/category/horror-awards/"
     ],
-    "count": 1946,
+    "count": 1938,
     "by_source": {
       "10escapes": 1365,
-      "escape_room_awards": 89,
-      "giba_awards": 192,
-      "horror_awards": 300
+      "escape_room_awards": 83,
+      "giba_awards": 191,
+      "horror_awards": 299
     }
   },
   "awards": [
@@ -17806,19 +17806,6 @@
       "year": 2024,
       "category": "Mejor acting",
       "status": "nominee",
-      "rank": 4,
-      "room": "Sector 77: La Resistencia",
-      "room_key": "sector 77 la resistencia",
-      "company": "The Freak Factory",
-      "company_key": "the freak factory"
-    },
-    {
-      "source_id": "escape_room_awards",
-      "source_name": "Escape Room Awards",
-      "source_url": "https://escaperoomawardsoficial.com/wp-content/uploads/2025/04/RESULTADOS-NOMINACIONES-ESCAPE-ROOM-AWARDS-2024.pdf",
-      "year": 2024,
-      "category": "Mejor acting",
-      "status": "nominee",
       "rank": 5,
       "room": "La Casa sin Ojos",
       "room_key": "la casa sin ojos",
@@ -17837,19 +17824,6 @@
       "room_key": "night shift",
       "company": "Crupont Legacy",
       "company_key": "crupont legacy"
-    },
-    {
-      "source_id": "escape_room_awards",
-      "source_name": "Escape Room Awards",
-      "source_url": "https://escaperoomawardsoficial.com/wp-content/uploads/2025/04/RESULTADOS-NOMINACIONES-ESCAPE-ROOM-AWARDS-2024.pdf",
-      "year": 2024,
-      "category": "Mejor acting",
-      "status": "nominee",
-      "rank": 9,
-      "room": "Infected",
-      "room_key": "infected",
-      "company": "The Freak Factory",
-      "company_key": "the freak factory"
     },
     {
       "source_id": "escape_room_awards",
@@ -18171,10 +18145,10 @@
       "category": "Mejor escape room",
       "status": "nominee",
       "rank": 14,
-      "room": "La Cabaña",
+      "room": "La Cabana",
       "room_key": "la cabana",
-      "company": "Escapop",
-      "company_key": "escapop"
+      "company": "Tematic World Escape",
+      "company_key": "tematic world escape"
     },
     {
       "source_id": "escape_room_awards",
@@ -18186,8 +18160,8 @@
       "rank": 15,
       "room": "Chernobyl",
       "room_key": "chernobyl",
-      "company": "Code258",
-      "company_key": "code258"
+      "company": "Villa Indómita",
+      "company_key": "villa indomita"
     },
     {
       "source_id": "escape_room_awards",
@@ -18212,8 +18186,8 @@
       "rank": 16,
       "room": "La Grieta",
       "room_key": "la grieta",
-      "company": "13 Monos Escape Room",
-      "company_key": "13 monos escape room"
+      "company": "Las Celdas",
+      "company_key": "las celdas"
     },
     {
       "source_id": "escape_room_awards",
@@ -18240,19 +18214,6 @@
       "room_key": "robert west reanimador",
       "company": "Al Otro Lado",
       "company_key": "al otro lado"
-    },
-    {
-      "source_id": "escape_room_awards",
-      "source_name": "Escape Room Awards",
-      "source_url": "https://escaperoomawardsoficial.com/wp-content/uploads/2025/04/RESULTADOS-NOMINACIONES-ESCAPE-ROOM-AWARDS-2024.pdf",
-      "year": 2024,
-      "category": "Mejor escape room",
-      "status": "nominee",
-      "rank": 19,
-      "room": "Sector 77: La Resistencia",
-      "room_key": "sector 77 la resistencia",
-      "company": "The Freak Factory",
-      "company_key": "the freak factory"
     },
     {
       "source_id": "escape_room_awards",
@@ -18420,8 +18381,8 @@
       "rank": 9,
       "room": "La Grieta",
       "room_key": "la grieta",
-      "company": "13 Monos Escape Room",
-      "company_key": "13 monos escape room"
+      "company": "Las Celdas",
+      "company_key": "las celdas"
     },
     {
       "source_id": "escape_room_awards",
@@ -18487,19 +18448,6 @@
       "room_key": "proyecto dcrisis",
       "company": "Paradiso Escape Room",
       "company_key": "paradiso escape room"
-    },
-    {
-      "source_id": "escape_room_awards",
-      "source_name": "Escape Room Awards",
-      "source_url": "https://escaperoomawardsoficial.com/wp-content/uploads/2025/04/RESULTADOS-NOMINACIONES-ESCAPE-ROOM-AWARDS-2024.pdf",
-      "year": 2024,
-      "category": "Mejor experiencia de terror",
-      "status": "nominee",
-      "rank": 8,
-      "room": "Infected",
-      "room_key": "infected",
-      "company": "The Freak Factory",
-      "company_key": "the freak factory"
     },
     {
       "source_id": "escape_room_awards",
@@ -18586,19 +18534,6 @@
       "year": 2024,
       "category": "Mejor marketing inauguracion",
       "status": "nominee",
-      "rank": 6,
-      "room": "Sector 77: La Resistencia",
-      "room_key": "sector 77 la resistencia",
-      "company": "The Freak Factory",
-      "company_key": "the freak factory"
-    },
-    {
-      "source_id": "escape_room_awards",
-      "source_name": "Escape Room Awards",
-      "source_url": "https://escaperoomawardsoficial.com/wp-content/uploads/2025/04/RESULTADOS-NOMINACIONES-ESCAPE-ROOM-AWARDS-2024.pdf",
-      "year": 2024,
-      "category": "Mejor marketing inauguracion",
-      "status": "nominee",
       "rank": 8,
       "room": "El Lechero",
       "room_key": "el lechero",
@@ -18617,19 +18552,6 @@
       "room_key": "backstab",
       "company": "Bizarre Escape Room Barcelona",
       "company_key": "bizarre escape room barcelona"
-    },
-    {
-      "source_id": "escape_room_awards",
-      "source_name": "Escape Room Awards",
-      "source_url": "https://escaperoomawardsoficial.com/wp-content/uploads/2025/04/RESULTADOS-NOMINACIONES-ESCAPE-ROOM-AWARDS-2024.pdf",
-      "year": 2024,
-      "category": "Mejor marketing inauguracion",
-      "status": "nominee",
-      "rank": 13,
-      "room": "Infected",
-      "room_key": "infected",
-      "company": "The Freak Factory",
-      "company_key": "the freak factory"
     },
     {
       "source_id": "escape_room_awards",
@@ -18836,8 +18758,8 @@
       "rank": 8,
       "room": "Chernobyl",
       "room_key": "chernobyl",
-      "company": "Code258",
-      "company_key": "code258"
+      "company": "Villa Indómita",
+      "company_key": "villa indomita"
     },
     {
       "source_id": "escape_room_awards",
@@ -19317,21 +19239,8 @@
       "rank": 1,
       "room": "Virus",
       "room_key": "virus",
-      "company": "El Reino Escape Room",
-      "company_key": "el reino escape room"
-    },
-    {
-      "source_id": "giba_awards",
-      "source_name": "Giba Awards",
-      "source_url": "https://www.gibaescape.com/proyectos/escape-room-giba-awards",
-      "year": 2024,
-      "category": "MEJOR GM",
-      "status": "runner_up",
-      "rank": 2,
-      "room": "Infected",
-      "room_key": "infected",
-      "company": "The Freak Factory",
-      "company_key": "the freak factory"
+      "company": "Escapeleku",
+      "company_key": "escapeleku"
     },
     {
       "source_id": "giba_awards",
@@ -19512,8 +19421,8 @@
       "rank": 1,
       "room": "Virus",
       "room_key": "virus",
-      "company": "El Reino Escape Room",
-      "company_key": "el reino escape room"
+      "company": "Escapeleku",
+      "company_key": "escapeleku"
     },
     {
       "source_id": "giba_awards",
@@ -19666,10 +19575,10 @@
       "category": "MEJOR GAME MASTER (Interpretación)",
       "status": "winner",
       "rank": 1,
-      "room": "Paranoia",
-      "room_key": "paranoia",
-      "company": "CodeXcape",
-      "company_key": "codexcape"
+      "room": "PARANOIA REMASTERED",
+      "room_key": "paranoia remastered",
+      "company": "",
+      "company_key": ""
     },
     {
       "source_id": "giba_awards",
@@ -19796,10 +19705,10 @@
       "category": "MEJOR SALA DE TERROR",
       "status": "runner_up",
       "rank": 2,
-      "room": "Paranoia",
-      "room_key": "paranoia",
-      "company": "CodeXcape",
-      "company_key": "codexcape"
+      "room": "PARANOIA REMASTERED",
+      "room_key": "paranoia remastered",
+      "company": "",
+      "company_key": ""
     },
     {
       "source_id": "giba_awards",
@@ -19952,9 +19861,9 @@
       "category": "SALA DEL PÚBLICO DE TERROR",
       "status": "runner_up",
       "rank": 2,
-      "room": "Paranoia",
-      "room_key": "paranoia",
-      "company": "CodeXcape",
+      "room": "PARANOIA REMASTERED",
+      "room_key": "paranoia remastered",
+      "company": "CODEXCAPE",
       "company_key": "codexcape"
     },
     {
@@ -20784,10 +20693,10 @@
       "category": "MEJOR GAME MASTER",
       "status": "runner_up",
       "rank": 3,
-      "room": "Arcanum",
+      "room": "ARCANUM",
       "room_key": "arcanum",
-      "company": "Arcanum",
-      "company_key": "arcanum"
+      "company": "",
+      "company_key": ""
     },
     {
       "source_id": "giba_awards",
@@ -20810,10 +20719,10 @@
       "category": "MEJOR HISTORIA",
       "status": "runner_up",
       "rank": 2,
-      "room": "Arcanum",
+      "room": "ARCANUM",
       "room_key": "arcanum",
-      "company": "Arcanum",
-      "company_key": "arcanum"
+      "company": "",
+      "company_key": ""
     },
     {
       "source_id": "giba_awards",
@@ -20966,10 +20875,10 @@
       "category": "SALA DEL PÚBLICO TERROR",
       "status": "runner_up",
       "rank": 2,
-      "room": "Arcanum",
+      "room": "ARCANUM",
       "room_key": "arcanum",
-      "company": "Arcanum",
-      "company_key": "arcanum"
+      "company": "",
+      "company_key": ""
     },
     {
       "source_id": "giba_awards",
@@ -21241,8 +21150,8 @@
       "rank": 2,
       "room": "La Mina",
       "room_key": "la mina",
-      "company": "Share-Lock",
-      "company_key": "share lock"
+      "company": "Unreal Room Escape",
+      "company_key": "unreal room escape"
     },
     {
       "source_id": "giba_awards",
@@ -21538,10 +21447,10 @@
       "category": "BEST HORROR ESCAPE",
       "status": "nominee",
       "rank": "",
-      "room": "Necronomicón",
+      "room": "Necronomicon",
       "room_key": "necronomicon",
-      "company": "Macabro Escape Room",
-      "company_key": "macabro escape room"
+      "company": "Intramuros Room Escape",
+      "company_key": "intramuros room escape"
     },
     {
       "source_id": "horror_awards",
@@ -22023,19 +21932,6 @@
       "room_key": "ganadores premios horrorificos",
       "company": "",
       "company_key": ""
-    },
-    {
-      "source_id": "horror_awards",
-      "source_name": "Horror Awards",
-      "source_url": "https://ocioterror.es/nominados-horror-awards-vii-edicion-2024/",
-      "year": 2024,
-      "category": "BEST HORROR ESCAPE",
-      "status": "nominee",
-      "rank": "",
-      "room": "Infected",
-      "room_key": "infected",
-      "company": "The Freak Factory",
-      "company_key": "the freak factory"
     },
     {
       "source_id": "horror_awards",
@@ -22734,9 +22630,9 @@
       "category": "BEST HORROR ESCAPE",
       "status": "nominee",
       "rank": "",
-      "room": "Paranoia",
-      "room_key": "paranoia",
-      "company": "CodeXcape",
+      "room": "Paranoia Remastered",
+      "room_key": "paranoia remastered",
+      "company": "Codexcape",
       "company_key": "codexcape"
     },
     {
@@ -22747,10 +22643,10 @@
       "category": "BEST HORROR ESCAPE",
       "status": "nominee",
       "rank": "",
-      "room": "Pesadillas",
-      "room_key": "pesadillas",
-      "company": "Golden Pop",
-      "company_key": "golden pop"
+      "room": "Pesadillas 2",
+      "room_key": "pesadillas 2",
+      "company": "Pesadillas",
+      "company_key": "pesadillas"
     },
     {
       "source_id": "horror_awards",
@@ -23020,9 +22916,9 @@
       "category": "MEJOR HORROR ESCAPE",
       "status": "winner",
       "rank": 1,
-      "room": "Paranoia",
-      "room_key": "paranoia",
-      "company": "CodeXcape",
+      "room": "Paranoia Remastered",
+      "room_key": "paranoia remastered",
+      "company": "Codexcape",
       "company_key": "codexcape"
     },
     {
@@ -23254,10 +23150,10 @@
       "category": "BEST HORROR ESCAPE",
       "status": "nominee",
       "rank": "",
-      "room": "La Cabaña",
+      "room": "La Cabana",
       "room_key": "la cabana",
-      "company": "Escapop",
-      "company_key": "escapop"
+      "company": "Tematic World Escape",
+      "company_key": "tematic world escape"
     },
     {
       "source_id": "horror_awards",
@@ -24036,8 +23932,8 @@
       "rank": "",
       "room": "Pesadillas",
       "room_key": "pesadillas",
-      "company": "Golden Pop",
-      "company_key": "golden pop"
+      "company": "Pesadillas Escape Room",
+      "company_key": "pesadillas escape room"
     },
     {
       "source_id": "horror_awards",
@@ -24049,8 +23945,8 @@
       "rank": "",
       "room": "Saw Experience",
       "room_key": "saw experience",
-      "company": "Immersion",
-      "company_key": "immersion"
+      "company": "Questory",
+      "company_key": "questory"
     },
     {
       "source_id": "horror_awards",
@@ -24283,8 +24179,8 @@
       "rank": "",
       "room": "La Casa en Piezas",
       "room_key": "la casa en piezas",
-      "company": "El Rey Rojo",
-      "company_key": "el rey rojo"
+      "company": "Terror Stories",
+      "company_key": "terror stories"
     },
     {
       "source_id": "horror_awards",
@@ -24866,10 +24762,10 @@
       "category": "BEST HORROR ESCAPE GAME estrenado en",
       "status": "nominee",
       "rank": "",
-      "room": "PASAJE DEL TERROR",
-      "room_key": "pasaje del terror",
-      "company": "Master Productions Entertainment",
-      "company_key": "master productions entertainment"
+      "room": "PARANOIA",
+      "room_key": "paranoia",
+      "company": "Codexcape",
+      "company_key": "codexcape"
     },
     {
       "source_id": "horror_awards",
@@ -24879,10 +24775,10 @@
       "category": "BEST HORROR ESCAPE GAME estrenado en",
       "status": "nominee",
       "rank": "",
-      "room": "Paranoia",
-      "room_key": "paranoia",
-      "company": "CodeXcape",
-      "company_key": "codexcape"
+      "room": "PASAJE DEL TERROR",
+      "room_key": "pasaje del terror",
+      "company": "Master Productions Entertainment",
+      "company_key": "master productions entertainment"
     },
     {
       "source_id": "horror_awards",
@@ -24957,10 +24853,10 @@
       "category": "MEJOR ESCAPE ROOM estrenado en",
       "status": "nominee",
       "rank": "",
-      "room": "Arcanum",
-      "room_key": "arcanum",
-      "company": "Arcanum",
-      "company_key": "arcanum"
+      "room": "Arcanum Escape Room",
+      "room_key": "arcanum escape room",
+      "company": "",
+      "company_key": ""
     },
     {
       "source_id": "horror_awards",
@@ -25087,10 +24983,10 @@
       "category": "MEJOR ESCAPE ROOM estrenado en",
       "status": "nominee",
       "rank": "",
-      "room": "Los Años Oscuros",
+      "room": "Los Anos Oscuros",
       "room_key": "los anos oscuros",
-      "company": "The X-Door",
-      "company_key": "the x door"
+      "company": "The X door Malaga",
+      "company_key": "the x door malaga"
     },
     {
       "source_id": "horror_awards",
