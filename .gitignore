@@ -28,6 +28,7 @@ scripts/enrich_*.py
 scripts/export_official_videos.py
 scripts/geocode_room_locations.py
 scripts/search_web_room_locations.py
+scripts/ai_location_review.py
 scripts/run_consensus_*.py
 scripts/sanitize_*.py
 scripts/scrape_*.py

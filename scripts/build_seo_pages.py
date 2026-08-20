@@ -11,7 +11,6 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE_URL = "https://thevaultescape.com"
 SITE_NAME = "The Vault Escape"
 TODAY = date.today().isoformat()
-FEATURED_ROOM_LIMIT = 50
 
 
 def read_json(path, fallback):
@@ -424,11 +423,11 @@ def review_page(room, photos):
     </div>
   </article>
   <section class="section">
-    <h2>Opinion del grupo</h2>
+    <h2>Opinión del grupo</h2>
     <div class="review">{escape(text(room.get("descripcion")) or "Review pendiente de completar.")}</div>
   </section>
   <section class="section">
-    <h2>Valoracion por categorias</h2>
+    <h2>Valoración por categorías</h2>
     <div class="cats">{cat_html}</div>
   </section>
   {f'<section class="section"><h2>Fotos de la experiencia</h2><div class="photos">{photo_html}</div></section>' if photo_html else ''}
@@ -440,7 +439,7 @@ def review_page(room, photos):
 
 def reviews_index_page(rooms):
     canonical = site_url("/reviews/")
-    description = "Reviews de escape rooms jugados por The Vault Escape, con opinion del grupo, puntuaciones y fotos."
+    description = "Reviews de escape rooms jugados por The Vault Escape, con opinión del grupo, puntuaciones y fotos."
     image = site_url("/images/brand/social-card.png")
     title = f"Reviews de escape rooms | {SITE_NAME}"
     items = []
@@ -509,11 +508,11 @@ def reviews_index_page(rooms):
 
 
 def ranking_index_page(rows):
-    top_rows = rows[:FEATURED_ROOM_LIMIT]
+    top_rows = rows
     canonical = site_url("/ranking/")
-    description = "Ranking ponderado de escape rooms en Espana segun fuentes externas, comunidad y premios recopilados por The Vault Escape."
+    description = "Ranking ponderado de escape rooms en España según fuentes externas, comunidad y premios recopilados por The Vault Escape."
     image = site_url("/images/brand/social-card.png")
-    title = f"Ranking de escape rooms en Espana | {SITE_NAME}"
+    title = f"Ranking de escape rooms en España | {SITE_NAME}"
     items = []
     list_items = []
     for idx, item in enumerate(top_rows, 1):
@@ -576,8 +575,8 @@ def ranking_index_page(rows):
 <body>
 <main>
   <a class="brand" href="../"><img src="../images/brand/icon-round-192.png" alt="">The Vault Escape</a>
-  <h1>Ranking de escape rooms en Espana</h1>
-  <p>Ranking ponderado con fuentes externas, comunidad y premios. Esta pagina estatica ayuda a Google a descubrir salas destacadas y enlaza con sus fichas SEO.</p>
+  <h1>Ranking de escape rooms en España</h1>
+  <p>Ranking ponderado con fuentes externas, comunidad y premios. Esta página estática ayuda a Google a descubrir salas destacadas y enlaza con sus fichas SEO.</p>
   <div class="list">
     {''.join(items)}
   </div>
@@ -709,7 +708,7 @@ def sitemap_xml(review_rooms, ranking_rows):
         (site_url("/ranking/"), "weekly", "0.9"),
     ]
     entries.extend((site_url(f"/reviews/{room_url_slug(room)}/"), "monthly", "0.7") for room in review_rooms)
-    entries.extend((site_url(f"/salas/{room_url_slug(item['room'])}/"), "monthly", "0.7") for item in ranking_rows[:FEATURED_ROOM_LIMIT])
+    entries.extend((site_url(f"/salas/{room_url_slug(item['room'])}/"), "monthly", "0.7") for item in ranking_rows)
     unique_entries = []
     seen_urls = set()
     for entry in entries:
@@ -736,7 +735,7 @@ def main():
     data = read_json(ROOT / "data.json", {})
     photos_data = read_json(ROOT / "review_photos.json", {}).get("photos", {})
     rooms = review_rooms(data)
-    ranking_rows = ranked_rooms(data)
+    ranking_rows = [row for row in ranked_rooms(data) if decimal(row["rating"].get("global_score")) > 0]
 
     reviews_dir = ROOT / "reviews"
     reviews_dir.mkdir(exist_ok=True)
@@ -754,14 +753,14 @@ def main():
 
     salas_dir = ROOT / "salas"
     salas_dir.mkdir(exist_ok=True)
-    for position, item in enumerate(ranking_rows[:FEATURED_ROOM_LIMIT], 1):
+    for position, item in enumerate(ranking_rows, 1):
         page_dir = salas_dir / room_url_slug(item["room"])
         page_dir.mkdir(parents=True, exist_ok=True)
         (page_dir / "index.html").write_text(room_page(item, position), encoding="utf-8", newline="\n")
 
     (ROOT / "sitemap.xml").write_text(sitemap_xml(rooms, ranking_rows), encoding="utf-8", newline="\n")
     (ROOT / "robots.txt").write_text(robots_txt(), encoding="utf-8", newline="\n")
-    print(f"SEO generado: {len(rooms)} reviews, {min(FEATURED_ROOM_LIMIT, len(ranking_rows))} salas, ranking, sitemap.xml y robots.txt")
+    print(f"SEO generado: {len(rooms)} reviews, {len(ranking_rows)} salas, ranking, sitemap.xml y robots.txt")
 
 
 if __name__ == "__main__":

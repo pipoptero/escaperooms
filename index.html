@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Vault — Escape Room Chronicles</title>
-<meta name="description" content="The Vault Escape es un archivo vivo de escape rooms en Espana: catalogo, reviews propias, ranking ponderado, premios, listas personales y grupos escapistas.">
+<meta name="description" content="The Vault Escape es un archivo vivo de escape rooms en España: catálogo, reviews propias, ranking ponderado, premios, listas personales y grupos escapistas.">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://thevaultescape.com/">
 <meta name="theme-color" content="#0a0a0f">
@@ -32,7 +32,7 @@
 <meta property="og:image:alt" content="The Vault - Escape Room Chronicles">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="The Vault Escape - Escape Room Chronicles">
-<meta name="twitter:description" content="Catalogo nacional, reviews propias, ranking ponderado y listas personales para escapistas.">
+<meta name="twitter:description" content="Catálogo nacional, reviews propias, ranking ponderado y listas personales para escapistas.">
 <meta name="twitter:image" content="https://thevaultescape.com/images/brand/social-card.png">
 <script type="application/ld+json">
 {
@@ -58,7 +58,7 @@
       "@id": "https://thevaultescape.com/#website",
       "url": "https://thevaultescape.com/",
       "name": "The Vault Escape",
-      "description": "Catalogo nacional de escape rooms, reviews propias, ranking ponderado, premios, listas personales y grupos escapistas.",
+      "description": "Catálogo nacional de escape rooms, reviews propias, ranking ponderado, premios, listas personales y grupos escapistas.",
       "publisher": {
         "@id": "https://thevaultescape.com/#organization"
       },
@@ -71,7 +71,7 @@
       "url": "https://thevaultescape.com/",
       "applicationCategory": "LifestyleApplication",
       "operatingSystem": "Web, Android, iOS",
-      "description": "Aplicacion web para descubrir escape rooms, guardar pendientes, marcar hechos, crear grupos escapistas y consultar reviews y rankings.",
+      "description": "Aplicación web para descubrir escape rooms, guardar pendientes, marcar hechos, crear grupos escapistas y consultar reviews y rankings.",
       "publisher": {
         "@id": "https://thevaultescape.com/#organization"
       }
@@ -525,7 +525,7 @@
   .escapist-map-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
   .escapist-map-filter{font-family:'Share Tech Mono',monospace;font-size:.56rem;letter-spacing:.09em;text-transform:uppercase;color:var(--text3);border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.025);padding:7px 9px;cursor:pointer;}
   .escapist-map-filter.active{border-color:rgba(125,187,63,.62);background:rgba(125,187,63,.1);color:var(--green);}
-  .escapist-map-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-bottom:10px;}
+  .escapist-map-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(74px,1fr));gap:6px;margin-bottom:10px;}
   .escapist-map-stat{border:1px solid rgba(125,187,63,.12);background:rgba(125,187,63,.035);padding:8px 9px;min-width:0;}
   .escapist-map-stat strong{display:block;font-family:'Cinzel',serif;color:var(--amber);font-size:1.05rem;line-height:1;}
   .escapist-map-stat span{display:block;font-family:'Share Tech Mono',monospace;font-size:.48rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-top:4px;}
@@ -540,6 +540,7 @@
   .escapist-map-city-block{border-top:1px solid rgba(255,255,255,.06);padding-top:8px;margin-top:8px;}
   .escapist-map-city-block:first-child{border-top:none;padding-top:0;margin-top:0;}
   .escapist-map-city-heading{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px;}
+  .escapist-map-address{font-family:'Share Tech Mono',monospace;font-size:.52rem;color:var(--text3);letter-spacing:.05em;text-transform:uppercase;line-height:1.4;margin:-2px 0 7px;overflow-wrap:anywhere;}
   .escapist-map-room{border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.022);padding:8px 9px;}
   .escapist-map-room-name{font-family:'Cinzel',serif;color:var(--text);font-size:.86rem;line-height:1.16;}
   .escapist-map-room-sub{font-family:'Share Tech Mono',monospace;font-size:.52rem;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;margin-top:3px;line-height:1.35;}
@@ -1620,7 +1621,7 @@
     <div class="auth-bar">
       <div class="auth-status" id="auth-status">
         <span class="auth-label">Cuenta personal</span>
-        <span class="auth-name" id="auth-name">Sin iniciar sesion</span>
+        <span class="auth-name" id="auth-name">Sin iniciar sesión</span>
       </div>
       <button class="auth-btn" id="auth-login" type="button" onclick="signInGoogle()">Entrar con Google</button>
       <button class="auth-btn secondary" id="auth-profile" type="button" onclick="openProfile()" style="display:none">Ajustes</button>
@@ -1644,10 +1645,10 @@
       <div>
         <div class="vault-guest-kicker">The Vault</div>
         <div class="vault-guest-title">Tu archivo de escape rooms, rankings y grupos escapistas.</div>
-        <div class="vault-guest-text">Explora el catalogo sin cuenta o entra con Google para guardar pendientes, hechos, favoritos y grupos privados.</div>
+        <div class="vault-guest-text">Explora el catálogo sin cuenta o entra con Google para guardar pendientes, hechos, favoritos y grupos privados.</div>
       </div>
       <div class="vault-guest-actions">
-        <button class="vault-guide-action secondary" type="button" onclick="switchTab('thevault')">Como funciona</button>
+        <button class="vault-guide-action secondary" type="button" onclick="switchTab('thevault')">Cómo funciona</button>
         <button class="vault-guide-action" type="button" onclick="signInGoogle()">Entrar con Google</button>
       </div>
     </div>
@@ -1659,7 +1660,7 @@
           <div class="vault-guide-kicker">The Vault Escape</div>
           <div class="vault-guide-title">Un archivo vivo para descubrir, comparar y recordar escape rooms.</div>
           <p class="vault-guide-copy">
-            Catalogo nacional, reviews propias, ranking ponderado, premios y herramientas personales
+            Catálogo nacional, reviews propias, ranking ponderado, premios y herramientas personales
             para guardar pendientes, hechos, favoritos y grupos escapistas.
           </p>
           <div class="vault-guide-proof">
@@ -1668,14 +1669,14 @@
             <span>Grupos privados</span>
           </div>
           <div class="vault-guide-actions">
-            <button class="vault-guide-action" type="button" onclick="switchTab('catalogo')">Explorar catalogo</button>
+            <button class="vault-guide-action" type="button" onclick="switchTab('catalogo')">Explorar catálogo</button>
             <button class="vault-guide-action secondary" type="button" onclick="switchTab('hechos')">Leer reviews</button>
             <button class="vault-guide-action secondary guest-only" type="button" onclick="signInGoogle()">Crear cuenta</button>
             <button class="vault-guide-action secondary auth-only" type="button" onclick="openProfile()" style="display:none">Abrir ajustes</button>
           </div>
         </div>
         <div class="vault-guide-stats">
-          <div class="vault-guide-stat"><strong id="vault-stat-catalog">0</strong><span>salas en catalogo</span></div>
+          <div class="vault-guide-stat"><strong id="vault-stat-catalog">0</strong><span>salas en catálogo</span></div>
           <div class="vault-guide-stat"><strong id="vault-stat-reviews">0</strong><span>reviews publicadas</span></div>
           <div class="vault-guide-stat"><strong id="vault-stat-ranking">0</strong><span>salas con ranking</span></div>
           <div class="vault-guide-stat"><strong id="vault-stat-groups">0</strong><span>tus grupos activos</span></div>
@@ -1683,7 +1684,7 @@
       </div>
 
       <div class="vault-section-head">
-        <div class="vault-section-title">Ultimas reviews</div>
+        <div class="vault-section-title">Últimas reviews</div>
         <div class="vault-section-note">Listas para abrir y compartir</div>
       </div>
       <div class="vault-latest-grid" id="vault-latest-reviews"></div>
@@ -1691,7 +1692,7 @@
       <div class="vault-guide-grid">
         <div class="vault-guide-card">
           <div class="vault-guide-icon">01</div>
-          <h3>Catalogo vivo</h3>
+          <h3>Catálogo vivo</h3>
           <p>Busca por comunidad, provincia, ciudad, jugadores, dificultad, terror y premios. Cada sala abre una ficha completa con sinopsis, datos y acciones personales.</p>
         </div>
         <div class="vault-guide-card">
@@ -1702,12 +1703,12 @@
         <div class="vault-guide-card">
           <div class="vault-guide-icon">03</div>
           <h3>Reviews The Vault</h3>
-          <p>Las reviews del grupo mantienen la memoria de lo jugado: opinion, puntuacion, fotos, datos utiles y acceso al detalle de cada experiencia.</p>
+          <p>Las reviews del grupo mantienen la memoria de lo jugado: opinión, puntuación, fotos, datos útiles y acceso al detalle de cada experiencia.</p>
         </div>
         <div class="vault-guide-card">
           <div class="vault-guide-icon">04</div>
           <h3>Cuenta personal</h3>
-          <p>Al entrar con Google puedes guardar favoritos, pendientes y hechos, escribir resenas publicas y conservar tu lista entre movil, PC y app instalada.</p>
+          <p>Al entrar con Google puedes guardar favoritos, pendientes y hechos, escribir reseñas públicas y conservar tu lista entre móvil, PC y app instalada.</p>
         </div>
         <div class="vault-guide-card">
           <div class="vault-guide-icon">05</div>
@@ -1737,7 +1738,7 @@
       </div>
 
       <div class="vault-guide-flow">
-        <div class="vault-guide-step"><div class="vault-guide-step-num">1</div><div><strong>Explora</strong><span>Filtra el catalogo y abre fichas de sala.</span></div></div>
+        <div class="vault-guide-step"><div class="vault-guide-step-num">1</div><div><strong>Explora</strong><span>Filtra el catálogo y abre fichas de sala.</span></div></div>
         <div class="vault-guide-step"><div class="vault-guide-step-num">2</div><div><strong>Guarda</strong><span>Marca favoritos, pendientes y hechos.</span></div></div>
         <div class="vault-guide-step"><div class="vault-guide-step-num">3</div><div><strong>Comparte</strong><span>Crea grupos e invita a tus companeros.</span></div></div>
         <div class="vault-guide-step"><div class="vault-guide-step-num">4</div><div><strong>Recuerda</strong><span>Consulta reviews, fotos, notas y ranking.</span></div></div>
@@ -2795,7 +2796,7 @@ function isEmbeddedSocialBrowser() {
 }
 
 function externalBrowserAuthMessage() {
-  return 'El navegador integrado de Instagram/Facebook puede bloquear Firebase o el inicio de sesion con Google.\n\nAbre esta pagina en Safari, Chrome o el navegador del movil desde el menu de la app y vuelve a entrar con Google.';
+  return 'El navegador integrado de Instagram/Facebook puede bloquear Firebase o el inicio de sesión con Google.\n\nAbre esta página en Safari, Chrome o el navegador del móvil desde el menú de la app y vuelve a entrar con Google.';
 }
 
 function loadScriptOnce(src) {
@@ -2895,7 +2896,7 @@ function renderAuthStatus() {
     if (profileBtn) profileBtn.style.display = '';
     logoutBtn.style.display = '';
   } else {
-    nameEl.textContent = 'Sin iniciar sesion';
+    nameEl.textContent = 'Sin iniciar sesión';
     loginBtn.style.display = '';
     if (profileBtn) profileBtn.style.display = 'none';
     logoutBtn.style.display = 'none';
@@ -2966,7 +2967,7 @@ async function loadUserRoomStates() {
 
 async function saveUserRoomState(room, patch) {
   if (!AUTH_USER) {
-    alert('Inicia sesion con Google para guardar tus pendientes y hechos personales.');
+    alert('Inicia sesión con Google para guardar tus pendientes y hechos personales.');
     return;
   }
   const key = userRoomKey(room);
@@ -3450,7 +3451,7 @@ function exactLocationForRoom(room) {
 
 function coordForRoomLocation(room) {
   const exact = exactLocationForRoom(room);
-  if (exact) return { lat: exact.lat, lon: exact.lon, fallback: false, exact: true, address: exact.address || '' };
+  if (exact) return { lat: exact.lat, lon: exact.lon, fallback: false, exact: true, address: exact.address || '', precision: exact.precision || '', source: exact.source || '' };
   const cityKey = coordLookupKey(room?.ciudad);
   if (MAP_CITY_COORDS[cityKey]) return { lat: MAP_CITY_COORDS[cityKey][0], lon: MAP_CITY_COORDS[cityKey][1], fallback: false };
   const provinceKey = coordLookupKey(room?.provincia);
@@ -3458,6 +3459,15 @@ function coordForRoomLocation(room) {
   const communityKey = coordLookupKey(communityOf(room));
   if (MAP_PROVINCE_COORDS[communityKey]) return { lat: MAP_PROVINCE_COORDS[communityKey][0], lon: MAP_PROVINCE_COORDS[communityKey][1], fallback: true, seed: cityKey || communityKey };
   return { lat: 40.2, lon: -3.7, fallback: true, seed: cityKey || userRoomKey(room) };
+}
+
+function escapistLocationKey(room, coord, city, province) {
+  if (coord?.exact) {
+    const lat = Number(coord.lat).toFixed(5);
+    const lon = Number(coord.lon).toFixed(5);
+    return `exact_${lat}_${lon}`;
+  }
+  return normalizedKey(`${city} ${province}`) || userRoomKey(room);
 }
 
 function projectMapPoint(coord) {
@@ -3509,9 +3519,9 @@ function escapistMapLocations(items) {
     const room = item.room || {};
     const city = cleanValue(room.ciudad) || 'Sin ciudad';
     const province = cleanValue(room.provincia) || cleanValue(communityOf(room)) || 'Sin provincia';
-    const key = normalizedKey(`${city} ${province}`) || userRoomKey(room) || item.key;
+    const coord = coordForRoomLocation(room);
+    const key = escapistLocationKey(room, coord, city, province) || item.key;
     if (!locations.has(key)) {
-      const coord = coordForRoomLocation(room);
       locations.set(key, {
         key,
         city,
@@ -3537,11 +3547,11 @@ function escapistMapClusters(locations) {
   const threshold = locations.length > 8 ? 7.2 : 6.2;
   const clusters = [];
   locations.forEach(location => {
-    let target = clusters
-      .filter(cluster => distanceBetweenPoints(cluster.point, location.point) <= threshold)
+    let target = location.exact ? null : clusters
+      .filter(cluster => !cluster.exactOnly && distanceBetweenPoints(cluster.point, location.point) <= threshold)
       .sort((a, b) => distanceBetweenPoints(a.point, location.point) - distanceBetweenPoints(b.point, location.point))[0];
     if (!target) {
-      target = { locations: [], rooms: [], point: { ...location.point }, coord: { ...location.coord }, weight: 0 };
+      target = { locations: [], rooms: [], point: { ...location.point }, coord: { ...location.coord }, weight: 0, exactOnly: location.exact };
       clusters.push(target);
     }
     const weight = Math.max(1, location.rooms.length);
@@ -3621,6 +3631,7 @@ function escapistMapRoomHtml(item) {
 function escapistMapClusterListHtml(cluster) {
   return cluster.locations.map(location => `<section class="escapist-map-city-block">
     <div class="escapist-map-city-heading">${escapeHtml(location.city)} <span style="opacity:.62">(${location.rooms.length})</span></div>
+    ${location.address ? `<div class="escapist-map-address">${escapeHtml(location.address)}</div>` : ''}
     ${location.rooms.map(escapistMapRoomHtml).join('')}
   </section>`).join('');
 }
@@ -3675,6 +3686,7 @@ function escapistMapHtml() {
   const active = clusters.find(cluster => cluster.key === PROFILE_MAP_ACTIVE_KEY) || clusters[0];
   const personalRooms = allItems.filter(item => item.personal).length;
   const groupRooms = allItems.filter(item => item.groups.length).length;
+  const exactLocations = locations.filter(location => location.exact).length;
   const points = clusters.map(cluster => {
     const cls = escapistMapClusterMarkerClass(cluster);
     const isCluster = cluster.locations.length > 1;
@@ -3699,8 +3711,9 @@ function escapistMapHtml() {
       <div class="escapist-map-side">
         ${escapistMapFilterHtml()}
         <div class="escapist-map-stats">
-          <div class="escapist-map-stat"><strong>${locations.length}</strong><span>Ciudades</span></div>
+          <div class="escapist-map-stat"><strong>${locations.length}</strong><span>Ubicaciones</span></div>
           <div class="escapist-map-stat"><strong>${items.length}</strong><span>Salas</span></div>
+          <div class="escapist-map-stat"><strong>${exactLocations}</strong><span>Exactas</span></div>
           <div class="escapist-map-stat"><strong>${personalRooms}</strong><span>Personal</span></div>
           <div class="escapist-map-stat"><strong>${groupRooms}</strong><span>Grupo</span></div>
         </div>
@@ -3767,9 +3780,12 @@ function initEscapistLeafletMap(attempt = 0) {
   });
   canvas.classList.add('leaflet-ready');
   if (PROFILE_MAP_FOCUS_ACTIVE && active?.coord) {
-    map.setView([active.coord.lat, active.coord.lon], active.locations.length > 1 ? 10 : 12);
+    const allExact = active.locations.every(location => location.exact);
+    map.setView([active.coord.lat, active.coord.lon], allExact ? 15 : active.locations.length > 1 ? 10 : 12);
   } else {
-    map.fitBounds(bounds, { padding: [34, 34], maxZoom: 7 });
+    const allExact = clusters.every(cluster => cluster.locations.every(location => location.exact));
+    const fitMaxZoom = clusters.length <= 4 ? 13 : allExact ? 10 : 7;
+    map.fitBounds(bounds, { padding: [34, 34], maxZoom: fitMaxZoom });
   }
   setTimeout(() => map.invalidateSize(), 80);
 }
@@ -3904,7 +3920,7 @@ function groupRoomsListHtml(groupId) {
       <div class="group-room-thumb">${groupRoomImageHtml(room)}</div>
       <div class="group-room-main">
         <div class="group-room-name">${escapeHtml(room.nombre || record.roomName || 'Sala')}</div>
-        <div class="group-room-sub">${escapeHtml(meta || 'Sin ubicacion')}</div>
+        <div class="group-room-sub">${escapeHtml(meta || 'Sin ubicación')}</div>
         <div class="group-room-tags">
           ${room.dificultad ? `<span class="tag tag-tipo">${escapeHtml(room.dificultad)}</span>` : ''}
           ${room.duracion ? `<span class="tag tag-muted">${escapeHtml(room.duracion)} min</span>` : ''}
@@ -3922,7 +3938,7 @@ function groupRoomsListHtml(groupId) {
 
 function groupPendingRoomsListHtml(groupId) {
   const entries = groupPendingEntries(groupId);
-  if (!entries.length) return '<div class="review-empty">Este grupo no tiene pendientes. Abre una sala del catalogo y marcala como pendiente del grupo.</div>';
+  if (!entries.length) return '<div class="review-empty">Este grupo no tiene pendientes. Abre una sala del catálogo y márcala como pendiente del grupo.</div>';
   return `<div class="group-room-table">${entries.map(({ key, room, record }) => {
     const ref = detailRefForRoom(room, ['catalogo', 'pendientes', 'hechos']);
     const meta = [room.empresa || record.company, room.ciudad || record.city, room.provincia || record.province].filter(Boolean).join(' - ');
@@ -3930,7 +3946,7 @@ function groupPendingRoomsListHtml(groupId) {
       <div class="group-room-thumb">${groupRoomImageHtml(room)}</div>
       <div class="group-room-main">
         <div class="group-room-name">${escapeHtml(room.nombre || record.roomName || 'Sala')}</div>
-        <div class="group-room-sub">${escapeHtml(meta || 'Sin ubicacion')}</div>
+        <div class="group-room-sub">${escapeHtml(meta || 'Sin ubicación')}</div>
         <div class="group-room-tags">
           ${room.dificultad ? `<span class="tag tag-tipo">${escapeHtml(room.dificultad)}</span>` : ''}
           ${room.duracion ? `<span class="tag tag-muted">${escapeHtml(room.duracion)} min</span>` : ''}
@@ -4220,7 +4236,7 @@ function adminDraftsListHtml() {
     .map(([id, draft]) => ({ id, ...draft }))
     .sort((a, b) => (b.updatedAt || b.createdAt || 0) - (a.updatedAt || a.createdAt || 0))
     .slice(0, 10);
-  if (!drafts.length) return '<div class="review-empty">Todavia no hay borradores admin.</div>';
+  if (!drafts.length) return '<div class="review-empty">Todavía no hay borradores admin.</div>';
   return `<div class="admin-draft-list">${drafts.map(draft => {
     const review = draft.review || {};
     const date = draft.updatedAt ? formatReviewDate(draft.updatedAt) : '';
@@ -4245,7 +4261,7 @@ function adminPublishedListHtml() {
     .filter(item => item.review?.nombre && (!item.status || item.status === 'published'))
     .sort((a, b) => (b.updatedAt || b.publishedAt || 0) - (a.updatedAt || a.publishedAt || 0))
     .slice(0, 12);
-  if (!published.length) return '<div class="review-empty">Todavia no hay reviews publicadas desde el panel admin.</div>';
+  if (!published.length) return '<div class="review-empty">Todavía no hay reviews publicadas desde el panel admin.</div>';
   return `<div class="admin-draft-list">${published.map(item => {
     const review = item.review || {};
     const date = item.updatedAt ? formatReviewDate(item.updatedAt) : item.publishedAt ? formatReviewDate(item.publishedAt) : '';
@@ -4357,11 +4373,11 @@ function renderSettingsEditHtml(message = '') {
   const isPublished = !!currentAdminPublishedReview();
   return `<div class="profile-section">
     <div class="profile-section-title">Administracion de reviews</div>
-    <div class="admin-note">${editingLabel}. Las reviews publicadas aqui se guardan en Firebase y aparecen directamente en la pestaña Reviews.</div>
+    <div class="admin-note">${editingLabel}. Las reviews publicadas aquí se guardan en Firebase y aparecen directamente en la pestaña Reviews.</div>
     <datalist id="admin-review-room-list">${adminReviewOptionsHtml()}</datalist>
     <div class="admin-review-grid">
       <div class="wide">
-        <label class="profile-field-label" for="admin-review-room-search">Buscar sala del catalogo</label>
+        <label class="profile-field-label" for="admin-review-room-search">Buscar sala del catálogo</label>
         <div class="profile-row">
           <input class="profile-input" id="admin-review-room-search" list="admin-review-room-list" value="${escapeHtml(searchValue)}" placeholder="Escribe nombre, empresa o ciudad" onchange="fillAdminReviewFromRoom()" onkeydown="if(event.key==='Enter'){event.preventDefault();fillAdminReviewFromRoom()}">
           <button class="auth-btn secondary" type="button" onclick="fillAdminReviewFromRoom()">Rellenar</button>
@@ -4373,7 +4389,7 @@ function renderSettingsEditHtml(message = '') {
       ${adminReviewField('admin-review-province', 'Provincia', 'Provincia', false, '', editingReview.provincia || '')}
       ${adminReviewField('admin-review-duration', 'Duracion', '60', false, 'inputmode="numeric"', editingReview.duracion || '')}
       ${adminReviewField('admin-review-difficulty', 'Dificultad', 'Media', false, '', editingReview.dificultad || '')}
-      ${adminReviewField('admin-review-rating', 'Valoracion grupo', '8.5', false, 'inputmode="decimal"', editingReview.valoracion || '')}
+      ${adminReviewField('admin-review-rating', 'Valoración grupo', '8.5', false, 'inputmode="decimal"', editingReview.valoracion || '')}
       ${adminReviewField('admin-review-history', 'Historia', '0-10', false, 'inputmode="decimal"', editingReview.historia || '')}
       ${adminReviewField('admin-review-ambient', 'Ambientacion', '0-10', false, 'inputmode="decimal"', editingReview.ambientacion || '')}
       ${adminReviewField('admin-review-gameplay', 'Jugabilidad', '0-10', false, 'inputmode="decimal"', editingReview.jugabilidad || '')}
@@ -4388,8 +4404,8 @@ function renderSettingsEditHtml(message = '') {
       <button class="auth-btn secondary" type="button" onclick="newAdminReviewDraft()">Nuevo borrador</button>
       <span class="profile-status-msg" id="admin-review-status">${message || ''}</span>
     </div>
-    <div class="profile-section-title" style="margin-top:14px">Publicacion</div>
-    <div class="admin-note">${isPublished ? 'Esta sala ya tiene una review publicada desde el panel admin. Si publicas de nuevo, se actualizara.' : 'Publica esta review para que aparezca al momento en la pestaña Reviews.'}</div>
+    <div class="profile-section-title" style="margin-top:14px">Publicación</div>
+    <div class="admin-note">${isPublished ? 'Esta sala ya tiene una review publicada desde el panel admin. Si publicas de nuevo, se actualizará.' : 'Publica esta review para que aparezca al momento en la pestaña Reviews.'}</div>
     <div class="profile-row" style="margin-top:10px">
       <button class="auth-btn" type="button" onclick="publishAdminReview()">${isPublished ? 'Actualizar review publicada' : 'Publicar review'}</button>
       <button class="auth-btn secondary" type="button" onclick="unpublishAdminReview()" ${isPublished ? '' : 'disabled'}>Despublicar</button>
@@ -4458,13 +4474,13 @@ function validateAdminReviewForPublish(form) {
   if (review.valoracion < 0 || review.valoracion > 10) return 'La valoracion grupo debe estar entre 0 y 10.';
   if (!String(review.descripcion || '').trim()) {
     const ok = confirm('La review no tiene texto. Publicar solo con puntuaciones?');
-    if (!ok) return 'Publicacion cancelada: falta texto de review.';
+    if (!ok) return 'Publicación cancelada: falta texto de review.';
   }
   const historicalReview = HECHOS.find(room => userRoomKey(room) === roomKey);
   const alreadyPublished = !!ADMIN_PUBLISHED_REVIEWS[roomKey];
   if (historicalReview && !alreadyPublished) {
     const ok = confirm('Esta sala ya tiene review historica en el Excel. Si publicas desde Firebase, esta version tendra prioridad visual. Continuar?');
-    if (!ok) return 'Publicacion cancelada.';
+    if (!ok) return 'Publicación cancelada.';
   }
   return '';
 }
@@ -4585,7 +4601,7 @@ function accountRoleInfoHtml() {
   return `<div class="profile-section">
     <div class="profile-section-title">Cuenta Firebase</div>
     <div class="admin-note">
-      UID de esta sesion:<br><code>${escapeHtml(USER_ID)}</code>
+      UID de esta sesión:<br><code>${escapeHtml(USER_ID)}</code>
       ${ADMIN_ROLE_ERROR ? `<br><br>No se pudo leer <code>admins/${escapeHtml(USER_ID)}</code>:<br><code>${escapeHtml(ADMIN_ROLE_ERROR)}</code>` : `<br><br>Valor leido en <code>admins/${escapeHtml(USER_ID)}</code>:<br><code>${escapeHtml(rawRole)}</code><br><br>Para activar admin debe ser <code>true</code>.`}
       <div class="profile-row" style="margin-top:10px">
         <button class="auth-btn secondary" type="button" onclick="copyTextToClipboard('${jsString(USER_ID)}').then(ok => setProfileStatus(ok ? 'UID copiado.' : 'No se pudo copiar el UID.'))">Copiar UID</button>
@@ -4601,7 +4617,7 @@ function profileSettingsHtml(message = '') {
   const province = escapeHtml(USER_PROFILE.baseProvince || '');
   const bio = escapeHtml(USER_PROFILE.bio || '');
   const photo = publicPhotoURL();
-  const place = [USER_PROFILE.baseCity, USER_PROFILE.baseProvince].filter(Boolean).join(' - ') || 'Sin ubicacion base';
+  const place = [USER_PROFILE.baseCity, USER_PROFILE.baseProvince].filter(Boolean).join(' - ') || 'Sin ubicación base';
   return `
     <div class="profile-section">
       <div class="profile-section-title">Mi perfil escapista</div>
@@ -4642,7 +4658,7 @@ function profileSettingsHtml(message = '') {
           </div>
           <div class="profile-group-rooms">${groupRoomsPreviewHtml(groupId)}</div>
           <div class="profile-group-rooms">${groupPendingPreviewHtml(groupId)}</div>
-        </article>`).join('') : '<div class="review-empty">Todavia no tienes grupos. Crea uno y comparte la invitacion.</div>'}
+        </article>`).join('') : '<div class="review-empty">Todavía no tienes grupos. Crea uno y comparte la invitación.</div>'}
       </div>
     </div>`;
 }
@@ -4961,7 +4977,7 @@ async function migrateAnonymousDataToAccount() {
     try {
       await fbDelete(`likes/${slug}/${LOCAL_USER_ID}`);
     } catch(e) {
-      console.warn('No se pudo limpiar el favorito anonimo tras iniciar sesion:', e.message);
+      console.warn('No se pudo limpiar el favorito anónimo tras iniciar sesión:', e.message);
     }
   }
 
@@ -4974,7 +4990,7 @@ async function migrateAnonymousDataToAccount() {
     try {
       await fbDelete(`votes/${slug}/${LOCAL_USER_ID}`);
     } catch(e) {
-      console.warn('No se pudo limpiar el voto anonimo tras iniciar sesion:', e.message);
+      console.warn('No se pudo limpiar el voto anónimo tras iniciar sesión:', e.message);
     }
   }
   FAVS = favSlugs;
@@ -5020,7 +5036,7 @@ async function signInGoogle() {
     }
     result = await FIREBASE_AUTH.signInWithPopup(GOOGLE_PROVIDER);
   } catch(e) {
-    console.error('Error al iniciar sesion con Google:', e);
+    console.error('Error al iniciar sesión con Google:', e);
     const redirectCodes = new Set([
       'auth/popup-blocked',
       'auth/operation-not-supported-in-this-environment'
@@ -5030,11 +5046,11 @@ async function signInGoogle() {
         await FIREBASE_AUTH.signInWithRedirect(GOOGLE_PROVIDER);
         return;
       } catch (redirectError) {
-        console.error('Error al iniciar sesion con redirect:', redirectError);
+        console.error('Error al iniciar sesión con redirect:', redirectError);
       }
     }
     const detail = e.code ? `\n\nDetalle: ${e.code}` : '';
-    alert(`No se pudo iniciar sesion con Google. Revisa la configuracion de Firebase Auth.${detail}`);
+    alert(`No se pudo iniciar sesión con Google. Revisa la configuración de Firebase Auth.${detail}`);
     if (loginBtn) {
       loginBtn.disabled = false;
       loginBtn.textContent = originalText;
@@ -7749,7 +7765,7 @@ function globalSourcesDetailHtml(room) {
   const { sources } = globalRatingForRoom(room);
   if (!sources.length) return '';
   return `
-    <div class="detail-section-title">Puntuacion global</div>
+    <div class="detail-section-title">Puntuación global</div>
     <div class="detail-awards">
       ${sources.map(source => {
         const votes = source.votes ? ` · ${source.votes} votos` : '';
