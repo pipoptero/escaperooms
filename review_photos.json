@@ -1,9 +1,9 @@
 {
   "meta": {
-    "generated_at": "2026-08-20T18:51:03",
+    "generated_at": "2026-08-22T21:53:44",
     "source": "images/Hechos",
-    "groups": 17,
-    "photos": 42,
+    "groups": 18,
+    "photos": 47,
     "unmatched": []
   },
   "photos": {
@@ -257,6 +257,31 @@
         {
           "src": "images/Hechos/Willy el tuerto 3.jpeg",
           "alt": "Willy el Tuerto - foto del grupo"
+        }
+      ]
+    },
+    "forbidden_room": {
+      "room": "Forbidden Room",
+      "photos": [
+        {
+          "src": "images/Hechos/Forbidden 1.jpeg",
+          "alt": "Forbidden Room - foto del grupo 1"
+        },
+        {
+          "src": "images/Hechos/Forbidden 2.jpeg",
+          "alt": "Forbidden Room - foto del grupo 2"
+        },
+        {
+          "src": "images/Hechos/Forbidden 3.jpeg",
+          "alt": "Forbidden Room - foto del grupo 3"
+        },
+        {
+          "src": "images/Hechos/Forbidden 4.jpeg",
+          "alt": "Forbidden Room - foto del grupo 4"
+        },
+        {
+          "src": "images/Hechos/Forbidden 5.jpeg",
+          "alt": "Forbidden Room - foto del grupo 5"
         }
       ]
     }
