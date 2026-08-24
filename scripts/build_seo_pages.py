@@ -579,17 +579,26 @@ def generate_review_social_card(room, photos):
             draw.text((304, 486 + idx * 28), line, fill=(215, 215, 224), font=small_font)
 
     draw.text((62, 578), "thevaultescape.com", fill=green, font=small_font)
-    canvas.save(out_path, "JPEG", quality=88, optimize=True)
+    canvas.save(out_path, "JPEG", quality=82, optimize=True)
     return out_rel.as_posix()
 
 
 def generate_latest_review_thumbnail(room, photos):
     if Image is None:
         return ""
-    slug = room_url_slug(room)
-    out_rel = LATEST_REVIEW_THUMB_DIR / f"{slug}.webp"
-    out_path = ROOT / out_rel
-    out_path.parent.mkdir(parents=True, exist_ok=True)
+    slugs = []
+    for value in [
+        canonical_room_name(room),
+        room.get("nombre"),
+        room.get("id"),
+        room.get("_reviewKey"),
+        room.get("roomKey"),
+    ]:
+        slug = slugify(value)
+        if slug and slug not in slugs:
+            slugs.append(slug)
+    if not slugs:
+        return ""
 
     candidates = [
         room.get("imagen"),
@@ -609,10 +618,14 @@ def generate_latest_review_thumbnail(room, photos):
         return ""
     try:
         thumb = cover_resize(image, (156, 208))
-        thumb.save(out_path, "WEBP", quality=76, method=6)
+        for slug in slugs:
+            out_rel = LATEST_REVIEW_THUMB_DIR / f"{slug}.webp"
+            out_path = ROOT / out_rel
+            out_path.parent.mkdir(parents=True, exist_ok=True)
+            thumb.save(out_path, "WEBP", quality=72, method=6)
     finally:
         image.close()
-    return out_rel.as_posix()
+    return (LATEST_REVIEW_THUMB_DIR / f"{slugs[0]}.webp").as_posix()
 
 
 def base_head(title, description, canonical, image):
