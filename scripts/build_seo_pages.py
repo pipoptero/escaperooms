@@ -358,6 +358,46 @@ def ranked_rooms(data):
     return rows
 
 
+def catalog_seo_rows(data, ranking_rows):
+    rows = []
+    by_identity = {}
+    for position, item in enumerate(ranking_rows, 1):
+        identity = room_identity(item.get("room"))
+        if not identity:
+            continue
+        seo_item = dict(item)
+        seo_item["position"] = position
+        by_identity[identity] = seo_item
+
+    for room in catalog_rooms():
+        if not text(room.get("nombre")):
+            continue
+        room = apply_canonical_room_fields(room)
+        identity = room_identity(room)
+        if not identity:
+            continue
+        if identity in by_identity:
+            by_identity[identity]["room"] = merge_room_data(by_identity[identity]["room"], room)
+        else:
+            by_identity[identity] = {
+                "key": identity,
+                "room": room,
+                "rating": {},
+                "meta": {},
+                "position": None,
+            }
+
+    ranked_identities = {room_identity(item.get("room")) for item in ranking_rows}
+    rows.extend(item for item in by_identity.values() if room_identity(item.get("room")) in ranked_identities)
+    remaining = [
+        item for item in by_identity.values()
+        if room_identity(item.get("room")) not in ranked_identities
+    ]
+    remaining.sort(key=lambda item: text(item["room"].get("nombre")).lower())
+    rows.extend(remaining)
+    return rows
+
+
 def json_ld(data):
     return json.dumps(data, ensure_ascii=False, indent=2)
 
@@ -518,6 +558,8 @@ def base_head(title, description, canonical, image):
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{escape(title)}</title>
 <meta name="description" content="{escape(description)}">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="{SITE_NAME}">
 <link rel="canonical" href="{escape(canonical)}">
 <meta name="theme-color" content="#0a0a0f">
 <link rel="icon" href="../../images/brand/favicon-round-32.png" sizes="32x32" type="image/png">
@@ -528,6 +570,8 @@ def base_head(title, description, canonical, image):
 <meta property="og:description" content="{escape(description)}">
 <meta property="og:url" content="{escape(canonical)}">
 <meta property="og:image" content="{escape(image)}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{escape(title)}">
 <meta name="twitter:description" content="{escape(description)}">
@@ -548,6 +592,9 @@ def base_head(title, description, canonical, image):
   .meta {{ display:flex; flex-wrap:wrap; gap:8px; margin:18px 0; }}
   .pill {{ border:1px solid rgba(125,187,63,.22); background:rgba(125,187,63,.06); color:#dbead2; padding:5px 8px; font-size:.86rem; }}
   .score {{ display:inline-flex; margin:8px 0 14px; border:1px solid rgba(125,187,63,.32); background:rgba(125,187,63,.08); color:var(--green); padding:8px 12px; font-weight:700; font-size:1.15rem; }}
+  .share {{ margin:18px 0 4px; border:1px solid rgba(125,187,63,.24); background:rgba(125,187,63,.055); padding:13px; }}
+  .share strong {{ display:block; color:var(--text); font-family:Georgia,serif; font-size:1.08rem; margin-bottom:4px; }}
+  .share span {{ display:block; color:var(--muted); font-size:.9rem; margin-bottom:10px; }}
   .section {{ margin-top:24px; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.025); padding:18px; }}
   h2 {{ margin:0 0 10px; font-family:Georgia,serif; font-size:1.35rem; }}
   .review {{ color:#d9d9e3; white-space:pre-line; }}
@@ -558,7 +605,8 @@ def base_head(title, description, canonical, image):
   .photos {{ display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:10px; }}
   .photos img {{ width:100%; aspect-ratio:4/3; object-fit:cover; border:1px solid rgba(125,187,63,.22); background:#050507; }}
   .actions {{ display:flex; gap:10px; flex-wrap:wrap; margin-top:20px; }}
-  .btn {{ display:inline-flex; align-items:center; justify-content:center; min-height:42px; padding:9px 13px; border:1px solid rgba(125,187,63,.32); background:rgba(125,187,63,.07); text-decoration:none; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }}
+  .btn {{ display:inline-flex; align-items:center; justify-content:center; min-height:42px; padding:9px 13px; border:1px solid rgba(125,187,63,.32); background:rgba(125,187,63,.07); color:var(--green); text-decoration:none; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; cursor:pointer; }}
+  button.btn {{ font-family:inherit; }}
   .btn.secondary {{ border-color:rgba(255,255,255,.12); background:rgba(255,255,255,.025); color:var(--muted); }}
   @media(max-width:720px) {{ .hero {{ grid-template-columns:1fr; padding:16px; }} .cover {{ max-height:360px; }} .cats {{ grid-template-columns:1fr 1fr; }} .wrap {{ width:min(100% - 22px,1020px); padding-top:18px; }} }}
 </style>
@@ -580,6 +628,8 @@ def review_page(room, photos, social_image_path=""):
     author = text(room.get("_reviewAuthorName")) or "The Vault"
     date_published = timestamp_iso(room.get("_publishedAt"))
     date_modified = timestamp_iso(room.get("_updatedAt")) or date_published
+    share_text = f"Review de {name} en {SITE_NAME} {canonical}"
+    whatsapp_link = f"https://wa.me/?text={quote(share_text, safe='')}"
     photo_html = "\n".join(
         f'<img src="{escape(page_asset(photo.get("src")))}" alt="{escape(photo.get("alt") or name)}" loading="lazy">'
         for photo in photos
@@ -611,15 +661,26 @@ def review_page(room, photos, social_image_path=""):
                 "url": canonical,
                 "name": title,
                 "description": description,
+                "inLanguage": "es",
+                "keywords": ["escape rooms", "review escape room", name, company, text(room.get("ciudad"))],
+                "about": {"@type": "Thing", "name": "Escape rooms en España"},
                 "isPartOf": {"@id": site_url("/#website")},
                 "primaryImageOfPage": image,
+            },
+            {
+                "@type": "Organization",
+                "@id": site_url("/#organization"),
+                "name": SITE_NAME,
+                "url": BASE_URL,
+                "logo": site_url("/images/brand/icon-round-512.png"),
+                "sameAs": ["https://www.instagram.com/thevault_escape/"],
             },
             {
                 "@type": "Review",
                 "name": f"Review de {name}",
                 "reviewBody": text(room.get("descripcion")),
                 "author": {"@type": "Person" if author != "The Vault" else "Organization", "name": author, "url": BASE_URL},
-                "publisher": {"@type": "Organization", "name": SITE_NAME, "url": BASE_URL},
+                "publisher": {"@id": site_url("/#organization")},
                 "itemReviewed": {
                     "@type": "EntertainmentBusiness",
                     "name": f"{name}{' - ' + company if company else ''}",
@@ -653,7 +714,16 @@ def review_page(room, photos, social_image_path=""):
         schema["@graph"][1]["datePublished"] = date_published
     if date_modified:
         schema["@graph"][1]["dateModified"] = date_modified
+    article_meta = "\n".join([
+        f'<meta property="article:published_time" content="{escape(date_published)}">' if date_published else "",
+        f'<meta property="article:modified_time" content="{escape(date_modified)}">' if date_modified else "",
+        '<meta property="article:section" content="Escape rooms">',
+        '<meta property="article:tag" content="escape rooms">',
+        '<meta property="article:tag" content="review escape room">',
+        f'<meta property="article:tag" content="{escape(name)}">',
+    ])
     return base_head(title, description, canonical, image) + f"""
+{article_meta}
 <script type="application/ld+json">
 {json_ld(schema)}
 </script>
@@ -670,6 +740,14 @@ def review_page(room, photos, social_image_path=""):
       <div class="meta">{meta_html}</div>
       {f'<div class="score">Nota The Vault: {escape(score)}/10</div>' if score else ''}
       <p>{escape(description)}</p>
+      <div class="share">
+        <strong>Comparte esta review</strong>
+        <span>Enlace directo preparado para WhatsApp, Instagram, buscadores y vistas previas con imagen.</span>
+        <div class="actions">
+          <a class="btn" href="{escape(whatsapp_link)}" target="_blank" rel="noopener">Compartir por WhatsApp</a>
+          <button class="btn secondary" type="button" onclick="navigator.clipboard?.writeText('{escape(canonical)}')">Copiar enlace</button>
+        </div>
+      </div>
       <div class="actions">
         <a class="btn" href="{escape(app_link)}">Abrir ficha interactiva</a>
         <a class="btn secondary" href="../">Ver todas las reviews</a>
@@ -853,24 +931,24 @@ def source_pills(rating, meta):
 
 def room_page(item, position):
     room = item["room"]
-    rating = item["rating"]
-    meta = item["meta"]
+    rating = item.get("rating") or {}
+    meta = item.get("meta") or {}
     name = canonical_room_name(room) or "Escape room"
     company = canonical_room_company(room)
     slug = room_url_slug(room)
     canonical = site_url(f"/salas/{slug}/")
     app_link = site_url(f"/#room/{app_hash_key(room)}")
     score = decimal(rating.get("global_score"))
+    has_score = score > 0
     description = short_description({
         **room,
         "descripcion": text(room.get("descripcion")) or (
-            f"{name} aparece en el ranking ponderado de The Vault Escape con una nota global de {score:.1f}/10 "
-            f"calculada a partir de {int(rating.get('source_count') or 0)} fuentes."
+            f"{name} forma parte del catálogo de The Vault Escape con datos de ubicación, empresa y ficha pública para consulta."
         ),
     })
     image = asset_url(room.get("imagen") or "images/brand/social-card.png")
     cover = page_asset(room.get("imagen") or "images/brand/social-card.png")
-    title = f"{name}: ranking y puntuaciones | {SITE_NAME}"
+    title = f"{name}: ranking y puntuaciones | {SITE_NAME}" if has_score else f"{name}: ficha de escape room | {SITE_NAME}"
     location = room_location(room)
     meta_values = [
         location,
@@ -880,7 +958,7 @@ def room_page(item, position):
         text(room.get("dificultad")),
     ]
     meta_html = "\n".join(f'<span class="pill">{escape(value)}</span>' for value in meta_values if value)
-    sources_html = source_pills(rating, meta)
+    sources_html = source_pills(rating, meta) if has_score else ""
     schema = {
         "@context": "https://schema.org",
         "@graph": [
@@ -903,13 +981,6 @@ def room_page(item, position):
                     "addressRegion": text(room.get("provincia")),
                     "addressCountry": "ES",
                 },
-                "aggregateRating": {
-                    "@type": "AggregateRating",
-                    "ratingValue": f"{score:.1f}",
-                    "bestRating": "10",
-                    "worstRating": "0",
-                    "ratingCount": max(1, int(rating.get("source_count") or 1)),
-                },
             },
             {
                 "@type": "BreadcrumbList",
@@ -921,6 +992,14 @@ def room_page(item, position):
             },
         ],
     }
+    if has_score:
+        schema["@graph"][1]["aggregateRating"] = {
+            "@type": "AggregateRating",
+            "ratingValue": f"{score:.1f}",
+            "bestRating": "10",
+            "worstRating": "0",
+            "ratingCount": max(1, int(rating.get("source_count") or 1)),
+        }
     return base_head(title, description, canonical, image) + f"""
 <script type="application/ld+json">
 {json_ld(schema)}
@@ -932,22 +1011,22 @@ def room_page(item, position):
   <article class="hero">
     <img class="cover" src="{escape(cover)}" alt="Cartel de {escape(name)}">
     <div>
-      <div class="kicker">Sala destacada #{position}</div>
+      <div class="kicker">{f'Sala destacada #{position}' if has_score else 'Ficha de catálogo'}</div>
       <h1>{escape(name)}</h1>
       <div class="company">{escape(company)}</div>
       <div class="meta">{meta_html}</div>
-      <div class="score">Nota global: {score:.1f}/10</div>
+      {f'<div class="score">Nota global: {score:.1f}/10</div>' if has_score else ''}
       <p>{escape(description)}</p>
       <div class="actions">
         <a class="btn" href="{escape(app_link)}">Abrir ficha interactiva</a>
-        <a class="btn secondary" href="../../ranking/">Ver ranking completo</a>
+        {f'<a class="btn secondary" href="../../ranking/">Ver ranking completo</a>' if has_score else '<a class="btn secondary" href="../../">Ver catálogo</a>'}
       </div>
     </div>
   </article>
-  <section class="section">
+  {f'''<section class="section">
     <h2>Fuentes del ranking</h2>
     <div class="meta">{sources_html}</div>
-  </section>
+  </section>''' if sources_html else ''}
   {f'<section class="section"><h2>Sinopsis</h2><div class="review">{escape(text(room.get("descripcion")))}</div></section>' if text(room.get("descripcion")) else ''}
 </main>
 </body>
@@ -955,14 +1034,14 @@ def room_page(item, position):
 """
 
 
-def sitemap_xml(review_rooms, ranking_rows):
+def sitemap_xml(review_rooms, sala_rows):
     entries = [
         (site_url("/"), "daily", "1.0"),
         (site_url("/reviews/"), "weekly", "0.8"),
         (site_url("/ranking/"), "weekly", "0.9"),
     ]
     entries.extend((site_url(f"/reviews/{room_url_slug(room)}/"), "monthly", "0.7") for room in review_rooms)
-    entries.extend((site_url(f"/salas/{room_url_slug(item['room'])}/"), "monthly", "0.7") for item in ranking_rows)
+    entries.extend((site_url(f"/salas/{room_url_slug(item['room'])}/"), "monthly", "0.7") for item in sala_rows)
     unique_entries = []
     seen_urls = set()
     for entry in entries:
@@ -985,11 +1064,34 @@ Sitemap: {site_url('/sitemap.xml')}
 """
 
 
+def llms_txt():
+    return f"""# {SITE_NAME}
+
+The Vault Escape es un catálogo y archivo de escape rooms en España. Incluye fichas de salas, reviews propias, ranking ponderado con varias fuentes, premios, fotos y herramientas personales para usuarios registrados.
+
+## URLs principales
+- Inicio y aplicación interactiva: {site_url('/')}
+- Reviews publicadas: {site_url('/reviews/')}
+- Ranking de escape rooms: {site_url('/ranking/')}
+- Sitemap XML: {site_url('/sitemap.xml')}
+
+## Contenido
+- Fichas públicas en /salas/{{slug}}/ con nombre, empresa, ubicación, sinopsis cuando existe y puntuaciones si están disponibles.
+- Reviews públicas en /reviews/{{slug}}/ con opinión del grupo, puntuaciones por categorías, fotos y enlaces para compartir.
+- Ranking calculado con fuentes externas, comunidad The Vault y premios, descrito en las páginas legales de la web.
+
+## Contacto
+Instagram: https://www.instagram.com/thevault_escape/
+Web: {BASE_URL}
+"""
+
+
 def main():
     data = read_json(ROOT / "data.json", {})
     photos_data = read_json(ROOT / "review_photos.json", {}).get("photos", {})
     rooms = published_review_rooms(data) or review_rooms(data)
     ranking_rows = [row for row in ranked_rooms(data) if decimal(row["rating"].get("global_score")) > 0]
+    sala_rows = catalog_seo_rows(data, ranking_rows)
 
     reviews_dir = ROOT / "reviews"
     reviews_dir.mkdir(exist_ok=True)
@@ -1010,19 +1112,20 @@ def main():
 
     salas_dir = ROOT / "salas"
     salas_dir.mkdir(exist_ok=True)
-    for position, item in enumerate(ranking_rows, 1):
+    for item in sala_rows:
         page_dir = salas_dir / room_url_slug(item["room"])
         page_dir.mkdir(parents=True, exist_ok=True)
-        (page_dir / "index.html").write_text(room_page(item, position), encoding="utf-8", newline="\n")
+        (page_dir / "index.html").write_text(room_page(item, item.get("position") or 0), encoding="utf-8", newline="\n")
 
-    (ROOT / "sitemap.xml").write_text(sitemap_xml(rooms, ranking_rows), encoding="utf-8", newline="\n")
+    (ROOT / "sitemap.xml").write_text(sitemap_xml(rooms, sala_rows), encoding="utf-8", newline="\n")
     (ROOT / "robots.txt").write_text(robots_txt(), encoding="utf-8", newline="\n")
+    (ROOT / "llms.txt").write_text(llms_txt(), encoding="utf-8", newline="\n")
     print(
         "SEO generado: "
         f"{len(generated_review_pages)} reviews, "
-        f"{len(ranking_rows)} salas, "
+        f"{len(sala_rows)} salas, "
         f"{len(generated_review_pages)} tarjetas sociales, "
-        "ranking, sitemap.xml y robots.txt"
+        "ranking, sitemap.xml, robots.txt y llms.txt"
     )
 
 

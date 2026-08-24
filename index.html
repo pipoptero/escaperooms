@@ -640,6 +640,13 @@
   .detail-review-text{font-size:.95rem;line-height:1.55;color:var(--text2);white-space:pre-line;overflow-wrap:anywhere;}
   .detail-review-text.empty{color:var(--text3);font-style:italic;}
   .detail-cats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 14px;margin-top:8px;}
+  .detail-share-panel{border:1px solid rgba(125,187,63,.24);background:linear-gradient(135deg,rgba(125,187,63,.075),rgba(255,255,255,.025));padding:11px 12px;margin:0 0 12px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;}
+  .detail-share-kicker{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--amber);letter-spacing:.13em;text-transform:uppercase;margin-bottom:4px;}
+  .detail-share-title{font-family:'Cinzel',serif;font-size:1.02rem;color:var(--text);line-height:1.15;}
+  .detail-share-copy{font-size:.78rem;color:var(--text3);line-height:1.35;margin-top:3px;}
+  .detail-share-buttons{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end;}
+  .detail-share-panel .detail-link{background:rgba(0,0,0,.16);}
+  .detail-share-panel .detail-share-status{grid-column:1/-1;margin-top:2px;}
   .detail-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
   .detail-link{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--amber);text-decoration:none;letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(125,187,63,.28);padding:9px 13px;}
   button.detail-link{background:transparent;cursor:pointer;}
@@ -1548,6 +1555,18 @@
     }
     .detail-meta{
       gap:7px;
+    }
+    .detail-share-panel{
+      grid-template-columns:1fr;
+      padding:10px;
+    }
+    .detail-share-buttons{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      justify-content:stretch;
+    }
+    .detail-share-buttons .detail-link:last-child{
+      grid-column:1/-1;
     }
     .detail-actions{
       display:grid;
@@ -6885,6 +6904,44 @@ function detailUrlFor(kind, room) {
   return url.toString();
 }
 
+function detailShareText(kind, room) {
+  const name = room?.nombre || 'escape room';
+  const company = room?.empresa ? ` de ${room.empresa}` : '';
+  return kind === 'hechos'
+    ? `Review de ${name}${company} en The Vault Escape`
+    : `Ficha de ${name}${company} en The Vault Escape`;
+}
+
+function detailWhatsAppUrl(kind, room) {
+  const url = detailUrlFor(kind, room);
+  return `https://wa.me/?text=${encodeURIComponent(`${detailShareText(kind, room)} ${url}`)}`;
+}
+
+function setDetailShareStatus(message, ok = true) {
+  document.querySelectorAll('.detail-share-status').forEach(status => {
+    status.textContent = message;
+    status.className = `detail-share-status ${ok ? 'ok' : 'error'}`;
+  });
+}
+
+function detailSharePanelHtml(room, kind, key) {
+  const url = detailUrlFor(kind, room);
+  const whatsApp = detailWhatsAppUrl(kind, room);
+  return `<section class="detail-share-panel" aria-label="Compartir review">
+    <div>
+      <div class="detail-share-kicker">Enlace publico</div>
+      <div class="detail-share-title">Comparte esta review</div>
+      <div class="detail-share-copy">URL preparada para Google, WhatsApp, redes sociales y vistas previas con imagen.</div>
+    </div>
+    <div class="detail-share-buttons">
+      <button class="detail-link" type="button" onclick="copyDetailLink('${kind}','${jsString(key)}')">Copiar</button>
+      <button class="detail-link" type="button" onclick="shareDetailLink('${kind}','${jsString(key)}')">Compartir</button>
+      <a class="detail-link" href="${escapeHtml(whatsApp)}" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+    <span class="detail-share-status" title="${escapeHtml(url)}"></span>
+  </section>`;
+}
+
 function setDetailHash(kind, room) {
   const hash = detailHashFor(kind, room);
   if (!hash) return;
@@ -6904,12 +6961,28 @@ function clearDetailHashIfCurrent() {
 
 async function copyDetailLink(kind, key) {
   const room = findDetailRoom(kind, key);
-  const status = document.getElementById('detail-share-status');
-  if (!room || !status) return;
+  if (!room) return;
   const url = detailUrlFor(kind, room);
   const copied = await copyTextToClipboard(url);
-  status.textContent = copied ? 'Enlace copiado' : url;
-  status.className = `detail-share-status ${copied ? 'ok' : 'error'}`;
+  setDetailShareStatus(copied ? 'Enlace copiado' : url, copied);
+}
+
+async function shareDetailLink(kind, key) {
+  const room = findDetailRoom(kind, key);
+  if (!room) return;
+  const url = detailUrlFor(kind, room);
+  const title = detailShareText(kind, room);
+  if (navigator.share) {
+    try {
+      await navigator.share({ title, text: title, url });
+      setDetailShareStatus('Compartido', true);
+      return;
+    } catch (error) {
+      if (error?.name === 'AbortError') return;
+    }
+  }
+  const copied = await copyTextToClipboard(url);
+  setDetailShareStatus(copied ? 'Enlace copiado' : url, copied);
 }
 
 function parseDetailHash() {
@@ -7335,6 +7408,7 @@ function openDetail(kind, key, options = {}) {
     <h2 class="detail-title" id="detail-title">${escapeHtml(room.nombre || 'Escape room')}</h2>
     <div class="detail-company">${escapeHtml(room.empresa || '')}</div>
     <div class="detail-tags">${detailTags(room, kind)}</div>
+    ${isReview ? detailSharePanelHtml(room, kind, key) : ''}
     <div class="detail-meta">
       ${!isReview ? metaItem('Rating', rating ? `★ ${rating}` : '') : ''}
       ${metaItem('Duracion', room.duracion ? `⏱ ${room.duracion} min` : '')}
@@ -7358,7 +7432,7 @@ function openDetail(kind, key, options = {}) {
     <div class="detail-actions">
       <button class="detail-link" type="button" onclick="copyDetailLink('${kind}','${jsString(key)}')">${kind === 'hechos' ? 'Copiar enlace review' : 'Copiar enlace'}</button>
       ${room.web ? `<a class="detail-link" href="${room.web}" target="_blank">Ver web oficial</a>` : ''}
-      <span class="detail-share-status" id="detail-share-status"></span>
+      <span class="detail-share-status"></span>
       ${kind === 'catalogo' ? `<span class="tag tag-muted">Catálogo</span>` : kind === 'hechos' ? `<span class="tag tag-feature">${room._arkkadiaCommunityReview ? 'Review Arkkadia' : 'Review grupo'}</span>` : `<span class="tag tag-feature">Pendiente</span>`}
     </div>`;
 
