@@ -51,11 +51,21 @@
   .cat strong { color:var(--green); font-size:1.25rem; }
   .photos { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:10px; }
   .photos img { width:100%; aspect-ratio:4/3; object-fit:cover; border:1px solid rgba(125,187,63,.22); background:#050507; }
+  .video-frame { width:100%; aspect-ratio:16/9; display:block; border:1px solid rgba(125,187,63,.24); background:#050507; }
+  iframe.video-frame { border:1px solid rgba(125,187,63,.24); }
+  .media-note { color:var(--muted); font-size:.85rem; margin:9px 0 0; }
+  .facts { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:0; }
+  .fact { min-width:0; border:1px solid rgba(255,255,255,.08); background:rgba(0,0,0,.16); padding:11px; }
+  .fact dt { color:var(--muted); font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; }
+  .fact dd { margin:3px 0 0; color:var(--text); overflow-wrap:anywhere; }
+  .internal-links { display:flex; flex-wrap:wrap; gap:9px; }
+  .explain { color:#c6c6d4; margin:0; }
   .actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:20px; }
   .btn { display:inline-flex; align-items:center; justify-content:center; min-height:42px; padding:9px 13px; border:1px solid rgba(125,187,63,.32); background:rgba(125,187,63,.07); color:var(--green); text-decoration:none; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; cursor:pointer; }
   button.btn { font-family:inherit; }
   .btn.secondary { border-color:rgba(255,255,255,.12); background:rgba(255,255,255,.025); color:var(--muted); }
-  @media(max-width:720px) { .hero { grid-template-columns:1fr; padding:16px; } .cover { max-height:360px; } .cats { grid-template-columns:1fr 1fr; } .wrap { width:min(100% - 22px,1020px); padding-top:18px; } }
+  @media(max-width:720px) { .hero { grid-template-columns:1fr; padding:16px; } .cover { max-height:360px; } .cats,.facts { grid-template-columns:1fr 1fr; } .wrap { width:min(100% - 22px,1020px); padding-top:18px; } }
+  @media(max-width:440px) { .facts { grid-template-columns:1fr; } }
 </style>
 
 <meta property="article:published_time" content="2026-07-09">

@@ -22,6 +22,8 @@ REVIEW_SOCIAL_DIR = Path("images/seo/reviews")
 LATEST_REVIEW_THUMB_DIR = Path("images/seo/latest")
 CITY_PAGE_MIN_ROOMS = 8
 REGION_PAGE_MIN_ROOMS = 10
+ROOM_LOCATIONS_CACHE = None
+SEO_ROOM_SLUGS = {}
 
 TEXT_FIXES = {
     "Espa�a": "España",
@@ -113,6 +115,28 @@ def room_alias_keys(room):
         if target == identity:
             keys.add(alias)
     return [key for key in keys if key and key != "escape_room"]
+
+
+def room_locations():
+    global ROOM_LOCATIONS_CACHE
+    if ROOM_LOCATIONS_CACHE is None:
+        payload = read_json(ROOT / "room_locations.json", {})
+        ROOM_LOCATIONS_CACHE = payload.get("locations") or {}
+    return ROOM_LOCATIONS_CACHE
+
+
+def exact_room_location(room):
+    locations = room_locations()
+    candidates = []
+    for value in (room.get("id"), room_identity(room), room_url_slug(room), *room_alias_keys(room)):
+        raw = text(value)
+        if raw:
+            candidates.extend((raw, slugify(raw), slugify(raw, "_")))
+    for key in dict.fromkeys(candidates):
+        location = locations.get(key)
+        if location:
+            return location
+    return {}
 
 
 def app_hash_key(room):
@@ -218,12 +242,76 @@ def photo_entries(room, photos_data):
     return []
 
 
+def video_entry(room, videos_data):
+    candidates = []
+    for value in (room.get("id"), room_identity(room), room_url_slug(room), *room_alias_keys(room)):
+        raw = text(value)
+        if raw:
+            candidates.extend((raw, slugify(raw), slugify(raw, "_")))
+    for key in dict.fromkeys(candidates):
+        video = videos_data.get(key)
+        if video:
+            return video
+    return {}
+
+
 def room_identity(room):
     return canonical_room_identity(room.get("id") or room.get("nombre"))
 
 
 def room_url_slug(room):
     return slugify(canonical_room_name(room))
+
+
+def seo_room_url_slug(room):
+    return SEO_ROOM_SLUGS.get(room_identity(room), room_url_slug(room))
+
+
+def assign_seo_room_slugs(rows):
+    SEO_ROOM_SLUGS.clear()
+    groups = {}
+    for item in rows:
+        room = item.get("room") or {}
+        groups.setdefault(room_url_slug(room), []).append(item)
+
+    used = set()
+    for base_slug, items in groups.items():
+        ordered = sorted(
+            items,
+            key=lambda item: (
+                item.get("position") is None,
+                item.get("position") or 10**9,
+                room_identity(item.get("room") or {}),
+            ),
+        )
+        for index, item in enumerate(ordered):
+            room = item.get("room") or {}
+            identity = room_identity(room)
+            if index == 0:
+                candidate = base_slug
+            else:
+                suffixes = [
+                    canonical_room_company(room),
+                    room.get("ciudad"),
+                    room.get("id"),
+                    identity,
+                ]
+                candidate = ""
+                for suffix in suffixes:
+                    value = slugify(suffix)
+                    if value and value != base_slug:
+                        candidate = f"{base_slug}-{value}"
+                        if candidate not in used:
+                            break
+                if not candidate or candidate in used:
+                    candidate = f"{base_slug}-{index + 1}"
+            serial = 2
+            unique = candidate
+            while unique in used:
+                unique = f"{candidate}-{serial}"
+                serial += 1
+            SEO_ROOM_SLUGS[identity] = unique
+            used.add(unique)
 
 
 def catalog_rooms():
@@ -682,11 +770,21 @@ def base_head(title, description, canonical, image):
   .cat strong {{ color:var(--green); font-size:1.25rem; }}
   .photos {{ display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:10px; }}
   .photos img {{ width:100%; aspect-ratio:4/3; object-fit:cover; border:1px solid rgba(125,187,63,.22); background:#050507; }}
+  .video-frame {{ width:100%; aspect-ratio:16/9; display:block; border:1px solid rgba(125,187,63,.24); background:#050507; }}
+  iframe.video-frame {{ border:1px solid rgba(125,187,63,.24); }}
+  .media-note {{ color:var(--muted); font-size:.85rem; margin:9px 0 0; }}
+  .facts {{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:0; }}
+  .fact {{ min-width:0; border:1px solid rgba(255,255,255,.08); background:rgba(0,0,0,.16); padding:11px; }}
+  .fact dt {{ color:var(--muted); font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; }}
+  .fact dd {{ margin:3px 0 0; color:var(--text); overflow-wrap:anywhere; }}
+  .internal-links {{ display:flex; flex-wrap:wrap; gap:9px; }}
+  .explain {{ color:#c6c6d4; margin:0; }}
   .actions {{ display:flex; gap:10px; flex-wrap:wrap; margin-top:20px; }}
   .btn {{ display:inline-flex; align-items:center; justify-content:center; min-height:42px; padding:9px 13px; border:1px solid rgba(125,187,63,.32); background:rgba(125,187,63,.07); color:var(--green); text-decoration:none; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; cursor:pointer; }}
   button.btn {{ font-family:inherit; }}
   .btn.secondary {{ border-color:rgba(255,255,255,.12); background:rgba(255,255,255,.025); color:var(--muted); }}
-  @media(max-width:720px) {{ .hero {{ grid-template-columns:1fr; padding:16px; }} .cover {{ max-height:360px; }} .cats {{ grid-template-columns:1fr 1fr; }} .wrap {{ width:min(100% - 22px,1020px); padding-top:18px; }} }}
+  @media(max-width:720px) {{ .hero {{ grid-template-columns:1fr; padding:16px; }} .cover {{ max-height:360px; }} .cats,.facts {{ grid-template-columns:1fr 1fr; }} .wrap {{ width:min(100% - 22px,1020px); padding-top:18px; }} }}
+  @media(max-width:440px) {{ .facts {{ grid-template-columns:1fr; }} }}
 </style>
 """
 
@@ -929,7 +1027,7 @@ def ranking_index_page(rows):
         room = item["room"]
         rating = item["rating"]
         name = canonical_room_name(room) or "Escape room"
-        url = site_url(f"/salas/{room_url_slug(room)}/")
+        url = site_url(f"/salas/{seo_room_url_slug(room)}/")
         score = decimal(rating.get("global_score"))
         location = room_location(room)
         items.append(
@@ -1039,7 +1137,7 @@ def ranking_landing_page(slug, title, h1, description, intro, rows, keyword_note
         rating = item.get("rating") or {}
         name = canonical_room_name(room) or "Escape room"
         company = canonical_room_company(room)
-        url = site_url(f"/salas/{room_url_slug(room)}/")
+        url = site_url(f"/salas/{seo_room_url_slug(room)}/")
         score = decimal(rating.get("global_score"))
         sources = int(rating.get("source_count") or 0)
         awards = int(rating.get("award_count") or 0)
@@ -1225,7 +1323,7 @@ def location_landing_page(slug, kind, label, rows, total_count):
         rating = item.get("rating") or {}
         name = canonical_room_name(room) or "Escape room"
         company = canonical_room_company(room)
-        url = site_url(f"/salas/{room_url_slug(room)}/")
+        url = site_url(f"/salas/{seo_room_url_slug(room)}/")
         score = decimal(rating.get("global_score"))
         source_count = int(rating.get("source_count") or 0)
         awards = int(rating.get("award_count") or 0)
@@ -1486,27 +1584,84 @@ def source_pills(rating, meta):
     return "\n".join(items)
 
 
-def room_page(item, position):
+def room_players(room):
+    minimum = text(room.get("min_personas"))
+    maximum = text(room.get("max_personas"))
+    if minimum and maximum:
+        return minimum if minimum == maximum else f"{minimum} a {maximum}"
+    return minimum or maximum
+
+
+def room_price(room):
+    minimum = decimal(room.get("precio_min"))
+    maximum = decimal(room.get("precio_max"))
+    if minimum and maximum:
+        if minimum == maximum:
+            return f"{minimum:g} €"
+        low, high = sorted((minimum, maximum))
+        return f"{low:g} a {high:g} €"
+    value = minimum or maximum
+    return f"{value:g} €" if value else ""
+
+
+def room_facts(room, location_data):
+    city = text(location_data.get("city")) or text(room.get("ciudad"))
+    province = text(location_data.get("province")) or text(room.get("provincia"))
+    facts = [
+        ("Empresa", canonical_room_company(room)),
+        ("Ciudad", city),
+        ("Provincia", province),
+        ("Comunidad", canonical_region(room.get("comunidad"))),
+        ("Dirección", text(location_data.get("address"))),
+        ("Duración", f'{text(room.get("duracion"))} minutos' if text(room.get("duracion")) else ""),
+        ("Jugadores", room_players(room)),
+        ("Precio orientativo", room_price(room)),
+        ("Dificultad", text(room.get("dificultad"))),
+        ("Temática", text(room.get("tematica")) or text(room.get("tipo"))),
+    ]
+    return [(label, value) for label, value in facts if value]
+
+
+def room_page(item, position, location_links=None, review_slugs=None, videos_data=None, photos_data=None):
     room = item["room"]
     rating = item.get("rating") or {}
     meta = item.get("meta") or {}
     name = canonical_room_name(room) or "Escape room"
     company = canonical_room_company(room)
-    slug = room_url_slug(room)
+    slug = seo_room_url_slug(room)
     canonical = site_url(f"/salas/{slug}/")
     app_link = site_url(f"/#room/{app_hash_key(room)}")
     score = decimal(rating.get("global_score"))
     has_score = score > 0
-    description = short_description({
-        **room,
-        "descripcion": text(room.get("descripcion")) or (
-            f"{name} forma parte del catálogo de The Vault Escape con datos de ubicación, empresa y ficha pública para consulta."
-        ),
-    })
+    synopsis = text(room.get("descripcion"))
+    location_data = exact_room_location(room)
+    city = text(location_data.get("city")) or text(room.get("ciudad"))
+    province = text(location_data.get("province")) or text(room.get("provincia"))
+    source_count = int(rating.get("source_count") or 0)
+    award_count = int(rating.get("award_count") or 0)
+    fallback_description = f"Ficha de {name}{' de ' + company if company else ''}"
+    if city:
+        fallback_description += f" en {city}"
+    fallback_description += ", con datos de ubicación, duración, jugadores y enlaces de consulta."
+    if has_score:
+        identity_detail = name
+        if company:
+            identity_detail += f" de {company}"
+        if city:
+            identity_detail += f" en {city}"
+        rating_detail = f"Nota global {score:.1f}/10"
+        if source_count:
+            rating_detail += f" con {source_count} fuentes"
+        if award_count:
+            rating_detail += f" y {award_count} premios o nominaciones"
+        seo_description = f"{identity_detail}. {rating_detail}. Consulta datos, sinopsis, ubicación y fuentes del ranking."
+    else:
+        seo_description = fallback_description
+    description = short_description({"descripcion": seo_description})
     image = asset_url(room.get("imagen") or "images/brand/social-card.png")
     cover = page_asset(room.get("imagen") or "images/brand/social-card.png")
     title = f"{name}: ranking y puntuaciones | {SITE_NAME}" if has_score else f"{name}: ficha de escape room | {SITE_NAME}"
-    location = room_location(room)
+    location = " · ".join(value for value in (city, province) if value)
     meta_values = [
         location,
         text(room.get("tematica")),
@@ -1516,6 +1671,57 @@ def room_page(item, position):
     ]
     meta_html = "\n".join(f'<span class="pill">{escape(value)}</span>' for value in meta_values if value)
     sources_html = source_pills(rating, meta) if has_score else ""
+    facts_html = "\n".join(
+        f'<div class="fact"><dt>{escape(label)}</dt><dd>{escape(value)}</dd></div>'
+        for label, value in room_facts(room, location_data)
+    )
+    links = []
+    location_links = location_links or {}
+    city_link = location_links.get(("city", slugify(city))) if city else None
+    region = canonical_region(room.get("comunidad"))
+    region_link = location_links.get(("region", slugify(region))) if region else None
+    if city_link:
+        links.append((f"Escape rooms en {city}", site_url(f"/{city_link}/")))
+    if region_link and region_link != city_link:
+        links.append((f"Escape rooms en {region}", site_url(f"/{region_link}/")))
+    links.append(("Ranking de escape rooms", site_url("/ranking-escape-rooms/")))
+    review_slug = room_url_slug(room)
+    if review_slug in (review_slugs or set()):
+        links.append((f"Review de {name}", site_url(f"/reviews/{review_slug}/")))
+    internal_links_html = "\n".join(
+        f'<a class="btn secondary" href="{escape(url)}">{escape(label)}</a>' for label, url in links
+    )
+    official_url = text(room.get("web"))
+    if official_url and not official_url.startswith(("http://", "https://")):
+        official_url = f"https://{official_url.lstrip('/')}"
+    video = video_entry(room, videos_data or {})
+    video_url = text(video.get("embed_url") or video.get("video_url"))
+    if video_url and not video_url.startswith(("http://", "https://")):
+        video_url = ""
+    video_provider = folded(video.get("provider"))
+    video_thumbnail = text(video.get("thumbnail"))
+    if video_thumbnail and not video_thumbnail.startswith(("http://", "https://")):
+        video_thumbnail = asset_url(video_thumbnail)
+    photos = photo_entries(room, photos_data or {})
+    photo_html = "\n".join(
+        f'<img src="{escape(page_asset(photo.get("src")))}" alt="{escape(photo.get("alt") or f"{name} - foto del grupo")}" loading="lazy" decoding="async">'
+        for photo in photos
+        if photo.get("src")
+    )
+    if video_url and video_provider in {"youtube", "vimeo"}:
+        video_html = (
+            f'<iframe class="video-frame" src="{escape(video_url)}" title="Vídeo oficial de {escape(name)}" '
+            'loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" '
+            'allowfullscreen></iframe>'
+        )
+    elif video_url:
+        poster = f' poster="{escape(video_thumbnail)}"' if video_thumbnail else ""
+        video_html = (
+            f'<video class="video-frame" controls preload="metadata"{poster}>'
+            f'<source src="{escape(video_url)}">Tu navegador no puede reproducir este vídeo.</video>'
+        )
+    else:
+        video_html = ""
     schema = {
         "@context": "https://schema.org",
         "@graph": [
@@ -1525,6 +1731,7 @@ def room_page(item, position):
                 "url": canonical,
                 "name": title,
                 "description": description,
+                "inLanguage": "es",
                 "isPartOf": {"@id": site_url("/#website")},
                 "primaryImageOfPage": image,
             },
@@ -1532,10 +1739,13 @@ def room_page(item, position):
                 "@type": "EntertainmentBusiness",
                 "name": f"{name}{' - ' + company if company else ''}",
                 "image": image,
+                "description": description,
+                "url": canonical,
                 "address": {
                     "@type": "PostalAddress",
-                    "addressLocality": text(room.get("ciudad")),
-                    "addressRegion": text(room.get("provincia")),
+                    "streetAddress": text(location_data.get("address")),
+                    "addressLocality": city,
+                    "addressRegion": province,
                     "addressCountry": "ES",
                 },
             },
@@ -1557,6 +1767,27 @@ def room_page(item, position):
             "worstRating": "0",
             "ratingCount": max(1, int(rating.get("source_count") or 1)),
         }
+    if official_url:
+        schema["@graph"][1]["sameAs"] = [official_url]
+    if decimal(location_data.get("lat")) and decimal(location_data.get("lon")):
+        schema["@graph"][1]["geo"] = {
+            "@type": "GeoCoordinates",
+            "latitude": decimal(location_data.get("lat")),
+            "longitude": decimal(location_data.get("lon")),
+        }
+    if photos:
+        schema["@graph"][1]["image"] = [image] + [asset_url(photo.get("src")) for photo in photos if photo.get("src")]
+    if video_html:
+        video_schema = {
+            "@type": "VideoObject",
+            "name": text(video.get("label")) or f"Vídeo oficial de {name}",
+            "description": f"Vídeo de introducción oficial de la experiencia {name}{' de ' + company if company else ''}.",
+            "thumbnailUrl": video_thumbnail or image,
+            "embedUrl": video_url if video_provider in {"youtube", "vimeo"} else None,
+            "contentUrl": text(video.get("video_url")) or video_url,
+            "isPartOf": {"@id": canonical},
+        }
+        schema["@graph"].append({key: value for key, value in video_schema.items() if value})
     return base_head(title, description, canonical, image) + f"""
 <script type="application/ld+json">
 {json_ld(schema)}
@@ -1581,10 +1812,28 @@ def room_page(item, position):
     </div>
   </article>
   {f'''<section class="section">
+    <h2>Datos rápidos de {escape(name)}</h2>
+    <dl class="facts">{facts_html}</dl>
+  </section>''' if facts_html else ''}
+  {f'''<section class="section">
     <h2>Fuentes del ranking</h2>
     <div class="meta">{sources_html}</div>
+    <p class="explain">La nota global combina las fuentes disponibles para esta sala, las reviews publicadas en The Vault, la comunidad y el peso moderado de premios o nominaciones. En caso de empate se prioriza la sala contrastada por más fuentes.</p>
   </section>''' if sources_html else ''}
-  {f'<section class="section"><h2>Sinopsis</h2><div class="review">{escape(text(room.get("descripcion")))}</div></section>' if text(room.get("descripcion")) else ''}
+  {f'<section class="section"><h2>Sinopsis</h2><div class="review">{escape(synopsis)}</div></section>' if synopsis and folded(synopsis) != 'sin sinopsis' else ''}
+  {f'''<section class="section">
+    <h2>Vídeo de introducción</h2>
+    {video_html}
+    <p class="media-note">Vídeo localizado en la web oficial de la sala.</p>
+  </section>''' if video_html else ''}
+  {f'''<section class="section">
+    <h2>Fotos del grupo</h2>
+    <div class="photos">{photo_html}</div>
+  </section>''' if photo_html else ''}
+  <section class="section">
+    <h2>Explorar más</h2>
+    <nav class="internal-links" aria-label="Enlaces relacionados">{internal_links_html}</nav>
+  </section>
 </main>
 </body>
 </html>
@@ -1603,7 +1852,7 @@ def sitemap_xml(review_rooms, sala_rows, location_specs=None):
     ]
     entries.extend((site_url(f"/reviews/{room_url_slug(room)}/"), "monthly", "0.7") for room in review_rooms)
     entries.extend((site_url(f"/{spec['slug']}/"), "weekly", "0.86") for spec in (location_specs or []))
-    entries.extend((site_url(f"/salas/{room_url_slug(item['room'])}/"), "monthly", "0.7") for item in sala_rows)
+    entries.extend((site_url(f"/salas/{seo_room_url_slug(item['room'])}/"), "monthly", "0.7") for item in sala_rows)
     unique_entries = []
     seen_urls = set()
     for entry in entries:
@@ -1681,9 +1930,11 @@ The Vault Escape es un catálogo y archivo de escape rooms en España. Incluye f
 def main():
     data = read_json(ROOT / "data.json", {})
     photos_data = read_json(ROOT / "review_photos.json", {}).get("photos", {})
+    videos_data = read_json(ROOT / "official_videos.json", {}).get("videos", {})
     rooms = published_review_rooms(data) or review_rooms(data)
     ranking_rows = [row for row in ranked_rooms(data) if decimal(row["rating"].get("global_score")) > 0]
     sala_rows = catalog_seo_rows(data, ranking_rows)
+    assign_seo_room_slugs(sala_rows)
 
     reviews_dir = ROOT / "reviews"
     reviews_dir.mkdir(exist_ok=True)
@@ -1769,10 +2020,19 @@ def main():
 
     salas_dir = ROOT / "salas"
     salas_dir.mkdir(exist_ok=True)
+    location_links = {
+        (spec["kind"], slugify(spec["label"])): spec["slug"]
+        for spec in location_specs
+    }
+    review_slugs = {room_url_slug(room) for room in rooms}
     for item in sala_rows:
-        page_dir = salas_dir / room_url_slug(item["room"])
+        page_dir = salas_dir / seo_room_url_slug(item["room"])
         page_dir.mkdir(parents=True, exist_ok=True)
-        (page_dir / "index.html").write_text(room_page(item, item.get("position") or 0), encoding="utf-8", newline="\n")
+        (page_dir / "index.html").write_text(
+            room_page(item, item.get("position") or 0, location_links, review_slugs, videos_data, photos_data),
+            encoding="utf-8",
+            newline="\n",
+        )
 
     stats_json = site_stats_json(rooms, sala_rows, location_specs)
     update_inline_site_stats(stats_json)

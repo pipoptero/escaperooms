@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Level: ficha de escape room | The Vault Escape</title>
-<meta name="description" content="Sin sinopsis">
+<meta name="description" content="Ficha de Level de Relogik Escape Room en Aspe, con datos de ubicación, duración, jugadores y enlaces de consulta.">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="author" content="The Vault Escape">
 <link rel="canonical" href="https://thevaultescape.com/salas/level/">
@@ -14,14 +14,14 @@
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="The Vault Escape">
 <meta property="og:title" content="Level: ficha de escape room | The Vault Escape">
-<meta property="og:description" content="Sin sinopsis">
+<meta property="og:description" content="Ficha de Level de Relogik Escape Room en Aspe, con datos de ubicación, duración, jugadores y enlaces de consulta.">
 <meta property="og:url" content="https://thevaultescape.com/salas/level/">
 <meta property="og:image" content="https://thevaultescape.com/images/brand/social-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Level: ficha de escape room | The Vault Escape">
-<meta name="twitter:description" content="Sin sinopsis">
+<meta name="twitter:description" content="Ficha de Level de Relogik Escape Room en Aspe, con datos de ubicación, duración, jugadores y enlaces de consulta.">
 <meta name="twitter:image" content="https://thevaultescape.com/images/brand/social-card.png">
 <style>
   :root { --bg:#0a0a0f; --card:#12121e; --border:#2a2a45; --green:#7dbb3f; --text:#f0f0ea; --muted:#9a9ab6; --soft:#151522; }
@@ -51,11 +51,21 @@
   .cat strong { color:var(--green); font-size:1.25rem; }
   .photos { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:10px; }
   .photos img { width:100%; aspect-ratio:4/3; object-fit:cover; border:1px solid rgba(125,187,63,.22); background:#050507; }
+  .video-frame { width:100%; aspect-ratio:16/9; display:block; border:1px solid rgba(125,187,63,.24); background:#050507; }
+  iframe.video-frame { border:1px solid rgba(125,187,63,.24); }
+  .media-note { color:var(--muted); font-size:.85rem; margin:9px 0 0; }
+  .facts { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:0; }
+  .fact { min-width:0; border:1px solid rgba(255,255,255,.08); background:rgba(0,0,0,.16); padding:11px; }
+  .fact dt { color:var(--muted); font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; }
+  .fact dd { margin:3px 0 0; color:var(--text); overflow-wrap:anywhere; }
+  .internal-links { display:flex; flex-wrap:wrap; gap:9px; }
+  .explain { color:#c6c6d4; margin:0; }
   .actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:20px; }
   .btn { display:inline-flex; align-items:center; justify-content:center; min-height:42px; padding:9px 13px; border:1px solid rgba(125,187,63,.32); background:rgba(125,187,63,.07); color:var(--green); text-decoration:none; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; cursor:pointer; }
   button.btn { font-family:inherit; }
   .btn.secondary { border-color:rgba(255,255,255,.12); background:rgba(255,255,255,.025); color:var(--muted); }
-  @media(max-width:720px) { .hero { grid-template-columns:1fr; padding:16px; } .cover { max-height:360px; } .cats { grid-template-columns:1fr 1fr; } .wrap { width:min(100% - 22px,1020px); padding-top:18px; } }
+  @media(max-width:720px) { .hero { grid-template-columns:1fr; padding:16px; } .cover { max-height:360px; } .cats,.facts { grid-template-columns:1fr 1fr; } .wrap { width:min(100% - 22px,1020px); padding-top:18px; } }
+  @media(max-width:440px) { .facts { grid-template-columns:1fr; } }
 </style>
 
 <script type="application/ld+json">
@@ -67,7 +77,8 @@
       "@id": "https://thevaultescape.com/salas/level/",
       "url": "https://thevaultescape.com/salas/level/",
       "name": "Level: ficha de escape room | The Vault Escape",
-      "description": "Sin sinopsis",
+      "description": "Ficha de Level de Relogik Escape Room en Aspe, con datos de ubicación, duración, jugadores y enlaces de consulta.",
+      "inLanguage": "es",
       "isPartOf": {
         "@id": "https://thevaultescape.com/#website"
       },
@@ -77,12 +88,18 @@
       "@type": "EntertainmentBusiness",
       "name": "Level - Relogik Escape Room",
       "image": "https://thevaultescape.com/images/brand/social-card.png",
+      "description": "Ficha de Level de Relogik Escape Room en Aspe, con datos de ubicación, duración, jugadores y enlaces de consulta.",
+      "url": "https://thevaultescape.com/salas/level/",
       "address": {
         "@type": "PostalAddress",
+        "streetAddress": "",
         "addressLocality": "Aspe",
         "addressRegion": "Alicante/Alacant",
         "addressCountry": "ES"
-      }
+      },
+      "sameAs": [
+        "https://relogikescaperoom.com/"
+      ]
     },
     {
       "@type": "BreadcrumbList",
@@ -120,19 +137,37 @@
       <div class="kicker">Ficha de catálogo</div>
       <h1>Level</h1>
       <div class="company">Relogik Escape Room</div>
-      <div class="meta"><span class="pill">Aspe - Alicante/Alacant</span>
+      <div class="meta"><span class="pill">Aspe · Alicante/Alacant</span>
 <span class="pill">75 min</span>
 <span class="pill">Media</span></div>
       
-      <p>Sin sinopsis</p>
+      <p>Ficha de Level de Relogik Escape Room en Aspe, con datos de ubicación, duración, jugadores y enlaces de consulta.</p>
       <div class="actions">
         <a class="btn" href="https://thevaultescape.com/#room/level">Abrir ficha interactiva</a>
         <a class="btn secondary" href="../../">Ver catálogo</a>
       </div>
     </div>
   </article>
+  <section class="section">
+    <h2>Datos rápidos de Level</h2>
+    <dl class="facts"><div class="fact"><dt>Empresa</dt><dd>Relogik Escape Room</dd></div>
+<div class="fact"><dt>Ciudad</dt><dd>Aspe</dd></div>
+<div class="fact"><dt>Provincia</dt><dd>Alicante/Alacant</dd></div>
+<div class="fact"><dt>Comunidad</dt><dd>Comunitat Valenciana</dd></div>
+<div class="fact"><dt>Duración</dt><dd>75 minutos</dd></div>
+<div class="fact"><dt>Jugadores</dt><dd>2 a 6</dd></div>
+<div class="fact"><dt>Precio orientativo</dt><dd>16 a 30 €</dd></div>
+<div class="fact"><dt>Dificultad</dt><dd>Media</dd></div></dl>
+  </section>
   
-  <section class="section"><h2>Sinopsis</h2><div class="review">Sin sinopsis</div></section>
+  
+  
+  
+  <section class="section">
+    <h2>Explorar más</h2>
+    <nav class="internal-links" aria-label="Enlaces relacionados"><a class="btn secondary" href="https://thevaultescape.com/escape-rooms-comunitat-valenciana/">Escape rooms en Comunitat Valenciana</a>
+<a class="btn secondary" href="https://thevaultescape.com/ranking-escape-rooms/">Ranking de escape rooms</a></nav>
+  </section>
 </main>
 </body>
 </html>
