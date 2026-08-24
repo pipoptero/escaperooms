@@ -617,12 +617,12 @@ def generate_latest_review_thumbnail(room, photos):
     if not image:
         return ""
     try:
-        thumb = cover_resize(image, (156, 208))
+        thumb = cover_resize(image, (124, 166))
         for slug in slugs:
             out_rel = LATEST_REVIEW_THUMB_DIR / f"{slug}.webp"
             out_path = ROOT / out_rel
             out_path.parent.mkdir(parents=True, exist_ok=True)
-            thumb.save(out_path, "WEBP", quality=72, method=6)
+            thumb.save(out_path, "WEBP", quality=68, method=6)
     finally:
         image.close()
     return (LATEST_REVIEW_THUMB_DIR / f"{slugs[0]}.webp").as_posix()
