@@ -102,6 +102,11 @@ def text(value):
     return str(value or "").strip()
 
 
+def folded(value):
+    value = unicodedata.normalize("NFD", text(value).lower())
+    return "".join(ch for ch in value if unicodedata.category(ch) != "Mn")
+
+
 def decimal(value):
     raw = text(value).replace(",", ".")
     try:
@@ -704,16 +709,16 @@ def review_page(room, photos, social_image_path=""):
         ],
     }
     if score:
-        schema["@graph"][1]["reviewRating"] = {
+        schema["@graph"][2]["reviewRating"] = {
             "@type": "Rating",
             "ratingValue": score.replace(",", "."),
             "bestRating": "10",
             "worstRating": "0",
         }
     if date_published:
-        schema["@graph"][1]["datePublished"] = date_published
+        schema["@graph"][2]["datePublished"] = date_published
     if date_modified:
-        schema["@graph"][1]["dateModified"] = date_modified
+        schema["@graph"][2]["dateModified"] = date_modified
     article_meta = "\n".join([
         f'<meta property="article:published_time" content="{escape(date_published)}">' if date_published else "",
         f'<meta property="article:modified_time" content="{escape(date_modified)}">' if date_modified else "",
@@ -918,6 +923,164 @@ def ranking_index_page(rows):
 """
 
 
+def is_terror_room(item):
+    room = item.get("room") or {}
+    rating = item.get("rating") or {}
+    meta = item.get("meta") or {}
+    parts = [
+        room.get("nombre"),
+        room.get("empresa"),
+        room.get("descripcion"),
+        room.get("tematica"),
+        room.get("tipo"),
+        room.get("dificultad"),
+    ]
+    for source_id in (rating.get("sources") or {}).keys():
+        parts.append(source_label(source_id, meta))
+    haystack = folded(" ".join(text(part) for part in parts))
+    tokens = (
+        "terror",
+        "horror",
+        "miedo",
+        "paranormal",
+        "exorc",
+        "posesion",
+        "maldito",
+        "maldicion",
+        "asylum",
+        "haunted",
+        "inferno",
+        "pesadilla",
+    )
+    return any(token in haystack for token in tokens)
+
+
+def ranking_landing_page(slug, title, h1, description, intro, rows, keyword_note, limit=60):
+    canonical = site_url(f"/{slug}/")
+    image = site_url("/images/brand/social-card.png")
+    top_rows = rows[:limit]
+    items = []
+    list_items = []
+    for idx, item in enumerate(top_rows, 1):
+        room = item["room"]
+        rating = item.get("rating") or {}
+        name = canonical_room_name(room) or "Escape room"
+        company = canonical_room_company(room)
+        url = site_url(f"/salas/{room_url_slug(room)}/")
+        score = decimal(rating.get("global_score"))
+        sources = int(rating.get("source_count") or 0)
+        awards = int(rating.get("award_count") or 0)
+        location = room_location(room)
+        extra = []
+        if location:
+            extra.append(location)
+        if sources:
+            extra.append(f"{sources} fuentes")
+        if awards:
+            extra.append(f"{awards} premios o nominaciones")
+        items.append(
+            f'<a class="rank-link" href="{escape(url)}">'
+            f'<span class="pos">#{idx}</span>'
+            f'<strong>{escape(name)}</strong>'
+            f'<span>{escape(company)}{(" - " + escape(" · ".join(extra))) if extra else ""}</span>'
+            f'<em>{score:.1f}/10</em></a>'
+        )
+        list_items.append({"@type": "ListItem", "position": idx, "name": name, "url": url})
+    schema = {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "CollectionPage",
+                "@id": canonical,
+                "url": canonical,
+                "name": title,
+                "description": description,
+                "inLanguage": "es",
+                "keywords": keyword_note,
+                "isPartOf": {"@id": site_url("/#website")},
+                "mainEntity": {"@type": "ItemList", "itemListElement": list_items},
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {"@type": "ListItem", "position": 1, "name": "Inicio", "item": site_url("/")},
+                    {"@type": "ListItem", "position": 2, "name": h1, "item": canonical},
+                ],
+            },
+        ],
+    }
+    return f"""<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{escape(title)}</title>
+<meta name="description" content="{escape(description)}">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="{escape(canonical)}">
+<link rel="icon" href="../images/brand/favicon-round-32.png" sizes="32x32" type="image/png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{SITE_NAME}">
+<meta property="og:title" content="{escape(title)}">
+<meta property="og:description" content="{escape(description)}">
+<meta property="og:url" content="{escape(canonical)}">
+<meta property="og:image" content="{escape(image)}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{escape(title)}">
+<meta name="twitter:description" content="{escape(description)}">
+<meta name="twitter:image" content="{escape(image)}">
+<script type="application/ld+json">
+{json_ld(schema)}
+</script>
+<style>
+  :root{{--bg:#0a0a0f;--card:#12121e;--border:#2a2a45;--green:#7dbb3f;--amber:#ffa91f;--text:#f0f0ea;--muted:#9a9ab6;}}
+  *{{box-sizing:border-box;}}
+  body{{margin:0;background:radial-gradient(ellipse at top,rgba(125,187,63,.14),transparent 38%),var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;line-height:1.55;}}
+  main{{width:min(1040px,calc(100% - 32px));margin:0 auto;padding:32px 0 54px;}}
+  a{{color:var(--green);}}
+  .brand{{display:flex;align-items:center;gap:12px;text-decoration:none;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-size:.72rem;margin-bottom:24px;}}
+  .brand img{{width:42px;height:42px;border-radius:50%;}}
+  .hero{{border:1px solid rgba(125,187,63,.25);background:linear-gradient(135deg,rgba(255,255,255,.035),rgba(125,187,63,.04));padding:22px;margin-bottom:18px;}}
+  .kicker{{color:var(--amber);text-transform:uppercase;letter-spacing:.16em;font-size:.72rem;margin-bottom:8px;}}
+  h1{{font-family:Georgia,serif;font-size:clamp(2rem,5vw,3.5rem);line-height:1.05;margin:0 0 12px;}}
+  p{{color:#b8b8c8;line-height:1.65;max-width:880px;}}
+  .nav{{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px;}}
+  .nav a{{border:1px solid rgba(125,187,63,.25);background:rgba(125,187,63,.055);padding:8px 11px;text-decoration:none;text-transform:uppercase;letter-spacing:.08em;font-size:.74rem;}}
+  .list{{display:grid;gap:10px;margin-top:24px;}}
+  .rank-link{{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:8px 12px;align-items:center;border:1px solid rgba(125,187,63,.2);background:rgba(255,255,255,.025);padding:13px;text-decoration:none;}}
+  .pos{{grid-row:1/3;color:var(--green);font-weight:700;font-size:1.1rem;}}
+  .rank-link strong{{color:var(--text);font-family:Georgia,serif;font-size:1.15rem;}}
+  .rank-link span:not(.pos){{color:var(--muted);}}
+  .rank-link em{{grid-column:3;grid-row:1/3;color:var(--amber);font-style:normal;font-weight:700;white-space:nowrap;}}
+  .note{{margin-top:22px;border-top:1px solid rgba(255,255,255,.08);padding-top:16px;color:var(--muted);font-size:.92rem;}}
+  @media(max-width:680px){{main{{width:min(100% - 22px,1040px);padding-top:20px;}}.hero{{padding:16px;}}.rank-link{{grid-template-columns:44px minmax(0,1fr);}}.rank-link em{{grid-column:2;grid-row:auto;}}}}
+</style>
+</head>
+<body>
+<main>
+  <a class="brand" href="../"><img src="../images/brand/icon-round-192.png" alt="">The Vault Escape</a>
+  <section class="hero">
+    <div class="kicker">The Vault Escape</div>
+    <h1>{escape(h1)}</h1>
+    <p>{escape(intro)}</p>
+    <div class="nav">
+      <a href="../ranking/">Ranking completo</a>
+      <a href="../reviews/">Reviews</a>
+      <a href="../mejores-escape-rooms/">Mejores escape rooms</a>
+      <a href="../mejores-escape-rooms-terror/">Terror</a>
+      <a href="../">Abrir web</a>
+    </div>
+  </section>
+  <div class="list">
+    {''.join(items)}
+  </div>
+  <p class="note">{escape(keyword_note)}</p>
+</main>
+</body>
+</html>
+"""
+
+
 def source_pills(rating, meta):
     items = []
     for source_id, source in (rating.get("sources") or {}).items():
@@ -1039,6 +1202,9 @@ def sitemap_xml(review_rooms, sala_rows):
         (site_url("/"), "daily", "1.0"),
         (site_url("/reviews/"), "weekly", "0.8"),
         (site_url("/ranking/"), "weekly", "0.9"),
+        (site_url("/ranking-escape-rooms/"), "weekly", "0.95"),
+        (site_url("/mejores-escape-rooms/"), "weekly", "0.95"),
+        (site_url("/mejores-escape-rooms-terror/"), "weekly", "0.9"),
     ]
     entries.extend((site_url(f"/reviews/{room_url_slug(room)}/"), "monthly", "0.7") for room in review_rooms)
     entries.extend((site_url(f"/salas/{room_url_slug(item['room'])}/"), "monthly", "0.7") for item in sala_rows)
@@ -1073,6 +1239,9 @@ The Vault Escape es un catálogo y archivo de escape rooms en España. Incluye f
 - Inicio y aplicación interactiva: {site_url('/')}
 - Reviews publicadas: {site_url('/reviews/')}
 - Ranking de escape rooms: {site_url('/ranking/')}
+- Landing SEO ranking escape rooms España: {site_url('/ranking-escape-rooms/')}
+- Landing SEO mejores escape rooms España: {site_url('/mejores-escape-rooms/')}
+- Landing SEO mejores escape rooms de terror: {site_url('/mejores-escape-rooms-terror/')}
 - Sitemap XML: {site_url('/sitemap.xml')}
 
 ## Contenido
@@ -1110,6 +1279,44 @@ def main():
     ranking_dir.mkdir(exist_ok=True)
     (ranking_dir / "index.html").write_text(ranking_index_page(ranking_rows), encoding="utf-8", newline="\n")
 
+    landing_pages = [
+        (
+            "ranking-escape-rooms",
+            f"Ranking escape rooms España | {SITE_NAME}",
+            "Ranking de escape rooms en España",
+            "Ranking escape rooms España con puntuaciones ponderadas, fuentes externas, reviews The Vault, premios y comunidad.",
+            "Consulta un ranking de escape rooms en España calculado con varias señales: puntuaciones externas, reviews The Vault, votos de comunidad y premios o nominaciones. La intención es ayudarte a descubrir salas destacadas con más contexto que una nota aislada.",
+            ranking_rows,
+            "Ranking orientativo de escape rooms en España. The Vault Escape combina varias fuentes disponibles, reviews propias, comunidad y premios para evitar que una única puntuación aislada domine el resultado.",
+        ),
+        (
+            "mejores-escape-rooms",
+            f"Mejores escape rooms de España | {SITE_NAME}",
+            "Mejores escape rooms de España",
+            "Selección de mejores escape rooms de España según ranking ponderado, premios, reviews y fuentes contrastadas.",
+            "Explora una selección de los mejores escape rooms de España con fichas enlazadas, ubicación, empresa y nota global. Esta página está pensada para búsquedas generales y para compartir una referencia rápida antes de elegir próxima sala.",
+            ranking_rows,
+            "Selección basada en el ranking global de The Vault Escape. Las posiciones pueden variar cuando se actualizan nuevas fuentes, premios, reviews o votos de comunidad.",
+        ),
+        (
+            "mejores-escape-rooms-terror",
+            f"Mejores escape rooms de terror en España | {SITE_NAME}",
+            "Mejores escape rooms de terror en España",
+            "Ranking de mejores escape rooms de terror y miedo en España con fuentes externas, premios y reviews The Vault.",
+            "Si buscas terror, miedo o experiencias oscuras, esta selección filtra las salas con señales de terror dentro del ranking global y prioriza las que tienen varias fuentes, premios o reviews.",
+            [item for item in ranking_rows if is_terror_room(item)],
+            "Ranking orientativo de escape rooms de terror en España. El filtro usa temática, descripciones, fuentes de puntuación y premios relacionados con terror, horror o miedo.",
+        ),
+    ]
+    for slug, title, h1, description, intro, rows, note in landing_pages:
+        page_dir = ROOT / slug
+        page_dir.mkdir(exist_ok=True)
+        (page_dir / "index.html").write_text(
+            ranking_landing_page(slug, title, h1, description, intro, rows, note),
+            encoding="utf-8",
+            newline="\n",
+        )
+
     salas_dir = ROOT / "salas"
     salas_dir.mkdir(exist_ok=True)
     for item in sala_rows:
@@ -1125,7 +1332,7 @@ def main():
         f"{len(generated_review_pages)} reviews, "
         f"{len(sala_rows)} salas, "
         f"{len(generated_review_pages)} tarjetas sociales, "
-        "ranking, sitemap.xml, robots.txt y llms.txt"
+        "ranking, landings SEO, sitemap.xml, robots.txt y llms.txt"
     )
 
 

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Vault — Escape Room Chronicles</title>
-<meta name="description" content="The Vault Escape es un archivo vivo de escape rooms en España: catálogo, reviews propias, ranking ponderado, premios, listas personales y grupos escapistas.">
+<title>The Vault Escape | Ranking y catálogo de escape rooms en España</title>
+<meta name="description" content="Ranking de escape rooms en España, mejores salas, reviews propias, premios, catálogo nacional y herramientas para guardar pendientes, hechos, favoritos y grupos escapistas.">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://thevaultescape.com/">
 <meta name="theme-color" content="#0a0a0f">
@@ -24,16 +24,16 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="es_ES">
 <meta property="og:site_name" content="The Vault">
-<meta property="og:title" content="The Vault Escape - Escape Room Chronicles">
-<meta property="og:description" content="Descubre salas, lee reviews, compara rankings y organiza tus pendientes, hechos, favoritos y grupos escapistas.">
+<meta property="og:title" content="The Vault Escape - Ranking y catálogo de escape rooms">
+<meta property="og:description" content="Descubre los mejores escape rooms de España, lee reviews, compara rankings y organiza tus pendientes, hechos, favoritos y grupos escapistas.">
 <meta property="og:url" content="https://thevaultescape.com/">
 <meta property="og:image" content="https://thevaultescape.com/images/brand/social-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="The Vault - Escape Room Chronicles">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="The Vault Escape - Escape Room Chronicles">
-<meta name="twitter:description" content="Catálogo nacional, reviews propias, ranking ponderado y listas personales para escapistas.">
+<meta name="twitter:title" content="The Vault Escape - Ranking y catálogo de escape rooms">
+<meta name="twitter:description" content="Ranking de escape rooms en España, mejores salas, reviews propias, premios y listas personales para escapistas.">
 <meta name="twitter:image" content="https://thevaultescape.com/images/brand/social-card.png">
 <script type="application/ld+json">
 {
@@ -261,7 +261,7 @@
   .vault-guide-proof{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px;}
   .vault-guide-proof span{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--text2);letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.18);padding:5px 8px;}
   .vault-guide-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px;}
-  .vault-guide-action{font-family:'Share Tech Mono',monospace;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(125,187,63,.32);background:rgba(125,187,63,.07);color:var(--amber);padding:9px 12px;cursor:pointer;}
+  .vault-guide-action{font-family:'Share Tech Mono',monospace;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(125,187,63,.32);background:rgba(125,187,63,.07);color:var(--amber);padding:9px 12px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;}
   .vault-guide-action.secondary{border-color:var(--border);background:rgba(255,255,255,.025);color:var(--text3);}
   .vault-guide-action:hover{border-color:var(--amber);color:var(--amber);}
   .vault-guide-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
@@ -1742,15 +1742,17 @@
           <div class="vault-guide-actions">
             <button class="vault-guide-action" type="button" onclick="switchTab('catalogo')">Explorar catálogo</button>
             <button class="vault-guide-action secondary" type="button" onclick="switchTab('hechos')">Leer reviews</button>
+            <a class="vault-guide-action secondary" href="ranking-escape-rooms/">Ranking escape rooms</a>
+            <a class="vault-guide-action secondary" href="mejores-escape-rooms/">Mejores salas</a>
             <button class="vault-guide-action secondary guest-only" type="button" onclick="signInGoogle()">Crear cuenta</button>
             <button class="vault-guide-action secondary auth-only" type="button" onclick="openProfile()" style="display:none">Abrir ajustes</button>
           </div>
         </div>
         <div class="vault-guide-stats">
-          <div class="vault-guide-stat"><strong id="vault-stat-catalog">0</strong><span>salas en catálogo</span></div>
-          <div class="vault-guide-stat"><strong id="vault-stat-reviews">0</strong><span>reviews publicadas</span></div>
-          <div class="vault-guide-stat"><strong id="vault-stat-ranking">0</strong><span>salas con ranking</span></div>
-          <div class="vault-guide-stat"><strong id="vault-stat-groups">0</strong><span>tus grupos activos</span></div>
+          <div class="vault-guide-stat"><strong id="vault-stat-catalog">1700+</strong><span>salas en catálogo</span></div>
+          <div class="vault-guide-stat"><strong id="vault-stat-reviews">38</strong><span>reviews publicadas</span></div>
+          <div class="vault-guide-stat"><strong id="vault-stat-ranking">950+</strong><span>salas con ranking</span></div>
+          <div class="vault-guide-stat"><strong id="vault-stat-groups">Privados</strong><span>grupos escapistas</span></div>
         </div>
       </div>
 
@@ -1956,6 +1958,9 @@
     <div class="seo-footer-inner">
       <span class="rights">&copy; 2026 The Vault Escape. Todos los derechos reservados.</span>
       <span>Reviews de escape rooms con URL propia</span>
+      <a href="ranking-escape-rooms/">Ranking escape rooms España</a>
+      <a href="mejores-escape-rooms/">Mejores escape rooms</a>
+      <a href="mejores-escape-rooms-terror/">Mejores escape rooms de terror</a>
       <a href="reviews/">Ver indice de reviews</a>
       <a href="ranking/">Ver ranking SEO</a>
       <a href="privacidad/">Privacidad</a>
