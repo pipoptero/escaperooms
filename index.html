@@ -497,6 +497,7 @@
   .escapist-leaflet-marker{width:28px;height:28px;border-radius:999px;border:1px solid rgba(255,255,255,.24);display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:.62rem;font-weight:700;color:#fff;box-shadow:0 0 0 3px rgba(0,0,0,.28),0 10px 24px rgba(0,0,0,.36);}
   .escapist-leaflet-marker.personal{background:rgba(230,57,70,.92);border-color:rgba(230,57,70,.98);}
   .escapist-leaflet-marker.group{background:rgba(6,214,160,.88);border-color:rgba(6,214,160,.95);color:#07120f;}
+  .escapist-leaflet-marker.pending{background:rgba(255,176,32,.92);border-color:rgba(255,176,32,.98);color:#171007;}
   .escapist-leaflet-marker.mixed{background:linear-gradient(135deg,rgba(230,57,70,.94) 0 48%,rgba(6,214,160,.9) 52% 100%);border-color:rgba(255,255,255,.36);}
   .escapist-leaflet-marker.cluster{width:34px;height:34px;font-size:.72rem;border-width:2px;}
   .escapist-leaflet-marker.approx{border-style:dashed;}
@@ -507,6 +508,17 @@
   .escapist-leaflet-cluster.mixed{background:linear-gradient(135deg,rgba(230,57,70,.96) 0 48%,rgba(6,214,160,.92) 52% 100%);color:#fff;border-color:rgba(255,255,255,.42);}
   .escapist-leaflet-cluster.personal{background:radial-gradient(circle at 38% 35%,#ff9ca4 0,#e63946 54%,#65131a 100%);color:#fff;border-color:rgba(230,57,70,.92);}
   .escapist-leaflet-cluster.group{background:radial-gradient(circle at 38% 35%,#9bffe8 0,#06d6a0 54%,#064633 100%);color:#06120f;border-color:rgba(6,214,160,.92);}
+  .escapist-leaflet-cluster.pending{background:radial-gradient(circle at 38% 35%,#ffe5a2 0,#ffb020 54%,#704900 100%);color:#140d03;border-color:rgba(255,176,32,.92);}
+  .escapist-map-popup-card{display:grid;grid-template-columns:62px minmax(0,1fr);gap:10px;align-items:start;min-width:230px;max-width:300px;text-transform:none;}
+  .escapist-map-popup-thumb{width:62px;aspect-ratio:2/3;object-fit:contain;background:#07070b;border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:1.45rem;color:var(--green);}
+  .escapist-map-popup-thumb.fallback{background:linear-gradient(135deg,rgba(125,187,63,.12),rgba(255,255,255,.03));}
+  .escapist-map-popup-body{min-width:0;}
+  .escapist-map-popup-kicker{font-family:'Share Tech Mono',monospace;font-size:.48rem;color:var(--green);letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px;}
+  .escapist-map-popup-title{font-family:'Cinzel',serif;font-size:.9rem;color:var(--text);line-height:1.12;margin-bottom:3px;}
+  .escapist-map-popup-meta,.escapist-map-popup-more{font-family:'Share Tech Mono',monospace;font-size:.5rem;color:var(--text3);letter-spacing:.05em;text-transform:uppercase;line-height:1.35;margin-bottom:6px;}
+  .escapist-map-popup-card .profile-group-rooms{margin:5px 0 7px;}
+  .escapist-map-popup-card .tag{font-size:.48rem;padding:3px 5px;}
+  .escapist-map-popup-card .auth-btn{font-size:.52rem;padding:6px 8px;}
   .escapist-map-fallback{position:absolute;inset:0;}
   .escapist-map-img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;opacity:.9;}
   .escapist-map-svg{position:absolute;inset:0;width:100%;height:100%;opacity:.42;}
@@ -515,6 +527,7 @@
   .escapist-map-point{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);min-width:24px;height:24px;border-radius:999px;border:1px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:.58rem;font-weight:700;color:#fff;cursor:pointer;box-shadow:0 0 0 3px rgba(0,0,0,.22),0 8px 22px rgba(0,0,0,.36);z-index:2;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;}
   .escapist-map-point.personal{background:rgba(230,57,70,.9);border-color:rgba(230,57,70,.98);}
   .escapist-map-point.group{background:rgba(6,214,160,.86);border-color:rgba(6,214,160,.95);color:#07120f;}
+  .escapist-map-point.pending{background:rgba(255,176,32,.92);border-color:rgba(255,176,32,.98);color:#171007;}
   .escapist-map-point.mixed{background:linear-gradient(135deg,rgba(230,57,70,.92) 0 48%,rgba(6,214,160,.9) 52% 100%);border-color:rgba(255,255,255,.34);}
   .escapist-map-point.cluster{min-width:34px;height:34px;font-size:.7rem;border-width:2px;}
   .escapist-map-point.approx{border-style:dashed;}
@@ -524,6 +537,7 @@
   .escapist-map-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle;}
   .escapist-map-dot.personal{background:var(--red);}
   .escapist-map-dot.group{background:var(--green);}
+  .escapist-map-dot.pending{background:#ffb020;}
   .escapist-map-side{border:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.12);padding:11px 12px;min-width:0;}
   .escapist-map-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
   .escapist-map-filter{font-family:'Share Tech Mono',monospace;font-size:.56rem;letter-spacing:.09em;text-transform:uppercase;color:var(--text3);border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.025);padding:7px 9px;cursor:pointer;}
@@ -534,9 +548,15 @@
   .escapist-map-stat{border:1px solid rgba(125,187,63,.12);background:rgba(125,187,63,.035);padding:8px 9px;min-width:0;}
   .escapist-map-stat strong{display:block;font-family:'Cinzel',serif;color:var(--amber);font-size:1.05rem;line-height:1;}
   .escapist-map-stat span{display:block;font-family:'Share Tech Mono',monospace;font-size:.48rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-top:4px;}
+  .escapist-map-quality{font-family:'Share Tech Mono',monospace;font-size:.52rem;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;line-height:1.45;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.018);padding:7px 8px;margin:-2px 0 10px;}
   .escapist-map-city{font-family:'Cinzel',serif;font-size:1.08rem;color:var(--text);line-height:1.15;margin-bottom:4px;}
   .escapist-map-meta{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;line-height:1.45;margin-bottom:10px;}
   .escapist-map-toolbar{display:flex;gap:6px;flex-wrap:wrap;margin:-3px 0 10px;}
+  .escapist-map-community-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:6px;margin-bottom:10px;}
+  .escapist-map-community{border:1px solid rgba(125,187,63,.12);background:rgba(125,187,63,.035);text-align:left;padding:7px 8px;cursor:pointer;min-width:0;}
+  .escapist-map-community.active{border-color:rgba(125,187,63,.52);background:rgba(125,187,63,.1);}
+  .escapist-map-community strong{display:block;font-family:'Cinzel',serif;font-size:.74rem;color:var(--text);line-height:1.12;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .escapist-map-community span{display:block;font-family:'Share Tech Mono',monospace;font-size:.48rem;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .escapist-map-zones{display:grid;grid-template-columns:repeat(auto-fit,minmax(126px,1fr));gap:6px;max-height:118px;overflow:auto;margin-bottom:10px;padding-right:2px;}
   .escapist-map-zone{border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.018);text-align:left;padding:7px 8px;cursor:pointer;min-width:0;}
   .escapist-map-zone.active{border-color:rgba(125,187,63,.42);background:linear-gradient(135deg,rgba(125,187,63,.11),rgba(255,255,255,.02));}
@@ -1234,9 +1254,13 @@
     .profile-row .auth-btn{flex:1 1 auto;}
     .profile-groups{grid-template-columns:1fr;}
     .escapist-map-wrap{grid-template-columns:1fr;}
-    .escapist-map-canvas{min-height:280px;}
+    .escapist-map-canvas{min-height:300px;height:42vh;max-height:430px;}
     .escapist-map-side{padding:10px;}
     .escapist-map-stats{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .escapist-map-community-summary{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .escapist-map-zones{grid-template-columns:repeat(2,minmax(0,1fr));max-height:104px;}
+    .escapist-map-toolbar .auth-btn{flex:1 1 auto;}
+    .escapist-map-list{max-height:none;}
     .escapist-map-point{min-width:22px;height:22px;font-size:.52rem;}
     .escapist-map-point.cluster{min-width:30px;height:30px;font-size:.62rem;}
     .group-stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
@@ -2195,6 +2219,7 @@ let INVITE_NOTICE_SHOWN = false;
 let SETTINGS_TAB = 'profile';
 let PROFILE_MAP_ACTIVE_KEY = '';
 let PROFILE_MAP_FILTER = 'all';
+let PROFILE_MAP_STATUS_FILTER = 'done';
 let PROFILE_MAP_PRECISION_FILTER = 'all';
 let PROFILE_MAP_FOCUS_ACTIVE = false;
 let ESCAPIST_LEAFLET_MAP = null;
@@ -3625,35 +3650,75 @@ function projectMapPoint(coord) {
   return { x: Math.max(5, Math.min(95, x)), y: Math.max(5, Math.min(94, y)) };
 }
 
-function escapistDoneRoomItems() {
+function escapistMapRoomItems() {
   const byKey = new Map();
   const ensure = (key, room) => {
     if (!key) return null;
-    if (!byKey.has(key)) byKey.set(key, { key, room, personal: false, groups: [] });
+    if (!byKey.has(key)) {
+      byKey.set(key, {
+        key,
+        room,
+        personal: false,
+        groups: [],
+        personalPending: false,
+        pendingGroups: []
+      });
+    }
     const item = byKey.get(key);
     if (room && (!item.room?.ciudad || !item.room?.provincia || room.imagen)) item.room = { ...item.room, ...room };
     return item;
   };
   personalRoomSources().forEach(room => {
-    if (!userStateFor(room).done) return;
+    const state = userStateFor(room);
+    if (!state.done && !state.pending) return;
     const item = ensure(userRoomKey(room), room);
-    if (item) item.personal = true;
+    if (!item) return;
+    if (state.done) item.personal = true;
+    if (state.pending) item.personalPending = true;
   });
   activeUserGroups().forEach(([groupId, group]) => {
+    const name = group.name || groupName(groupId);
     Object.entries(GROUP_ROOMS[groupId] || {}).forEach(([key, record]) => {
       const item = ensure(key, roomFromGroupRecord(key, record));
       if (!item) return;
-      const name = group.name || groupName(groupId);
       if (!item.groups.some(g => g.groupId === groupId)) item.groups.push({ groupId, name });
     });
+    Object.entries(GROUP_PENDING_ROOMS[groupId] || {}).forEach(([key, record]) => {
+      const item = ensure(key, roomFromGroupRecord(key, record));
+      if (!item) return;
+      if (!item.pendingGroups.some(g => g.groupId === groupId)) item.pendingGroups.push({ groupId, name });
+    });
   });
-  return [...byKey.values()].filter(item => item.personal || item.groups.length);
+  return [...byKey.values()].filter(item => mapItemHasDone(item) || mapItemHasPending(item));
+}
+
+function escapistDoneRoomItems() {
+  return escapistMapRoomItems().filter(mapItemHasDone);
+}
+
+function mapItemHasDone(item) {
+  return !!(item?.personal || item?.groups?.length);
+}
+
+function mapItemHasPending(item) {
+  return !!(item?.personalPending || item?.pendingGroups?.length);
+}
+
+function mapItemHasPersonal(item) {
+  return !!(item?.personal || item?.personalPending);
+}
+
+function mapItemHasGroup(item) {
+  return !!(item?.groups?.length || item?.pendingGroups?.length);
 }
 
 function escapistMapFilteredItems(items) {
-  if (PROFILE_MAP_FILTER === 'personal') return items.filter(item => item.personal);
-  if (PROFILE_MAP_FILTER === 'group') return items.filter(item => item.groups.length);
-  return items;
+  let filtered = items;
+  if (PROFILE_MAP_STATUS_FILTER === 'done') filtered = filtered.filter(mapItemHasDone);
+  else if (PROFILE_MAP_STATUS_FILTER === 'pending') filtered = filtered.filter(mapItemHasPending);
+  if (PROFILE_MAP_FILTER === 'personal') return filtered.filter(mapItemHasPersonal);
+  if (PROFILE_MAP_FILTER === 'group') return filtered.filter(mapItemHasGroup);
+  return filtered;
 }
 
 function escapistMapPrecisionFilteredLocations(locations) {
@@ -3769,17 +3834,50 @@ function escapistMapBaseSvg() {
   return '<img class="escapist-map-img" src="images/maps/spain-peninsula-balearic-natural-earth.svg" alt="Mapa de España peninsular y Baleares">';
 }
 
+function escapistMapSourceTagsHtml(item) {
+  return [
+    item.personal ? '<span class="tag tag-feature">Hecho por ti</span>' : '',
+    ...item.groups.map(group => `<span class="tag tag-tipo">Grupo: ${escapeHtml(group.name || 'Grupo')}</span>`),
+    item.personalPending ? '<span class="tag tag-premio">Pendiente personal</span>' : '',
+    ...item.pendingGroups.map(group => `<span class="tag tag-muted">Pendiente: ${escapeHtml(group.name || 'Grupo')}</span>`)
+  ].filter(Boolean).join('');
+}
+
+function escapistMapPopupImageHtml(room) {
+  const src = roomImageSrc(room);
+  const initial = escapeHtml((room?.nombre || '?').trim().slice(0, 1).toUpperCase());
+  const fallback = `<div class="escapist-map-popup-thumb fallback">${initial}</div>`;
+  if (!src) return fallback;
+  return `<img class="escapist-map-popup-thumb" src="${escapeHtml(src)}" alt="" loading="lazy" onerror="this.replaceWith(this.nextElementSibling)">${fallback}`;
+}
+
+function escapistMapPopupHtml(cluster) {
+  const first = cluster.rooms[0] || {};
+  const room = first.room || {};
+  const ref = detailRefForRoom(room, ['catalogo', 'hechos', 'pendientes']);
+  const more = cluster.rooms.length > 1
+    ? `<div class="escapist-map-popup-more">${cluster.rooms.slice(1, 4).map(item => escapeHtml(item.room?.nombre || item.key || 'Sala')).join(' · ')}${cluster.rooms.length > 4 ? ` · +${cluster.rooms.length - 4}` : ''}</div>`
+    : '';
+  return `<div class="escapist-map-popup-card">
+    ${escapistMapPopupImageHtml(room)}
+    <div class="escapist-map-popup-body">
+      <div class="escapist-map-popup-kicker">${escapeHtml(mapClusterPrecisionLabel(cluster))}</div>
+      <div class="escapist-map-popup-title">${escapeHtml(room.nombre || mapClusterTitle(cluster) || 'Escape room')}</div>
+      <div class="escapist-map-popup-meta">${escapeHtml([room.empresa, room.ciudad, room.provincia].filter(Boolean).join(' - ') || mapClusterMeta(cluster))}</div>
+      <div class="profile-group-rooms">${escapistMapSourceTagsHtml(first)}</div>
+      ${more}
+      <button class="auth-btn secondary" type="button" onclick="openProfileRoomDetail('${ref.kind}','${jsString(ref.key)}')">Ver sala</button>
+    </div>
+  </div>`;
+}
+
 function escapistMapRoomHtml(item) {
   const room = item.room || {};
   const ref = detailRefForRoom(room, ['catalogo', 'hechos', 'pendientes']);
-  const sources = [
-    item.personal ? '<span class="tag tag-feature">Personal</span>' : '',
-    ...item.groups.map(group => `<span class="tag tag-tipo">${escapeHtml(group.name || 'Grupo')}</span>`)
-  ].filter(Boolean).join('');
   return `<article class="escapist-map-room">
     <div class="escapist-map-room-name">${escapeHtml(room.nombre || item.key || 'Sala')}</div>
     <div class="escapist-map-room-sub">${escapeHtml([room.empresa, room.ciudad].filter(Boolean).join(' - ') || 'Escape room')}</div>
-    <div class="profile-group-rooms">${sources}</div>
+    <div class="profile-group-rooms">${escapistMapSourceTagsHtml(item)}</div>
     <div class="profile-group-actions" style="margin-top:7px">
       <button class="auth-btn secondary" type="button" onclick="openProfileRoomDetail('${ref.kind}','${jsString(ref.key)}')">Ver sala</button>
     </div>
@@ -3808,6 +3906,20 @@ function escapistMapFilterHtml() {
   </div>`;
 }
 
+function escapistMapStatusFilterHtml() {
+  const filters = [
+    ['done', 'Hechos'],
+    ['pending', 'Pendientes'],
+    ['all', 'Todo']
+  ];
+  return `<div class="escapist-map-filter-row">
+    <span class="escapist-map-filter-label">Vista</span>
+    <div class="escapist-map-filters">${filters.map(([value, label]) => `
+      <button class="escapist-map-filter ${PROFILE_MAP_STATUS_FILTER === value ? 'active' : ''}" type="button" onclick="setEscapistMapStatusFilter('${value}')">${label}</button>
+    `).join('')}</div>
+  </div>`;
+}
+
 function escapistMapPrecisionFilterHtml() {
   const filters = [
     ['all', 'Todas'],
@@ -3832,10 +3944,41 @@ function escapistMapZoneListHtml(clusters, activeKey) {
   `).join('')}</div>`;
 }
 
+function escapistMapCommunitySummaryHtml(clusters, activeKey) {
+  const communities = new Map();
+  clusters.forEach(cluster => {
+    const entries = new Map();
+    cluster.locations.forEach(location => {
+      const name = location.community || location.province || location.city || 'Sin comunidad';
+      entries.set(name, (entries.get(name) || 0) + location.rooms.length);
+    });
+    const [name] = [...entries.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0] || ['Sin comunidad', 0];
+    if (!communities.has(name)) communities.set(name, { name, rooms: 0, locations: 0, clusterKey: cluster.key, active: false });
+    const item = communities.get(name);
+    item.rooms += cluster.rooms.length;
+    item.locations += cluster.locations.length;
+    if (cluster.key === activeKey) item.active = true;
+  });
+  const list = [...communities.values()].sort((a, b) => b.rooms - a.rooms || a.name.localeCompare(b.name)).slice(0, 8);
+  if (list.length < 2) return '';
+  return `<div class="escapist-map-community-summary">${list.map(item => `
+    <button class="escapist-map-community ${item.active ? 'active' : ''}" type="button" onclick="openEscapistMapLocation('${jsString(item.clusterKey)}')">
+      <strong>${escapeHtml(item.name)}</strong>
+      <span>${item.rooms} salas · ${item.locations} ubic.</span>
+    </button>
+  `).join('')}</div>`;
+}
+
 function escapistMapClusterMarkerClass(cluster) {
-  const hasPersonal = cluster.rooms.some(item => item.personal);
-  const hasGroup = cluster.rooms.some(item => item.groups.length);
-  const sourceClass = hasPersonal && hasGroup ? 'mixed' : hasGroup ? 'group' : 'personal';
+  const hasDone = cluster.rooms.some(mapItemHasDone);
+  const hasPending = cluster.rooms.some(mapItemHasPending);
+  const hasPersonal = cluster.rooms.some(mapItemHasPersonal);
+  const hasGroup = cluster.rooms.some(mapItemHasGroup);
+  const sourceClass = hasDone && hasPending ? 'mixed'
+    : hasPending ? 'pending'
+    : hasPersonal && hasGroup ? 'mixed'
+    : hasGroup ? 'group'
+    : 'personal';
   const scaleClass = cluster.locations.length > 1 || cluster.rooms.length > 1 ? 'cluster' : '';
   const precisionClass = cluster.locations.every(location => location.exact) ? 'exact' : 'approx';
   return `${sourceClass} ${scaleClass} ${precisionClass}`.trim();
@@ -3848,7 +3991,7 @@ function escapistMapHtml() {
       <div class="escapist-map-empty">Cargando ubicaciones reales del mapa...</div>
     </div>`;
   }
-  const allItems = escapistDoneRoomItems();
+  const allItems = escapistMapRoomItems();
   const items = escapistMapFilteredItems(allItems);
   const sourceLocations = escapistMapLocations(items);
   const locations = escapistMapPrecisionFilteredLocations(sourceLocations);
@@ -3856,9 +3999,10 @@ function escapistMapHtml() {
     PROFILE_MAP_ACTIVE_KEY = '';
     return `<div class="profile-section">
       <div class="profile-section-title">Mi mapa escapista</div>
+      ${escapistMapStatusFilterHtml()}
       ${escapistMapFilterHtml()}
       ${escapistMapPrecisionFilterHtml()}
-      <div class="escapist-map-empty">${allItems.length ? 'No hay ubicaciones para este filtro.' : 'Marca salas como hechas, personales o de grupo, para empezar a llenar tu mapa.'}</div>
+      <div class="escapist-map-empty">${allItems.length ? 'No hay ubicaciones para este filtro.' : 'Marca salas como hechas o pendientes, personales o de grupo, para empezar a llenar tu mapa.'}</div>
     </div>`;
   }
   const clusters = escapistMapClusters(locations);
@@ -3867,8 +4011,10 @@ function escapistMapHtml() {
     PROFILE_MAP_ACTIVE_KEY = containing?.key || clusters[0].key;
   }
   const active = clusters.find(cluster => cluster.key === PROFILE_MAP_ACTIVE_KEY) || clusters[0];
-  const personalRooms = allItems.filter(item => item.personal).length;
-  const groupRooms = allItems.filter(item => item.groups.length).length;
+  const personalRooms = allItems.filter(mapItemHasPersonal).length;
+  const groupRooms = allItems.filter(mapItemHasGroup).length;
+  const doneRooms = allItems.filter(mapItemHasDone).length;
+  const pendingRooms = allItems.filter(mapItemHasPending).length;
   const exactLocations = sourceLocations.filter(location => location.exact).length;
   const approxLocations = sourceLocations.length - exactLocations;
   const points = clusters.map(cluster => {
@@ -3889,24 +4035,30 @@ function escapistMapHtml() {
           <div class="escapist-map-legend">
             <span><i class="escapist-map-dot personal"></i>Hecho personal</span>
             <span><i class="escapist-map-dot group"></i>Hecho por grupo</span>
+            <span><i class="escapist-map-dot pending"></i>Pendiente</span>
           </div>
         </div>
       </div>
       <div class="escapist-map-side">
+        ${escapistMapStatusFilterHtml()}
         ${escapistMapFilterHtml()}
         ${escapistMapPrecisionFilterHtml()}
         <div class="escapist-map-stats">
           <div class="escapist-map-stat"><strong>${sourceLocations.length}</strong><span>Ubicaciones</span></div>
           <div class="escapist-map-stat"><strong>${items.length}</strong><span>Salas</span></div>
+          <div class="escapist-map-stat"><strong>${doneRooms}</strong><span>Hechas</span></div>
+          <div class="escapist-map-stat"><strong>${pendingRooms}</strong><span>Pend.</span></div>
           <div class="escapist-map-stat"><strong>${exactLocations}</strong><span>Exactas</span></div>
           <div class="escapist-map-stat"><strong>${approxLocations}</strong><span>Aprox.</span></div>
           <div class="escapist-map-stat"><strong>${personalRooms}</strong><span>Personal</span></div>
           <div class="escapist-map-stat"><strong>${groupRooms}</strong><span>Grupo</span></div>
         </div>
+        <div class="escapist-map-quality">${exactLocations} ubicaciones con coordenada exacta y ${approxLocations} aproximadas por ciudad o provincia.</div>
         <div class="escapist-map-toolbar">
           <button class="auth-btn secondary" type="button" onclick="resetEscapistMapFocus()">Ver todo</button>
           <button class="auth-btn secondary" type="button" onclick="zoomEscapistMapActive()">Centrar seleccion</button>
         </div>
+        ${escapistMapCommunitySummaryHtml(clusters, active.key)}
         ${escapistMapZoneListHtml(clusters, active.key)}
         <div class="escapist-map-city">${escapeHtml(mapClusterTitle(active))}</div>
         <div class="escapist-map-meta">${escapeHtml(mapClusterMeta(active))}</div>
@@ -3932,7 +4084,7 @@ async function initEscapistLeafletMap() {
     ESCAPIST_LEAFLET_MAP.remove();
     ESCAPIST_LEAFLET_MAP = null;
   }
-  const allItems = escapistDoneRoomItems();
+  const allItems = escapistMapRoomItems();
   const items = escapistMapFilteredItems(allItems);
   const locations = escapistMapPrecisionFilteredLocations(escapistMapLocations(items));
   const clusters = escapistMapClusters(locations);
@@ -3956,9 +4108,15 @@ async function initEscapistLeafletMap() {
     iconCreateFunction: cluster => {
       const children = cluster.getAllChildMarkers();
       const roomCount = children.reduce((sum, marker) => sum + (marker.options.roomCount || 1), 0);
+      const hasDone = children.some(marker => marker.options.hasDone);
+      const hasPending = children.some(marker => marker.options.hasPending);
       const hasPersonal = children.some(marker => marker.options.hasPersonal);
       const hasGroup = children.some(marker => marker.options.hasGroup);
-      const sourceClass = hasPersonal && hasGroup ? 'mixed' : hasGroup ? 'group' : 'personal';
+      const sourceClass = hasDone && hasPending ? 'mixed'
+        : hasPending ? 'pending'
+        : hasPersonal && hasGroup ? 'mixed'
+        : hasGroup ? 'group'
+        : 'personal';
       return L.divIcon({
         className: 'escapist-leaflet-cluster-wrap',
         html: `<div class="escapist-leaflet-cluster ${sourceClass}">${roomCount}</div>`,
@@ -3981,12 +4139,17 @@ async function initEscapistLeafletMap() {
     });
     const latLng = [cluster.coord.lat, cluster.coord.lon];
     bounds.push(latLng);
-    const hasPersonal = cluster.rooms.some(item => item.personal);
-    const hasGroup = cluster.rooms.some(item => item.groups.length);
-    L.marker(latLng, { icon, title: mapClusterTitle(cluster), roomCount: Math.max(1, cluster.rooms.length), hasPersonal, hasGroup })
+    const hasDone = cluster.rooms.some(mapItemHasDone);
+    const hasPending = cluster.rooms.some(mapItemHasPending);
+    const hasPersonal = cluster.rooms.some(mapItemHasPersonal);
+    const hasGroup = cluster.rooms.some(mapItemHasGroup);
+    const marker = L.marker(latLng, { icon, title: mapClusterTitle(cluster), roomCount: Math.max(1, cluster.rooms.length), hasDone, hasPending, hasPersonal, hasGroup })
       .addTo(markerLayer)
-      .bindPopup(`<strong>${escapeHtml(mapClusterTitle(cluster))}</strong><br>${escapeHtml(mapClusterMeta(cluster))}`)
-      .on('click', () => openEscapistMapLocation(cluster.key));
+      .bindPopup(escapistMapPopupHtml(cluster), { maxWidth: 300, minWidth: 240 });
+    marker.on('click', () => {
+      PROFILE_MAP_ACTIVE_KEY = cluster.key;
+      PROFILE_MAP_FOCUS_ACTIVE = true;
+    });
   });
   canvas.classList.add('leaflet-ready');
   if (PROFILE_MAP_FOCUS_ACTIVE && active?.coord) {
@@ -4024,6 +4187,13 @@ function setEscapistMapFilter(filter) {
   renderProfile();
 }
 
+function setEscapistMapStatusFilter(filter) {
+  PROFILE_MAP_STATUS_FILTER = ['done', 'pending', 'all'].includes(filter) ? filter : 'done';
+  PROFILE_MAP_ACTIVE_KEY = '';
+  PROFILE_MAP_FOCUS_ACTIVE = false;
+  renderProfile();
+}
+
 function setEscapistMapPrecisionFilter(filter) {
   PROFILE_MAP_PRECISION_FILTER = ['all', 'exact', 'approx'].includes(filter) ? filter : 'all';
   PROFILE_MAP_ACTIVE_KEY = '';
@@ -4033,6 +4203,7 @@ function setEscapistMapPrecisionFilter(filter) {
 
 window.openEscapistMapLocation = openEscapistMapLocation;
 window.setEscapistMapFilter = setEscapistMapFilter;
+window.setEscapistMapStatusFilter = setEscapistMapStatusFilter;
 window.setEscapistMapPrecisionFilter = setEscapistMapPrecisionFilter;
 window.resetEscapistMapFocus = resetEscapistMapFocus;
 window.zoomEscapistMapActive = zoomEscapistMapActive;
