@@ -2198,6 +2198,8 @@ let ESCAPIST_LEAFLET_MAP = null;
 let LAST_LIVE_REFRESH_AT = 0;
 let LIVE_REFRESH_IN_PROGRESS = false;
 let LIVE_REFRESH_EVENTS_READY = false;
+let ROOM_ALIASES_LOADED = false;
+let STATIC_PUBLISHED_REVIEWS_LOADED = false;
 let STATIC_ENHANCEMENTS_LOADED = false;
 let STATIC_ENHANCEMENTS_PROMISE = null;
 let PHOTO_LIGHTBOX_GALLERIES = {};
@@ -3375,15 +3377,18 @@ async function loadAdminReviewDrafts() {
 }
 
 async function loadStaticPublishedReviews() {
+  if (STATIC_PUBLISHED_REVIEWS_LOADED) return STATIC_PUBLISHED_REVIEWS;
   STATIC_PUBLISHED_REVIEWS = {};
   try {
     const r = await fetch('published_reviews.json');
     if (!r.ok) return {};
     const data = await r.json();
     STATIC_PUBLISHED_REVIEWS = normalizePublishedReviewsPayload(data);
+    STATIC_PUBLISHED_REVIEWS_LOADED = true;
   } catch (e) {
     console.warn('No se pudo cargar published_reviews.json:', e.message);
     STATIC_PUBLISHED_REVIEWS = {};
+    STATIC_PUBLISHED_REVIEWS_LOADED = false;
   }
   invalidateReviewRoomsCache();
   return STATIC_PUBLISHED_REVIEWS;
@@ -5879,9 +5884,10 @@ async function loadRoomLocations() {
 }
 
 async function loadRoomAliases() {
+  if (ROOM_ALIASES_LOADED) return true;
   try {
     const r = await fetch('room_aliases.json');
-    if (!r.ok) return;
+    if (!r.ok) return false;
     const data = await r.json();
     const aliases = data.aliases || {};
     const rooms = data.rooms || {};
@@ -5906,8 +5912,12 @@ async function loadRoomAliases() {
     });
     rebuildReviewAliasGroups();
     invalidateReviewRoomsCache();
+    ROOM_ALIASES_LOADED = true;
+    return true;
   } catch (e) {
     console.warn('No se pudo cargar room_aliases.json:', e.message);
+    ROOM_ALIASES_LOADED = false;
+    return false;
   }
 }
 
@@ -6020,11 +6030,16 @@ function scheduleStaticEnhancementsAfterInitialRender() {
 
 async function loadData() {
   try {
+    const earlyReviewsPromise = Promise.allSettled([
+      loadRoomAliases(),
+      loadStaticPublishedReviews()
+    ]);
     const r = await fetch('data.json');
     if (!r.ok) throw new Error(`HTTP ${r.status} — no se encontró data.json`);
     const d = await r.json();
     PENDIENTES = d.pendientes || [];
     HECHOS     = d.hechos     || [];
+    await earlyReviewsPromise;
     invalidateReviewRoomsCache();
     rebuildGroupIndexes();
     const lastMod = r.headers.get('last-modified');
