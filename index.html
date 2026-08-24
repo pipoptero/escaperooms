@@ -647,6 +647,8 @@
   .detail-share-buttons{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end;}
   .detail-share-panel .detail-link{background:rgba(0,0,0,.16);}
   .detail-share-panel .detail-share-status{grid-column:1/-1;margin-top:2px;}
+  .detail-share-icon{display:none;font-family:'Share Tech Mono',monospace;font-size:1rem;line-height:1;}
+  .detail-share-label{display:inline;}
   .detail-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
   .detail-link{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--amber);text-decoration:none;letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(125,187,63,.28);padding:9px 13px;}
   button.detail-link{background:transparent;cursor:pointer;}
@@ -1557,16 +1559,55 @@
       gap:7px;
     }
     .detail-share-panel{
-      grid-template-columns:1fr;
-      padding:10px;
+      grid-template-columns:minmax(0,1fr) auto;
+      padding:8px 9px;
+      gap:8px;
+      margin-bottom:9px;
+      align-items:center;
+    }
+    .detail-share-kicker{
+      font-size:.5rem;
+      margin-bottom:2px;
+    }
+    .detail-share-title{
+      font-size:.86rem;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .detail-share-copy{
+      display:none;
     }
     .detail-share-buttons{
       display:grid;
-      grid-template-columns:1fr 1fr;
-      justify-content:stretch;
+      grid-template-columns:repeat(3,40px);
+      gap:6px;
+      justify-content:end;
+    }
+    .detail-share-buttons .detail-link{
+      width:40px;
+      height:40px;
+      min-height:40px;
+      padding:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:0;
     }
     .detail-share-buttons .detail-link:last-child{
-      grid-column:1/-1;
+      grid-column:auto;
+    }
+    .detail-share-icon{
+      display:inline;
+      font-size:.95rem;
+    }
+    .detail-share-label{
+      position:absolute;
+      width:1px;
+      height:1px;
+      overflow:hidden;
+      clip:rect(0 0 0 0);
+      white-space:nowrap;
     }
     .detail-actions{
       display:grid;
@@ -6934,9 +6975,9 @@ function detailSharePanelHtml(room, kind, key) {
       <div class="detail-share-copy">URL preparada para Google, WhatsApp, redes sociales y vistas previas con imagen.</div>
     </div>
     <div class="detail-share-buttons">
-      <button class="detail-link" type="button" onclick="copyDetailLink('${kind}','${jsString(key)}')">Copiar</button>
-      <button class="detail-link" type="button" onclick="shareDetailLink('${kind}','${jsString(key)}')">Compartir</button>
-      <a class="detail-link" href="${escapeHtml(whatsApp)}" target="_blank" rel="noopener">WhatsApp</a>
+      <button class="detail-link" type="button" onclick="copyDetailLink('${kind}','${jsString(key)}')" aria-label="Copiar enlace" title="Copiar enlace"><span class="detail-share-icon" aria-hidden="true">⧉</span><span class="detail-share-label">Copiar</span></button>
+      <button class="detail-link" type="button" onclick="shareDetailLink('${kind}','${jsString(key)}')" aria-label="Compartir enlace" title="Compartir enlace"><span class="detail-share-icon" aria-hidden="true">↗</span><span class="detail-share-label">Compartir</span></button>
+      <a class="detail-link" href="${escapeHtml(whatsApp)}" target="_blank" rel="noopener" aria-label="Compartir por WhatsApp" title="Compartir por WhatsApp"><span class="detail-share-icon" aria-hidden="true">WA</span><span class="detail-share-label">WhatsApp</span></a>
     </div>
     <span class="detail-share-status" title="${escapeHtml(url)}"></span>
   </section>`;
