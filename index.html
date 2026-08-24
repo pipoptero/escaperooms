@@ -2204,7 +2204,8 @@ let LIVE_REFRESH_EVENTS_READY = false;
 let ROOM_ALIASES_LOADED = false;
 let STATIC_PUBLISHED_REVIEWS_LOADED = false;
 let SITE_STATS_LOADED = false;
-let PUBLIC_SITE_STATS = {};
+const FALLBACK_SITE_STATS = {"catalog":1736,"reviews":38,"ranking":948,"locations":45,"updated":"2026-08-24"};
+let PUBLIC_SITE_STATS = { ...FALLBACK_SITE_STATS };
 let STATIC_ENHANCEMENTS_LOADED = false;
 let STATIC_ENHANCEMENTS_PROMISE = null;
 let PHOTO_LIGHTBOX_GALLERIES = {};
@@ -3408,7 +3409,7 @@ async function loadSiteStats() {
     SITE_STATS_LOADED = true;
   } catch (e) {
     console.warn('No se pudo cargar site_stats.json:', e.message);
-    PUBLIC_SITE_STATS = {};
+    PUBLIC_SITE_STATS = { ...FALLBACK_SITE_STATS };
     SITE_STATS_LOADED = false;
   }
   return PUBLIC_SITE_STATS;
@@ -7944,6 +7945,16 @@ function renderHechos() {
 }
 
 function renderCatalogo() {
+  if (!CATALOGO.length) {
+    const total = publicCatalogCount();
+    document.getElementById('result-info-cat').textContent =
+      total ? `Cargando catálogo (${total} salas en catálogo)...` : 'Cargando catálogo...';
+    document.getElementById('grid-catalogo').innerHTML =
+      `<div class="empty-state"><div class="lock">...</div><p>CARGANDO CATALOGO</p></div>`;
+    document.getElementById('catalog-more-top').innerHTML = '';
+    document.getElementById('catalog-more').innerHTML = '';
+    return;
+  }
   const s = document.getElementById('search-cat').value;
   const comunidad = document.getElementById('filter-comunidad-cat').value;
   const prov = document.getElementById('filter-prov-cat').value;
@@ -8397,4 +8408,3 @@ registerServiceWorker();
 </script>
 </body>
 </html>
-

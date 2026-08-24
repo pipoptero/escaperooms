@@ -1637,6 +1637,20 @@ def site_stats_json(review_rooms, sala_rows, location_specs):
     return json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
 
 
+def update_inline_site_stats(stats_json):
+    index_path = ROOT / "index.html"
+    if not index_path.exists():
+        return
+    stats = json.loads(stats_json)
+    inline = json.dumps(stats, ensure_ascii=False, separators=(",", ":"))
+    html = index_path.read_text(encoding="utf-8")
+    pattern = r"const FALLBACK_SITE_STATS = \{.*?\};"
+    replacement = f"const FALLBACK_SITE_STATS = {inline};"
+    next_html, count = re.subn(pattern, replacement, html, count=1)
+    if count:
+        index_path.write_text(next_html, encoding="utf-8", newline="\n")
+
+
 def llms_txt():
     return f"""# {SITE_NAME}
 
@@ -1760,10 +1774,12 @@ def main():
         page_dir.mkdir(parents=True, exist_ok=True)
         (page_dir / "index.html").write_text(room_page(item, item.get("position") or 0), encoding="utf-8", newline="\n")
 
+    stats_json = site_stats_json(rooms, sala_rows, location_specs)
+    update_inline_site_stats(stats_json)
     (ROOT / "sitemap.xml").write_text(sitemap_xml(rooms, sala_rows, location_specs), encoding="utf-8", newline="\n")
     (ROOT / "robots.txt").write_text(robots_txt(), encoding="utf-8", newline="\n")
     (ROOT / "llms.txt").write_text(llms_txt(), encoding="utf-8", newline="\n")
-    (ROOT / "site_stats.json").write_text(site_stats_json(rooms, sala_rows, location_specs), encoding="utf-8", newline="\n")
+    (ROOT / "site_stats.json").write_text(stats_json, encoding="utf-8", newline="\n")
     print(
         "SEO generado: "
         f"{len(generated_review_pages)} reviews, "
