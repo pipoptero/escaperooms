@@ -52,7 +52,7 @@ jobs:
           cp CNAME data.json catalog.json external_ratings.json extra_awards.json terpeca_awards.json official_videos.json published_reviews.json public-site/
           cp review_photos.json room_aliases.json room_locations.json robots.txt sitemap.xml llms.txt public-site/
           cp site.webmanifest service-worker.js public-site/
-          cp -R aviso-legal condiciones cookies privacidad ranking reviews salas public-site/
+          cp -R aviso-legal condiciones cookies privacidad ranking ranking-escape-rooms mejores-escape-rooms mejores-escape-rooms-terror reviews salas public-site/
           mkdir -p public-site/images
           rsync -a --delete \
             --exclude '*.psd' \
