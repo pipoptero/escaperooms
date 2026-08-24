@@ -144,8 +144,7 @@
     filter:blur(16px);opacity:.72;pointer-events:none;
   }
   .vault-brand-logo{
-    position:relative;z-index:1;display:block;width:min(610px,86vw);height:126px;object-fit:fill;
-    transform:scaleX(1.01);transform-origin:center;
+    position:relative;z-index:1;display:block;width:min(610px,86vw);height:auto;aspect-ratio:1000/206;object-fit:contain;
     filter:drop-shadow(0 16px 30px rgba(0,0,0,.88)) drop-shadow(0 0 10px rgba(82,177,41,.22));
   }
   .vault-brand-title{
@@ -267,7 +266,7 @@
   .vault-guide-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px;}
   .vault-guide-card{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.02);padding:13px 14px;min-width:0;}
   .vault-guide-icon{font-family:'Cinzel',serif;color:var(--amber);font-size:1.25rem;line-height:1;margin-bottom:9px;}
-  .vault-guide-card h3{font-family:'Cinzel',serif;color:var(--text);font-size:.98rem;line-height:1.22;margin-bottom:7px;}
+  .vault-guide-card h2{font-family:'Cinzel',serif;color:var(--text);font-size:.98rem;line-height:1.22;margin-bottom:7px;}
   .vault-guide-card p{color:var(--text2);font-size:.91rem;line-height:1.42;}
   .vault-guide-flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:18px;padding-top:16px;border-top:1px solid var(--border);}
   .vault-guide-step{display:grid;grid-template-columns:auto minmax(0,1fr);gap:9px;align-items:start;border:1px solid rgba(125,187,63,.12);background:rgba(125,187,63,.035);padding:10px;}
@@ -277,7 +276,7 @@
   .vault-section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:20px 0 10px;}
   .vault-section-title{font-family:'Cinzel',serif;color:var(--text);font-size:1.05rem;letter-spacing:.08em;text-transform:uppercase;}
   .vault-section-note{font-family:'Share Tech Mono',monospace;color:var(--text3);font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;text-align:right;}
-  .vault-latest-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+  .vault-latest-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;min-height:124px;}
   .vault-latest-card{display:grid;grid-template-columns:78px minmax(0,1fr);gap:11px;align-items:center;width:100%;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.02);padding:10px;cursor:pointer;color:inherit;text-align:left;font:inherit;appearance:none;-webkit-appearance:none;transition:border-color .2s,background .2s,transform .2s;}
   .vault-latest-card:hover{border-color:rgba(125,187,63,.38);background:rgba(125,187,63,.04);transform:translateY(-1px);}
   .vault-latest-img{width:78px;aspect-ratio:3/4;border:1px solid rgba(125,187,63,.18);background:rgba(0,0,0,.18);overflow:hidden;display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;color:var(--amber);font-size:1.4rem;}
@@ -1127,7 +1126,7 @@
   @media(max-width:640px){
     header{padding:8px 14px 7px;}
     .vault-brand::before{width:min(410px,93vw);height:78px;filter:blur(12px);opacity:.7;}
-    .vault-brand-logo{width:min(348px,90vw);height:78px;object-fit:fill;transform:scaleX(1.01);}
+    .vault-brand-logo{width:min(348px,90vw);height:auto;aspect-ratio:1000/206;object-fit:contain;}
     h1{font-size:1.75rem;letter-spacing:.13em;filter:drop-shadow(0 2px 0 rgba(0,0,0,.8)) drop-shadow(0 5px 14px rgba(0,0,0,.75));}
     .vault-frame{padding:4px 16px 5px;}
     .vault-frame::before,.vault-frame::after,.vault-icon,.vault-dash{display:none;}
@@ -1162,7 +1161,7 @@
     .vault-guide-proof span{font-size:.52rem;padding:4px 6px;}
     .vault-guide-actions{gap:7px;}
     .vault-guide-action{flex:1 1 auto;text-align:center;padding:9px 10px;}
-    .vault-guide-stats{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .vault-guide-stats{grid-template-columns:repeat(2,minmax(0,1fr));min-height:128px;}
     .vault-guide-stat{padding:9px 10px;}
     .vault-guide-stat strong{font-size:1.25rem;}
     .vault-guide-grid{grid-template-columns:1fr;gap:9px;}
@@ -1170,7 +1169,7 @@
     .vault-guide-flow{grid-template-columns:1fr;gap:7px;margin-top:14px;padding-top:13px;}
     .vault-section-head{align-items:flex-start;flex-direction:column;margin:16px 0 9px;}
     .vault-section-note{text-align:left;}
-    .vault-latest-grid{grid-template-columns:1fr;gap:8px;}
+    .vault-latest-grid{grid-template-columns:1fr;gap:8px;min-height:270px;}
     .vault-latest-card{grid-template-columns:64px minmax(0,1fr);padding:9px;}
     .vault-latest-img{width:64px;}
     .vault-latest-name{font-size:.9rem;}
@@ -1654,7 +1653,7 @@
   <div class="error-msg" id="error-msg"></div>
 </div>
 
-<div id="app">
+<main id="app">
 
   <!-- Banner si Firebase no está configurado -->
   <div id="setup-banner">
@@ -1665,7 +1664,7 @@
   <header>
     <div class="updated-badge">DATOS ACTUALIZADOS<span id="update-date"></span></div>
     <div class="vault-brand">
-      <img class="vault-brand-logo" src="images/brand/the-vault-wordmark-transparent.png" alt="The Vault Escape">
+      <img class="vault-brand-logo" src="images/brand/the-vault-wordmark-wide.webp" alt="The Vault Escape" width="1000" height="206">
       <h1 class="vault-brand-title">The Vault Escape</h1>
     </div>
     <div class="vault-icon">
@@ -1761,32 +1760,32 @@
       <div class="vault-guide-grid">
         <div class="vault-guide-card">
           <div class="vault-guide-icon">01</div>
-          <h3>Catálogo vivo</h3>
+          <h2>Catálogo vivo</h2>
           <p>Busca por comunidad, provincia, ciudad, jugadores, dificultad, terror y premios. Cada sala abre una ficha completa con sinopsis, datos y acciones personales.</p>
         </div>
         <div class="vault-guide-card">
           <div class="vault-guide-icon">02</div>
-          <h3>Ranking con contexto</h3>
+          <h2>Ranking con contexto</h2>
           <p>La nota global mezcla fuentes externas, reviews The Vault y reconocimiento en premios para que una sala con varias senales pese mejor que una nota aislada.</p>
         </div>
         <div class="vault-guide-card">
           <div class="vault-guide-icon">03</div>
-          <h3>Reviews The Vault</h3>
+          <h2>Reviews The Vault</h2>
           <p>Las reviews del grupo mantienen la memoria de lo jugado: opinión, puntuación, fotos, datos útiles y acceso al detalle de cada experiencia.</p>
         </div>
         <div class="vault-guide-card">
           <div class="vault-guide-icon">04</div>
-          <h3>Cuenta personal</h3>
+          <h2>Cuenta personal</h2>
           <p>Al entrar con Google puedes guardar favoritos, pendientes y hechos, escribir reseñas públicas y conservar tu lista entre móvil, PC y app instalada.</p>
         </div>
         <div class="vault-guide-card">
           <div class="vault-guide-icon">05</div>
-          <h3>Grupos escapistas</h3>
+          <h2>Grupos escapistas</h2>
           <p>Crea grupos privados, invita companeros y separa que salas teneis pendientes o hechas juntos, incluso si perteneces a varios grupos diferentes.</p>
         </div>
         <div class="vault-guide-card">
           <div class="vault-guide-icon">06</div>
-          <h3>Recomendador</h3>
+          <h2>Recomendador</h2>
           <p>El asistente flotante ayuda a encontrar salas por zona, jugadores, estilo, terror o premios cuando no sabes por donde empezar.</p>
         </div>
       </div>
@@ -1948,7 +1947,7 @@
       <div class="catalog-more" id="catalog-more"></div>
     </div>
   </div>
-  </div>
+  </main>
 
   <footer class="seo-footer" aria-label="Enlaces de reviews">
     <div class="seo-footer-inner">
@@ -6205,6 +6204,18 @@ function reviewPublishedTime(room) {
   return reviewTimeValue(room);
 }
 
+function seoSlug(str) {
+  return String(str || '').toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+function latestReviewThumbPath(room) {
+  const meta = canonicalReviewRoomMeta(roomKey(room));
+  const slug = seoSlug(meta.canonical_name || room.nombre || room.id || '');
+  return slug ? `images/seo/latest/${slug}.webp` : '';
+}
+
 function vaultLatestReviewsHtml() {
   const items = reviewRooms()
     .filter(room => room && room.nombre)
@@ -6218,9 +6229,13 @@ function vaultLatestReviewsHtml() {
   return items.map(room => {
     const key = jsString(roomKey(room));
     const initial = escapeHtml((room.nombre || '?').trim().slice(0, 1).toUpperCase());
-    const imgSrc = room.imagen || '';
-    const img = imgSrc
-      ? `<img src="${escapeHtml(imgSrc)}" alt="" loading="lazy" onerror="this.replaceWith(document.createTextNode('${initial}'))">`
+    const thumbSrc = latestReviewThumbPath(room);
+    const fallbackSrc = room.imagen || '';
+    const fallbackHandler = fallbackSrc
+      ? `this.onerror=function(){this.replaceWith(document.createTextNode('${initial}'))};this.src='${escapeHtml(fallbackSrc)}';`
+      : `this.replaceWith(document.createTextNode('${initial}'))`;
+    const img = thumbSrc
+      ? `<img src="${escapeHtml(thumbSrc)}" alt="" width="78" height="104" loading="lazy" decoding="async" onerror="${fallbackHandler}">`
       : initial;
     const meta = [room.empresa, room.ciudad, room.provincia].filter(Boolean).join(' - ');
     const score = room.valoracion ? Number(room.valoracion).toFixed(1).replace('.0', '') : '';

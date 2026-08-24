@@ -19,6 +19,7 @@ SITE_NAME = "The Vault Escape"
 TODAY = date.today().isoformat()
 DEFAULT_SOCIAL_CARD = "images/brand/social-card.png"
 REVIEW_SOCIAL_DIR = Path("images/seo/reviews")
+LATEST_REVIEW_THUMB_DIR = Path("images/seo/latest")
 CITY_PAGE_MIN_ROOMS = 8
 REGION_PAGE_MIN_ROOMS = 10
 
@@ -579,6 +580,38 @@ def generate_review_social_card(room, photos):
 
     draw.text((62, 578), "thevaultescape.com", fill=green, font=small_font)
     canvas.save(out_path, "JPEG", quality=88, optimize=True)
+    return out_rel.as_posix()
+
+
+def generate_latest_review_thumbnail(room, photos):
+    if Image is None:
+        return ""
+    slug = room_url_slug(room)
+    out_rel = LATEST_REVIEW_THUMB_DIR / f"{slug}.webp"
+    out_path = ROOT / out_rel
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+
+    candidates = [
+        room.get("imagen"),
+        *((photo.get("src") for photo in photos if photo.get("src")) if photos else []),
+        DEFAULT_SOCIAL_CARD,
+    ]
+    source_path = None
+    for candidate in candidates:
+        source_path = local_asset_path(candidate)
+        if source_path:
+            break
+    if not source_path:
+        return ""
+
+    image = safe_open_image(source_path)
+    if not image:
+        return ""
+    try:
+        thumb = cover_resize(image, (156, 208))
+        thumb.save(out_path, "WEBP", quality=76, method=6)
+    finally:
+        image.close()
     return out_rel.as_posix()
 
 
@@ -1623,6 +1656,7 @@ def main():
         page_dir.mkdir(parents=True, exist_ok=True)
         photos = photo_entries(room, photos_data)
         social_card = generate_review_social_card(room, photos)
+        generate_latest_review_thumbnail(room, photos)
         (page_dir / "index.html").write_text(review_page(room, photos, social_card), encoding="utf-8", newline="\n")
         generated_review_pages.append(slug)
 
