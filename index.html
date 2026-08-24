@@ -16,11 +16,7 @@
 <link rel="icon" href="images/brand/favicon-round-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="images/brand/apple-touch-icon-round.png">
 <link rel="manifest" href="site.webmanifest">
-<link rel="preconnect" href="https://unpkg.com">
-<link rel="preconnect" href="https://a.basemaps.cartocdn.com">
-<link rel="preconnect" href="https://b.basemaps.cartocdn.com">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <meta property="og:type" content="website">
 <meta property="og:locale" content="es_ES">
 <meta property="og:site_name" content="The Vault">
@@ -2084,8 +2080,6 @@
   </div>
 </div>
 <script src="firebase-config.js"></script>
-<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script defer src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script>
 // ════════════════════════════════════════════════════════════
 //  🔥 CONFIGURACIÓN FIREBASE
@@ -2096,9 +2090,14 @@ const FIREBASE_CONFIG = window.THE_VAULT_FIREBASE_CONFIG || {};
 const FIREBASE_URL = String(FIREBASE_CONFIG.databaseURL || '').trim();
 const FIREBASE_APP_SDK = 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js';
 const FIREBASE_AUTH_SDK = 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js';
+const LEAFLET_CSS = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+const LEAFLET_CLUSTER_CSS = 'https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css';
+const LEAFLET_SDK = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+const LEAFLET_CLUSTER_SDK = 'https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js';
 let FIREBASE_SDK_PROMISE = null;
 let FIREBASE_SDK_FAILED = false;
 let FIREBASE_SDK_ERROR = '';
+let LEAFLET_ASSETS_PROMISE = null;
 // ════════════════════════════════════════════════════════════
 
 const FIREBASE_ENABLED = FIREBASE_URL.trim() !== '';
@@ -2910,6 +2909,38 @@ function loadScriptOnce(src) {
   });
 }
 
+function loadStylesheetOnce(href) {
+  const existing = document.querySelector(`link[href="${href}"]`);
+  if (existing) return Promise.resolve();
+  return new Promise((resolve, reject) => {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = href;
+    link.onload = resolve;
+    link.onerror = () => reject(new Error(`No se pudo cargar ${href}`));
+    document.head.appendChild(link);
+  });
+}
+
+async function ensureLeafletAssets() {
+  if (window.L?.map) return true;
+  if (!LEAFLET_ASSETS_PROMISE) {
+    LEAFLET_ASSETS_PROMISE = Promise.all([
+      loadStylesheetOnce(LEAFLET_CSS),
+      loadStylesheetOnce(LEAFLET_CLUSTER_CSS),
+      loadScriptOnce(LEAFLET_SDK).then(() => loadScriptOnce(LEAFLET_CLUSTER_SDK))
+    ]);
+  }
+  try {
+    await LEAFLET_ASSETS_PROMISE;
+    return !!window.L?.map;
+  } catch (error) {
+    LEAFLET_ASSETS_PROMISE = null;
+    console.warn('No se pudo cargar Leaflet:', error.message);
+    return false;
+  }
+}
+
 async function ensureFirebaseSdk() {
   if (!firebaseAuthConfigured()) return false;
   if (window.firebase?.auth) return true;
@@ -3344,7 +3375,7 @@ async function loadAdminReviewDrafts() {
 async function loadStaticPublishedReviews() {
   STATIC_PUBLISHED_REVIEWS = {};
   try {
-    const r = await fetch('published_reviews.json?v=' + Date.now());
+    const r = await fetch('published_reviews.json');
     if (!r.ok) return {};
     const data = await r.json();
     STATIC_PUBLISHED_REVIEWS = normalizePublishedReviewsPayload(data);
@@ -3850,7 +3881,7 @@ function escapistMapHtml() {
   </div>`;
 }
 
-function initEscapistLeafletMap(attempt = 0) {
+async function initEscapistLeafletMap() {
   const node = document.getElementById('escapist-leaflet-map');
   const canvas = node?.closest('.escapist-map-canvas');
   if (!node || !canvas) {
@@ -3860,10 +3891,8 @@ function initEscapistLeafletMap(attempt = 0) {
     }
     return;
   }
-  if (!window.L) {
-    if (attempt < 25) setTimeout(() => initEscapistLeafletMap(attempt + 1), 160);
-    return;
-  }
+  const leafletReady = await ensureLeafletAssets();
+  if (!leafletReady) return;
   if (ESCAPIST_LEAFLET_MAP) {
     ESCAPIST_LEAFLET_MAP.remove();
     ESCAPIST_LEAFLET_MAP = null;
@@ -4843,11 +4872,9 @@ function renderProfile(message = '') {
     root.innerHTML = `${settingsTabsHtml()}${content}`;
     if (SETTINGS_TAB === 'profile') {
       requestAnimationFrame(() => {
-        try {
-          initEscapistLeafletMap();
-        } catch (e) {
+        initEscapistLeafletMap().catch(e => {
           console.warn('No se pudo inicializar el mapa escapista:', e.message);
-        }
+        });
       });
     }
   } catch (e) {
@@ -5738,7 +5765,7 @@ async function loadRoomReviews() {
 }
 async function loadCatalogo() {
   try {
-    const r = await fetch('catalog.json?v=' + Date.now());
+    const r = await fetch('catalog.json');
     if (!r.ok) return;
     const d = await r.json();
     CATALOGO = d.catalogo || [];
@@ -5776,7 +5803,7 @@ function rebuildReviewAliasGroups() {
 
 async function loadTerpecaAwards() {
   try {
-    const r = await fetch('terpeca_awards.json?v=' + Date.now());
+    const r = await fetch('terpeca_awards.json');
     if (!r.ok) return;
     const d = await r.json();
     TERPECA_AWARDS = d.awards || [];
@@ -5788,7 +5815,7 @@ async function loadTerpecaAwards() {
 
 async function loadExtraAwards() {
   try {
-    const r = await fetch('extra_awards.json?v=' + Date.now());
+    const r = await fetch('extra_awards.json');
     if (!r.ok) return;
     const d = await r.json();
     EXTRA_AWARDS = d.awards || [];
@@ -5800,7 +5827,7 @@ async function loadExtraAwards() {
 
 async function loadExternalRatings() {
   try {
-    const r = await fetch('external_ratings.json?v=' + Date.now());
+    const r = await fetch('external_ratings.json');
     if (!r.ok) return;
     const d = await r.json();
     EXTERNAL_RATINGS = d.ratings || {};
@@ -5815,7 +5842,7 @@ async function loadExternalRatings() {
 
 async function loadReviewPhotos() {
   try {
-    const r = await fetch('review_photos.json?v=' + Date.now());
+    const r = await fetch('review_photos.json');
     if (!r.ok) return;
     const d = await r.json();
     REVIEW_PHOTOS = d.photos || {};
@@ -5827,7 +5854,7 @@ async function loadReviewPhotos() {
 
 async function loadOfficialVideos() {
   try {
-    const r = await fetch('official_videos.json?v=' + Date.now());
+    const r = await fetch('official_videos.json');
     if (!r.ok) return;
     const d = await r.json();
     OFFICIAL_VIDEOS = d.videos || {};
@@ -5839,7 +5866,7 @@ async function loadOfficialVideos() {
 
 async function loadRoomLocations() {
   try {
-    const r = await fetch('room_locations.json?v=' + Date.now());
+    const r = await fetch('room_locations.json');
     if (!r.ok) return;
     const data = await r.json();
     ROOM_LOCATIONS = data.locations || {};
@@ -5851,7 +5878,7 @@ async function loadRoomLocations() {
 
 async function loadRoomAliases() {
   try {
-    const r = await fetch('room_aliases.json?v=' + Date.now());
+    const r = await fetch('room_aliases.json');
     if (!r.ok) return;
     const data = await r.json();
     const aliases = data.aliases || {};
@@ -5950,6 +5977,7 @@ function setupAutomaticLiveRefresh() {
 
 async function loadStaticEnhancementsAfterInitialRender() {
   try {
+    await loadCatalogo();
     await loadRoomAliases();
     await loadStaticPublishedReviews();
     await loadTerpecaAwards();
@@ -5958,19 +5986,31 @@ async function loadStaticEnhancementsAfterInitialRender() {
     await loadReviewPhotos();
     await loadOfficialVideos();
     await loadRoomLocations();
+    populateFilters();
+    renderStats();
     renderCatalogo();
     renderHechos();
     if (ACTIVE_TAB === 'ranking') renderRanking();
     renderVaultGuide();
+    updateFavCount();
     openDeepLinkFromHash();
   } catch (e) {
     console.warn('No se pudieron cargar los datos complementarios:', e.message);
   }
 }
 
+function scheduleStaticEnhancementsAfterInitialRender() {
+  const start = () => loadStaticEnhancementsAfterInitialRender();
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(start, { timeout: 1200 });
+  } else {
+    setTimeout(start, 350);
+  }
+}
+
 async function loadData() {
   try {
-    const r = await fetch('data.json?v=' + Date.now());
+    const r = await fetch('data.json');
     if (!r.ok) throw new Error(`HTTP ${r.status} — no se encontró data.json`);
     const d = await r.json();
     PENDIENTES = d.pendientes || [];
@@ -5982,11 +6022,6 @@ async function loadData() {
       document.getElementById('update-date').textContent =
         new Date(lastMod).toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'numeric'});
     }
-    await loadCatalogo();
-    await loadRoomAliases();
-    await loadRoomLocations();
-    await loadStaticPublishedReviews();
-
     document.getElementById('loading').style.display = 'none';
     document.getElementById('app').style.display = 'block';
     if (!FIREBASE_ENABLED) document.getElementById('setup-banner').style.display = 'block';
@@ -5994,7 +6029,7 @@ async function loadData() {
     populateFilters(); renderStats(); renderPendientes(); renderMisHechos(); renderHechos(); renderCatalogo(); renderVaultGuide(); updateGuestStripVisibility();
     openDeepLinkFromHash();
     updateFavCount();
-    loadStaticEnhancementsAfterInitialRender();
+    scheduleStaticEnhancementsAfterInitialRender();
     scheduleLiveDataAfterInitialRender();
     setupAutomaticLiveRefresh();
   } catch(err) {
