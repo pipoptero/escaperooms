@@ -1,5 +1,6 @@
 import json
 import re
+import shutil
 import unicodedata
 from datetime import date, datetime, timezone
 from html import escape
@@ -18,6 +19,25 @@ SITE_NAME = "The Vault Escape"
 TODAY = date.today().isoformat()
 DEFAULT_SOCIAL_CARD = "images/brand/social-card.png"
 REVIEW_SOCIAL_DIR = Path("images/seo/reviews")
+CITY_PAGE_MIN_ROOMS = 8
+REGION_PAGE_MIN_ROOMS = 10
+
+TEXT_FIXES = {
+    "Espa�a": "España",
+    "M�laga": "Málaga",
+    "Matar�": "Mataró",
+    "Gij�n": "Gijón",
+    "Pa�s Vasco": "País Vasco",
+    "Arag�n": "Aragón",
+    "Andaluc�a": "Andalucía",
+    "Regi�n de Murcia": "Región de Murcia",
+    "Castell�n": "Castellón",
+    "Coru�a": "Coruña",
+    "C�diz": "Cádiz",
+    "C�rdoba": "Córdoba",
+    "Le�n": "León",
+    "Ja�n": "Jaén",
+}
 
 
 def read_json(path, fallback):
@@ -107,6 +127,13 @@ def folded(value):
     return "".join(ch for ch in value if unicodedata.category(ch) != "Mn")
 
 
+def clean_text(value):
+    value = text(value)
+    for bad, good in TEXT_FIXES.items():
+        value = value.replace(bad, good)
+    return value
+
+
 def decimal(value):
     raw = text(value).replace(",", ".")
     try:
@@ -179,7 +206,7 @@ def score_label(value):
 
 
 def room_location(room):
-    return " - ".join(part for part in [text(room.get("ciudad")), text(room.get("provincia"))] if part)
+    return " - ".join(part for part in [clean_text(room.get("ciudad")), clean_text(room.get("provincia"))] if part)
 
 
 def photo_entries(room, photos_data):
@@ -1068,6 +1095,9 @@ def ranking_landing_page(slug, title, h1, description, intro, rows, keyword_note
       <a href="../reviews/">Reviews</a>
       <a href="../mejores-escape-rooms/">Mejores escape rooms</a>
       <a href="../mejores-escape-rooms-terror/">Terror</a>
+      <a href="../escape-rooms-barcelona/">Barcelona</a>
+      <a href="../escape-rooms-madrid/">Madrid</a>
+      <a href="../escape-rooms-valencia/">Valencia</a>
       <a href="../">Abrir web</a>
     </div>
   </section>
@@ -1075,6 +1105,324 @@ def ranking_landing_page(slug, title, h1, description, intro, rows, keyword_note
     {''.join(items)}
   </div>
   <p class="note">{escape(keyword_note)}</p>
+</main>
+</body>
+</html>
+"""
+
+
+def canonical_region(value):
+    raw = clean_text(value)
+    key = folded(raw)
+    mapping = {
+        "andalucia": "Andalucía",
+        "aragon": "Aragón",
+        "asturias": "Asturias",
+        "cantabria": "Cantabria",
+        "canarias": "Canarias",
+        "castilla y leon": "Castilla y León",
+        "castilla-la mancha": "Castilla-La Mancha",
+        "castilla la mancha": "Castilla-La Mancha",
+        "catalunya": "Catalunya",
+        "cataluna": "Catalunya",
+        "comunidad de madrid": "Comunidad de Madrid",
+        "madrid": "Comunidad de Madrid",
+        "comunitat valenciana": "Comunitat Valenciana",
+        "comunidad valenciana": "Comunitat Valenciana",
+        "extremadura": "Extremadura",
+        "galicia": "Galicia",
+        "la rioja": "La Rioja",
+        "navarra": "Navarra",
+        "pais vasco": "País Vasco",
+        "euskadi": "País Vasco",
+        "region de murcia": "Región de Murcia",
+        "murcia": "Región de Murcia",
+    }
+    return mapping.get(key, raw)
+
+
+def location_sort_key(item):
+    rating = item.get("rating") or {}
+    return (
+        item.get("position") is None,
+        item.get("position") or 999999,
+        -decimal(rating.get("global_score")),
+        -int(rating.get("source_count") or 0),
+        text(item.get("room", {}).get("nombre")).lower(),
+    )
+
+
+def location_landing_page(slug, kind, label, rows, total_count):
+    canonical = site_url(f"/{slug}/")
+    image = site_url("/images/brand/social-card.png")
+    is_city = kind == "city"
+    title = (
+        f"Escape rooms en {label} | Ranking y mejores salas | {SITE_NAME}"
+        if is_city else
+        f"Escape rooms en {label} | Ranking y catálogo | {SITE_NAME}"
+    )
+    description = (
+        f"Catálogo de escape rooms en {label} con ranking, puntuaciones, premios, ubicación y fichas de salas destacadas."
+        if is_city else
+        f"Escape rooms en {label}: catálogo, ranking ponderado, mejores salas, premios y fichas públicas de The Vault Escape."
+    )
+    intro = (
+        f"Descubre escape rooms en {label} ordenados con el criterio de The Vault Escape: ranking ponderado, fuentes externas, premios, reviews y datos de catálogo."
+        if is_city else
+        f"Explora escape rooms en {label} por ranking y catálogo. Esta página agrupa salas destacadas de la zona para facilitar búsquedas locales y comparar experiencias antes de reservar."
+    )
+    top_rows = sorted(rows, key=location_sort_key)[:80]
+    items = []
+    list_items = []
+    for idx, item in enumerate(top_rows, 1):
+        room = item["room"]
+        rating = item.get("rating") or {}
+        name = canonical_room_name(room) or "Escape room"
+        company = canonical_room_company(room)
+        url = site_url(f"/salas/{room_url_slug(room)}/")
+        score = decimal(rating.get("global_score"))
+        source_count = int(rating.get("source_count") or 0)
+        awards = int(rating.get("award_count") or 0)
+        location = room_location(room)
+        details = [value for value in [company, location] if value]
+        if source_count:
+            details.append(f"{source_count} fuentes")
+        if awards:
+            details.append(f"{awards} premios o nominaciones")
+        score_html = f"{score:.1f}/10" if score else "Ficha"
+        items.append(
+            f'<a class="rank-link" href="{escape(url)}">'
+            f'<span class="pos">#{idx}</span>'
+            f'<strong>{escape(name)}</strong>'
+            f'<span>{escape(" · ".join(details))}</span>'
+            f'<em>{escape(score_html)}</em></a>'
+        )
+        list_items.append({"@type": "ListItem", "position": idx, "name": name, "url": url})
+    schema = {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "CollectionPage",
+                "@id": canonical,
+                "url": canonical,
+                "name": title,
+                "description": description,
+                "inLanguage": "es",
+                "keywords": f"escape rooms {label}, mejores escape rooms {label}, ranking escape rooms {label}",
+                "isPartOf": {"@id": site_url("/#website")},
+                "mainEntity": {"@type": "ItemList", "itemListElement": list_items},
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {"@type": "ListItem", "position": 1, "name": "Inicio", "item": site_url("/")},
+                    {"@type": "ListItem", "position": 2, "name": f"Escape rooms en {label}", "item": canonical},
+                ],
+            },
+        ],
+    }
+    return f"""<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{escape(title)}</title>
+<meta name="description" content="{escape(description)}">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="{escape(canonical)}">
+<link rel="icon" href="../images/brand/favicon-round-32.png" sizes="32x32" type="image/png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{SITE_NAME}">
+<meta property="og:title" content="{escape(title)}">
+<meta property="og:description" content="{escape(description)}">
+<meta property="og:url" content="{escape(canonical)}">
+<meta property="og:image" content="{escape(image)}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{escape(title)}">
+<meta name="twitter:description" content="{escape(description)}">
+<meta name="twitter:image" content="{escape(image)}">
+<script type="application/ld+json">
+{json_ld(schema)}
+</script>
+<style>
+  :root{{--bg:#0a0a0f;--border:#2a2a45;--green:#7dbb3f;--amber:#ffa91f;--text:#f0f0ea;--muted:#9a9ab6;}}
+  *{{box-sizing:border-box;}}
+  body{{margin:0;background:radial-gradient(ellipse at top,rgba(125,187,63,.14),transparent 38%),var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;line-height:1.55;}}
+  main{{width:min(1040px,calc(100% - 32px));margin:0 auto;padding:32px 0 54px;}}
+  a{{color:var(--green);}}
+  .brand{{display:flex;align-items:center;gap:12px;text-decoration:none;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-size:.72rem;margin-bottom:24px;}}
+  .brand img{{width:42px;height:42px;border-radius:50%;}}
+  .hero{{border:1px solid rgba(125,187,63,.25);background:linear-gradient(135deg,rgba(255,255,255,.035),rgba(125,187,63,.04));padding:22px;margin-bottom:18px;}}
+  .kicker{{color:var(--amber);text-transform:uppercase;letter-spacing:.16em;font-size:.72rem;margin-bottom:8px;}}
+  h1{{font-family:Georgia,serif;font-size:clamp(2rem,5vw,3.5rem);line-height:1.05;margin:0 0 12px;}}
+  p{{color:#b8b8c8;line-height:1.65;max-width:900px;}}
+  .summary{{display:flex;gap:9px;flex-wrap:wrap;margin:16px 0 0;}}
+  .summary span{{border:1px solid rgba(125,187,63,.25);background:rgba(125,187,63,.055);padding:7px 10px;color:#dbead2;}}
+  .nav{{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px;}}
+  .nav a{{border:1px solid rgba(125,187,63,.25);background:rgba(125,187,63,.055);padding:8px 11px;text-decoration:none;text-transform:uppercase;letter-spacing:.08em;font-size:.74rem;}}
+  .list{{display:grid;gap:10px;margin-top:24px;}}
+  .rank-link{{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:8px 12px;align-items:center;border:1px solid rgba(125,187,63,.2);background:rgba(255,255,255,.025);padding:13px;text-decoration:none;}}
+  .pos{{grid-row:1/3;color:var(--green);font-weight:700;font-size:1.1rem;}}
+  .rank-link strong{{color:var(--text);font-family:Georgia,serif;font-size:1.15rem;}}
+  .rank-link span:not(.pos){{color:var(--muted);}}
+  .rank-link em{{grid-column:3;grid-row:1/3;color:var(--amber);font-style:normal;font-weight:700;white-space:nowrap;}}
+  .note{{margin-top:22px;border-top:1px solid rgba(255,255,255,.08);padding-top:16px;color:var(--muted);font-size:.92rem;}}
+  @media(max-width:680px){{main{{width:min(100% - 22px,1040px);padding-top:20px;}}.hero{{padding:16px;}}.rank-link{{grid-template-columns:44px minmax(0,1fr);}}.rank-link em{{grid-column:2;grid-row:auto;}}}}
+</style>
+</head>
+<body>
+<main>
+  <a class="brand" href="../"><img src="../images/brand/icon-round-192.png" alt="">The Vault Escape</a>
+  <section class="hero">
+    <div class="kicker">Escape rooms por ubicación</div>
+    <h1>Escape rooms en {escape(label)}</h1>
+    <p>{escape(intro)}</p>
+    <div class="summary">
+      <span>{len(top_rows)} salas destacadas</span>
+      <span>{total_count} salas detectadas en la zona</span>
+      <span>Ranking, premios y fichas públicas</span>
+    </div>
+    <div class="nav">
+      <a href="../ranking-escape-rooms/">Ranking España</a>
+      <a href="../mejores-escape-rooms/">Mejores salas</a>
+      <a href="../mejores-escape-rooms-terror/">Terror</a>
+      <a href="../reviews/">Reviews</a>
+      <a href="../">Abrir web</a>
+    </div>
+  </section>
+  <div class="list">
+    {''.join(items)}
+  </div>
+  <p class="note">Página local orientativa para búsquedas de escape rooms en {escape(label)}. Las posiciones pueden cambiar cuando se actualizan nuevas fuentes, premios, reviews o datos de catálogo.</p>
+</main>
+</body>
+</html>
+"""
+
+
+def build_location_page_specs(sala_rows):
+    city_groups = {}
+    region_groups = {}
+    for item in sala_rows:
+        room = item.get("room") or {}
+        city = clean_text(room.get("ciudad"))
+        region = canonical_region(room.get("comunidad"))
+        if city:
+            city_groups.setdefault(slugify(city), {"kind": "city", "label": city, "rows": []})["rows"].append(item)
+        if region:
+            region_groups.setdefault(slugify(region), {"kind": "region", "label": region, "rows": []})["rows"].append(item)
+
+    specs = []
+    used_slugs = set()
+    for group in city_groups.values():
+        if len(group["rows"]) < CITY_PAGE_MIN_ROOMS:
+            continue
+        slug = f"escape-rooms-{slugify(group['label'])}"
+        used_slugs.add(slug)
+        specs.append({**group, "slug": slug})
+
+    for group in region_groups.values():
+        if len(group["rows"]) < REGION_PAGE_MIN_ROOMS:
+            continue
+        base_slug = f"escape-rooms-{slugify(group['label'])}"
+        slug = base_slug if base_slug not in used_slugs else f"escape-rooms-comunidad-{slugify(group['label'])}"
+        used_slugs.add(slug)
+        specs.append({**group, "slug": slug})
+
+    specs.sort(key=lambda spec: (spec["kind"] != "city", -len(spec["rows"]), spec["label"].lower()))
+    return specs
+
+
+def location_index_page(location_specs):
+    canonical = site_url("/escape-rooms/")
+    image = site_url("/images/brand/social-card.png")
+    city_specs = [spec for spec in location_specs if spec["kind"] == "city"]
+    region_specs = [spec for spec in location_specs if spec["kind"] == "region"]
+
+    def links(specs):
+        return "\n".join(
+            f'<a class="location-link" href="../{escape(spec["slug"])}/">'
+            f'<strong>{escape(spec["label"])}</strong>'
+            f'<span>{len(spec["rows"])} salas detectadas</span>'
+            "</a>"
+            for spec in specs
+        )
+
+    schema = {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "@id": canonical,
+        "url": canonical,
+        "name": f"Escape rooms por ciudad y comunidad | {SITE_NAME}",
+        "description": "Índice de escape rooms en España por ciudad y comunidad autónoma con enlaces a rankings locales y fichas públicas.",
+        "inLanguage": "es",
+        "isPartOf": {"@id": site_url("/#website")},
+    }
+    return f"""<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Escape rooms por ciudad y comunidad | {SITE_NAME}</title>
+<meta name="description" content="Encuentra escape rooms en España por ciudad y comunidad autónoma: Barcelona, Madrid, Valencia, Catalunya, Andalucía, País Vasco y más.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="{escape(canonical)}">
+<link rel="icon" href="../images/brand/favicon-round-32.png" sizes="32x32" type="image/png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{SITE_NAME}">
+<meta property="og:title" content="Escape rooms por ciudad y comunidad | {SITE_NAME}">
+<meta property="og:description" content="Índice de escape rooms en España por ciudad y comunidad autónoma, con rankings locales y fichas públicas.">
+<meta property="og:url" content="{escape(canonical)}">
+<meta property="og:image" content="{escape(image)}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="{escape(image)}">
+<script type="application/ld+json">
+{json_ld(schema)}
+</script>
+<style>
+  :root{{--bg:#0a0a0f;--border:#2a2a45;--green:#7dbb3f;--amber:#ffa91f;--text:#f0f0ea;--muted:#9a9ab6;}}
+  *{{box-sizing:border-box;}}
+  body{{margin:0;background:radial-gradient(ellipse at top,rgba(125,187,63,.14),transparent 38%),var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;line-height:1.55;}}
+  main{{width:min(1120px,calc(100% - 32px));margin:0 auto;padding:32px 0 54px;}}
+  .brand{{display:flex;align-items:center;gap:12px;text-decoration:none;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-size:.72rem;margin-bottom:24px;}}
+  .brand img{{width:42px;height:42px;border-radius:50%;}}
+  .hero{{border:1px solid rgba(125,187,63,.25);background:linear-gradient(135deg,rgba(255,255,255,.035),rgba(125,187,63,.04));padding:22px;margin-bottom:18px;}}
+  .kicker{{color:var(--amber);text-transform:uppercase;letter-spacing:.16em;font-size:.72rem;margin-bottom:8px;}}
+  h1{{font-family:Georgia,serif;font-size:clamp(2rem,5vw,3.45rem);line-height:1.05;margin:0 0 12px;}}
+  h2{{margin:28px 0 12px;color:var(--green);font-size:.86rem;text-transform:uppercase;letter-spacing:.16em;}}
+  p{{color:#b8b8c8;line-height:1.65;max-width:900px;}}
+  .nav{{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px;}}
+  .nav a,.location-link{{border:1px solid rgba(125,187,63,.25);background:rgba(125,187,63,.055);text-decoration:none;}}
+  .nav a{{color:var(--green);padding:8px 11px;text-transform:uppercase;letter-spacing:.08em;font-size:.74rem;}}
+  .grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;}}
+  .location-link{{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px;color:var(--text);}}
+  .location-link strong{{font-family:Georgia,serif;font-size:1.08rem;}}
+  .location-link span{{color:var(--muted);font-size:.82rem;white-space:nowrap;}}
+  @media(max-width:680px){{main{{width:min(100% - 22px,1120px);padding-top:20px;}}.hero{{padding:16px;}}.location-link{{align-items:flex-start;flex-direction:column;gap:2px;}}}}
+</style>
+</head>
+<body>
+<main>
+  <a class="brand" href="../"><img src="../images/brand/icon-round-192.png" alt="">The Vault Escape</a>
+  <section class="hero">
+    <div class="kicker">Escape rooms por ubicación</div>
+    <h1>Escape rooms por ciudad y comunidad</h1>
+    <p>Accede a rankings locales y fichas públicas de escape rooms en España. Cada página agrupa salas por ciudad o comunidad autónoma para ayudar a descubrir, comparar y planificar próximas experiencias.</p>
+    <div class="nav">
+      <a href="../ranking-escape-rooms/">Ranking España</a>
+      <a href="../mejores-escape-rooms/">Mejores salas</a>
+      <a href="../reviews/">Reviews</a>
+      <a href="../">Abrir web</a>
+    </div>
+  </section>
+  <h2>Ciudades</h2>
+  <div class="grid">
+    {links(city_specs)}
+  </div>
+  <h2>Comunidades autónomas</h2>
+  <div class="grid">
+    {links(region_specs)}
+  </div>
 </main>
 </body>
 </html>
@@ -1197,9 +1545,10 @@ def room_page(item, position):
 """
 
 
-def sitemap_xml(review_rooms, sala_rows):
+def sitemap_xml(review_rooms, sala_rows, location_specs=None):
     entries = [
         (site_url("/"), "daily", "1.0"),
+        (site_url("/escape-rooms/"), "weekly", "0.9"),
         (site_url("/reviews/"), "weekly", "0.8"),
         (site_url("/ranking/"), "weekly", "0.9"),
         (site_url("/ranking-escape-rooms/"), "weekly", "0.95"),
@@ -1207,6 +1556,7 @@ def sitemap_xml(review_rooms, sala_rows):
         (site_url("/mejores-escape-rooms-terror/"), "weekly", "0.9"),
     ]
     entries.extend((site_url(f"/reviews/{room_url_slug(room)}/"), "monthly", "0.7") for room in review_rooms)
+    entries.extend((site_url(f"/{spec['slug']}/"), "weekly", "0.86") for spec in (location_specs or []))
     entries.extend((site_url(f"/salas/{room_url_slug(item['room'])}/"), "monthly", "0.7") for item in sala_rows)
     unique_entries = []
     seen_urls = set()
@@ -1242,6 +1592,8 @@ The Vault Escape es un catálogo y archivo de escape rooms en España. Incluye f
 - Landing SEO ranking escape rooms España: {site_url('/ranking-escape-rooms/')}
 - Landing SEO mejores escape rooms España: {site_url('/mejores-escape-rooms/')}
 - Landing SEO mejores escape rooms de terror: {site_url('/mejores-escape-rooms-terror/')}
+- Índice SEO por ciudad y comunidad: {site_url('/escape-rooms/')}
+- Landings SEO por ubicación: /escape-rooms-{{ciudad}}/ y /escape-rooms-{{comunidad}}/
 - Sitemap XML: {site_url('/sitemap.xml')}
 
 ## Contenido
@@ -1317,6 +1669,32 @@ def main():
             newline="\n",
         )
 
+    for old_location_dir in ROOT.glob("escape-rooms-*"):
+        if old_location_dir.is_dir():
+            shutil.rmtree(old_location_dir)
+    location_specs = build_location_page_specs(sala_rows)
+    for spec in location_specs:
+        page_dir = ROOT / spec["slug"]
+        page_dir.mkdir(exist_ok=True)
+        (page_dir / "index.html").write_text(
+            location_landing_page(
+                spec["slug"],
+                spec["kind"],
+                spec["label"],
+                spec["rows"],
+                len(spec["rows"]),
+            ),
+            encoding="utf-8",
+            newline="\n",
+        )
+    location_index_dir = ROOT / "escape-rooms"
+    location_index_dir.mkdir(exist_ok=True)
+    (location_index_dir / "index.html").write_text(
+        location_index_page(location_specs),
+        encoding="utf-8",
+        newline="\n",
+    )
+
     salas_dir = ROOT / "salas"
     salas_dir.mkdir(exist_ok=True)
     for item in sala_rows:
@@ -1324,13 +1702,14 @@ def main():
         page_dir.mkdir(parents=True, exist_ok=True)
         (page_dir / "index.html").write_text(room_page(item, item.get("position") or 0), encoding="utf-8", newline="\n")
 
-    (ROOT / "sitemap.xml").write_text(sitemap_xml(rooms, sala_rows), encoding="utf-8", newline="\n")
+    (ROOT / "sitemap.xml").write_text(sitemap_xml(rooms, sala_rows, location_specs), encoding="utf-8", newline="\n")
     (ROOT / "robots.txt").write_text(robots_txt(), encoding="utf-8", newline="\n")
     (ROOT / "llms.txt").write_text(llms_txt(), encoding="utf-8", newline="\n")
     print(
         "SEO generado: "
         f"{len(generated_review_pages)} reviews, "
         f"{len(sala_rows)} salas, "
+        f"{len(location_specs)} landings por ubicacion, "
         f"{len(generated_review_pages)} tarjetas sociales, "
         "ranking, landings SEO, sitemap.xml, robots.txt y llms.txt"
     )

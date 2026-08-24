@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://thevaultescape.com/</loc><lastmod>2026-08-24</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://thevaultescape.com/reviews/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://thevaultescape.com/ranking/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://thevaultescape.com/ranking-escape-rooms/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.95</priority></url>
@@ -44,6 +45,51 @@
   <url><loc>https://thevaultescape.com/reviews/achijira/</loc><lastmod>2026-08-24</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://thevaultescape.com/reviews/dark-city/</loc><lastmod>2026-08-24</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://thevaultescape.com/reviews/scubick-doo/</loc><lastmod>2026-08-24</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-madrid/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-barcelona/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-valencia/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-sevilla/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-alicante/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-bilbao/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-zaragoza/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-murcia/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-malaga/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-mataro/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-gijon/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-valladolid/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-granada/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-sabadell/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-santander/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-terrassa/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-elche/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-badalona/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-almeria/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-vitoria-gasteiz/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-a-coruna/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-granollers/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-cornella-de-llobregat/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-lleida/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-santiago-de-compostela/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-peligros/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-salamanca/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-santa-coloma-de-gramenet/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-alcorcon/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-leon/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-pamplona/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-vigo/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-catalunya/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-comunidad-de-madrid/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-comunitat-valenciana/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-andalucia/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-pais-vasco/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-aragon/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-region-de-murcia/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-castilla-y-leon/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-cantabria/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-galicia/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-asturias/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-canarias/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
+  <url><loc>https://thevaultescape.com/escape-rooms-castilla-la-mancha/</loc><lastmod>2026-08-24</lastmod><changefreq>weekly</changefreq><priority>0.86</priority></url>
   <url><loc>https://thevaultescape.com/salas/la-taberna/</loc><lastmod>2026-08-24</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://thevaultescape.com/salas/malum/</loc><lastmod>2026-08-24</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://thevaultescape.com/salas/el-secreto-de-los-krugger/</loc><lastmod>2026-08-24</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>

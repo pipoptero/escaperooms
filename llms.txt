@@ -9,6 +9,8 @@ The Vault Escape es un catálogo y archivo de escape rooms en España. Incluye f
 - Landing SEO ranking escape rooms España: https://thevaultescape.com/ranking-escape-rooms/
 - Landing SEO mejores escape rooms España: https://thevaultescape.com/mejores-escape-rooms/
 - Landing SEO mejores escape rooms de terror: https://thevaultescape.com/mejores-escape-rooms-terror/
+- Índice SEO por ciudad y comunidad: https://thevaultescape.com/escape-rooms/
+- Landings SEO por ubicación: /escape-rooms-{ciudad}/ y /escape-rooms-{comunidad}/
 - Sitemap XML: https://thevaultescape.com/sitemap.xml
 
 ## Contenido

@@ -38,7 +38,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data.json review_photos.json robots.txt sitemap.xml llms.txt reviews/ ranking/ ranking-escape-rooms/ mejores-escape-rooms/ mejores-escape-rooms-terror/ salas/ images/seo/
+          git add data.json review_photos.json robots.txt sitemap.xml llms.txt reviews/ ranking/ ranking-escape-rooms/ mejores-escape-rooms/ mejores-escape-rooms-terror/ escape-rooms/ escape-rooms-*/ salas/ images/seo/
           git diff --staged --quiet && echo "Sin cambios en datos generados" || (
             git commit -m "Auto-update datos y SEO"
             git push
