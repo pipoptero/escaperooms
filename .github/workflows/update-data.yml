@@ -26,7 +26,7 @@ jobs:
           python-version: "3.11"
 
       - name: Instalar dependencias
-        run: pip install openpyxl
+        run: pip install openpyxl pillow
 
       - name: Convertir Excel, fotos y paginas SEO
         run: |
@@ -38,7 +38,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data.json review_photos.json robots.txt sitemap.xml reviews/ ranking/ salas/
+          git add data.json review_photos.json robots.txt sitemap.xml reviews/ ranking/ salas/ images/seo/
           git diff --staged --quiet && echo "Sin cambios en datos generados" || (
             git commit -m "Auto-update datos y SEO"
             git push

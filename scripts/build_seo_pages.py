@@ -1,16 +1,23 @@
 import json
 import re
 import unicodedata
-from datetime import date
+from datetime import date, datetime, timezone
 from html import escape
 from pathlib import Path
 from urllib.parse import quote
+
+try:
+    from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageOps
+except ImportError:  # The SEO pages still build without social card generation.
+    Image = ImageDraw = ImageFont = ImageFilter = ImageOps = None
 
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE_URL = "https://thevaultescape.com"
 SITE_NAME = "The Vault Escape"
 TODAY = date.today().isoformat()
+DEFAULT_SOCIAL_CARD = "images/brand/social-card.png"
+REVIEW_SOCIAL_DIR = Path("images/seo/reviews")
 
 
 def read_json(path, fallback):
@@ -127,6 +134,14 @@ def page_asset(path):
     return "../../" + quote(value, safe="/")
 
 
+def local_asset_path(path):
+    value = text(path).replace("\\", "/")
+    if not value or value.startswith("http://") or value.startswith("https://"):
+        return None
+    candidate = ROOT / value
+    return candidate if candidate.exists() else None
+
+
 def short_description(room, limit=155):
     source = re.sub(r"\s+", " ", text(room.get("descripcion")))
     if not source:
@@ -134,6 +149,23 @@ def short_description(room, limit=155):
     if len(source) <= limit:
         return source
     return source[: limit - 1].rsplit(" ", 1)[0] + "..."
+
+
+def short_text(value, limit=135):
+    source = re.sub(r"\s+", " ", text(value))
+    if len(source) <= limit:
+        return source
+    return source[: limit - 1].rsplit(" ", 1)[0] + "..."
+
+
+def social_text(value):
+    cleaned = []
+    for ch in text(value):
+        category = unicodedata.category(ch)
+        if category.startswith("C") or category in {"Mn", "So", "Sk"}:
+            continue
+        cleaned.append(ch)
+    return re.sub(r"\s+", " ", "".join(cleaned)).strip()
 
 
 def score_label(value):
@@ -161,6 +193,13 @@ def room_url_slug(room):
     return slugify(canonical_room_name(room))
 
 
+def catalog_rooms():
+    catalog = read_json(ROOT / "catalog.json", [])
+    if isinstance(catalog, dict):
+        return catalog.get("catalogo") or catalog.get("rooms") or catalog.get("catalog") or []
+    return catalog or []
+
+
 def source_label(source_id, meta):
     labels = meta.get("sources", {}) if isinstance(meta, dict) else {}
     return labels.get(source_id, {}).get("label") or {
@@ -175,6 +214,14 @@ def merge_room_data(base, extra):
     merged = dict(base or {})
     for key, value in (extra or {}).items():
         if text(value) and not text(merged.get(key)):
+            merged[key] = value
+    return merged
+
+
+def merge_room_override(base, extra):
+    merged = dict(base or {})
+    for key, value in (extra or {}).items():
+        if text(value) or isinstance(value, (int, float, bool)):
             merged[key] = value
     return merged
 
@@ -204,6 +251,40 @@ def review_rooms(data):
     return rooms
 
 
+def published_review_rooms(data):
+    published = read_json(ROOT / "published_reviews.json", {})
+    reviews = published.get("reviews") or {}
+    lookup = build_room_lookup(data)
+    rooms = []
+    seen = set()
+    for key, record in reviews.items():
+        if text(record.get("status") or "published").lower() != "published":
+            continue
+        review = record.get("review") or {}
+        identity = canonical_room_identity(
+            record.get("roomKey")
+            or record.get("sourceRoomKey")
+            or review.get("id")
+            or review.get("nombre")
+            or key
+        )
+        if not identity or identity in seen:
+            continue
+        base = lookup.get(identity, {})
+        room = merge_room_override(base, review)
+        if not text(room.get("id")):
+            room["id"] = identity
+        room["_reviewKey"] = identity
+        room["_publishedAt"] = record.get("publishedAt") or record.get("updatedAt") or 0
+        room["_updatedAt"] = record.get("updatedAt") or record.get("publishedAt") or 0
+        room["_reviewAuthorName"] = record.get("publishedByName") or review.get("_reviewAuthorName") or "The Vault"
+        room["_arkkadiaCommunityReview"] = room["_reviewAuthorName"] not in ("", "The Vault")
+        rooms.append(apply_canonical_room_fields(room))
+        seen.add(identity)
+    rooms.sort(key=lambda room: (-review_timestamp(room), text(room.get("nombre")).lower()))
+    return rooms
+
+
 def build_room_lookup(data):
     lookup = {}
     for collection in ("hechos", "pendientes"):
@@ -211,14 +292,32 @@ def build_room_lookup(data):
             key = room_identity(room)
             if key:
                 lookup[key] = merge_room_data(lookup.get(key, {}), room)
-    catalog = read_json(ROOT / "catalog.json", [])
-    if isinstance(catalog, dict):
-        catalog = catalog.get("rooms") or catalog.get("catalog") or []
-    for room in catalog or []:
+    for room in catalog_rooms():
         key = room_identity(room)
         if key:
             lookup[key] = merge_room_data(lookup.get(key, {}), room)
     return lookup
+
+
+def review_timestamp(room):
+    for key in ("_updatedAt", "_publishedAt", "updatedAt", "publishedAt"):
+        try:
+            value = int(room.get(key) or 0)
+        except (TypeError, ValueError):
+            value = 0
+        if value:
+            return value
+    return 0
+
+
+def timestamp_iso(ms):
+    try:
+        value = int(ms or 0)
+    except (TypeError, ValueError):
+        return ""
+    if not value:
+        return ""
+    return datetime.fromtimestamp(value / 1000, tz=timezone.utc).date().isoformat()
 
 
 def ranked_rooms(data):
@@ -261,6 +360,154 @@ def ranked_rooms(data):
 
 def json_ld(data):
     return json.dumps(data, ensure_ascii=False, indent=2)
+
+
+def load_font(candidates, size):
+    if ImageFont is None:
+        return None
+    for candidate in candidates:
+        path = Path(candidate)
+        if path.exists():
+            try:
+                return ImageFont.truetype(str(path), size=size)
+            except OSError:
+                pass
+        try:
+            return ImageFont.truetype(candidate, size=size)
+        except OSError:
+            pass
+    return ImageFont.load_default()
+
+
+def text_width(draw, value, font):
+    box = draw.textbbox((0, 0), value, font=font)
+    return box[2] - box[0]
+
+
+def wrap_lines(draw, value, font, max_width, max_lines=3):
+    words = text(value).split()
+    lines = []
+    current = ""
+    for word in words:
+        candidate = f"{current} {word}".strip()
+        if not current or text_width(draw, candidate, font) <= max_width:
+            current = candidate
+            continue
+        lines.append(current)
+        current = word
+        if len(lines) >= max_lines:
+            break
+    if current and len(lines) < max_lines:
+        lines.append(current)
+    if words and len(lines) == max_lines:
+        consumed = " ".join(lines).split()
+        if len(consumed) < len(words):
+            lines[-1] = lines[-1].rstrip(".,;:") + "..."
+    return lines or [""]
+
+
+def cover_resize(image, size):
+    if ImageOps is None:
+        return image.resize(size)
+    return ImageOps.fit(image, size, method=Image.Resampling.LANCZOS, centering=(0.5, 0.5))
+
+
+def safe_open_image(path):
+    try:
+        return Image.open(path).convert("RGB")
+    except Exception:
+        return None
+
+
+def review_social_source(room, photos):
+    candidates = [
+        *((photo.get("src") for photo in photos if photo.get("src")) if photos else []),
+        room.get("imagen"),
+        DEFAULT_SOCIAL_CARD,
+    ]
+    for candidate in candidates:
+        path = local_asset_path(candidate)
+        if path:
+            return path
+    return None
+
+
+def generate_review_social_card(room, photos):
+    if Image is None:
+        return ""
+    slug = room_url_slug(room)
+    out_rel = REVIEW_SOCIAL_DIR / f"{slug}.jpg"
+    out_path = ROOT / out_rel
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+
+    name = canonical_room_name(room) or "Escape room"
+    company = canonical_room_company(room)
+    location = room_location(room)
+    score = score_label(room.get("valoracion") or room.get("rating"))
+    author = text(room.get("_reviewAuthorName")) or "The Vault"
+
+    canvas = Image.new("RGB", (1200, 630), "#07080d")
+    draw = ImageDraw.Draw(canvas)
+    for y in range(630):
+        glow = int(28 * (1 - y / 630))
+        draw.line([(0, y), (1200, y)], fill=(7 + glow // 3, 8 + glow // 2, 13 + glow))
+    draw.rectangle((0, 0, 1200, 630), outline=(125, 187, 63), width=3)
+    draw.rectangle((24, 24, 1176, 606), outline=(42, 58, 38), width=1)
+
+    source_path = review_social_source(room, photos)
+    if source_path:
+        image = safe_open_image(source_path)
+        if image:
+            cover = cover_resize(image, (470, 590))
+            canvas.paste(cover, (704, 20))
+            shade = Image.new("RGBA", (470, 590), (0, 0, 0, 48))
+            canvas.paste(shade.convert("RGB"), (704, 20), shade)
+            image.close()
+
+    logo_path = local_asset_path("images/brand/icon-round-192.png") or local_asset_path("images/brand/the-vault-round-logo.jpg")
+    if logo_path:
+        logo = safe_open_image(logo_path)
+        if logo:
+            logo = cover_resize(logo, (86, 86))
+            canvas.paste(logo, (62, 52))
+            logo.close()
+
+    title_font = load_font(["C:/Windows/Fonts/georgiab.ttf", "Georgia Bold", "DejaVuSerif-Bold.ttf"], 58)
+    meta_font = load_font(["C:/Windows/Fonts/bahnschrift.ttf", "C:/Windows/Fonts/arialbd.ttf", "Arial Bold"], 25)
+    small_font = load_font(["C:/Windows/Fonts/bahnschrift.ttf", "C:/Windows/Fonts/arial.ttf", "Arial"], 21)
+    score_font = load_font(["C:/Windows/Fonts/georgiab.ttf", "Georgia Bold", "DejaVuSerif-Bold.ttf"], 52)
+
+    green = (125, 187, 63)
+    amber = (246, 166, 25)
+    white = (245, 245, 238)
+    muted = (172, 170, 205)
+
+    draw.text((168, 66), "THE VAULT ESCAPE", fill=green, font=small_font)
+    draw.text((62, 168), f"REVIEW {author.upper()}", fill=muted, font=small_font)
+    y = 215
+    for line in wrap_lines(draw, name.upper(), title_font, 580, max_lines=3):
+        draw.text((62, y), line, fill=white, font=title_font)
+        y += 64
+    if company:
+        draw.text((64, y + 6), company, fill=green, font=meta_font)
+        y += 42
+    if location:
+        draw.text((64, y), location, fill=muted, font=small_font)
+
+    if score:
+        draw.rounded_rectangle((62, 478, 270, 560), radius=0, outline=amber, width=2, fill=(22, 19, 17))
+        draw.text((84, 478), "NOTA", fill=muted, font=small_font)
+        draw.text((84, 492), score, fill=amber, font=score_font)
+        draw.text((188, 517), "/10", fill=muted, font=small_font)
+
+    quote_text = short_text(social_text(room.get("descripcion")), 120)
+    if quote_text:
+        for idx, line in enumerate(wrap_lines(draw, quote_text, small_font, 360, max_lines=3)):
+            draw.text((304, 486 + idx * 28), line, fill=(215, 215, 224), font=small_font)
+
+    draw.text((62, 578), "thevaultescape.com", fill=green, font=small_font)
+    canvas.save(out_path, "JPEG", quality=88, optimize=True)
+    return out_rel.as_posix()
 
 
 def base_head(title, description, canonical, image):
@@ -318,18 +565,21 @@ def base_head(title, description, canonical, image):
 """
 
 
-def review_page(room, photos):
+def review_page(room, photos, social_image_path=""):
     name = canonical_room_name(room) or "Escape room"
     company = canonical_room_company(room)
     slug = room_url_slug(room)
     canonical = site_url(f"/reviews/{slug}/")
     app_link = site_url(f"/#review/{app_hash_key(room)}")
     description = short_description(room)
-    image = asset_url(room.get("imagen") or (photos[0].get("src") if photos else "images/brand/social-card.png"))
+    image = asset_url(social_image_path or room.get("imagen") or (photos[0].get("src") if photos else DEFAULT_SOCIAL_CARD))
     title = f"Review de {name} | {SITE_NAME}"
     location = room_location(room)
     score = score_label(room.get("valoracion"))
-    cover = page_asset(room.get("imagen") or (photos[0].get("src") if photos else "images/brand/social-card.png"))
+    cover = page_asset(room.get("imagen") or (photos[0].get("src") if photos else DEFAULT_SOCIAL_CARD))
+    author = text(room.get("_reviewAuthorName")) or "The Vault"
+    date_published = timestamp_iso(room.get("_publishedAt"))
+    date_modified = timestamp_iso(room.get("_updatedAt")) or date_published
     photo_html = "\n".join(
         f'<img src="{escape(page_asset(photo.get("src")))}" alt="{escape(photo.get("alt") or name)}" loading="lazy">'
         for photo in photos
@@ -368,7 +618,7 @@ def review_page(room, photos):
                 "@type": "Review",
                 "name": f"Review de {name}",
                 "reviewBody": text(room.get("descripcion")),
-                "author": {"@type": "Organization", "name": SITE_NAME, "url": BASE_URL},
+                "author": {"@type": "Person" if author != "The Vault" else "Organization", "name": author, "url": BASE_URL},
                 "publisher": {"@type": "Organization", "name": SITE_NAME, "url": BASE_URL},
                 "itemReviewed": {
                     "@type": "EntertainmentBusiness",
@@ -399,6 +649,10 @@ def review_page(room, photos):
             "bestRating": "10",
             "worstRating": "0",
         }
+    if date_published:
+        schema["@graph"][1]["datePublished"] = date_published
+    if date_modified:
+        schema["@graph"][1]["dateModified"] = date_modified
     return base_head(title, description, canonical, image) + f"""
 <script type="application/ld+json">
 {json_ld(schema)}
@@ -410,7 +664,7 @@ def review_page(room, photos):
   <article class="hero">
     <img class="cover" src="{escape(cover)}" alt="Cartel de {escape(name)}">
     <div>
-      <div class="kicker">Review The Vault</div>
+      <div class="kicker">Review {escape(author)}</div>
       <h1>{escape(name)}</h1>
       <div class="company">{escape(company)}</div>
       <div class="meta">{meta_html}</div>
@@ -734,17 +988,20 @@ Sitemap: {site_url('/sitemap.xml')}
 def main():
     data = read_json(ROOT / "data.json", {})
     photos_data = read_json(ROOT / "review_photos.json", {}).get("photos", {})
-    rooms = review_rooms(data)
+    rooms = published_review_rooms(data) or review_rooms(data)
     ranking_rows = [row for row in ranked_rooms(data) if decimal(row["rating"].get("global_score")) > 0]
 
     reviews_dir = ROOT / "reviews"
     reviews_dir.mkdir(exist_ok=True)
+    generated_review_pages = []
     for room in rooms:
-        slug = slugify(room.get("nombre"))
+        slug = room_url_slug(room)
         page_dir = reviews_dir / slug
         page_dir.mkdir(parents=True, exist_ok=True)
         photos = photo_entries(room, photos_data)
-        (page_dir / "index.html").write_text(review_page(room, photos), encoding="utf-8", newline="\n")
+        social_card = generate_review_social_card(room, photos)
+        (page_dir / "index.html").write_text(review_page(room, photos, social_card), encoding="utf-8", newline="\n")
+        generated_review_pages.append(slug)
 
     (reviews_dir / "index.html").write_text(reviews_index_page(rooms), encoding="utf-8", newline="\n")
     ranking_dir = ROOT / "ranking"
@@ -760,7 +1017,13 @@ def main():
 
     (ROOT / "sitemap.xml").write_text(sitemap_xml(rooms, ranking_rows), encoding="utf-8", newline="\n")
     (ROOT / "robots.txt").write_text(robots_txt(), encoding="utf-8", newline="\n")
-    print(f"SEO generado: {len(rooms)} reviews, {len(ranking_rows)} salas, ranking, sitemap.xml y robots.txt")
+    print(
+        "SEO generado: "
+        f"{len(generated_review_pages)} reviews, "
+        f"{len(ranking_rows)} salas, "
+        f"{len(generated_review_pages)} tarjetas sociales, "
+        "ranking, sitemap.xml y robots.txt"
+    )
 
 
 if __name__ == "__main__":

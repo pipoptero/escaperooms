@@ -20,6 +20,7 @@
 <link rel="preconnect" href="https://a.basemaps.cartocdn.com">
 <link rel="preconnect" href="https://b.basemaps.cartocdn.com">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="es_ES">
 <meta property="og:site_name" content="The Vault">
@@ -504,6 +505,12 @@
   .escapist-leaflet-marker.cluster{width:34px;height:34px;font-size:.72rem;border-width:2px;}
   .escapist-leaflet-marker.approx{border-style:dashed;}
   .escapist-leaflet-marker.active{box-shadow:0 0 0 4px rgba(0,0,0,.34),0 0 0 8px rgba(125,187,63,.24),0 0 32px rgba(125,187,63,.46),0 10px 28px rgba(0,0,0,.46);}
+  .escapist-leaflet-map .marker-cluster{background:transparent;}
+  .escapist-leaflet-map .marker-cluster div{background:transparent;}
+  .escapist-leaflet-cluster{width:42px;height:42px;border-radius:999px;border:2px solid rgba(125,187,63,.85);display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:.72rem;font-weight:900;color:#07120f;background:radial-gradient(circle at 38% 35%,#d8ff9a 0,#7dbb3f 44%,#24450f 100%);box-shadow:0 0 0 4px rgba(0,0,0,.34),0 0 0 9px rgba(125,187,63,.16),0 14px 34px rgba(0,0,0,.46);}
+  .escapist-leaflet-cluster.mixed{background:linear-gradient(135deg,rgba(230,57,70,.96) 0 48%,rgba(6,214,160,.92) 52% 100%);color:#fff;border-color:rgba(255,255,255,.42);}
+  .escapist-leaflet-cluster.personal{background:radial-gradient(circle at 38% 35%,#ff9ca4 0,#e63946 54%,#65131a 100%);color:#fff;border-color:rgba(230,57,70,.92);}
+  .escapist-leaflet-cluster.group{background:radial-gradient(circle at 38% 35%,#9bffe8 0,#06d6a0 54%,#064633 100%);color:#06120f;border-color:rgba(6,214,160,.92);}
   .escapist-map-fallback{position:absolute;inset:0;}
   .escapist-map-img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;opacity:.9;}
   .escapist-map-svg{position:absolute;inset:0;width:100%;height:100%;opacity:.42;}
@@ -525,12 +532,15 @@
   .escapist-map-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
   .escapist-map-filter{font-family:'Share Tech Mono',monospace;font-size:.56rem;letter-spacing:.09em;text-transform:uppercase;color:var(--text3);border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.025);padding:7px 9px;cursor:pointer;}
   .escapist-map-filter.active{border-color:rgba(125,187,63,.62);background:rgba(125,187,63,.1);color:var(--green);}
+  .escapist-map-filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+  .escapist-map-filter-label{font-family:'Share Tech Mono',monospace;font-size:.5rem;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;align-self:center;margin-right:2px;}
   .escapist-map-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(74px,1fr));gap:6px;margin-bottom:10px;}
   .escapist-map-stat{border:1px solid rgba(125,187,63,.12);background:rgba(125,187,63,.035);padding:8px 9px;min-width:0;}
   .escapist-map-stat strong{display:block;font-family:'Cinzel',serif;color:var(--amber);font-size:1.05rem;line-height:1;}
   .escapist-map-stat span{display:block;font-family:'Share Tech Mono',monospace;font-size:.48rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-top:4px;}
   .escapist-map-city{font-family:'Cinzel',serif;font-size:1.08rem;color:var(--text);line-height:1.15;margin-bottom:4px;}
   .escapist-map-meta{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;line-height:1.45;margin-bottom:10px;}
+  .escapist-map-toolbar{display:flex;gap:6px;flex-wrap:wrap;margin:-3px 0 10px;}
   .escapist-map-zones{display:grid;grid-template-columns:repeat(auto-fit,minmax(126px,1fr));gap:6px;max-height:118px;overflow:auto;margin-bottom:10px;padding-right:2px;}
   .escapist-map-zone{border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.018);text-align:left;padding:7px 8px;cursor:pointer;min-width:0;}
   .escapist-map-zone.active{border-color:rgba(125,187,63,.42);background:linear-gradient(135deg,rgba(125,187,63,.11),rgba(255,255,255,.02));}
@@ -2004,6 +2014,7 @@
 </div>
 <script src="firebase-config.js"></script>
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script defer src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script>
 // ════════════════════════════════════════════════════════════
 //  🔥 CONFIGURACIÓN FIREBASE
@@ -2111,6 +2122,7 @@ let INVITE_NOTICE_SHOWN = false;
 let SETTINGS_TAB = 'profile';
 let PROFILE_MAP_ACTIVE_KEY = '';
 let PROFILE_MAP_FILTER = 'all';
+let PROFILE_MAP_PRECISION_FILTER = 'all';
 let PROFILE_MAP_FOCUS_ACTIVE = false;
 let ESCAPIST_LEAFLET_MAP = null;
 let LAST_LIVE_REFRESH_AT = 0;
@@ -2316,8 +2328,8 @@ function canonicalizeReviewRoom(room) {
     ...catalogRoom,
     ...room,
     id: room.id || catalogRoom.id,
-    imagen: room.imagen || catalogRoom.imagen,
-    image: room.image || catalogRoom.image,
+    imagen: catalogRoom.imagen || room.imagen,
+    image: catalogRoom.image || room.image,
     web: room.web || catalogRoom.web,
     provincia: room.provincia || catalogRoom.provincia,
     comunidad: room.comunidad || catalogRoom.comunidad,
@@ -3513,6 +3525,12 @@ function escapistMapFilteredItems(items) {
   return items;
 }
 
+function escapistMapPrecisionFilteredLocations(locations) {
+  if (PROFILE_MAP_PRECISION_FILTER === 'exact') return locations.filter(location => location.exact);
+  if (PROFILE_MAP_PRECISION_FILTER === 'approx') return locations.filter(location => !location.exact);
+  return locations;
+}
+
 function escapistMapLocations(items) {
   const locations = new Map();
   items.forEach(item => {
@@ -3602,9 +3620,18 @@ function mapClusterMeta(cluster) {
     const base = location.address || [location.province, location.community].filter(Boolean).join(' - ');
     return `${base} - ${rooms} sala${rooms !== 1 ? 's' : ''} - ${precision}`;
   }
-  const names = cluster.locations.slice(0, 4).map(location => location.city).join(', ');
-  const more = cluster.locations.length > 4 ? ` +${cluster.locations.length - 4}` : '';
+  const uniqueNames = [...new Set(cluster.locations.map(location => location.city).filter(Boolean))];
+  const names = uniqueNames.slice(0, 4).join(', ');
+  const more = uniqueNames.length > 4 ? ` +${uniqueNames.length - 4}` : '';
   return `${cities} ciudades - ${rooms} salas - ${precision} - ${names}${more}`;
+}
+
+function mapClusterPrecisionLabel(cluster) {
+  if (!cluster) return '';
+  const exactCount = cluster.locations.filter(location => location.exact).length;
+  if (exactCount === cluster.locations.length) return 'exactas';
+  if (!exactCount) return 'aprox.';
+  return `${exactCount} exactas`;
 }
 
 function escapistMapBaseSvg() {
@@ -3642,9 +3669,26 @@ function escapistMapFilterHtml() {
     ['personal', 'Personal'],
     ['group', 'Grupo']
   ];
-  return `<div class="escapist-map-filters">${filters.map(([value, label]) => `
+  return `<div class="escapist-map-filter-row">
+    <span class="escapist-map-filter-label">Tipo</span>
+    <div class="escapist-map-filters">${filters.map(([value, label]) => `
     <button class="escapist-map-filter ${PROFILE_MAP_FILTER === value ? 'active' : ''}" type="button" onclick="setEscapistMapFilter('${value}')">${label}</button>
-  `).join('')}</div>`;
+  `).join('')}</div>
+  </div>`;
+}
+
+function escapistMapPrecisionFilterHtml() {
+  const filters = [
+    ['all', 'Todas'],
+    ['exact', 'Exactas'],
+    ['approx', 'Aprox.']
+  ];
+  return `<div class="escapist-map-filter-row">
+    <span class="escapist-map-filter-label">Precision</span>
+    <div class="escapist-map-filters">${filters.map(([value, label]) => `
+      <button class="escapist-map-filter ${PROFILE_MAP_PRECISION_FILTER === value ? 'active' : ''}" type="button" onclick="setEscapistMapPrecisionFilter('${value}')">${label}</button>
+    `).join('')}</div>
+  </div>`;
 }
 
 function escapistMapZoneListHtml(clusters, activeKey) {
@@ -3652,7 +3696,7 @@ function escapistMapZoneListHtml(clusters, activeKey) {
   return `<div class="escapist-map-zones">${clusters.map(cluster => `
     <button class="escapist-map-zone ${cluster.key === activeKey ? 'active' : ''}" type="button" onclick="openEscapistMapLocation('${jsString(cluster.key)}')">
       <strong>${escapeHtml(mapClusterTitle(cluster))}</strong>
-      <span>${cluster.rooms.length} sala${cluster.rooms.length !== 1 ? 's' : ''} · ${cluster.locations.length} ciudad${cluster.locations.length !== 1 ? 'es' : ''}</span>
+      <span>${cluster.rooms.length} sala${cluster.rooms.length !== 1 ? 's' : ''} · ${cluster.locations.length} ubic. · ${escapeHtml(mapClusterPrecisionLabel(cluster))}</span>
     </button>
   `).join('')}</div>`;
 }
@@ -3669,13 +3713,15 @@ function escapistMapClusterMarkerClass(cluster) {
 function escapistMapHtml() {
   const allItems = escapistDoneRoomItems();
   const items = escapistMapFilteredItems(allItems);
-  const locations = escapistMapLocations(items);
+  const sourceLocations = escapistMapLocations(items);
+  const locations = escapistMapPrecisionFilteredLocations(sourceLocations);
   if (!locations.length) {
     PROFILE_MAP_ACTIVE_KEY = '';
     return `<div class="profile-section">
       <div class="profile-section-title">Mi mapa escapista</div>
       ${escapistMapFilterHtml()}
-      <div class="escapist-map-empty">${allItems.length ? 'No hay salas para este filtro.' : 'Marca salas como hechas, personales o de grupo, para empezar a llenar tu mapa.'}</div>
+      ${escapistMapPrecisionFilterHtml()}
+      <div class="escapist-map-empty">${allItems.length ? 'No hay ubicaciones para este filtro.' : 'Marca salas como hechas, personales o de grupo, para empezar a llenar tu mapa.'}</div>
     </div>`;
   }
   const clusters = escapistMapClusters(locations);
@@ -3686,7 +3732,8 @@ function escapistMapHtml() {
   const active = clusters.find(cluster => cluster.key === PROFILE_MAP_ACTIVE_KEY) || clusters[0];
   const personalRooms = allItems.filter(item => item.personal).length;
   const groupRooms = allItems.filter(item => item.groups.length).length;
-  const exactLocations = locations.filter(location => location.exact).length;
+  const exactLocations = sourceLocations.filter(location => location.exact).length;
+  const approxLocations = sourceLocations.length - exactLocations;
   const points = clusters.map(cluster => {
     const cls = escapistMapClusterMarkerClass(cluster);
     const isCluster = cluster.locations.length > 1;
@@ -3710,12 +3757,18 @@ function escapistMapHtml() {
       </div>
       <div class="escapist-map-side">
         ${escapistMapFilterHtml()}
+        ${escapistMapPrecisionFilterHtml()}
         <div class="escapist-map-stats">
-          <div class="escapist-map-stat"><strong>${locations.length}</strong><span>Ubicaciones</span></div>
+          <div class="escapist-map-stat"><strong>${sourceLocations.length}</strong><span>Ubicaciones</span></div>
           <div class="escapist-map-stat"><strong>${items.length}</strong><span>Salas</span></div>
           <div class="escapist-map-stat"><strong>${exactLocations}</strong><span>Exactas</span></div>
+          <div class="escapist-map-stat"><strong>${approxLocations}</strong><span>Aprox.</span></div>
           <div class="escapist-map-stat"><strong>${personalRooms}</strong><span>Personal</span></div>
           <div class="escapist-map-stat"><strong>${groupRooms}</strong><span>Grupo</span></div>
+        </div>
+        <div class="escapist-map-toolbar">
+          <button class="auth-btn secondary" type="button" onclick="resetEscapistMapFocus()">Ver todo</button>
+          <button class="auth-btn secondary" type="button" onclick="zoomEscapistMapActive()">Centrar seleccion</button>
         </div>
         ${escapistMapZoneListHtml(clusters, active.key)}
         <div class="escapist-map-city">${escapeHtml(mapClusterTitle(active))}</div>
@@ -3746,7 +3799,7 @@ function initEscapistLeafletMap(attempt = 0) {
   }
   const allItems = escapistDoneRoomItems();
   const items = escapistMapFilteredItems(allItems);
-  const locations = escapistMapLocations(items);
+  const locations = escapistMapPrecisionFilteredLocations(escapistMapLocations(items));
   const clusters = escapistMapClusters(locations);
   if (!clusters.length) return;
   const active = clusters.find(cluster => cluster.key === PROFILE_MAP_ACTIVE_KEY) || clusters[0];
@@ -3760,6 +3813,26 @@ function initEscapistLeafletMap(attempt = 0) {
     maxZoom: 18,
     attribution: '&copy; OpenStreetMap &copy; CARTO'
   }).addTo(map);
+  const markerLayer = window.L.markerClusterGroup ? L.markerClusterGroup({
+    showCoverageOnHover: false,
+    spiderfyOnMaxZoom: true,
+    disableClusteringAtZoom: 15,
+    maxClusterRadius: zoom => zoom >= 12 ? 34 : 46,
+    iconCreateFunction: cluster => {
+      const children = cluster.getAllChildMarkers();
+      const roomCount = children.reduce((sum, marker) => sum + (marker.options.roomCount || 1), 0);
+      const hasPersonal = children.some(marker => marker.options.hasPersonal);
+      const hasGroup = children.some(marker => marker.options.hasGroup);
+      const sourceClass = hasPersonal && hasGroup ? 'mixed' : hasGroup ? 'group' : 'personal';
+      return L.divIcon({
+        className: 'escapist-leaflet-cluster-wrap',
+        html: `<div class="escapist-leaflet-cluster ${sourceClass}">${roomCount}</div>`,
+        iconSize: [42, 42],
+        iconAnchor: [21, 21]
+      });
+    }
+  }) : L.layerGroup();
+  markerLayer.addTo(map);
   const bounds = [];
   clusters.forEach(cluster => {
     const cls = escapistMapClusterMarkerClass(cluster);
@@ -3773,8 +3846,10 @@ function initEscapistLeafletMap(attempt = 0) {
     });
     const latLng = [cluster.coord.lat, cluster.coord.lon];
     bounds.push(latLng);
-    L.marker(latLng, { icon, title: mapClusterTitle(cluster) })
-      .addTo(map)
+    const hasPersonal = cluster.rooms.some(item => item.personal);
+    const hasGroup = cluster.rooms.some(item => item.groups.length);
+    L.marker(latLng, { icon, title: mapClusterTitle(cluster), roomCount: Math.max(1, cluster.rooms.length), hasPersonal, hasGroup })
+      .addTo(markerLayer)
       .bindPopup(`<strong>${escapeHtml(mapClusterTitle(cluster))}</strong><br>${escapeHtml(mapClusterMeta(cluster))}`)
       .on('click', () => openEscapistMapLocation(cluster.key));
   });
@@ -3796,6 +3871,17 @@ function openEscapistMapLocation(locationKey) {
   renderProfile();
 }
 
+function resetEscapistMapFocus() {
+  PROFILE_MAP_ACTIVE_KEY = '';
+  PROFILE_MAP_FOCUS_ACTIVE = false;
+  renderProfile();
+}
+
+function zoomEscapistMapActive() {
+  PROFILE_MAP_FOCUS_ACTIVE = true;
+  renderProfile();
+}
+
 function setEscapistMapFilter(filter) {
   PROFILE_MAP_FILTER = ['all', 'personal', 'group'].includes(filter) ? filter : 'all';
   PROFILE_MAP_ACTIVE_KEY = '';
@@ -3803,8 +3889,18 @@ function setEscapistMapFilter(filter) {
   renderProfile();
 }
 
+function setEscapistMapPrecisionFilter(filter) {
+  PROFILE_MAP_PRECISION_FILTER = ['all', 'exact', 'approx'].includes(filter) ? filter : 'all';
+  PROFILE_MAP_ACTIVE_KEY = '';
+  PROFILE_MAP_FOCUS_ACTIVE = false;
+  renderProfile();
+}
+
 window.openEscapistMapLocation = openEscapistMapLocation;
 window.setEscapistMapFilter = setEscapistMapFilter;
+window.setEscapistMapPrecisionFilter = setEscapistMapPrecisionFilter;
+window.resetEscapistMapFocus = resetEscapistMapFocus;
+window.zoomEscapistMapActive = zoomEscapistMapActive;
 
 function openProfileRoomDetail(kind, key) {
   closeProfile();
@@ -6780,6 +6876,10 @@ function detailHashFor(kind, room) {
 function detailUrlFor(kind, room) {
   const hash = detailHashFor(kind, room);
   if (!hash) return '';
+  if (kind === 'hechos') {
+    const reviewKey = hash.replace(/^review\//, '');
+    return new URL(`/reviews/${reviewKey}/`, window.location.origin).toString();
+  }
   const url = new URL(window.location.href);
   url.hash = hash;
   return url.toString();
