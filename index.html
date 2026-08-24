@@ -2208,6 +2208,7 @@ const FALLBACK_SITE_STATS = {"catalog":1736,"reviews":38,"ranking":948,"location
 let PUBLIC_SITE_STATS = { ...FALLBACK_SITE_STATS };
 let STATIC_ENHANCEMENTS_LOADED = false;
 let STATIC_ENHANCEMENTS_PROMISE = null;
+let PROFILE_MAP_DATA_PROMISE = null;
 let PHOTO_LIGHTBOX_GALLERIES = {};
 const LIVE_REFRESH_MIN_INTERVAL = 5 * 60 * 1000;
 
@@ -3841,6 +3842,12 @@ function escapistMapClusterMarkerClass(cluster) {
 }
 
 function escapistMapHtml() {
+  if (!CATALOGO.length || !Object.keys(ROOM_LOCATIONS || {}).length) {
+    return `<div class="profile-section">
+      <div class="profile-section-title">Mi mapa escapista</div>
+      <div class="escapist-map-empty">Cargando ubicaciones reales del mapa...</div>
+    </div>`;
+  }
   const allItems = escapistDoneRoomItems();
   const items = escapistMapFilteredItems(allItems);
   const sourceLocations = escapistMapLocations(items);
@@ -4029,6 +4036,19 @@ window.setEscapistMapFilter = setEscapistMapFilter;
 window.setEscapistMapPrecisionFilter = setEscapistMapPrecisionFilter;
 window.resetEscapistMapFocus = resetEscapistMapFocus;
 window.zoomEscapistMapActive = zoomEscapistMapActive;
+
+function ensureProfileMapDataLoaded() {
+  if (CATALOGO.length && Object.keys(ROOM_LOCATIONS || {}).length) return Promise.resolve(true);
+  if (!PROFILE_MAP_DATA_PROMISE) {
+    PROFILE_MAP_DATA_PROMISE = Promise.all([
+      CATALOGO.length ? Promise.resolve(true) : loadCatalogo(),
+      Object.keys(ROOM_LOCATIONS || {}).length ? Promise.resolve(true) : loadRoomLocations()
+    ]).then(() => true).finally(() => {
+      PROFILE_MAP_DATA_PROMISE = null;
+    });
+  }
+  return PROFILE_MAP_DATA_PROMISE;
+}
 
 function openProfileRoomDetail(kind, key) {
   closeProfile();
@@ -4341,6 +4361,11 @@ async function openProfile(message = '', refresh = true) {
   document.body.style.overflow = 'hidden';
 
   renderProfile(message);
+  if (AUTH_USER && SETTINGS_TAB === 'profile') {
+    ensureProfileMapDataLoaded().then(() => {
+      if (document.getElementById('profile-modal')?.classList.contains('open') && SETTINGS_TAB === 'profile') renderProfile(message);
+    }).catch(e => console.warn('No se pudieron cargar ubicaciones del mapa:', e.message));
+  }
   if (AUTH_USER && FIREBASE_ENABLED && refresh) {
     refreshProfileDataForSettings();
   }
@@ -4361,6 +4386,11 @@ async function refreshProfileDataForSettings() {
     renderCatalogo();
     if (document.getElementById('profile-modal')?.classList.contains('open')) {
       renderProfile();
+      if (SETTINGS_TAB === 'profile') {
+        ensureProfileMapDataLoaded().then(() => {
+          if (document.getElementById('profile-modal')?.classList.contains('open') && SETTINGS_TAB === 'profile') renderProfile();
+        }).catch(err => console.warn('No se pudieron cargar ubicaciones del mapa:', err.message));
+      }
     }
   } catch (e) {
     console.warn('No se pudieron refrescar los grupos al abrir perfil:', e.message);
@@ -4386,6 +4416,11 @@ function setProfileStatus(message) {
 function setSettingsTab(tab) {
   SETTINGS_TAB = tab === 'edit' && IS_ADMIN ? 'edit' : 'profile';
   renderProfile();
+  if (SETTINGS_TAB === 'profile') {
+    ensureProfileMapDataLoaded().then(() => {
+      if (document.getElementById('profile-modal')?.classList.contains('open') && SETTINGS_TAB === 'profile') renderProfile();
+    }).catch(e => console.warn('No se pudieron cargar ubicaciones del mapa:', e.message));
+  }
 }
 
 function settingsTabsHtml() {
