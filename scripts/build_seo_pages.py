@@ -1586,15 +1586,15 @@ def llms_txt():
 The Vault Escape es un catálogo y archivo de escape rooms en España. Incluye fichas de salas, reviews propias, ranking ponderado con varias fuentes, premios, fotos y herramientas personales para usuarios registrados.
 
 ## URLs principales
-- Inicio y aplicación interactiva: {site_url('/')}
-- Reviews publicadas: {site_url('/reviews/')}
-- Ranking de escape rooms: {site_url('/ranking/')}
-- Landing SEO ranking escape rooms España: {site_url('/ranking-escape-rooms/')}
-- Landing SEO mejores escape rooms España: {site_url('/mejores-escape-rooms/')}
-- Landing SEO mejores escape rooms de terror: {site_url('/mejores-escape-rooms-terror/')}
-- Índice SEO por ciudad y comunidad: {site_url('/escape-rooms/')}
+- [Inicio y aplicación interactiva]({site_url('/')})
+- [Reviews publicadas]({site_url('/reviews/')})
+- [Ranking de escape rooms]({site_url('/ranking/')})
+- [Ranking escape rooms España]({site_url('/ranking-escape-rooms/')})
+- [Mejores escape rooms España]({site_url('/mejores-escape-rooms/')})
+- [Mejores escape rooms de terror]({site_url('/mejores-escape-rooms-terror/')})
+- [Índice SEO por ciudad y comunidad]({site_url('/escape-rooms/')})
 - Landings SEO por ubicación: /escape-rooms-{{ciudad}}/ y /escape-rooms-{{comunidad}}/
-- Sitemap XML: {site_url('/sitemap.xml')}
+- [Sitemap XML]({site_url('/sitemap.xml')})
 
 ## Contenido
 - Fichas públicas en /salas/{{slug}}/ con nombre, empresa, ubicación, sinopsis cuando existe y puntuaciones si están disponibles.
@@ -1602,8 +1602,8 @@ The Vault Escape es un catálogo y archivo de escape rooms en España. Incluye f
 - Ranking calculado con fuentes externas, comunidad The Vault y premios, descrito en las páginas legales de la web.
 
 ## Contacto
-Instagram: https://www.instagram.com/thevault_escape/
-Web: {BASE_URL}
+- [Instagram The Vault Escape](https://www.instagram.com/thevault_escape/)
+- [Web The Vault Escape]({BASE_URL})
 """
 
 
