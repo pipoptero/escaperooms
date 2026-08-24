@@ -2200,6 +2200,8 @@ let LIVE_REFRESH_IN_PROGRESS = false;
 let LIVE_REFRESH_EVENTS_READY = false;
 let ROOM_ALIASES_LOADED = false;
 let STATIC_PUBLISHED_REVIEWS_LOADED = false;
+let SITE_STATS_LOADED = false;
+let PUBLIC_SITE_STATS = {};
 let STATIC_ENHANCEMENTS_LOADED = false;
 let STATIC_ENHANCEMENTS_PROMISE = null;
 let PHOTO_LIGHTBOX_GALLERIES = {};
@@ -3392,6 +3394,21 @@ async function loadStaticPublishedReviews() {
   }
   invalidateReviewRoomsCache();
   return STATIC_PUBLISHED_REVIEWS;
+}
+
+async function loadSiteStats() {
+  if (SITE_STATS_LOADED) return PUBLIC_SITE_STATS;
+  try {
+    const r = await fetch('site_stats.json');
+    if (!r.ok) return {};
+    PUBLIC_SITE_STATS = await r.json();
+    SITE_STATS_LOADED = true;
+  } catch (e) {
+    console.warn('No se pudo cargar site_stats.json:', e.message);
+    PUBLIC_SITE_STATS = {};
+    SITE_STATS_LOADED = false;
+  }
+  return PUBLIC_SITE_STATS;
 }
 
 async function loadAdminPublishedReviews() {
@@ -6031,6 +6048,7 @@ function scheduleStaticEnhancementsAfterInitialRender() {
 async function loadData() {
   try {
     const earlyReviewsPromise = Promise.allSettled([
+      loadSiteStats(),
       loadRoomAliases(),
       loadStaticPublishedReviews()
     ]);
@@ -6112,6 +6130,16 @@ function updateGeoFilters(scope) {
   fillOptions(cityId, uniqueSorted(cityRooms.map(room => room.ciudad)), cityPlaceholder);
 }
 
+function publicCatalogCount() {
+  return CATALOGO.length || Number(PUBLIC_SITE_STATS.catalog) || 0;
+}
+
+function publicRankingCount() {
+  let ranked = 0;
+  try { ranked = rankingRooms().length; } catch (e) { ranked = 0; }
+  return ranked || Number(PUBLIC_SITE_STATS.ranking) || 0;
+}
+
 function populateFilters() {
   const pendingRooms = allPendingRooms();
   const doneRooms = allDoneRooms();
@@ -6150,7 +6178,7 @@ function populateFilters() {
   document.getElementById('badge-pend').textContent  = pendingRooms.length;
   document.getElementById('badge-mine').textContent = personalDoneRooms().length;
   document.getElementById('badge-hecho').textContent = reviews.length;
-  document.getElementById('badge-cat').textContent = CATALOGO.length;
+  document.getElementById('badge-cat').textContent = publicCatalogCount();
   syncNavigationForAuth();
 }
 
@@ -6204,9 +6232,8 @@ function renderVaultGuide() {
     const node = document.getElementById(id);
     if (node) node.textContent = value;
   };
-  let ranked = 0;
-  try { ranked = rankingRooms().length; } catch (e) { ranked = 0; }
-  setText('vault-stat-catalog', CATALOGO.length || 0);
+  const ranked = publicRankingCount();
+  setText('vault-stat-catalog', publicCatalogCount());
   setText('vault-stat-reviews', reviewRooms().length || 0);
   setText('vault-stat-ranking', ranked || 0);
   setText('vault-stat-groups', AUTH_USER ? activeUserGroups().length : '-');

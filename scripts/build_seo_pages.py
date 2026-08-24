@@ -1626,6 +1626,17 @@ Sitemap: {site_url('/sitemap.xml')}
 """
 
 
+def site_stats_json(review_rooms, sala_rows, location_specs):
+    payload = {
+        "catalog": len(catalog_rooms()),
+        "reviews": len(review_rooms),
+        "ranking": sum(1 for item in sala_rows if decimal(item.get("rating", {}).get("global_score")) > 0),
+        "locations": len(location_specs or []),
+        "updated": TODAY,
+    }
+    return json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
+
+
 def llms_txt():
     return f"""# {SITE_NAME}
 
@@ -1752,6 +1763,7 @@ def main():
     (ROOT / "sitemap.xml").write_text(sitemap_xml(rooms, sala_rows, location_specs), encoding="utf-8", newline="\n")
     (ROOT / "robots.txt").write_text(robots_txt(), encoding="utf-8", newline="\n")
     (ROOT / "llms.txt").write_text(llms_txt(), encoding="utf-8", newline="\n")
+    (ROOT / "site_stats.json").write_text(site_stats_json(rooms, sala_rows, location_specs), encoding="utf-8", newline="\n")
     print(
         "SEO generado: "
         f"{len(generated_review_pages)} reviews, "
