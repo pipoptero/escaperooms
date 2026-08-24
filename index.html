@@ -1822,6 +1822,23 @@
 
       <div class="vault-community-band">
         <div>
+          <div class="vault-guide-kicker">Progreso escapista</div>
+          <div class="vault-community-title">Juega, comparte y desbloquea tu identidad en The Vault.</div>
+          <p class="vault-community-copy">Las salas hechas y las reseñas conceden experiencia. Los logros aportan créditos Vault para desbloquear marcos y títulos públicos. La experiencia nunca se gasta y los créditos son internos, no transferibles y sin valor económico.</p>
+          <div class="vault-guide-actions">
+            <button class="vault-guide-action auth-only" type="button" onclick="openProfile()" style="display:none">Ver mi progreso</button>
+            <button class="vault-guide-action guest-only" type="button" onclick="signInGoogle()">Crear mi perfil escapista</button>
+          </div>
+        </div>
+        <div class="vault-mini-list">
+          <div class="vault-mini-item"><span>Niveles escapistas</span><strong>6</strong></div>
+          <div class="vault-mini-item"><span>Logros disponibles</span><strong>18</strong></div>
+          <div class="vault-mini-item"><span>Marcos y títulos</span><strong>11</strong></div>
+        </div>
+      </div>
+
+      <div class="vault-community-band">
+        <div>
           <div class="vault-community-title">Pensado para escapistas que juegan solos, en pareja o en varios grupos.</div>
           <p class="vault-community-copy">
             Puedes tener tu lista personal y, a la vez, separar lo que haces con cada grupo.
@@ -2213,11 +2230,17 @@ const PROGRESS_LEVELS = [
   { min: 1500, name: 'Escapista legendario' }
 ];
 const PROGRESS_COSMETICS = [
-  { id: 'vault', name: 'Sello The Vault', cost: 0, frame: '', image: 'images/brand/icon-round-192.png' },
-  { id: 'copper', name: 'Marco cobre', cost: 60, frame: 'frame-copper', image: 'images/brand/icon-round-192.png' },
-  { id: 'silver', name: 'Marco plata', cost: 140, frame: 'frame-silver', image: 'images/brand/icon-round-192.png' },
-  { id: 'gold', name: 'Marco oro', cost: 260, frame: 'frame-gold', image: 'images/brand/icon-round-192.png' },
-  { id: 'master', name: 'Guardián de la cámara', cost: 450, frame: 'frame-master', image: 'images/brand/icon-round-192.png' }
+  { id: 'vault', type: 'avatar', name: 'Sello The Vault', cost: 0, frame: '', image: 'images/brand/icon-round-192.png' },
+  { id: 'copper', type: 'avatar', name: 'Marco cobre', cost: 60, frame: 'frame-copper', image: 'images/brand/icon-round-192.png' },
+  { id: 'silver', type: 'avatar', name: 'Marco plata', cost: 140, frame: 'frame-silver', image: 'images/brand/icon-round-192.png' },
+  { id: 'gold', type: 'avatar', name: 'Marco oro', cost: 260, frame: 'frame-gold', image: 'images/brand/icon-round-192.png', requires: 'award_hunter' },
+  { id: 'master', type: 'avatar', name: 'Guardián de la cámara', cost: 450, frame: 'frame-master', image: 'images/brand/icon-round-192.png', requires: 'veteran' },
+  { id: 'title_none', type: 'title', name: 'Sin título', cost: 0 },
+  { id: 'title_clue', type: 'title', name: 'Buscador de pistas', cost: 80 },
+  { id: 'title_terror', type: 'title', name: 'Especialista en terror', cost: 160, requires: 'without_fear' },
+  { id: 'title_awards', type: 'title', name: 'Cazapremios', cost: 220, requires: 'award_hunter' },
+  { id: 'title_chronicler', type: 'title', name: 'Cronista de The Vault', cost: 320, requires: 'chronicler' },
+  { id: 'title_legend', type: 'title', name: 'Escapista legendario', cost: 600, requires: 'veteran' }
 ];
 let IS_ADMIN = false;
 let ADMIN_ROLE_ERROR = '';
@@ -3208,6 +3231,7 @@ async function setPersonalRoomState(kind, key, state) {
 async function saveCompletedMinutes(kind, key, context = 'detail') {
   const room = findDetailRoom(kind, key);
   if (!room) return;
+  const progressBefore = AUTH_USER ? progressModel() : null;
   const state = userStateFor(room);
   if (!state.done) {
     alert('Marca primero esta sala como Hecho por mi para guardar el tiempo completado.');
@@ -3227,6 +3251,7 @@ async function saveCompletedMinutes(kind, key, context = 'detail') {
     renderMisHechos();
     renderCatalogo();
     renderVaultGuide();
+    announceProgressChange(progressBefore, progressModel());
     if (document.getElementById('detail-modal')?.classList.contains('open')) {
       openDetail(kind, key);
     }
@@ -3528,11 +3553,12 @@ async function syncProfileIdentityToReviews() {
   if (!AUTH_USER || !FIREBASE_ENABLED) return;
   const displayName = shortDisplayName();
   const equippedCosmetic = String(USER_PROFILE.equippedCosmetic || 'vault');
+  const equippedTitle = selectedProgressTitle()?.name || '';
   const progressLevel = progressModel().level.name;
   for (const [slug, reviews] of Object.entries(roomReviewsCache || {})) {
     const review = reviews?.[USER_ID];
-    if (!review || (review.userName === displayName && review.equippedCosmetic === equippedCosmetic && review.progressLevel === progressLevel)) continue;
-    const next = { ...review, userName: displayName, equippedCosmetic, progressLevel, updatedAt: review.updatedAt || Date.now() };
+    if (!review || (review.userName === displayName && review.equippedCosmetic === equippedCosmetic && review.equippedTitle === equippedTitle && review.progressLevel === progressLevel)) continue;
+    const next = { ...review, userName: displayName, equippedCosmetic, equippedTitle, progressLevel, updatedAt: review.updatedAt || Date.now() };
     try {
       await fbPut(`roomReviews/${slug}/${USER_ID}`, next);
       roomReviewsCache[slug][USER_ID] = next;
@@ -5096,6 +5122,9 @@ function progressModel() {
   const reviews = progressUserReviews();
   const completeReviews = reviews.filter(review => REVIEW_CATEGORIES.every(([id]) => Number(review.scores?.[id]) > 0));
   const textReviews = reviews.filter(review => String(review.text || '').trim().length >= 80);
+  const timedRooms = Object.values(USER_ROOM_STATES || {}).filter(state => state?.done && Number(state.completedMinutes) > 0);
+  const pendingRooms = Object.values(USER_ROOM_STATES || {}).filter(state => state?.pending);
+  const groupDoneCount = activeUserGroups().reduce((sum, [id]) => sum + groupRoomCount(id), 0);
   const cities = new Set(doneRooms.map(room => normalizedKey(room.ciudad)).filter(Boolean));
   const communities = new Set(doneRooms.map(room => normalizedKey(communityOf(room))).filter(Boolean));
   const terrorRooms = doneRooms.filter(room => !!room.terror || normalizedKey(room.tematica).includes('terror'));
@@ -5109,19 +5138,25 @@ function progressModel() {
     achievement('first_escape', 'I', 'Primera fuga', 'Marca tu primera sala como hecha.', doneRooms.length, 1, 10),
     achievement('enthusiast', 'X', 'Escapista habitual', 'Completa 10 salas.', doneRooms.length, 10, 25),
     achievement('veteran', 'L', 'Veterano de cámara', 'Completa 50 salas.', doneRooms.length, 50, 80),
+    achievement('centurion', 'C', 'Centurión escapista', 'Completa 100 salas.', doneRooms.length, 100, 160),
     achievement('first_review', 'R', 'La crítica', 'Publica tu primera reseña.', reviews.length, 1, 20),
     achievement('chronicler', 'X', 'Cronista', 'Publica 10 reseñas.', reviews.length, 10, 50),
     achievement('community_voice', 'XXV', 'Voz de la comunidad', 'Publica 25 reseñas.', reviews.length, 25, 100),
     achievement('complete_review', '4/4', 'Análisis completo', 'Valora todas las categorías de una sala.', completeReviews.length, 1, 15),
+    achievement('perfectionist', 'X', 'Crítico meticuloso', 'Publica 10 reseñas con todas las categorías.', completeReviews.length, 10, 55),
+    achievement('timekeeper', '60', 'Contra el reloj', 'Registra el tiempo de 10 salas completadas.', timedRooms.length, 10, 35),
+    achievement('planner', 'P', 'Plan maestro', 'Guarda 10 salas pendientes.', pendingRooms.length, 10, 20),
+    achievement('collector', 'F', 'Coleccionista', 'Guarda 20 salas favoritas.', FAVS.size, 20, 25),
     achievement('without_fear', 'T', 'Sin miedo', 'Completa 10 salas de terror.', terrorRooms.length, 10, 40),
     achievement('award_hunter', 'P', 'Cazapremios', 'Completa 10 salas premiadas.', awardedRooms.length, 10, 40),
     achievement('company', 'G', 'En buena compañía', 'Forma parte de un grupo con salas hechas.', activeGroupDone, 1, 20),
+    achievement('team_player', 'GX', 'Jugador de equipo', 'Completa 10 registros de sala con tus grupos.', groupDoneCount, 10, 40),
     achievement('explorer', 'V', 'Explorador', 'Completa salas en 5 ciudades.', cities.size, 5, 35),
     achievement('traveller', 'III', 'Viajero', 'Completa salas en 3 comunidades.', communities.size, 3, 35)
   ];
   const achievementCredits = achievements.filter(item => item.unlocked).reduce((sum, item) => sum + item.reward, 0);
   const earnedCredits = doneRooms.length * 2 + reviews.length * 10 + textReviews.length * 3 + achievementCredits;
-  const owned = new Set(['vault', ...(Array.isArray(USER_PROFILE.ownedCosmetics) ? USER_PROFILE.ownedCosmetics : [])]);
+  const owned = new Set(['vault', 'title_none', ...(Array.isArray(USER_PROFILE.ownedCosmetics) ? USER_PROFILE.ownedCosmetics : [])]);
   const spentCredits = PROGRESS_COSMETICS.filter(item => item.cost && owned.has(item.id)).reduce((sum, item) => sum + item.cost, 0);
   let levelIndex = 0;
   PROGRESS_LEVELS.forEach((level, index) => { if (xp >= level.min) levelIndex = index; });
@@ -5129,12 +5164,22 @@ function progressModel() {
   const nextLevel = PROGRESS_LEVELS[levelIndex + 1] || null;
   const levelProgress = nextLevel ? Math.max(0, Math.min(100, ((xp - level.min) / (nextLevel.min - level.min)) * 100)) : 100;
   const nextAchievement = achievements.filter(item => !item.unlocked).sort((a, b) => (b.current / b.target) - (a.current / a.target))[0] || null;
-  return { doneRooms, reviews, completeReviews, cities, communities, xp, levelIndex, level, nextLevel, levelProgress, achievements, nextAchievement, earnedCredits, spentCredits, balance: Math.max(0, earnedCredits - spentCredits), owned };
+  return { doneRooms, reviews, completeReviews, timedRooms, pendingRooms, groupDoneCount, cities, communities, xp, levelIndex, level, nextLevel, levelProgress, achievements, nextAchievement, earnedCredits, spentCredits, balance: Math.max(0, earnedCredits - spentCredits), owned };
 }
 
 function selectedProgressCosmetic() {
   const id = String(USER_PROFILE.equippedCosmetic || 'vault');
   return PROGRESS_COSMETICS.find(item => item.id === id) || PROGRESS_COSMETICS[0];
+}
+
+function selectedProgressTitleItem() {
+  const id = String(USER_PROFILE.equippedTitle || 'title_none');
+  return PROGRESS_COSMETICS.find(item => item.type === 'title' && item.id === id) || PROGRESS_COSMETICS.find(item => item.id === 'title_none');
+}
+
+function selectedProgressTitle() {
+  const item = selectedProgressTitleItem();
+  return item?.id === 'title_none' ? null : item;
 }
 
 function showProgressToast(title, detail) {
@@ -5164,6 +5209,9 @@ function announceProgressChange(before, after) {
   } else if (xpGain || creditGain) {
     showProgressToast('Progreso actualizado', `+${xpGain} XP · +${creditGain} créditos Vault`);
   }
+  if (AUTH_USER && before.level?.name !== after.level?.name) {
+    syncProfileIdentityToReviews().catch(error => console.warn('No se pudo actualizar el nivel público:', error.message));
+  }
 }
 
 function progressAvatarHtml(cosmetic = selectedProgressCosmetic(), extraClass = '') {
@@ -5178,12 +5226,14 @@ function reviewProgressAvatarHtml(review) {
 function progressSettingsHtml() {
   const model = progressModel();
   const selected = selectedProgressCosmetic();
+  const selectedTitleItem = selectedProgressTitleItem();
+  const selectedTitle = selectedProgressTitle();
   const nextText = model.nextLevel ? `${model.xp} / ${model.nextLevel.min} XP` : `${model.xp} XP · nivel máximo`;
   return `<div class="profile-section progress-shell">
     <div class="profile-section-title">Progreso escapista</div>
     <div class="progress-hero">
       ${progressAvatarHtml(selected)}
-      <div><div class="progress-kicker">Nivel ${model.levelIndex + 1}</div><div class="progress-level">${escapeHtml(model.level.name)}</div><div class="progress-label">${escapeHtml(nextText)}</div><div class="progress-xp-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(model.levelProgress)}"><div class="progress-xp-fill" style="width:${model.levelProgress.toFixed(1)}%"></div></div></div>
+      <div><div class="progress-kicker">Nivel ${model.levelIndex + 1}</div><div class="progress-level">${escapeHtml(model.level.name)}</div>${selectedTitle ? `<div class="progress-reward">${escapeHtml(selectedTitle.name)}</div>` : ''}<div class="progress-label">${escapeHtml(nextText)}</div><div class="progress-xp-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(model.levelProgress)}"><div class="progress-xp-fill" style="width:${model.levelProgress.toFixed(1)}%"></div></div></div>
       <div class="progress-balance">${model.balance}<small>Créditos Vault</small></div>
     </div>
     <div class="progress-stats">
@@ -5196,10 +5246,13 @@ function progressSettingsHtml() {
     <details class="progress-details"><summary>Logros <span>${model.achievements.filter(item => item.unlocked).length}/${model.achievements.length}</span></summary><div class="progress-details-body"><div class="achievement-grid">${model.achievements.map(item => { const ratio = Math.min(100, (item.current / item.target) * 100); return `<article class="achievement-card ${item.unlocked ? '' : 'locked'}"><div class="achievement-mark">${escapeHtml(item.mark)}</div><div class="achievement-name">${escapeHtml(item.name)}</div><div class="achievement-desc">${escapeHtml(item.description)}</div><div class="achievement-progress"><span style="width:${ratio.toFixed(1)}%"></span></div><div class="progress-reward">${item.unlocked ? 'Conseguido' : `${Math.min(item.current, item.target)}/${item.target} · +${item.reward} créditos`}</div></article>`; }).join('')}</div></div></details>
     <details class="progress-details"><summary>Personalización <span>${model.owned.size}/${PROGRESS_COSMETICS.length}</span></summary><div class="progress-details-body"><div class="cosmetic-grid">${PROGRESS_COSMETICS.map(item => {
       const owned = model.owned.has(item.id);
-      const equipped = selected.id === item.id;
-      const affordable = model.balance >= item.cost;
-      const action = equipped ? 'Equipado' : owned ? 'Equipar' : `${item.cost} créditos`;
-      return `<article class="cosmetic-card ${owned || affordable ? '' : 'locked'}"><div class="cosmetic-preview">${progressAvatarHtml(item)}<div><div class="cosmetic-name">${escapeHtml(item.name)}</div><div class="cosmetic-meta">${owned ? 'En tu colección' : `${item.cost} créditos`}</div></div></div><button class="auth-btn ${equipped ? 'secondary' : ''}" type="button" ${equipped || (!owned && !affordable) ? 'disabled' : ''} onclick="acquireProgressCosmetic('${jsString(item.id)}')">${escapeHtml(action)}</button></article>`;
+      const equipped = item.type === 'title' ? selectedTitleItem?.id === item.id : selected.id === item.id;
+      const requirement = item.requires ? model.achievements.find(achievement => achievement.id === item.requires) : null;
+      const requirementMet = !requirement || requirement.unlocked;
+      const affordable = model.balance >= item.cost && requirementMet;
+      const action = equipped ? 'Equipado' : owned ? 'Equipar' : !requirementMet ? `Requiere: ${requirement.name}` : `${item.cost} créditos`;
+      const preview = item.type === 'title' ? `<div class="achievement-mark">T</div>` : progressAvatarHtml(item);
+      return `<article class="cosmetic-card ${owned || affordable ? '' : 'locked'}"><div class="cosmetic-preview">${preview}<div><div class="cosmetic-name">${escapeHtml(item.name)}</div><div class="cosmetic-meta">${item.type === 'title' ? 'Título público' : 'Avatar y marco'} · ${owned ? 'En tu colección' : `${item.cost} créditos`}</div></div></div><button class="auth-btn ${equipped ? 'secondary' : ''}" type="button" ${equipped || (!owned && !affordable) ? 'disabled' : ''} onclick="acquireProgressCosmetic('${jsString(item.id)}')">${escapeHtml(action)}</button></article>`;
     }).join('')}</div></div></details>
     <div class="progress-note">La experiencia determina tu nivel y no se gasta. Los créditos son internos, no transferibles y no tienen valor económico. Se obtienen por salas hechas, reseñas y logros.</div>
   </div>`;
@@ -5211,11 +5264,16 @@ async function acquireProgressCosmetic(cosmeticId) {
   if (!cosmetic) return;
   const model = progressModel();
   const owned = new Set(model.owned);
+  const requirement = cosmetic.requires ? model.achievements.find(item => item.id === cosmetic.requires) : null;
+  if (requirement && !requirement.unlocked) return setProfileStatus(`Necesitas el logro ${requirement.name}.`);
   if (!owned.has(cosmetic.id)) {
     if (model.balance < cosmetic.cost) return setProfileStatus('No tienes suficientes créditos Vault.');
     owned.add(cosmetic.id);
   }
-  const saved = await saveUserProfile({ ownedCosmetics: [...owned], equippedCosmetic: cosmetic.id });
+  const equipment = cosmetic.type === 'title'
+    ? { equippedTitle: cosmetic.id }
+    : { equippedCosmetic: cosmetic.id };
+  const saved = await saveUserProfile({ ownedCosmetics: [...owned], ...equipment });
   if (!saved) return setProfileStatus('No se pudo guardar la personalización.');
   await syncProfileIdentityToReviews();
   renderAuthStatus();
@@ -6057,7 +6115,7 @@ function reviewListHtml(slug) {
     const scores = REVIEW_CATEGORIES.filter(([id]) => review.scores?.[id]).map(([id, label]) => `<span class="review-score-pill">${label}: ${scoreToTen(review.scores[id]).toFixed(1)}/10</span>`).join('');
     const text = String(review.text || '').trim();
     return `<article class="community-review">
-      <div class="community-review-head"><span class="community-review-identity">${reviewProgressAvatarHtml(review)}<span><span class="community-review-user">${escapeHtml(review.userName || 'Usuario')}</span>${review.progressLevel ? `<span class="progress-label" style="display:block">${escapeHtml(review.progressLevel)}</span>` : ''}</span></span><span class="community-review-date">${formatReviewDate(review.updatedAt)}</span></div>
+      <div class="community-review-head"><span class="community-review-identity">${reviewProgressAvatarHtml(review)}<span><span class="community-review-user">${escapeHtml(review.userName || 'Usuario')}</span>${review.equippedTitle || review.progressLevel ? `<span class="progress-label" style="display:block">${escapeHtml(review.equippedTitle || review.progressLevel)}</span>` : ''}</span></span><span class="community-review-date">${formatReviewDate(review.updatedAt)}</span></div>
       <div class="community-review-scores">${scores}</div>
       ${text ? `<div class="community-review-text">${escapeHtml(text)}</div>` : ''}
     </article>`;
@@ -6109,6 +6167,7 @@ async function saveRoomReview(kind, key) {
     roomName: room.nombre || '',
     company: room.empresa || '',
     equippedCosmetic: String(USER_PROFILE.equippedCosmetic || 'vault'),
+    equippedTitle: selectedProgressTitle()?.name || '',
     progressLevel: progressModel().level.name,
     scores,
     text,
@@ -7039,6 +7098,7 @@ function refreshAllLikeCounts() {
 }
 
 async function toggleFav(slug, btn) {
+  const progressBefore = AUTH_USER ? progressModel() : null;
   const wasLiked = iLiked(slug);
 
   // Optimistic update local
@@ -7067,6 +7127,7 @@ async function toggleFav(slug, btn) {
   });
 
   updateFavCount();
+  if (AUTH_USER) announceProgressChange(progressBefore, progressModel());
   if (showOnlyFavs) renderCatalogoDesdeInicio();
 
   // Persistir en Firebase
