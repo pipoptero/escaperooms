@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'the-vault-v19';
+const CACHE_VERSION = 'the-vault-v20';
 const APP_SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
