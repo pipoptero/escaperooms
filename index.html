@@ -442,12 +442,15 @@
   .profile-modal.open{display:flex;}
   .profile-dialog{width:min(880px,100%);max-height:min(92vh,820px);background:var(--card);border:1px solid rgba(125,187,63,.28);box-shadow:0 24px 80px rgba(0,0,0,.75);display:flex;flex-direction:column;overflow:hidden;}
   .profile-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 18px;border-bottom:1px solid var(--border);background:rgba(125,187,63,.04);}
+  .profile-head-main{display:flex;align-items:center;gap:18px;min-width:0;}
   .profile-title{font-family:'Share Tech Mono',monospace;color:var(--amber);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;}
   .profile-close{width:32px;height:32px;border:1px solid var(--border);background:rgba(255,255,255,.025);color:var(--text3);cursor:pointer;}
   .profile-body{padding:16px 18px;overflow:auto;min-height:0;}
   .settings-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:13px;border-bottom:1px solid var(--border);padding-bottom:10px;}
   .settings-tab{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--border);background:rgba(255,255,255,.025);color:var(--text3);padding:8px 12px;cursor:pointer;}
   .settings-tab.active{color:var(--amber);border-color:rgba(125,187,63,.42);background:rgba(125,187,63,.07);}
+  .profile-head .settings-tabs{position:static;z-index:auto;margin:0;padding:0;border:0;background:none;backdrop-filter:none;flex-wrap:nowrap;}
+  .profile-head .settings-tab{padding:7px 11px;}
   .profile-section{border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);padding:13px 14px;margin-bottom:13px;}
   .profile-section-title{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--text3);letter-spacing:.13em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
   .profile-section-title::after{content:'';height:1px;background:var(--border);flex:1;}
@@ -1244,7 +1247,10 @@
     .profile-modal.open{display:block;}
     .profile-dialog{width:100%;height:100dvh;max-height:none;border:none;box-shadow:none;}
     .profile-head{position:sticky;top:0;z-index:3;padding:12px 14px;background:rgba(18,18,30,.96);}
+    .profile-head-main{gap:9px;}
     .profile-title{font-size:.68rem;letter-spacing:.1em;}
+    .profile-head .settings-tabs{gap:5px;margin:0;padding:0;}
+    .profile-head .settings-tab{flex:0 0 auto;padding:7px 8px;font-size:.55rem;}
     .profile-close{width:38px;height:38px;background:rgba(10,10,15,.86);}
     .profile-body{flex:1;padding:14px;overflow:auto;}
     .settings-tabs{gap:6px;margin-bottom:11px;padding-bottom:9px;}
@@ -1663,8 +1669,9 @@
       justify-content:stretch;
     }
   }
-.progress-shell{display:grid;gap:14px}.progress-hero{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:16px;align-items:center;padding:16px;border:1px solid #304426;background:#101510}.progress-avatar{width:72px;height:72px;border:2px solid #76c442;border-radius:50%;object-fit:cover;background:#080b08;padding:3px}.progress-avatar.frame-copper{border-color:#b87333;box-shadow:0 0 0 3px #3a2415}.progress-avatar.frame-silver{border-color:#d8d8d8;box-shadow:0 0 0 3px #424242}.progress-avatar.frame-gold{border-color:#ffb000;box-shadow:0 0 0 3px #5b3f00,0 0 16px #ffb00055}.progress-avatar.frame-master{border-color:#7ee53f;box-shadow:0 0 0 3px #223d15,0 0 18px #7ee53f66}.progress-kicker,.progress-label,.achievement-meta,.cosmetic-meta{font-family:'Share Tech Mono',monospace;text-transform:uppercase;color:#777394;font-size:11px;letter-spacing:0}.progress-level{font-family:'Cinzel',serif;color:#f1efe8;font-size:22px;margin:3px 0}.progress-xp-track{height:8px;background:#242331;border:1px solid #343247;overflow:hidden;margin-top:8px}.progress-xp-fill{height:100%;background:#76c442}.progress-balance{min-width:100px;text-align:right;color:#ffb000;font-family:'Cinzel',serif;font-size:22px}.progress-balance small{display:block;color:#777394;font-family:'Share Tech Mono',monospace;font-size:10px}.progress-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.progress-stat{border:1px solid #2d2b40;padding:10px;background:#12121d}.progress-stat strong{display:block;color:#80d34b;font-family:'Cinzel',serif;font-size:20px}.achievement-grid,.cosmetic-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.achievement-card,.cosmetic-card{border:1px solid #2d2b40;background:#12121d;padding:12px;min-height:92px}.achievement-card.locked,.cosmetic-card.locked{opacity:.48}.achievement-mark{font-family:'Cinzel',serif;color:#80d34b;font-size:20px;margin-bottom:5px}.achievement-name,.cosmetic-name{font-family:'Cinzel',serif;color:#efedf6;font-size:14px}.achievement-desc{color:#8b879f;font-size:13px;margin-top:4px;line-height:1.35}.cosmetic-preview{display:flex;align-items:center;gap:10px;margin-bottom:10px}.cosmetic-preview .progress-avatar{width:48px;height:48px}.cosmetic-card .auth-btn{width:100%;margin-top:8px}.progress-note{font-size:12px;color:#777394;line-height:1.45}.progress-reward{color:#ffb000;font-family:'Share Tech Mono',monospace;font-size:11px;margin-top:5px}@media(max-width:700px){.progress-hero{grid-template-columns:auto minmax(0,1fr);padding:12px;gap:11px}.progress-balance{grid-column:1/-1;text-align:left;border-top:1px solid #2d2b40;padding-top:10px}.progress-avatar{width:58px;height:58px}.progress-level{font-size:18px}.progress-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.achievement-grid,.cosmetic-grid{grid-template-columns:1fr}}
-.auth-avatar.frame-copper{border-color:#b87333;box-shadow:0 0 0 2px #3a2415}.auth-avatar.frame-silver{border-color:#d8d8d8;box-shadow:0 0 0 2px #424242}.auth-avatar.frame-gold{border-color:#ffb000;box-shadow:0 0 0 2px #5b3f00}.auth-avatar.frame-master{border-color:#7ee53f;box-shadow:0 0 0 2px #223d15}.community-review-identity{display:flex;align-items:center;gap:9px}.community-review-avatar{width:30px!important;height:30px!important;padding:1px;flex:0 0 30px}.community-review-head{align-items:center}.progress-details{border:1px solid #2d2b40;background:#0f0f18}.progress-details summary{cursor:pointer;list-style:none;padding:12px 14px;color:#80d34b;font-family:'Share Tech Mono',monospace;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}.progress-details summary::-webkit-details-marker{display:none}.progress-details summary:after{content:'+';font-size:20px}.progress-details[open] summary:after{content:'−'}.progress-details-body{padding:0 12px 12px}.achievement-progress{height:4px;background:#292738;margin-top:8px;overflow:hidden}.achievement-progress span{display:block;height:100%;background:#76c442}.progress-next{border-left:3px solid #ffb000;background:#17150e;padding:10px 12px;color:#aaa4bd;font-size:13px}.progress-next strong{color:#f1efe8}.progress-toast-stack{position:fixed;right:18px;bottom:18px;z-index:10020;display:grid;gap:8px;width:min(360px,calc(100vw - 24px));pointer-events:none}.progress-toast{border:1px solid #547c35;border-left:4px solid #80d34b;background:#101510;color:#e9e7ef;padding:13px 15px;box-shadow:0 12px 30px #000a;animation:progress-toast-in .22s ease-out}.progress-toast-title{font-family:'Cinzel',serif;color:#80d34b;margin-bottom:3px}.progress-toast-meta{font-family:'Share Tech Mono',monospace;color:#aaa4bd;font-size:12px}@keyframes progress-toast-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}@media(max-width:700px){.progress-toast-stack{right:12px;bottom:12px}}
+.progress-shell{display:grid;gap:14px}.progress-hero{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:16px;align-items:center;padding:16px;border:1px solid #304426;background:#101510}.progress-avatar{width:72px;height:72px;border:2px solid #76c442;border-radius:50%;object-fit:cover;background:#080b08;padding:3px;display:grid;place-items:center;color:#9de366;font-family:'Cinzel',serif;font-size:20px;line-height:1}.progress-avatar.frame-copper{border-color:#b87333;box-shadow:0 0 0 3px #3a2415}.progress-avatar.frame-silver{border-color:#d8d8d8;box-shadow:0 0 0 3px #424242}.progress-avatar.frame-gold{border-color:#ffb000;box-shadow:0 0 0 3px #5b3f00,0 0 16px #ffb00055}.progress-avatar.frame-master{border-color:#7ee53f;box-shadow:0 0 0 3px #223d15,0 0 18px #7ee53f66}.progress-kicker,.progress-label,.achievement-meta,.cosmetic-meta{font-family:'Share Tech Mono',monospace;text-transform:uppercase;color:#777394;font-size:11px;letter-spacing:0}.progress-level{font-family:'Cinzel',serif;color:#f1efe8;font-size:22px;margin:3px 0}.progress-xp-track{height:8px;background:#242331;border:1px solid #343247;overflow:hidden;margin-top:8px}.progress-xp-fill{height:100%;background:#76c442}.progress-balance{min-width:100px;text-align:right;color:#ffb000;font-family:'Cinzel',serif;font-size:22px}.progress-balance small{display:block;color:#777394;font-family:'Share Tech Mono',monospace;font-size:10px}.progress-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.progress-stat{border:1px solid #2d2b40;padding:10px;background:#12121d}.progress-stat strong{display:block;color:#80d34b;font-family:'Cinzel',serif;font-size:20px}.achievement-grid,.cosmetic-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.achievement-card,.cosmetic-card{border:1px solid #2d2b40;background:#12121d;padding:12px;min-height:92px}.achievement-card.locked,.cosmetic-card.locked{opacity:.48}.achievement-mark{font-family:'Cinzel',serif;color:#80d34b;font-size:20px;margin-bottom:5px}.achievement-name,.cosmetic-name{font-family:'Cinzel',serif;color:#efedf6;font-size:14px}.achievement-desc{color:#8b879f;font-size:13px;margin-top:4px;line-height:1.35}.cosmetic-preview{display:flex;align-items:center;gap:10px;margin-bottom:10px}.cosmetic-preview .progress-avatar{width:48px;height:48px;font-size:14px}.cosmetic-card .auth-btn{width:100%;margin-top:8px}.personalization-preview{display:flex;align-items:center;gap:14px;padding:13px;border:1px solid #304426;background:#101510;margin-bottom:10px}.personalization-preview .progress-avatar{width:62px;height:62px}.personalization-name{font-family:'Cinzel',serif;color:#f1efe8;font-size:17px}.personalization-tabs{display:flex;gap:7px;margin-bottom:10px}.personalization-tab{flex:1;border:1px solid #343247;background:#12121d;color:#8b879f;padding:9px 10px;font-family:'Share Tech Mono',monospace;text-transform:uppercase;cursor:pointer}.personalization-tab.active{border-color:#527d34;color:#9de366;background:#121a0f}.progress-note{font-size:12px;color:#777394;line-height:1.45}.progress-reward{color:#ffb000;font-family:'Share Tech Mono',monospace;font-size:11px;margin-top:5px}@media(max-width:700px){.progress-hero{grid-template-columns:auto minmax(0,1fr);padding:12px;gap:11px}.progress-balance{grid-column:1/-1;text-align:left;border-top:1px solid #2d2b40;padding-top:10px}.progress-avatar{width:58px;height:58px}.progress-level{font-size:18px}.progress-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.achievement-grid,.cosmetic-grid{grid-template-columns:1fr}.personalization-tabs{gap:5px}.personalization-tab{padding:8px 5px;font-size:10px}}
+.auth-avatar.frame-copper{border-color:#b87333;box-shadow:0 0 0 2px #3a2415}.auth-avatar.frame-silver{border-color:#d8d8d8;box-shadow:0 0 0 2px #424242}.auth-avatar.frame-gold{border-color:#ffb000;box-shadow:0 0 0 2px #5b3f00}.auth-avatar.frame-master{border-color:#7ee53f;box-shadow:0 0 0 2px #223d15}.auth-avatar.avatar-initials{display:grid;place-items:center;color:#9de366;font-family:'Cinzel',serif;font-size:9px;line-height:1}.community-review-identity{display:flex;align-items:center;gap:9px}.community-review-avatar{width:30px!important;height:30px!important;padding:1px;flex:0 0 30px}.community-review-head{align-items:center}.community-review-achievements{display:flex;gap:5px;flex-wrap:wrap;margin:7px 0}.community-achievement{display:inline-flex;align-items:center;gap:4px;border:1px solid #3c5630;background:#11180e;color:#9cdb72;padding:3px 6px;font-family:'Share Tech Mono',monospace;font-size:10px}.community-achievement strong{color:#ffb000;font-family:'Cinzel',serif}.progress-details{border:1px solid #2d2b40;background:#0f0f18}.progress-details summary{cursor:pointer;list-style:none;padding:12px 14px;color:#80d34b;font-family:'Share Tech Mono',monospace;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}.progress-details summary::-webkit-details-marker{display:none}.progress-details summary:after{content:'+';font-size:20px}.progress-details[open] summary:after{content:'−'}.progress-details-body{padding:0 12px 12px}.achievement-progress{height:4px;background:#292738;margin-top:8px;overflow:hidden}.achievement-progress span{display:block;height:100%;background:#76c442}.achievement-feature{width:100%;margin-top:8px;padding:6px!important;font-size:10px!important}.progress-next{border-left:3px solid #ffb000;background:#17150e;padding:10px 12px;color:#aaa4bd;font-size:13px}.progress-next strong{color:#f1efe8}.progress-toast-stack{position:fixed;right:18px;bottom:18px;z-index:10020;display:grid;gap:8px;width:min(360px,calc(100vw - 24px));pointer-events:none}.progress-toast{border:1px solid #547c35;border-left:4px solid #80d34b;background:#101510;color:#e9e7ef;padding:13px 15px;box-shadow:0 12px 30px #000a;animation:progress-toast-in .22s ease-out}.progress-toast-title{font-family:'Cinzel',serif;color:#80d34b;margin-bottom:3px}.progress-toast-meta{font-family:'Share Tech Mono',monospace;color:#aaa4bd;font-size:12px}@keyframes progress-toast-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}@media(max-width:700px){.progress-toast-stack{right:12px;bottom:12px}.community-achievement{font-size:9px}}
+.route-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.route-card{border:1px solid #2d2b40;background:#12121d;padding:12px}.route-card.completed{border-color:#527d34;background:#11180e}.route-head{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:10px;align-items:center}.route-emblem{width:44px;height:44px;border:1px solid #4a6638;border-radius:50%;display:grid;place-items:center;color:#9de366;background:#0b1009;font-family:'Cinzel',serif;font-size:13px}.route-card.completed .route-emblem{border-color:#ffb000;color:#ffb000;box-shadow:0 0 12px #ffb00033}.route-name{font-family:'Cinzel',serif;color:#efedf6;font-size:14px}.route-status{font-family:'Share Tech Mono',monospace;color:#777394;font-size:9px;text-transform:uppercase}.route-count{font-family:'Share Tech Mono',monospace;color:#ffb000;font-size:12px}.route-rooms{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}.route-room{border:1px solid #2d2b40;color:#777394;padding:3px 5px;font-family:'Share Tech Mono',monospace;font-size:9px}.route-room.done{border-color:#3c5630;color:#9de366}.route-link{display:inline-block;margin-top:9px;color:#9de366;font-family:'Share Tech Mono',monospace;font-size:10px;text-transform:uppercase}.community-route-badges{display:flex;gap:5px;flex-wrap:wrap;margin:6px 0}.community-route-badge{border:1px solid #6c5822;background:#17150e;color:#ffbf31;padding:3px 6px;font-family:'Share Tech Mono',monospace;font-size:9px}@media(max-width:700px){.route-grid{grid-template-columns:1fr}.route-head{grid-template-columns:40px minmax(0,1fr) auto}.route-emblem{width:40px;height:40px}}
 </style>
 </head>
 <body>
@@ -1826,7 +1833,7 @@
           <div class="vault-community-title">Juega, comparte y desbloquea tu identidad en The Vault.</div>
           <p class="vault-community-copy">Las salas hechas y las reseñas conceden experiencia. Los logros aportan créditos Vault para desbloquear marcos y títulos públicos. La experiencia nunca se gasta y los créditos son internos, no transferibles y sin valor económico.</p>
           <div class="vault-guide-actions">
-            <button class="vault-guide-action auth-only" type="button" onclick="openProfile()" style="display:none">Ver mi progreso</button>
+            <button class="vault-guide-action auth-only" type="button" onclick="openProgressSettings()" style="display:none">Ver mi progreso</button>
             <button class="vault-guide-action guest-only" type="button" onclick="signInGoogle()">Crear mi perfil escapista</button>
           </div>
         </div>
@@ -2104,7 +2111,10 @@
 <div class="profile-modal" id="profile-modal" aria-hidden="true" onclick="closeProfile(event)">
   <div class="profile-dialog" role="dialog" aria-modal="true" aria-labelledby="profile-title" onclick="event.stopPropagation()">
     <div class="profile-head">
-      <div class="profile-title" id="profile-title">Ajustes</div>
+      <div class="profile-head-main">
+        <div class="profile-title" id="profile-title">Ajustes</div>
+        <div id="settings-tabs-host"></div>
+      </div>
       <button class="profile-close" type="button" onclick="closeProfile()" aria-label="Cerrar perfil">X</button>
     </div>
     <div class="profile-body" id="profile-content"></div>
@@ -2230,11 +2240,14 @@ const PROGRESS_LEVELS = [
   { min: 1500, name: 'Escapista legendario' }
 ];
 const PROGRESS_COSMETICS = [
-  { id: 'vault', type: 'avatar', name: 'Sello The Vault', cost: 0, frame: '', image: 'images/brand/icon-round-192.png' },
-  { id: 'copper', type: 'avatar', name: 'Marco cobre', cost: 60, frame: 'frame-copper', image: 'images/brand/icon-round-192.png' },
-  { id: 'silver', type: 'avatar', name: 'Marco plata', cost: 140, frame: 'frame-silver', image: 'images/brand/icon-round-192.png' },
-  { id: 'gold', type: 'avatar', name: 'Marco oro', cost: 260, frame: 'frame-gold', image: 'images/brand/icon-round-192.png', requires: 'award_hunter' },
-  { id: 'master', type: 'avatar', name: 'Guardián de la cámara', cost: 450, frame: 'frame-master', image: 'images/brand/icon-round-192.png', requires: 'veteran' },
+  { id: 'avatar_google', type: 'avatar', name: 'Foto de Google', cost: 0, source: 'google' },
+  { id: 'avatar_vault', type: 'avatar', name: 'Sello The Vault', cost: 0, source: 'image', image: 'images/brand/icon-round-192.png' },
+  { id: 'avatar_initials', type: 'avatar', name: 'Iniciales escapistas', cost: 0, source: 'initials' },
+  { id: 'frame_none', type: 'frame', name: 'Sin marco', cost: 0, frame: '' },
+  { id: 'copper', type: 'frame', name: 'Marco cobre', cost: 60, frame: 'frame-copper' },
+  { id: 'silver', type: 'frame', name: 'Marco plata', cost: 140, frame: 'frame-silver' },
+  { id: 'gold', type: 'frame', name: 'Marco oro', cost: 260, frame: 'frame-gold', requires: 'award_hunter' },
+  { id: 'master', type: 'frame', name: 'Guardián de la cámara', cost: 450, frame: 'frame-master', requires: 'veteran' },
   { id: 'title_none', type: 'title', name: 'Sin título', cost: 0 },
   { id: 'title_clue', type: 'title', name: 'Buscador de pistas', cost: 80 },
   { id: 'title_terror', type: 'title', name: 'Especialista en terror', cost: 160, requires: 'without_fear' },
@@ -2242,6 +2255,39 @@ const PROGRESS_COSMETICS = [
   { id: 'title_chronicler', type: 'title', name: 'Cronista de The Vault', cost: 320, requires: 'chronicler' },
   { id: 'title_legend', type: 'title', name: 'Escapista legendario', cost: 600, requires: 'veteran' }
 ];
+const PROGRESS_ROUTES = [
+  { id: 'pain-route-3', mark: 'PR3', name: 'Pain Route 3', status: 'vigente', url: 'https://www.painroute.com/', rooms: [
+    ['Achijira', 'Red Dopamine'], ['Dark City', 'Obscura Experiences'], ['Sección Esoterismo: Exorcista', 'Terror Stories', 'Exorcista'], ['Forbidden Room', 'Shallow Grave', 'Forbidden'], ['La Isla de las Muñecas', 'Cindy Escape Box'], ['La Vitrina', 'Malorial Experience']
+  ]},
+  { id: 'movie-route', mark: 'MR', name: 'Movie Route', status: 'vigente', url: 'https://movierouteescaperoom.es/', rooms: [
+    ['Abduction Enterprises', 'Abduction', 'Abduction 4 Enterprises'], ['Escapafantasmas', 'Cubick', 'Escapa Fantasmas'], ['EscapeStory', 'Fugitivos Room Escape', 'Escape Story'], ['Nunca Jamás', 'Key Play'], ['Olimpo', 'Olimpo Escape Room'], ['Poison', 'Kadabra Escape Rooms'], ['Roomions', 'Virus Room Escape'], ['Room Angie 2', 'Ilusium Room Escape', 'Room Angie'], ['Sustos S.A.', 'Quimera Escape'], ['Willy el Tuerto', 'Willy el Tuerto Escape Room']
+  ]},
+  { id: 'panic-tour', mark: 'PT', name: 'Panic Tour', status: 'histórica', rooms: [
+    ['Profana', 'Fear Factory Experience'], ['IN', 'Fear Factory Experiences'], ['El Orfanato (Fear Factory)', 'Fear Factory Experiences', 'El Orfanato'], ['Pesadillas', 'Golden Pop'], ['La Consulta', 'Escapism Experience'], ['El Claustre', 'El Claustre']
+  ]},
+  { id: 'achoporte', mark: 'AC', name: 'Achoporte', status: 'histórica', rooms: [
+    ['Héroes', 'Audacia Escape Room'], ['Atraco al Compadre', 'Start Play'], ['Ciudad Halloween', 'Carthago'], ['9:1', 'The Blackout Escape']
+  ]},
+  { id: 'hells-route', mark: 'HR', name: "Hell's Route", status: 'histórica', rooms: [
+    ['La Casa', 'Insomnia Corporation'], ['La Historia de Charlotte', 'Room Whitechapel'], ['La Posesión', 'Arcanum'], ['Outline', 'Outline Escape Room'], ['Parasomnia Bajo 2ª', 'Plastic Robot', 'Parasomnia Bajo Segunda']
+  ]},
+  { id: 'ruta-unreal', mark: 'UR', name: 'Ruta Unreal', status: 'por verificar', rooms: [
+    ['La Mina', 'Unreal Room Escape'], ['The Narcos', 'Unreal Room Escape'], ['Vikingos', 'Unreal Room Escape'], ['Endurance II', 'Unreal Horta'], ['Distrito 111', 'Unreal Room Escape Sant Martí'], ['Las Maravillas de Agrabah', 'Unreal Room Escape Vilapicina']
+  ]},
+  { id: 'pasaporte-colors', mark: 'CO', name: 'Pasaporte Colors', status: 'histórica', rooms: [
+    ['Experiencia Roja', 'Experiencity Colors'], ['Experiencia Amarilla', 'Experiencity Colors'], ['Experiencia Verde - El escondite del hacker', 'Experiencity Colors'], ['Experiencia Azul - Atrincherados', 'Experiencity Colors'], ['Experiencia Morada', 'Experiencity Colors'], ['Experiencia Perla - Atlantis', 'Experiencity Colors']
+  ]},
+  { id: 'candado-infinito', mark: '∞', name: 'El Candado del Infinito', status: 'histórica', rooms: [
+    ['El Secreto de Kaos', 'Mente Colmena Rooms'], ['Daemonium', 'Sala La Clave'], ['Inframundo', 'Eskapark'], ['La Tienda de Cómics', 'Timeout Escape'], ['Sanatorio Arkham', 'Al Otro Lado'], ['Un trabajo sencillo', '3criptados Escape Room'], ['La Célula', 'El Zulo'], ['Inventum: el control del tiempo', 'Lógicamente'], ['El Secreto del Almacén del Puerto', 'Fugarte'], ['Destino: Orión', 'Escape Time']
+  ]},
+  { id: 'pasaporte-elements', mark: 'EL', name: 'Pasaporte Elements', status: 'histórica', rooms: [
+    ['La Reina Roja', 'Elements Escape Room'], ['Bajo Zero', 'Elements Escape Room'], ['Futura', 'Futura Escape'], ['Atlantis', 'Elements Escape Room'], ['Atrincherados', 'Elements Escape Room'], ['La Sospecha', 'Escapem']
+  ]},
+  { id: 'ruta-666', mark: '666', name: 'Ruta 666', status: 'por verificar', rooms: [
+    ['Blasphemia', 'Cindy Escape Box'], ['Profana', 'Fear Factory Experience'], ['Parasomnia Bajo 2ª', 'Plastic Robot', 'Parasomnia Bajo Segunda'], ['Awaken', 'Red Dopamine'], ['Exorcismo', 'Delirium Xperience'], ['Brujería', 'Vive tu Escape']
+  ]}
+];
+let PERSONALIZATION_TAB = 'avatar';
 let IS_ADMIN = false;
 let ADMIN_ROLE_ERROR = '';
 let ADMIN_ROLE_RAW = null;
@@ -3073,16 +3119,19 @@ function renderAuthStatus() {
   loginBtn.title = 'Entrar con tu cuenta de Google';
   if (AUTH_USER) {
     const publicPhoto = publicPhotoURL();
+    const selectedFrame = selectedProgressFrame();
+    const avatar = publicPhoto ? document.createElement('img') : document.createElement('span');
+    avatar.className = 'auth-avatar';
+    if (selectedFrame.frame) avatar.classList.add(selectedFrame.frame);
     if (publicPhoto) {
-      const avatar = document.createElement('img');
-      avatar.className = 'auth-avatar';
-      const equipped = selectedProgressCosmetic();
-      if (equipped.id !== 'vault' && equipped.frame) avatar.classList.add(equipped.frame);
       avatar.alt = '';
       avatar.referrerPolicy = 'no-referrer';
       avatar.src = publicPhoto;
-      statusEl.insertBefore(avatar, nameEl);
+    } else {
+      avatar.classList.add('avatar-initials');
+      avatar.textContent = escapistInitials();
     }
+    statusEl.insertBefore(avatar, nameEl);
     nameEl.textContent = shortDisplayName();
     loginBtn.style.display = 'none';
     if (profileBtn) profileBtn.style.display = '';
@@ -3384,10 +3433,10 @@ function googleShortName(user = AUTH_USER) {
 }
 
 function publicPhotoURL() {
-  const equipped = String(USER_PROFILE.equippedCosmetic || '');
-  const cosmetic = PROGRESS_COSMETICS.find(item => item.id === equipped && item.id !== 'vault');
-  if (cosmetic) return cosmetic.image;
-  return USER_PROFILE.useGooglePhoto === false ? '' : (AUTH_USER?.photoURL || USER_PROFILE.photoURL || '');
+  const avatar = selectedProgressAvatar();
+  if (avatar.source === 'google') return AUTH_USER?.photoURL || USER_PROFILE.photoURL || 'images/brand/icon-round-192.png';
+  if (avatar.source === 'image') return avatar.image || 'images/brand/icon-round-192.png';
+  return '';
 }
 
 async function loadUserProfile() {
@@ -3405,6 +3454,8 @@ async function loadUserProfile() {
       photoURL: AUTH_USER.photoURL || saved.photoURL || '',
       publicName: String(saved.publicName || saved.shortName || googleShortName()).trim(),
       useGooglePhoto: saved.useGooglePhoto !== false,
+      equippedAvatar: saved.equippedAvatar || (saved.useGooglePhoto === false ? 'avatar_vault' : 'avatar_google'),
+      equippedFrame: saved.equippedFrame || (['copper', 'silver', 'gold', 'master'].includes(saved.equippedCosmetic) ? saved.equippedCosmetic : 'frame_none'),
       baseCity: saved.baseCity || '',
       baseProvince: saved.baseProvince || '',
       bio: saved.bio || ''
@@ -3418,6 +3469,8 @@ async function loadUserProfile() {
       photoURL: AUTH_USER.photoURL || '',
       publicName: googleShortName(),
       useGooglePhoto: true,
+      equippedAvatar: 'avatar_google',
+      equippedFrame: 'frame_none',
       baseCity: '',
       baseProvince: '',
       bio: ''
@@ -3552,13 +3605,20 @@ async function syncProfileIdentityToGroups() {
 async function syncProfileIdentityToReviews() {
   if (!AUTH_USER || !FIREBASE_ENABLED) return;
   const displayName = shortDisplayName();
-  const equippedCosmetic = String(USER_PROFILE.equippedCosmetic || 'vault');
+  const equippedAvatar = selectedProgressAvatar().id;
+  const equippedFrame = selectedProgressFrame().id;
+  const photoURL = equippedAvatar === 'avatar_google' ? publicPhotoURL() : '';
   const equippedTitle = selectedProgressTitle()?.name || '';
-  const progressLevel = progressModel().level.name;
+  const progress = progressModel();
+  const progressLevel = progress.level.name;
+  const featuredAchievements = featuredAchievementData(progress);
+  const routeBadges = completedRouteBadgeData(progress);
+  const featuredSignature = JSON.stringify(featuredAchievements);
+  const routeSignature = JSON.stringify(routeBadges);
   for (const [slug, reviews] of Object.entries(roomReviewsCache || {})) {
     const review = reviews?.[USER_ID];
-    if (!review || (review.userName === displayName && review.equippedCosmetic === equippedCosmetic && review.equippedTitle === equippedTitle && review.progressLevel === progressLevel)) continue;
-    const next = { ...review, userName: displayName, equippedCosmetic, equippedTitle, progressLevel, updatedAt: review.updatedAt || Date.now() };
+    if (!review || (review.userName === displayName && review.equippedAvatar === equippedAvatar && review.equippedFrame === equippedFrame && (review.photoURL || '') === photoURL && review.equippedTitle === equippedTitle && review.progressLevel === progressLevel && JSON.stringify(review.featuredAchievements || []) === featuredSignature && JSON.stringify(review.routeBadges || []) === routeSignature)) continue;
+    const next = { ...review, userName: displayName, equippedAvatar, equippedFrame, photoURL, equippedCosmetic: equippedFrame, equippedTitle, progressLevel, featuredAchievements, routeBadges, updatedAt: review.updatedAt || Date.now() };
     try {
       await fbPut(`roomReviews/${slug}/${USER_ID}`, next);
       roomReviewsCache[slug][USER_ID] = next;
@@ -4637,7 +4697,7 @@ function setProfileStatus(message) {
 }
 
 function setSettingsTab(tab) {
-  SETTINGS_TAB = tab === 'edit' && IS_ADMIN ? 'edit' : 'profile';
+  SETTINGS_TAB = tab === 'progress' ? 'progress' : tab === 'edit' && IS_ADMIN ? 'edit' : 'profile';
   renderProfile();
   if (SETTINGS_TAB === 'profile') {
     ensureProfileMapDataLoaded().then(() => {
@@ -4649,8 +4709,14 @@ function setSettingsTab(tab) {
 function settingsTabsHtml() {
   return `<div class="settings-tabs">
     <button class="settings-tab ${SETTINGS_TAB === 'profile' ? 'active' : ''}" type="button" onclick="setSettingsTab('profile')">Perfil</button>
+    <button class="settings-tab ${SETTINGS_TAB === 'progress' ? 'active' : ''}" type="button" onclick="setSettingsTab('progress')">Progreso</button>
     ${IS_ADMIN ? `<button class="settings-tab ${SETTINGS_TAB === 'edit' ? 'active' : ''}" type="button" onclick="setSettingsTab('edit')">Edicion</button>` : ''}
   </div>`;
+}
+
+function openProgressSettings() {
+  SETTINGS_TAB = 'progress';
+  openProfile();
 }
 
 function adminReviewRoomSources() {
@@ -5103,6 +5169,42 @@ function progressDoneRooms() {
   return [...rooms.values()];
 }
 
+function progressPersonalDoneRooms() {
+  const rooms = new Map();
+  Object.entries(USER_ROOM_STATES || {}).forEach(([key, state]) => {
+    if (!state?.done) return;
+    const room = findDetailRoom('catalogo', key) || state;
+    rooms.set(userRoomKey(room) || key, room);
+  });
+  return [...rooms.values()];
+}
+
+function routeRoomMatches(room, requirement) {
+  const [name, company = '', ...aliases] = requirement;
+  const roomName = normalizedKey(room?.nombre || room?.roomName || '');
+  const validNames = [name, ...aliases].map(normalizedKey).filter(Boolean);
+  if (!validNames.some(candidate => roomName === candidate)) return false;
+  if (!company) return true;
+  const roomCompany = normalizedKey(room?.empresa || room?.company || '');
+  const expectedCompany = normalizedKey(company);
+  return !roomCompany || roomCompany === expectedCompany || roomCompany.includes(expectedCompany) || expectedCompany.includes(roomCompany);
+}
+
+function progressRoutes(personalDoneRooms = progressPersonalDoneRooms()) {
+  return PROGRESS_ROUTES.map(route => {
+    const rooms = route.rooms.map(requirement => {
+      const matchedRoom = personalDoneRooms.find(room => routeRoomMatches(room, requirement)) || null;
+      return { name: requirement[0], done: !!matchedRoom, room: matchedRoom };
+    });
+    const completed = rooms.filter(room => room.done).length;
+    return { ...route, rooms, completed, target: rooms.length, unlocked: completed === rooms.length };
+  });
+}
+
+function completedRouteBadgeData(model = progressModel()) {
+  return (model.routes || []).filter(route => route.unlocked).map(route => ({ id: route.id, mark: route.mark, name: route.name }));
+}
+
 function progressUserReviews() {
   const reviews = [];
   const seen = new Set();
@@ -5119,6 +5221,7 @@ function progressUserReviews() {
 
 function progressModel() {
   const doneRooms = progressDoneRooms();
+  const personalDoneRooms = progressPersonalDoneRooms();
   const reviews = progressUserReviews();
   const completeReviews = reviews.filter(review => REVIEW_CATEGORIES.every(([id]) => Number(review.scores?.[id]) > 0));
   const textReviews = reviews.filter(review => String(review.text || '').trim().length >= 80);
@@ -5155,8 +5258,12 @@ function progressModel() {
     achievement('traveller', 'III', 'Viajero', 'Completa salas en 3 comunidades.', communities.size, 3, 35)
   ];
   const achievementCredits = achievements.filter(item => item.unlocked).reduce((sum, item) => sum + item.reward, 0);
+  const unlockedIds = new Set(achievements.filter(item => item.unlocked).map(item => item.id));
+  const featuredAchievementIds = (Array.isArray(USER_PROFILE.featuredAchievements) ? USER_PROFILE.featuredAchievements : [])
+    .filter((id, index, list) => unlockedIds.has(id) && list.indexOf(id) === index)
+    .slice(0, 3);
   const earnedCredits = doneRooms.length * 2 + reviews.length * 10 + textReviews.length * 3 + achievementCredits;
-  const owned = new Set(['vault', 'title_none', ...(Array.isArray(USER_PROFILE.ownedCosmetics) ? USER_PROFILE.ownedCosmetics : [])]);
+  const owned = new Set(['avatar_google', 'avatar_vault', 'avatar_initials', 'frame_none', 'title_none', ...(Array.isArray(USER_PROFILE.ownedCosmetics) ? USER_PROFILE.ownedCosmetics : [])]);
   const spentCredits = PROGRESS_COSMETICS.filter(item => item.cost && owned.has(item.id)).reduce((sum, item) => sum + item.cost, 0);
   let levelIndex = 0;
   PROGRESS_LEVELS.forEach((level, index) => { if (xp >= level.min) levelIndex = index; });
@@ -5164,12 +5271,24 @@ function progressModel() {
   const nextLevel = PROGRESS_LEVELS[levelIndex + 1] || null;
   const levelProgress = nextLevel ? Math.max(0, Math.min(100, ((xp - level.min) / (nextLevel.min - level.min)) * 100)) : 100;
   const nextAchievement = achievements.filter(item => !item.unlocked).sort((a, b) => (b.current / b.target) - (a.current / a.target))[0] || null;
-  return { doneRooms, reviews, completeReviews, timedRooms, pendingRooms, groupDoneCount, cities, communities, xp, levelIndex, level, nextLevel, levelProgress, achievements, nextAchievement, earnedCredits, spentCredits, balance: Math.max(0, earnedCredits - spentCredits), owned };
+  const routes = progressRoutes(personalDoneRooms);
+  return { doneRooms, personalDoneRooms, reviews, completeReviews, timedRooms, pendingRooms, groupDoneCount, cities, communities, xp, levelIndex, level, nextLevel, levelProgress, achievements, featuredAchievementIds, nextAchievement, routes, earnedCredits, spentCredits, balance: Math.max(0, earnedCredits - spentCredits), owned };
 }
 
-function selectedProgressCosmetic() {
-  const id = String(USER_PROFILE.equippedCosmetic || 'vault');
-  return PROGRESS_COSMETICS.find(item => item.id === id) || PROGRESS_COSMETICS[0];
+function renderSettingsTabs() {
+  const host = document.getElementById('settings-tabs-host');
+  if (host) host.innerHTML = AUTH_USER ? settingsTabsHtml() : '';
+}
+
+function selectedProgressAvatar(profile = USER_PROFILE) {
+  const id = String(profile?.equippedAvatar || (profile?.useGooglePhoto === false ? 'avatar_vault' : 'avatar_google'));
+  return PROGRESS_COSMETICS.find(item => item.type === 'avatar' && item.id === id) || PROGRESS_COSMETICS.find(item => item.id === 'avatar_vault');
+}
+
+function selectedProgressFrame(profile = USER_PROFILE) {
+  const legacy = ['copper', 'silver', 'gold', 'master'].includes(profile?.equippedCosmetic) ? profile.equippedCosmetic : 'frame_none';
+  const id = String(profile?.equippedFrame || legacy);
+  return PROGRESS_COSMETICS.find(item => item.type === 'frame' && item.id === id) || PROGRESS_COSMETICS.find(item => item.id === 'frame_none');
 }
 
 function selectedProgressTitleItem() {
@@ -5180,6 +5299,29 @@ function selectedProgressTitleItem() {
 function selectedProgressTitle() {
   const item = selectedProgressTitleItem();
   return item?.id === 'title_none' ? null : item;
+}
+
+function featuredAchievementData(model = progressModel()) {
+  const selected = new Set(model.featuredAchievementIds || []);
+  return model.achievements.filter(item => selected.has(item.id)).map(item => ({ id: item.id, mark: item.mark, name: item.name }));
+}
+
+async function toggleFeaturedAchievement(achievementId) {
+  if (!AUTH_USER || !FIREBASE_ENABLED) return;
+  const model = progressModel();
+  const achievement = model.achievements.find(item => item.id === achievementId);
+  if (!achievement?.unlocked) return setProfileStatus('Este logro todavía está bloqueado.');
+  const selected = [...model.featuredAchievementIds];
+  const index = selected.indexOf(achievementId);
+  if (index >= 0) selected.splice(index, 1);
+  else {
+    if (selected.length >= 3) return setProfileStatus('Puedes destacar un máximo de tres logros.');
+    selected.push(achievementId);
+  }
+  const saved = await saveUserProfile({ featuredAchievements: selected });
+  if (!saved) return setProfileStatus('No se pudo guardar la vitrina de logros.');
+  await syncProfileIdentityToReviews();
+  renderProfile(index >= 0 ? 'Logro retirado de tu vitrina.' : 'Logro añadido a tu vitrina pública.');
 }
 
 function showProgressToast(title, detail) {
@@ -5204,35 +5346,63 @@ function announceProgressChange(before, after) {
   const creditGain = Math.max(0, after.earnedCredits - before.earnedCredits);
   const previous = new Set(before.achievements.filter(item => item.unlocked).map(item => item.id));
   const unlocked = after.achievements.filter(item => item.unlocked && !previous.has(item.id));
-  if (unlocked.length) {
+  const previousRoutes = new Set((before.routes || []).filter(item => item.unlocked).map(item => item.id));
+  const unlockedRoutes = (after.routes || []).filter(item => item.unlocked && !previousRoutes.has(item.id));
+  if (unlockedRoutes.length) {
+    showProgressToast(`Ruta completada: ${unlockedRoutes[0].name}`, `Emblema ${unlockedRoutes[0].mark} desbloqueado`);
+  } else if (unlocked.length) {
     showProgressToast(`Logro: ${unlocked[0].name}`, `+${xpGain} XP · +${creditGain} créditos Vault`);
   } else if (xpGain || creditGain) {
     showProgressToast('Progreso actualizado', `+${xpGain} XP · +${creditGain} créditos Vault`);
   }
-  if (AUTH_USER && before.level?.name !== after.level?.name) {
+  if (AUTH_USER && (before.level?.name !== after.level?.name || unlockedRoutes.length)) {
     syncProfileIdentityToReviews().catch(error => console.warn('No se pudo actualizar el nivel público:', error.message));
   }
 }
 
-function progressAvatarHtml(cosmetic = selectedProgressCosmetic(), extraClass = '') {
-  return `<img class="progress-avatar ${escapeHtml(cosmetic.frame || '')} ${escapeHtml(extraClass)}" src="${escapeHtml(cosmetic.image)}" alt="Avatar ${escapeHtml(cosmetic.name)}">`;
+function escapistInitials(name = shortDisplayName()) {
+  const parts = String(name || 'TV').trim().split(/\s+/).filter(Boolean);
+  return (parts.slice(0, 2).map(part => part[0]).join('') || 'TV').toUpperCase();
+}
+
+function progressAvatarHtml(avatar = selectedProgressAvatar(), frame = selectedProgressFrame(), extraClass = '', name = shortDisplayName()) {
+  const classes = `progress-avatar ${escapeHtml(frame?.frame || '')} ${escapeHtml(extraClass)}`;
+  if (avatar?.source === 'initials') return `<span class="${classes}" role="img" aria-label="Avatar con iniciales">${escapeHtml(escapistInitials(name))}</span>`;
+  const src = avatar?.source === 'google'
+    ? (AUTH_USER?.photoURL || USER_PROFILE.photoURL || 'images/brand/icon-round-192.png')
+    : (avatar?.image || 'images/brand/icon-round-192.png');
+  return `<img class="${classes}" src="${escapeHtml(src)}" alt="Avatar ${escapeHtml(avatar?.name || 'The Vault')}" referrerpolicy="no-referrer">`;
 }
 
 function reviewProgressAvatarHtml(review) {
-  const cosmetic = PROGRESS_COSMETICS.find(item => item.id === String(review?.equippedCosmetic || 'vault')) || PROGRESS_COSMETICS[0];
-  return progressAvatarHtml(cosmetic, 'community-review-avatar');
+  const avatarId = review?.equippedAvatar || (review?.equippedCosmetic === 'vault' ? 'avatar_google' : 'avatar_vault');
+  const frameId = review?.equippedFrame || (['copper', 'silver', 'gold', 'master'].includes(review?.equippedCosmetic) ? review.equippedCosmetic : 'frame_none');
+  const avatar = PROGRESS_COSMETICS.find(item => item.type === 'avatar' && item.id === avatarId) || PROGRESS_COSMETICS.find(item => item.id === 'avatar_vault');
+  const frame = PROGRESS_COSMETICS.find(item => item.type === 'frame' && item.id === frameId) || PROGRESS_COSMETICS.find(item => item.id === 'frame_none');
+  const classes = `progress-avatar ${escapeHtml(frame.frame || '')} community-review-avatar`;
+  if (avatar.source === 'initials') return `<span class="${classes}" role="img" aria-label="Avatar con iniciales">${escapeHtml(escapistInitials(review?.userName))}</span>`;
+  const src = avatar.source === 'google' ? (review?.photoURL || 'images/brand/icon-round-192.png') : (avatar.image || 'images/brand/icon-round-192.png');
+  return `<img class="${classes}" src="${escapeHtml(src)}" alt="" referrerpolicy="no-referrer">`;
 }
 
-function progressSettingsHtml() {
+function setPersonalizationTab(tab) {
+  PERSONALIZATION_TAB = ['avatar', 'frame', 'title'].includes(tab) ? tab : 'avatar';
+  renderProfile();
+}
+
+function progressSettingsHtml(message = '') {
   const model = progressModel();
-  const selected = selectedProgressCosmetic();
+  const selectedAvatar = selectedProgressAvatar();
+  const selectedFrame = selectedProgressFrame();
   const selectedTitleItem = selectedProgressTitleItem();
   const selectedTitle = selectedProgressTitle();
   const nextText = model.nextLevel ? `${model.xp} / ${model.nextLevel.min} XP` : `${model.xp} XP · nivel máximo`;
+  const personalizationItems = PROGRESS_COSMETICS.filter(item => item.type === PERSONALIZATION_TAB);
+  const ownedCount = PROGRESS_COSMETICS.filter(item => model.owned.has(item.id)).length;
   return `<div class="profile-section progress-shell">
     <div class="profile-section-title">Progreso escapista</div>
     <div class="progress-hero">
-      ${progressAvatarHtml(selected)}
+      ${progressAvatarHtml(selectedAvatar, selectedFrame)}
       <div><div class="progress-kicker">Nivel ${model.levelIndex + 1}</div><div class="progress-level">${escapeHtml(model.level.name)}</div>${selectedTitle ? `<div class="progress-reward">${escapeHtml(selectedTitle.name)}</div>` : ''}<div class="progress-label">${escapeHtml(nextText)}</div><div class="progress-xp-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(model.levelProgress)}"><div class="progress-xp-fill" style="width:${model.levelProgress.toFixed(1)}%"></div></div></div>
       <div class="progress-balance">${model.balance}<small>Créditos Vault</small></div>
     </div>
@@ -5243,18 +5413,40 @@ function progressSettingsHtml() {
       <div class="progress-stat"><strong>${model.earnedCredits}</strong><span class="progress-label">Créditos ganados</span></div>
     </div>
     ${model.nextAchievement ? `<div class="progress-next"><span class="progress-label">Siguiente objetivo</span><br><strong>${escapeHtml(model.nextAchievement.name)}</strong> · ${Math.min(model.nextAchievement.current, model.nextAchievement.target)}/${model.nextAchievement.target}</div>` : '<div class="progress-next"><strong>Todos los logros conseguidos.</strong></div>'}
-    <details class="progress-details"><summary>Logros <span>${model.achievements.filter(item => item.unlocked).length}/${model.achievements.length}</span></summary><div class="progress-details-body"><div class="achievement-grid">${model.achievements.map(item => { const ratio = Math.min(100, (item.current / item.target) * 100); return `<article class="achievement-card ${item.unlocked ? '' : 'locked'}"><div class="achievement-mark">${escapeHtml(item.mark)}</div><div class="achievement-name">${escapeHtml(item.name)}</div><div class="achievement-desc">${escapeHtml(item.description)}</div><div class="achievement-progress"><span style="width:${ratio.toFixed(1)}%"></span></div><div class="progress-reward">${item.unlocked ? 'Conseguido' : `${Math.min(item.current, item.target)}/${item.target} · +${item.reward} créditos`}</div></article>`; }).join('')}</div></div></details>
-    <details class="progress-details"><summary>Personalización <span>${model.owned.size}/${PROGRESS_COSMETICS.length}</span></summary><div class="progress-details-body"><div class="cosmetic-grid">${PROGRESS_COSMETICS.map(item => {
+    <details class="progress-details"><summary>Logros <span>${model.achievements.filter(item => item.unlocked).length}/${model.achievements.length} · destacados ${model.featuredAchievementIds.length}/3</span></summary><div class="progress-details-body"><div class="achievement-grid">${model.achievements.map(item => { const ratio = Math.min(100, (item.current / item.target) * 100); const featured = model.featuredAchievementIds.includes(item.id); return `<article class="achievement-card ${item.unlocked ? '' : 'locked'}"><div class="achievement-mark">${escapeHtml(item.mark)}</div><div class="achievement-name">${escapeHtml(item.name)}</div><div class="achievement-desc">${escapeHtml(item.description)}</div><div class="achievement-progress"><span style="width:${ratio.toFixed(1)}%"></span></div><div class="progress-reward">${item.unlocked ? 'Conseguido' : `${Math.min(item.current, item.target)}/${item.target} · +${item.reward} créditos`}</div>${item.unlocked ? `<button class="auth-btn secondary achievement-feature" type="button" onclick="toggleFeaturedAchievement('${jsString(item.id)}')">${featured ? 'Quitar de la vitrina' : 'Destacar logro'}</button>` : ''}</article>`; }).join('')}</div></div></details>
+    <details class="progress-details"><summary>Rutas escapistas <span>${model.routes.filter(route => route.unlocked).length}/${model.routes.length}</span></summary><div class="progress-details-body"><div class="route-grid">${model.routes.map(route => `<article class="route-card ${route.unlocked ? 'completed' : ''}">
+      <div class="route-head"><div class="route-emblem">${escapeHtml(route.mark)}</div><div><div class="route-name">${escapeHtml(route.name)}</div><div class="route-status">${escapeHtml(route.status)}${route.unlocked ? ' · emblema desbloqueado' : ''}</div></div><div class="route-count">${route.completed}/${route.target}</div></div>
+      <div class="route-rooms">${route.rooms.map(room => `<span class="route-room ${room.done ? 'done' : ''}">${room.done ? '✓ ' : ''}${escapeHtml(room.name)}</span>`).join('')}</div>
+      ${route.url ? `<a class="route-link" href="${escapeHtml(route.url)}" target="_blank" rel="noopener noreferrer">Web oficial</a>` : ''}
+    </article>`).join('')}</div><div class="progress-note" style="margin-top:10px">El progreso se calcula con salas marcadas como Hecho por ti. Un emblema de The Vault no equivale a la validación oficial de la organización de la ruta.</div></div></details>
+    <details class="progress-details" open><summary>Personalización <span>${ownedCount}/${PROGRESS_COSMETICS.length}</span></summary><div class="progress-details-body">
+      <div class="personalization-preview">
+        ${progressAvatarHtml(selectedAvatar, selectedFrame)}
+        <div><div class="progress-label">Tu identidad pública</div><div class="personalization-name">${escapeHtml(shortDisplayName())}</div><div class="progress-reward">${escapeHtml(selectedTitle?.name || model.level.name)}</div></div>
+      </div>
+      <div class="personalization-tabs" role="tablist" aria-label="Opciones de personalización">
+        <button class="personalization-tab ${PERSONALIZATION_TAB === 'avatar' ? 'active' : ''}" type="button" onclick="setPersonalizationTab('avatar')">Avatar</button>
+        <button class="personalization-tab ${PERSONALIZATION_TAB === 'frame' ? 'active' : ''}" type="button" onclick="setPersonalizationTab('frame')">Marco</button>
+        <button class="personalization-tab ${PERSONALIZATION_TAB === 'title' ? 'active' : ''}" type="button" onclick="setPersonalizationTab('title')">Título</button>
+      </div>
+      <div class="cosmetic-grid">${personalizationItems.map(item => {
       const owned = model.owned.has(item.id);
-      const equipped = item.type === 'title' ? selectedTitleItem?.id === item.id : selected.id === item.id;
+      const equipped = item.type === 'title' ? selectedTitleItem?.id === item.id : item.type === 'frame' ? selectedFrame.id === item.id : selectedAvatar.id === item.id;
       const requirement = item.requires ? model.achievements.find(achievement => achievement.id === item.requires) : null;
       const requirementMet = !requirement || requirement.unlocked;
       const affordable = model.balance >= item.cost && requirementMet;
-      const action = equipped ? 'Equipado' : owned ? 'Equipar' : !requirementMet ? `Requiere: ${requirement.name}` : `${item.cost} créditos`;
-      const preview = item.type === 'title' ? `<div class="achievement-mark">T</div>` : progressAvatarHtml(item);
-      return `<article class="cosmetic-card ${owned || affordable ? '' : 'locked'}"><div class="cosmetic-preview">${preview}<div><div class="cosmetic-name">${escapeHtml(item.name)}</div><div class="cosmetic-meta">${item.type === 'title' ? 'Título público' : 'Avatar y marco'} · ${owned ? 'En tu colección' : `${item.cost} créditos`}</div></div></div><button class="auth-btn ${equipped ? 'secondary' : ''}" type="button" ${equipped || (!owned && !affordable) ? 'disabled' : ''} onclick="acquireProgressCosmetic('${jsString(item.id)}')">${escapeHtml(action)}</button></article>`;
+      const kindLabel = item.type === 'avatar' ? 'Avatar' : item.type === 'frame' ? 'Marco' : 'Título';
+      const action = equipped ? `${kindLabel} activo` : owned ? `Usar ${kindLabel.toLowerCase()}` : !requirementMet ? `Requiere: ${requirement.name}` : `Comprar · ${item.cost} créditos`;
+      const preview = item.type === 'title'
+        ? `<div class="achievement-mark">T</div>`
+        : item.type === 'frame'
+          ? progressAvatarHtml(selectedAvatar, item)
+          : progressAvatarHtml(item, selectedFrame);
+      const kind = item.type === 'title' ? 'Título público' : item.type === 'frame' ? 'Marco de avatar' : 'Avatar público';
+      return `<article class="cosmetic-card ${owned || affordable ? '' : 'locked'}"><div class="cosmetic-preview">${preview}<div><div class="cosmetic-name">${escapeHtml(item.name)}</div><div class="cosmetic-meta">${kind} · ${owned ? 'En tu colección' : `${item.cost} créditos`}</div></div></div><button class="auth-btn ${equipped ? 'secondary' : ''}" type="button" ${equipped || (!owned && !affordable) ? 'disabled' : ''} onclick="acquireProgressCosmetic('${jsString(item.id)}')">${escapeHtml(action)}</button></article>`;
     }).join('')}</div></div></details>
     <div class="progress-note">La experiencia determina tu nivel y no se gasta. Los créditos son internos, no transferibles y no tienen valor económico. Se obtienen por salas hechas, reseñas y logros.</div>
+    <div class="profile-status-msg" id="profile-status">${message || ''}</div>
   </div>`;
 }
 
@@ -5272,10 +5464,12 @@ async function acquireProgressCosmetic(cosmeticId) {
   }
   const equipment = cosmetic.type === 'title'
     ? { equippedTitle: cosmetic.id }
-    : { equippedCosmetic: cosmetic.id };
+    : cosmetic.type === 'frame'
+      ? { equippedFrame: cosmetic.id, equippedCosmetic: cosmetic.id }
+      : { equippedAvatar: cosmetic.id, useGooglePhoto: cosmetic.id === 'avatar_google' };
   const saved = await saveUserProfile({ ownedCosmetics: [...owned], ...equipment });
   if (!saved) return setProfileStatus('No se pudo guardar la personalización.');
-  await syncProfileIdentityToReviews();
+  await Promise.all([syncProfileIdentityToReviews(), syncProfileIdentityToGroups()]);
   renderAuthStatus();
   renderProfile(`${cosmetic.name} equipado.`);
 }
@@ -5286,13 +5480,12 @@ function profileSettingsHtml(message = '') {
   const city = escapeHtml(USER_PROFILE.baseCity || '');
   const province = escapeHtml(USER_PROFILE.baseProvince || '');
   const bio = escapeHtml(USER_PROFILE.bio || '');
-  const photo = publicPhotoURL();
   const place = [USER_PROFILE.baseCity, USER_PROFILE.baseProvince].filter(Boolean).join(' - ') || 'Sin ubicación base';
   return `
     <div class="profile-section">
       <div class="profile-section-title">Mi perfil escapista</div>
       <div class="profile-preview">
-        ${photo ? `<img class="auth-avatar" src="${escapeHtml(photo)}" alt="" referrerpolicy="no-referrer">` : '<div class="auth-avatar"></div>'}
+        ${progressAvatarHtml(selectedProgressAvatar(), selectedProgressFrame())}
         <div><div class="profile-preview-name">${publicName}</div><div class="profile-preview-meta">${escapeHtml(place)}</div>${IS_ADMIN ? '<span class="profile-admin-badge">Admin web</span>' : ''}</div>
       </div>
       <label class="profile-field-label" for="profile-public-name">Nombre publico</label>
@@ -5303,11 +5496,10 @@ function profileSettingsHtml(message = '') {
       </div>
       <label class="profile-field-label" for="profile-bio">Bio corta</label>
       <textarea class="profile-textarea" id="profile-bio" maxlength="180" placeholder="Tipo de salas que te gustan, estilo de juego, ciudad habitual...">${bio}</textarea>
-      <label class="profile-check"><input type="checkbox" id="profile-use-google-photo" ${USER_PROFILE.useGooglePhoto !== false ? 'checked' : ''}> Mostrar foto de Google cuando no haya un avatar equipado</label>
+      <div class="progress-note">El avatar, marco y título públicos se eligen desde la pestaña Progreso.</div>
       <div class="profile-row" style="margin-top:10px"><button class="auth-btn" type="button" onclick="saveProfileSettings()">Guardar perfil</button></div>
       <div class="profile-status-msg" id="profile-status">${message || ''}</div>
     </div>
-    ${progressSettingsHtml()}
     ${accountRoleInfoHtml()}
     ${escapistMapHtml()}
     <div class="profile-section">
@@ -5337,14 +5529,19 @@ function profileSettingsHtml(message = '') {
 function renderProfile(message = '') {
   const root = document.getElementById('profile-content');
   if (!root) return;
+  if (SETTINGS_TAB === 'edit' && !IS_ADMIN) SETTINGS_TAB = 'profile';
+  renderSettingsTabs();
   if (!AUTH_USER) {
     root.innerHTML = `<div class="profile-section"><div class="profile-section-title">Cuenta</div><div class="review-empty">Entra con Google para crear y compartir grupos escapistas.</div></div>`;
     return;
   }
-  if (SETTINGS_TAB === 'edit' && !IS_ADMIN) SETTINGS_TAB = 'profile';
   try {
-    const content = SETTINGS_TAB === 'edit' ? renderSettingsEditHtml(message) : profileSettingsHtml(message);
-    root.innerHTML = `${settingsTabsHtml()}${content}`;
+    const content = SETTINGS_TAB === 'edit'
+      ? renderSettingsEditHtml(message)
+      : SETTINGS_TAB === 'progress'
+        ? progressSettingsHtml(message)
+        : profileSettingsHtml(message);
+    root.innerHTML = content;
     if (SETTINGS_TAB === 'profile') {
       requestAnimationFrame(() => {
         initEscapistLeafletMap().catch(e => {
@@ -5354,7 +5551,7 @@ function renderProfile(message = '') {
     }
   } catch (e) {
     console.error('No se pudo pintar Ajustes:', e);
-    root.innerHTML = `${settingsTabsHtml()}<div class="profile-section">
+    root.innerHTML = `<div class="profile-section">
       <div class="profile-section-title">Ajustes</div>
       <div class="review-empty">No se pudo cargar esta seccion. ${escapeHtml(e.message || '')}</div>
     </div>`;
@@ -5375,7 +5572,6 @@ async function saveProfileSettings() {
   setProfileStatus('Guardando perfil...');
   const saved = await saveUserProfile({
     publicName,
-    useGooglePhoto: !!document.getElementById('profile-use-google-photo')?.checked,
     baseCity: document.getElementById('profile-city')?.value || '',
     baseProvince: document.getElementById('profile-province')?.value || '',
     bio: document.getElementById('profile-bio')?.value || ''
@@ -6114,8 +6310,12 @@ function reviewListHtml(slug) {
   return `<div class="review-list">${reviews.map(review => {
     const scores = REVIEW_CATEGORIES.filter(([id]) => review.scores?.[id]).map(([id, label]) => `<span class="review-score-pill">${label}: ${scoreToTen(review.scores[id]).toFixed(1)}/10</span>`).join('');
     const text = String(review.text || '').trim();
+    const featured = (Array.isArray(review.featuredAchievements) ? review.featuredAchievements : []).slice(0, 3);
+    const routeBadges = Array.isArray(review.routeBadges) ? review.routeBadges : [];
     return `<article class="community-review">
       <div class="community-review-head"><span class="community-review-identity">${reviewProgressAvatarHtml(review)}<span><span class="community-review-user">${escapeHtml(review.userName || 'Usuario')}</span>${review.equippedTitle || review.progressLevel ? `<span class="progress-label" style="display:block">${escapeHtml(review.equippedTitle || review.progressLevel)}</span>` : ''}</span></span><span class="community-review-date">${formatReviewDate(review.updatedAt)}</span></div>
+      ${featured.length ? `<div class="community-review-achievements">${featured.map(item => `<span class="community-achievement"><strong>${escapeHtml(item.mark || 'V')}</strong>${escapeHtml(item.name || 'Logro')}</span>`).join('')}</div>` : ''}
+      ${routeBadges.length ? `<div class="community-route-badges">${routeBadges.map(item => `<span class="community-route-badge">${escapeHtml(item.mark || 'R')} · ${escapeHtml(item.name || 'Ruta completada')}</span>`).join('')}</div>` : ''}
       <div class="community-review-scores">${scores}</div>
       ${text ? `<div class="community-review-text">${escapeHtml(text)}</div>` : ''}
     </article>`;
@@ -6166,9 +6366,14 @@ async function saveRoomReview(kind, key) {
     userName: shortDisplayName(),
     roomName: room.nombre || '',
     company: room.empresa || '',
-    equippedCosmetic: String(USER_PROFILE.equippedCosmetic || 'vault'),
+    equippedAvatar: selectedProgressAvatar().id,
+    equippedFrame: selectedProgressFrame().id,
+    equippedCosmetic: selectedProgressFrame().id,
+    photoURL: selectedProgressAvatar().id === 'avatar_google' ? publicPhotoURL() : '',
     equippedTitle: selectedProgressTitle()?.name || '',
     progressLevel: progressModel().level.name,
+    featuredAchievements: featuredAchievementData(),
+    routeBadges: completedRouteBadgeData(),
     scores,
     text,
     createdAt: previous.createdAt || now,
