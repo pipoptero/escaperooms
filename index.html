@@ -1674,6 +1674,15 @@
 .route-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.route-card{border:1px solid #2d2b40;background:#12121d;padding:12px}.route-card.completed{border-color:#527d34;background:#11180e}.route-head{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:10px;align-items:center}.route-emblem{width:44px;height:44px;border:1px solid #4a6638;border-radius:50%;display:grid;place-items:center;color:#9de366;background:#0b1009;font-family:'Cinzel',serif;font-size:13px}.route-card.completed .route-emblem{border-color:#ffb000;color:#ffb000;box-shadow:0 0 12px #ffb00033}.route-name{font-family:'Cinzel',serif;color:#efedf6;font-size:14px}.route-status{font-family:'Share Tech Mono',monospace;color:#777394;font-size:9px;text-transform:uppercase}.route-count{font-family:'Share Tech Mono',monospace;color:#ffb000;font-size:12px}.route-rooms{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}.route-room{border:1px solid #2d2b40;color:#777394;padding:3px 5px;font-family:'Share Tech Mono',monospace;font-size:9px}.route-room.done{border-color:#3c5630;color:#9de366}.route-link{display:inline-block;margin-top:9px;color:#9de366;font-family:'Share Tech Mono',monospace;font-size:10px;text-transform:uppercase}.community-route-badges{display:flex;gap:5px;flex-wrap:wrap;margin:6px 0}.community-route-badge{border:1px solid #6c5822;background:#17150e;color:#ffbf31;padding:3px 6px;font-family:'Share Tech Mono',monospace;font-size:9px}@media(max-width:700px){.route-grid{grid-template-columns:1fr}.route-head{grid-template-columns:40px minmax(0,1fr) auto}.route-emblem{width:40px;height:40px}}
 .route-emblem img{width:100%;height:100%;border-radius:50%;object-fit:cover;opacity:.38;filter:grayscale(1)}.route-card.completed .route-emblem img{opacity:1;filter:none}.community-route-badge{display:inline-flex;align-items:center;gap:5px}.community-route-badge img{width:20px;height:20px;border-radius:50%;object-fit:cover}
 .progress-avatar.avatar-contain{object-fit:contain;padding:5px}.route-emblem img,.community-route-badge img{object-fit:contain!important;background:#080a08}.progress-showcase{border:1px solid #415d32;background:#0d120c;padding:13px}.progress-showcase-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:10px}.progress-showcase-title{font-family:'Cinzel',serif;color:#f1efe8;font-size:17px}.progress-showcase-slots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.progress-showcase-slot{min-height:82px;border:1px solid #304426;background:#11170f;padding:10px;display:flex;align-items:center;gap:9px}.progress-showcase-slot.empty{border-style:dashed;color:#67637d;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:10px;text-transform:uppercase}.progress-showcase-mark{width:44px;height:44px;flex:0 0 44px;border:1px solid #587a3f;border-radius:50%;display:grid;place-items:center;color:#ffb000;font-family:'Cinzel',serif;overflow:hidden;background:#080b08}.progress-showcase-mark img{width:100%;height:100%;object-fit:contain}.progress-showcase-name{font-family:'Cinzel',serif;color:#efedf6;font-size:12px;overflow-wrap:anywhere}.progress-showcase-type{font-family:'Share Tech Mono',monospace;color:#777394;font-size:9px;text-transform:uppercase}.progress-card-panel{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid #304426;background:#101510;padding:13px}.progress-card-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.progress-card-status{grid-column:1/-1;min-height:1em;color:#80d34b;font-family:'Share Tech Mono',monospace;font-size:10px}.route-reward{display:flex;align-items:center;gap:7px;margin-top:9px;padding-top:8px;border-top:1px solid #292738;color:#9de366;font-family:'Share Tech Mono',monospace;font-size:9px;text-transform:uppercase}.route-reward img{width:30px;height:30px;border-radius:50%;object-fit:contain;background:#080a08;border:1px solid #4a6638}@media(max-width:700px){.progress-showcase-slots{grid-template-columns:1fr}.progress-showcase-slot{min-height:62px}.progress-card-panel{grid-template-columns:1fr}.progress-card-actions{justify-content:stretch}.progress-card-actions .auth-btn{flex:1}.progress-showcase-head{align-items:flex-start}}
+.achievement-medallion{position:relative;width:54px;height:54px;display:grid;place-items:center;border:1px solid #527d34;border-radius:50%;background:#080b08;box-shadow:inset 0 0 0 3px #121a0f;margin-bottom:8px;flex:0 0 54px}
+.achievement-medallion img{width:28px;height:28px;object-fit:contain}
+.achievement-medallion strong{position:absolute;right:-4px;bottom:-3px;min-width:21px;height:21px;padding:0 4px;display:grid;place-items:center;border:2px solid #080b08;border-radius:50%;background:#ffb000;color:#080b08;font:700 9px 'Cinzel',serif;box-sizing:border-box}
+.achievement-medallion.showcase{width:44px;height:44px;flex-basis:44px;margin:0}
+.achievement-medallion.showcase img{width:23px;height:23px}
+.achievement-medallion.small{width:26px;height:26px;flex-basis:26px;margin:0;border-width:1px;box-shadow:none}
+.achievement-medallion.small img{width:14px;height:14px}
+.achievement-medallion.small strong{right:-4px;bottom:-4px;min-width:14px;height:14px;padding:0 2px;border-width:1px;font-size:6px}
+.community-achievement{gap:7px;padding:4px 7px 4px 5px}
 </style>
 </head>
 <body>
@@ -2242,6 +2251,26 @@ const PROGRESS_LEVELS = [
   { min: 900, name: 'Guardián de The Vault' },
   { min: 1500, name: 'Escapista legendario' }
 ];
+const ACHIEVEMENT_ICONS = {
+  first_escape: 'images/progress/achievements/door-open.svg',
+  enthusiast: 'images/progress/achievements/footprints.svg',
+  veteran: 'images/progress/achievements/medal.svg',
+  centurion: 'images/progress/achievements/crown.svg',
+  first_review: 'images/progress/achievements/pen-line.svg',
+  chronicler: 'images/progress/achievements/notebook-pen.svg',
+  community_voice: 'images/progress/achievements/messages-square.svg',
+  complete_review: 'images/progress/achievements/star.svg',
+  perfectionist: 'images/progress/achievements/badge-check.svg',
+  timekeeper: 'images/progress/achievements/timer.svg',
+  planner: 'images/progress/achievements/list-checks.svg',
+  collector: 'images/progress/achievements/heart.svg',
+  without_fear: 'images/progress/achievements/skull.svg',
+  award_hunter: 'images/progress/achievements/trophy.svg',
+  company: 'images/progress/achievements/users.svg',
+  team_player: 'images/progress/achievements/handshake.svg',
+  explorer: 'images/progress/achievements/map.svg',
+  traveller: 'images/progress/achievements/compass.svg'
+};
 const PROGRESS_COSMETICS = [
   { id: 'avatar_google', type: 'avatar', name: 'Foto de Google', cost: 0, source: 'google' },
   { id: 'avatar_vault', type: 'avatar', name: 'Sello The Vault', cost: 0, source: 'image', image: 'images/brand/icon-round-192.png' },
@@ -5246,7 +5275,7 @@ function progressModel() {
   });
   const xp = doneRooms.length * 5 + reviews.length * 20 + completeReviews.length * 5 + (reviews.length ? 25 : 0);
   const activeGroupDone = activeUserGroups().some(([id]) => groupRoomCount(id) > 0) ? 1 : 0;
-  const achievement = (id, mark, name, description, current, target, reward) => ({ id, mark, name, description, current, target, unlocked: current >= target, reward });
+  const achievement = (id, mark, name, description, current, target, reward) => ({ id, mark, icon: ACHIEVEMENT_ICONS[id] || '', name, description, current, target, unlocked: current >= target, reward });
   const achievements = [
     achievement('first_escape', 'I', 'Primera fuga', 'Marca tu primera sala como hecha.', doneRooms.length, 1, 10),
     achievement('enthusiast', 'X', 'Escapista habitual', 'Completa 10 salas.', doneRooms.length, 10, 25),
@@ -5343,7 +5372,13 @@ function selectedProgressTitle() {
 
 function featuredAchievementData(model = progressModel()) {
   const selected = new Set(model.featuredAchievementIds || []);
-  return model.achievements.filter(item => selected.has(item.id)).map(item => ({ id: item.id, mark: item.mark, name: item.name }));
+  return model.achievements.filter(item => selected.has(item.id)).map(item => ({ id: item.id, mark: item.mark, icon: item.icon || '', name: item.name }));
+}
+
+function achievementMedallionHtml(item, extraClass = '') {
+  const icon = String(item?.icon || ACHIEVEMENT_ICONS[item?.id] || '');
+  const mark = String(item?.mark || 'V');
+  return `<span class="achievement-medallion ${escapeHtml(extraClass)}" aria-hidden="true">${icon ? `<img src="${escapeHtml(icon)}" alt="">` : ''}<strong>${escapeHtml(mark)}</strong></span>`;
 }
 
 async function toggleFeaturedAchievement(achievementId) {
@@ -5475,10 +5510,10 @@ function roomAvatarCardsHtml(model, selectedAvatar, selectedFrame) {
 function progressShowcaseItems(model = progressModel()) {
   const achievements = model.achievements
     .filter(item => model.featuredAchievementIds.includes(item.id))
-    .map(item => ({ id: item.id, type: 'Logro', name: item.name, mark: item.mark, image: '' }));
+    .map(item => ({ id: item.id, kind: 'achievement', type: 'Logro', name: item.name, mark: item.mark, icon: item.icon || '' }));
   const routes = model.routes
     .filter(item => model.featuredRouteIds.includes(item.id))
-    .map(item => ({ id: item.id, type: 'Trofeo de ruta', name: item.name, mark: item.mark, image: item.emblem || '' }));
+    .map(item => ({ id: item.id, kind: 'route', type: 'Trofeo de ruta', name: item.name, mark: item.mark, image: item.emblem || '' }));
   return [...achievements, ...routes].slice(0, 3);
 }
 
@@ -5486,7 +5521,7 @@ function progressShowcaseHtml(model) {
   const items = progressShowcaseItems(model);
   const slots = [...items];
   while (slots.length < 3) slots.push(null);
-  return `<section class="progress-showcase" aria-label="Vitrina escapista"><div class="progress-showcase-head"><div><div class="progress-label">Identidad pública</div><div class="progress-showcase-title">Vitrina escapista</div></div><span class="progress-label">${items.length}/3 destacados</span></div><div class="progress-showcase-slots">${slots.map(item => item ? `<div class="progress-showcase-slot"><div class="progress-showcase-mark">${item.image ? `<img src="${escapeHtml(item.image)}" alt="">` : escapeHtml(item.mark)}</div><div><div class="progress-showcase-type">${escapeHtml(item.type)}</div><div class="progress-showcase-name">${escapeHtml(item.name)}</div></div></div>` : '<div class="progress-showcase-slot empty">Espacio disponible</div>').join('')}</div></section>`;
+  return `<section class="progress-showcase" aria-label="Vitrina escapista"><div class="progress-showcase-head"><div><div class="progress-label">Identidad pública</div><div class="progress-showcase-title">Vitrina escapista</div></div><span class="progress-label">${items.length}/3 destacados</span></div><div class="progress-showcase-slots">${slots.map(item => item ? `<div class="progress-showcase-slot">${item.kind === 'achievement' ? achievementMedallionHtml(item, 'showcase') : `<div class="progress-showcase-mark">${item.image ? `<img src="${escapeHtml(item.image)}" alt="">` : escapeHtml(item.mark)}</div>`}<div><div class="progress-showcase-type">${escapeHtml(item.type)}</div><div class="progress-showcase-name">${escapeHtml(item.name)}</div></div></div>` : '<div class="progress-showcase-slot empty">Espacio disponible</div>').join('')}</div></section>`;
 }
 
 function setProgressCardStatus(message) {
@@ -5624,16 +5659,31 @@ async function buildProgressCardCanvas() {
       ctx.fillText('ESPACIO LIBRE', x + 62, 884);
       continue;
     }
-    if (item.image) {
+    if (item.kind === 'route' && item.image) {
       try {
         const emblem = await loadProgressCardImage(item.image);
         drawProgressCardImage(ctx, emblem, x + 74, 765, 140, 140, true);
       } catch {}
-    } else {
-      ctx.fillStyle = '#80d34b';
-      ctx.font = '700 54px Georgia';
+    } else if (item.kind === 'achievement') {
+      ctx.fillStyle = '#080b08';
+      ctx.beginPath();
+      ctx.arc(x + 144, 835, 70, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#527d34';
+      ctx.lineWidth = 4;
+      ctx.stroke();
+      try {
+        const icon = await loadProgressCardImage(item.icon || ACHIEVEMENT_ICONS[item.id]);
+        drawProgressCardImage(ctx, icon, x + 104, 795, 80, 80, true);
+      } catch {}
+      ctx.fillStyle = '#ffb000';
+      ctx.beginPath();
+      ctx.arc(x + 196, 885, 27, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#080b08';
+      ctx.font = '700 18px Georgia';
       ctx.textAlign = 'center';
-      ctx.fillText(item.mark, x + 144, 855);
+      ctx.fillText(item.mark, x + 196, 891, 44);
       ctx.textAlign = 'left';
     }
     ctx.fillStyle = '#777394';
@@ -5720,7 +5770,7 @@ function progressSettingsHtml(message = '') {
     </div>
     ${progressShowcaseHtml(model)}
     ${model.nextAchievement ? `<div class="progress-next"><span class="progress-label">Siguiente objetivo</span><br><strong>${escapeHtml(model.nextAchievement.name)}</strong> · ${Math.min(model.nextAchievement.current, model.nextAchievement.target)}/${model.nextAchievement.target}</div>` : '<div class="progress-next"><strong>Todos los logros conseguidos.</strong></div>'}
-    <details class="progress-details"><summary>Logros <span>${model.achievements.filter(item => item.unlocked).length}/${model.achievements.length} · vitrina ${model.featuredAchievementIds.length + model.featuredRouteIds.length}/3</span></summary><div class="progress-details-body"><div class="achievement-grid">${model.achievements.map(item => { const ratio = Math.min(100, (item.current / item.target) * 100); const featured = model.featuredAchievementIds.includes(item.id); return `<article class="achievement-card ${item.unlocked ? '' : 'locked'}"><div class="achievement-mark">${escapeHtml(item.mark)}</div><div class="achievement-name">${escapeHtml(item.name)}</div><div class="achievement-desc">${escapeHtml(item.description)}</div><div class="achievement-progress"><span style="width:${ratio.toFixed(1)}%"></span></div><div class="progress-reward">${item.unlocked ? 'Conseguido' : `${Math.min(item.current, item.target)}/${item.target} · +${item.reward} créditos`}</div>${item.unlocked ? `<button class="auth-btn secondary achievement-feature" type="button" onclick="toggleFeaturedAchievement('${jsString(item.id)}')">${featured ? 'Quitar de la vitrina' : 'Destacar logro'}</button>` : ''}</article>`; }).join('')}</div></div></details>
+    <details class="progress-details"><summary>Logros <span>${model.achievements.filter(item => item.unlocked).length}/${model.achievements.length} · vitrina ${model.featuredAchievementIds.length + model.featuredRouteIds.length}/3</span></summary><div class="progress-details-body"><div class="achievement-grid">${model.achievements.map(item => { const ratio = Math.min(100, (item.current / item.target) * 100); const featured = model.featuredAchievementIds.includes(item.id); return `<article class="achievement-card ${item.unlocked ? '' : 'locked'}">${achievementMedallionHtml(item)}<div class="achievement-name">${escapeHtml(item.name)}</div><div class="achievement-desc">${escapeHtml(item.description)}</div><div class="achievement-progress"><span style="width:${ratio.toFixed(1)}%"></span></div><div class="progress-reward">${item.unlocked ? 'Conseguido' : `${Math.min(item.current, item.target)}/${item.target} · +${item.reward} créditos`}</div>${item.unlocked ? `<button class="auth-btn secondary achievement-feature" type="button" onclick="toggleFeaturedAchievement('${jsString(item.id)}')">${featured ? 'Quitar de la vitrina' : 'Destacar logro'}</button>` : ''}</article>`; }).join('')}</div></div></details>
     <details class="progress-details"><summary>Rutas escapistas <span>${model.routes.filter(route => route.unlocked).length}/${model.routes.length}</span></summary><div class="progress-details-body"><div class="route-grid">${model.routes.map(route => { const featured = model.featuredRouteIds.includes(route.id); return `<article class="route-card ${route.unlocked ? 'completed' : ''}">
       <div class="route-head"><div class="route-emblem">${route.emblem ? `<img src="${escapeHtml(route.emblem)}" alt="Emblema ${escapeHtml(route.name)}">` : escapeHtml(route.mark)}</div><div><div class="route-name">${escapeHtml(route.name)}</div><div class="route-status">${escapeHtml(route.status)}${route.unlocked ? ' · trofeo y avatar desbloqueados' : ''}</div></div><div class="route-count">${route.completed}/${route.target}</div></div>
       <div class="route-rooms">${route.rooms.map(room => `<span class="route-room ${room.done ? 'done' : ''}">${room.done ? '✓ ' : ''}${escapeHtml(room.name)}</span>`).join('')}</div>
@@ -6653,7 +6703,7 @@ function reviewListHtml(slug) {
     const routeBadges = Array.isArray(review.routeBadges) ? review.routeBadges : [];
     return `<article class="community-review">
       <div class="community-review-head"><span class="community-review-identity">${reviewProgressAvatarHtml(review)}<span><span class="community-review-user">${escapeHtml(review.userName || 'Usuario')}</span>${review.equippedTitle || review.progressLevel ? `<span class="progress-label" style="display:block">${escapeHtml(review.equippedTitle || review.progressLevel)}</span>` : ''}</span></span><span class="community-review-date">${formatReviewDate(review.updatedAt)}</span></div>
-      ${featured.length ? `<div class="community-review-achievements">${featured.map(item => `<span class="community-achievement"><strong>${escapeHtml(item.mark || 'V')}</strong>${escapeHtml(item.name || 'Logro')}</span>`).join('')}</div>` : ''}
+      ${featured.length ? `<div class="community-review-achievements">${featured.map(item => `<span class="community-achievement">${achievementMedallionHtml(item, 'small')}${escapeHtml(item.name || 'Logro')}</span>`).join('')}</div>` : ''}
       ${routeBadges.length ? `<div class="community-route-badges">${routeBadges.map(item => `<span class="community-route-badge">${item.emblem ? `<img src="${escapeHtml(item.emblem)}" alt="">` : ''}${escapeHtml(item.mark || 'R')} · ${escapeHtml(item.name || 'Ruta completada')}</span>`).join('')}</div>` : ''}
       <div class="community-review-scores">${scores}</div>
       ${text ? `<div class="community-review-text">${escapeHtml(text)}</div>` : ''}
