@@ -55,3 +55,5 @@ scripts/generate_review_carousel.ps1
 scripts/generate_all_review_carousels.ps1
 scripts/generate_story_review_assets.ps1
 scripts/generate_marketing_template.ps1
+# Fuentes graficas originales de logros; la web publica solo sus WebP optimizados.
+/images/logros/

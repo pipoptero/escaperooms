@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -440,12 +440,13 @@
   /* -- ESCAPIST GROUPS / PROFILE -- */
   .profile-modal{position:fixed;inset:0;z-index:210;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);}
   .profile-modal.open{display:flex;}
-  .profile-dialog{width:min(880px,100%);max-height:min(92vh,820px);background:var(--card);border:1px solid rgba(125,187,63,.28);box-shadow:0 24px 80px rgba(0,0,0,.75);display:flex;flex-direction:column;overflow:hidden;}
+  .profile-dialog{width:min(1440px,calc(100vw - 32px));height:min(94vh,980px);max-height:calc(100vh - 24px);background:var(--card);border:1px solid rgba(125,187,63,.28);box-shadow:0 24px 80px rgba(0,0,0,.75);display:flex;flex-direction:column;overflow:hidden;}
   .profile-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 18px;border-bottom:1px solid var(--border);background:rgba(125,187,63,.04);}
   .profile-head-main{display:flex;align-items:center;gap:18px;min-width:0;}
   .profile-title{font-family:'Share Tech Mono',monospace;color:var(--amber);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;}
   .profile-close{width:32px;height:32px;border:1px solid var(--border);background:rgba(255,255,255,.025);color:var(--text3);cursor:pointer;}
-  .profile-body{padding:16px 18px;overflow:auto;min-height:0;}
+  .profile-body{padding:16px 18px;overflow:auto;min-height:0;flex:1;}
+  .profile-opening{min-height:220px;display:grid;place-items:center;border:1px solid rgba(125,187,63,.12);background:rgba(125,187,63,.025);font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);}
   .settings-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:13px;border-bottom:1px solid var(--border);padding-bottom:10px;}
   .settings-tab{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--border);background:rgba(255,255,255,.025);color:var(--text3);padding:8px 12px;cursor:pointer;}
   .settings-tab.active{color:var(--amber);border-color:rgba(125,187,63,.42);background:rgba(125,187,63,.07);}
@@ -485,8 +486,8 @@
   .profile-group-mini{border:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.11);padding:6px 7px;min-width:0;}
   .profile-group-mini strong{display:block;font-family:'Cinzel',serif;font-size:.95rem;color:var(--amber);line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .profile-group-mini span{display:block;font-family:'Share Tech Mono',monospace;font-size:.48rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-top:3px;}
-  .escapist-map-wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(220px,.9fr);gap:12px;align-items:stretch;}
-  .escapist-map-canvas{position:relative;min-height:330px;border:1px solid rgba(125,187,63,.16);background:radial-gradient(circle at 50% 45%,rgba(125,187,63,.08),transparent 44%),linear-gradient(135deg,rgba(255,255,255,.024),rgba(0,0,0,.12));overflow:hidden;}
+  .escapist-map-wrap{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,.65fr);gap:12px;align-items:stretch;}
+  .escapist-map-canvas{position:relative;min-height:510px;border:1px solid rgba(125,187,63,.16);background:radial-gradient(circle at 50% 45%,rgba(125,187,63,.08),transparent 44%),linear-gradient(135deg,rgba(255,255,255,.024),rgba(0,0,0,.12));overflow:hidden;}
   .escapist-leaflet-map{position:absolute;inset:0;display:none;background:#10120f;z-index:4;}
   .escapist-map-canvas.leaflet-ready .escapist-leaflet-map{display:block;}
   .escapist-map-canvas.leaflet-ready .escapist-map-fallback{display:none;}
@@ -497,12 +498,14 @@
   .escapist-leaflet-map .leaflet-control-attribution a{color:var(--green);}
   .escapist-leaflet-map .leaflet-popup-content-wrapper,.escapist-leaflet-map .leaflet-popup-tip{background:#14141e;color:var(--text);border:1px solid rgba(125,187,63,.22);box-shadow:0 14px 40px rgba(0,0,0,.45);}
   .escapist-leaflet-map .leaflet-popup-content{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.05em;text-transform:uppercase;margin:10px 12px;line-height:1.45;}
-  .escapist-leaflet-marker{width:28px;height:28px;border-radius:999px;border:1px solid rgba(255,255,255,.24);display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:.62rem;font-weight:700;color:#fff;box-shadow:0 0 0 3px rgba(0,0,0,.28),0 10px 24px rgba(0,0,0,.36);}
+  .escapist-leaflet-marker{width:28px;height:28px;border-radius:50% 50% 50% 7px;border:1px solid rgba(255,255,255,.24);display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:.62rem;font-weight:700;color:#fff;box-shadow:0 0 0 3px rgba(0,0,0,.28),0 10px 24px rgba(0,0,0,.36);transform:rotate(-45deg);cursor:pointer;}
+  .escapist-leaflet-marker>span{display:block;transform:rotate(45deg);line-height:1;}
   .escapist-leaflet-marker.personal{background:rgba(230,57,70,.92);border-color:rgba(230,57,70,.98);}
   .escapist-leaflet-marker.group{background:rgba(6,214,160,.88);border-color:rgba(6,214,160,.95);color:#07120f;}
   .escapist-leaflet-marker.pending{background:rgba(255,176,32,.92);border-color:rgba(255,176,32,.98);color:#171007;}
   .escapist-leaflet-marker.mixed{background:linear-gradient(135deg,rgba(230,57,70,.94) 0 48%,rgba(6,214,160,.9) 52% 100%);border-color:rgba(255,255,255,.36);}
-  .escapist-leaflet-marker.cluster{width:34px;height:34px;font-size:.72rem;border-width:2px;}
+  .escapist-leaflet-marker.cluster{width:34px;height:34px;border-radius:50%;font-size:.72rem;border-width:2px;transform:none;}
+  .escapist-leaflet-marker.cluster>span{transform:none;}
   .escapist-leaflet-marker.approx{border-style:dashed;}
   .escapist-leaflet-marker.active{box-shadow:0 0 0 4px rgba(0,0,0,.34),0 0 0 8px rgba(125,187,63,.24),0 0 32px rgba(125,187,63,.46),0 10px 28px rgba(0,0,0,.46);}
   .escapist-leaflet-map .marker-cluster{background:transparent;}
@@ -522,6 +525,13 @@
   .escapist-map-popup-card .profile-group-rooms{margin:5px 0 7px;}
   .escapist-map-popup-card .tag{font-size:.48rem;padding:3px 5px;}
   .escapist-map-popup-card .auth-btn{font-size:.52rem;padding:6px 8px;}
+  .escapist-map-popup-group{min-width:240px;max-width:300px;text-transform:none;}
+  .escapist-map-popup-room-list{display:grid;max-height:250px;overflow:auto;margin-top:8px;border-top:1px solid rgba(255,255,255,.1);}
+  .escapist-map-popup-room{display:grid;grid-template-columns:minmax(0,1fr) 30px;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.07);}
+  .escapist-map-popup-room strong,.escapist-map-popup-room span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .escapist-map-popup-room strong{font-family:'Cinzel',serif;font-size:.7rem;color:var(--text);}
+  .escapist-map-popup-room span{font-family:'Share Tech Mono',monospace;font-size:.48rem;color:var(--text3);text-transform:uppercase;margin-top:2px;}
+  .escapist-map-popup-room button{width:30px;height:30px;border:1px solid rgba(125,187,63,.35);background:rgba(125,187,63,.08);color:var(--green);cursor:pointer;font-size:1rem;}
   .escapist-map-fallback{position:absolute;inset:0;}
   .escapist-map-img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;opacity:.9;}
   .escapist-map-svg{position:absolute;inset:0;width:100%;height:100%;opacity:.42;}
@@ -1472,7 +1482,7 @@
     box-shadow:0 10px 24px rgba(0,0,0,.2);
   }
 
-  .profile-dialog{width:min(1120px,100%);}
+  .profile-dialog{width:min(1440px,calc(100vw - 32px));}
   .profile-head{
     background:linear-gradient(90deg,rgba(125,187,63,.075),rgba(255,255,255,.015));
   }
@@ -1675,14 +1685,24 @@
 .route-emblem img{width:100%;height:100%;border-radius:50%;object-fit:cover;opacity:.38;filter:grayscale(1)}.route-card.completed .route-emblem img{opacity:1;filter:none}.community-route-badge{display:inline-flex;align-items:center;gap:5px}.community-route-badge img{width:20px;height:20px;border-radius:50%;object-fit:cover}
 .progress-avatar.avatar-contain{object-fit:contain;padding:5px}.route-emblem img,.community-route-badge img{object-fit:contain!important;background:#080a08}.progress-showcase{border:1px solid #415d32;background:#0d120c;padding:13px}.progress-showcase-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:10px}.progress-showcase-title{font-family:'Cinzel',serif;color:#f1efe8;font-size:17px}.progress-showcase-slots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.progress-showcase-slot{min-height:82px;border:1px solid #304426;background:#11170f;padding:10px;display:flex;align-items:center;gap:9px}.progress-showcase-slot.empty{border-style:dashed;color:#67637d;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:10px;text-transform:uppercase}.progress-showcase-mark{width:44px;height:44px;flex:0 0 44px;border:1px solid #587a3f;border-radius:50%;display:grid;place-items:center;color:#ffb000;font-family:'Cinzel',serif;overflow:hidden;background:#080b08}.progress-showcase-mark img{width:100%;height:100%;object-fit:contain}.progress-showcase-name{font-family:'Cinzel',serif;color:#efedf6;font-size:12px;overflow-wrap:anywhere}.progress-showcase-type{font-family:'Share Tech Mono',monospace;color:#777394;font-size:9px;text-transform:uppercase}.progress-card-panel{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid #304426;background:#101510;padding:13px}.progress-card-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.progress-card-status{grid-column:1/-1;min-height:1em;color:#80d34b;font-family:'Share Tech Mono',monospace;font-size:10px}.route-reward{display:flex;align-items:center;gap:7px;margin-top:9px;padding-top:8px;border-top:1px solid #292738;color:#9de366;font-family:'Share Tech Mono',monospace;font-size:9px;text-transform:uppercase}.route-reward img{width:30px;height:30px;border-radius:50%;object-fit:contain;background:#080a08;border:1px solid #4a6638}@media(max-width:700px){.progress-showcase-slots{grid-template-columns:1fr}.progress-showcase-slot{min-height:62px}.progress-card-panel{grid-template-columns:1fr}.progress-card-actions{justify-content:stretch}.progress-card-actions .auth-btn{flex:1}.progress-showcase-head{align-items:flex-start}}
 .achievement-medallion{position:relative;width:54px;height:54px;display:grid;place-items:center;border:1px solid #527d34;border-radius:50%;background:#080b08;box-shadow:inset 0 0 0 3px #121a0f;margin-bottom:8px;flex:0 0 54px}
-.achievement-medallion img{width:28px;height:28px;object-fit:contain}
+.achievement-medallion img{width:48px;height:48px;object-fit:contain}
 .achievement-medallion strong{position:absolute;right:-4px;bottom:-3px;min-width:21px;height:21px;padding:0 4px;display:grid;place-items:center;border:2px solid #080b08;border-radius:50%;background:#ffb000;color:#080b08;font:700 9px 'Cinzel',serif;box-sizing:border-box}
 .achievement-medallion.showcase{width:44px;height:44px;flex-basis:44px;margin:0}
-.achievement-medallion.showcase img{width:23px;height:23px}
+.achievement-medallion.showcase img{width:39px;height:39px}
 .achievement-medallion.small{width:26px;height:26px;flex-basis:26px;margin:0;border-width:1px;box-shadow:none}
-.achievement-medallion.small img{width:14px;height:14px}
+.achievement-medallion.small img{width:22px;height:22px}
 .achievement-medallion.small strong{right:-4px;bottom:-4px;min-width:14px;height:14px;padding:0 2px;border-width:1px;font-size:6px}
 .community-achievement{gap:7px;padding:4px 7px 4px 5px}
+.escapist-map-popup-thumb[hidden]{display:none!important}
+.escapist-leaflet-marker.personal,.escapist-leaflet-marker.group,.escapist-leaflet-marker.mixed,.escapist-map-point.personal,.escapist-map-point.group,.escapist-map-point.mixed{background:#11170f;border-color:#80d34b;color:#eef7e8;box-shadow:inset 0 0 0 2px rgba(128,211,75,.12)}
+.escapist-leaflet-marker.pending,.escapist-map-point.pending{background:#17150e;border-color:#ffb000;color:#ffca55}
+.escapist-leaflet-marker.mixed,.escapist-map-point.mixed{box-shadow:inset 0 -4px 0 #ffb000}
+.escapist-leaflet-marker.approx,.escapist-map-point.approx{border-style:dashed;opacity:.82}
+.escapist-leaflet-marker.active,.escapist-map-point.active{border-color:#ffb000;box-shadow:0 0 0 4px rgba(0,0,0,.45),0 0 0 7px rgba(255,176,0,.24),0 0 24px rgba(128,211,75,.32)}
+.escapist-leaflet-cluster.personal,.escapist-leaflet-cluster.group,.escapist-leaflet-cluster.mixed{background:#11170f;border-color:#80d34b;color:#eef7e8;box-shadow:0 5px 18px rgba(0,0,0,.5),inset 0 0 0 4px rgba(128,211,75,.1)}
+.escapist-leaflet-cluster.pending{background:#17150e;border-color:#ffb000;color:#ffca55}
+.escapist-leaflet-cluster.mixed{box-shadow:0 5px 18px rgba(0,0,0,.5),inset 0 -5px 0 #ffb000}
+.escapist-map-dot.done{background:#80d34b}.escapist-map-dot.pending{background:#ffb000}.escapist-map-dot.approx{background:transparent;border:1px dashed #aaa4bd}
 </style>
 </head>
 <body>
@@ -2252,24 +2272,24 @@ const PROGRESS_LEVELS = [
   { min: 1500, name: 'Escapista legendario' }
 ];
 const ACHIEVEMENT_ICONS = {
-  first_escape: 'images/progress/achievements/door-open.svg',
-  enthusiast: 'images/progress/achievements/footprints.svg',
-  veteran: 'images/progress/achievements/medal.svg',
-  centurion: 'images/progress/achievements/crown.svg',
-  first_review: 'images/progress/achievements/pen-line.svg',
-  chronicler: 'images/progress/achievements/notebook-pen.svg',
-  community_voice: 'images/progress/achievements/messages-square.svg',
-  complete_review: 'images/progress/achievements/star.svg',
-  perfectionist: 'images/progress/achievements/badge-check.svg',
-  timekeeper: 'images/progress/achievements/timer.svg',
-  planner: 'images/progress/achievements/list-checks.svg',
-  collector: 'images/progress/achievements/heart.svg',
-  without_fear: 'images/progress/achievements/skull.svg',
-  award_hunter: 'images/progress/achievements/trophy.svg',
-  company: 'images/progress/achievements/users.svg',
-  team_player: 'images/progress/achievements/handshake.svg',
-  explorer: 'images/progress/achievements/map.svg',
-  traveller: 'images/progress/achievements/compass.svg'
+  first_escape: 'images/progress/achievements/badges/first_escape.webp',
+  enthusiast: 'images/progress/achievements/badges/enthusiast.webp',
+  veteran: 'images/progress/achievements/badges/veteran.webp',
+  centurion: 'images/progress/achievements/badges/centurion.webp',
+  first_review: 'images/progress/achievements/badges/first_review.webp',
+  chronicler: 'images/progress/achievements/badges/chronicler.webp',
+  community_voice: 'images/progress/achievements/badges/community_voice.webp',
+  complete_review: 'images/progress/achievements/badges/complete_review.webp',
+  perfectionist: 'images/progress/achievements/badges/perfectionist.webp',
+  timekeeper: 'images/progress/achievements/badges/timekeeper.webp',
+  planner: 'images/progress/achievements/badges/planner.webp',
+  collector: 'images/progress/achievements/badges/collector.webp',
+  without_fear: 'images/progress/achievements/badges/without_fear.webp',
+  award_hunter: 'images/progress/achievements/badges/award_hunter.webp',
+  company: 'images/progress/achievements/badges/company.webp',
+  team_player: 'images/progress/achievements/badges/team_player.webp',
+  explorer: 'images/progress/achievements/badges/explorer.webp',
+  traveller: 'images/progress/achievements/badges/traveller.webp'
 };
 const PROGRESS_COSMETICS = [
   { id: 'avatar_google', type: 'avatar', name: 'Foto de Google', cost: 0, source: 'google' },
@@ -2351,7 +2371,7 @@ let LIVE_REFRESH_EVENTS_READY = false;
 let ROOM_ALIASES_LOADED = false;
 let STATIC_PUBLISHED_REVIEWS_LOADED = false;
 let SITE_STATS_LOADED = false;
-const FALLBACK_SITE_STATS = {"catalog":1736,"reviews":38,"ranking":948,"locations":45,"updated":"2026-08-24"};
+const FALLBACK_SITE_STATS = {"catalog":1735,"reviews":38,"ranking":947,"locations":45,"updated":"2026-08-26"};
 let PUBLIC_SITE_STATS = { ...FALLBACK_SITE_STATS };
 let STATIC_ENHANCEMENTS_LOADED = false;
 let STATIC_ENHANCEMENTS_PROMISE = null;
@@ -3757,11 +3777,73 @@ function roomLocationKeys(room) {
 }
 
 function exactLocationForRoom(room) {
-  for (const key of roomLocationKeys(room)) {
+  const locationForKey = key => {
+    const raw = String(key || '').trim().toLowerCase();
+    const slug = slugify(raw);
+    const aliased = REVIEW_ROOM_ALIASES[slug] || REVIEW_ROOM_ALIASES[raw] || '';
+    const variants = [...new Set([
+      raw,
+      slug,
+      aliased,
+      slug.replace(/_/g, '-'),
+      aliased.replace(/_/g, '-'),
+      raw.replace(/_/g, '-'),
+      raw.replace(/-/g, '_')
+    ].filter(Boolean))];
+    const entry = variants.map(candidate => ROOM_LOCATIONS[candidate]).find(Boolean);
+    const lat = Number(entry?.lat);
+    const lon = Number(entry?.lon);
+    return Number.isFinite(lat) && Number.isFinite(lon) ? { ...entry, lat, lon } : null;
+  };
+  const directKey = slugify(room?.id || '');
+
+  // Los estados personales y de grupo pueden conservar IDs antiguos. Cuando
+  // existe una ficha actual en el catalogo, su ubicacion tiene prioridad.
+  const identityMatch = catalogRoomForReview(room);
+  const canonicalDirect = locationForKey(identityMatch?.id);
+  if (canonicalDirect) return canonicalDirect;
+
+  const direct = locationForKey(directKey);
+  if (direct) return direct;
+
+  for (const identity of reviewIdentityKeys(room || {})) {
+    const aliased = canonicalReviewRoomKey(identity);
+    const aliasLocation = locationForKey(aliased);
+    if (aliasLocation) return aliasLocation;
+  }
+
+  // Los hechos antiguos pueden conservar el nombre usado antes de reconstruir
+  // el catalogo. Recuperamos primero su ficha canonica y, con ella, el ID actual.
+  const canonicalCandidates = [];
+  if (identityMatch) canonicalCandidates.push(identityMatch);
+  const roomCompany = normalizedKey(room?.empresa || room?.company);
+  const roomName = compactKey(room?.nombre || room?.roomName).replace(/(.)\1+/g, '$1');
+  CATALOGO.forEach(candidate => {
+    const candidateCompany = normalizedKey(candidate?.empresa);
+    const candidateName = compactKey(candidate?.nombre).replace(/(.)\1+/g, '$1');
+    const sameCompany = roomCompany && candidateCompany === roomCompany;
+    const sameName = roomName.length >= 6
+      && (candidateName === roomName || candidateName.includes(roomName) || roomName.includes(candidateName));
+    if (sameCompany && sameName && !canonicalCandidates.includes(candidate)) canonicalCandidates.push(candidate);
+  });
+  for (const candidate of canonicalCandidates) {
+    const canonicalLocation = locationForKey(candidate?.id);
+    if (canonicalLocation) return canonicalLocation;
+  }
+  const canonical = canonicalCandidates[0] || null;
+
+  const roomCity = normalizedKey(room?.ciudad);
+  const roomProvince = normalizedKey(room?.provincia);
+  const keys = [...new Set([...roomLocationKeys(room), ...roomLocationKeys(canonical || {})])];
+  for (const key of keys.filter(key => key !== directKey)) {
     const entry = ROOM_LOCATIONS[key];
     const lat = Number(entry?.lat);
     const lon = Number(entry?.lon);
-    if (Number.isFinite(lat) && Number.isFinite(lon)) {
+    const entryCity = normalizedKey(entry?.city);
+    const entryProvince = normalizedKey(entry?.province);
+    const sameArea = (roomCity && entryCity && roomCity === entryCity)
+      || (roomProvince && entryProvince && roomProvince === entryProvince);
+    if (sameArea && Number.isFinite(lat) && Number.isFinite(lon)) {
       return { ...entry, lat, lon };
     }
   }
@@ -3801,14 +3883,41 @@ function projectMapPoint(coord) {
   return { x: Math.max(5, Math.min(95, x)), y: Math.max(5, Math.min(94, y)) };
 }
 
+function mapCatalogRoomFor(room, rawKey = '') {
+  const direct = catalogRoomForReview(room) || findRoomByUserKey(rawKey);
+  if (direct) return direct;
+  const web = normalizedKey(String(room?.web || '').replace(/^https?:\/\/(?:www\.)?/i, '').replace(/\/$/, ''));
+  if (web) {
+    const byWeb = CATALOGO.find(candidate => normalizedKey(String(candidate.web || '').replace(/^https?:\/\/(?:www\.)?/i, '').replace(/\/$/, '')) === web);
+    if (byWeb) return byWeb;
+  }
+  const company = normalizedKey(room?.empresa || room?.company);
+  const name = compactKey(room?.nombre || room?.roomName).replace(/(.)\1+/g, '$1');
+  if (!company || !name) return null;
+  return CATALOGO.find(candidate => normalizedKey(candidate.empresa) === company
+    && compactKey(candidate.nombre).replace(/(.)\1+/g, '$1') === name) || null;
+}
+
 function escapistMapRoomItems() {
   const byKey = new Map();
-  const ensure = (key, room) => {
-    if (!key) return null;
+  const identityIndex = new Map();
+  const ensure = (rawKey, sourceRoom) => {
+    const catalogRoom = mapCatalogRoomFor(sourceRoom, rawKey);
+    const room = catalogRoom ? { ...sourceRoom, ...catalogRoom } : sourceRoom;
+    const identities = [...new Set([
+      rawKey,
+      userRoomKey(room),
+      roomKey(room),
+      ...reviewIdentityKeys(room || {})
+    ].map(canonicalReviewRoomKey).filter(Boolean))];
+    if (!identities.length) return null;
+    const existingKey = identities.map(key => identityIndex.get(key)).find(Boolean);
+    const key = existingKey || identities[0];
     if (!byKey.has(key)) {
       byKey.set(key, {
         key,
-        room,
+        room: room || {},
+        identities: new Set(),
         personal: false,
         groups: [],
         personalPending: false,
@@ -3816,7 +3925,14 @@ function escapistMapRoomItems() {
       });
     }
     const item = byKey.get(key);
-    if (room && (!item.room?.ciudad || !item.room?.provincia || room.imagen)) item.room = { ...item.room, ...room };
+    identities.forEach(identity => {
+      item.identities.add(identity);
+      identityIndex.set(identity, key);
+    });
+    if (room) {
+      const present = Object.fromEntries(Object.entries(room).filter(([, value]) => value !== '' && value !== null && value !== undefined));
+      item.room = { ...item.room, ...present };
+    }
     return item;
   };
   personalRoomSources().forEach(room => {
@@ -3864,9 +3980,7 @@ function mapItemHasGroup(item) {
 }
 
 function escapistMapFilteredItems(items) {
-  let filtered = items;
-  if (PROFILE_MAP_STATUS_FILTER === 'done') filtered = filtered.filter(mapItemHasDone);
-  else if (PROFILE_MAP_STATUS_FILTER === 'pending') filtered = filtered.filter(mapItemHasPending);
+  let filtered = items.filter(mapItemHasDone);
   if (PROFILE_MAP_FILTER === 'personal') return filtered.filter(mapItemHasPersonal);
   if (PROFILE_MAP_FILTER === 'group') return filtered.filter(mapItemHasGroup);
   return filtered;
@@ -3909,37 +4023,15 @@ function distanceBetweenPoints(a, b) {
 }
 
 function escapistMapClusters(locations) {
-  const threshold = locations.length > 8 ? 7.2 : 6.2;
-  const clusters = [];
-  locations.forEach(location => {
-    let target = location.exact ? null : clusters
-      .filter(cluster => !cluster.exactOnly && distanceBetweenPoints(cluster.point, location.point) <= threshold)
-      .sort((a, b) => distanceBetweenPoints(a.point, location.point) - distanceBetweenPoints(b.point, location.point))[0];
-    if (!target) {
-      target = { locations: [], rooms: [], point: { ...location.point }, coord: { ...location.coord }, weight: 0, exactOnly: location.exact };
-      clusters.push(target);
-    }
-    const weight = Math.max(1, location.rooms.length);
-    target.locations.push(location);
-    target.rooms.push(...location.rooms);
-    target.point = {
-      x: ((target.point.x * target.weight) + (location.point.x * weight)) / (target.weight + weight),
-      y: ((target.point.y * target.weight) + (location.point.y * weight)) / (target.weight + weight)
-    };
-    target.coord = {
-      lat: ((target.coord.lat * target.weight) + (location.coord.lat * weight)) / (target.weight + weight),
-      lon: ((target.coord.lon * target.weight) + (location.coord.lon * weight)) / (target.weight + weight)
-    };
-    target.weight += weight;
-  });
-  return clusters.map(cluster => {
-    cluster.locations.sort((a, b) => b.rooms.length - a.rooms.length || a.city.localeCompare(b.city));
-    cluster.rooms.sort((a, b) => String(a.room?.nombre || '').localeCompare(String(b.room?.nombre || '')));
-    cluster.key = cluster.locations.length === 1
-      ? cluster.locations[0].key
-      : `cluster_${cluster.locations.map(location => location.key).sort().join('__')}`;
-    return cluster;
-  }).sort((a, b) => b.rooms.length - a.rooms.length || mapClusterTitle(a).localeCompare(mapClusterTitle(b)));
+  return locations.map(location => ({
+    locations: [location],
+    rooms: [...location.rooms].sort((a, b) => String(a.room?.nombre || '').localeCompare(String(b.room?.nombre || ''))),
+    point: { ...location.point },
+    coord: { ...location.coord },
+    weight: Math.max(1, location.rooms.length),
+    exactOnly: location.exact,
+    key: location.key
+  })).sort((a, b) => b.rooms.length - a.rooms.length || mapClusterTitle(a).localeCompare(mapClusterTitle(b)));
 }
 
 function mapClusterTitle(cluster) {
@@ -3961,7 +4053,7 @@ function mapClusterMeta(cluster) {
   const cities = cluster.locations.length;
   const rooms = cluster.rooms.length;
   const exactCount = cluster.locations.filter(location => location.exact).length;
-  const precision = exactCount === cluster.locations.length ? 'exacto' : exactCount ? `${exactCount} exactas` : 'aprox. ciudad';
+  const precision = exactCount === cluster.locations.length ? 'con coordenadas' : exactCount ? `${exactCount} con coordenadas` : 'aprox. ciudad';
   if (cluster.locations.length === 1) {
     const location = cluster.locations[0];
     const base = location.address || [location.province, location.community].filter(Boolean).join(' - ');
@@ -3976,9 +4068,9 @@ function mapClusterMeta(cluster) {
 function mapClusterPrecisionLabel(cluster) {
   if (!cluster) return '';
   const exactCount = cluster.locations.filter(location => location.exact).length;
-  if (exactCount === cluster.locations.length) return 'exactas';
+  if (exactCount === cluster.locations.length) return 'con coordenadas';
   if (!exactCount) return 'aprox.';
-  return `${exactCount} exactas`;
+  return `${exactCount} con coordenadas`;
 }
 
 function escapistMapBaseSvg() {
@@ -3999,10 +4091,29 @@ function escapistMapPopupImageHtml(room) {
   const initial = escapeHtml((room?.nombre || '?').trim().slice(0, 1).toUpperCase());
   const fallback = `<div class="escapist-map-popup-thumb fallback">${initial}</div>`;
   if (!src) return fallback;
-  return `<img class="escapist-map-popup-thumb" src="${escapeHtml(src)}" alt="" loading="lazy" onerror="this.replaceWith(this.nextElementSibling)">${fallback}`;
+  return `<img class="escapist-map-popup-thumb" src="${escapeHtml(src)}" alt="" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><div class="escapist-map-popup-thumb fallback" hidden>${initial}</div>`;
+}
+
+function escapistMapDoneSourceTagsHtml(item) {
+  return [
+    item.personal ? '<span class="tag tag-feature">Hecho por ti</span>' : '',
+    ...item.groups.map(group => `<span class="tag tag-tipo">Grupo: ${escapeHtml(group.name || 'Grupo')}</span>`)
+  ].filter(Boolean).join('');
 }
 
 function escapistMapPopupHtml(cluster) {
+  if (cluster.rooms.length > 1) {
+    return `<div class="escapist-map-popup-group">
+      <div class="escapist-map-popup-kicker">${escapeHtml(mapClusterPrecisionLabel(cluster))}</div>
+      <div class="escapist-map-popup-title">${escapeHtml(mapClusterTitle(cluster))} · ${cluster.rooms.length} salas</div>
+      <div class="escapist-map-popup-meta">${escapeHtml(mapClusterMeta(cluster))}</div>
+      <div class="escapist-map-popup-room-list">${cluster.rooms.map(item => {
+        const itemRoom = item.room || {};
+        const itemRef = detailRefForRoom(itemRoom, ['catalogo', 'hechos', 'pendientes']);
+        return `<div class="escapist-map-popup-room"><div><strong>${escapeHtml(itemRoom.nombre || item.key || 'Sala')}</strong><span>${escapeHtml(itemRoom.empresa || '')}</span></div><button type="button" title="Ver sala" onclick="openProfileRoomDetail('${itemRef.kind}','${jsString(itemRef.key)}')">›</button></div>`;
+      }).join('')}</div>
+    </div>`;
+  }
   const first = cluster.rooms[0] || {};
   const room = first.room || {};
   const ref = detailRefForRoom(room, ['catalogo', 'hechos', 'pendientes']);
@@ -4015,7 +4126,7 @@ function escapistMapPopupHtml(cluster) {
       <div class="escapist-map-popup-kicker">${escapeHtml(mapClusterPrecisionLabel(cluster))}</div>
       <div class="escapist-map-popup-title">${escapeHtml(room.nombre || mapClusterTitle(cluster) || 'Escape room')}</div>
       <div class="escapist-map-popup-meta">${escapeHtml([room.empresa, room.ciudad, room.provincia].filter(Boolean).join(' - ') || mapClusterMeta(cluster))}</div>
-      <div class="profile-group-rooms">${escapistMapSourceTagsHtml(first)}</div>
+      <div class="profile-group-rooms">${escapistMapDoneSourceTagsHtml(first)}</div>
       ${more}
       <button class="auth-btn secondary" type="button" onclick="openProfileRoomDetail('${ref.kind}','${jsString(ref.key)}')">Ver sala</button>
     </div>
@@ -4028,7 +4139,7 @@ function escapistMapRoomHtml(item) {
   return `<article class="escapist-map-room">
     <div class="escapist-map-room-name">${escapeHtml(room.nombre || item.key || 'Sala')}</div>
     <div class="escapist-map-room-sub">${escapeHtml([room.empresa, room.ciudad].filter(Boolean).join(' - ') || 'Escape room')}</div>
-    <div class="profile-group-rooms">${escapistMapSourceTagsHtml(item)}</div>
+    <div class="profile-group-rooms">${escapistMapDoneSourceTagsHtml(item)}</div>
     <div class="profile-group-actions" style="margin-top:7px">
       <button class="auth-btn secondary" type="button" onclick="openProfileRoomDetail('${ref.kind}','${jsString(ref.key)}')">Ver sala</button>
     </div>
@@ -4074,11 +4185,11 @@ function escapistMapStatusFilterHtml() {
 function escapistMapPrecisionFilterHtml() {
   const filters = [
     ['all', 'Todas'],
-    ['exact', 'Exactas'],
+    ['exact', 'Con coordenadas'],
     ['approx', 'Aprox.']
   ];
   return `<div class="escapist-map-filter-row">
-    <span class="escapist-map-filter-label">Precision</span>
+    <span class="escapist-map-filter-label">Ubicacion</span>
     <div class="escapist-map-filters">${filters.map(([value, label]) => `
       <button class="escapist-map-filter ${PROFILE_MAP_PRECISION_FILTER === value ? 'active' : ''}" type="button" onclick="setEscapistMapPrecisionFilter('${value}')">${label}</button>
     `).join('')}</div>
@@ -4142,7 +4253,7 @@ function escapistMapHtml() {
       <div class="escapist-map-empty">Cargando ubicaciones reales del mapa...</div>
     </div>`;
   }
-  const allItems = escapistMapRoomItems();
+  const allItems = escapistDoneRoomItems();
   const items = escapistMapFilteredItems(allItems);
   const sourceLocations = escapistMapLocations(items);
   const locations = escapistMapPrecisionFilteredLocations(sourceLocations);
@@ -4150,10 +4261,9 @@ function escapistMapHtml() {
     PROFILE_MAP_ACTIVE_KEY = '';
     return `<div class="profile-section">
       <div class="profile-section-title">Mi mapa escapista</div>
-      ${escapistMapStatusFilterHtml()}
       ${escapistMapFilterHtml()}
       ${escapistMapPrecisionFilterHtml()}
-      <div class="escapist-map-empty">${allItems.length ? 'No hay ubicaciones para este filtro.' : 'Marca salas como hechas o pendientes, personales o de grupo, para empezar a llenar tu mapa.'}</div>
+      <div class="escapist-map-empty">${allItems.length ? 'No hay salas hechas con ubicacion para este filtro.' : 'Marca salas como hechas, personalmente o mediante un grupo, para empezar a llenar tu mapa.'}</div>
     </div>`;
   }
   const clusters = escapistMapClusters(locations);
@@ -4165,7 +4275,6 @@ function escapistMapHtml() {
   const personalRooms = allItems.filter(mapItemHasPersonal).length;
   const groupRooms = allItems.filter(mapItemHasGroup).length;
   const doneRooms = allItems.filter(mapItemHasDone).length;
-  const pendingRooms = allItems.filter(mapItemHasPending).length;
   const exactLocations = sourceLocations.filter(location => location.exact).length;
   const approxLocations = sourceLocations.length - exactLocations;
   const points = clusters.map(cluster => {
@@ -4184,32 +4293,28 @@ function escapistMapHtml() {
           ${escapistMapBaseSvg()}
           ${points}
           <div class="escapist-map-legend">
-            <span><i class="escapist-map-dot personal"></i>Hecho personal</span>
-            <span><i class="escapist-map-dot group"></i>Hecho por grupo</span>
-            <span><i class="escapist-map-dot pending"></i>Pendiente</span>
+            <span><i class="escapist-map-dot done"></i>Sala realizada</span>
+            <span><i class="escapist-map-dot approx"></i>Ubicacion aproximada</span>
           </div>
         </div>
       </div>
       <div class="escapist-map-side">
-        ${escapistMapStatusFilterHtml()}
         ${escapistMapFilterHtml()}
         ${escapistMapPrecisionFilterHtml()}
         <div class="escapist-map-stats">
-          <div class="escapist-map-stat"><strong>${sourceLocations.length}</strong><span>Ubicaciones</span></div>
+          <div class="escapist-map-stat"><strong>${sourceLocations.length}</strong><span>Puntos mapa</span></div>
           <div class="escapist-map-stat"><strong>${items.length}</strong><span>Salas</span></div>
           <div class="escapist-map-stat"><strong>${doneRooms}</strong><span>Hechas</span></div>
-          <div class="escapist-map-stat"><strong>${pendingRooms}</strong><span>Pend.</span></div>
-          <div class="escapist-map-stat"><strong>${exactLocations}</strong><span>Exactas</span></div>
+          <div class="escapist-map-stat"><strong>${exactLocations}</strong><span>Coords.</span></div>
           <div class="escapist-map-stat"><strong>${approxLocations}</strong><span>Aprox.</span></div>
           <div class="escapist-map-stat"><strong>${personalRooms}</strong><span>Personal</span></div>
           <div class="escapist-map-stat"><strong>${groupRooms}</strong><span>Grupo</span></div>
         </div>
-        <div class="escapist-map-quality">${exactLocations} ubicaciones con coordenada exacta y ${approxLocations} aproximadas por ciudad o provincia.</div>
+        <div class="escapist-map-quality">${exactLocations} puntos exactos · ${approxLocations} aproximados por ciudad o provincia. Los numeros sobre el mapa agrupan salas cercanas: pulsa para ampliar.</div>
         <div class="escapist-map-toolbar">
           <button class="auth-btn secondary" type="button" onclick="resetEscapistMapFocus()">Ver todo</button>
           <button class="auth-btn secondary" type="button" onclick="zoomEscapistMapActive()">Centrar seleccion</button>
         </div>
-        ${escapistMapCommunitySummaryHtml(clusters, active.key)}
         ${escapistMapZoneListHtml(clusters, active.key)}
         <div class="escapist-map-city">${escapeHtml(mapClusterTitle(active))}</div>
         <div class="escapist-map-meta">${escapeHtml(mapClusterMeta(active))}</div>
@@ -4235,7 +4340,7 @@ async function initEscapistLeafletMap() {
     ESCAPIST_LEAFLET_MAP.remove();
     ESCAPIST_LEAFLET_MAP = null;
   }
-  const allItems = escapistMapRoomItems();
+  const allItems = escapistDoneRoomItems();
   const items = escapistMapFilteredItems(allItems);
   const locations = escapistMapPrecisionFilteredLocations(escapistMapLocations(items));
   const clusters = escapistMapClusters(locations);
@@ -4284,7 +4389,7 @@ async function initEscapistLeafletMap() {
     const isActive = cluster.key === active.key;
     const icon = L.divIcon({
       className: '',
-      html: `<button class="escapist-leaflet-marker ${cls} ${isActive ? 'active' : ''}" type="button">${label}</button>`,
+      html: `<button class="escapist-leaflet-marker ${cls} ${isActive ? 'active' : ''}" type="button" aria-label="${escapeHtml(mapClusterTitle(cluster))}"><span>${label || '•'}</span></button>`,
       iconSize: [cluster.rooms.length > 1 ? 34 : 28, cluster.rooms.length > 1 ? 34 : 28],
       iconAnchor: [cluster.rooms.length > 1 ? 17 : 14, cluster.rooms.length > 1 ? 17 : 14]
     });
@@ -4682,10 +4787,14 @@ async function openProfile(message = '', refresh = true) {
   modal.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
 
-  renderProfile(message);
-  if (AUTH_USER && SETTINGS_TAB === 'profile') {
+  renderSettingsTabs();
+  if (root && !root.innerHTML.trim()) root.innerHTML = '<div class="profile-opening">Preparando tus ajustes...</div>';
+  requestAnimationFrame(() => {
+    if (modal.classList.contains('open')) renderProfile(message);
+  });
+  if (AUTH_USER && SETTINGS_TAB === 'profile' && (!CATALOGO.length || !Object.keys(ROOM_LOCATIONS || {}).length)) {
     ensureProfileMapDataLoaded().then(() => {
-      if (document.getElementById('profile-modal')?.classList.contains('open') && SETTINGS_TAB === 'profile') renderProfile(message);
+      if (modal.classList.contains('open') && SETTINGS_TAB === 'profile') renderProfile(message);
     }).catch(e => console.warn('No se pudieron cargar ubicaciones del mapa:', e.message));
   }
   if (AUTH_USER && FIREBASE_ENABLED && refresh) {
@@ -4698,22 +4807,23 @@ async function refreshProfileDataForSettings() {
   const status = document.getElementById('profile-status');
   if (status) status.textContent = 'Actualizando datos...';
   try {
-    await loadAdminRole();
-    await loadAdminReviewDrafts();
-    await loadUserGroups();
-    populateFilters();
+    await Promise.all([
+      loadAdminRole(),
+      loadAdminReviewDrafts(),
+      loadUserGroups()
+    ]);
     renderAuthStatus();
     renderStats();
-    renderMisHechos();
-    renderCatalogo();
     if (document.getElementById('profile-modal')?.classList.contains('open')) {
       renderProfile();
-      if (SETTINGS_TAB === 'profile') {
-        ensureProfileMapDataLoaded().then(() => {
-          if (document.getElementById('profile-modal')?.classList.contains('open') && SETTINGS_TAB === 'profile') renderProfile();
-        }).catch(err => console.warn('No se pudieron cargar ubicaciones del mapa:', err.message));
-      }
     }
+    const refreshBackgroundViews = () => {
+      populateFilters();
+      renderMisHechos();
+      renderCatalogo();
+    };
+    if ('requestIdleCallback' in window) requestIdleCallback(refreshBackgroundViews, { timeout: 1200 });
+    else setTimeout(refreshBackgroundViews, 80);
   } catch (e) {
     console.warn('No se pudieron refrescar los grupos al abrir perfil:', e.message);
     if (root && document.getElementById('profile-modal')?.classList.contains('open')) {
@@ -5183,18 +5293,7 @@ async function unpublishAdminReview(explicitRoomKey = '') {
 }
 
 function accountRoleInfoHtml() {
-  if (IS_ADMIN) return '';
-  const rawRole = ADMIN_ROLE_RAW === null ? 'null' : JSON.stringify(ADMIN_ROLE_RAW);
-  return `<div class="profile-section">
-    <div class="profile-section-title">Cuenta Firebase</div>
-    <div class="admin-note">
-      UID de esta sesión:<br><code>${escapeHtml(USER_ID)}</code>
-      ${ADMIN_ROLE_ERROR ? `<br><br>No se pudo leer <code>admins/${escapeHtml(USER_ID)}</code>:<br><code>${escapeHtml(ADMIN_ROLE_ERROR)}</code>` : `<br><br>Valor leido en <code>admins/${escapeHtml(USER_ID)}</code>:<br><code>${escapeHtml(rawRole)}</code><br><br>Para activar admin debe ser <code>true</code>.`}
-      <div class="profile-row" style="margin-top:10px">
-        <button class="auth-btn secondary" type="button" onclick="copyTextToClipboard('${jsString(USER_ID)}').then(ok => setProfileStatus(ok ? 'UID copiado.' : 'No se pudo copiar el UID.'))">Copiar UID</button>
-      </div>
-    </div>
-  </div>`;
+  return '';
 }
 
 function progressDoneRooms() {
@@ -6942,7 +7041,7 @@ async function loadOfficialVideos() {
 
 async function loadRoomLocations() {
   try {
-    const r = await fetch('room_locations.json');
+    const r = await fetch('room_locations.json?v=27', { cache: 'no-store' });
     if (!r.ok) return;
     const data = await r.json();
     ROOM_LOCATIONS = data.locations || {};

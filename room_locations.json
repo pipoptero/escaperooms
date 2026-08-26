@@ -1,8 +1,8 @@
 {
   "meta": {
     "description": "Ubicaciones exactas opcionales para el mapa escapista. Las claves son IDs de sala. Si una sala no aparece aqui, la web usa una posicion aproximada por ciudad/provincia.",
-    "generated_at": "2026-08-26T09:23:44",
-    "count": 984,
+    "generated_at": "2026-08-26T13:50:30",
+    "count": 985,
     "schema": {
       "address": "Direccion visible opcional",
       "lat": "Latitud decimal",
@@ -687,11 +687,11 @@
     "bank-of-thaqar": {
       "lat": 41.4119153,
       "lon": 2.1658908,
-      "address": "Ronda del Guinardó, 36 08025 Barcelona España",
+      "address": "Ronda del Guinardó, 36, 08025 Barcelona, España",
       "city": "Barcelona",
       "province": "Barcelona",
-      "precision": "source_room_data",
-      "confidence": 0,
+      "precision": "manual_verified",
+      "confidence": 99,
       "source": "official_site",
       "source_url": "https://www.missionleak.com/bankofthaqar",
       "updated_at": "2026-08-25T14:39:42"
@@ -3447,11 +3447,11 @@
     "en-la-mente-del-asesino": {
       "lat": 41.3712461,
       "lon": 2.1424918,
-      "address": "Carrer del Moianès 20. Barcelona 08014, España",
+      "address": "Carrer del Moianès, 20, 08014 Barcelona, España",
       "city": "Barcelona",
       "province": "Barcelona",
       "precision": "nominatim",
-      "confidence": 86,
+      "confidence": 99,
       "source": "official_site",
       "source_url": "https://www.encryptroom.com/reservas/",
       "updated_at": "2026-08-25T14:39:42"
@@ -5331,11 +5331,11 @@
     "la-historia-de-charlotte": {
       "lat": 41.4251716,
       "lon": 2.178178,
-      "address": "Carrer de les Acàcies, 23-25 08027 La Sagrera – Barcelona. Teléfono: 689922212 Email:",
+      "address": "Carrer de les Acàcies, 23-25, 08027 Barcelona, España",
       "city": "Barcelona",
       "province": "Barcelona",
       "precision": "nominatim",
-      "confidence": 80,
+      "confidence": 99,
       "source": "official_site",
       "source_url": "https://roomwhitechapel.com/",
       "updated_at": "2026-08-25T14:39:42"
@@ -10359,12 +10359,12 @@
     "bajo-segunda": {
       "lat": 41.372851,
       "lon": 2.1429736,
-      "address": "Carretera de la Bordeta 62-68 Barcelona",
+      "address": "Carretera de la Bordeta, 62-68, 08014 Barcelona, España",
       "city": "Barcelona",
       "province": "Barcelona",
-      "precision": "candidate",
-      "confidence": 64,
-      "source": "ai_csv_import",
+      "precision": "manual_verified",
+      "confidence": 99,
+      "source": "user_verified",
       "source_url": "https://bajosegunda.com/",
       "updated_at": "2026-08-26T09:23:44"
     },
@@ -11819,6 +11819,42 @@
       "source": "ai_csv_import",
       "source_url": "https://thechapelescaperoom.com/juegos/le-voyage-dans-la-lune",
       "updated_at": "2026-08-26T09:23:44"
+    },
+    "k-o-n-g-protocol": {
+      "lat": 41.4494394,
+      "lon": 2.2092872,
+      "address": "Carrer de Francesc Moragas, 18, 08922 Santa Coloma de Gramenet, Barcelona, España",
+      "city": "Santa Coloma de Gramenet",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 99,
+      "source": "official_site",
+      "source_url": "https://www.escapebarcelona.com/kong-protocol.php",
+      "updated_at": "2026-08-26T13:50:30"
+    },
+    "k_o_n_g_protocol": {
+      "lat": 41.4494394,
+      "lon": 2.2092872,
+      "address": "Carrer de Francesc Moragas, 18, 08922 Santa Coloma de Gramenet, Barcelona, España",
+      "city": "Santa Coloma de Gramenet",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 99,
+      "source": "official_site",
+      "source_url": "https://www.escapebarcelona.com/kong-protocol.php",
+      "updated_at": "2026-08-26T13:50:30"
+    },
+    "k_o_n_g_protocol_escape_barcelona": {
+      "lat": 41.4494394,
+      "lon": 2.2092872,
+      "address": "Carrer de Francesc Moragas, 18, 08922 Santa Coloma de Gramenet, Barcelona, España",
+      "city": "Santa Coloma de Gramenet",
+      "province": "Barcelona",
+      "precision": "nominatim",
+      "confidence": 99,
+      "source": "official_site",
+      "source_url": "https://www.escapebarcelona.com/kong-protocol.php",
+      "updated_at": "2026-08-26T13:50:30"
     }
   }
 }

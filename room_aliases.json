@@ -38,9 +38,21 @@
     "jurasico_golden_pop": "jurasico",
     "whitechapel_room_whitechapel": "la_historia_de_charlotte",
     "la_historia_de_charlotte_room_whitechapel": "la_historia_de_charlotte",
+    "bank_of_thaqar": "bank_of_thaqar",
+    "bank_of_thaqar_missionleak": "bank_of_thaqar",
+    "parasomnia_bajo_2": "bajo_segunda",
+    "parasomnia_bajo_2a": "bajo_segunda",
+    "parasomnia_bajo_2_plastic_robot": "bajo_segunda",
+    "parasomnia_bajo_2a_plastic_robot": "bajo_segunda",
+    "bajo_2": "bajo_segunda",
+    "bajo_2a": "bajo_segunda",
+    "bajo_segunda_plastic_robot": "bajo_segunda",
     "catacumbas_golden_pop": "catacumbas",
-    "encryptroom_encrypt": "encryptroom",
-    "encrypt_encrypt_escape_room_barcelona": "encryptroom",
+    "encrypt": "en_la_mente_del_asesino",
+    "encryptroom": "en_la_mente_del_asesino",
+    "encryptroom_encrypt": "en_la_mente_del_asesino",
+    "encrypt_encrypt_escape_room_barcelona": "en_la_mente_del_asesino",
+    "en_la_mente_del_asesino_encrypt": "en_la_mente_del_asesino",
     "willy_el_tuerto_willy_el_tuerto_escape_room": "willy_el_tuerto"
   },
   "rooms": {
@@ -113,6 +125,28 @@
         "Night Shift"
       ],
       "notes": "Unifica la review historica Nightshift con el nombre de catalogo Night Shift."
+    },
+    "en_la_mente_del_asesino": {
+      "canonical_name": "En la Mente del Asesino",
+      "canonical_company": "Encrypt",
+      "aliases": [
+        "Encrypt",
+        "Encryptroom",
+        "En la Mente del Asesino"
+      ],
+      "notes": "Encrypt era una ficha duplicada del mismo juego y se conserva solo como alias historico."
+    },
+    "bajo_segunda": {
+      "canonical_name": "Parasomnia Bajo 2ª",
+      "canonical_company": "Plastic Robot",
+      "aliases": [
+        "Parasomnia Bajo 2",
+        "Parasomnia Bajo 2ª",
+        "Bajo 2",
+        "Bajo 2ª",
+        "Bajo Segunda"
+      ],
+      "notes": "Unifica los nombres historicos de Parasomnia Bajo 2ª con la ficha bajo-segunda del catalogo."
     },
     "el_secreto_de_los_krugger": {
       "canonical_name": "El Secreto de los Krugger",
