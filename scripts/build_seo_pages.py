@@ -1834,7 +1834,8 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
         }
     if photos:
         schema["@graph"][1]["image"] = [image] + [asset_url(photo.get("src")) for photo in photos if photo.get("src")]
-    if video_html:
+    video_upload_date = text(video.get("upload_date"))
+    if video_html and video_upload_date:
         video_schema = {
             "@type": "VideoObject",
             "name": text(video.get("label")) or f"Vídeo oficial de {name}",
@@ -1842,6 +1843,7 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
             "thumbnailUrl": video_thumbnail or image,
             "embedUrl": video_url if video_provider in {"youtube", "vimeo"} else None,
             "contentUrl": text(video.get("video_url")) or video_url,
+            "uploadDate": video_upload_date,
             "isPartOf": {"@id": canonical},
         }
         schema["@graph"].append({key: value for key, value in video_schema.items() if value})

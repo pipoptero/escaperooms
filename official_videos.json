@@ -2,7 +2,8 @@
   "meta": {
     "generated_at": "2026-08-18T14:30:08",
     "rooms": 282,
-    "source": "official_web_high_confidence"
+    "source": "official_web_high_confidence",
+    "videos_with_upload_date": 194
   },
   "videos": {
     "abduccion-alien": {
@@ -12,7 +13,8 @@
       "thumbnail": "https://i.ytimg.com/vi/QqikNE8I7Hw/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://www.elsecretoescaperoom.com/latapadera",
-      "score": 106
+      "score": 106,
+      "upload_date": "2017-05-24T03:20:47-07:00"
     },
     "academia-de-magia": {
       "provider": "direct",
@@ -21,7 +23,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://bcn.aventurico.com/juegos/academia",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "after-party": {
       "provider": "youtube",
@@ -30,7 +33,8 @@
       "thumbnail": "https://i.ytimg.com/vi/Oj7vhLYvpIg/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://lock-clock.com/es/game/after-party",
-      "score": 124
+      "score": 124,
+      "upload_date": "2022-05-01T08:03:19-07:00"
     },
     "agencia-360": {
       "provider": "youtube",
@@ -39,7 +43,8 @@
       "thumbnail": "https://i.ytimg.com/vi/zjUDhXZXyTc/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://arroyoescaperoom.es/agencia-360/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2024-04-22T15:00:37-07:00"
     },
     "alcatraz": {
       "provider": "direct",
@@ -48,7 +53,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://www.alcatraztenerife.com/el-juego",
-      "score": 104
+      "score": 104,
+      "upload_date": ""
     },
     "alicia-en-el-pais-de-las-maravillas": {
       "provider": "direct",
@@ -57,7 +63,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://bcn.aventurico.com/juegos/alice",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "alicia-y-la-llave-del-tiempo": {
       "provider": "direct",
@@ -66,7 +73,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://bcn.aventurico.com/juegos/alice-kids",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "alicia-y-la-llave-del-tiempo-489241": {
       "provider": "direct",
@@ -75,7 +83,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://aventurico.com/juegos/alice-kids1",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "aliens": {
       "provider": "youtube",
@@ -84,7 +93,8 @@
       "thumbnail": "https://i.ytimg.com/vi/J006ZIhOX7Q/hqdefault.jpg",
       "label": "Ver Trailer",
       "source_page_url": "https://www.escapemania.es/",
-      "score": 83
+      "score": 83,
+      "upload_date": "2020-05-08T11:38:06-07:00"
     },
     "alkatraz-classic": {
       "provider": "direct",
@@ -93,7 +103,8 @@
       "thumbnail": "",
       "label": "elementor-video",
       "source_page_url": "https://playescaperoom.es/room/escape-room-alcatraz/",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "alkatraz-medieval": {
       "provider": "direct",
@@ -102,7 +113,8 @@
       "thumbnail": "",
       "label": "elementor-video",
       "source_page_url": "https://playescaperoom.es/room/escape-room-medieval/",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "alkatraz-medieval-571811": {
       "provider": "youtube",
@@ -111,7 +123,8 @@
       "thumbnail": "https://i.ytimg.com/vi/x3KG3_GNXmI/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://www.goldenescaperoom.es/escape-room-mostoles/",
-      "score": 78
+      "score": 78,
+      "upload_date": "2019-01-12T07:19:21-08:00"
     },
     "alkatraz-medieval-santiago-de-compostela": {
       "provider": "youtube",
@@ -120,7 +133,8 @@
       "thumbnail": "https://i.ytimg.com/vi/RT5Ty4aGQZo/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://compostela.eskapark.com/detalle/juego/3",
-      "score": 106
+      "score": 106,
+      "upload_date": "2019-05-27T01:04:37-07:00"
     },
     "almacen-oculto": {
       "provider": "youtube",
@@ -129,7 +143,8 @@
       "thumbnail": "https://i.ytimg.com/vi/KUD7Vo2IEnY/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://www.faunaroomescape.com/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2017-05-25T04:55:20-07:00"
     },
     "ambar-la-visita": {
       "provider": "youtube",
@@ -138,7 +153,8 @@
       "thumbnail": "https://i.ytimg.com/vi/pjeNHSksAGs/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cocoroom.es/ambar/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2017-06-13T03:34:32-07:00"
     },
     "ambar-la-visita-2-0": {
       "provider": "youtube",
@@ -147,7 +163,8 @@
       "thumbnail": "https://i.ytimg.com/vi/pjeNHSksAGs/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cocoroom.es/ambar/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2017-06-13T03:34:32-07:00"
     },
     "apophis": {
       "provider": "youtube",
@@ -156,7 +173,8 @@
       "thumbnail": "https://i.ytimg.com/vi/aL7IfJSMth8/hqdefault.jpg",
       "label": "documental",
       "source_page_url": "https://vortexescape.com/apophis",
-      "score": 101
+      "score": 101,
+      "upload_date": "2016-10-24T00:57:43-07:00"
     },
     "arcade-invaders": {
       "provider": "direct",
@@ -165,7 +183,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://arcadeinvaders.es/#eljuego",
-      "score": 142
+      "score": 142,
+      "upload_date": ""
     },
     "area-51": {
       "provider": "youtube",
@@ -174,7 +193,8 @@
       "thumbnail": "https://i.ytimg.com/vi/E4fL7YpuZXY/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://www.mindclue.es/",
-      "score": 83
+      "score": 83,
+      "upload_date": "2016-02-05T13:14:10-08:00"
     },
     "armageroom": {
       "provider": "youtube",
@@ -183,7 +203,8 @@
       "thumbnail": "https://i.ytimg.com/vi/9fBhUDxRlOI/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cocoroom.es/armageroom/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2024-09-24T00:22:46-07:00"
     },
     "asesinato-en-el-orient-express": {
       "provider": "youtube",
@@ -192,7 +213,8 @@
       "thumbnail": "https://i.ytimg.com/vi/WGigXXk2Eqk/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://malaga.escapegameover.es/es/rooms/orient-express-the-murder",
-      "score": 106
+      "score": 106,
+      "upload_date": "2024-06-20T00:59:08-07:00"
     },
     "asesinato-en-el-tren": {
       "provider": "youtube",
@@ -201,7 +223,8 @@
       "thumbnail": "https://i.ytimg.com/vi/uAk39coySj8/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cluehunter.es/asesinato-en-el-tren/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2017-06-02T11:32:30-07:00"
     },
     "atlantida": {
       "provider": "youtube",
@@ -210,7 +233,8 @@
       "thumbnail": "https://i.ytimg.com/vi/DXcsrM_zc0A/hqdefault.jpg",
       "label": "Keops Space Project Trailer",
       "source_page_url": "https://keopsescapelleida.com/es/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2022-12-18T15:06:25-08:00"
     },
     "atraco-al-compadre": {
       "provider": "youtube",
@@ -219,7 +243,8 @@
       "thumbnail": "https://i.ytimg.com/vi/JS0XAjmPES8/hqdefault.jpg",
       "label": "TRAILER OFICIAL \"ATRACO AL COMPADRE\"",
       "source_page_url": "https://startplay.es/escape-room-en-murcia/",
-      "score": 130
+      "score": 130,
+      "upload_date": "2023-10-12T10:05:33-07:00"
     },
     "atrapado-en-el-museo": {
       "provider": "youtube",
@@ -228,7 +253,8 @@
       "thumbnail": "https://i.ytimg.com/vi/9hCT_8zk3hc/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://lasalida.net/escape-room-atrapado-en-el-museo/",
-      "score": 101
+      "score": 101,
+      "upload_date": "2014-01-30T10:00:37-08:00"
     },
     "atrapado-en-un-cuarto-con-un-zombie": {
       "provider": "youtube",
@@ -237,7 +263,8 @@
       "thumbnail": "https://i.ytimg.com/vi/e6xVaU2OWlE/hqdefault.jpg",
       "label": "ROOM ESCAPE ADVENTURES/ATRAPADO EN UN CUARTO CON UN ZOMBIE",
       "source_page_url": "https://roomescapeadventures.es/project/atrapado-en-un-cuarto-con-un-zombie/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2016-10-21T09:38:05-07:00"
     },
     "atrapados-en-el-sotano": {
       "provider": "youtube",
@@ -246,7 +273,8 @@
       "thumbnail": "https://i.ytimg.com/vi/47VfPySyxIo/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cluehunter.es/atrapados-en-el-sotano/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2021-04-02T10:42:45-07:00"
     },
     "atrapados-en-el-sotano-251831": {
       "provider": "youtube",
@@ -255,7 +283,8 @@
       "thumbnail": "https://i.ytimg.com/vi/47VfPySyxIo/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cluehunter.es/atrapados-en-el-sotano/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2021-04-02T10:42:45-07:00"
     },
     "atrapados-en-el-sotano-a-coruna": {
       "provider": "youtube",
@@ -264,7 +293,8 @@
       "thumbnail": "https://i.ytimg.com/vi/47VfPySyxIo/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cluehunter.es/atrapados-en-el-sotano/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2021-04-02T10:42:45-07:00"
     },
     "atrapados-en-el-sotano-murcia": {
       "provider": "youtube",
@@ -273,7 +303,8 @@
       "thumbnail": "https://i.ytimg.com/vi/47VfPySyxIo/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cluehunter.es/atrapados-en-el-sotano/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2021-04-02T10:42:45-07:00"
     },
     "atrapados-en-sotano": {
       "provider": "youtube",
@@ -282,7 +313,8 @@
       "thumbnail": "https://i.ytimg.com/vi/47VfPySyxIo/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cluehunter.es/atrapados-en-el-sotano/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2021-04-02T10:42:45-07:00"
     },
     "aventura-medieval": {
       "provider": "youtube",
@@ -291,7 +323,8 @@
       "thumbnail": "https://i.ytimg.com/vi/bqLUp7GuUTg/hqdefault.jpg",
       "label": "Find out why a good domain name is important",
       "source_page_url": "https://www.escapesbd.com/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2021-05-17T12:39:26-07:00"
     },
     "awaken": {
       "provider": "youtube",
@@ -300,7 +333,8 @@
       "thumbnail": "https://i.ytimg.com/vi/6rnN-VxMKkQ/hqdefault.jpg",
       "label": "Awaken Escape Room | Trailer Oficial",
       "source_page_url": "https://www.reddopamine.com/landing-terror",
-      "score": 130
+      "score": 130,
+      "upload_date": "2019-09-28T03:10:48-07:00"
     },
     "baba-yaga": {
       "provider": "direct",
@@ -309,7 +343,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://mindblowescape.com/es/escape-room/baba-yaga/",
-      "score": 142
+      "score": 142,
+      "upload_date": ""
     },
     "bajo-segunda": {
       "provider": "youtube",
@@ -318,7 +353,8 @@
       "thumbnail": "https://i.ytimg.com/vi/23v_99lH0GQ/hqdefault.jpg",
       "label": "Parasomnia Bajo 2a - Horror Escape Room (trailer 2021)",
       "source_page_url": "https://bajosegunda.com/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2025-07-02T10:54:11-07:00"
     },
     "beyond-medusa": {
       "provider": "youtube",
@@ -327,7 +363,8 @@
       "thumbnail": "https://i.ytimg.com/vi/mC_ZT23km-4/hqdefault.jpg",
       "label": "UBISOFT ESCAPE GAMES | BEYOND MEDUSA'S GATE - TEASER",
       "source_page_url": "https://escapesecretcode.com/sala/escape-beyond-medusa-gate/#bookingForm",
-      "score": 124
+      "score": 124,
+      "upload_date": "2019-04-23T01:19:30-07:00"
     },
     "bites-motel": {
       "provider": "youtube",
@@ -336,7 +373,8 @@
       "thumbnail": "https://i.ytimg.com/vi/yfl0v7Qu0-M/hqdefault.jpg",
       "label": "Bites Motel | Trailer oficial",
       "source_page_url": "https://www.bitethefly.com/bites-motel",
-      "score": 130
+      "score": 130,
+      "upload_date": "2020-10-17T13:41:35-07:00"
     },
     "boom-escape": {
       "provider": "youtube",
@@ -345,7 +383,8 @@
       "thumbnail": "https://i.ytimg.com/vi/6UAzV8Gj7wo/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://runawayescaperoom.com/producto/boom-escape/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2025-06-03T15:00:14-07:00"
     },
     "c-s-i-95": {
       "provider": "youtube",
@@ -354,7 +393,8 @@
       "thumbnail": "https://i.ytimg.com/vi/iavZdzQiugw/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://paraparkmalaga.es/escape-room-escena-del-crimen-95/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2016-08-20T14:55:28-07:00"
     },
     "caesaraugusta": {
       "provider": "youtube",
@@ -363,7 +403,8 @@
       "thumbnail": "https://i.ytimg.com/vi/pfzi9Vw0Muk/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cocoroom.es/imperio-romano/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2016-12-07T09:42:05-08:00"
     },
     "caos": {
       "provider": "direct",
@@ -372,7 +413,8 @@
       "thumbnail": "",
       "label": "elementor-video",
       "source_page_url": "https://escaperoomcaos.es/",
-      "score": 142
+      "score": 142,
+      "upload_date": ""
     },
     "catacumbas": {
       "provider": "youtube",
@@ -381,7 +423,8 @@
       "thumbnail": "https://i.ytimg.com/vi/KlzgSS8TSSA/hqdefault.jpg",
       "label": "GOLDEN POP - CATACUMBAS - EL ESCAPE ROOM MÁS GRANDE DE ESPAÑA",
       "source_page_url": "https://goldenpop.es/juegos/catacumbas/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2018-09-22T01:48:38-07:00"
     },
     "chernobil": {
       "provider": "youtube",
@@ -390,7 +433,8 @@
       "thumbnail": "https://i.ytimg.com/vi/S8V9FhIERL4/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://malaga.escapegameover.es/es/rooms/chernobyl",
-      "score": 106
+      "score": 106,
+      "upload_date": "2024-05-29T02:43:36-07:00"
     },
     "circo-maldito": {
       "provider": "direct",
@@ -399,7 +443,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://aventurico.com/juegos/circus",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "conquista-de-troya": {
       "provider": "youtube",
@@ -408,7 +453,8 @@
       "thumbnail": "https://i.ytimg.com/vi/y3VwYksChgc/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://neverlandescape.com/",
-      "score": 88
+      "score": 88,
+      "upload_date": "2024-03-29T08:13:51-07:00"
     },
     "contagio": {
       "provider": "youtube",
@@ -417,7 +463,8 @@
       "thumbnail": "https://i.ytimg.com/vi/cpEUQ5dlj8s/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://escapegamecastellon.com/rooms/contagio/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2026-06-10T14:11:25-07:00"
     },
     "crimen-en-sant-pere": {
       "provider": "direct",
@@ -426,7 +473,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://gymkhana-barcelona.com/es/crimen-en-sant-pere/",
-      "score": 104
+      "score": 104,
+      "upload_date": ""
     },
     "criogenic-609591": {
       "provider": "youtube",
@@ -435,7 +483,8 @@
       "thumbnail": "https://i.ytimg.com/vi/IhhLIRSTKZk/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://criogenicescaperoom.com/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2023-06-27T12:30:07-07:00"
     },
     "crisys-rivas-vaciamadrid": {
       "provider": "youtube",
@@ -444,7 +493,8 @@
       "thumbnail": "https://i.ytimg.com/vi/rBrgUseWEYk/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://www.shockescaperoom.com/escape-room-hall-escape-crisys/#jupiterx-main",
-      "score": 89
+      "score": 89,
+      "upload_date": "2020-07-21T06:24:55-07:00"
     },
     "crow-el-amanecer-de-judy": {
       "provider": "direct",
@@ -453,7 +503,8 @@
       "thumbnail": "",
       "label": "elementor-video",
       "source_page_url": "https://mentecolmenarooms.com/crow-el-amanecer-de-judy/",
-      "score": 142
+      "score": 142,
+      "upload_date": ""
     },
     "crupier": {
       "provider": "youtube",
@@ -462,7 +513,8 @@
       "thumbnail": "https://i.ytimg.com/vi/J7GcqxDcRtA/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://quimeraescape.com/crupier/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2022-05-10T06:50:20-07:00"
     },
     "daemonium": {
       "provider": "vimeo",
@@ -471,7 +523,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://salalaclave.es/daemonium-2/",
-      "score": 101
+      "score": 101,
+      "upload_date": ""
     },
     "dark-city": {
       "provider": "direct",
@@ -480,7 +533,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://obscuraexperiences.com/",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "del-born-al-raval": {
       "provider": "direct",
@@ -489,7 +543,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://gymkhana-barcelona.com/es/del-born-al-raval/",
-      "score": 104
+      "score": 104,
+      "upload_date": ""
     },
     "dementia": {
       "provider": "youtube",
@@ -498,7 +553,8 @@
       "thumbnail": "https://i.ytimg.com/vi/_BPULSjvvUc/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://sinequanon.com.es/salas.html",
-      "score": 106
+      "score": 106,
+      "upload_date": "2019-10-27T03:59:49-07:00"
     },
     "depths-of-osiris": {
       "provider": "direct",
@@ -507,7 +563,8 @@
       "thumbnail": "",
       "label": "elementor-video",
       "source_page_url": "https://vroomescape.com/en/depths-of-osiris/",
-      "score": 104
+      "score": 104,
+      "upload_date": ""
     },
     "descendientes-de-sokar": {
       "provider": "youtube",
@@ -516,7 +573,8 @@
       "thumbnail": "https://i.ytimg.com/vi/_MsEHAiHWn4/hqdefault.jpg",
       "label": "Descendientes de Sokar - Trailer - Illusion Escape Room",
       "source_page_url": "https://www.illusionescaperoom.com/rooms/descendientes-sokar/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2024-02-13T04:25:34-08:00"
     },
     "desmadre-en-las-vegas-vitoria-gasteiz": {
       "provider": "youtube",
@@ -525,7 +583,8 @@
       "thumbnail": "https://i.ytimg.com/vi/FO6ZHYQ5pTs/hqdefault.jpg",
       "label": "DESMADRE EN LAS VEGAS",
       "source_page_url": "https://koderoomescape.com/desmadre-en-las-vegas/",
-      "score": 83
+      "score": 83,
+      "upload_date": "2020-06-30T02:24:09-07:00"
     },
     "el-4-elemento": {
       "provider": "youtube",
@@ -534,7 +593,8 @@
       "thumbnail": "https://i.ytimg.com/vi/peCUlVuY38s/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://paraparkmalaga.es/escape-room-el-cuarto-elemento/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2016-08-20T15:11:12-07:00"
     },
     "el-artista": {
       "provider": "youtube",
@@ -543,7 +603,8 @@
       "thumbnail": "https://i.ytimg.com/vi/kocPqKP0D1Q/hqdefault.jpg",
       "label": "scale-with-grid",
       "source_page_url": "https://www.gabineteescarlata.es/sala-el-artista/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2021-07-23T13:37:48-07:00"
     },
     "el-bosque-de-blair": {
       "provider": "direct",
@@ -552,7 +613,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://uyquemiedo.com/el-bosque-de-blair/",
-      "score": 142
+      "score": 142,
+      "upload_date": ""
     },
     "el-camerino": {
       "provider": "youtube",
@@ -561,7 +623,8 @@
       "thumbnail": "https://i.ytimg.com/vi/Gk47ugIktAI/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://esfinge-escape.com/juegos/el-camerino-escape-room",
-      "score": 89
+      "score": 89,
+      "upload_date": "2022-06-22T10:25:10-07:00"
     },
     "el-caso-ridel": {
       "provider": "youtube",
@@ -570,7 +633,8 @@
       "thumbnail": "https://i.ytimg.com/vi/Sr1QVdsXwyI/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://rubikescaperoom.com/juegos/1-el-caso-ridel.html",
-      "score": 124
+      "score": 124,
+      "upload_date": "2023-05-15T13:35:52-07:00"
     },
     "el-caso-w-e-n": {
       "provider": "youtube",
@@ -579,7 +643,8 @@
       "thumbnail": "https://i.ytimg.com/vi/KyTNKcdGRmY/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cluehunter.es/el-caso-wen/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2016-12-05T14:29:16-08:00"
     },
     "el-caso-w-e-n-murcia": {
       "provider": "youtube",
@@ -588,7 +653,8 @@
       "thumbnail": "https://i.ytimg.com/vi/KyTNKcdGRmY/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cluehunter.es/el-caso-wen/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2016-12-05T14:29:16-08:00"
     },
     "el-club-de-los-viajes-extraordinarios": {
       "provider": "vimeo",
@@ -597,7 +663,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://salalaclave.es/el-club-de-los-viajes-extraordinarios/",
-      "score": 101
+      "score": 101,
+      "upload_date": ""
     },
     "el-destino-del-embajador": {
       "provider": "youtube",
@@ -606,7 +673,8 @@
       "thumbnail": "https://i.ytimg.com/vi/tZc3wN-JE34/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://www.evasionrebelde.com/escape-room-oviedo-el-destino-del-embajador/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2018-01-08T21:49:47-08:00"
     },
     "el-diario-de-miko": {
       "provider": "youtube",
@@ -615,7 +683,8 @@
       "thumbnail": "https://i.ytimg.com/vi/CtWP8xmh4Io/hqdefault.jpg",
       "label": "El Diario de Miko ...",
       "source_page_url": "https://www.xcaperoombcn.com/room/el-diario-de-miko/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2018-12-03T05:38:59-08:00"
     },
     "el-duelo": {
       "provider": "direct",
@@ -624,7 +693,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://eldueloescaperoom.es/#reservas",
-      "score": 142
+      "score": 142,
+      "upload_date": ""
     },
     "el-elixir-experimento-inmortal": {
       "provider": "direct",
@@ -633,7 +703,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://exitescaperoom.es/",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "el-enigma-de-goya": {
       "provider": "youtube",
@@ -642,7 +713,8 @@
       "thumbnail": "https://i.ytimg.com/vi/NgMTMT2qsqU/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cocoroom.es/enigmadegoya/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2019-10-21T02:22:13-07:00"
     },
     "el-enigma-de-goya-sevilla": {
       "provider": "youtube",
@@ -651,7 +723,8 @@
       "thumbnail": "https://i.ytimg.com/vi/NgMTMT2qsqU/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cocoroom.es/enigmadegoya/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2019-10-21T02:22:13-07:00"
     },
     "el-enigma-de-goya-zaragoza": {
       "provider": "youtube",
@@ -660,7 +733,8 @@
       "thumbnail": "https://i.ytimg.com/vi/NgMTMT2qsqU/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cocoroom.es/enigmadegoya/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2019-10-21T02:22:13-07:00"
     },
     "el-espiritu-de-la-movida": {
       "provider": "direct",
@@ -669,7 +743,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://elsecretodemadrid.es/soho",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "el-hechizo-de-la-dama-oscura": {
       "provider": "youtube",
@@ -678,7 +753,8 @@
       "thumbnail": "https://i.ytimg.com/vi/-kTbvaK_nL4/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://escapethebox.es/escape-rooms/escape-room-magia-el-hechizo-de-la-dama-oscura/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2026-05-20T18:09:05-07:00"
     },
     "el-hijo-perdido-del-posadero": {
       "provider": "youtube",
@@ -687,7 +763,8 @@
       "thumbnail": "https://i.ytimg.com/vi/479hktaG3CM/hqdefault.jpg",
       "label": "Reproductor de vídeo youtube",
       "source_page_url": "https://dragonbornvitoria.es/dragonborn/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2019-01-21T09:37:11-08:00"
     },
     "el-hospicio": {
       "provider": "youtube",
@@ -696,7 +773,8 @@
       "thumbnail": "https://i.ytimg.com/vi/vXAQqTv7WdE/hqdefault.jpg",
       "label": "El Hospicio",
       "source_page_url": "http://www.laultimaescapada.es/el-hospicio/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2020-03-07T10:08:49-08:00"
     },
     "el-hospital": {
       "provider": "vimeo",
@@ -705,7 +783,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://linked-minds.com/services/el-hospital/",
-      "score": 89
+      "score": 89,
+      "upload_date": ""
     },
     "el-imperio-romano": {
       "provider": "youtube",
@@ -714,7 +793,8 @@
       "thumbnail": "https://i.ytimg.com/vi/pfzi9Vw0Muk/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cocoroom.es/imperio-romano/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2016-12-07T09:42:05-08:00"
     },
     "el-invernadero-by-resident-riddle": {
       "provider": "youtube",
@@ -723,7 +803,8 @@
       "thumbnail": "https://i.ytimg.com/vi/OL0msjX7Z3s/hqdefault.jpg",
       "label": "Trailer El Invernadero Escape Room",
       "source_page_url": "https://goodlock.es/el-invernadero/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2023-06-23T10:10:44-07:00"
     },
     "el-laberinto-del-tiempo": {
       "provider": "youtube",
@@ -732,7 +813,8 @@
       "thumbnail": "https://i.ytimg.com/vi/yP59YK_Inck/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://lock-clock.com/es/game/el-laberinto-del-tiempo",
-      "score": 124
+      "score": 124,
+      "upload_date": "2024-06-04T05:09:47-07:00"
     },
     "el-lechero": {
       "provider": "youtube",
@@ -741,7 +823,8 @@
       "thumbnail": "https://i.ytimg.com/vi/zt58jFRaP-c/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://sabotajerooms.com/el-lechero/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2024-12-07T04:01:26-08:00"
     },
     "el-malvado-troll": {
       "provider": "direct",
@@ -750,7 +833,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://code258.com/el-malvado-troll/#content",
-      "score": 107
+      "score": 107,
+      "upload_date": ""
     },
     "el-manicomio": {
       "provider": "youtube",
@@ -759,7 +843,8 @@
       "thumbnail": "https://i.ytimg.com/vi/6yU3uANwct4/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://www.elsecretoescaperoom.com/elmanicomio",
-      "score": 124
+      "score": 124,
+      "upload_date": "2018-07-02T14:43:10-07:00"
     },
     "el-menu": {
       "provider": "direct",
@@ -768,7 +853,8 @@
       "thumbnail": "",
       "label": "elementor-video",
       "source_page_url": "https://mentecolmenarooms.com/el-menu/",
-      "score": 142
+      "score": 142,
+      "upload_date": ""
     },
     "el-misterio-de-don-quijote": {
       "provider": "youtube",
@@ -777,7 +863,8 @@
       "thumbnail": "https://i.ytimg.com/vi/-nend7wr1i0/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://therombocode.es/sevilla/juegos/el-misterio-de-don-quijote/",
-      "score": 101
+      "score": 101,
+      "upload_date": "2016-08-27T10:32:41-07:00"
     },
     "el-misterio-de-joan": {
       "provider": "vimeo",
@@ -786,7 +873,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://elmisteriodejoan.es/",
-      "score": 101
+      "score": 101,
+      "upload_date": ""
     },
     "el-misterio-de-la-marina": {
       "provider": "direct",
@@ -795,7 +883,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://www.tangramescaperoom.com/salas/el-secreto-de-la-marina/",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "el-misterio-de-la-sagra": {
       "provider": "youtube",
@@ -804,7 +893,8 @@
       "thumbnail": "https://i.ytimg.com/vi/fyZ83d00m0E/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://www.illusionescaperoom.com/rooms/el-misterio-de-la-sagra/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2019-10-21T10:04:51-07:00"
     },
     "el-mundo-magico-de-las-lamias": {
       "provider": "direct",
@@ -813,7 +903,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://www.mitologik.com/",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "el-rescate-alicante": {
       "provider": "youtube",
@@ -822,7 +913,8 @@
       "thumbnail": "https://i.ytimg.com/vi/Hrtuax4CzQM/hqdefault.jpg",
       "label": "YouTube video player 1",
       "source_page_url": "https://secrethunter.es/el-rescate/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2018-09-19T07:24:10-07:00"
     },
     "el-rescate-valencia": {
       "provider": "direct",
@@ -831,7 +923,8 @@
       "thumbnail": "",
       "label": "elementor-video",
       "source_page_url": "https://cronosvalencia.com/el-rescate/",
-      "score": 142
+      "score": 142,
+      "upload_date": ""
     },
     "el-santuario": {
       "provider": "direct",
@@ -840,7 +933,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://escaperoomrivas.es/services/el-santuario/",
-      "score": 142
+      "score": 142,
+      "upload_date": ""
     },
     "el-secret-de-la-torre": {
       "provider": "youtube",
@@ -849,7 +943,8 @@
       "thumbnail": "https://i.ytimg.com/vi/87ICF_YZd_g/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://www.visitgironella.cat/room-escape-el-secret-de-la-torre/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2021-03-17T05:02:02-07:00"
     },
     "el-secreto-de-alcatraz": {
       "provider": "youtube",
@@ -858,7 +953,8 @@
       "thumbnail": "https://i.ytimg.com/vi/ormiUqUVpYI/hqdefault.jpg",
       "label": "El Secreto de Alcatraz ESCAPE ROOM - Trailer",
       "source_page_url": "https://excapexperience.com/el-secreto-de-alcatraz/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2020-06-26T04:26:55-07:00"
     },
     "el-secreto-de-la-jungla": {
       "provider": "direct",
@@ -867,7 +963,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://bcn.aventurico.com/juegos/jungle",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "el-secreto-de-los-magos": {
       "provider": "youtube",
@@ -876,7 +973,8 @@
       "thumbnail": "https://i.ytimg.com/vi/ytp0TzZeIcI/hqdefault.jpg",
       "label": "bricks-lazy-hidden",
       "source_page_url": "https://maytokingdom.es/juegos/secreto-de-los-magos/#reservas",
-      "score": 106
+      "score": 106,
+      "upload_date": "2025-09-25T09:52:51-07:00"
     },
     "el-secreto-de-wendy": {
       "provider": "direct",
@@ -885,7 +983,8 @@
       "thumbnail": "",
       "label": "elementor-video",
       "source_page_url": "https://mentecolmenarooms.com/el-secreto-de-wendy/",
-      "score": 142
+      "score": 142,
+      "upload_date": ""
     },
     "el-secuestro-mataro": {
       "provider": "youtube",
@@ -894,7 +993,8 @@
       "thumbnail": "https://i.ytimg.com/vi/tdvaq-QWXME/hqdefault.jpg",
       "label": "EL SECUESTRO",
       "source_page_url": "https://mataro.cubickroomescape.es/el-rescate-de-maria/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2023-01-16T05:10:29-08:00"
     },
     "el-sombrerero-de-alicia": {
       "provider": "youtube",
@@ -903,7 +1003,8 @@
       "thumbnail": "https://i.ytimg.com/vi/6d3Uq-uzgg0/hqdefault.jpg",
       "label": "El sombrero de Alicia XCAPEROOM FINESTRAT",
       "source_page_url": "https://xcaperoomfinestrat.com/el-sombrerero-de-alicia",
-      "score": 124
+      "score": 124,
+      "upload_date": "2020-10-29T04:17:36-07:00"
     },
     "el-tesoro-de-barba-verde": {
       "provider": "youtube",
@@ -912,7 +1013,8 @@
       "thumbnail": "https://i.ytimg.com/vi/7RU2uof2-LE/hqdefault.jpg",
       "label": "scale-with-grid",
       "source_page_url": "https://www.roomescapesalamanca.com/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2018-11-06T04:13:23-08:00"
     },
     "el-tesoro-de-calatravo": {
       "provider": "youtube",
@@ -921,7 +1023,8 @@
       "thumbnail": "https://i.ytimg.com/vi/D6vagI_M_hc/hqdefault.jpg",
       "label": "El Tesoro Calatravo",
       "source_page_url": "https://www.escapateruel.com/room/escapa-teruel-el-tesoro-calatravo/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2019-12-12T12:49:30-08:00"
     },
     "el-tesoro-de-calico-jack": {
       "provider": "youtube",
@@ -930,7 +1033,8 @@
       "thumbnail": "https://i.ytimg.com/vi/h-plC2yhk0A/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cluehunter.es/el-tesoro-de-calico-jack/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2017-10-29T07:11:44-07:00"
     },
     "el-tesoro-de-calico-jack-a-coruna": {
       "provider": "youtube",
@@ -939,7 +1043,8 @@
       "thumbnail": "https://i.ytimg.com/vi/h-plC2yhk0A/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cluehunter.es/el-tesoro-de-calico-jack/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2017-10-29T07:11:44-07:00"
     },
     "el-tesoro-de-calico-jack-murcia": {
       "provider": "youtube",
@@ -948,7 +1053,8 @@
       "thumbnail": "https://i.ytimg.com/vi/h-plC2yhk0A/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cluehunter.es/el-tesoro-de-calico-jack/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2017-10-29T07:11:44-07:00"
     },
     "el-tesoro-de-calico-jack-zaragoza": {
       "provider": "youtube",
@@ -957,7 +1063,8 @@
       "thumbnail": "https://i.ytimg.com/vi/h-plC2yhk0A/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cluehunter.es/el-tesoro-de-calico-jack/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2017-10-29T07:11:44-07:00"
     },
     "el-testamento-de-mr-collins": {
       "provider": "direct",
@@ -966,7 +1073,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://123actionbarcelona.com/cluedo-en-vivo/",
-      "score": 89
+      "score": 89,
+      "upload_date": ""
     },
     "el-ultimo-vampiro": {
       "provider": "youtube",
@@ -975,7 +1083,8 @@
       "thumbnail": "https://i.ytimg.com/vi/icUAOwAgqzY/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://tempus60.com/reserva-el-ultimo-vampiro/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2024-06-28T16:14:48-07:00"
     },
     "el-ultimo-vikingo": {
       "provider": "vimeo",
@@ -984,7 +1093,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://linked-minds.com/services/el-ultimo-vikingo/",
-      "score": 89
+      "score": 89,
+      "upload_date": ""
     },
     "emisario": {
       "provider": "youtube",
@@ -993,7 +1103,8 @@
       "thumbnail": "https://i.ytimg.com/vi/ZlQrBJJivWc/hqdefault.jpg",
       "label": "Epikana escape room exterior",
       "source_page_url": "https://epikana.com/escape-room-bilbao-exterior-emisario/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2025-05-31T10:01:44-07:00"
     },
     "en-la-mente-del-genio": {
       "provider": "youtube",
@@ -1002,7 +1113,8 @@
       "thumbnail": "https://i.ytimg.com/vi/zg_F4FJRba8/hqdefault.jpg",
       "label": "En la mente de un genio Trailer",
       "source_page_url": "https://www.protagonist.es/escape-room-mente-de-un-genio/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2019-07-27T05:05:58-07:00"
     },
     "escape-bus-sevilla-transporte-de-prisioneros": {
       "provider": "youtube",
@@ -1011,7 +1123,8 @@
       "thumbnail": "https://i.ytimg.com/vi/js_wBPOGnck/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://therombocode.es/sevilla/juegos/escape-bus-sevilla/",
-      "score": 83
+      "score": 83,
+      "upload_date": "2022-10-25T09:46:34-07:00"
     },
     "escape-room-portatil": {
       "provider": "youtube",
@@ -1020,7 +1133,8 @@
       "thumbnail": "https://i.ytimg.com/vi/AdH9N7waIrs/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://www.proyecto-c.com/escape-room-portatil",
-      "score": 124
+      "score": 124,
+      "upload_date": "2018-05-31T04:13:31-07:00"
     },
     "escape-room-vr-ubisoft": {
       "provider": "youtube",
@@ -1029,7 +1143,8 @@
       "thumbnail": "https://i.ytimg.com/vi/CmpxujeTEVw/hqdefault.jpg",
       "label": "Escape The Lost Pyramid Trailer",
       "source_page_url": "https://incognitoescape.es/escape-the-lost-pyramid-vr/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2020-06-17T12:51:53-07:00"
     },
     "escape-story": {
       "provider": "direct",
@@ -1038,7 +1153,8 @@
       "thumbnail": "",
       "label": "elementor-video",
       "source_page_url": "https://fugitivosroomescape.com/juegos/escapestory/",
-      "score": 142
+      "score": 142,
+      "upload_date": ""
     },
     "escape-the-lost-pyramid": {
       "provider": "vimeo",
@@ -1047,7 +1163,8 @@
       "thumbnail": "",
       "label": "VR ESCAPEGAMES",
       "source_page_url": "https://escapesecretcode.com/sala/escape-the-lost-pyramid/",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "escondite-en-la-oscuridad": {
       "provider": "direct",
@@ -1056,7 +1173,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://aventurico.com/juegos/escondite",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "escuela-de-magia-161321": {
       "provider": "direct",
@@ -1065,7 +1183,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://aventurico.com/juegos/academia2?gclid=CjwKCAjw8IfABhBXEiwAxRHlsCGUgeYOlbHuG2pihFBslOXH0fCIztHlUirp5ZzOtKcCck3TQ3cdHBoCBE0QAvD_BwE",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "estacion-del-ferrocarril": {
       "provider": "youtube",
@@ -1074,7 +1193,8 @@
       "thumbnail": "https://i.ytimg.com/vi/iq_iVL5nrh4/hqdefault.jpg",
       "label": "Sala de escape Santander Xkapa ( Room Escape )",
       "source_page_url": "https://xkapa.com/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2015-04-22T08:55:51-07:00"
     },
     "expediente-paranormal": {
       "provider": "youtube",
@@ -1083,7 +1203,8 @@
       "thumbnail": "https://i.ytimg.com/vi/uEcX1pGqvSU/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://www.madridterror.com/expediente-paranormal/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2023-02-14T02:48:38-08:00"
     },
     "fabrica-ambar-la-visita-zaragoza": {
       "provider": "youtube",
@@ -1092,7 +1213,8 @@
       "thumbnail": "https://i.ytimg.com/vi/pjeNHSksAGs/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cocoroom.es/ambar/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2017-06-13T03:34:32-07:00"
     },
     "fiesta-de-los-sentidos": {
       "provider": "youtube",
@@ -1101,7 +1223,8 @@
       "thumbnail": "https://i.ytimg.com/vi/fcKtsphcxxY/hqdefault.jpg",
       "label": "Fiesta de los sentidos",
       "source_page_url": "https://www.laultimaescapada.es/fiesta-de-los-sentidos/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2020-03-07T09:50:43-08:00"
     },
     "final-code-bermudas": {
       "provider": "youtube",
@@ -1110,7 +1233,8 @@
       "thumbnail": "https://i.ytimg.com/vi/U-rkPsWAWZ4/hqdefault.jpg",
       "label": "Atrévete a adentrarte en el TRIANGULO DE LAS BERMUDAS",
       "source_page_url": "https://finalcodeescaperoom.com/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2021-12-02T10:24:20-08:00"
     },
     "fortaleza-de-lobos": {
       "provider": "youtube",
@@ -1119,7 +1243,8 @@
       "thumbnail": "https://i.ytimg.com/vi/499L7L_zmzA/hqdefault.jpg",
       "label": "Fortaleza de Lobos - Komnata Elche Escape",
       "source_page_url": "https://elmisteriescaperoomelche.es/fortaleza-de-lobos/#wp--skip-link--target",
-      "score": 124
+      "score": 124,
+      "upload_date": "2026-02-11T09:33:19-08:00"
     },
     "fugitivos": {
       "provider": "direct",
@@ -1128,7 +1253,8 @@
       "thumbnail": "",
       "label": "elementor-video",
       "source_page_url": "https://fugitivosroomescape.com/juegos/la-fortaleza/",
-      "score": 142
+      "score": 142,
+      "upload_date": ""
     },
     "galeria-de-cadaveres": {
       "provider": "youtube",
@@ -1137,7 +1263,8 @@
       "thumbnail": "https://i.ytimg.com/vi/92fwoeINXeA/hqdefault.jpg",
       "label": "Galeria de Cadaveres - Castellano",
       "source_page_url": "https://www.xcaperoombcn.com/room/galeria-de-cadaveres/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2019-01-26T03:33:00-08:00"
     },
     "gaya": {
       "provider": "direct",
@@ -1146,7 +1273,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://mindblowescape.com/es/escape-room/gaya/",
-      "score": 142
+      "score": 142,
+      "upload_date": ""
     },
     "gymkhabar": {
       "provider": "direct",
@@ -1155,7 +1283,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://gymkhana-barcelona.com/es/gymkhabar/",
-      "score": 104
+      "score": 104,
+      "upload_date": ""
     },
     "harrison-jones-y-el-6-elemento": {
       "provider": "youtube",
@@ -1164,7 +1293,8 @@
       "thumbnail": "https://i.ytimg.com/vi/J006ZIhOX7Q/hqdefault.jpg",
       "label": "Ver Trailer",
       "source_page_url": "https://www.escapemania.es/",
-      "score": 83
+      "score": 83,
+      "upload_date": "2020-05-08T11:38:06-07:00"
     },
     "haunted-house": {
       "provider": "youtube",
@@ -1173,7 +1303,8 @@
       "thumbnail": "https://i.ytimg.com/vi/fG3bdo-FwgM/hqdefault.jpg",
       "label": "Haunted House - Run Rabbit Escape Room",
       "source_page_url": "https://runrabbit.es/haunted-house/#modos-de-juego",
-      "score": 124
+      "score": 124,
+      "upload_date": "2022-12-11T12:11:47-08:00"
     },
     "horror-asylum": {
       "provider": "direct",
@@ -1182,7 +1313,8 @@
       "thumbnail": "",
       "label": "elementor-video",
       "source_page_url": "https://horrorasylum.es/",
-      "score": 142
+      "score": 142,
+      "upload_date": ""
     },
     "horror-club": {
       "provider": "youtube",
@@ -1191,7 +1323,8 @@
       "thumbnail": "https://i.ytimg.com/vi/Dzn2-MsRsC0/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://www.madridterror.com/horror-club/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2021-12-14T07:10:43-08:00"
     },
     "hotel-km15": {
       "provider": "direct",
@@ -1200,7 +1333,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://escaperoomrivas.es/services/hotel-km15/",
-      "score": 142
+      "score": 142,
+      "upload_date": ""
     },
     "indiana-y-el-idolo-maldito": {
       "provider": "youtube",
@@ -1209,7 +1343,8 @@
       "thumbnail": "https://i.ytimg.com/vi/-bTpp8PQSog/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cluehunter.es/indiana-y-el-idolo-maldito/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2011-02-02T13:31:07-08:00"
     },
     "infiltracion-espacial": {
       "provider": "youtube",
@@ -1218,7 +1353,8 @@
       "thumbnail": "https://i.ytimg.com/vi/aTZtYuFqF_Q/hqdefault.jpg",
       "label": "h-video-main",
       "source_page_url": "https://www.insolitoescaperoom.com/juegos/infiltracion-espacial/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2021-07-15T15:59:20-07:00"
     },
     "inframundo": {
       "provider": "youtube",
@@ -1227,7 +1363,8 @@
       "thumbnail": "https://i.ytimg.com/vi/KUlcsjPTYrA/hqdefault.jpg",
       "label": "Inframundo trailer v2",
       "source_page_url": "https://amazein60.com/room/inframundo/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2018-11-06T15:11:25-08:00"
     },
     "insepulta": {
       "provider": "vimeo",
@@ -1236,7 +1373,8 @@
       "thumbnail": "",
       "label": "Reproductor de vídeo vimeo",
       "source_page_url": "https://salalaclave.es/insepulta/",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "intracorpus": {
       "provider": "direct",
@@ -1245,7 +1383,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://vortexescape.com/intracorpus",
-      "score": 104
+      "score": 104,
+      "upload_date": ""
     },
     "jack-the-ripper-el-museo": {
       "provider": "direct",
@@ -1254,7 +1393,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://atrezzoandfreak.com/",
-      "score": 89
+      "score": 89,
+      "upload_date": ""
     },
     "jigsaw": {
       "provider": "youtube",
@@ -1263,7 +1403,8 @@
       "thumbnail": "https://i.ytimg.com/vi/4CYyV_PpbUQ/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://horrorbox.es/jigsaw-escape-room/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2026-03-04T12:07:35-08:00"
     },
     "jolly-roger-el-cofre-fantasma": {
       "provider": "youtube",
@@ -1272,7 +1413,8 @@
       "thumbnail": "https://i.ytimg.com/vi/8T0f94o5sDw/hqdefault.jpg",
       "label": "Jolly Roger - El cofre fantasma. Komnata Quest Elche",
       "source_page_url": "https://elmisteriescaperoomelche.es/jolly-roger/#wp--skip-link--target",
-      "score": 106
+      "score": 106,
+      "upload_date": "2026-06-16T13:16:53-07:00"
     },
     "jurasico": {
       "provider": "youtube",
@@ -1281,7 +1423,8 @@
       "thumbnail": "https://i.ytimg.com/vi/wVcgkHAwKxU/hqdefault.jpg",
       "label": "JURASICO @ Golden Pop",
       "source_page_url": "https://goldenpop.es/jurasico/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2023-08-08T03:48:19-07:00"
     },
     "katrina": {
       "provider": "youtube",
@@ -1290,7 +1433,8 @@
       "thumbnail": "https://i.ytimg.com/vi/hKON-baAwXU/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://www.elementsescaperoom.com/katrina/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2025-10-21T07:58:53-07:00"
     },
     "kgb-mision-madrid": {
       "provider": "youtube",
@@ -1299,7 +1443,8 @@
       "thumbnail": "https://i.ytimg.com/vi/BqpyV81UJuI/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://monkey-donkey.es/kgb-mision-madrid/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2022-09-09T08:02:35-07:00"
     },
     "la-abadia-de-atxuri": {
       "provider": "youtube",
@@ -1308,7 +1453,8 @@
       "thumbnail": "https://i.ytimg.com/vi/19j9dMX-lNk/hqdefault.jpg",
       "label": "La abadía de Atxuri 2019",
       "source_page_url": "https://abadiadeatxuri.com/en/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2019-09-23T02:35:33-07:00"
     },
     "la-agencia": {
       "provider": "youtube",
@@ -1317,7 +1463,8 @@
       "thumbnail": "https://i.ytimg.com/vi/isoT2XNB93A/hqdefault.jpg",
       "label": "La Agencia, Wayout Escape Room",
       "source_page_url": "https://wayoutlaspalmas.com/la-agencia/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2023-10-16T14:18:05-07:00"
     },
     "la-cabana-889251": {
       "provider": "direct",
@@ -1326,7 +1473,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://tematicworldescape.com/index.php/la-cabana/",
-      "score": 142
+      "score": 142,
+      "upload_date": ""
     },
     "la-cabana-de-hagrid": {
       "provider": "youtube",
@@ -1335,7 +1483,8 @@
       "thumbnail": "https://i.ytimg.com/vi/TLujWiZTrzc/hqdefault.jpg",
       "label": "La Cabaña de Hagrid. Hall Escape",
       "source_page_url": "https://xcaperoomfinestrat.com/la-cabana-de-hagrid",
-      "score": 124
+      "score": 124,
+      "upload_date": "2026-06-23T09:23:08-07:00"
     },
     "la-caja-diabolica": {
       "provider": "youtube",
@@ -1344,7 +1493,8 @@
       "thumbnail": "https://i.ytimg.com/vi/0dM4o8bkpBI/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://compostela.eskapark.com/detalle/juego/19",
-      "score": 106
+      "score": 106,
+      "upload_date": "2019-05-27T01:47:54-07:00"
     },
     "la-caja-diabolica-101611": {
       "provider": "youtube",
@@ -1353,7 +1503,8 @@
       "thumbnail": "https://i.ytimg.com/vi/x3KG3_GNXmI/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://www.goldenescaperoom.es/",
-      "score": 78
+      "score": 78,
+      "upload_date": "2019-01-12T07:19:21-08:00"
     },
     "la-caja-diabolica-99981": {
       "provider": "youtube",
@@ -1362,7 +1513,8 @@
       "thumbnail": "https://i.ytimg.com/vi/0dM4o8bkpBI/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://compostela.eskapark.com/detalle/juego/19",
-      "score": 106
+      "score": 106,
+      "upload_date": "2019-05-27T01:47:54-07:00"
     },
     "la-casa-en-piezas-797301": {
       "provider": "youtube",
@@ -1371,7 +1523,8 @@
       "thumbnail": "https://i.ytimg.com/vi/DYHqVNXve9M/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://terrorstories.com/madrid",
-      "score": 106
+      "score": 106,
+      "upload_date": "2025-03-13T04:32:16-07:00"
     },
     "la-casa-encantada": {
       "provider": "youtube",
@@ -1380,7 +1533,8 @@
       "thumbnail": "https://i.ytimg.com/vi/u6cB8ncLoIg/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://xcapate.com/escape-room-miedo-alicante/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2016-12-27T05:06:28-08:00"
     },
     "la-casa-maldita-606441": {
       "provider": "youtube",
@@ -1389,7 +1543,8 @@
       "thumbnail": "https://i.ytimg.com/vi/fcIyxcXH8DQ/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://escapethebox.es/escape-rooms/escape-room-miedo-la-casa-maldita/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2020-06-30T12:48:56-07:00"
     },
     "la-casa-paranormal": {
       "provider": "youtube",
@@ -1398,7 +1553,8 @@
       "thumbnail": "https://i.ytimg.com/vi/w1PhNT572PI/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://thehive.barcelona/la-casa-paranormal/?gad_source=1&gclid=Cj0KCQjw6oi4BhD1ARIsAL6pox08nP_eo-no5J6ggLs8mSIKBasjF_KiTEg61D0IcbCqbusG9aBV550aAnjGEALw_wcB",
-      "score": 89
+      "score": 89,
+      "upload_date": "2020-05-03T09:44:11-07:00"
     },
     "la-casa-sin-ojos": {
       "provider": "direct",
@@ -1407,7 +1563,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://mrwolley.com/",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "la-divina-comedia": {
       "provider": "youtube",
@@ -1416,7 +1573,8 @@
       "thumbnail": "https://i.ytimg.com/vi/X2oDK6iDIl8/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://www.evasionrebelde.com/escape-room-oviedo-la-divina-comedia/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2018-01-03T09:28:26-08:00"
     },
     "la-estacion-del-ferrocarril": {
       "provider": "youtube",
@@ -1425,7 +1583,8 @@
       "thumbnail": "https://i.ytimg.com/vi/iq_iVL5nrh4/hqdefault.jpg",
       "label": "Sala de escape Santander Xkapa ( Room Escape )",
       "source_page_url": "https://xkapa.com/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2015-04-22T08:55:51-07:00"
     },
     "la-experiencia-sensorial": {
       "provider": "direct",
@@ -1434,7 +1593,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://barcelona.sensas.top/",
-      "score": 86
+      "score": 86,
+      "upload_date": ""
     },
     "la-fabula": {
       "provider": "youtube",
@@ -1443,7 +1603,8 @@
       "thumbnail": "https://i.ytimg.com/vi/_BPULSjvvUc/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://sinequanon.com.es/salas.html#salas_fabula",
-      "score": 106
+      "score": 106,
+      "upload_date": "2019-10-27T03:59:49-07:00"
     },
     "la-familia-van-landen": {
       "provider": "youtube",
@@ -1452,7 +1613,8 @@
       "thumbnail": "https://i.ytimg.com/vi/J006ZIhOX7Q/hqdefault.jpg",
       "label": "Ver Trailer",
       "source_page_url": "https://www.escapemania.es/",
-      "score": 83
+      "score": 83,
+      "upload_date": "2020-05-08T11:38:06-07:00"
     },
     "la-fortaleza-2-0": {
       "provider": "direct",
@@ -1461,7 +1623,8 @@
       "thumbnail": "",
       "label": "elementor-video",
       "source_page_url": "https://fugitivosroomescape.com/juegos/la-fortaleza/",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "la-fuga-de-casanova": {
       "provider": "youtube",
@@ -1470,7 +1633,8 @@
       "thumbnail": "https://i.ytimg.com/vi/-nend7wr1i0/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://therombocode.es/bilbao/juegos/la-fuga-de-casanova/",
-      "score": 83
+      "score": 83,
+      "upload_date": "2016-08-27T10:32:41-07:00"
     },
     "la-galeria": {
       "provider": "direct",
@@ -1479,7 +1643,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://www.elsorteoroomescape.com/",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "la-herencia-988601": {
       "provider": "youtube",
@@ -1488,7 +1653,8 @@
       "thumbnail": "https://i.ytimg.com/vi/5WPivzI_5ps/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://escaperoombadajoz.com/la-herencia/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2021-01-06T05:21:04-08:00"
     },
     "la-historia-de-charlotte": {
       "provider": "youtube",
@@ -1497,7 +1663,8 @@
       "thumbnail": "https://i.ytimg.com/vi/oAMexiQifDU/hqdefault.jpg",
       "label": "Whitechapel room Escape - La Historia de Charlotte",
       "source_page_url": "https://roomwhitechapel.com/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2024-03-21T09:08:47-07:00"
     },
     "la-historia-del-colegio-midwich": {
       "provider": "direct",
@@ -1506,7 +1673,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://www.azescaperoom.es/escaperoomterror/escaperoom-silenthill-full/",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "la-iniciativa": {
       "provider": "youtube",
@@ -1515,7 +1683,8 @@
       "thumbnail": "https://i.ytimg.com/vi/JE0WKXhDHOE/hqdefault.jpg",
       "label": "Teaser La Iniciativa",
       "source_page_url": "https://lainiciativa.es/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2019-12-26T11:01:38-08:00"
     },
     "la-jugueteria-mimitos": {
       "provider": "youtube",
@@ -1524,7 +1693,8 @@
       "thumbnail": "https://i.ytimg.com/vi/QTs7JTrdJ84/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://tortugasalafuga.com/la-jugueteria-mimitos/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2025-01-27T11:00:13-08:00"
     },
     "la-llamada-arcana": {
       "provider": "youtube",
@@ -1533,7 +1703,8 @@
       "thumbnail": "https://i.ytimg.com/vi/Wmv7ruPYp9A/hqdefault.jpg",
       "label": "La Llamada Arcana - Teaser",
       "source_page_url": "https://lallamadaarcana.es/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2023-06-14T03:43:54-07:00"
     },
     "la-locura-de-goya": {
       "provider": "vimeo",
@@ -1542,7 +1713,8 @@
       "thumbnail": "",
       "label": "Vimeo video player 1",
       "source_page_url": "https://madescaperoom.com/el-misterio-del-triangulo-de-las-bermudas-juego-portatil-teambuilding/",
-      "score": 78
+      "score": 78,
+      "upload_date": ""
     },
     "la-mansion": {
       "provider": "youtube",
@@ -1551,7 +1723,8 @@
       "thumbnail": "https://i.ytimg.com/vi/0vEgK0cuyCM/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://www.timeskp.com/es/escape-room/la-mansion",
-      "score": 89
+      "score": 89,
+      "upload_date": "2018-02-07T12:05:57-08:00"
     },
     "la-mansion-del-crimen": {
       "provider": "youtube",
@@ -1560,7 +1733,8 @@
       "thumbnail": "https://i.ytimg.com/vi/VCKuujBGAEM/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://www.escapology.com/en/madrid-alcala-spain/escape-games/mansion-murder",
-      "score": 124
+      "score": 124,
+      "upload_date": "2025-10-06T19:37:40-07:00"
     },
     "la-masia": {
       "provider": "direct",
@@ -1569,7 +1743,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://canbruna.cat/",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "la-mazmorra": {
       "provider": "youtube",
@@ -1578,7 +1753,8 @@
       "thumbnail": "https://i.ytimg.com/vi/iBfj81l2cVY/hqdefault.jpg",
       "label": "La Mazmorra - Run Rabbit Escape Room",
       "source_page_url": "https://runrabbit.es/la-mazmorra/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2020-10-13T08:58:12-07:00"
     },
     "la-mazmorra-de-hood": {
       "provider": "youtube",
@@ -1587,7 +1763,8 @@
       "thumbnail": "https://i.ytimg.com/vi/bqLUp7GuUTg/hqdefault.jpg",
       "label": "Find out why a good domain name is important",
       "source_page_url": "https://www.scapandgo.com/es/",
-      "score": 78
+      "score": 78,
+      "upload_date": "2021-05-17T12:39:26-07:00"
     },
     "la-mina": {
       "provider": "youtube",
@@ -1596,7 +1773,8 @@
       "thumbnail": "https://i.ytimg.com/vi/McHENnNXlpc/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://unrealroomescape.es/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2020-05-14T10:30:15-07:00"
     },
     "la-misteriosa-herencia-de-cal-pere": {
       "provider": "youtube",
@@ -1605,7 +1783,8 @@
       "thumbnail": "https://i.ytimg.com/vi/_-h_vOBoiSg/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://thebunkerescape.com/el-joc/",
-      "score": 78
+      "score": 78,
+      "upload_date": "2018-02-03T11:44:53-08:00"
     },
     "la-mussara": {
       "provider": "youtube",
@@ -1614,7 +1793,8 @@
       "thumbnail": "https://i.ytimg.com/vi/JiVFlKIwrXk/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://escape4room.com/la-mussara/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2020-01-01T15:00:12-08:00"
     },
     "la-nave-84311": {
       "provider": "youtube",
@@ -1623,7 +1803,8 @@
       "thumbnail": "https://i.ytimg.com/vi/bqLUp7GuUTg/hqdefault.jpg",
       "label": "Find out why a good domain name is important",
       "source_page_url": "https://www.rkgames.com",
-      "score": 106
+      "score": 106,
+      "upload_date": "2021-05-17T12:39:26-07:00"
     },
     "la-nube-151131": {
       "provider": "direct",
@@ -1632,7 +1813,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://www.emotionescape.com/madrid.html",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "la-oficina-de-john-monroe": {
       "provider": "youtube",
@@ -1641,7 +1823,8 @@
       "thumbnail": "https://i.ytimg.com/vi/7RU2uof2-LE/hqdefault.jpg",
       "label": "scale-with-grid",
       "source_page_url": "https://www.roomescapesalamanca.com/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2018-11-06T04:13:23-08:00"
     },
     "la-prueba-34421": {
       "provider": "direct",
@@ -1650,7 +1833,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://www.escaperoomrivas.es/services/la-prueba/",
-      "score": 142
+      "score": 142,
+      "upload_date": ""
     },
     "la-purga": {
       "provider": "youtube",
@@ -1659,7 +1843,8 @@
       "thumbnail": "https://i.ytimg.com/vi/sJNZfxKPSGk/hqdefault.jpg",
       "label": "Katharsis Room Escape",
       "source_page_url": "https://mataro.cubickroomescape.es/katharsis/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2025-10-12T05:52:37-07:00"
     },
     "la-tentacion": {
       "provider": "youtube",
@@ -1668,7 +1853,8 @@
       "thumbnail": "https://i.ytimg.com/vi/FoeoFKhIFxo/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://escape4room.com/la-tentacion/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2022-01-03T15:14:51-08:00"
     },
     "la-tienda-de-munecas-de-lilith": {
       "provider": "youtube",
@@ -1677,7 +1863,8 @@
       "thumbnail": "https://i.ytimg.com/vi/J006ZIhOX7Q/hqdefault.jpg",
       "label": "Ver Trailer",
       "source_page_url": "https://www.escapemania.es/",
-      "score": 83
+      "score": 83,
+      "upload_date": "2020-05-08T11:38:06-07:00"
     },
     "la-tienda-de-te-del-sr-miyagi": {
       "provider": "youtube",
@@ -1686,7 +1873,8 @@
       "thumbnail": "https://i.ytimg.com/vi/sn4_PPkTxdw/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://donescape.es/",
-      "score": 83
+      "score": 83,
+      "upload_date": "2024-02-12T07:55:32-08:00"
     },
     "la-trementinaire": {
       "provider": "direct",
@@ -1695,7 +1883,8 @@
       "thumbnail": "",
       "label": "elementor-video",
       "source_page_url": "https://www.roomiaescape.com/la-tremantinaire/",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "la-varita-de-los-margoro": {
       "provider": "direct",
@@ -1704,7 +1893,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://wizardingescaperooms.com/",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "la-vitrina": {
       "provider": "vimeo",
@@ -1713,7 +1903,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://malorialexperience.com/",
-      "score": 106
+      "score": 106,
+      "upload_date": ""
     },
     "la-zona": {
       "provider": "youtube",
@@ -1722,7 +1913,8 @@
       "thumbnail": "https://i.ytimg.com/vi/Brf8SjIaBDw/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://terrorstories.com/madrid/la-zona-escape-room",
-      "score": 83
+      "score": 83,
+      "upload_date": "2022-08-30T06:41:15-07:00"
     },
     "las-reliquias-de-judy-692401": {
       "provider": "direct",
@@ -1731,7 +1923,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://theworksofmadness.com/reliquias-de-judy/?fbclid=PAZXh0bgNhZW0CMTEAAaaPjyynwHqtNrwu0fNe4z8EWM3eR87UEVm9ckHHTqGpiuX9IG7enYvOKAk_aem_ccM1oVK_yfxI",
-      "score": 106
+      "score": 106,
+      "upload_date": ""
     },
     "los-7-pecados-capitales": {
       "provider": "direct",
@@ -1740,7 +1933,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://escapology.ilusiona.com/booking/form",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "los-castillejos": {
       "provider": "youtube",
@@ -1749,7 +1943,8 @@
       "thumbnail": "https://i.ytimg.com/vi/fIlopkNStb0/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://escape4room.com/los-castillejos/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2020-12-09T08:20:51-08:00"
     },
     "los-crimenes-de-la-abadia-522401": {
       "provider": "youtube",
@@ -1758,7 +1953,8 @@
       "thumbnail": "https://i.ytimg.com/vi/x3KG3_GNXmI/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://www.goldenescaperoom.es/",
-      "score": 78
+      "score": 78,
+      "upload_date": "2019-01-12T07:19:21-08:00"
     },
     "los-ultimos-templarios": {
       "provider": "vimeo",
@@ -1767,7 +1963,8 @@
       "thumbnail": "",
       "label": "Escape Room - Los Últimos Templarios",
       "source_page_url": "https://escapepeniscola.com/escape-room-templarios.html",
-      "score": 106
+      "score": 106,
+      "upload_date": ""
     },
     "mafia": {
       "provider": "youtube",
@@ -1776,7 +1973,8 @@
       "thumbnail": "https://i.ytimg.com/vi/8P8D_wc15hI/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://www.chickenbanana.com/room/mafia",
-      "score": 124
+      "score": 124,
+      "upload_date": "2014-12-07T19:09:34-08:00"
     },
     "magic-universe": {
       "provider": "direct",
@@ -1785,7 +1983,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://madlandmadrid.es/",
-      "score": 86
+      "score": 86,
+      "upload_date": ""
     },
     "malum": {
       "provider": "direct",
@@ -1794,7 +1993,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://malumescaperoom.com/",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "mamba-negra": {
       "provider": "direct",
@@ -1803,7 +2003,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://www.tarregaroomescape.com/",
-      "score": 89
+      "score": 89,
+      "upload_date": ""
     },
     "manoir-escape-house": {
       "provider": "youtube",
@@ -1812,7 +2013,8 @@
       "thumbnail": "https://i.ytimg.com/vi/9gAr-MpdVXI/hqdefault.jpg",
       "label": "Manoir Escape House | Trauma Factory",
       "source_page_url": "https://traumafactory.es/reservar-escape-room/manoir/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2021-05-02T03:49:38-07:00"
     },
     "manor-of-escape": {
       "provider": "direct",
@@ -1821,7 +2023,8 @@
       "thumbnail": "",
       "label": "elementor-video",
       "source_page_url": "https://vroomescape.com/en/escape-room-miedo/",
-      "score": 86
+      "score": 86,
+      "upload_date": ""
     },
     "maxx391": {
       "provider": "youtube",
@@ -1830,7 +2033,8 @@
       "thumbnail": "https://i.ytimg.com/vi/Qw12t2Oztos/hqdefault.jpg",
       "label": "embed-responsive-item",
       "source_page_url": "https://www.virtualbilbao.com/sala-escape-bilbao/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2024-04-25T08:02:40-07:00"
     },
     "megachef": {
       "provider": "youtube",
@@ -1839,7 +2043,8 @@
       "thumbnail": "https://i.ytimg.com/vi/74VTGyZKyxs/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cluehunter.es/megachef/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2012-12-31T04:10:04-08:00"
     },
     "mental-experiment": {
       "provider": "youtube",
@@ -1848,7 +2053,8 @@
       "thumbnail": "https://i.ytimg.com/vi/py_Y0cQkGG4/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cocoroom.es/mental-experiment/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2021-11-22T07:22:01-08:00"
     },
     "morgana": {
       "provider": "direct",
@@ -1857,7 +2063,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://d3d4l0.es/booking-room2.php",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "nathael": {
       "provider": "youtube",
@@ -1866,7 +2073,8 @@
       "thumbnail": "https://i.ytimg.com/vi/qB9K7YfYkto/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://mataro.cubickroomescape.es/nathael/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2020-12-08T03:01:24-08:00"
     },
     "naturia-el-bosque-encantado": {
       "provider": "youtube",
@@ -1875,7 +2083,8 @@
       "thumbnail": "https://i.ytimg.com/vi/HGSSgXBBTbE/hqdefault.jpg",
       "label": "NATURIA, el Bosque Encantado",
       "source_page_url": "https://excapexperience.com/bosque-encantado-2/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2021-05-13T06:43:29-07:00"
     },
     "nightshift": {
       "provider": "youtube",
@@ -1884,7 +2093,8 @@
       "thumbnail": "https://i.ytimg.com/vi/O9tlAHvVriA/hqdefault.jpg",
       "label": "TRAILER NIGHTSHIFT",
       "source_page_url": "https://www.crupontlegacy.com/home",
-      "score": 130
+      "score": 130,
+      "upload_date": "2025-01-28T01:41:04-08:00"
     },
     "obsesion": {
       "provider": "youtube",
@@ -1893,7 +2103,8 @@
       "thumbnail": "https://i.ytimg.com/vi/hhUSrzcx3SE/hqdefault.jpg",
       "label": "OBSESIÓN",
       "source_page_url": "https://insideescaperoom.es/obsesion/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2023-09-02T15:29:23-07:00"
     },
     "offline": {
       "provider": "youtube",
@@ -1902,7 +2113,8 @@
       "thumbnail": "https://i.ytimg.com/vi/ENr7HM_lW1g/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://www.area60.es/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2026-03-19T08:24:30-07:00"
     },
     "olimpo": {
       "provider": "youtube",
@@ -1911,7 +2123,8 @@
       "thumbnail": "https://i.ytimg.com/vi/d9FUrlNirXc/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://olimpoescaperoom.com/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2021-07-26T06:19:05-07:00"
     },
     "operacion-delawer": {
       "provider": "youtube",
@@ -1920,7 +2133,8 @@
       "thumbnail": "https://i.ytimg.com/vi/2l1fSt9NS2g/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://rubikescaperoom.com/juegos/23-operacion-delawer---escape-room-temporal.html",
-      "score": 124
+      "score": 124,
+      "upload_date": "2025-05-24T03:35:18-07:00"
     },
     "operacion-diamante-712321": {
       "provider": "youtube",
@@ -1929,7 +2143,8 @@
       "thumbnail": "https://i.ytimg.com/vi/5_axpYM1wgo/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://roomescapekids.com/#operaciondiamante",
-      "score": 89
+      "score": 89,
+      "upload_date": "2025-10-28T08:41:13-07:00"
     },
     "operacion-diamante-791191": {
       "provider": "youtube",
@@ -1938,7 +2153,8 @@
       "thumbnail": "https://i.ytimg.com/vi/W0WtMLoF3hk/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://goldenpop.es/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2022-05-13T04:55:52-07:00"
     },
     "operacion-diamante-alicante": {
       "provider": "youtube",
@@ -1947,7 +2163,8 @@
       "thumbnail": "https://i.ytimg.com/vi/UEdfexKM5Eo/hqdefault.jpg",
       "label": "YouTube video player 1",
       "source_page_url": "https://secrethunter.es/operacion-diamante/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2018-09-19T04:21:34-07:00"
     },
     "operacion-flashback": {
       "provider": "direct",
@@ -1956,7 +2173,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://elsecretodemadrid.es/soho",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "operacion-steampunk": {
       "provider": "youtube",
@@ -1965,7 +2183,8 @@
       "thumbnail": "https://i.ytimg.com/vi/exfyykmUt2Q/hqdefault.jpg",
       "label": "Teaser Escape Room Operación Steampunk",
       "source_page_url": "https://incognitoescape.es/operacion-steampunk/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2018-10-31T15:19:53-07:00"
     },
     "origen-boadilla-del-monte": {
       "provider": "youtube",
@@ -1974,7 +2193,8 @@
       "thumbnail": "https://i.ytimg.com/vi/cxMceW0KSTo/hqdefault.jpg",
       "label": "Escape room ORIGEN, Español",
       "source_page_url": "https://amazein60.com/room/origen/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2020-08-05T23:14:13-07:00"
     },
     "origen-santiago-de-compostela": {
       "provider": "youtube",
@@ -1983,7 +2203,8 @@
       "thumbnail": "https://i.ytimg.com/vi/RT5Ty4aGQZo/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://compostela.eskapark.com/detalle/juego/3",
-      "score": 106
+      "score": 106,
+      "upload_date": "2019-05-27T01:04:37-07:00"
     },
     "ouija": {
       "provider": "youtube",
@@ -1992,7 +2213,8 @@
       "thumbnail": "https://i.ytimg.com/vi/1fzGr2wokYA/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://horrorbox.es/ouija-escape-room/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2026-03-05T11:00:01-08:00"
     },
     "outline": {
       "provider": "youtube",
@@ -2001,7 +2223,8 @@
       "thumbnail": "https://i.ytimg.com/vi/Z6gqECxuTSM/hqdefault.jpg",
       "label": "Trailer Oficial de OUTLINE Escape Room Cornellà",
       "source_page_url": "https://outlineescaperoom.es/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2023-01-27T10:00:06-08:00"
     },
     "pagana": {
       "provider": "direct",
@@ -2010,7 +2233,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://uyquemiedo.com/pagana/",
-      "score": 142
+      "score": 142,
+      "upload_date": ""
     },
     "paranormal-experience": {
       "provider": "youtube",
@@ -2019,7 +2243,8 @@
       "thumbnail": "https://i.ytimg.com/vi/ko9K9kTN3VI/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://www.madridterror.com/paranormal-experience/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2021-08-06T02:56:18-07:00"
     },
     "pesadillas": {
       "provider": "youtube",
@@ -2028,7 +2253,8 @@
       "thumbnail": "https://i.ytimg.com/vi/X_ZFrfdPPVQ/hqdefault.jpg",
       "label": "PESADILLAS @ GOLDEN POP",
       "source_page_url": "https://goldenpop.es/juegos/pesadillas/#reservar",
-      "score": 124
+      "score": 124,
+      "upload_date": "2020-10-03T10:13:03-07:00"
     },
     "piratas-la-busqueda-del-caliz-de-la-vida-eterna": {
       "provider": "youtube",
@@ -2037,7 +2263,8 @@
       "thumbnail": "https://i.ytimg.com/vi/J006ZIhOX7Q/hqdefault.jpg",
       "label": "Ver Trailer",
       "source_page_url": "https://www.escapemania.es/",
-      "score": 83
+      "score": 83,
+      "upload_date": "2020-05-08T11:38:06-07:00"
     },
     "pixel-games": {
       "provider": "youtube",
@@ -2046,7 +2273,8 @@
       "thumbnail": "https://i.ytimg.com/vi/NiCCj2h1qHE/hqdefault.jpg",
       "label": "pixel grande trailer",
       "source_page_url": "https://mataro.cubickroomescape.es/pixel-games/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2026-03-13T02:50:27-07:00"
     },
     "polybius": {
       "provider": "direct",
@@ -2055,7 +2283,8 @@
       "thumbnail": "",
       "label": "elementor-video",
       "source_page_url": "https://mentecolmenarooms.com/polybius/",
-      "score": 142
+      "score": 142,
+      "upload_date": ""
     },
     "portales-malffoy": {
       "provider": "youtube",
@@ -2064,7 +2293,8 @@
       "thumbnail": "https://i.ytimg.com/vi/XHOmBV4js_E/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://momentescape.es/portalesmalffoy_sala/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2019-01-23T01:41:21-08:00"
     },
     "proyecto-dcrisis": {
       "provider": "youtube",
@@ -2073,7 +2303,8 @@
       "thumbnail": "https://i.ytimg.com/vi/yLt8waQIfO8/hqdefault.jpg",
       "label": "Proyecto DCrisis - Trailer oficial",
       "source_page_url": "https://paradisoescaperoom.es/proyecto-dcrisis",
-      "score": 130
+      "score": 130,
+      "upload_date": "2024-10-10T07:21:25-07:00"
     },
     "psycho-escape": {
       "provider": "direct",
@@ -2082,7 +2313,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://horrorbox.es/",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "pulse-up": {
       "provider": "direct",
@@ -2091,7 +2323,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://aventurico.com/juegos/pulseup",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "quien-mato-a-david-kentley": {
       "provider": "vimeo",
@@ -2100,7 +2333,8 @@
       "thumbnail": "",
       "label": "Sala 4: ¿QUIÉN MATÓ A DAVID KENTLEY? - Escape College Madrid",
       "source_page_url": "https://escapecollegemadrid.com/room/quien-mato-a-david/",
-      "score": 106
+      "score": 106,
+      "upload_date": ""
     },
     "racoon-corporation": {
       "provider": "youtube",
@@ -2109,7 +2343,8 @@
       "thumbnail": "https://i.ytimg.com/vi/IdcbLGdX7qo/hqdefault.jpg",
       "label": "TerrorEscapeRoom, Bienvenidos a nuestra sala de escape Racoon Corporation.",
       "source_page_url": "https://www.terrorescaperoom.com/escape-room/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2024-02-05T04:10:41-08:00"
     },
     "ratas-de-laboratorio": {
       "provider": "youtube",
@@ -2118,7 +2353,8 @@
       "thumbnail": "https://i.ytimg.com/vi/5L-yibO8bxE/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://roomescapecorporation.com/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2023-03-05T05:47:41-08:00"
     },
     "resident-virus-x": {
       "provider": "youtube",
@@ -2127,7 +2363,8 @@
       "thumbnail": "https://i.ytimg.com/vi/5KLnsPMJnLI/hqdefault.jpg",
       "label": "Xcaperoom Finestrat - Sala Resident Virus X",
       "source_page_url": "https://xcaperoomfinestrat.com/escape-room-virus-x",
-      "score": 106
+      "score": 106,
+      "upload_date": "2020-01-16T10:45:00-08:00"
     },
     "resonance": {
       "provider": "youtube",
@@ -2136,7 +2373,8 @@
       "thumbnail": "https://i.ytimg.com/vi/r_YtVsIZLn0/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://funly.es/game/resonance",
-      "score": 124
+      "score": 124,
+      "upload_date": "2026-05-05T09:40:41-07:00"
     },
     "room-foc-destruccio": {
       "provider": "direct",
@@ -2145,7 +2383,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://www.tarregaroomescape.com/",
-      "score": 89
+      "score": 89,
+      "upload_date": ""
     },
     "roomin-escape": {
       "provider": "youtube",
@@ -2154,7 +2393,8 @@
       "thumbnail": "https://i.ytimg.com/vi/Nb0mE0dfL0c/hqdefault.jpg",
       "label": "ROOMIN - DAUVILLE ESCAPE 2017",
       "source_page_url": "https://roomin.es/dauville-2017-el-juego-de-room-escape-mas-grande-de-europa/",
-      "score": 78
+      "score": 78,
+      "upload_date": "2018-11-18T01:13:08-08:00"
     },
     "s-o-s-salacia": {
       "provider": "direct",
@@ -2163,7 +2403,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "http://www.topoescape.es/",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "samantha": {
       "provider": "direct",
@@ -2172,7 +2413,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://samanthaescape.com/#escaperooms",
-      "score": 142
+      "score": 142,
+      "upload_date": ""
     },
     "scubick-doo": {
       "provider": "youtube",
@@ -2181,7 +2423,8 @@
       "thumbnail": "https://i.ytimg.com/vi/qB9K7YfYkto/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://mataro.cubickroomescape.es/scubick-doo/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2020-12-08T03:01:24-08:00"
     },
     "secuestro": {
       "provider": "youtube",
@@ -2190,7 +2433,8 @@
       "thumbnail": "https://i.ytimg.com/vi/fQzQZz1KAtw/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://escapegamecastellon.com/rooms/secuestro/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2026-06-10T14:22:04-07:00"
     },
     "seven-the-game": {
       "provider": "youtube",
@@ -2199,7 +2443,8 @@
       "thumbnail": "https://i.ytimg.com/vi/NSYJyFJDz70/hqdefault.jpg",
       "label": "test",
       "source_page_url": "https://quimeraescape.com/",
-      "score": 78
+      "score": 78,
+      "upload_date": "2025-03-13T07:24:47-07:00"
     },
     "sherlock-se-viste-de-negro-49191": {
       "provider": "youtube",
@@ -2208,7 +2453,8 @@
       "thumbnail": "https://i.ytimg.com/vi/ENr7HM_lW1g/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://www.area60.es/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2026-03-19T08:24:30-07:00"
     },
     "sherlock-se-viste-de-negro-92601": {
       "provider": "youtube",
@@ -2217,7 +2463,8 @@
       "thumbnail": "https://i.ytimg.com/vi/x3KG3_GNXmI/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://www.goldenescaperoom.es/",
-      "score": 78
+      "score": 78,
+      "upload_date": "2019-01-12T07:19:21-08:00"
     },
     "sherlock-se-viste-de-negro-vigo": {
       "provider": "youtube",
@@ -2226,7 +2473,8 @@
       "thumbnail": "https://i.ytimg.com/vi/ENr7HM_lW1g/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://www.area60.es/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2026-03-19T08:24:30-07:00"
     },
     "sopar-de-l": {
       "provider": "youtube",
@@ -2235,7 +2483,8 @@
       "thumbnail": "https://i.ytimg.com/vi/L8ZrWPk2seg/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://www.sternalia.com/cena-de-los-sentidos-barcelona.html",
-      "score": 106
+      "score": 106,
+      "upload_date": "2019-02-01T03:56:29-08:00"
     },
     "soulbound": {
       "provider": "youtube",
@@ -2244,7 +2493,8 @@
       "thumbnail": "https://i.ytimg.com/vi/XiJ3qPXlZQM/hqdefault.jpg",
       "label": "Play Video El cuento de Soulbound",
       "source_page_url": "https://habitacio13.com/",
-      "score": 83
+      "score": 83,
+      "upload_date": "2024-01-30T04:11:33-08:00"
     },
     "space-base-extermination": {
       "provider": "direct",
@@ -2253,7 +2503,8 @@
       "thumbnail": "",
       "label": "bricks-lazy-hidden",
       "source_page_url": "https://spacebase-extermination.es/",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "space-project": {
       "provider": "youtube",
@@ -2262,7 +2513,8 @@
       "thumbnail": "https://i.ytimg.com/vi/DXcsrM_zc0A/hqdefault.jpg",
       "label": "Keops Space Project Trailer",
       "source_page_url": "https://www.keopsescapelleida.com/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2022-12-18T15:06:25-08:00"
     },
     "space-station-tiberia": {
       "provider": "direct",
@@ -2271,7 +2523,8 @@
       "thumbnail": "",
       "label": "elementor-video",
       "source_page_url": "https://vroomescape.com/es/spacestation/",
-      "score": 86
+      "score": 86,
+      "upload_date": ""
     },
     "suite-405": {
       "provider": "youtube",
@@ -2280,7 +2533,8 @@
       "thumbnail": "https://i.ytimg.com/vi/hXKx9HrS7Nc/hqdefault.jpg",
       "label": "YouTube video player 1",
       "source_page_url": "https://secrethunter.es/suite-405/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2016-08-27T06:02:50-07:00"
     },
     "sunset-boulevard": {
       "provider": "vimeo",
@@ -2289,7 +2543,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://linked-minds.com/services/sunset-boulevard/",
-      "score": 89
+      "score": 89,
+      "upload_date": ""
     },
     "sustos-s-a": {
       "provider": "youtube",
@@ -2298,7 +2553,8 @@
       "thumbnail": "https://i.ytimg.com/vi/wAKowWQNN_Q/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://quimeraescape.com/sustos/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2025-03-13T07:29:07-07:00"
     },
     "swat-countdown": {
       "provider": "direct",
@@ -2307,7 +2563,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://123actionbarcelona.com/escapeexterior/",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "tesoro-azteca": {
       "provider": "youtube",
@@ -2316,7 +2573,8 @@
       "thumbnail": "https://i.ytimg.com/vi/Y2mlGHToBHw/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://lock-clock.com/es/game/tesoro-azteca",
-      "score": 124
+      "score": 124,
+      "upload_date": "2022-04-30T10:02:07-07:00"
     },
     "the-black-proyect": {
       "provider": "youtube",
@@ -2325,7 +2583,8 @@
       "thumbnail": "https://i.ytimg.com/vi/j6QtFRd3YdQ/hqdefault.jpg",
       "label": "The Black Project - Cubick Escape Room",
       "source_page_url": "https://cubickmadrid.es/the-black-project-escape-room/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2020-10-19T07:01:47-07:00"
     },
     "the-magic": {
       "provider": "youtube",
@@ -2334,7 +2593,8 @@
       "thumbnail": "https://i.ytimg.com/vi/HqZIPeHMBW0/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cocoroom.es/the-magic/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2020-07-14T10:00:47-07:00"
     },
     "the-mystery-of-scum-island": {
       "provider": "direct",
@@ -2343,7 +2603,8 @@
       "thumbnail": "",
       "label": "elementor-video",
       "source_page_url": "https://mentecolmenarooms.com/el-misterio-de-scum-island/",
-      "score": 142
+      "score": 142,
+      "upload_date": ""
     },
     "the-narcos": {
       "provider": "youtube",
@@ -2352,7 +2613,8 @@
       "thumbnail": "https://i.ytimg.com/vi/McHENnNXlpc/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://unrealroomescape.es/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2020-05-14T10:30:15-07:00"
     },
     "the-temple-box": {
       "provider": "youtube",
@@ -2361,7 +2623,8 @@
       "thumbnail": "https://i.ytimg.com/vi/ineLAb5zhHk/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://escapethebox.es/escape-rooms/escape-room-aventura-el-templo-maya/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2020-06-30T12:56:07-07:00"
     },
     "time-travel-paradox": {
       "provider": "direct",
@@ -2370,7 +2633,8 @@
       "thumbnail": "",
       "label": "elementor-video",
       "source_page_url": "https://vroomescape.com/en/time-travel/",
-      "score": 86
+      "score": 86,
+      "upload_date": ""
     },
     "tras-el-espejo": {
       "provider": "youtube",
@@ -2379,7 +2643,8 @@
       "thumbnail": "https://i.ytimg.com/vi/FjqxCG79aJ8/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://therombocode.es/bilbao/juegos/tras-el-espejo/",
-      "score": 101
+      "score": 101,
+      "upload_date": "2016-07-19T01:59:31-07:00"
     },
     "tras-el-espejo-gines": {
       "provider": "youtube",
@@ -2388,7 +2653,8 @@
       "thumbnail": "https://i.ytimg.com/vi/FjqxCG79aJ8/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://therombocode.es/sevilla/juegos/tras-el-espejo/",
-      "score": 83
+      "score": 83,
+      "upload_date": "2016-07-19T01:59:31-07:00"
     },
     "tras-el-ultimo-dragon": {
       "provider": "youtube",
@@ -2397,7 +2663,8 @@
       "thumbnail": "https://i.ytimg.com/vi/H-LoRQN4H5M/hqdefault.jpg",
       "label": "TRAS EL ULTIMO DRAGON",
       "source_page_url": "https://escapesecretcode.com/sala/tras-el-ultimo-dragon/#bookingForm",
-      "score": 124
+      "score": 124,
+      "upload_date": "2021-04-09T11:33:44-07:00"
     },
     "tu-tambien-sonaras": {
       "provider": "youtube",
@@ -2406,7 +2673,8 @@
       "thumbnail": "https://i.ytimg.com/vi/xawQc4BwhHA/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://maytokingdom.es/juegos/tu-tambien-sonaras/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2022-12-19T05:35:19-08:00"
     },
     "un-misterio-a-los-postres": {
       "provider": "direct",
@@ -2415,7 +2683,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://elsecretodemadrid.es/un-misterio-a-los-postres",
-      "score": 142
+      "score": 142,
+      "upload_date": ""
     },
     "una-aventura-de-leyenda": {
       "provider": "youtube",
@@ -2424,7 +2693,8 @@
       "thumbnail": "https://i.ytimg.com/vi/1b0hmcwOhD8/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://maytokingdom.es/juegos/una-aventura-de-leyenda/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2023-09-01T15:33:35-07:00"
     },
     "una-mision-extraterrestre": {
       "provider": "direct",
@@ -2433,7 +2703,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://elsecretodemadrid.es/soho",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "venganza-374601": {
       "provider": "youtube",
@@ -2442,7 +2713,8 @@
       "thumbnail": "https://i.ytimg.com/vi/gr6Co3WTgJM/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://runawayescaperoom.com/producto/venganza/",
-      "score": 89
+      "score": 89,
+      "upload_date": "2025-06-03T10:08:35-07:00"
     },
     "verdun-1916": {
       "provider": "direct",
@@ -2451,7 +2723,8 @@
       "thumbnail": "",
       "label": "elementor-video",
       "source_page_url": "https://aventuring.com/escape-room-girona-barcelona/",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "vikingos": {
       "provider": "youtube",
@@ -2460,7 +2733,8 @@
       "thumbnail": "https://i.ytimg.com/vi/McHENnNXlpc/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://unrealroomescape.es/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2020-05-14T10:30:15-07:00"
     },
     "vinoteca": {
       "provider": "direct",
@@ -2469,7 +2743,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://code258.com/vinoteca/",
-      "score": 89
+      "score": 89,
+      "upload_date": ""
     },
     "vuelo-a-0714": {
       "provider": "youtube",
@@ -2478,7 +2753,8 @@
       "thumbnail": "https://i.ytimg.com/vi/OiL1JPAUCTA/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cocoroom.es/vuelo/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2016-11-22T03:31:04-08:00"
     },
     "vuelo-a-0714-521341": {
       "provider": "youtube",
@@ -2487,7 +2763,8 @@
       "thumbnail": "https://i.ytimg.com/vi/OiL1JPAUCTA/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cocoroom.es/vuelo/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2016-11-22T03:31:04-08:00"
     },
     "vuelo-a-0714-584461": {
       "provider": "youtube",
@@ -2496,7 +2773,8 @@
       "thumbnail": "https://i.ytimg.com/vi/OiL1JPAUCTA/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cocoroom.es/vuelo/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2016-11-22T03:31:04-08:00"
     },
     "vuelo-a-0714-granada": {
       "provider": "youtube",
@@ -2505,7 +2783,8 @@
       "thumbnail": "https://i.ytimg.com/vi/OiL1JPAUCTA/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cocoroom.es/vuelo/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2016-11-22T03:31:04-08:00"
     },
     "willy-el-tuerto": {
       "provider": "vimeo",
@@ -2514,7 +2793,8 @@
       "thumbnail": "",
       "label": "Willy el Tuerto",
       "source_page_url": "https://willyeltuertoescaperoom.com/",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "y-el-gato": {
       "provider": "direct",
@@ -2523,7 +2803,8 @@
       "thumbnail": "",
       "label": "Intro oficial",
       "source_page_url": "https://www.emotionescape.com/barcelona.html",
-      "score": 124
+      "score": 124,
+      "upload_date": ""
     },
     "yucatan-el-ultimo-templo": {
       "provider": "youtube",
@@ -2532,7 +2813,8 @@
       "thumbnail": "https://i.ytimg.com/vi/gDCNgae1GeA/hqdefault.jpg",
       "label": "Intro oficial",
       "source_page_url": "https://cocoroom.es/yucatan/",
-      "score": 106
+      "score": 106,
+      "upload_date": "2020-09-15T03:17:45-07:00"
     },
     "zombie-outbreak": {
       "provider": "youtube",
@@ -2541,7 +2823,8 @@
       "thumbnail": "https://i.ytimg.com/vi/UryLw7SY2WQ/hqdefault.jpg",
       "label": "youtube-player",
       "source_page_url": "https://fearescapebarcelona.wordpress.com/zombie-outbreak-roomescape/",
-      "score": 124
+      "score": 124,
+      "upload_date": "2018-03-30T11:26:09-07:00"
     }
   }
 }
