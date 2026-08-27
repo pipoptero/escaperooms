@@ -552,13 +552,34 @@
   .escapist-map-dot.personal{background:var(--red);}
   .escapist-map-dot.group{background:var(--green);}
   .escapist-map-dot.pending{background:#ffb020;}
-  .escapist-map-side{border:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.12);padding:11px 12px;min-width:0;}
+  .escapist-map-side{border:1px solid rgba(255,255,255,.07);background:linear-gradient(180deg,rgba(125,187,63,.035),rgba(0,0,0,.14));padding:14px;min-width:0;overflow:hidden;}
+  .escapist-map-sheet-handle{display:none;}
+  .escapist-map-side-content{display:flex;flex-direction:column;gap:12px;height:100%;min-height:0;}
+  .escapist-map-controls{border-bottom:1px solid rgba(255,255,255,.07);padding-bottom:10px;}
+  .escapist-map-selection{min-height:0;overflow:auto;padding-right:2px;}
+  .escapist-map-selected-card{display:grid;grid-template-columns:minmax(112px,36%) minmax(0,1fr);gap:14px;align-items:start;}
+  .escapist-map-selected-cover{min-width:0;background:#08080c;border:1px solid rgba(125,187,63,.2);aspect-ratio:2/3;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+  .escapist-map-selected-cover .escapist-map-popup-thumb{width:100%;height:100%;aspect-ratio:auto;object-fit:contain;border:0;}
+  .escapist-map-selected-main{min-width:0;}
+  .escapist-map-selected-main h3{font-family:'Cinzel',serif;color:var(--text);font-size:1.08rem;line-height:1.16;margin:3px 0 2px;overflow-wrap:anywhere;}
+  .escapist-map-selected-company{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--green);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;}
+  .escapist-map-selected-data{display:grid;gap:7px;margin:0;}
+  .escapist-map-selected-data>div{border-top:1px solid rgba(255,255,255,.065);padding-top:7px;}
+  .escapist-map-selected-data dt{font-family:'Share Tech Mono',monospace;font-size:.48rem;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px;}
+  .escapist-map-selected-data dd{font-family:'Rajdhani',sans-serif;font-size:.78rem;color:var(--text2);line-height:1.3;margin:0;overflow-wrap:anywhere;}
+  .escapist-map-detail-btn{width:100%;margin-top:10px;}
+  .escapist-map-room-switcher{border-top:1px solid rgba(255,255,255,.08);margin-top:14px;padding-top:11px;}
+  .escapist-map-room-switcher-title{font-family:'Share Tech Mono',monospace;font-size:.52rem;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px;}
+  .escapist-map-room-switcher-list{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin;}
+  .escapist-map-room-choice{flex:0 0 auto;max-width:210px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.025);color:var(--text3);font-family:'Share Tech Mono',monospace;font-size:.54rem;letter-spacing:.05em;text-transform:uppercase;padding:7px 9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;}
+  .escapist-map-room-choice.active{border-color:rgba(125,187,63,.5);background:rgba(125,187,63,.1);color:var(--green);}
   .escapist-map-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
   .escapist-map-filter{font-family:'Share Tech Mono',monospace;font-size:.56rem;letter-spacing:.09em;text-transform:uppercase;color:var(--text3);border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.025);padding:7px 9px;cursor:pointer;}
   .escapist-map-filter.active{border-color:rgba(125,187,63,.62);background:rgba(125,187,63,.1);color:var(--green);}
   .escapist-map-filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
   .escapist-map-filter-label{font-family:'Share Tech Mono',monospace;font-size:.5rem;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;align-self:center;margin-right:2px;}
   .escapist-map-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(74px,1fr));gap:6px;margin-bottom:10px;}
+  .escapist-map-stats.compact{grid-template-columns:repeat(3,minmax(0,1fr));}
   .escapist-map-stat{border:1px solid rgba(125,187,63,.12);background:rgba(125,187,63,.035);padding:8px 9px;min-width:0;}
   .escapist-map-stat strong{display:block;font-family:'Cinzel',serif;color:var(--amber);font-size:1.05rem;line-height:1;}
   .escapist-map-stat span{display:block;font-family:'Share Tech Mono',monospace;font-size:.48rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-top:4px;}
@@ -1270,10 +1291,26 @@
     .profile-input{min-width:0;flex-basis:100%;}
     .profile-row .auth-btn{flex:1 1 auto;}
     .profile-groups{grid-template-columns:1fr;}
-    .escapist-map-wrap{grid-template-columns:1fr;}
-    .escapist-map-canvas{min-height:300px;height:42vh;max-height:430px;}
-    .escapist-map-side{padding:10px;}
+    .escapist-map-wrap{display:block;position:relative;min-height:64dvh;overflow:hidden;border:1px solid rgba(125,187,63,.16);}
+    .escapist-map-canvas{min-height:440px;height:64dvh;max-height:none;border:0;}
+    .escapist-map-side{position:absolute;left:7px;right:7px;bottom:7px;z-index:700;padding:0;border-color:rgba(125,187,63,.3);background:rgba(15,15,23,.97);box-shadow:0 -14px 42px rgba(0,0,0,.46);max-height:min(68dvh,590px);transition:max-height .22s ease;}
+    .escapist-map-sheet-handle{width:100%;min-height:54px;border:0;background:linear-gradient(90deg,rgba(125,187,63,.1),rgba(255,255,255,.018));color:var(--text);display:grid;grid-template-columns:24px minmax(0,1fr) auto;align-items:center;gap:8px;padding:10px 12px;text-align:left;cursor:pointer;}
+    .escapist-map-sheet-handle>span{width:24px;height:3px;border-radius:2px;background:var(--green);box-shadow:0 -6px 0 rgba(125,187,63,.22),0 6px 0 rgba(125,187,63,.22);}
+    .escapist-map-sheet-handle strong{font-family:'Cinzel',serif;font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .escapist-map-sheet-handle i{font-family:'Share Tech Mono',monospace;font-size:.48rem;font-style:normal;color:var(--green);letter-spacing:.08em;text-transform:uppercase;}
+    .escapist-map-side-content{display:none;max-height:calc(min(68dvh,590px) - 54px);overflow:auto;padding:10px;}
+    .escapist-map-side.sheet-open .escapist-map-side-content{display:flex;}
+    .escapist-map-controls{flex:0 0 auto;}
+    .escapist-map-selection{overflow:visible;}
+    .escapist-map-selected-card{grid-template-columns:82px minmax(0,1fr);gap:10px;}
+    .escapist-map-selected-main h3{font-size:.92rem;}
+    .escapist-map-selected-company{margin-bottom:8px;}
+    .escapist-map-selected-data{gap:5px;}
+    .escapist-map-selected-data>div{padding-top:5px;}
+    .escapist-map-selected-data dd{font-size:.72rem;}
+    .escapist-map-detail-btn{padding:8px 9px;font-size:.54rem;}
     .escapist-map-stats{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .escapist-map-stats.compact{grid-template-columns:repeat(3,minmax(0,1fr));}
     .escapist-map-community-summary{grid-template-columns:repeat(2,minmax(0,1fr));}
     .escapist-map-zones{grid-template-columns:repeat(2,minmax(0,1fr));max-height:104px;}
     .escapist-map-toolbar .auth-btn{flex:1 1 auto;}
@@ -2361,6 +2398,8 @@ let PENDING_INVITE_ID = new URLSearchParams(window.location.search).get('invite'
 let INVITE_NOTICE_SHOWN = false;
 let SETTINGS_TAB = 'profile';
 let PROFILE_MAP_ACTIVE_KEY = '';
+let PROFILE_MAP_SELECTED_ROOM_KEY = '';
+let PROFILE_MAP_SHEET_OPEN = false;
 let PROFILE_MAP_FILTER = 'all';
 let PROFILE_MAP_STATUS_FILTER = 'done';
 let PROFILE_MAP_PRECISION_FILTER = 'all';
@@ -3920,6 +3959,7 @@ function escapistMapRoomItems() {
         room: room || {},
         identities: new Set(),
         personal: false,
+        personalRecord: null,
         groups: [],
         personalPending: false,
         pendingGroups: []
@@ -3941,7 +3981,10 @@ function escapistMapRoomItems() {
     if (!state.done && !state.pending) return;
     const item = ensure(userRoomKey(room), room);
     if (!item) return;
-    if (state.done) item.personal = true;
+    if (state.done) {
+      item.personal = true;
+      item.personalRecord = state;
+    }
     if (state.pending) item.personalPending = true;
   });
   activeUserGroups().forEach(([groupId, group]) => {
@@ -3949,7 +3992,7 @@ function escapistMapRoomItems() {
     Object.entries(GROUP_ROOMS[groupId] || {}).forEach(([key, record]) => {
       const item = ensure(key, roomFromGroupRecord(key, record));
       if (!item) return;
-      if (!item.groups.some(g => g.groupId === groupId)) item.groups.push({ groupId, name });
+      if (!item.groups.some(g => g.groupId === groupId)) item.groups.push({ groupId, name, record });
     });
     Object.entries(GROUP_PENDING_ROOMS[groupId] || {}).forEach(([key, record]) => {
       const item = ensure(key, roomFromGroupRecord(key, record));
@@ -4155,6 +4198,82 @@ function escapistMapClusterListHtml(cluster) {
   </section>`).join('');
 }
 
+function escapistMapCompletionDate(item) {
+  const timestamps = [
+    item?.personalRecord?.completedAt,
+    item?.personalRecord?.doneAt,
+    item?.personalRecord?.updatedAt,
+    ...(item?.groups || []).flatMap(group => [group.record?.completedAt, group.record?.doneAt, group.record?.addedAt, group.record?.updatedAt])
+  ].map(Number).filter(value => Number.isFinite(value) && value > 0);
+  if (!timestamps.length) return '';
+  return new Intl.DateTimeFormat('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(Math.min(...timestamps)));
+}
+
+function escapistMapSelectedRoom(cluster) {
+  if (!cluster?.rooms?.length) return null;
+  return cluster.rooms.find(item => item.key === PROFILE_MAP_SELECTED_ROOM_KEY) || cluster.rooms[0];
+}
+
+function escapistMapRoomSelectorHtml(cluster, selected) {
+  if (!cluster || cluster.rooms.length < 2) return '';
+  return `<div class="escapist-map-room-switcher" aria-label="Salas en esta ubicacion">
+    <div class="escapist-map-room-switcher-title">${cluster.rooms.length} salas en este punto</div>
+    <div class="escapist-map-room-switcher-list">${cluster.rooms.map(item => `
+      <button class="escapist-map-room-choice ${item.key === selected?.key ? 'active' : ''}" type="button" onclick="selectEscapistMapRoom('${jsString(item.key)}')">
+        ${escapeHtml(item.room?.nombre || item.key || 'Sala')}
+      </button>`).join('')}</div>
+  </div>`;
+}
+
+function escapistMapSelectedCardHtml(cluster) {
+  const item = escapistMapSelectedRoom(cluster);
+  if (!item) return '<div class="escapist-map-empty">Selecciona una sala en el mapa.</div>';
+  const room = item.room || {};
+  const location = cluster.locations.find(candidate => candidate.rooms.includes(item)) || cluster.locations[0];
+  const ref = detailRefForRoom(room, ['catalogo', 'hechos', 'pendientes']);
+  const date = escapistMapCompletionDate(item);
+  const address = location?.address || [room.ciudad, room.provincia].filter(Boolean).join(' - ') || 'Direccion pendiente de confirmar';
+  const groups = item.groups || [];
+  return `<article class="escapist-map-selected-card">
+    <div class="escapist-map-selected-cover">${escapistMapPopupImageHtml(room)}</div>
+    <div class="escapist-map-selected-main">
+      <div class="escapist-map-popup-kicker">${escapeHtml(mapClusterPrecisionLabel(cluster))}</div>
+      <h3>${escapeHtml(room.nombre || item.key || 'Escape room')}</h3>
+      <div class="escapist-map-selected-company">${escapeHtml(room.empresa || 'Empresa no indicada')}</div>
+      <dl class="escapist-map-selected-data">
+        <div><dt>Direccion</dt><dd>${escapeHtml(address)}</dd></div>
+        <div><dt>Realizada con</dt><dd>${escapeHtml(groups.length ? groups.map(group => group.name || 'Grupo').join(', ') : item.personal ? 'Registro personal' : 'Sin grupo indicado')}</dd></div>
+        <div><dt>Fecha</dt><dd>${escapeHtml(date || 'No registrada')}</dd></div>
+      </dl>
+      <div class="profile-group-rooms">${escapistMapDoneSourceTagsHtml(item)}</div>
+      <button class="auth-btn escapist-map-detail-btn" type="button" onclick="openProfileRoomDetail('${ref.kind}','${jsString(ref.key)}')">Ver ficha completa</button>
+    </div>
+  </article>
+  ${escapistMapRoomSelectorHtml(cluster, item)}`;
+}
+
+function escapistMapSideHtml(clusters, active, stats) {
+  return `<button class="escapist-map-sheet-handle" type="button" aria-expanded="${PROFILE_MAP_SHEET_OPEN ? 'true' : 'false'}" onclick="toggleEscapistMapSheet()">
+      <span></span><strong>${escapeHtml(escapistMapSelectedRoom(active)?.room?.nombre || 'Explorar mapa')}</strong><i>${PROFILE_MAP_SHEET_OPEN ? 'Ocultar' : 'Ver detalles'}</i>
+    </button>
+    <div class="escapist-map-side-content">
+      <div class="escapist-map-controls">
+        ${escapistMapFilterHtml()}
+        ${escapistMapPrecisionFilterHtml()}
+        <div class="escapist-map-stats compact">
+          <div class="escapist-map-stat"><strong>${stats.rooms}</strong><span>Salas</span></div>
+          <div class="escapist-map-stat"><strong>${stats.locations}</strong><span>Ubicaciones</span></div>
+          <div class="escapist-map-stat"><strong>${stats.exact}</strong><span>Exactas</span></div>
+        </div>
+        <div class="escapist-map-toolbar">
+          <button class="auth-btn secondary" type="button" onclick="resetEscapistMapFocus()">Ver todo</button>
+          <button class="auth-btn secondary" type="button" onclick="zoomEscapistMapActive()">Centrar</button>
+        </div>
+      </div>
+      <div class="escapist-map-selection">${escapistMapSelectedCardHtml(active)}</div>
+    </div>`;
+}
+
 function escapistMapFilterHtml() {
   const filters = [
     ['all', 'Todos'],
@@ -4273,6 +4392,8 @@ function escapistMapHtml() {
     PROFILE_MAP_ACTIVE_KEY = containing?.key || clusters[0].key;
   }
   const active = clusters.find(cluster => cluster.key === PROFILE_MAP_ACTIVE_KEY) || clusters[0];
+  const selected = escapistMapSelectedRoom(active);
+  PROFILE_MAP_SELECTED_ROOM_KEY = selected?.key || '';
   const personalRooms = allItems.filter(mapItemHasPersonal).length;
   const groupRooms = allItems.filter(mapItemHasGroup).length;
   const doneRooms = allItems.filter(mapItemHasDone).length;
@@ -4299,27 +4420,8 @@ function escapistMapHtml() {
           </div>
         </div>
       </div>
-      <div class="escapist-map-side">
-        ${escapistMapFilterHtml()}
-        ${escapistMapPrecisionFilterHtml()}
-        <div class="escapist-map-stats">
-          <div class="escapist-map-stat"><strong>${sourceLocations.length}</strong><span>Puntos mapa</span></div>
-          <div class="escapist-map-stat"><strong>${items.length}</strong><span>Salas</span></div>
-          <div class="escapist-map-stat"><strong>${doneRooms}</strong><span>Hechas</span></div>
-          <div class="escapist-map-stat"><strong>${exactLocations}</strong><span>Coords.</span></div>
-          <div class="escapist-map-stat"><strong>${approxLocations}</strong><span>Aprox.</span></div>
-          <div class="escapist-map-stat"><strong>${personalRooms}</strong><span>Personal</span></div>
-          <div class="escapist-map-stat"><strong>${groupRooms}</strong><span>Grupo</span></div>
-        </div>
-        <div class="escapist-map-quality">${exactLocations} puntos exactos · ${approxLocations} aproximados por ciudad o provincia. Los numeros sobre el mapa agrupan salas cercanas: pulsa para ampliar.</div>
-        <div class="escapist-map-toolbar">
-          <button class="auth-btn secondary" type="button" onclick="resetEscapistMapFocus()">Ver todo</button>
-          <button class="auth-btn secondary" type="button" onclick="zoomEscapistMapActive()">Centrar seleccion</button>
-        </div>
-        ${escapistMapZoneListHtml(clusters, active.key)}
-        <div class="escapist-map-city">${escapeHtml(mapClusterTitle(active))}</div>
-        <div class="escapist-map-meta">${escapeHtml(mapClusterMeta(active))}</div>
-        <div class="escapist-map-list">${escapistMapClusterListHtml(active)}</div>
+      <div id="escapist-map-side" class="escapist-map-side ${PROFILE_MAP_SHEET_OPEN ? 'sheet-open' : ''}">
+        ${escapistMapSideHtml(clusters, active, { rooms: items.length, locations: sourceLocations.length, exact: exactLocations })}
       </div>
     </div>
   </div>`;
@@ -4401,11 +4503,11 @@ async function initEscapistLeafletMap() {
     const hasPersonal = cluster.rooms.some(mapItemHasPersonal);
     const hasGroup = cluster.rooms.some(mapItemHasGroup);
     const marker = L.marker(latLng, { icon, title: mapClusterTitle(cluster), roomCount: Math.max(1, cluster.rooms.length), hasDone, hasPending, hasPersonal, hasGroup })
-      .addTo(markerLayer)
-      .bindPopup(escapistMapPopupHtml(cluster), { maxWidth: 300, minWidth: 240 });
+      .addTo(markerLayer);
     marker.on('click', () => {
-      PROFILE_MAP_ACTIVE_KEY = cluster.key;
-      PROFILE_MAP_FOCUS_ACTIVE = true;
+      node.querySelectorAll('.escapist-leaflet-marker.active').forEach(element => element.classList.remove('active'));
+      marker.getElement()?.querySelector('.escapist-leaflet-marker')?.classList.add('active');
+      selectEscapistMapLocation(cluster.key);
     });
   });
   canvas.classList.add('leaflet-ready');
@@ -4422,8 +4524,49 @@ async function initEscapistLeafletMap() {
 
 function openEscapistMapLocation(locationKey) {
   PROFILE_MAP_ACTIVE_KEY = locationKey;
+  PROFILE_MAP_SELECTED_ROOM_KEY = '';
   PROFILE_MAP_FOCUS_ACTIVE = true;
   renderProfile();
+}
+
+function currentEscapistMapModel() {
+  const items = escapistMapFilteredItems(escapistDoneRoomItems());
+  const sourceLocations = escapistMapLocations(items);
+  const clusters = escapistMapClusters(escapistMapPrecisionFilteredLocations(sourceLocations));
+  const active = clusters.find(cluster => cluster.key === PROFILE_MAP_ACTIVE_KEY) || clusters[0];
+  return { items, sourceLocations, clusters, active };
+}
+
+function refreshEscapistMapSide() {
+  const side = document.getElementById('escapist-map-side');
+  if (!side) return;
+  const model = currentEscapistMapModel();
+  if (!model.active) return;
+  side.classList.toggle('sheet-open', PROFILE_MAP_SHEET_OPEN);
+  side.innerHTML = escapistMapSideHtml(model.clusters, model.active, {
+    rooms: model.items.length,
+    locations: model.sourceLocations.length,
+    exact: model.sourceLocations.filter(location => location.exact).length
+  });
+}
+
+function selectEscapistMapLocation(locationKey) {
+  PROFILE_MAP_ACTIVE_KEY = locationKey;
+  PROFILE_MAP_SELECTED_ROOM_KEY = '';
+  PROFILE_MAP_FOCUS_ACTIVE = true;
+  PROFILE_MAP_SHEET_OPEN = true;
+  refreshEscapistMapSide();
+}
+
+function selectEscapistMapRoom(roomKeyValue) {
+  PROFILE_MAP_SELECTED_ROOM_KEY = roomKeyValue;
+  PROFILE_MAP_SHEET_OPEN = true;
+  refreshEscapistMapSide();
+}
+
+function toggleEscapistMapSheet() {
+  PROFILE_MAP_SHEET_OPEN = !PROFILE_MAP_SHEET_OPEN;
+  refreshEscapistMapSide();
 }
 
 function resetEscapistMapFocus() {
@@ -4459,6 +4602,9 @@ function setEscapistMapPrecisionFilter(filter) {
 }
 
 window.openEscapistMapLocation = openEscapistMapLocation;
+window.selectEscapistMapLocation = selectEscapistMapLocation;
+window.selectEscapistMapRoom = selectEscapistMapRoom;
+window.toggleEscapistMapSheet = toggleEscapistMapSheet;
 window.setEscapistMapFilter = setEscapistMapFilter;
 window.setEscapistMapStatusFilter = setEscapistMapStatusFilter;
 window.setEscapistMapPrecisionFilter = setEscapistMapPrecisionFilter;
