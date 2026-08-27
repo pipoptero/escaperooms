@@ -491,6 +491,7 @@
   .escapist-leaflet-map{position:absolute;inset:0;display:none;background:#10120f;z-index:4;}
   .escapist-map-canvas.leaflet-ready .escapist-leaflet-map{display:block;}
   .escapist-map-canvas.leaflet-ready .escapist-map-fallback{display:none;}
+  .escapist-leaflet-map .leaflet-tile-pane{filter:grayscale(1) invert(.88) hue-rotate(180deg) brightness(.62) contrast(1.18);}
   .escapist-leaflet-map .leaflet-control-container{font-family:'Share Tech Mono',monospace;}
   .escapist-leaflet-map .leaflet-control-zoom a{background:rgba(10,10,15,.92);border-color:rgba(125,187,63,.24);color:var(--green);}
   .escapist-leaflet-map .leaflet-control-zoom a:hover{background:rgba(125,187,63,.14);color:var(--amber);}
@@ -4352,9 +4353,9 @@ async function initEscapistLeafletMap() {
     tap: true
   });
   ESCAPIST_LEAFLET_MAP = map;
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    maxZoom: 18,
-    attribution: '&copy; OpenStreetMap &copy; CARTO'
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map);
   const markerLayer = window.L.markerClusterGroup ? L.markerClusterGroup({
     showCoverageOnHover: false,
