@@ -1129,7 +1129,30 @@ def is_terror_room(item):
 def ranking_landing_page(slug, title, h1, description, intro, rows, keyword_note, limit=60):
     canonical = site_url(f"/{slug}/")
     image = site_url("/images/brand/social-card.png")
-    top_rows = rows[:limit]
+    page_limits = {
+        "ranking-escape-rooms": 100,
+        "mejores-escape-rooms": 30,
+        "mejores-escape-rooms-terror": 40,
+    }
+    top_rows = rows[: page_limits.get(slug, limit)]
+    faq_by_slug = {
+        "ranking-escape-rooms": [
+            ("¿Cómo se calcula el ranking de escape rooms?", "La clasificación combina puntuaciones de varias fuentes, reviews de The Vault, votos de la comunidad y premios o nominaciones. También se valora disponer de varias fuentes para reducir el peso de una única nota aislada."),
+            ("¿Cada cuánto se actualiza el ranking?", "El ranking se regenera cuando se incorporan nuevas puntuaciones, reviews, premios o salas al catálogo. Por eso las posiciones pueden cambiar con el tiempo."),
+            ("¿Una nota alta garantiza que sea la mejor sala para mí?", "No. El ranking es una referencia comparativa. La temática, el terror, la dificultad, la ubicación y el tamaño del grupo también influyen en la elección."),
+        ],
+        "mejores-escape-rooms": [
+            ("¿Qué significa mejores escape rooms en esta selección?", "Son salas destacadas dentro del ranking ponderado de The Vault por sus puntuaciones, variedad de fuentes, premios y opiniones disponibles. No es una selección comercial ni implica pago por aparecer."),
+            ("¿Cómo elegir un escape room de la lista?", "Además de la nota, conviene revisar la ciudad, la temática, el número de jugadores, la dificultad y las reviews enlazadas en cada ficha."),
+            ("¿La selección incluye salas de toda España?", "Sí. El catálogo reúne escape rooms de distintas comunidades y ciudades españolas cuando existe información suficiente para construir su ficha."),
+        ],
+        "mejores-escape-rooms-terror": [
+            ("¿Qué salas aparecen en el ranking de terror?", "Aparecen experiencias identificadas como terror, horror o miedo y que cuentan con puntuaciones, premios o reviews suficientes para formar parte de la clasificación."),
+            ("¿Todas las salas tienen la misma intensidad de miedo?", "No. Algunas se centran en tensión y ambientación, mientras otras incluyen actores, persecuciones o terror intenso. Revisa la ficha y la web oficial antes de reservar."),
+            ("¿El ranking de terror se calcula de forma distinta?", "Parte del mismo sistema ponderado del ranking general, pero se limita a salas cuya temática o experiencia está relacionada con terror y miedo."),
+        ],
+    }
+    faqs = faq_by_slug.get(slug, [])
     items = []
     list_items = []
     for idx, item in enumerate(top_rows, 1):
@@ -1180,6 +1203,22 @@ def ranking_landing_page(slug, title, h1, description, intro, rows, keyword_note
             },
         ],
     }
+    if faqs:
+        schema["@graph"].append({
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": question,
+                    "acceptedAnswer": {"@type": "Answer", "text": answer},
+                }
+                for question, answer in faqs
+            ],
+        })
+    faq_html = "".join(
+        f'<details><summary>{escape(question)}</summary><p>{escape(answer)}</p></details>'
+        for question, answer in faqs
+    )
     return f"""<!DOCTYPE html>
 <html lang="es">
 <head>
@@ -1224,6 +1263,14 @@ def ranking_landing_page(slug, title, h1, description, intro, rows, keyword_note
   .rank-link span:not(.pos){{color:var(--muted);}}
   .rank-link em{{grid-column:3;grid-row:1/3;color:var(--amber);font-style:normal;font-weight:700;white-space:nowrap;}}
   .note{{margin-top:22px;border-top:1px solid rgba(255,255,255,.08);padding-top:16px;color:var(--muted);font-size:.92rem;}}
+  .method{{margin-top:22px;border:1px solid rgba(125,187,63,.2);background:rgba(125,187,63,.035);padding:18px;}}
+  .method h2,.faq h2{{font-family:Georgia,serif;font-size:1.45rem;margin:0 0 8px;}}
+  .method p{{margin:6px 0;}}
+  .updated{{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.08em;}}
+  .faq{{margin-top:24px;}}
+  .faq details{{border-top:1px solid rgba(255,255,255,.1);padding:12px 0;}}
+  .faq summary{{cursor:pointer;color:var(--text);font-weight:700;}}
+  .faq details p{{margin:8px 0 0;}}
   @media(max-width:680px){{main{{width:min(100% - 22px,1040px);padding-top:20px;}}.hero{{padding:16px;}}.rank-link{{grid-template-columns:44px minmax(0,1fr);}}.rank-link em{{grid-column:2;grid-row:auto;}}}}
 </style>
 </head>
@@ -1248,7 +1295,17 @@ def ranking_landing_page(slug, title, h1, description, intro, rows, keyword_note
   <div class="list">
     {''.join(items)}
   </div>
-  <p class="note">{escape(keyword_note)}</p>
+  <section class="method" aria-labelledby="metodologia-ranking">
+    <div class="updated">Actualizado el {TODAY}</div>
+    <h2 id="metodologia-ranking">Cómo elaboramos esta selección</h2>
+    <p>{escape(keyword_note)}</p>
+    <p>Las fichas enlazadas permiten consultar las puntuaciones y señales disponibles para cada sala. El resultado es orientativo, independiente y puede variar cuando se incorporan datos nuevos.</p>
+  </section>
+  <section class="faq" aria-labelledby="preguntas-ranking">
+    <h2 id="preguntas-ranking">Preguntas frecuentes</h2>
+    {faq_html}
+  </section>
+  <p class="note">Consulta también el <a href="../aviso-legal/">aviso legal y la explicación de fuentes</a> de The Vault Escape.</p>
 </main>
 </body>
 </html>
