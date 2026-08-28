@@ -50,7 +50,7 @@ jobs:
           mkdir -p public-site
           cp index.html public-site/
           cp CNAME data.json catalog.json external_ratings.json extra_awards.json terpeca_awards.json official_videos.json published_reviews.json public-site/
-          cp review_photos.json room_aliases.json room_locations.json site_stats.json robots.txt sitemap.xml llms.txt public-site/
+          cp review_photos.json room_aliases.json room_locations.json site_stats.json robots.txt sitemap.xml video-sitemap.xml llms.txt public-site/
           cp site.webmanifest service-worker.js public-site/
           cp -R aviso-legal condiciones cookies privacidad ranking ranking-escape-rooms mejores-escape-rooms mejores-escape-rooms-terror escape-rooms reviews salas public-site/
           find . -maxdepth 1 -type d -name 'escape-rooms-*' -exec cp -R {} public-site/ \;
