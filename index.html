@@ -605,6 +605,9 @@
   .escapist-map-room{border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.022);padding:8px 9px;}
   .escapist-map-room-name{font-family:'Cinzel',serif;color:var(--text);font-size:.86rem;line-height:1.16;}
   .escapist-map-room-sub{font-family:'Share Tech Mono',monospace;font-size:.52rem;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;margin-top:3px;line-height:1.35;}
+  .escapist-map-experiences{display:grid;gap:3px;margin-top:8px;padding-top:7px;border-top:1px solid rgba(255,255,255,.07);font-family:'Share Tech Mono',monospace;text-transform:uppercase;line-height:1.35;}
+  .escapist-map-experiences strong{color:var(--green);font-size:.48rem;letter-spacing:.08em;}
+  .escapist-map-experiences span{color:var(--text3);font-size:.5rem;letter-spacing:.04em;}
   .escapist-map-empty{font-family:'Share Tech Mono',monospace;color:var(--text3);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;line-height:1.55;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);padding:12px;}
   .group-room-control{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.02);padding:11px 12px;margin-top:10px;}
   .group-room-title{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--text3);letter-spacing:.13em;text-transform:uppercase;margin-bottom:8px;}
@@ -2283,6 +2286,21 @@ let REVIEW_ROOM_ALIASES = {
 };
 let REVIEW_ROOM_ALIAS_GROUPS = {};
 let REVIEW_ROOM_META = {};
+const ROOM_EXPERIENCE_FAMILIES = [
+  {
+    id: 'krugger-hotel',
+    parentId: 'el-secreto-de-los-krugger',
+    parentName: 'El Secreto de los Krugger',
+    members: [
+      { id: 'aradia-insomnia-hotel', name: 'Aradia' },
+      { id: 'xperiment-insomnia-hotel', name: 'Xperiment' },
+      { id: 'madre-insomnia-hotel', name: 'Madre' },
+      { id: 'doctor-insomnia-hotel', name: 'Doctor' },
+      { id: 'sr-krugger-insomnia-hotel', name: 'Sr. Krugger' },
+      { id: 'jack-insomnia-hotel', name: 'Jack' }
+    ]
+  }
+];
 
 let PENDIENTES = [], HECHOS = [], CATALOGO = [], TERPECA_AWARDS = [], EXTRA_AWARDS = [], EXTERNAL_RATINGS = {}, EXTERNAL_RATINGS_META = {}, REVIEW_PHOTOS = {}, OFFICIAL_VIDEOS = {}, ROOM_LOCATIONS = {}, sortPend = 'rating', sortMine = 'rating', sortCatalogo = 'awards', sortRank = 'global', rankTerrorFilter = 'all', rankCommunityFilter = '';
 const CATALOG_PAGE_SIZE = 120;
@@ -3939,6 +3957,72 @@ function mapCatalogRoomFor(room, rawKey = '') {
     && compactKey(candidate.nombre).replace(/(.)\1+/g, '$1') === name) || null;
 }
 
+function experienceFamilyForMapItem(item) {
+  const room = item?.room || {};
+  const identities = new Set([
+    item?.key,
+    room.id,
+    room.nombre,
+    userRoomKey(room),
+    slugify(room.id || ''),
+    slugify(room.nombre || '')
+  ].map(slugify).filter(Boolean));
+  return ROOM_EXPERIENCE_FAMILIES.find(family => {
+    if (identities.has(slugify(family.parentId)) || identities.has(slugify(family.parentName))) return true;
+    return family.members.some(member => identities.has(slugify(member.id)) || identities.has(slugify(member.name)));
+  }) || null;
+}
+
+function mergeMapExperienceFamilies(items) {
+  const grouped = new Map();
+  const standalone = [];
+  items.forEach(item => {
+    const family = experienceFamilyForMapItem(item);
+    if (!family) {
+      standalone.push(item);
+      return;
+    }
+    if (!grouped.has(family.id)) grouped.set(family.id, { family, items: [] });
+    grouped.get(family.id).items.push(item);
+  });
+  grouped.forEach(({ family, items: familyItems }) => {
+    const parentRoom = CATALOGO.find(room => slugify(room.id || '') === slugify(family.parentId))
+      || familyItems.find(item => slugify(item.room?.nombre || '') === slugify(family.parentName))?.room
+      || familyItems[0]?.room
+      || {};
+    const parentItem = familyItems.find(item => slugify(item.room?.id || '') === slugify(family.parentId));
+    const completedExperiences = familyItems.map(item => ({
+      id: item.room?.id || item.key,
+      name: item.room?.nombre || item.key,
+      personal: !!item.personal,
+      groups: (item.groups || []).map(group => group.name || 'Grupo')
+    }));
+    const groups = [];
+    const pendingGroups = [];
+    familyItems.forEach(item => {
+      (item.groups || []).forEach(group => {
+        if (!groups.some(existing => existing.groupId === group.groupId)) groups.push(group);
+      });
+      (item.pendingGroups || []).forEach(group => {
+        if (!pendingGroups.some(existing => existing.groupId === group.groupId)) pendingGroups.push(group);
+      });
+    });
+    standalone.push({
+      ...(parentItem || familyItems[0]),
+      key: slugify(family.parentId),
+      room: { ...parentRoom },
+      personal: familyItems.some(item => item.personal),
+      personalRecord: parentItem?.personalRecord || familyItems.find(item => item.personalRecord)?.personalRecord || null,
+      groups,
+      personalPending: familyItems.some(item => item.personalPending),
+      pendingGroups,
+      experienceFamily: family,
+      completedExperiences
+    });
+  });
+  return standalone;
+}
+
 function escapistMapRoomItems() {
   const byKey = new Map();
   const identityIndex = new Map();
@@ -4001,7 +4085,8 @@ function escapistMapRoomItems() {
       if (!item.pendingGroups.some(g => g.groupId === groupId)) item.pendingGroups.push({ groupId, name });
     });
   });
-  return [...byKey.values()].filter(item => mapItemHasDone(item) || mapItemHasPending(item));
+  const items = [...byKey.values()].filter(item => mapItemHasDone(item) || mapItemHasPending(item));
+  return mergeMapExperienceFamilies(items);
 }
 
 function escapistDoneRoomItems() {
@@ -4146,6 +4231,13 @@ function escapistMapDoneSourceTagsHtml(item) {
   ].filter(Boolean).join('');
 }
 
+function escapistMapExperienceHtml(item) {
+  if (!item?.experienceFamily || !item?.completedExperiences?.length) return '';
+  const names = [...new Set(item.completedExperiences.map(experience => experience.name).filter(Boolean))];
+  if (!names.length) return '';
+  return `<div class="escapist-map-experiences"><strong>Experiencias realizadas</strong><span>${names.map(escapeHtml).join(' · ')}</span></div>`;
+}
+
 function escapistMapPopupHtml(cluster) {
   if (cluster.rooms.length > 1) {
     return `<div class="escapist-map-popup-group">
@@ -4172,6 +4264,7 @@ function escapistMapPopupHtml(cluster) {
       <div class="escapist-map-popup-title">${escapeHtml(room.nombre || mapClusterTitle(cluster) || 'Escape room')}</div>
       <div class="escapist-map-popup-meta">${escapeHtml([room.empresa, room.ciudad, room.provincia].filter(Boolean).join(' - ') || mapClusterMeta(cluster))}</div>
       <div class="profile-group-rooms">${escapistMapDoneSourceTagsHtml(first)}</div>
+      ${escapistMapExperienceHtml(first)}
       ${more}
       <button class="auth-btn secondary" type="button" onclick="openProfileRoomDetail('${ref.kind}','${jsString(ref.key)}')">Ver sala</button>
     </div>
@@ -4185,6 +4278,7 @@ function escapistMapRoomHtml(item) {
     <div class="escapist-map-room-name">${escapeHtml(room.nombre || item.key || 'Sala')}</div>
     <div class="escapist-map-room-sub">${escapeHtml([room.empresa, room.ciudad].filter(Boolean).join(' - ') || 'Escape room')}</div>
     <div class="profile-group-rooms">${escapistMapDoneSourceTagsHtml(item)}</div>
+    ${escapistMapExperienceHtml(item)}
     <div class="profile-group-actions" style="margin-top:7px">
       <button class="auth-btn secondary" type="button" onclick="openProfileRoomDetail('${ref.kind}','${jsString(ref.key)}')">Ver sala</button>
     </div>
@@ -4247,6 +4341,7 @@ function escapistMapSelectedCardHtml(cluster) {
         <div><dt>Fecha</dt><dd>${escapeHtml(date || 'No registrada')}</dd></div>
       </dl>
       <div class="profile-group-rooms">${escapistMapDoneSourceTagsHtml(item)}</div>
+      ${escapistMapExperienceHtml(item)}
       <button class="auth-btn escapist-map-detail-btn" type="button" onclick="openProfileRoomDetail('${ref.kind}','${jsString(ref.key)}')">Ver ficha completa</button>
     </div>
   </article>

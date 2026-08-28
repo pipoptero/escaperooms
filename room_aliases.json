@@ -25,10 +25,6 @@
     "high_school": "highschool",
     "high_school_unreal_room_escape": "highschool",
     "highschool_unreal_room_escape": "highschool",
-    "aradia": "el_secreto_de_los_krugger",
-    "aradia_insomnia_hotel": "el_secreto_de_los_krugger",
-    "xperiment": "el_secreto_de_los_krugger",
-    "xperiment_insomnia_hotel": "el_secreto_de_los_krugger",
     "el_secreto_de_los_krugger_insomnia_corp": "el_secreto_de_los_krugger",
     "el_secreto_de_los_krugger_insomnia_corporation": "el_secreto_de_los_krugger",
     "londium_saga_escape_room": "londium",
@@ -153,13 +149,9 @@
       "canonical_company": "Insomnia Corporation",
       "aliases": [
         "El secreto de los Krugger",
-        "El Secreto de los Krugger",
-        "Aradia",
-        "Aradia (Insomnia Hotel)",
-        "Xperiment",
-        "Xperiment (Insomnia Hotel)"
+        "El Secreto de los Krugger"
       ],
-      "notes": "Aradia y Xperiment forman parte de la experiencia global El Secreto de los Krugger."
+      "notes": "Experiencia principal de Insomnia Corporation. Sus habitaciones tematicas se conservan como experiencias independientes y solo se agrupan bajo esta ficha en el mapa."
     }
   }
 }
