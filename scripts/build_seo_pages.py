@@ -1836,13 +1836,16 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
         schema["@graph"][1]["image"] = [image] + [asset_url(photo.get("src")) for photo in photos if photo.get("src")]
     video_upload_date = text(video.get("upload_date"))
     if video_html and video_upload_date:
+        direct_video_url = text(video.get("video_url"))
+        if video_provider in {"youtube", "vimeo"}:
+            direct_video_url = ""
         video_schema = {
             "@type": "VideoObject",
             "name": text(video.get("label")) or f"Vídeo oficial de {name}",
             "description": f"Vídeo de introducción oficial de la experiencia {name}{' de ' + company if company else ''}.",
             "thumbnailUrl": video_thumbnail or image,
             "embedUrl": video_url if video_provider in {"youtube", "vimeo"} else None,
-            "contentUrl": text(video.get("video_url")) or video_url,
+            "contentUrl": direct_video_url or (video_url if video_provider not in {"youtube", "vimeo"} else None),
             "uploadDate": video_upload_date,
             "isPartOf": {"@id": canonical},
         }
@@ -1926,11 +1929,58 @@ def sitemap_xml(review_rooms, sala_rows, location_specs=None):
     return f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{body}\n</urlset>\n'
 
 
+def video_sitemap_xml(sala_rows, videos_data):
+    entries = []
+    seen_pages = set()
+    for item in sala_rows:
+        room = item.get("room") or {}
+        video = video_entry(room, videos_data or {})
+        upload_date = text(video.get("upload_date"))
+        thumbnail = text(video.get("thumbnail"))
+        provider = folded(video.get("provider"))
+        embed_url = text(video.get("embed_url") or video.get("video_url"))
+        direct_url = text(video.get("video_url")) if provider not in {"youtube", "vimeo"} else ""
+        if not upload_date or not thumbnail or not (embed_url or direct_url):
+            continue
+        if not thumbnail.startswith(("http://", "https://")):
+            thumbnail = asset_url(thumbnail)
+        page_url = site_url(f"/salas/{seo_room_url_slug(room)}/")
+        if page_url in seen_pages:
+            continue
+        seen_pages.add(page_url)
+        name = canonical_room_name(room) or "Escape room"
+        company = canonical_room_company(room)
+        title = text(video.get("label")) or f"Vídeo oficial de {name}"
+        description = f"Vídeo de introducción oficial de la experiencia {name}{' de ' + company if company else ''}."
+        source_tag = "video:player_loc" if provider in {"youtube", "vimeo"} else "video:content_loc"
+        source_url = embed_url if provider in {"youtube", "vimeo"} else (direct_url or embed_url)
+        entries.append(
+            "  <url>\n"
+            f"    <loc>{escape(page_url)}</loc>\n"
+            "    <video:video>\n"
+            f"      <video:thumbnail_loc>{escape(thumbnail)}</video:thumbnail_loc>\n"
+            f"      <video:title>{escape(title)}</video:title>\n"
+            f"      <video:description>{escape(description)}</video:description>\n"
+            f"      <{source_tag}>{escape(source_url)}</{source_tag}>\n"
+            f"      <video:publication_date>{escape(upload_date)}</video:publication_date>\n"
+            "    </video:video>\n"
+            "  </url>"
+        )
+    body = "\n".join(entries)
+    return (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" '
+        'xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">\n'
+        f"{body}\n</urlset>\n"
+    )
+
+
 def robots_txt():
     return f"""User-agent: *
 Allow: /
 
 Sitemap: {site_url('/sitemap.xml')}
+Sitemap: {site_url('/video-sitemap.xml')}
 """
 
 
@@ -2096,6 +2146,7 @@ def main():
     stats_json = site_stats_json(rooms, sala_rows, location_specs)
     update_inline_site_stats(stats_json)
     (ROOT / "sitemap.xml").write_text(sitemap_xml(rooms, sala_rows, location_specs), encoding="utf-8", newline="\n")
+    (ROOT / "video-sitemap.xml").write_text(video_sitemap_xml(sala_rows, videos_data), encoding="utf-8", newline="\n")
     (ROOT / "robots.txt").write_text(robots_txt(), encoding="utf-8", newline="\n")
     (ROOT / "llms.txt").write_text(llms_txt(), encoding="utf-8", newline="\n")
     (ROOT / "site_stats.json").write_text(stats_json, encoding="utf-8", newline="\n")
@@ -2105,7 +2156,7 @@ def main():
         f"{len(sala_rows)} salas, "
         f"{len(location_specs)} landings por ubicacion, "
         f"{len(generated_review_pages)} tarjetas sociales, "
-        "ranking, landings SEO, sitemap.xml, robots.txt y llms.txt"
+        "ranking, landings SEO, sitemap.xml, video-sitemap.xml, robots.txt y llms.txt"
     )
 
 

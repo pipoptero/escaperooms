@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://thevaultescape.com/sitemap.xml
+Sitemap: https://thevaultescape.com/video-sitemap.xml
