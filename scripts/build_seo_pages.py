@@ -1,3 +1,4 @@
+import argparse
 import json
 import re
 import shutil
@@ -24,6 +25,200 @@ CITY_PAGE_MIN_ROOMS = 8
 REGION_PAGE_MIN_ROOMS = 10
 ROOM_LOCATIONS_CACHE = None
 SEO_ROOM_SLUGS = {}
+
+SEO_STYLES = """
+:root {
+  --bg: #0a0a0f;
+  --bg2: #0f0f18;
+  --bg3: #141422;
+  --card: #12121e;
+  --border: #2a2a45;
+  --green: #7dbb3f;
+  --green-dark: #5f9f32;
+  --gold: #f0f0ea;
+  --text: #e8e8f0;
+  --text2: #9090b0;
+  --text3: #5a5a80;
+}
+* { box-sizing: border-box; }
+html { color-scheme: dark; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 17px;
+  line-height: 1.55;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .25;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+}
+a { color: var(--green); }
+img { max-width: 100%; }
+.skip-link { position: fixed; left: 12px; top: -80px; z-index: 100; background: var(--green); color: #081005; padding: 9px 12px; text-decoration: none; }
+.skip-link:focus { top: 12px; }
+.site-header { border-bottom: 1px solid var(--border); background: rgba(10,10,15,.97); }
+.site-header-inner {
+  width: min(1180px, calc(100% - 40px));
+  min-height: 78px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(190px, 1fr) auto auto;
+  align-items: center;
+  gap: 24px;
+}
+.site-brand { display: inline-flex; align-items: center; width: fit-content; text-decoration: none; }
+.site-brand img { display: block; width: 228px; height: auto; }
+.site-nav { display: flex; align-items: stretch; gap: 4px; }
+.site-nav a,
+.site-app-link {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  padding: 7px 10px;
+  color: var(--text2);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: .68rem;
+  letter-spacing: .08em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.site-nav a:hover,
+.site-nav a:focus-visible,
+.site-nav a[aria-current='page'] { border-color: rgba(125,187,63,.34); color: var(--green); background: rgba(125,187,63,.06); }
+.site-app-link { border-color: rgba(125,187,63,.4); color: var(--green); background: rgba(125,187,63,.07); }
+.seo-main,
+.wrap { width: min(1120px, calc(100% - 40px)); margin: 0 auto; padding: 38px 0 60px; }
+.page-intro { padding: 8px 0 24px; border-bottom: 1px solid var(--border); }
+.kicker,
+.updated {
+  color: var(--green);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: .68rem;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+h1, h2, h3, .rank-link strong, .review-link strong, .location-link strong {
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0;
+}
+h1 { margin: 8px 0 12px; color: var(--gold); font-size: clamp(2rem, 5vw, 3.7rem); line-height: 1.05; }
+h2 { margin: 0 0 12px; color: var(--gold); font-size: 1.35rem; }
+p { color: var(--text2); }
+.lead { max-width: 900px; margin: 0; font-size: 1.08rem; }
+.detail-hero { display: grid; grid-template-columns: minmax(220px, 360px) minmax(0, 1fr); gap: 30px; align-items: start; }
+.cover { width: 100%; max-height: 540px; object-fit: contain; background: #050507; border: 1px solid rgba(255,255,255,.09); }
+.company { color: var(--text3); font-family: 'Share Tech Mono', monospace; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; }
+.meta, .summary, .nav, .actions, .internal-links { display: flex; flex-wrap: wrap; gap: 8px; }
+.meta { margin: 18px 0; }
+.pill, .summary span { border: 1px solid rgba(125,187,63,.24); background: rgba(125,187,63,.055); color: #cde3bc; padding: 5px 8px; font-size: .86rem; }
+.score { display: inline-flex; margin: 8px 0 14px; border: 1px solid rgba(125,187,63,.4); background: rgba(125,187,63,.08); color: var(--green); padding: 8px 12px; font-family: 'Cinzel', serif; font-weight: 700; }
+.section { margin-top: 24px; border-top: 1px solid var(--border); padding: 20px 0 0; }
+.review { color: #cfcfdb; white-space: pre-line; }
+.cats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.cat, .fact { border: 1px solid rgba(255,255,255,.08); background: var(--bg2); padding: 11px; }
+.cat span, .fact dt { display: block; color: var(--text3); font-family: 'Share Tech Mono', monospace; font-size: .62rem; letter-spacing: .08em; text-transform: uppercase; }
+.cat strong { color: var(--green); font-size: 1.25rem; }
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 0; }
+.fact { min-width: 0; }
+.fact dd { margin: 4px 0 0; color: var(--text); overflow-wrap: anywhere; }
+.photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; }
+.photos img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border: 1px solid rgba(125,187,63,.22); background: #050507; }
+.video-frame { width: 100%; aspect-ratio: 16/9; display: block; border: 1px solid rgba(125,187,63,.24); background: #050507; }
+.media-note, .note, .explain { color: var(--text2); }
+.share, .method { margin-top: 20px; border-left: 2px solid var(--green); background: rgba(125,187,63,.035); padding: 14px 16px; }
+.share strong { display: block; color: var(--gold); font-family: 'Cinzel', serif; }
+.share span { display: block; color: var(--text2); margin: 4px 0 10px; }
+.actions { margin-top: 18px; }
+.btn, .nav a {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(125,187,63,.34);
+  background: rgba(125,187,63,.065);
+  color: var(--green);
+  padding: 8px 12px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: .68rem;
+  letter-spacing: .08em;
+  text-decoration: none;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.btn.secondary { border-color: rgba(255,255,255,.12); background: rgba(255,255,255,.025); color: var(--text2); }
+.list { display: grid; gap: 9px; margin-top: 24px; }
+.rank-link {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  gap: 6px 12px;
+  align-items: center;
+  border: 1px solid rgba(255,255,255,.08);
+  background: var(--bg2);
+  padding: 13px;
+  text-decoration: none;
+}
+.rank-link:hover, .review-link:hover, .location-link:hover { border-color: rgba(125,187,63,.4); background: rgba(125,187,63,.045); }
+.rank-link .pos { grid-row: 1/3; color: var(--green); font-family: 'Share Tech Mono', monospace; font-weight: 700; }
+.rank-link strong { color: var(--gold); font-size: 1.02rem; }
+.rank-link span:not(.pos) { color: var(--text2); }
+.rank-link em { grid-column: 3; grid-row: 1/3; color: var(--green); font-style: normal; font-weight: 700; white-space: nowrap; }
+.review-link { display: block; border: 1px solid rgba(255,255,255,.08); background: var(--bg2); padding: 14px; text-decoration: none; }
+.review-link strong { display: block; color: var(--gold); font-size: 1.05rem; }
+.review-link span { display: block; color: var(--text2); margin-top: 3px; }
+.summary { margin-top: 16px; }
+.method h2, .faq h2 { margin-top: 0; }
+.faq { margin-top: 26px; }
+.faq details { border-top: 1px solid rgba(255,255,255,.1); padding: 12px 0; }
+.faq summary { color: var(--text); font-weight: 700; cursor: pointer; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+.section-label { margin: 30px 0 12px; color: var(--green); font-family: 'Share Tech Mono', monospace; font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; }
+.location-link { display: flex; justify-content: space-between; gap: 10px; align-items: center; border: 1px solid rgba(255,255,255,.08); background: var(--bg2); padding: 12px; color: var(--text); text-decoration: none; }
+.location-link span { color: var(--text2); font-size: .82rem; white-space: nowrap; }
+.site-footer { border-top: 1px solid var(--border); background: var(--bg2); }
+.site-footer-inner { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 24px 0 30px; display: flex; justify-content: space-between; gap: 22px; align-items: center; }
+.site-footer strong { display: block; color: var(--gold); font-family: 'Cinzel', serif; }
+.site-footer span { display: block; color: var(--text3); font-family: 'Share Tech Mono', monospace; font-size: .62rem; letter-spacing: .06em; text-transform: uppercase; }
+.footer-links { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 12px; }
+.footer-links a { color: var(--text2); font-family: 'Share Tech Mono', monospace; font-size: .62rem; letter-spacing: .06em; text-decoration: none; text-transform: uppercase; }
+@media (max-width: 860px) {
+  .site-header-inner { grid-template-columns: 1fr auto; gap: 12px; padding: 12px 0; }
+  .site-brand img { width: 190px; }
+  .site-nav { grid-column: 1/-1; overflow-x: auto; padding-top: 2px; }
+  .site-nav a { flex: 0 0 auto; }
+  .detail-hero { grid-template-columns: 1fr; }
+  .cover { max-height: 430px; }
+  .facts { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 620px) {
+  body { font-size: 16px; }
+  .site-header-inner, .seo-main, .wrap, .site-footer-inner { width: min(100% - 24px, 1120px); }
+  .site-header-inner { display: flex; flex-wrap: wrap; }
+  .site-brand { flex: 1; }
+  .site-brand img { width: 168px; }
+  .site-app-link { min-height: 34px; padding: 6px 8px; }
+  .site-nav { width: 100%; order: 3; }
+  .seo-main, .wrap { padding-top: 24px; }
+  .cats, .facts { grid-template-columns: 1fr 1fr; }
+  .rank-link { grid-template-columns: 42px minmax(0, 1fr); }
+  .rank-link em { grid-column: 2; grid-row: auto; }
+  .site-footer-inner { align-items: flex-start; flex-direction: column; }
+  .footer-links { justify-content: flex-start; }
+}
+@media (max-width: 420px) {
+  .facts { grid-template-columns: 1fr; }
+}
+"""
 
 TEXT_FIXES = {
     "Espa�a": "España",
@@ -716,7 +911,90 @@ def generate_latest_review_thumbnail(room, photos):
     return (LATEST_REVIEW_THUMB_DIR / f"{slugs[0]}.webp").as_posix()
 
 
-def base_head(title, description, canonical, image):
+def seo_header(active=""):
+    links = [
+        ("catalog", "/escape-rooms/", "Catálogo"),
+        ("reviews", "/reviews/", "Reviews"),
+        ("ranking", "/ranking-escape-rooms/", "Ranking"),
+        ("terror", "/mejores-escape-rooms-terror/", "Terror"),
+    ]
+    nav_items = []
+    for key, href, label in links:
+        current = ' aria-current="page"' if key == active else ""
+        nav_items.append(f'<a href="{href}"{current}>{label}</a>')
+    nav = "".join(nav_items)
+    return f"""
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="site-brand" href="/" aria-label="The Vault Escape - Inicio">
+      <img src="/images/brand/the-vault-wordmark-wide.webp" alt="The Vault Escape" width="1000" height="206">
+    </a>
+    <nav class="site-nav" aria-label="Navegación principal">{nav}</nav>
+    <a class="site-app-link" href="/">Abrir The Vault</a>
+  </div>
+</header>
+"""
+
+
+def seo_footer():
+    return """
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <div><strong>The Vault Escape</strong><span>Escape Room Chronicles</span></div>
+    <nav class="footer-links" aria-label="Enlaces legales">
+      <a href="/aviso-legal/">Aviso legal</a>
+      <a href="/privacidad/">Privacidad</a>
+      <a href="/escape-rooms/">Escape rooms por zona</a>
+      <a href="https://www.instagram.com/thevault_escape/" target="_blank" rel="noopener">Instagram</a>
+    </nav>
+  </div>
+</footer>
+"""
+
+
+def legacy_seo_page(name, canonical, target="", retired=False):
+    if retired:
+        title = f"{name}: sala cerrada | {SITE_NAME}"
+        description = f"La ficha de {name} se ha retirado del catálogo público porque la sala está cerrada."
+        message = "Esta sala está cerrada y su ficha ya no forma parte del catálogo público."
+        action_label = "Explorar el catálogo actual"
+        action_url = site_url("/escape-rooms/")
+        redirect_meta = ""
+    else:
+        title = f"{name}: nueva dirección | {SITE_NAME}"
+        description = f"La ficha de {name} se ha unificado y ahora está disponible en una única dirección."
+        message = "Esta ficha se ha unificado para evitar contenido duplicado. Te llevamos a su dirección actual."
+        action_label = "Abrir la ficha actual"
+        action_url = target
+        redirect_meta = f'<meta http-equiv="refresh" content="0; url={escape(target)}">'
+    return base_head(
+        title,
+        description,
+        canonical,
+        site_url("/images/brand/social-card.png"),
+        "website",
+        "noindex, follow",
+    ) + f"""
+{redirect_meta}
+</head>
+<body>
+{seo_header("catalog")}
+<main class="seo-main" id="contenido">
+  <section class="page-intro">
+    <div class="kicker">Catálogo The Vault</div>
+    <h1>{escape(name)}</h1>
+    <p class="lead">{escape(message)}</p>
+    <div class="actions"><a class="btn" href="{escape(action_url)}">{escape(action_label)}</a></div>
+  </section>
+</main>
+{seo_footer()}
+</body>
+</html>
+"""
+
+
+def base_head(title, description, canonical, image, og_type="article", robots="index, follow, max-image-preview:large"):
     return f"""<!DOCTYPE html>
 <html lang="es">
 <head>
@@ -724,13 +1002,17 @@ def base_head(title, description, canonical, image):
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{escape(title)}</title>
 <meta name="description" content="{escape(description)}">
-<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="robots" content="{escape(robots)}">
 <meta name="author" content="{SITE_NAME}">
 <link rel="canonical" href="{escape(canonical)}">
 <meta name="theme-color" content="#0a0a0f">
-<link rel="icon" href="../../images/brand/favicon-round-32.png" sizes="32x32" type="image/png">
-<link rel="apple-touch-icon" href="../../images/brand/apple-touch-icon-round.png">
-<meta property="og:type" content="article">
+<link rel="icon" href="/images/brand/favicon-round-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/images/brand/apple-touch-icon-round.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/seo.css">
+<meta property="og:type" content="{escape(og_type)}">
 <meta property="og:site_name" content="{SITE_NAME}">
 <meta property="og:title" content="{escape(title)}">
 <meta property="og:description" content="{escape(description)}">
@@ -742,50 +1024,6 @@ def base_head(title, description, canonical, image):
 <meta name="twitter:title" content="{escape(title)}">
 <meta name="twitter:description" content="{escape(description)}">
 <meta name="twitter:image" content="{escape(image)}">
-<style>
-  :root {{ --bg:#0a0a0f; --card:#12121e; --border:#2a2a45; --green:#7dbb3f; --text:#f0f0ea; --muted:#9a9ab6; --soft:#151522; }}
-  * {{ box-sizing:border-box; }}
-  body {{ margin:0; background:radial-gradient(ellipse at top,rgba(125,187,63,.12),transparent 36%),var(--bg); color:var(--text); font-family:Arial,Helvetica,sans-serif; line-height:1.55; }}
-  a {{ color:var(--green); }}
-  .wrap {{ width:min(1020px,calc(100% - 32px)); margin:0 auto; padding:28px 0 44px; }}
-  .brand {{ display:flex; align-items:center; gap:12px; margin-bottom:26px; color:var(--muted); text-decoration:none; text-transform:uppercase; letter-spacing:.12em; font-size:.72rem; }}
-  .brand img {{ width:42px; height:42px; border-radius:50%; object-fit:cover; }}
-  .hero {{ display:grid; grid-template-columns:minmax(220px,360px) minmax(0,1fr); gap:24px; align-items:start; border:1px solid rgba(125,187,63,.25); background:linear-gradient(135deg,rgba(255,255,255,.035),rgba(125,187,63,.04)); padding:22px; }}
-  .cover {{ width:100%; max-height:520px; object-fit:contain; background:#050507; border:1px solid rgba(255,255,255,.08); }}
-  .kicker {{ color:var(--green); text-transform:uppercase; letter-spacing:.16em; font-size:.72rem; margin-bottom:8px; }}
-  h1 {{ margin:.1em 0 .25em; font-family:Georgia,serif; font-size:clamp(2rem,5vw,3.8rem); line-height:1.02; }}
-  .company {{ color:var(--muted); text-transform:uppercase; letter-spacing:.08em; font-size:.84rem; }}
-  .meta {{ display:flex; flex-wrap:wrap; gap:8px; margin:18px 0; }}
-  .pill {{ border:1px solid rgba(125,187,63,.22); background:rgba(125,187,63,.06); color:#dbead2; padding:5px 8px; font-size:.86rem; }}
-  .score {{ display:inline-flex; margin:8px 0 14px; border:1px solid rgba(125,187,63,.32); background:rgba(125,187,63,.08); color:var(--green); padding:8px 12px; font-weight:700; font-size:1.15rem; }}
-  .share {{ margin:18px 0 4px; border:1px solid rgba(125,187,63,.24); background:rgba(125,187,63,.055); padding:13px; }}
-  .share strong {{ display:block; color:var(--text); font-family:Georgia,serif; font-size:1.08rem; margin-bottom:4px; }}
-  .share span {{ display:block; color:var(--muted); font-size:.9rem; margin-bottom:10px; }}
-  .section {{ margin-top:24px; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.025); padding:18px; }}
-  h2 {{ margin:0 0 10px; font-family:Georgia,serif; font-size:1.35rem; }}
-  .review {{ color:#d9d9e3; white-space:pre-line; }}
-  .cats {{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }}
-  .cat {{ border:1px solid rgba(255,255,255,.08); background:rgba(0,0,0,.16); padding:10px; }}
-  .cat span {{ display:block; color:var(--muted); font-size:.75rem; text-transform:uppercase; letter-spacing:.08em; }}
-  .cat strong {{ color:var(--green); font-size:1.25rem; }}
-  .photos {{ display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:10px; }}
-  .photos img {{ width:100%; aspect-ratio:4/3; object-fit:cover; border:1px solid rgba(125,187,63,.22); background:#050507; }}
-  .video-frame {{ width:100%; aspect-ratio:16/9; display:block; border:1px solid rgba(125,187,63,.24); background:#050507; }}
-  iframe.video-frame {{ border:1px solid rgba(125,187,63,.24); }}
-  .media-note {{ color:var(--muted); font-size:.85rem; margin:9px 0 0; }}
-  .facts {{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:0; }}
-  .fact {{ min-width:0; border:1px solid rgba(255,255,255,.08); background:rgba(0,0,0,.16); padding:11px; }}
-  .fact dt {{ color:var(--muted); font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; }}
-  .fact dd {{ margin:3px 0 0; color:var(--text); overflow-wrap:anywhere; }}
-  .internal-links {{ display:flex; flex-wrap:wrap; gap:9px; }}
-  .explain {{ color:#c6c6d4; margin:0; }}
-  .actions {{ display:flex; gap:10px; flex-wrap:wrap; margin-top:20px; }}
-  .btn {{ display:inline-flex; align-items:center; justify-content:center; min-height:42px; padding:9px 13px; border:1px solid rgba(125,187,63,.32); background:rgba(125,187,63,.07); color:var(--green); text-decoration:none; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; cursor:pointer; }}
-  button.btn {{ font-family:inherit; }}
-  .btn.secondary {{ border-color:rgba(255,255,255,.12); background:rgba(255,255,255,.025); color:var(--muted); }}
-  @media(max-width:720px) {{ .hero {{ grid-template-columns:1fr; padding:16px; }} .cover {{ max-height:360px; }} .cats,.facts {{ grid-template-columns:1fr 1fr; }} .wrap {{ width:min(100% - 22px,1020px); padding-top:18px; }} }}
-  @media(max-width:440px) {{ .facts {{ grid-template-columns:1fr; }} }}
-</style>
 """
 
 
@@ -795,6 +1033,7 @@ def review_page(room, photos, social_image_path=""):
     slug = room_url_slug(room)
     canonical = site_url(f"/reviews/{slug}/")
     app_link = site_url(f"/#review/{app_hash_key(room)}")
+    room_link = site_url(f"/salas/{seo_room_url_slug(room)}/")
     description = short_description(room)
     image = asset_url(social_image_path or room.get("imagen") or (photos[0].get("src") if photos else DEFAULT_SOCIAL_CARD))
     title = f"Review de {name} | {SITE_NAME}"
@@ -905,9 +1144,9 @@ def review_page(room, photos, social_image_path=""):
 </script>
 </head>
 <body>
-<main class="wrap">
-  <a class="brand" href="../../"><img src="../../images/brand/icon-round-192.png" alt="">The Vault Escape</a>
-  <article class="hero">
+{seo_header("reviews")}
+<main class="wrap" id="contenido">
+  <article class="detail-hero">
     <img class="cover" src="{escape(cover)}" alt="Cartel de {escape(name)}">
     <div>
       <div class="kicker">Review {escape(author)}</div>
@@ -926,7 +1165,9 @@ def review_page(room, photos, social_image_path=""):
       </div>
       <div class="actions">
         <a class="btn" href="{escape(app_link)}">Abrir ficha interactiva</a>
-        <a class="btn secondary" href="../">Ver todas las reviews</a>
+        <a class="btn secondary" href="{escape(room_link)}">Datos y puntuaciones</a>
+        <a class="btn secondary" href="../">Todas las reviews</a>
+        <a class="btn secondary" href="../../ranking-escape-rooms/">Ver ranking</a>
       </div>
     </div>
   </article>
@@ -940,6 +1181,7 @@ def review_page(room, photos, social_image_path=""):
   </section>
   {f'<section class="section"><h2>Fotos de la experiencia</h2><div class="photos">{photo_html}</div></section>' if photo_html else ''}
 </main>
+{seo_footer()}
 </body>
 </html>
 """
@@ -969,47 +1211,24 @@ def reviews_index_page(rooms):
         "description": description,
         "mainEntity": {"@type": "ItemList", "itemListElement": list_items},
     }
-    return f"""<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{escape(title)}</title>
-<meta name="description" content="{escape(description)}">
-<link rel="canonical" href="{escape(canonical)}">
-<link rel="icon" href="../images/brand/favicon-round-32.png" sizes="32x32" type="image/png">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="{SITE_NAME}">
-<meta property="og:title" content="{escape(title)}">
-<meta property="og:description" content="{escape(description)}">
-<meta property="og:url" content="{escape(canonical)}">
-<meta property="og:image" content="{escape(image)}">
+    return base_head(title, description, canonical, image, "website") + f"""
 <script type="application/ld+json">
 {json_ld(schema)}
 </script>
-<style>
-  body{{margin:0;background:#0a0a0f;color:#f0f0ea;font-family:Arial,Helvetica,sans-serif;}}
-  main{{width:min(920px,calc(100% - 32px));margin:0 auto;padding:32px 0 48px;}}
-  a{{color:#7dbb3f;}}
-  .brand{{display:flex;align-items:center;gap:12px;text-decoration:none;text-transform:uppercase;letter-spacing:.12em;color:#9a9ab6;font-size:.72rem;margin-bottom:24px;}}
-  .brand img{{width:42px;height:42px;border-radius:50%;}}
-  h1{{font-family:Georgia,serif;font-size:clamp(2rem,5vw,3.4rem);line-height:1.05;margin:0 0 10px;}}
-  p{{color:#b8b8c8;line-height:1.6;}}
-  .list{{display:grid;gap:10px;margin-top:24px;}}
-  .review-link{{display:block;border:1px solid rgba(125,187,63,.2);background:rgba(255,255,255,.025);padding:14px;text-decoration:none;}}
-  .review-link strong{{display:block;color:#f0f0ea;font-family:Georgia,serif;font-size:1.15rem;}}
-  .review-link span{{display:block;color:#9a9ab6;margin-top:3px;}}
-</style>
 </head>
 <body>
-<main>
-  <a class="brand" href="../"><img src="../images/brand/icon-round-192.png" alt="">The Vault Escape</a>
-  <h1>Reviews de escape rooms</h1>
-  <p>Opiniones del grupo The Vault Escape sobre salas jugadas, con puntuaciones, fotos y enlaces a la ficha interactiva.</p>
+{seo_header("reviews")}
+<main class="seo-main" id="contenido">
+  <section class="page-intro">
+    <div class="kicker">The Vault Escape</div>
+    <h1>Reviews de escape rooms</h1>
+    <p class="lead">Opiniones del grupo The Vault Escape sobre salas jugadas, con puntuaciones, fotos y enlaces a la ficha interactiva.</p>
+  </section>
   <div class="list">
     {''.join(items)}
   </div>
 </main>
+{seo_footer()}
 </body>
 </html>
 """
@@ -1045,50 +1264,24 @@ def ranking_index_page(rows):
         "description": description,
         "mainEntity": {"@type": "ItemList", "itemListElement": list_items},
     }
-    return f"""<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{escape(title)}</title>
-<meta name="description" content="{escape(description)}">
-<link rel="canonical" href="{escape(canonical)}">
-<link rel="icon" href="../images/brand/favicon-round-32.png" sizes="32x32" type="image/png">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="{SITE_NAME}">
-<meta property="og:title" content="{escape(title)}">
-<meta property="og:description" content="{escape(description)}">
-<meta property="og:url" content="{escape(canonical)}">
-<meta property="og:image" content="{escape(image)}">
+    return base_head(title, description, canonical, image, "website") + f"""
 <script type="application/ld+json">
 {json_ld(schema)}
 </script>
-<style>
-  body{{margin:0;background:#0a0a0f;color:#f0f0ea;font-family:Arial,Helvetica,sans-serif;}}
-  main{{width:min(980px,calc(100% - 32px));margin:0 auto;padding:32px 0 48px;}}
-  a{{color:#7dbb3f;}}
-  .brand{{display:flex;align-items:center;gap:12px;text-decoration:none;text-transform:uppercase;letter-spacing:.12em;color:#9a9ab6;font-size:.72rem;margin-bottom:24px;}}
-  .brand img{{width:42px;height:42px;border-radius:50%;}}
-  h1{{font-family:Georgia,serif;font-size:clamp(2rem,5vw,3.5rem);line-height:1.05;margin:0 0 10px;}}
-  p{{color:#b8b8c8;line-height:1.6;}}
-  .list{{display:grid;gap:10px;margin-top:24px;}}
-  .rank-link{{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:8px 12px;align-items:center;border:1px solid rgba(125,187,63,.2);background:rgba(255,255,255,.025);padding:13px;text-decoration:none;}}
-  .pos{{grid-row:1/3;color:#7dbb3f;font-weight:700;font-size:1.1rem;}}
-  .rank-link strong{{color:#f0f0ea;font-family:Georgia,serif;font-size:1.15rem;}}
-  .rank-link span:not(.pos){{color:#9a9ab6;}}
-  .rank-link em{{grid-column:3;grid-row:1/3;color:#7dbb3f;font-style:normal;font-weight:700;white-space:nowrap;}}
-  @media(max-width:680px){{.rank-link{{grid-template-columns:44px minmax(0,1fr);}}.rank-link em{{grid-column:2;grid-row:auto;}}}}
-</style>
 </head>
 <body>
-<main>
-  <a class="brand" href="../"><img src="../images/brand/icon-round-192.png" alt="">The Vault Escape</a>
-  <h1>Ranking de escape rooms en España</h1>
-  <p>Ranking ponderado con fuentes externas, comunidad y premios. Esta página estática ayuda a Google a descubrir salas destacadas y enlaza con sus fichas SEO.</p>
+{seo_header("ranking")}
+<main class="seo-main" id="contenido">
+  <section class="page-intro">
+    <div class="kicker">Ranking The Vault</div>
+    <h1>Ranking de escape rooms en España</h1>
+    <p class="lead">Ranking ponderado con fuentes externas, comunidad y premios. Consulta las salas destacadas y abre cada ficha para ver sus puntuaciones y fuentes.</p>
+  </section>
   <div class="list">
     {''.join(items)}
   </div>
 </main>
+{seo_footer()}
 </body>
 </html>
 """
@@ -1219,68 +1412,18 @@ def ranking_landing_page(slug, title, h1, description, intro, rows, keyword_note
         f'<details><summary>{escape(question)}</summary><p>{escape(answer)}</p></details>'
         for question, answer in faqs
     )
-    return f"""<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{escape(title)}</title>
-<meta name="description" content="{escape(description)}">
-<meta name="robots" content="index, follow, max-image-preview:large">
-<link rel="canonical" href="{escape(canonical)}">
-<link rel="icon" href="../images/brand/favicon-round-32.png" sizes="32x32" type="image/png">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="{SITE_NAME}">
-<meta property="og:title" content="{escape(title)}">
-<meta property="og:description" content="{escape(description)}">
-<meta property="og:url" content="{escape(canonical)}">
-<meta property="og:image" content="{escape(image)}">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{escape(title)}">
-<meta name="twitter:description" content="{escape(description)}">
-<meta name="twitter:image" content="{escape(image)}">
+    return base_head(title, description, canonical, image, "website") + f"""
 <script type="application/ld+json">
 {json_ld(schema)}
 </script>
-<style>
-  :root{{--bg:#0a0a0f;--card:#12121e;--border:#2a2a45;--green:#7dbb3f;--amber:#ffa91f;--text:#f0f0ea;--muted:#9a9ab6;}}
-  *{{box-sizing:border-box;}}
-  body{{margin:0;background:radial-gradient(ellipse at top,rgba(125,187,63,.14),transparent 38%),var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;line-height:1.55;}}
-  main{{width:min(1040px,calc(100% - 32px));margin:0 auto;padding:32px 0 54px;}}
-  a{{color:var(--green);}}
-  .brand{{display:flex;align-items:center;gap:12px;text-decoration:none;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-size:.72rem;margin-bottom:24px;}}
-  .brand img{{width:42px;height:42px;border-radius:50%;}}
-  .hero{{border:1px solid rgba(125,187,63,.25);background:linear-gradient(135deg,rgba(255,255,255,.035),rgba(125,187,63,.04));padding:22px;margin-bottom:18px;}}
-  .kicker{{color:var(--amber);text-transform:uppercase;letter-spacing:.16em;font-size:.72rem;margin-bottom:8px;}}
-  h1{{font-family:Georgia,serif;font-size:clamp(2rem,5vw,3.5rem);line-height:1.05;margin:0 0 12px;}}
-  p{{color:#b8b8c8;line-height:1.65;max-width:880px;}}
-  .nav{{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px;}}
-  .nav a{{border:1px solid rgba(125,187,63,.25);background:rgba(125,187,63,.055);padding:8px 11px;text-decoration:none;text-transform:uppercase;letter-spacing:.08em;font-size:.74rem;}}
-  .list{{display:grid;gap:10px;margin-top:24px;}}
-  .rank-link{{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:8px 12px;align-items:center;border:1px solid rgba(125,187,63,.2);background:rgba(255,255,255,.025);padding:13px;text-decoration:none;}}
-  .pos{{grid-row:1/3;color:var(--green);font-weight:700;font-size:1.1rem;}}
-  .rank-link strong{{color:var(--text);font-family:Georgia,serif;font-size:1.15rem;}}
-  .rank-link span:not(.pos){{color:var(--muted);}}
-  .rank-link em{{grid-column:3;grid-row:1/3;color:var(--amber);font-style:normal;font-weight:700;white-space:nowrap;}}
-  .note{{margin-top:22px;border-top:1px solid rgba(255,255,255,.08);padding-top:16px;color:var(--muted);font-size:.92rem;}}
-  .method{{margin-top:22px;border:1px solid rgba(125,187,63,.2);background:rgba(125,187,63,.035);padding:18px;}}
-  .method h2,.faq h2{{font-family:Georgia,serif;font-size:1.45rem;margin:0 0 8px;}}
-  .method p{{margin:6px 0;}}
-  .updated{{color:var(--green);font-size:.82rem;text-transform:uppercase;letter-spacing:.08em;}}
-  .faq{{margin-top:24px;}}
-  .faq details{{border-top:1px solid rgba(255,255,255,.1);padding:12px 0;}}
-  .faq summary{{cursor:pointer;color:var(--text);font-weight:700;}}
-  .faq details p{{margin:8px 0 0;}}
-  @media(max-width:680px){{main{{width:min(100% - 22px,1040px);padding-top:20px;}}.hero{{padding:16px;}}.rank-link{{grid-template-columns:44px minmax(0,1fr);}}.rank-link em{{grid-column:2;grid-row:auto;}}}}
-</style>
 </head>
 <body>
-<main>
-  <a class="brand" href="../"><img src="../images/brand/icon-round-192.png" alt="">The Vault Escape</a>
-  <section class="hero">
+{seo_header("terror" if slug == "mejores-escape-rooms-terror" else "ranking")}
+<main class="seo-main" id="contenido">
+  <section class="page-intro">
     <div class="kicker">The Vault Escape</div>
     <h1>{escape(h1)}</h1>
-    <p>{escape(intro)}</p>
+    <p class="lead">{escape(intro)}</p>
     <div class="nav">
       <a href="../ranking/">Ranking completo</a>
       <a href="../reviews/">Reviews</a>
@@ -1307,6 +1450,7 @@ def ranking_landing_page(slug, title, h1, description, intro, rows, keyword_note
   </section>
   <p class="note">Consulta también el <a href="../aviso-legal/">aviso legal y la explicación de fuentes</a> de The Vault Escape.</p>
 </main>
+{seo_footer()}
 </body>
 </html>
 """
@@ -1422,62 +1566,18 @@ def location_landing_page(slug, kind, label, rows, total_count):
             },
         ],
     }
-    return f"""<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{escape(title)}</title>
-<meta name="description" content="{escape(description)}">
-<meta name="robots" content="index, follow, max-image-preview:large">
-<link rel="canonical" href="{escape(canonical)}">
-<link rel="icon" href="../images/brand/favicon-round-32.png" sizes="32x32" type="image/png">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="{SITE_NAME}">
-<meta property="og:title" content="{escape(title)}">
-<meta property="og:description" content="{escape(description)}">
-<meta property="og:url" content="{escape(canonical)}">
-<meta property="og:image" content="{escape(image)}">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{escape(title)}">
-<meta name="twitter:description" content="{escape(description)}">
-<meta name="twitter:image" content="{escape(image)}">
+    return base_head(title, description, canonical, image, "website") + f"""
 <script type="application/ld+json">
 {json_ld(schema)}
 </script>
-<style>
-  :root{{--bg:#0a0a0f;--border:#2a2a45;--green:#7dbb3f;--amber:#ffa91f;--text:#f0f0ea;--muted:#9a9ab6;}}
-  *{{box-sizing:border-box;}}
-  body{{margin:0;background:radial-gradient(ellipse at top,rgba(125,187,63,.14),transparent 38%),var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;line-height:1.55;}}
-  main{{width:min(1040px,calc(100% - 32px));margin:0 auto;padding:32px 0 54px;}}
-  a{{color:var(--green);}}
-  .brand{{display:flex;align-items:center;gap:12px;text-decoration:none;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-size:.72rem;margin-bottom:24px;}}
-  .brand img{{width:42px;height:42px;border-radius:50%;}}
-  .hero{{border:1px solid rgba(125,187,63,.25);background:linear-gradient(135deg,rgba(255,255,255,.035),rgba(125,187,63,.04));padding:22px;margin-bottom:18px;}}
-  .kicker{{color:var(--amber);text-transform:uppercase;letter-spacing:.16em;font-size:.72rem;margin-bottom:8px;}}
-  h1{{font-family:Georgia,serif;font-size:clamp(2rem,5vw,3.5rem);line-height:1.05;margin:0 0 12px;}}
-  p{{color:#b8b8c8;line-height:1.65;max-width:900px;}}
-  .summary{{display:flex;gap:9px;flex-wrap:wrap;margin:16px 0 0;}}
-  .summary span{{border:1px solid rgba(125,187,63,.25);background:rgba(125,187,63,.055);padding:7px 10px;color:#dbead2;}}
-  .nav{{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px;}}
-  .nav a{{border:1px solid rgba(125,187,63,.25);background:rgba(125,187,63,.055);padding:8px 11px;text-decoration:none;text-transform:uppercase;letter-spacing:.08em;font-size:.74rem;}}
-  .list{{display:grid;gap:10px;margin-top:24px;}}
-  .rank-link{{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:8px 12px;align-items:center;border:1px solid rgba(125,187,63,.2);background:rgba(255,255,255,.025);padding:13px;text-decoration:none;}}
-  .pos{{grid-row:1/3;color:var(--green);font-weight:700;font-size:1.1rem;}}
-  .rank-link strong{{color:var(--text);font-family:Georgia,serif;font-size:1.15rem;}}
-  .rank-link span:not(.pos){{color:var(--muted);}}
-  .rank-link em{{grid-column:3;grid-row:1/3;color:var(--amber);font-style:normal;font-weight:700;white-space:nowrap;}}
-  .note{{margin-top:22px;border-top:1px solid rgba(255,255,255,.08);padding-top:16px;color:var(--muted);font-size:.92rem;}}
-  @media(max-width:680px){{main{{width:min(100% - 22px,1040px);padding-top:20px;}}.hero{{padding:16px;}}.rank-link{{grid-template-columns:44px minmax(0,1fr);}}.rank-link em{{grid-column:2;grid-row:auto;}}}}
-</style>
 </head>
 <body>
-<main>
-  <a class="brand" href="../"><img src="../images/brand/icon-round-192.png" alt="">The Vault Escape</a>
-  <section class="hero">
+{seo_header("catalog")}
+<main class="seo-main" id="contenido">
+  <section class="page-intro">
     <div class="kicker">Escape rooms por ubicación</div>
     <h1>Escape rooms en {escape(label)}</h1>
-    <p>{escape(intro)}</p>
+    <p class="lead">{escape(intro)}</p>
     <div class="summary">
       <span>{len(top_rows)} salas destacadas</span>
       <span>{total_count} salas detectadas en la zona</span>
@@ -1496,6 +1596,7 @@ def location_landing_page(slug, kind, label, rows, total_count):
   </div>
   <p class="note">Página local orientativa para búsquedas de escape rooms en {escape(label)}. Las posiciones pueden cambiar cuando se actualizan nuevas fuentes, premios, reviews o datos de catálogo.</p>
 </main>
+{seo_footer()}
 </body>
 </html>
 """
@@ -1559,56 +1660,20 @@ def location_index_page(location_specs):
         "inLanguage": "es",
         "isPartOf": {"@id": site_url("/#website")},
     }
-    return f"""<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Escape rooms por ciudad y comunidad | {SITE_NAME}</title>
-<meta name="description" content="Encuentra escape rooms en España por ciudad y comunidad autónoma: Barcelona, Madrid, Valencia, Catalunya, Andalucía, País Vasco y más.">
-<meta name="robots" content="index, follow, max-image-preview:large">
-<link rel="canonical" href="{escape(canonical)}">
-<link rel="icon" href="../images/brand/favicon-round-32.png" sizes="32x32" type="image/png">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="{SITE_NAME}">
-<meta property="og:title" content="Escape rooms por ciudad y comunidad | {SITE_NAME}">
-<meta property="og:description" content="Índice de escape rooms en España por ciudad y comunidad autónoma, con rankings locales y fichas públicas.">
-<meta property="og:url" content="{escape(canonical)}">
-<meta property="og:image" content="{escape(image)}">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="{escape(image)}">
+    title = f"Escape rooms por ciudad y comunidad | {SITE_NAME}"
+    description = "Encuentra escape rooms en España por ciudad y comunidad autónoma: Barcelona, Madrid, Valencia, Catalunya, Andalucía, País Vasco y más."
+    return base_head(title, description, canonical, image, "website") + f"""
 <script type="application/ld+json">
 {json_ld(schema)}
 </script>
-<style>
-  :root{{--bg:#0a0a0f;--border:#2a2a45;--green:#7dbb3f;--amber:#ffa91f;--text:#f0f0ea;--muted:#9a9ab6;}}
-  *{{box-sizing:border-box;}}
-  body{{margin:0;background:radial-gradient(ellipse at top,rgba(125,187,63,.14),transparent 38%),var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;line-height:1.55;}}
-  main{{width:min(1120px,calc(100% - 32px));margin:0 auto;padding:32px 0 54px;}}
-  .brand{{display:flex;align-items:center;gap:12px;text-decoration:none;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-size:.72rem;margin-bottom:24px;}}
-  .brand img{{width:42px;height:42px;border-radius:50%;}}
-  .hero{{border:1px solid rgba(125,187,63,.25);background:linear-gradient(135deg,rgba(255,255,255,.035),rgba(125,187,63,.04));padding:22px;margin-bottom:18px;}}
-  .kicker{{color:var(--amber);text-transform:uppercase;letter-spacing:.16em;font-size:.72rem;margin-bottom:8px;}}
-  h1{{font-family:Georgia,serif;font-size:clamp(2rem,5vw,3.45rem);line-height:1.05;margin:0 0 12px;}}
-  h2{{margin:28px 0 12px;color:var(--green);font-size:.86rem;text-transform:uppercase;letter-spacing:.16em;}}
-  p{{color:#b8b8c8;line-height:1.65;max-width:900px;}}
-  .nav{{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px;}}
-  .nav a,.location-link{{border:1px solid rgba(125,187,63,.25);background:rgba(125,187,63,.055);text-decoration:none;}}
-  .nav a{{color:var(--green);padding:8px 11px;text-transform:uppercase;letter-spacing:.08em;font-size:.74rem;}}
-  .grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;}}
-  .location-link{{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px;color:var(--text);}}
-  .location-link strong{{font-family:Georgia,serif;font-size:1.08rem;}}
-  .location-link span{{color:var(--muted);font-size:.82rem;white-space:nowrap;}}
-  @media(max-width:680px){{main{{width:min(100% - 22px,1120px);padding-top:20px;}}.hero{{padding:16px;}}.location-link{{align-items:flex-start;flex-direction:column;gap:2px;}}}}
-</style>
 </head>
 <body>
-<main>
-  <a class="brand" href="../"><img src="../images/brand/icon-round-192.png" alt="">The Vault Escape</a>
-  <section class="hero">
+{seo_header("catalog")}
+<main class="seo-main" id="contenido">
+  <section class="page-intro">
     <div class="kicker">Escape rooms por ubicación</div>
     <h1>Escape rooms por ciudad y comunidad</h1>
-    <p>Accede a rankings locales y fichas públicas de escape rooms en España. Cada página agrupa salas por ciudad o comunidad autónoma para ayudar a descubrir, comparar y planificar próximas experiencias.</p>
+    <p class="lead">Accede a rankings locales y fichas públicas de escape rooms en España. Cada página agrupa salas por ciudad o comunidad autónoma para ayudar a descubrir, comparar y planificar próximas experiencias.</p>
     <div class="nav">
       <a href="../ranking-escape-rooms/">Ranking España</a>
       <a href="../mejores-escape-rooms/">Mejores salas</a>
@@ -1616,15 +1681,16 @@ def location_index_page(location_specs):
       <a href="../">Abrir web</a>
     </div>
   </section>
-  <h2>Ciudades</h2>
+  <h2 class="section-label">Ciudades</h2>
   <div class="grid">
     {links(city_specs)}
   </div>
-  <h2>Comunidades autónomas</h2>
+  <h2 class="section-label">Comunidades autónomas</h2>
   <div class="grid">
     {links(region_specs)}
   </div>
 </main>
+{seo_footer()}
 </body>
 </html>
 """
@@ -1856,9 +1922,9 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
 </script>
 </head>
 <body>
-<main class="wrap">
-  <a class="brand" href="../../"><img src="../../images/brand/icon-round-192.png" alt="">The Vault Escape</a>
-  <article class="hero">
+{seo_header("catalog")}
+<main class="wrap" id="contenido">
+  <article class="detail-hero">
     <img class="cover" src="{escape(cover)}" alt="Cartel de {escape(name)}">
     <div>
       <div class="kicker">{f'Sala destacada #{position}' if has_score else 'Ficha de catálogo'}</div>
@@ -1897,6 +1963,7 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
     <nav class="internal-links" aria-label="Enlaces relacionados">{internal_links_html}</nav>
   </section>
 </main>
+{seo_footer()}
 </body>
 </html>
 """
@@ -2037,6 +2104,14 @@ The Vault Escape es un catálogo y archivo de escape rooms en España. Incluye f
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Genera las páginas SEO estáticas de The Vault.")
+    parser.add_argument(
+        "--update-main-stats",
+        action="store_true",
+        help="Actualiza también el contador de respaldo incluido en index.html.",
+    )
+    args = parser.parse_args()
+    (ROOT / "seo.css").write_text(SEO_STYLES.strip() + "\n", encoding="utf-8", newline="\n")
     data = read_json(ROOT / "data.json", {})
     photos_data = read_json(ROOT / "review_photos.json", {}).get("photos", {})
     videos_data = read_json(ROOT / "official_videos.json", {}).get("videos", {})
@@ -2057,6 +2132,23 @@ def main():
         generate_latest_review_thumbnail(room, photos)
         (page_dir / "index.html").write_text(review_page(room, photos, social_card), encoding="utf-8", newline="\n")
         generated_review_pages.append(slug)
+
+    review_by_identity = {room_identity(room): room for room in rooms}
+    legacy_review_pages = 0
+    for old_page in reviews_dir.glob("*/index.html"):
+        old_slug = old_page.parent.name
+        if old_slug in generated_review_pages:
+            continue
+        current_room = review_by_identity.get(canonical_room_identity(old_slug))
+        if not current_room:
+            continue
+        target = site_url(f"/reviews/{room_url_slug(current_room)}/")
+        old_page.write_text(
+            legacy_seo_page(canonical_room_name(current_room), target, target=target),
+            encoding="utf-8",
+            newline="\n",
+        )
+        legacy_review_pages += 1
 
     (reviews_dir / "index.html").write_text(reviews_index_page(rooms), encoding="utf-8", newline="\n")
     ranking_dir = ROOT / "ranking"
@@ -2134,8 +2226,11 @@ def main():
         for spec in location_specs
     }
     review_slugs = {room_url_slug(room) for room in rooms}
+    generated_sala_slugs = set()
     for item in sala_rows:
-        page_dir = salas_dir / seo_room_url_slug(item["room"])
+        sala_slug = seo_room_url_slug(item["room"])
+        generated_sala_slugs.add(sala_slug)
+        page_dir = salas_dir / sala_slug
         page_dir.mkdir(parents=True, exist_ok=True)
         (page_dir / "index.html").write_text(
             room_page(item, item.get("position") or 0, location_links, review_slugs, videos_data, photos_data),
@@ -2143,8 +2238,38 @@ def main():
             newline="\n",
         )
 
+    sala_by_identity = {room_identity(item["room"]): item for item in sala_rows}
+    closed_rooms = read_json(ROOT / "private" / "closed_rooms.json", {}).get("rooms", [])
+    closed_by_slug = {slugify(room.get("id") or room.get("nombre")): room for room in closed_rooms}
+    legacy_sala_pages = 0
+    retired_sala_pages = 0
+    for old_page in salas_dir.glob("*/index.html"):
+        old_slug = old_page.parent.name
+        if old_slug in generated_sala_slugs:
+            continue
+        current_item = sala_by_identity.get(canonical_room_identity(old_slug))
+        if current_item:
+            current_room = current_item["room"]
+            target = site_url(f"/salas/{seo_room_url_slug(current_room)}/")
+            old_page.write_text(
+                legacy_seo_page(canonical_room_name(current_room), target, target=target),
+                encoding="utf-8",
+                newline="\n",
+            )
+            legacy_sala_pages += 1
+            continue
+        closed_room = closed_by_slug.get(old_slug)
+        if closed_room:
+            old_page.write_text(
+                legacy_seo_page(text(closed_room.get("nombre")) or old_slug, site_url(f"/salas/{old_slug}/"), retired=True),
+                encoding="utf-8",
+                newline="\n",
+            )
+            retired_sala_pages += 1
+
     stats_json = site_stats_json(rooms, sala_rows, location_specs)
-    update_inline_site_stats(stats_json)
+    if args.update_main_stats:
+        update_inline_site_stats(stats_json)
     (ROOT / "sitemap.xml").write_text(sitemap_xml(rooms, sala_rows, location_specs), encoding="utf-8", newline="\n")
     (ROOT / "video-sitemap.xml").write_text(video_sitemap_xml(sala_rows, videos_data), encoding="utf-8", newline="\n")
     (ROOT / "robots.txt").write_text(robots_txt(), encoding="utf-8", newline="\n")
@@ -2155,6 +2280,8 @@ def main():
         f"{len(generated_review_pages)} reviews, "
         f"{len(sala_rows)} salas, "
         f"{len(location_specs)} landings por ubicacion, "
+        f"{legacy_sala_pages + legacy_review_pages} alias redirigidos, "
+        f"{retired_sala_pages} fichas cerradas retiradas, "
         f"{len(generated_review_pages)} tarjetas sociales, "
         "ranking, landings SEO, sitemap.xml, video-sitemap.xml, robots.txt y llms.txt"
     )
