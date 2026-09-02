@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-22T19:58:01.208855+00:00",
+  "generatedAt": "2026-09-02T08:19:15",
   "source": "firebase-adminPublishedReviews-export",
   "reviews": {
     "achijira": {
@@ -471,25 +471,26 @@
       "sourceRoomKey": "jurasico",
       "roomName": "Jurásico",
       "review": {
-        "ambientacion": 10,
+        "ambientacion": 10.0,
         "ciudad": "Barcelona",
-        "descripcion": "Espectáculo visual y sensorial que recrea una selva hiperrealista bajo el centro de Barcelona. Una aventura de 120 minutos cargada de nostalgia, con una escenografía cinematográfica y efectos de sonido potentes. Jugado por 4 adultos y una niña de 9 años, destacamos el excelente acting inicial; el impacto del Game Master sobre la peque fue muy bueno y lo recuerda con mucho cariño. Es un escape dinámico con separación del grupo y una gran cantidad de juegos que garantiza que no haya momentos de parón. Ve preparado para gatear y ensuciarte con un poco de barro, ya que la vegetación se tiene que mantener. Una experiencia de 'nueva generación' de las más potentes del panorama actual.",
+        "descripcion": "Un auténtico espectáculo visual y sensorial que recrea una selva jurásica hiperrealista bajo el centro de Barcelona. Una aventura de 120 minutos cargada de nostalgia, con una escenografía cinematográfica, efectos de sonido potentes y una ambientación que es, sin duda, uno de sus grandes puntos fuertes.\n\nJugamos 4 adultos y una niña de 9 años, y destacamos especialmente el excelente acting inicial. El impacto del Game Master sobre la peque fue fantástico y es una parte de la experiencia que recuerda con mucho cariño.\n\nEs un escape muy dinámico, con una gran cantidad de juegos y prácticamente ningún momento de parón. Además, en algún momento hay separación del grupo, aportando variedad al desarrollo de la aventura y haciendo que todos tengan cosas que hacer.\n\nEso sí, hay que ir cómodo y preparado para moverse. En algunos momentos toca gatear y desplazarse por zonas con vegetación, barro y arena, por lo que existe la posibilidad de salir manchado. Mejor dejar la ropa de estreno en casa. 😅\n\nAunque no es un escape de terror, sí encontramos alguna aparición muy divertida y algún pequeño susto que ayudan a mantener la emoción. El enfoque es claramente familiar y divertido, por lo que creemos que funciona especialmente bien para jugar en familia.\n\nLa ambientación es espectacular y consigue generar una verdadera sensación de estar dentro de una selva jurásica. Una propuesta de gran formato, muy cuidada a nivel visual y sensorial, que sigue siendo una experiencia muy potente para los amantes de las escape rooms.\n\n📍 Barcelona\n⏱️ Duración: 120 minutos\n👥 Jugadores: 4 adultos + 1 niña de 9 años\n👨‍👩‍👧 Tipo: Familiar · Aventura · Inmersión\n\n🚗 Aparcamiento: complicado en la zona. Recomendamos utilizar transporte público.\n❄️ Local climatizado: sí.\n\n⭐ Veredicto The Vault\n\nUna aventura familiar donde la ambientación y el espectáculo son los grandes protagonistas. Mucho dinamismo, una escenografía espectacular y una experiencia especialmente recomendable si quieres introducir a los más pequeños en el mundo de las escape rooms.",
         "dificultad": "Media",
-        "duracion": 60,
+        "duracion": 120,
         "empresa": "Golden Pop",
-        "gamemaster": 10,
-        "historia": 9,
+        "gamemaster": 10.0,
+        "historia": 9.0,
         "imagen": "images/generated-catalog/jurasico.png",
-        "jugabilidad": 8,
+        "jugabilidad": 8.0,
         "nombre": "Jurásico",
         "rating": 8,
         "tematica": "Dinosaurios",
         "tipo": "Aventura familiar",
         "valoracion": 9.25,
-        "web": "https://goldenpop.es/jurasico/"
+        "web": "https://goldenpop.es/jurasico/",
+        "provincia": ""
       },
       "publishedAt": 1786736473623,
-      "updatedAt": 1786736473623,
+      "updatedAt": 1788329955769,
       "publishedByName": "The Vault"
     },
     "k_o_n_g_protocol": {
