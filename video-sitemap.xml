@@ -205,7 +205,7 @@
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/6yU3uANwct4/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia El Manicomio de NewDimension.</video:description>
+      <video:description>Vídeo de introducción oficial de la experiencia El Manicomio de El Secreto.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/6yU3uANwct4</video:player_loc>
       <video:publication_date>2018-07-02T14:43:10-07:00</video:publication_date>
     </video:video>
@@ -635,7 +635,7 @@
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/pjeNHSksAGs/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Ambar La Visita de Coco Room.</video:description>
+      <video:description>Vídeo de introducción oficial de la experiencia Ambar, La Visita de Coco Room.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/pjeNHSksAGs</video:player_loc>
       <video:publication_date>2017-06-13T03:34:32-07:00</video:publication_date>
     </video:video>
@@ -675,7 +675,7 @@
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/X_ZFrfdPPVQ/hqdefault.jpg</video:thumbnail_loc>
       <video:title>PESADILLAS @ GOLDEN POP</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Pesadillas de Pesadillas Escape Room.</video:description>
+      <video:description>Vídeo de introducción oficial de la experiencia Pesadillas de Golden Pop.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/X_ZFrfdPPVQ</video:player_loc>
       <video:publication_date>2020-10-03T10:13:03-07:00</video:publication_date>
     </video:video>
@@ -781,11 +781,11 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/la-purga/</loc>
+    <loc>https://thevaultescape.com/salas/la-hora-de-las-bestias-cubick/</loc>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/sJNZfxKPSGk/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Katharsis Room Escape</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia La Purga de The Exit.</video:description>
+      <video:description>Vídeo de introducción oficial de la experiencia La Hora de las Bestias de Cubick.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/sJNZfxKPSGk</video:player_loc>
       <video:publication_date>2025-10-12T05:52:37-07:00</video:publication_date>
     </video:video>
@@ -971,11 +971,11 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/la-fuga-de-casanova/</loc>
+    <loc>https://thevaultescape.com/salas/casanova-la-fuga-de-bilbao/</loc>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/-nend7wr1i0/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia La fuga de Casanova de The Rombo Code.</video:description>
+      <video:description>Vídeo de introducción oficial de la experiencia Casanova – La Fuga de Bilbao de The Rombo Code.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/-nend7wr1i0</video:player_loc>
       <video:publication_date>2016-08-27T10:32:41-07:00</video:publication_date>
     </video:video>
@@ -1065,7 +1065,7 @@
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/8P8D_wc15hI/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Mafia de Parapark Málaga.</video:description>
+      <video:description>Vídeo de introducción oficial de la experiencia Mafia de Chicken Banana.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/8P8D_wc15hI</video:player_loc>
       <video:publication_date>2014-12-07T19:09:34-08:00</video:publication_date>
     </video:video>
@@ -1261,7 +1261,7 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/desmadre-en-las-vegas-kode/</loc>
+    <loc>https://thevaultescape.com/salas/desmadre-en-las-vegas/</loc>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/FO6ZHYQ5pTs/hqdefault.jpg</video:thumbnail_loc>
       <video:title>DESMADRE EN LAS VEGAS</video:title>
@@ -1671,7 +1671,7 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/la-fuga-de-casanova-the-rombo-code/</loc>
+    <loc>https://thevaultescape.com/salas/la-fuga-de-casanova/</loc>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/-nend7wr1i0/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
@@ -1741,7 +1741,7 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/la-purga-the-exit/</loc>
+    <loc>https://thevaultescape.com/salas/la-purga/</loc>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/sJNZfxKPSGk/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Katharsis Room Escape</video:title>

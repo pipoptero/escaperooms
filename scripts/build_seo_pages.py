@@ -693,7 +693,10 @@ def catalog_seo_rows(data, ranking_rows):
         if not identity:
             continue
         if identity in by_identity:
-            by_identity[identity]["room"] = merge_room_data(by_identity[identity]["room"], room)
+            # catalog.json es la fuente actualizada desde el panel. Debe
+            # prevalecer sobre los valores históricos de data.json (por
+            # ejemplo, duración y sinopsis editadas manualmente).
+            by_identity[identity]["room"] = merge_room_override(by_identity[identity]["room"], room)
         else:
             by_identity[identity] = {
                 "key": identity,

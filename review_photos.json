@@ -1,9 +1,9 @@
 {
   "meta": {
-    "generated_at": "2026-08-31T07:03:20",
-    "source": "images/Hechos",
+    "generated_at": "2026-09-02T08:47:48",
+    "source": "panel-local",
     "groups": 18,
-    "photos": 47,
+    "photos": 49,
     "unmatched": []
   },
   "photos": {
@@ -143,6 +143,14 @@
       "photos": [
         {
           "src": "images/Hechos/Jurasico.jpeg",
+          "alt": "Jurásico - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/jurasico_1.jfif",
+          "alt": "Jurásico - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/jurasico_2.jfif",
           "alt": "Jurásico - foto del grupo"
         }
       ]
