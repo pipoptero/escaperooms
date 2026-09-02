@@ -8654,6 +8654,15 @@ function reviewPhotosHtml(room) {
     </div>`;
 }
 
+function reviewSynopsisHtml(room) {
+  const catalogRoom = catalogRoomForReview(room);
+  const synopsis = String(catalogRoom?.descripcion || '').trim();
+  if (!synopsis) return '';
+  return `
+    <div class="detail-section-title">Sinopsis del escape</div>
+    <div class="detail-desc">${escapeHtml(synopsis)}</div>`;
+}
+
 function officialVideoForRoom(room) {
   if (!room || !OFFICIAL_VIDEOS || !Object.keys(OFFICIAL_VIDEOS).length) return null;
   const catalogRoom = catalogRoomForReview(room);
@@ -9005,6 +9014,7 @@ function openDetail(kind, key, options = {}) {
     <div class="detail-section-title">Sinopsis</div>
     <div class="detail-desc">${synopsis}</div>` : ''}
     ${isReview ? reviewBlockHtml(room) : ''}
+    ${isReview ? reviewSynopsisHtml(room) : ''}
     ${officialVideoHtml(room)}
     ${detailAccountHtml(room, kind)}
     ${communityReviewsHtml(room, kind)}
