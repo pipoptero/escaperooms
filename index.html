@@ -2951,10 +2951,17 @@ function normalizePublishedReviewsPayload(payload) {
 }
 
 function publishedReviewRecords() {
-  return {
-    ...STATIC_PUBLISHED_REVIEWS,
-    ...ADMIN_PUBLISHED_REVIEWS
-  };
+  const merged = { ...STATIC_PUBLISHED_REVIEWS };
+  Object.entries(ADMIN_PUBLISHED_REVIEWS || {}).forEach(([rawKey, record]) => {
+    const key = canonicalReviewRoomKey(rawKey) || rawKey;
+    const current = merged[key];
+    // Firebase puede conservar una copia antigua mientras el export estatico
+    // ya contiene una edicion mas reciente. Elegimos siempre por fecha.
+    if (!current || reviewTimeValue(record) >= reviewTimeValue(current)) {
+      merged[key] = record;
+    }
+  });
+  return merged;
 }
 
 function publishedReviewRooms() {
