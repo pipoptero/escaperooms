@@ -2437,6 +2437,7 @@ let STATIC_ENHANCEMENTS_PROMISE = null;
 let PROFILE_MAP_DATA_PROMISE = null;
 let PHOTO_LIGHTBOX_GALLERIES = {};
 const LIVE_REFRESH_MIN_INTERVAL = 5 * 60 * 1000;
+const STATIC_ASSET_VERSION = '20260904-ritual';
 
 function invalidateReviewRoomsCache() {
   REVIEW_ROOMS_CACHE = null;
@@ -2681,6 +2682,12 @@ function roomImageSrc(room, withLocalFallback = true) {
   if (catalogRoom?.imagen) return catalogRoom.imagen;
   return '';
 }
+function versionedLocalAsset(src) {
+  const value = String(src || '').trim();
+  if (!value || !/^(?:\.\/)?images\//i.test(value)) return value;
+  const separator = value.includes('?') ? '&' : '?';
+  return `${value}${separator}v=${STATIC_ASSET_VERSION}`;
+}
 function cleanValue(text) {
   return String(text || '').trim();
 }
@@ -2710,11 +2717,12 @@ function catalogImageHtml(p) {
   const fallback = `<div class="card-media-fallback">${initial}</div>`;
   if (!p.imagen) return fallback;
   const fitClass = cardImageFitClass(p);
-  return `<img class="${fitClass}" src="${p.imagen}" alt="${p.nombre || 'Escape room'}" loading="lazy" onerror="this.replaceWith(this.nextElementSibling)">${fallback}`;
+  const src = versionedLocalAsset(p.imagen);
+  return `<img class="${fitClass}" src="${src}" alt="${p.nombre || 'Escape room'}" loading="lazy" onerror="this.replaceWith(this.nextElementSibling)">${fallback}`;
 }
 function imageHtml(p) {
   const initial = (p.nombre || '?').trim().slice(0, 1).toUpperCase();
-  const src = roomImageSrc(p);
+  const src = versionedLocalAsset(roomImageSrc(p));
   const fallback = `<div class="card-media-fallback">${initial}</div>`;
   const fitClass = cardImageFitClass({ ...p, imagen: src });
   return `<img class="${fitClass}" src="${src}" alt="${p.nombre || 'Escape room'}" loading="lazy" onerror="this.replaceWith(this.nextElementSibling)">${fallback}`;
@@ -7190,7 +7198,7 @@ async function loadRoomReviews() {
 }
 async function loadCatalogo() {
   try {
-    const r = await fetch('catalog.json');
+    const r = await fetch(`catalog.json?v=${STATIC_ASSET_VERSION}`, { cache: 'no-store' });
     if (!r.ok) return;
     const d = await r.json();
     CATALOGO = d.catalogo || [];
@@ -7279,7 +7287,7 @@ async function loadReviewPhotos() {
 
 async function loadOfficialVideos() {
   try {
-    const r = await fetch('official_videos.json');
+    const r = await fetch(`official_videos.json?v=${STATIC_ASSET_VERSION}`, { cache: 'no-store' });
     if (!r.ok) return;
     const d = await r.json();
     OFFICIAL_VIDEOS = d.videos || {};
@@ -7407,14 +7415,13 @@ function setupAutomaticLiveRefresh() {
 
 async function loadStaticEnhancementsAfterInitialRender() {
   try {
-    await loadCatalogo();
+    await Promise.all([loadCatalogo(), loadOfficialVideos()]);
     await loadRoomAliases();
     await loadStaticPublishedReviews();
     await loadTerpecaAwards();
     await loadExtraAwards();
     await loadExternalRatings();
     await loadReviewPhotos();
-    await loadOfficialVideos();
     await loadRoomLocations();
     populateFilters();
     renderStats();
@@ -7451,7 +7458,9 @@ async function loadData() {
     const earlyReviewsPromise = Promise.allSettled([
       loadSiteStats(),
       loadRoomAliases(),
-      loadStaticPublishedReviews()
+      loadStaticPublishedReviews(),
+      loadCatalogo(),
+      loadOfficialVideos()
     ]);
     const r = await fetch('data.json');
     if (!r.ok) throw new Error(`HTTP ${r.status} — no se encontró data.json`);
@@ -8602,7 +8611,7 @@ function openDeepLinkFromHash() {
 function detailImageHtml(room, kind) {
   const initial = escapeHtml((room.nombre || '?').trim().slice(0, 1).toUpperCase());
   const fallback = `<div class="card-media-fallback">${initial}</div>`;
-  const src = room.imagen || '';
+  const src = versionedLocalAsset(roomImageSrc(room));
   if (!src) return fallback;
   const fitClass = `detail-cover-img ${cardImageFitClass({ ...room, imagen: src }).replace('card-cover-img', '')}`.trim();
   return `<img class="${fitClass}" src="${src}" alt="${escapeHtml(room.nombre || 'Escape room')}" onerror="this.replaceWith(this.nextElementSibling)">${fallback}`;
