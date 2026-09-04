@@ -191,6 +191,16 @@
     </video:video>
   </url>
   <url>
+    <loc>https://thevaultescape.com/salas/ritual/</loc>
+    <video:video>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/wD_4NmMYGEg/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>Ritual Escape Room tráiler</video:title>
+      <video:description>Vídeo de introducción oficial de la experiencia Ritual de Locked ZGZ.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/wD_4NmMYGEg</video:player_loc>
+      <video:publication_date>2023-09-12T23:27:50-07:00</video:publication_date>
+    </video:video>
+  </url>
+  <url>
     <loc>https://thevaultescape.com/salas/la-mazmorra/</loc>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/iBfj81l2cVY/hqdefault.jpg</video:thumbnail_loc>

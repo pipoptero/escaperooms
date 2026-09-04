@@ -1,9 +1,9 @@
 {
   "meta": {
-    "generated_at": "2026-08-18T14:30:08",
-    "rooms": 282,
+    "generated_at": "2026-09-04T12:00:00",
+    "rooms": 283,
     "source": "official_web_high_confidence",
-    "videos_with_upload_date": 194
+    "videos_with_upload_date": 195
   },
   "videos": {
     "abduccion-alien": {
@@ -2375,6 +2375,16 @@
       "source_page_url": "https://funly.es/game/resonance",
       "score": 124,
       "upload_date": "2026-05-05T09:40:41-07:00"
+    },
+    "ritual": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/wD_4NmMYGEg",
+      "video_url": "https://www.youtube.com/watch?v=wD_4NmMYGEg",
+      "thumbnail": "https://i.ytimg.com/vi/wD_4NmMYGEg/hqdefault.jpg",
+      "label": "Ritual Escape Room tráiler",
+      "source_page_url": "https://www.youtube.com/watch?v=wD_4NmMYGEg",
+      "score": 200,
+      "upload_date": "2023-09-12T23:27:50-07:00"
     },
     "room-foc-destruccio": {
       "provider": "direct",

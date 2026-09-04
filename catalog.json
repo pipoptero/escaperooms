@@ -37104,10 +37104,13 @@
       "fuente_url": "https://www.todoescaperooms.com/zaragoza/locked-zgz/ritual",
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "verificada",
-      "imagen": "",
+      "imagen": "images/catalgo_propio_web_escape/optimized/ritual.jpg",
       "rating": null,
       "votos": null,
-      "verificado": true
+      "verificado": true,
+      "imagen_original": "images/catalgo_propio_web_escape/ritual-locked-zgz.png",
+      "imagen_fuente_tipo": "aportada_manualmente",
+      "imagen_revisada": "2026-09-04"
     },
     {
       "id": "rivals-game",
