@@ -1,9 +1,9 @@
 {
   "meta": {
-    "generated_at": "2026-09-02T06:48:42",
-    "source": "images/Hechos",
-    "groups": 18,
-    "photos": 49,
+    "generated_at": "2026-09-06T11:32:16",
+    "source": "panel-local",
+    "groups": 19,
+    "photos": 53,
     "unmatched": []
   },
   "photos": {
@@ -290,6 +290,27 @@
         {
           "src": "images/Hechos/Willy el tuerto 3.jpeg",
           "alt": "Willy el Tuerto - foto del grupo"
+        }
+      ]
+    },
+    "nunca_jamas": {
+      "room": "Nunca Jamás",
+      "photos": [
+        {
+          "src": "images/Hechos/nunca_jamas_1.jfif",
+          "alt": "Nunca Jamás - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/nunca_jamas_2.jfif",
+          "alt": "Nunca Jamás - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/nunca_jamas_1.jpg",
+          "alt": "Nunca Jamás - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/nunca_jamas_2.jpg",
+          "alt": "Nunca Jamás - foto del grupo"
         }
       ]
     }

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-02T08:48:01",
+  "generatedAt": "2026-09-06T11:32:20",
   "source": "firebase-adminPublishedReviews-export",
   "reviews": {
     "achijira": {
@@ -1090,6 +1090,34 @@
       },
       "publishedAt": 1787402731319,
       "updatedAt": 1787402731319,
+      "publishedByName": "Isaac B."
+    },
+    "nunca_jamas": {
+      "status": "published",
+      "roomKey": "nunca_jamas",
+      "sourceRoomKey": "nunca_jamas",
+      "roomName": "Nunca Jamás",
+      "review": {
+        "ambientacion": 9.0,
+        "ciudad": "Granollers",
+        "comunidad": "Catalunya",
+        "descripcion": "Ayer hicimos el escape de Nunca Jamás, basado en Peter Pan, en Key Play (Granollers) y salimos con esa sensación que solo dejan las salas especiales.\nHISTORIA\nLa premisa te atrapa desde el principio. Escuchas esa voz olvidada de tu infancia que te llama a volver. Sin spoilers: es una historia bonita, con una intro muy cuidada que te mete de lleno. Nos gustó muchísimo el detalle de que nadie te recibirá al llegar. Te quedas solo un par de segundos... y entonces aparece la magia dentro de la sala.\nAMBIENTACIÓN\nLas salas están muy bien ambientadas y fieles a la película. No es decorado genérico, son guiños constantes a Peter Pan. Cada prueba y cada acción va encaminada a la película. Los decorados están muy cuidados y hay una zona donde liberar tu yo más infantil que es simplemente deliciosa. Te obliga a jugar, a tirarte, a reír. Pura fantasía, nada de terror.\nJUGABILIDAD\nAquí es donde brilla. La experiencia global se sostiene por la cantidad y variedad de juegos: observación, lógica, deducción, orientación, relación de ideas y pruebas físicas. Todo muy variado y con sentido narrativo. Tiene una parte algo más física - imprescindible ir con calcetines - que le da dinamismo y que la hace diferente a la mayoría. Nosotros fuimos en familia, 2 adultos y 2 niños de 10 y 6 años, y todos pudimos aportar.\nGAME MASTER\nEl GM hace muy bien su papel. Sin mucha interacción intrusiva, pero con unas pistas muy bien integradas en la historia. No rompe la magia.\nEn resumen, una sala que te atrapa desde el minuto uno, con una historia bonita, decorados cuidados y una experiencia que se vuelve inolvidable por lo mágica que es. Como punto a mejorar solo uno: que no hubiese durado más.\nIdeal para familias y fans de Peter Pan que busquen aventura, no sustos.\n\n⭐ THE VAULT SCORE\n📖 Historia — 8.0/10\n🏚️ Ambientación — 9.0/10\n🧩 Jugabilidad — 8.0/10\n🎭 Game Master — 8.0/10\n⏱️ 90 min\n❄️ Local climatizado\n🚗 Aparcamiento fácil en la zona.",
+        "dificultad": "3 niveles ajustables",
+        "duracion": 90,
+        "empresa": "Key Play",
+        "gamemaster": 8.0,
+        "historia": 8.0,
+        "imagen": "images/catalgo_propio_web_escape/optimized/nunca-jamas.jpg",
+        "jugabilidad": 8.0,
+        "nombre": "Nunca Jamás",
+        "provincia": "Barcelona",
+        "valoracion": 8.25,
+        "web": "https://www.keyplay.es/sala-peter-escape-room-granollers/",
+        "tematica": "",
+        "tipo": ""
+      },
+      "publishedAt": 1788680131590,
+      "updatedAt": 1788687140795,
       "publishedByName": "Isaac B."
     }
   }
