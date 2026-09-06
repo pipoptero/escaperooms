@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-09-06T09:32:54",
+    "generated_at": "2026-09-06T09:49:37",
     "source": "images/Hechos",
     "groups": 19,
     "photos": 51,
@@ -12,7 +12,8 @@
       "photos": [
         {
           "src": "images/Hechos/Catacumbas.jpeg",
-          "alt": "Catacumbas - foto del grupo"
+          "alt": "Catacumbas - foto del grupo",
+          "type": "image"
         }
       ]
     },
@@ -21,19 +22,23 @@
       "photos": [
         {
           "src": "images/Hechos/darkcity 1.jfif",
-          "alt": "Dark City - foto del grupo"
+          "alt": "Dark City - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/darkcity 2.jfif",
-          "alt": "Dark City - foto del grupo"
+          "alt": "Dark City - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/darkcity 3.jfif",
-          "alt": "Dark City - foto del grupo"
+          "alt": "Dark City - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/darkcity 4.jfif",
-          "alt": "Dark City - foto del grupo"
+          "alt": "Dark City - foto del grupo",
+          "type": "image"
         }
       ]
     },
@@ -42,31 +47,38 @@
       "photos": [
         {
           "src": "images/Hechos/El Secreto de los Krugger 1.jpeg",
-          "alt": "El secreto de los Krugger - foto del grupo"
+          "alt": "El secreto de los Krugger - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/El Secreto de los Krugger 2.jpeg",
-          "alt": "El secreto de los Krugger - foto del grupo"
+          "alt": "El secreto de los Krugger - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/El Secreto de los Krugger 3.jpeg",
-          "alt": "El secreto de los Krugger - foto del grupo"
+          "alt": "El secreto de los Krugger - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/El Secreto de los Krugger 4.jpeg",
-          "alt": "El secreto de los Krugger - foto del grupo"
+          "alt": "El secreto de los Krugger - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/El Secreto de los Krugger 5.jpeg",
-          "alt": "El secreto de los Krugger - foto del grupo"
+          "alt": "El secreto de los Krugger - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/El Secreto de los Krugger 6.jpeg",
-          "alt": "El secreto de los Krugger - foto del grupo"
+          "alt": "El secreto de los Krugger - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/Experiment.jpeg",
-          "alt": "El secreto de los Krugger - foto del grupo"
+          "alt": "El secreto de los Krugger - foto del grupo",
+          "type": "image"
         }
       ]
     },
@@ -75,7 +87,8 @@
       "photos": [
         {
           "src": "images/Hechos/encryptroom.jpeg",
-          "alt": "encryptroom - foto del grupo"
+          "alt": "encryptroom - foto del grupo",
+          "type": "image"
         }
       ]
     },
@@ -84,23 +97,28 @@
       "photos": [
         {
           "src": "images/Hechos/Sección Esoterismo Exorcista 3.jpg",
-          "alt": "Exorcista - foto del grupo"
+          "alt": "Exorcista - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/Sección Esoterismo Exorcista 4.jpg",
-          "alt": "Exorcista - foto del grupo"
+          "alt": "Exorcista - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/Sección Esoterismo Exorcista 5.jpg",
-          "alt": "Exorcista - foto del grupo"
+          "alt": "Exorcista - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/Sección Esoterismo Exorcista 6.jpg",
-          "alt": "Exorcista - foto del grupo"
+          "alt": "Exorcista - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/Sección Esoterismo Exorcista.jpeg",
-          "alt": "Exorcista - foto del grupo"
+          "alt": "Exorcista - foto del grupo",
+          "type": "image"
         }
       ]
     },
@@ -109,23 +127,28 @@
       "photos": [
         {
           "src": "images/Hechos/Forbidden 1.jpeg",
-          "alt": "Forbidden Room - foto del grupo"
+          "alt": "Forbidden Room - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/Forbidden 2.jpeg",
-          "alt": "Forbidden Room - foto del grupo"
+          "alt": "Forbidden Room - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/Forbidden 3.jpeg",
-          "alt": "Forbidden Room - foto del grupo"
+          "alt": "Forbidden Room - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/Forbidden 4.jpeg",
-          "alt": "Forbidden Room - foto del grupo"
+          "alt": "Forbidden Room - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/Forbidden 5.jpeg",
-          "alt": "Forbidden Room - foto del grupo"
+          "alt": "Forbidden Room - foto del grupo",
+          "type": "image"
         }
       ]
     },
@@ -134,7 +157,8 @@
       "photos": [
         {
           "src": "images/Hechos/high_school 1.jpg",
-          "alt": "High School - foto del grupo"
+          "alt": "High School - foto del grupo",
+          "type": "image"
         }
       ]
     },
@@ -143,15 +167,18 @@
       "photos": [
         {
           "src": "images/Hechos/Jurasico.jpeg",
-          "alt": "Jurásico - foto del grupo"
+          "alt": "Jurásico - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/jurasico_1.jfif",
-          "alt": "Jurásico - foto del grupo"
+          "alt": "Jurásico - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/jurasico_2.jfif",
-          "alt": "Jurásico - foto del grupo"
+          "alt": "Jurásico - foto del grupo",
+          "type": "image"
         }
       ]
     },
@@ -160,11 +187,13 @@
       "photos": [
         {
           "src": "images/Hechos/K.O.N.G Protocol 1.jpeg",
-          "alt": "K.O.N.G. Protocol - foto del grupo"
+          "alt": "K.O.N.G. Protocol - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/K.O.N.G Protocol 2.jpeg",
-          "alt": "K.O.N.G. Protocol - foto del grupo"
+          "alt": "K.O.N.G. Protocol - foto del grupo",
+          "type": "image"
         }
       ]
     },
@@ -173,7 +202,8 @@
       "photos": [
         {
           "src": "images/Hechos/La Taberna.jpeg",
-          "alt": "La Taberna - foto del grupo"
+          "alt": "La Taberna - foto del grupo",
+          "type": "image"
         }
       ]
     },
@@ -182,7 +212,8 @@
       "photos": [
         {
           "src": "images/Hechos/Londium.jpeg",
-          "alt": "Londium - foto del grupo"
+          "alt": "Londium - foto del grupo",
+          "type": "image"
         }
       ]
     },
@@ -191,19 +222,23 @@
       "photos": [
         {
           "src": "images/Hechos/Nightshift 1.jpeg",
-          "alt": "Nightshift - foto del grupo"
+          "alt": "Nightshift - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/Nightshift 2.jpeg",
-          "alt": "Nightshift - foto del grupo"
+          "alt": "Nightshift - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/Nightshift 3.jpeg",
-          "alt": "Nightshift - foto del grupo"
+          "alt": "Nightshift - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/Nightshift 4.jpeg",
-          "alt": "Nightshift - foto del grupo"
+          "alt": "Nightshift - foto del grupo",
+          "type": "image"
         }
       ]
     },
@@ -212,11 +247,13 @@
       "photos": [
         {
           "src": "images/Hechos/nunca_jamas_1.jfif",
-          "alt": "Nunca Jamás - foto del grupo"
+          "alt": "Nunca Jamás - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/nunca_jamas_2.jfif",
-          "alt": "Nunca Jamás - foto del grupo"
+          "alt": "Nunca Jamás - foto del grupo",
+          "type": "image"
         }
       ]
     },
@@ -225,15 +262,18 @@
       "photos": [
         {
           "src": "images/Hechos/parasomnia_bajo_2_1.jpg",
-          "alt": "Parasomnia Bajo 2ª - foto del grupo"
+          "alt": "Parasomnia Bajo 2ª - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/parasomnia_bajo_2_2.jpg",
-          "alt": "Parasomnia Bajo 2ª - foto del grupo"
+          "alt": "Parasomnia Bajo 2ª - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/parasomnia_bajo_2_3.jpg",
-          "alt": "Parasomnia Bajo 2ª - foto del grupo"
+          "alt": "Parasomnia Bajo 2ª - foto del grupo",
+          "type": "image"
         }
       ]
     },
@@ -242,11 +282,13 @@
       "photos": [
         {
           "src": "images/Hechos/Roomions 1.jpeg",
-          "alt": "Roomions - foto del grupo"
+          "alt": "Roomions - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/Roomions 2.jpeg",
-          "alt": "Roomions - foto del grupo"
+          "alt": "Roomions - foto del grupo",
+          "type": "image"
         }
       ]
     },
@@ -255,15 +297,18 @@
       "photos": [
         {
           "src": "images/Hechos/scubick doo 1.jpeg",
-          "alt": "Scubick-Doo - foto del grupo"
+          "alt": "Scubick-Doo - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/scubick doo 2.jpeg",
-          "alt": "Scubick-Doo - foto del grupo"
+          "alt": "Scubick-Doo - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/scubick doo 3.jpeg",
-          "alt": "Scubick-Doo - foto del grupo"
+          "alt": "Scubick-Doo - foto del grupo",
+          "type": "image"
         }
       ]
     },
@@ -272,7 +317,8 @@
       "photos": [
         {
           "src": "images/Hechos/Tao.jpeg",
-          "alt": "Tao Room Escape - foto del grupo"
+          "alt": "Tao Room Escape - foto del grupo",
+          "type": "image"
         }
       ]
     },
@@ -281,11 +327,13 @@
       "photos": [
         {
           "src": "images/Hechos/La Historia de Charlotte 1.jpeg",
-          "alt": "WHITECHAPEL - foto del grupo"
+          "alt": "WHITECHAPEL - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/La Historia de Charlotte 2.jpeg",
-          "alt": "WHITECHAPEL - foto del grupo"
+          "alt": "WHITECHAPEL - foto del grupo",
+          "type": "image"
         }
       ]
     },
@@ -294,15 +342,18 @@
       "photos": [
         {
           "src": "images/Hechos/Willy el Tuerto 1.jpeg",
-          "alt": "Willy el Tuerto - foto del grupo"
+          "alt": "Willy el Tuerto - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/Willy el Tuerto 2.jpeg",
-          "alt": "Willy el Tuerto - foto del grupo"
+          "alt": "Willy el Tuerto - foto del grupo",
+          "type": "image"
         },
         {
           "src": "images/Hechos/Willy el tuerto 3.jpeg",
-          "alt": "Willy el Tuerto - foto del grupo"
+          "alt": "Willy el Tuerto - foto del grupo",
+          "type": "image"
         }
       ]
     }
