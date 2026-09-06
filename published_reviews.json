@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-06T12:20:54",
+  "generatedAt": "2026-09-06T12:42:38",
   "source": "firebase-adminPublishedReviews-export",
   "reviews": {
     "achijira": {
@@ -1117,7 +1117,7 @@
         "tipo": ""
       },
       "publishedAt": 1788680131590,
-      "updatedAt": 1788690054292,
+      "updatedAt": 1788691358073,
       "publishedByName": "Isaac B."
     }
   }
