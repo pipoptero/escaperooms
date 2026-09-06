@@ -822,7 +822,7 @@
   .rv-opinion-text.empty{color:var(--text3);font-style:italic;font-size:.85rem;}
   .review-photo-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:8px;margin-top:2px;}
   .review-photo{position:relative;display:block;overflow:hidden;border:1px solid rgba(125,187,63,.18);background:rgba(0,0,0,.18);aspect-ratio:4/3;}
-  .review-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .22s ease,filter .22s ease;}
+  .review-photo img,.review-photo video{width:100%;height:100%;object-fit:cover;display:block;transition:transform .22s ease,filter .22s ease;background:#050609;}
   .review-photo:hover img{transform:scale(1.035);filter:brightness(1.08);}
   .detail-review .review-photo-gallery{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));margin-top:12px;}
   .photo-lightbox{position:fixed;inset:0;z-index:260;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.86);backdrop-filter:blur(10px);}
@@ -2437,7 +2437,7 @@ let STATIC_ENHANCEMENTS_PROMISE = null;
 let PROFILE_MAP_DATA_PROMISE = null;
 let PHOTO_LIGHTBOX_GALLERIES = {};
 const LIVE_REFRESH_MIN_INTERVAL = 5 * 60 * 1000;
-const STATIC_ASSET_VERSION = '20260904-ritual';
+const STATIC_ASSET_VERSION = '20260906-review-media';
 
 function invalidateReviewRoomsCache() {
   REVIEW_ROOMS_CACHE = null;
@@ -7275,7 +7275,7 @@ async function loadExternalRatings() {
 
 async function loadReviewPhotos() {
   try {
-    const r = await fetch('review_photos.json');
+    const r = await fetch(`review_photos.json?v=${STATIC_ASSET_VERSION}`, { cache: 'no-store' });
     if (!r.ok) return;
     const d = await r.json();
     REVIEW_PHOTOS = d.photos || {};
@@ -8637,8 +8637,9 @@ function reviewPhotosEntryFor(room) {
   });
   if (photos.length) {
     const key = `review_${reviewRoomKey(room) || keys[0] || 'gallery'}`;
-    PHOTO_LIGHTBOX_GALLERIES[key] = photos;
-    return { key, photos };
+    const images = photos.filter(photo => photo?.type !== 'video' && !/\.mp4(?:[?#]|$)/i.test(photo?.src || ''));
+    PHOTO_LIGHTBOX_GALLERIES[key] = images;
+    return { key, photos, images };
   }
   return null;
 }
@@ -8652,14 +8653,22 @@ function reviewPhotosHtml(room) {
   const photos = entry?.photos || [];
   if (!photos.length) return '';
   const galleryKey = jsString(entry.key);
+  let imageIndex = 0;
   return `
-    <div class="rv-opinion-label" style="margin-top:12px">Fotos del grupo</div>
+    <div class="rv-opinion-label" style="margin-top:12px">Fotos y vídeos del grupo</div>
     <div class="review-photo-gallery">
-      ${photos.map((photo, index) => `
-        <a class="review-photo" href="${escapeHtml(photo.src)}" target="_blank" rel="noopener" onclick="openPhotoLightbox(event, '${galleryKey}', ${index})">
-          <img src="${escapeHtml(photo.src)}" alt="${escapeHtml(photo.alt || room.nombre || 'Foto del grupo')}" loading="lazy">
-        </a>
-      `).join('')}
+      ${photos.map(photo => {
+        const isVideo = photo?.type === 'video' || /\.mp4(?:[?#]|$)/i.test(photo?.src || '');
+        if (isVideo) return `
+          <div class="review-photo">
+            <video src="${escapeHtml(photo.src)}" controls preload="metadata" playsinline aria-label="${escapeHtml(photo.alt || room.nombre || 'Vídeo del grupo')}"></video>
+          </div>`;
+        const currentImageIndex = imageIndex++;
+        return `
+          <a class="review-photo" href="${escapeHtml(photo.src)}" target="_blank" rel="noopener" onclick="openPhotoLightbox(event, '${galleryKey}', ${currentImageIndex})">
+            <img src="${escapeHtml(photo.src)}" alt="${escapeHtml(photo.alt || room.nombre || 'Foto del grupo')}" loading="lazy">
+          </a>`;
+      }).join('')}
     </div>`;
 }
 

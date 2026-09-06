@@ -18,7 +18,7 @@ DATA_FILE = ROOT / "data.json"
 CATALOG_FILE = ROOT / "catalog.json"
 PHOTOS_DIR = ROOT / "images" / "Hechos"
 OUT_FILE = ROOT / "review_photos.json"
-EXTENSIONS = {".jpg", ".jpeg", ".jfif", ".png", ".webp", ".avif"}
+EXTENSIONS = {".jpg", ".jpeg", ".jfif", ".png", ".webp", ".avif", ".mp4"}
 PHOTO_ROOM_ALIASES = {
     "experiment": "el_secreto_de_los_krugger",
     "la_historia_de_charlotte": "whitechapel",
@@ -120,9 +120,11 @@ def build() -> dict:
                 if key == slugify(base) and compact(base) not in catalog_compacts:
                     unmatched.append(path.name)
             group = groups.setdefault(key, {"room": room_name, "photos": []})
+            media_type = "video" if path.suffix.lower() == ".mp4" else "image"
             group["photos"].append({
                 "src": path.relative_to(ROOT).as_posix(),
-                "alt": f"{room_name} - foto del grupo",
+                "alt": f"{room_name} - {'video corto' if media_type == 'video' else 'foto del grupo'}",
+                "type": media_type,
             })
 
     payload = {

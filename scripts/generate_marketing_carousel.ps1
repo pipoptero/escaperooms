@@ -364,7 +364,7 @@ $photosPayload = Load-Json (Join-Path $root "review_photos.json")
 $reviewPhoto = $null
 foreach ($prop in $photosPayload.photos.PSObject.Properties) {
   if ((Normalize $prop.Name) -eq (Normalize $room.id) -or (Normalize $prop.Value.room) -eq (Normalize $room.nombre)) {
-    $candidate = @($prop.Value.photos | Where-Object { $_.src } | Select-Object -Skip 1 -First 1)
+    $candidate = @($prop.Value.photos | Where-Object { $_.src -and $_.type -ne "video" -and $_.src -notmatch '(?i)\.mp4$' } | Select-Object -Skip 1 -First 1)
     if ($candidate) { $reviewPhoto = Join-Path $root ($candidate[0].src -replace "/", "\") }
     break
   }
