@@ -1,9 +1,14 @@
 {
   "meta": {
+<<<<<<< Updated upstream
     "generated_at": "2026-09-06T09:49:37",
     "source": "images/Hechos",
+=======
+    "generated_at": "2026-09-06T11:55:42",
+    "source": "panel-local",
+>>>>>>> Stashed changes
     "groups": 19,
-    "photos": 51,
+    "photos": 53,
     "unmatched": []
   },
   "photos": {
@@ -252,8 +257,22 @@
         },
         {
           "src": "images/Hechos/nunca_jamas_2.jfif",
+<<<<<<< Updated upstream
           "alt": "Nunca Jamás - foto del grupo",
           "type": "image"
+=======
+          "alt": "Nunca Jamás - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/nunca_jamas_1.mp4",
+          "alt": "Nunca Jamás - video corto",
+          "type": "video"
+        },
+        {
+          "src": "images/Hechos/nunca_jamas_2.mp4",
+          "alt": "Nunca Jamás - video corto",
+          "type": "video"
+>>>>>>> Stashed changes
         }
       ]
     },
