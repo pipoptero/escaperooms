@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-09-06T11:32:16",
-    "source": "panel-local",
+    "generated_at": "2026-09-06T09:32:54",
+    "source": "images/Hechos",
     "groups": 19,
     "photos": 53,
     "unmatched": []
@@ -207,6 +207,27 @@
         }
       ]
     },
+    "nunca_jamas": {
+      "room": "Nunca Jamás",
+      "photos": [
+        {
+          "src": "images/Hechos/nunca_jamas_1.jfif",
+          "alt": "Nunca Jamás - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/nunca_jamas_1.jpg",
+          "alt": "Nunca Jamás - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/nunca_jamas_2.jfif",
+          "alt": "Nunca Jamás - foto del grupo"
+        },
+        {
+          "src": "images/Hechos/nunca_jamas_2.jpg",
+          "alt": "Nunca Jamás - foto del grupo"
+        }
+      ]
+    },
     "parasomnia_bajo_2": {
       "room": "Parasomnia Bajo 2ª",
       "photos": [
@@ -290,27 +311,6 @@
         {
           "src": "images/Hechos/Willy el tuerto 3.jpeg",
           "alt": "Willy el Tuerto - foto del grupo"
-        }
-      ]
-    },
-    "nunca_jamas": {
-      "room": "Nunca Jamás",
-      "photos": [
-        {
-          "src": "images/Hechos/nunca_jamas_1.jfif",
-          "alt": "Nunca Jamás - foto del grupo"
-        },
-        {
-          "src": "images/Hechos/nunca_jamas_2.jfif",
-          "alt": "Nunca Jamás - foto del grupo"
-        },
-        {
-          "src": "images/Hechos/nunca_jamas_1.jpg",
-          "alt": "Nunca Jamás - foto del grupo"
-        },
-        {
-          "src": "images/Hechos/nunca_jamas_2.jpg",
-          "alt": "Nunca Jamás - foto del grupo"
         }
       ]
     }
