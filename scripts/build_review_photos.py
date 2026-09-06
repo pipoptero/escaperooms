@@ -19,6 +19,7 @@ CATALOG_FILE = ROOT / "catalog.json"
 PHOTOS_DIR = ROOT / "images" / "Hechos"
 OUT_FILE = ROOT / "review_photos.json"
 EXTENSIONS = {".jpg", ".jpeg", ".jfif", ".png", ".webp", ".avif", ".mp4"}
+VIDEO_CDN_BASE = "https://cdn.jsdelivr.net/gh/pipoptero/escaperooms@main/"
 PHOTO_ROOM_ALIASES = {
     "experiment": "el_secreto_de_los_krugger",
     "la_historia_de_charlotte": "whitechapel",
@@ -121,8 +122,9 @@ def build() -> dict:
                     unmatched.append(path.name)
             group = groups.setdefault(key, {"room": room_name, "photos": []})
             media_type = "video" if path.suffix.lower() == ".mp4" else "image"
+            relative_src = path.relative_to(ROOT).as_posix()
             group["photos"].append({
-                "src": path.relative_to(ROOT).as_posix(),
+                "src": VIDEO_CDN_BASE + relative_src if media_type == "video" else relative_src,
                 "alt": f"{room_name} - {'video corto' if media_type == 'video' else 'foto del grupo'}",
                 "type": media_type,
             })

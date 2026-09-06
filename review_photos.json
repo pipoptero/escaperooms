@@ -246,24 +246,24 @@
       "room": "Nunca Jamás",
       "photos": [
         {
-          "src": "images/Hechos/Nunca Jamas 3.mp4",
-          "alt": "Nunca Jamás - video corto",
-          "type": "video"
-        },
-        {
-          "src": "images/Hechos/Nunca Jamas 4.mp4",
-          "alt": "Nunca Jamás - video corto",
-          "type": "video"
-        },
-        {
           "src": "images/Hechos/nunca_jamas_1.jfif",
           "alt": "Nunca Jamás - foto del grupo",
           "type": "image"
         },
         {
+          "src": "https://cdn.jsdelivr.net/gh/pipoptero/escaperooms@main/images/Hechos/Nunca%20Jamas%203.mp4",
+          "alt": "Nunca Jamás - video corto",
+          "type": "video"
+        },
+        {
           "src": "images/Hechos/nunca_jamas_2.jfif",
           "alt": "Nunca Jamás - foto del grupo",
           "type": "image"
+        },
+        {
+          "src": "https://cdn.jsdelivr.net/gh/pipoptero/escaperooms@main/images/Hechos/Nunca%20Jamas%204.mp4",
+          "alt": "Nunca Jamás - video corto",
+          "type": "video"
         }
       ]
     },
