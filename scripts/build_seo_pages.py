@@ -124,7 +124,17 @@ p { color: var(--text2); }
 .pill, .summary span { border: 1px solid rgba(125,187,63,.24); background: rgba(125,187,63,.055); color: #cde3bc; padding: 5px 8px; font-size: .86rem; }
 .score { display: inline-flex; margin: 8px 0 14px; border: 1px solid rgba(125,187,63,.4); background: rgba(125,187,63,.08); color: var(--green); padding: 8px 12px; font-family: 'Cinzel', serif; font-weight: 700; }
 .section { margin-top: 24px; border-top: 1px solid var(--border); padding: 20px 0 0; }
-.review { color: #cfcfdb; white-space: pre-line; }
+.review { color: #cfcfdb; }
+.review p { margin: 0 0 1em; line-height: 1.72; }
+.review h3 { margin: 1.45em 0 .55em; color: var(--green); font-family: 'Cinzel', serif; font-size: 1rem; letter-spacing: .08em; text-transform: uppercase; }
+.review h3:first-child { margin-top: 0; }
+.review h4 { margin: 1.2em 0 .45em; color: #f1f1f3; font-family: 'Cinzel', serif; font-size: .9rem; letter-spacing: .04em; text-transform: uppercase; }
+.review strong { color: #f1f1f3; font-weight: 700; }
+.review u { text-decoration-color: var(--green); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.review ul { margin: .25em 0 1em; padding-left: 1.25em; }
+.review li { margin: .3em 0; }
+.review li::marker { color: var(--green); }
+.review hr { margin: 1.4em 0; border: 0; border-top: 1px solid var(--border); }
 .cats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
 .cat, .fact { border: 1px solid rgba(255,255,255,.08); background: var(--bg2); padding: 11px; }
 .cat span, .fact dt { display: block; color: var(--text3); font-family: 'Share Tech Mono', monospace; font-size: .62rem; letter-spacing: .08em; text-transform: uppercase; }
@@ -354,6 +364,81 @@ def clean_text(value):
     return value
 
 
+REVIEW_SECTION_HEADINGS = {
+    "historia",
+    "ambientacion",
+    "jugabilidad",
+    "game master",
+    "en resumen",
+    "nuestra opinion",
+    "datos importantes",
+    "valoracion the vault",
+    "veredicto the vault",
+    "the vault score",
+}
+
+
+def plain_review_text(value):
+    source = text(value)
+    source = re.sub(r"(?m)^\s*#{1,3}\s+", "", source)
+    source = re.sub(r"\*\*([^*\n]+)\*\*", r"\1", source)
+    source = re.sub(r"__([^_\n]+)__", r"\1", source)
+    source = re.sub(r"_([^_\n]+)_", r"\1", source)
+    return source
+
+
+def review_inline_html(value):
+    value = escape(text(value))
+    value = re.sub(r"\*\*([^*\n]+)\*\*", r"<strong>\1</strong>", value)
+    value = re.sub(r"__([^_\n]+)__", r"<u>\1</u>", value)
+    return re.sub(r"_([^_\n]+)_", r"<em>\1</em>", value)
+
+
+def review_text_html(value):
+    output, paragraph, items = [], [], []
+
+    def flush_paragraph():
+        if paragraph:
+            output.append(f"<p>{'<br>'.join(review_inline_html(line) for line in paragraph)}</p>")
+            paragraph.clear()
+
+    def flush_items():
+        if items:
+            output.append("<ul>" + "".join(f"<li>{review_inline_html(item)}</li>" for item in items) + "</ul>")
+            items.clear()
+
+    for raw_line in text(value).replace("\r\n", "\n").replace("\r", "\n").split("\n"):
+        line = raw_line.strip()
+        if not line:
+            flush_paragraph()
+            flush_items()
+            continue
+        heading = re.match(r"^(#{1,3})\s+(.+)$", line)
+        heading_candidate = re.sub(r"^[^\w]+", "", line, flags=re.UNICODE)
+        if heading or folded(heading_candidate) in REVIEW_SECTION_HEADINGS:
+            flush_paragraph()
+            flush_items()
+            tag = "h3" if not heading or len(heading.group(1)) == 1 else "h4"
+            label = heading.group(2) if heading else line
+            output.append(f"<{tag}>{review_inline_html(label)}</{tag}>")
+            continue
+        if re.match(r"^---+$", line):
+            flush_paragraph()
+            flush_items()
+            output.append("<hr>")
+            continue
+        bullet = re.match(r"^[-•]\s+(.+)$", line)
+        if bullet:
+            flush_paragraph()
+            items.append(bullet.group(1))
+            continue
+        flush_items()
+        paragraph.append(line)
+    flush_paragraph()
+    flush_items()
+    return "".join(output)
+
+
 def decimal(value):
     raw = text(value).replace(",", ".")
     try:
@@ -395,7 +480,7 @@ def local_asset_path(path):
 
 
 def short_description(room, limit=155):
-    source = re.sub(r"\s+", " ", text(room.get("descripcion")))
+    source = re.sub(r"\s+", " ", plain_review_text(room.get("descripcion")))
     if not source:
         source = f"Review de {text(room.get('nombre'))} en {SITE_NAME}."
     if len(source) <= limit:
@@ -1096,7 +1181,7 @@ def review_page(room, photos, social_image_path=""):
             {
                 "@type": "Review",
                 "name": f"Review de {name}",
-                "reviewBody": text(room.get("descripcion")),
+                "reviewBody": plain_review_text(room.get("descripcion")),
                 "author": {"@type": "Person" if author != "The Vault" else "Organization", "name": author, "url": BASE_URL},
                 "publisher": {"@id": site_url("/#organization")},
                 "itemReviewed": {
@@ -1176,7 +1261,7 @@ def review_page(room, photos, social_image_path=""):
   </article>
   <section class="section">
     <h2>Opinión del grupo</h2>
-    <div class="review">{escape(text(room.get("descripcion")) or "Review pendiente de completar.")}</div>
+    <div class="review">{review_text_html(room.get("descripcion") or "Review pendiente de completar.")}</div>
   </section>
   <section class="section">
     <h2>Valoración por categorías</h2>
