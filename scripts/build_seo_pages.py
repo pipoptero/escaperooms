@@ -1974,28 +1974,27 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
 
 def sitemap_xml(review_rooms, sala_rows, location_specs=None):
     entries = [
-        (site_url("/"), "daily", "1.0"),
-        (site_url("/escape-rooms/"), "weekly", "0.9"),
-        (site_url("/reviews/"), "weekly", "0.8"),
-        (site_url("/ranking/"), "weekly", "0.9"),
-        (site_url("/ranking-escape-rooms/"), "weekly", "0.95"),
-        (site_url("/mejores-escape-rooms/"), "weekly", "0.95"),
-        (site_url("/mejores-escape-rooms-terror/"), "weekly", "0.9"),
+        site_url("/"),
+        site_url("/escape-rooms/"),
+        site_url("/reviews/"),
+        site_url("/ranking/"),
+        site_url("/ranking-escape-rooms/"),
+        site_url("/mejores-escape-rooms/"),
+        site_url("/mejores-escape-rooms-terror/"),
     ]
-    entries.extend((site_url(f"/reviews/{room_url_slug(room)}/"), "monthly", "0.7") for room in review_rooms)
-    entries.extend((site_url(f"/{spec['slug']}/"), "weekly", "0.86") for spec in (location_specs or []))
-    entries.extend((site_url(f"/salas/{seo_room_url_slug(item['room'])}/"), "monthly", "0.7") for item in sala_rows)
+    entries.extend(site_url(f"/reviews/{room_url_slug(room)}/") for room in review_rooms)
+    entries.extend(site_url(f"/{spec['slug']}/") for spec in (location_specs or []))
+    entries.extend(site_url(f"/salas/{seo_room_url_slug(item['room'])}/") for item in sala_rows)
     unique_entries = []
     seen_urls = set()
-    for entry in entries:
-        if entry[0] in seen_urls:
+    for url in entries:
+        if url in seen_urls:
             continue
-        unique_entries.append(entry)
-        seen_urls.add(entry[0])
-    body = "\n".join(
-        f"  <url><loc>{escape(url)}</loc><lastmod>{TODAY}</lastmod><changefreq>{freq}</changefreq><priority>{priority}</priority></url>"
-        for url, freq, priority in unique_entries
-    )
+        unique_entries.append(url)
+        seen_urls.add(url)
+    # Omit lastmod until each URL has a reliable per-page modification date.
+    # Google ignores changefreq/priority and misleading dates waste crawl signals.
+    body = "\n".join(f"  <url><loc>{escape(url)}</loc></url>" for url in unique_entries)
     return f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{body}\n</urlset>\n'
 
 
