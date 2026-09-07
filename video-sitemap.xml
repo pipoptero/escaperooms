@@ -671,6 +671,16 @@
     </video:video>
   </url>
   <url>
+    <loc>https://thevaultescape.com/salas/los-mundos-de-alicia/</loc>
+    <video:video>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/Ks0q2VX4dQ8/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>Los Mundos de Alicia - vídeo oficial</video:title>
+      <video:description>Vídeo de introducción oficial de la experiencia Los Mundos de Alicia de KeyPlay.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/Ks0q2VX4dQ8</video:player_loc>
+      <video:publication_date>2025-11-28T02:57:16-08:00</video:publication_date>
+    </video:video>
+  </url>
+  <url>
     <loc>https://thevaultescape.com/salas/ouija/</loc>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/1fzGr2wokYA/hqdefault.jpg</video:thumbnail_loc>

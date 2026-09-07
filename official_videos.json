@@ -1,9 +1,9 @@
 {
   "meta": {
     "generated_at": "2026-09-04T12:00:00",
-    "rooms": 284,
+    "rooms": 285,
     "source": "official_web_high_confidence",
-    "videos_with_upload_date": 196
+    "videos_with_upload_date": 197
   },
   "videos": {
     "abduccion-alien": {
@@ -1955,6 +1955,16 @@
       "source_page_url": "https://www.goldenescaperoom.es/",
       "score": 78,
       "upload_date": "2019-01-12T07:19:21-08:00"
+    },
+    "los-mundos-de-alicia": {
+      "provider": "youtube",
+      "embed_url": "https://www.youtube-nocookie.com/embed/Ks0q2VX4dQ8",
+      "video_url": "https://www.youtube.com/watch?v=Ks0q2VX4dQ8",
+      "thumbnail": "https://i.ytimg.com/vi/Ks0q2VX4dQ8/hqdefault.jpg",
+      "label": "Los Mundos de Alicia - vídeo oficial",
+      "source_page_url": "https://www.youtube.com/watch?v=Ks0q2VX4dQ8",
+      "score": 200,
+      "upload_date": "2025-11-28T02:57:16-08:00"
     },
     "los-ultimos-templarios": {
       "provider": "vimeo",
