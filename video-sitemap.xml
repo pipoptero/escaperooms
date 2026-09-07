@@ -171,6 +171,16 @@
     </video:video>
   </url>
   <url>
+    <loc>https://thevaultescape.com/salas/nunca-jamas/</loc>
+    <video:video>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/oVU8jy0IePI/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>ESCAPE ROOM Peter Pan</video:title>
+      <video:description>Vídeo de introducción oficial de la experiencia Nunca Jamás de Key Play.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/oVU8jy0IePI</video:player_loc>
+      <video:publication_date>2026-04-27T03:25:35-07:00</video:publication_date>
+    </video:video>
+  </url>
+  <url>
     <loc>https://thevaultescape.com/salas/el-camerino/</loc>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/Gk47ugIktAI/hqdefault.jpg</video:thumbnail_loc>
