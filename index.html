@@ -234,7 +234,8 @@
 
   /* ── TABS ── */
   .tabs-container{display:flex;justify-content:center;padding:26px 32px 0;gap:4px;max-width:1400px;margin:0 auto;}
-  .tab{font-family:'Cinzel',serif;font-weight:600;font-size:.82rem;letter-spacing:.12em;padding:11px 28px;border:1px solid var(--border);background:transparent;color:var(--text3);cursor:pointer;transition:all .2s;text-transform:uppercase;}
+  .tab{font-family:'Cinzel',serif;font-weight:600;font-size:.76rem;letter-spacing:.08em;padding:8px 20px;border:1px solid var(--border);background:transparent;color:var(--text3);cursor:pointer;transition:all .2s;text-transform:uppercase;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:54px;}
+  .tab-icon{width:36px;height:36px;flex:0 0 36px;object-fit:contain;filter:drop-shadow(0 3px 5px rgba(0,0,0,.5));}
   .tab:hover{color:var(--amber);border-color:rgba(125,187,63,.3);}
   .tab.active{background:var(--card);border-color:var(--amber);color:var(--amber);border-bottom-color:var(--card);z-index:1;}
   .tab .count-badge{font-family:'Share Tech Mono',monospace;font-size:.62rem;background:rgba(125,187,63,.12);color:var(--amber);border:1px solid rgba(125,187,63,.25);padding:1px 6px;border-radius:20px;margin-left:7px;vertical-align:middle;}
@@ -291,6 +292,87 @@
   .vault-mini-list{display:grid;gap:7px;}
   .vault-mini-item{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.12);padding:8px 9px;font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;}
   .vault-mini-item strong{color:var(--amber);font-size:.68rem;}
+  .vault-home-loading{min-height:420px;display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:.66rem;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;}
+  .vault-home-shell{display:grid;gap:14px;}
+  .vault-home-identity{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;padding:18px;border:1px solid rgba(125,187,63,.24);background:linear-gradient(115deg,rgba(125,187,63,.095),rgba(255,255,255,.018) 55%,rgba(6,214,160,.045));}
+  .vault-home-user{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:center;min-width:0;}
+  .vault-home-user .progress-avatar{width:72px;height:72px;min-width:72px;}
+  .vault-home-eyebrow,.vault-home-label{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--green);letter-spacing:.12em;text-transform:uppercase;}
+  .vault-home-name{font-family:'Cinzel',serif;font-size:1.55rem;line-height:1.1;color:var(--text);margin:4px 0;overflow-wrap:anywhere;}
+  .vault-home-subtitle{color:var(--text2);font-size:.92rem;line-height:1.35;}
+  .vault-home-level{min-width:290px;}
+  .vault-home-level-head{display:flex;justify-content:space-between;gap:12px;align-items:end;margin-bottom:7px;}
+  .vault-home-level-head strong{font-family:'Cinzel',serif;color:var(--amber);font-size:1rem;}
+  .vault-home-level-head span{font-family:'Share Tech Mono',monospace;color:var(--text3);font-size:.56rem;text-transform:uppercase;}
+  .vault-home-track{height:9px;border:1px solid rgba(255,255,255,.09);background:rgba(0,0,0,.24);overflow:hidden;}
+  .vault-home-track>span{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--amber));}
+  .vault-home-identity-badges{display:flex;gap:7px;margin-top:10px;align-items:center;}
+  .vault-home-identity-badge{display:flex;align-items:center;gap:6px;min-width:0;border:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.14);padding:5px 7px;}
+  .vault-home-identity-badge .achievement-medallion{width:30px;height:30px;flex:0 0 30px;}
+  .vault-home-identity-badge strong{font-family:'Cinzel',serif;color:var(--text);font-size:.56rem;line-height:1.15;max-width:95px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .vault-home-actions{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;}
+  .vault-home-action{min-height:70px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.022);color:var(--text);cursor:pointer;padding:8px 10px;text-align:left;display:flex;align-items:center;gap:10px;min-width:0;}
+  .vault-home-action:hover{border-color:rgba(125,187,63,.48);background:rgba(125,187,63,.06);}
+  .vault-home-action-mark{width:48px;height:48px;flex:0 0 48px;display:flex;align-items:center;justify-content:center;}
+  .vault-home-action-mark img{width:100%;height:100%;display:block;object-fit:contain;filter:drop-shadow(0 3px 6px rgba(0,0,0,.55));}
+  .vault-home-action strong,.vault-home-action span{display:block;}
+  .vault-home-action strong{font-family:'Cinzel',serif;font-size:.74rem;line-height:1.15;}
+  .vault-home-action span{font-family:'Share Tech Mono',monospace;font-size:.48rem;color:var(--text3);text-transform:uppercase;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .vault-home-grid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(340px,.92fr);gap:14px;align-items:stretch;}
+  .vault-home-grid>.vault-home-section{display:flex;flex-direction:column;}
+  .vault-home-grid>.vault-home-section>.vault-home-map{flex:1;}
+  .vault-home-section{border-top:1px solid rgba(255,255,255,.09);padding-top:12px;min-width:0;}
+  .vault-home-section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:9px;}
+  .vault-home-section-title{font-family:'Cinzel',serif;font-size:.94rem;color:var(--text);text-transform:uppercase;letter-spacing:.06em;}
+  .vault-home-section-note{font-family:'Share Tech Mono',monospace;font-size:.5rem;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;text-align:right;}
+  .vault-home-map{display:grid;grid-template-columns:minmax(0,1fr) 180px;min-height:278px;border:1px solid rgba(125,187,63,.15);background:rgba(0,0,0,.12);overflow:hidden;}
+  .vault-home-map-canvas{position:relative;min-height:278px;background:radial-gradient(circle at 46% 48%,rgba(125,187,63,.09),transparent 35%),linear-gradient(135deg,#0b0c10,#12151a);overflow:hidden;}
+  .vault-home-map-canvas::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:32px 32px;}
+  .vault-home-map-canvas .escapist-map-svg{opacity:.33;}
+  .vault-home-leaflet-map{position:absolute;inset:0;z-index:4;background:#10120f;}
+  .vault-home-leaflet-map .leaflet-tile-pane{filter:grayscale(1) invert(.88) hue-rotate(180deg) brightness(.62) contrast(1.18);}
+  .vault-home-leaflet-map .leaflet-control-container{font-family:'Share Tech Mono',monospace;}
+  .vault-home-leaflet-map .leaflet-control-zoom a{background:rgba(10,10,15,.92);border-color:rgba(125,187,63,.24);color:var(--green);}
+  .vault-home-leaflet-map .leaflet-control-attribution{background:rgba(10,10,15,.72);color:rgba(255,255,255,.55);font-size:8px;}
+  .vault-home-leaflet-map .leaflet-control-attribution a{color:var(--green);}
+  .vault-home-map-dot{position:absolute;left:var(--x);top:var(--y);width:9px;height:9px;border:1px solid rgba(255,255,255,.62);border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(125,187,63,.13),0 0 14px rgba(125,187,63,.4);transform:translate(-50%,-50%);}
+  .vault-home-map-summary{padding:12px;border-left:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;gap:7px;}
+  .vault-home-map-stat{padding-bottom:7px;border-bottom:1px solid rgba(255,255,255,.06);}
+  .vault-home-map-stat strong{display:block;font-family:'Cinzel',serif;color:var(--amber);font-size:1.18rem;}
+  .vault-home-map-stat span{display:block;font-family:'Share Tech Mono',monospace;color:var(--text3);font-size:.49rem;text-transform:uppercase;margin-top:2px;}
+  .vault-home-map-city{display:flex;justify-content:space-between;gap:8px;font-family:'Share Tech Mono',monospace;font-size:.51rem;text-transform:uppercase;color:var(--text2);}
+  .vault-home-map-city strong{color:var(--green);}
+  .vault-home-map-summary .vault-guide-action{margin-top:auto;width:100%;}
+  .vault-home-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-bottom:10px;}
+  .vault-home-stat{border:1px solid rgba(255,255,255,.075);background:rgba(255,255,255,.02);padding:9px;min-width:0;}
+  .vault-home-stat strong{display:block;font-family:'Cinzel',serif;color:var(--amber);font-size:1.14rem;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .vault-home-stat span{display:block;font-family:'Share Tech Mono',monospace;color:var(--text3);font-size:.46rem;text-transform:uppercase;margin-top:5px;line-height:1.25;}
+  .vault-home-next{border:1px solid rgba(6,214,160,.14);background:rgba(6,214,160,.035);padding:10px;margin-top:9px;}
+  .vault-home-next strong{display:block;font-family:'Cinzel',serif;color:var(--text);font-size:.8rem;margin:3px 0;}
+  .vault-home-next p{font-size:.8rem;color:var(--text2);line-height:1.35;}
+  .vault-home-badges,.vault-home-routes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
+  .vault-home-progress-routes{margin-top:10px;}
+  .vault-home-badge{border:1px solid rgba(255,255,255,.075);background:rgba(255,255,255,.018);padding:10px;min-width:0;text-align:center;}
+  .vault-home-badge .achievement-medallion{margin:0 auto 7px;}
+  .vault-home-badge strong{display:block;font-family:'Cinzel',serif;color:var(--text);font-size:.68rem;line-height:1.2;}
+  .vault-home-badge span:not(.achievement-medallion){display:block;font-family:'Share Tech Mono',monospace;color:var(--text3);font-size:.46rem;text-transform:uppercase;margin-top:4px;}
+  .vault-home-route{text-align:left;}
+  .vault-home-route-head{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:7px;}
+  .vault-home-route-head strong{font-size:.7rem;text-align:left;}
+  .vault-home-route-head span{color:var(--green);font-size:.5rem;margin:0;white-space:nowrap;}
+  .vault-home-lower{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;}
+  .vault-home-lower .vault-home-section-head{align-items:center;min-height:32px;}
+  .vault-home-feed{display:grid;gap:7px;}
+  .vault-home-feed-item{display:grid;grid-template-columns:46px minmax(0,1fr) auto;gap:9px;align-items:center;width:100%;border:1px solid rgba(255,255,255,.075);background:rgba(255,255,255,.018);padding:8px;color:inherit;text-align:left;cursor:pointer;}
+  .vault-home-feed-thumb{width:46px;height:54px;object-fit:cover;background:#09090d;border:1px solid rgba(125,187,63,.16);display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;color:var(--amber);overflow:hidden;}
+  .vault-home-feed-thumb img{width:100%;height:100%;object-fit:cover;}
+  .vault-home-feed-item strong{display:block;font-family:'Cinzel',serif;color:var(--text);font-size:.72rem;line-height:1.18;}
+  .vault-home-feed-item span{display:block;font-family:'Share Tech Mono',monospace;color:var(--text3);font-size:.48rem;text-transform:uppercase;margin-top:3px;line-height:1.25;}
+  .vault-home-feed-score{font-family:'Cinzel',serif;color:var(--amber);font-size:.76rem;white-space:nowrap;}
+  .vault-home-empty{border:1px dashed rgba(255,255,255,.09);padding:16px;color:var(--text3);font-size:.86rem;line-height:1.4;}
+  .vault-home-guest{padding:18px;border:1px solid rgba(125,187,63,.16);background:rgba(125,187,63,.035);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;}
+  .vault-home-guest h2{font-family:'Cinzel',serif;color:var(--text);font-size:1rem;margin-bottom:5px;}
+  .vault-home-guest p{color:var(--text2);font-size:.9rem;line-height:1.42;max-width:760px;}
   .seo-footer{display:none;max-width:1400px;margin:0 auto 28px;padding:0 32px;color:var(--text3);font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;}
   body.app-ready .seo-footer{display:block;}
   .seo-footer-inner{border-top:1px solid rgba(255,255,255,.06);padding-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center;}
@@ -1218,8 +1300,11 @@
     .auth-name{max-width:72px;}
     .auth-btn{padding:7px 8px;font-size:.54rem;letter-spacing:.04em;}
     .content{padding:0 14px 40px;}
-    .tabs-container{padding:18px 14px 0;gap:0;flex-wrap:wrap;justify-content:stretch;}
-    .tab{flex:1 1 50%;min-width:0;padding:9px 10px;font-size:.72rem;text-align:center;}
+    .tabs-container{padding:18px 14px 0;gap:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));}
+    .tabs-container.authenticated{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .tab{min-width:0;padding:6px 5px;font-size:.58rem;letter-spacing:.03em;text-align:center;gap:4px;min-height:50px;}
+    .tab-icon{width:27px;height:27px;flex-basis:27px;}
+    .tab .count-badge{font-size:.5rem;padding:1px 4px;margin-left:1px;}
     .panel{padding:14px;}.rooms-grid{grid-template-columns:1fr;}
     .vault-guest-strip{grid-template-columns:1fr;margin-top:12px;padding:11px 12px;gap:10px;}
     .vault-guest-actions{justify-content:flex-start;}
@@ -1245,6 +1330,42 @@
     .vault-latest-img{width:64px;}
     .vault-latest-name{font-size:.9rem;}
     .vault-community-band{grid-template-columns:1fr;padding:12px;}
+    .vault-home{padding:10px;}
+    .vault-home-shell{gap:12px;}
+    .vault-home-identity{grid-template-columns:1fr;padding:12px;gap:12px;}
+    .vault-home-user{gap:10px;}
+    .vault-home-user .progress-avatar{width:54px;height:54px;min-width:54px;}
+    .vault-home-name{font-size:1.08rem;margin:2px 0;}
+    .vault-home-subtitle{font-size:.8rem;}
+    .vault-home-level{min-width:0;width:100%;}
+    .vault-home-level-head strong{font-size:.82rem;}
+    .vault-home-identity-badges{overflow-x:auto;padding-bottom:2px;}
+    .vault-home-identity-badge{flex:0 0 auto;}
+    .vault-home-actions{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:7px;padding-bottom:4px;scrollbar-width:thin;}
+    .vault-home-action{flex:0 0 142px;min-height:64px;scroll-snap-align:start;padding:7px 8px;}
+    .vault-home-action-mark{width:42px;height:42px;flex-basis:42px;}
+    .vault-home-action strong{font-size:.65rem;}
+    .vault-home-grid,.vault-home-lower{grid-template-columns:1fr;gap:12px;}
+    .vault-home-lower .vault-home-section-head{align-items:center;min-height:32px;}
+    .vault-home-grid>.vault-home-section>.vault-home-map{flex:none;}
+    .vault-home-section-head{align-items:start;}
+    .vault-home-section-note{max-width:45%;}
+    .vault-home-map{grid-template-columns:1fr;min-height:0;}
+    .vault-home-map-canvas{min-height:208px;}
+    .vault-home-map-summary{border-left:none;border-top:1px solid rgba(255,255,255,.07);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;padding:9px;}
+    .vault-home-map-stat{padding:0;border-bottom:none;}
+    .vault-home-map-city{display:none;}
+    .vault-home-map-summary .vault-guide-action{grid-column:1/-1;margin:2px 0 0;}
+    .vault-home-stats{grid-template-columns:repeat(4,minmax(72px,1fr));overflow-x:auto;padding-bottom:3px;}
+    .vault-home-stat{padding:8px 6px;}
+    .vault-home-stat strong{font-size:.95rem;}
+    .vault-home-badges,.vault-home-routes{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:4px;}
+    .vault-home-badge{flex:0 0 136px;scroll-snap-align:start;}
+    .vault-home-feed{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:4px;gap:7px;}
+    .vault-home-feed-item{flex:0 0 245px;scroll-snap-align:start;grid-template-columns:42px minmax(0,1fr);}
+    .vault-home-feed-thumb{width:42px;height:50px;}
+    .vault-home-feed-score{grid-column:2;margin-top:-3px;}
+    .vault-home-guest{grid-template-columns:1fr;padding:13px;}
     .seo-footer{padding:0 14px;margin-bottom:22px;}
     .seo-footer-inner{justify-content:flex-start;}
     .updated-badge{top:auto;bottom:16px;right:50%;transform:translateX(50%);text-align:center;}
@@ -1818,13 +1939,13 @@
   </div>
 
   <div style="max-width:1400px;margin:0 auto;padding:0 32px;">
-    <div class="tabs-container">
-      <button class="tab active" id="tab-vault" onclick="switchTab('thevault')">The Vault</button>
-      <button class="tab"        id="tab-cat"   onclick="switchTab('catalogo')">🗂 Catálogo <span class="count-badge" id="badge-cat">0</span></button>
-      <button class="tab auth-tab" id="tab-pend"  onclick="switchTab('pendientes')" style="display:none">🔒 Pendientes <span class="count-badge" id="badge-pend">0</span></button>
-      <button class="tab auth-tab" id="tab-mine" onclick="switchTab('mis-hechos')" style="display:none">✅ Hechos <span class="count-badge" id="badge-mine">0</span></button>
-      <button class="tab"        id="tab-hecho" onclick="switchTab('hechos')">✍ Reviews <span class="count-badge" id="badge-hecho">0</span></button>
-      <button class="tab"        id="tab-rank"  onclick="switchTab('ranking')">🏆 Ranking</button>
+    <div class="tabs-container" id="main-tabs">
+      <button class="tab active" id="tab-vault" onclick="switchTab('thevault')"><img class="tab-icon" src="images/navigation/progreso.png" alt="">The Vault</button>
+      <button class="tab" id="tab-cat" onclick="switchTab('catalogo')"><img class="tab-icon" src="images/navigation/catalogo.png" alt="">Catálogo <span class="count-badge" id="badge-cat">0</span></button>
+      <button class="tab auth-tab" id="tab-pend" onclick="switchTab('pendientes')" style="display:none"><img class="tab-icon" src="images/navigation/pendientes.png" alt="">Pendientes <span class="count-badge" id="badge-pend">0</span></button>
+      <button class="tab auth-tab" id="tab-mine" onclick="switchTab('mis-hechos')" style="display:none"><img class="tab-icon" src="images/navigation/hechos.png" alt="">Hechos <span class="count-badge" id="badge-mine">0</span></button>
+      <button class="tab" id="tab-hecho" onclick="switchTab('hechos')"><img class="tab-icon" src="images/navigation/reviews-tab.png" alt="">Reviews <span class="count-badge" id="badge-hecho">0</span></button>
+      <button class="tab" id="tab-rank" onclick="switchTab('ranking')"><img class="tab-icon" src="images/navigation/ranking.png" alt="">Ranking</button>
     </div>
   </div>
 
@@ -1842,115 +1963,8 @@
     </div>
 
     <!-- THE VAULT -->
-    <div id="panel-thevault" class="panel">
-      <div class="vault-guide-hero">
-        <div>
-          <div class="vault-guide-kicker">The Vault Escape</div>
-          <div class="vault-guide-title">Un archivo vivo para descubrir, comparar y recordar escape rooms.</div>
-          <p class="vault-guide-copy">
-            Catálogo nacional, reviews propias, ranking ponderado, premios y herramientas personales
-            para guardar pendientes, hechos, favoritos y grupos escapistas.
-          </p>
-          <div class="vault-guide-proof">
-            <span>Reviews con criterio propio</span>
-            <span>Ranking con varias fuentes</span>
-            <span>Grupos privados</span>
-          </div>
-          <div class="vault-guide-actions">
-            <button class="vault-guide-action" type="button" onclick="switchTab('catalogo')">Explorar catálogo</button>
-            <button class="vault-guide-action secondary" type="button" onclick="switchTab('hechos')">Leer reviews</button>
-            <a class="vault-guide-action secondary" href="ranking-escape-rooms/">Ranking escape rooms</a>
-            <a class="vault-guide-action secondary" href="mejores-escape-rooms/">Mejores salas</a>
-            <button class="vault-guide-action secondary guest-only" type="button" onclick="signInGoogle()">Crear cuenta</button>
-            <button class="vault-guide-action secondary auth-only" type="button" onclick="openProfile()" style="display:none">Abrir ajustes</button>
-          </div>
-        </div>
-        <div class="vault-guide-stats">
-          <div class="vault-guide-stat"><strong id="vault-stat-catalog">1700+</strong><span>salas en catálogo</span></div>
-          <div class="vault-guide-stat"><strong id="vault-stat-reviews">38</strong><span>reviews publicadas</span></div>
-          <div class="vault-guide-stat"><strong id="vault-stat-ranking">950+</strong><span>salas con ranking</span></div>
-          <div class="vault-guide-stat"><strong id="vault-stat-groups">Privados</strong><span>grupos escapistas</span></div>
-        </div>
-      </div>
-
-      <div class="vault-section-head">
-        <div class="vault-section-title">Últimas reviews</div>
-        <div class="vault-section-note">Listas para abrir y compartir</div>
-      </div>
-      <div class="vault-latest-grid" id="vault-latest-reviews"></div>
-
-      <div class="vault-guide-grid">
-        <div class="vault-guide-card">
-          <div class="vault-guide-icon">01</div>
-          <h2>Catálogo vivo</h2>
-          <p>Busca por comunidad, provincia, ciudad, jugadores, dificultad, terror y premios. Cada sala abre una ficha completa con sinopsis, datos y acciones personales.</p>
-        </div>
-        <div class="vault-guide-card">
-          <div class="vault-guide-icon">02</div>
-          <h2>Ranking con contexto</h2>
-          <p>La nota global mezcla fuentes externas, reviews The Vault y reconocimiento en premios para que una sala con varias senales pese mejor que una nota aislada.</p>
-        </div>
-        <div class="vault-guide-card">
-          <div class="vault-guide-icon">03</div>
-          <h2>Reviews The Vault</h2>
-          <p>Las reviews del grupo mantienen la memoria de lo jugado: opinión, puntuación, fotos, datos útiles y acceso al detalle de cada experiencia.</p>
-        </div>
-        <div class="vault-guide-card">
-          <div class="vault-guide-icon">04</div>
-          <h2>Cuenta personal</h2>
-          <p>Al entrar con Google puedes guardar favoritos, pendientes y hechos, escribir reseñas públicas y conservar tu lista entre móvil, PC y app instalada.</p>
-        </div>
-        <div class="vault-guide-card">
-          <div class="vault-guide-icon">05</div>
-          <h2>Grupos escapistas</h2>
-          <p>Crea grupos privados, invita companeros y separa que salas teneis pendientes o hechas juntos, incluso si perteneces a varios grupos diferentes.</p>
-        </div>
-        <div class="vault-guide-card">
-          <div class="vault-guide-icon">06</div>
-          <h2>Recomendador</h2>
-          <p>El asistente flotante ayuda a encontrar salas por zona, jugadores, estilo, terror o premios cuando no sabes por donde empezar.</p>
-        </div>
-      </div>
-
-      <div class="vault-community-band">
-        <div>
-          <div class="vault-guide-kicker">Progreso escapista</div>
-          <div class="vault-community-title">Juega, comparte y desbloquea tu identidad en The Vault.</div>
-          <p class="vault-community-copy">Las salas hechas y las reseñas conceden experiencia. Desbloquea avatares, marcos, títulos y trofeos de rutas; destaca tus tres favoritos en la vitrina y comparte tu tarjeta escapista en redes.</p>
-          <div class="vault-guide-actions">
-            <button class="vault-guide-action auth-only" type="button" onclick="openProgressSettings()" style="display:none">Ver mi progreso</button>
-            <button class="vault-guide-action guest-only" type="button" onclick="signInGoogle()">Crear mi perfil escapista</button>
-          </div>
-        </div>
-        <div class="vault-mini-list">
-          <div class="vault-mini-item"><span>Niveles escapistas</span><strong>6</strong></div>
-          <div class="vault-mini-item"><span>Logros disponibles</span><strong>18</strong></div>
-          <div class="vault-mini-item"><span>Rutas escapistas</span><strong>10</strong></div>
-          <div class="vault-mini-item"><span>Avatares y cosméticos</span><strong>+</strong></div>
-        </div>
-      </div>
-
-      <div class="vault-community-band">
-        <div>
-          <div class="vault-community-title">Pensado para escapistas que juegan solos, en pareja o en varios grupos.</div>
-          <p class="vault-community-copy">
-            Puedes tener tu lista personal y, a la vez, separar lo que haces con cada grupo.
-            Asi The Vault no solo guarda salas: guarda con quien las viviste y que queda por jugar.
-          </p>
-        </div>
-        <div class="vault-mini-list">
-          <div class="vault-mini-item"><span>Pendientes personales</span><strong id="vault-mini-pending">0</strong></div>
-          <div class="vault-mini-item"><span>Hechos personales</span><strong id="vault-mini-done">0</strong></div>
-          <div class="vault-mini-item"><span>Favoritos guardados</span><strong id="vault-mini-favs">0</strong></div>
-        </div>
-      </div>
-
-      <div class="vault-guide-flow">
-        <div class="vault-guide-step"><div class="vault-guide-step-num">1</div><div><strong>Explora</strong><span>Filtra el catálogo y abre fichas de sala.</span></div></div>
-        <div class="vault-guide-step"><div class="vault-guide-step-num">2</div><div><strong>Guarda</strong><span>Marca favoritos, pendientes y hechos.</span></div></div>
-        <div class="vault-guide-step"><div class="vault-guide-step-num">3</div><div><strong>Comparte</strong><span>Crea grupos e invita a tus companeros.</span></div></div>
-        <div class="vault-guide-step"><div class="vault-guide-step-num">4</div><div><strong>Recuerda</strong><span>Consulta reviews, fotos, notas y ranking.</span></div></div>
-      </div>
+    <div id="panel-thevault" class="panel vault-home">
+      <div id="vault-home-content" class="vault-home-loading">Preparando The Vault...</div>
     </div>
 
     <!-- PENDIENTES -->
@@ -2298,7 +2312,7 @@ let REVIEW_ROOM_ALIASES = {
 };
 let REVIEW_ROOM_ALIAS_GROUPS = {};
 let REVIEW_ROOM_META = {};
-const ROOM_EXPERIENCE_FAMILIES = [
+let ROOM_EXPERIENCE_FAMILIES = [
   {
     id: 'krugger-hotel',
     parentId: 'el-secreto-de-los-krugger',
@@ -2436,20 +2450,26 @@ let PROFILE_MAP_STATUS_FILTER = 'done';
 let PROFILE_MAP_PRECISION_FILTER = 'all';
 let PROFILE_MAP_FOCUS_ACTIVE = false;
 let ESCAPIST_LEAFLET_MAP = null;
+let VAULT_HOME_LEAFLET_MAP = null;
 let LAST_LIVE_REFRESH_AT = 0;
 let LIVE_REFRESH_IN_PROGRESS = false;
 let LIVE_REFRESH_EVENTS_READY = false;
 let ROOM_ALIASES_LOADED = false;
 let STATIC_PUBLISHED_REVIEWS_LOADED = false;
 let SITE_STATS_LOADED = false;
-const FALLBACK_SITE_STATS = {"catalog":1735,"reviews":38,"ranking":947,"locations":45,"updated":"2026-08-27"};
+let CATALOG_LOADED = false;
+let CATALOG_LOAD_PROMISE = null;
+let OFFICIAL_VIDEOS_LOADED = false;
+let OFFICIAL_VIDEOS_LOAD_PROMISE = null;
+let ROOM_RELATIONSHIPS_LOADED = false;
+const FALLBACK_SITE_STATS = {"catalog":1728,"reviews":39,"ranking":948,"locations":44,"updated":"2026-09-08"};
 let PUBLIC_SITE_STATS = { ...FALLBACK_SITE_STATS };
 let STATIC_ENHANCEMENTS_LOADED = false;
 let STATIC_ENHANCEMENTS_PROMISE = null;
 let PROFILE_MAP_DATA_PROMISE = null;
 let PHOTO_LIGHTBOX_GALLERIES = {};
 const LIVE_REFRESH_MIN_INTERVAL = 5 * 60 * 1000;
-const STATIC_ASSET_VERSION = '20260906-review-media';
+const STATIC_ASSET_VERSION = '20260908-vault-home';
 
 function invalidateReviewRoomsCache() {
   REVIEW_ROOMS_CACHE = null;
@@ -3688,7 +3708,9 @@ async function loadSiteStats() {
 async function loadAdminPublishedReviews() {
   ADMIN_PUBLISHED_REVIEWS = {};
   invalidateReviewRoomsCache();
-  if (!FIREBASE_ENABLED) return {};
+  // Public visitors must see the same immutable review set as crawlers and SEO pages.
+  // Only administrators merge the live Firebase version for editorial preview.
+  if (!FIREBASE_ENABLED || !IS_ADMIN) return {};
   try {
     ADMIN_PUBLISHED_REVIEWS = normalizePublishedReviewsPayload(await fbGet('adminPublishedReviews') || {});
   } catch (e) {
@@ -5567,14 +5589,9 @@ function accountRoleInfoHtml() {
 }
 
 function progressDoneRooms() {
-  const rooms = new Map();
-  Object.entries(USER_ROOM_STATES || {}).forEach(([key, state]) => {
-    if (!state?.done) return;
-    const room = findDetailRoom('catalogo', key) || state;
-    rooms.set(userRoomKey(room) || key, room);
-  });
-  groupDoneRooms().forEach(room => rooms.set(userRoomKey(room), room));
-  return [...rooms.values()];
+  // Usa la misma identidad canónica que la pestaña Hechos para no contar
+  // dos veces una sala conservada con nombres o alias históricos distintos.
+  return personalDoneRooms();
 }
 
 function progressPersonalDoneRooms() {
@@ -7208,17 +7225,61 @@ async function loadRoomReviews() {
   }
   invalidateReviewRoomsCache();
 }
-async function loadCatalogo() {
+async function loadRoomRelationships() {
+  if (ROOM_RELATIONSHIPS_LOADED) return true;
   try {
+    const r = await fetch(`room_relationships.json?v=${STATIC_ASSET_VERSION}`);
+    if (!r.ok) return false;
+    const data = await r.json();
+    if (Array.isArray(data.families) && data.families.length) {
+      ROOM_EXPERIENCE_FAMILIES = data.families;
+    }
+    ROOM_RELATIONSHIPS_LOADED = true;
+    return true;
+  } catch (e) {
+    console.warn('No se pudo cargar room_relationships.json:', e.message);
+    return false;
+  }
+}
+
+async function loadCatalogo() {
+  if (CATALOG_LOADED) return true;
+  if (CATALOG_LOAD_PROMISE) return CATALOG_LOAD_PROMISE;
+  CATALOG_LOAD_PROMISE = (async () => { try {
     const r = await fetch(`catalog.json?v=${STATIC_ASSET_VERSION}`, { cache: 'no-store' });
-    if (!r.ok) return;
+    if (!r.ok) return false;
     const d = await r.json();
-    CATALOGO = d.catalogo || [];
+    CATALOGO = dedupeCatalogRooms(d.catalogo || []);
     buildAutomaticReviewAliasesFromCatalog();
     invalidateReviewRoomsCache();
+    CATALOG_LOADED = true;
+    return true;
   } catch(e) {
     console.warn('No se pudo cargar catalog.json:', e.message);
-  }
+    return false;
+  } finally {
+    if (!CATALOG_LOADED) CATALOG_LOAD_PROMISE = null;
+  } })();
+  return CATALOG_LOAD_PROMISE;
+}
+
+function dedupeCatalogRooms(rooms) {
+  const byIdentity = new Map();
+  const quality = room => Object.values(room || {}).filter(value => value !== '' && value !== null && value !== undefined).length
+    - (/\-\d{5,}$/.test(String(room?.id || '')) ? 5 : 0);
+  (rooms || []).forEach(room => {
+    const identityParts = [room.nombre, room.empresa, room.ciudad].map(slugify);
+    const identity = identityParts.every(Boolean) ? identityParts.join('|') : `id:${slugify(room.id || room.nombre)}`;
+    const current = byIdentity.get(identity);
+    if (!current) {
+      byIdentity.set(identity, room);
+      return;
+    }
+    const preferred = quality(room) > quality(current) ? room : current;
+    const fallback = preferred === room ? current : room;
+    byIdentity.set(identity, { ...fallback, ...preferred });
+  });
+  return [...byIdentity.values()];
 }
 
 function buildAutomaticReviewAliasesFromCatalog() {
@@ -7298,15 +7359,23 @@ async function loadReviewPhotos() {
 }
 
 async function loadOfficialVideos() {
-  try {
+  if (OFFICIAL_VIDEOS_LOADED) return true;
+  if (OFFICIAL_VIDEOS_LOAD_PROMISE) return OFFICIAL_VIDEOS_LOAD_PROMISE;
+  OFFICIAL_VIDEOS_LOAD_PROMISE = (async () => { try {
     const r = await fetch(`official_videos.json?v=${STATIC_ASSET_VERSION}`, { cache: 'no-store' });
-    if (!r.ok) return;
+    if (!r.ok) return false;
     const d = await r.json();
     OFFICIAL_VIDEOS = d.videos || {};
+    OFFICIAL_VIDEOS_LOADED = true;
+    return true;
   } catch(e) {
     console.warn('No se pudo cargar official_videos.json:', e.message);
     OFFICIAL_VIDEOS = {};
-  }
+    return false;
+  } finally {
+    if (!OFFICIAL_VIDEOS_LOADED) OFFICIAL_VIDEOS_LOAD_PROMISE = null;
+  } })();
+  return OFFICIAL_VIDEOS_LOAD_PROMISE;
 }
 
 async function loadRoomLocations() {
@@ -7427,7 +7496,7 @@ function setupAutomaticLiveRefresh() {
 
 async function loadStaticEnhancementsAfterInitialRender() {
   try {
-    await Promise.all([loadCatalogo(), loadOfficialVideos()]);
+    await Promise.all([loadCatalogo(), loadOfficialVideos(), loadRoomRelationships()]);
     await loadRoomAliases();
     await loadStaticPublishedReviews();
     await loadTerpecaAwards();
@@ -7472,7 +7541,8 @@ async function loadData() {
       loadRoomAliases(),
       loadStaticPublishedReviews(),
       loadCatalogo(),
-      loadOfficialVideos()
+      loadOfficialVideos(),
+      loadRoomRelationships()
     ]);
     const r = await fetch('data.json');
     if (!r.ok) throw new Error(`HTTP ${r.status} — no se encontró data.json`);
@@ -7553,13 +7623,15 @@ function updateGeoFilters(scope) {
 }
 
 function publicCatalogCount() {
-  return CATALOGO.length || Number(PUBLIC_SITE_STATS.catalog) || 0;
+  return Number(PUBLIC_SITE_STATS.catalog) || CATALOGO.length || 0;
+}
+
+function publicReviewCount() {
+  return Number(PUBLIC_SITE_STATS.reviews) || Object.keys(STATIC_PUBLISHED_REVIEWS || {}).length || 0;
 }
 
 function publicRankingCount() {
-  let ranked = 0;
-  try { ranked = rankingRooms().length; } catch (e) { ranked = 0; }
-  return ranked || Number(PUBLIC_SITE_STATS.ranking) || 0;
+  return Number(PUBLIC_SITE_STATS.ranking) || 0;
 }
 
 function populateFilters() {
@@ -7599,7 +7671,7 @@ function populateFilters() {
   rankCommunityFilter = document.getElementById('filter-comunidad-rank')?.value || '';
   document.getElementById('badge-pend').textContent  = pendingRooms.length;
   document.getElementById('badge-mine').textContent = personalDoneRooms().length;
-  document.getElementById('badge-hecho').textContent = reviews.length;
+  document.getElementById('badge-hecho').textContent = publicReviewCount();
   document.getElementById('badge-cat').textContent = publicCatalogCount();
   syncNavigationForAuth();
 }
@@ -7650,20 +7722,288 @@ function renderStats() {
 }
 
 function renderVaultGuide() {
-  const setText = (id, value) => {
-    const node = document.getElementById(id);
-    if (node) node.textContent = value;
-  };
-  const ranked = publicRankingCount();
-  setText('vault-stat-catalog', publicCatalogCount());
-  setText('vault-stat-reviews', reviewRooms().length || 0);
-  setText('vault-stat-ranking', ranked || 0);
-  setText('vault-stat-groups', AUTH_USER ? activeUserGroups().length : '-');
-  setText('vault-mini-pending', AUTH_USER ? currentPendingRooms().length : '-');
-  setText('vault-mini-done', AUTH_USER ? currentDoneRooms().length : '-');
-  setText('vault-mini-favs', AUTH_USER ? FAVS.size : '-');
-  const latest = document.getElementById('vault-latest-reviews');
-  if (latest) latest.innerHTML = vaultLatestReviewsHtml();
+  const root = document.getElementById('vault-home-content');
+  if (!root) return;
+  if (!AUTH_USER) {
+    if (VAULT_HOME_LEAFLET_MAP) {
+      VAULT_HOME_LEAFLET_MAP.remove();
+      VAULT_HOME_LEAFLET_MAP = null;
+    }
+    root.className = 'vault-home-guest-shell';
+    root.innerHTML = vaultGuestOverviewHtml();
+    return;
+  }
+  const model = progressModel();
+  root.className = 'vault-home-shell';
+  root.innerHTML = `${vaultHomeIdentityHtml(model)}
+    <div class="vault-home-grid">
+      ${vaultHomeMapHtml(model)}
+      ${vaultHomeProgressHtml(model)}
+    </div>
+    <div class="vault-home-lower">
+      ${vaultHomeActivityHtml(model)}
+      ${vaultHomeDiscoveryHtml()}
+    </div>
+    `;
+  requestAnimationFrame(() => {
+    if (Object.keys(ROOM_LOCATIONS || {}).length) {
+      initVaultHomeLeafletMap();
+      return;
+    }
+    ensureProfileMapDataLoaded().then(() => {
+      if (AUTH_USER && ACTIVE_TAB === 'thevault') renderVaultGuide();
+    }).catch(error => console.warn('No se pudo cargar el mapa de inicio:', error.message));
+  });
+}
+
+function vaultHomeIdentityHtml(model) {
+  if (!model) {
+    return `<section class="vault-home-identity">
+      <div><div class="vault-home-eyebrow">The Vault Escape</div><h1 class="vault-home-name">Tu archivo escapista empieza aquí</h1><p class="vault-home-subtitle">Descubre salas, compara opiniones y guarda cada experiencia en un único lugar.</p></div>
+      <div class="vault-guide-stats">
+        <div class="vault-guide-stat"><strong>${publicCatalogCount()}</strong><span>salas</span></div>
+        <div class="vault-guide-stat"><strong>${publicReviewCount()}</strong><span>reviews</span></div>
+        <div class="vault-guide-stat"><strong>${publicRankingCount()}</strong><span>con ranking</span></div>
+        <div class="vault-guide-stat"><strong>18</strong><span>logros</span></div>
+      </div>
+    </section>`;
+  }
+  const title = selectedProgressTitle();
+  const nextCopy = model.nextLevel ? `${Math.max(0, model.nextLevel.min - model.xp)} XP para ${model.nextLevel.name}` : 'Nivel máximo alcanzado';
+  const identityAchievements = [...model.achievements]
+    .sort((a, b) => Number(b.unlocked) - Number(a.unlocked) || (b.current / b.target) - (a.current / a.target))
+    .slice(0, 3);
+  return `<section class="vault-home-identity">
+    <div class="vault-home-user">
+      ${progressAvatarHtml(selectedProgressAvatar(), selectedProgressFrame(), 'vault-home-avatar')}
+      <div><div class="vault-home-eyebrow">Mi identidad escapista</div><h1 class="vault-home-name">${escapeHtml(shortDisplayName())}</h1><p class="vault-home-subtitle">${escapeHtml(title?.name || model.level.name)} · ${model.doneRooms.length} salas hechas</p></div>
+    </div>
+    <div class="vault-home-level">
+      <div class="vault-home-level-head"><strong>${escapeHtml(model.level.name)}</strong><span>${model.xp} XP</span></div>
+      <div class="vault-home-track" aria-label="Progreso de nivel"><span style="width:${model.levelProgress.toFixed(1)}%"></span></div>
+      <div class="vault-home-section-note" style="margin-top:6px;text-align:left">${escapeHtml(nextCopy)}</div>
+      <div class="vault-home-identity-badges" aria-label="Logros destacados">${identityAchievements.map(item => `<div class="vault-home-identity-badge">${achievementMedallionHtml(item, 'small')}<strong>${escapeHtml(item.name)}</strong></div>`).join('')}</div>
+    </div>
+  </section>`;
+}
+
+function vaultHomeActionsHtml(model) {
+  const actions = [
+    ['images/navigation/catalogo.png', 'Catálogo', `${publicCatalogCount()} salas`, "switchTab('catalogo')"],
+    ['images/navigation/mapa.png', 'Mi mapa', model ? `${model.doneRooms.length} jugadas` : 'Explorar mapa', model ? 'openVaultHomeMap()' : 'signInGoogle()'],
+    ['images/navigation/reviews.png', 'Reviews', `${publicReviewCount()} publicadas`, "switchTab('hechos')"],
+    ['images/navigation/ranking.png', 'Ranking', `${publicRankingCount()} puntuadas`, "switchTab('ranking')"],
+    ['images/navigation/progreso.png', 'Progreso', model ? `${model.achievements.filter(item => item.unlocked).length} logros` : 'Crea tu perfil', model ? 'openProgressSettings()' : 'signInGoogle()']
+  ];
+  return `<nav class="vault-home-actions" aria-label="Accesos rápidos">${actions.map(([icon, name, meta, action]) => `<button class="vault-home-action" type="button" onclick="${action}"><span class="vault-home-action-mark"><img src="${versionedLocalAsset(icon)}" alt="" width="48" height="48"></span><span><strong>${escapeHtml(name)}</strong><span>${escapeHtml(meta)}</span></span></button>`).join('')}</nav>`;
+}
+
+function openVaultHomeMap() {
+  SETTINGS_TAB = 'profile';
+  openProfile('', false);
+  setTimeout(() => document.querySelector('.escapist-map-wrap')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 180);
+}
+
+function vaultHomeMapHtml(model) {
+  const rooms = model.doneRooms || [];
+  const cities = new Map();
+  const provinces = new Set();
+  rooms.forEach(room => {
+    const city = cleanValue(room.ciudad) || 'Sin ciudad';
+    cities.set(city, (cities.get(city) || 0) + 1);
+    const province = normalizedKey(room.provincia);
+    if (province) provinces.add(province);
+  });
+  const topCities = [...cities.entries()].sort((a, b) => b[1] - a[1]).slice(0, 4);
+  return `<section class="vault-home-section">
+    <div class="vault-home-section-head"><div class="vault-home-section-title">Mi mapa escapista</div><div class="vault-home-section-note">Solo salas realizadas</div></div>
+    <div class="vault-home-map">
+      <div class="vault-home-map-canvas"><div id="vault-home-leaflet-map" class="vault-home-leaflet-map"></div></div>
+      <div class="vault-home-map-summary">
+        <div class="vault-home-map-stat"><strong>${rooms.length}</strong><span>salas hechas</span></div>
+        <div class="vault-home-map-stat"><strong>${cities.size}</strong><span>ciudades</span></div>
+        <div class="vault-home-map-stat"><strong>${provinces.size}</strong><span>provincias</span></div>
+        ${topCities.map(([city, count]) => `<div class="vault-home-map-city"><span>${escapeHtml(city)}</span><strong>${count}</strong></div>`).join('')}
+        <button class="vault-guide-action" type="button" onclick="openVaultHomeMap()">Abrir mapa completo</button>
+      </div>
+    </div>
+  </section>`;
+}
+
+async function initVaultHomeLeafletMap() {
+  const node = document.getElementById('vault-home-leaflet-map');
+  if (!node || !AUTH_USER) return;
+  const leafletReady = await ensureLeafletAssets();
+  if (!leafletReady || !document.body.contains(node)) return;
+  if (VAULT_HOME_LEAFLET_MAP) VAULT_HOME_LEAFLET_MAP.remove();
+  const locations = escapistMapLocations(escapistDoneRoomItems());
+  const clusters = escapistMapClusters(locations);
+  const map = L.map(node, { zoomControl: true, scrollWheelZoom: false, tap: true });
+  VAULT_HOME_LEAFLET_MAP = map;
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+  if (!clusters.length) {
+    map.setView([40.2, -3.7], 5);
+    setTimeout(() => map.invalidateSize(), 80);
+    return;
+  }
+  const bounds = [];
+  clusters.forEach(cluster => {
+    const size = cluster.rooms.length > 1 ? 34 : 28;
+    const label = cluster.rooms.length > 1 ? cluster.rooms.length : '•';
+    const icon = L.divIcon({
+      className: '',
+      html: `<button class="escapist-leaflet-marker ${escapistMapClusterMarkerClass(cluster)}" type="button" aria-label="${escapeHtml(mapClusterTitle(cluster))}"><span>${label}</span></button>`,
+      iconSize: [size, size],
+      iconAnchor: [size / 2, size / 2]
+    });
+    const latLng = [cluster.coord.lat, cluster.coord.lon];
+    bounds.push(latLng);
+    L.marker(latLng, { icon, title: mapClusterTitle(cluster) }).addTo(map).on('click', () => {
+      PROFILE_MAP_ACTIVE_KEY = cluster.key;
+      PROFILE_MAP_FOCUS_ACTIVE = true;
+      openVaultHomeMap();
+    });
+  });
+  map.fitBounds(bounds, { padding: [26, 26], maxZoom: clusters.length <= 4 ? 13 : 8 });
+  setTimeout(() => map.invalidateSize(), 80);
+}
+
+function vaultHomeProgressHtml(model) {
+  const minutes = model ? model.doneRooms.reduce((sum, room) => sum + playedMinutesForRoom(room), 0) : 0;
+  const unlocked = model ? model.achievements.filter(item => item.unlocked).length : 0;
+  const next = model?.nextAchievement;
+  const routes = [...(model?.routes || [])]
+    .sort((a, b) => Number(b.unlocked) - Number(a.unlocked) || (b.completed / b.target) - (a.completed / a.target))
+    .slice(0, 3);
+  const routesHtml = routes.length
+    ? routes.map(route => `<div class="vault-home-badge vault-home-route"><div class="vault-home-route-head"><strong>${escapeHtml(route.name)}</strong><span>${route.completed}/${route.target}</span></div><div class="vault-home-track"><span style="width:${Math.min(100, (route.completed / route.target) * 100).toFixed(1)}%"></span></div><span>${route.unlocked ? 'Ruta completada' : 'En progreso'}</span></div>`).join('')
+    : '<div class="vault-home-empty" style="grid-column:1/-1">Las rutas conectan salas concretas y desbloquean trofeos al completarlas.</div>';
+  return `<section class="vault-home-section">
+    <div class="vault-home-section-head"><div class="vault-home-section-title">Progreso escapista</div><button class="vault-guide-action secondary" type="button" onclick="${model ? 'openProgressSettings()' : 'signInGoogle()'}">Ver progreso</button></div>
+    <div class="vault-home-stats">
+      <div class="vault-home-stat"><strong>${model ? model.doneRooms.length : '-'}</strong><span>hechas</span></div>
+      <div class="vault-home-stat"><strong>${model ? model.cities.size : '-'}</strong><span>ciudades</span></div>
+      <div class="vault-home-stat"><strong>${model ? formatPlayedMinutes(minutes) : '-'}</strong><span>jugado</span></div>
+      <div class="vault-home-stat"><strong>${model ? model.reviews.length : '-'}</strong><span>reseñas</span></div>
+    </div>
+    <div class="vault-home-next">
+      <div class="vault-home-label">${next ? 'Siguiente logro' : 'Sistema de experiencia'}</div>
+      <strong>${escapeHtml(next?.name || 'Convierte tus partidas en progreso')}</strong>
+      <p>${escapeHtml(next ? `${Math.min(next.current, next.target)} de ${next.target}. ${next.description}` : 'Marca salas, publica reseñas y completa rutas para desbloquear tu identidad.')}</p>
+      ${next ? `<div class="vault-home-track" style="margin-top:8px"><span style="width:${Math.min(100, (next.current / next.target) * 100).toFixed(1)}%"></span></div>` : ''}
+    </div>
+    <div class="vault-home-next"><div class="vault-home-label">Colección</div><strong>${unlocked} de ${model?.achievements.length || 18} logros · ${model?.routes.filter(route => route.unlocked).length || 0} rutas completas</strong><p>${model ? `${model.balance} créditos disponibles para personalizar avatar, marco y título.` : 'Tu perfil reúne logros, rutas, avatares y títulos.'}</p></div>
+    <div class="vault-home-progress-routes">
+      <div class="vault-home-section-head"><div class="vault-home-label">Rutas escapistas</div><div class="vault-home-section-note">${model?.routes.filter(route => route.unlocked).length || 0} completadas</div></div>
+      <div class="vault-home-routes">${routesHtml}</div>
+    </div>
+  </section>`;
+}
+
+function vaultHomeAchievementsHtml(model) {
+  const achievements = model
+    ? [...model.achievements].sort((a, b) => Number(b.unlocked) - Number(a.unlocked) || (b.current / b.target) - (a.current / a.target)).slice(0, 3)
+    : [];
+  const routes = model
+    ? [...model.routes].sort((a, b) => Number(b.unlocked) - Number(a.unlocked) || (b.completed / b.target) - (a.completed / a.target)).slice(0, 3)
+    : [];
+  const fallbackAchievements = [
+    { id: 'first_escape', mark: 'I', name: 'Primera fuga', current: 0, target: 1 },
+    { id: 'first_review', mark: 'R', name: 'La crítica', current: 0, target: 1 },
+    { id: 'explorer', mark: 'V', name: 'Explorador', current: 0, target: 5 }
+  ];
+  return `<section class="vault-home-section">
+    <div class="vault-home-section-head"><div class="vault-home-section-title">Logros y rutas</div><div class="vault-home-section-note">Tu vitrina escapista</div></div>
+    <div class="vault-home-grid">
+      <div class="vault-home-badges">${(achievements.length ? achievements : fallbackAchievements).map(item => `<div class="vault-home-badge">${achievementMedallionHtml(item)}<strong>${escapeHtml(item.name)}</strong><span>${item.unlocked ? 'Desbloqueado' : `${Math.min(item.current, item.target)} / ${item.target}`}</span></div>`).join('')}</div>
+      <div class="vault-home-routes">${routes.length ? routes.map(route => `<div class="vault-home-badge vault-home-route"><div class="vault-home-route-head"><strong>${escapeHtml(route.name)}</strong><span>${route.completed}/${route.target}</span></div><div class="vault-home-track"><span style="width:${Math.min(100, (route.completed / route.target) * 100).toFixed(1)}%"></span></div><span>${route.unlocked ? 'Ruta completada' : 'En progreso'}</span></div>`).join('') : `<div class="vault-home-empty" style="grid-column:1/-1">Las rutas conectan salas concretas y desbloquean trofeos al completarlas.</div>`}</div>
+    </div>
+  </section>`;
+}
+
+function vaultHomeThumbHtml(room) {
+  const src = roomImageSrc(room || {});
+  const initial = escapeHtml((room?.nombre || '?').trim().slice(0, 1).toUpperCase());
+  return `<span class="vault-home-feed-thumb">${src ? `<img src="${escapeHtml(src)}" alt="" loading="lazy" onerror="this.replaceWith(document.createTextNode('${initial}'))">` : initial}</span>`;
+}
+
+function vaultHomeActivityHtml(model) {
+  let rooms = [];
+  if (model) {
+    rooms = [...model.personalDoneRooms].sort((a, b) => Number(userStateFor(b).updatedAt || 0) - Number(userStateFor(a).updatedAt || 0)).slice(0, 3);
+  } else {
+    rooms = reviewRooms().filter(room => room?.nombre).sort((a, b) => reviewTimeValue(b) - reviewTimeValue(a)).slice(0, 3);
+  }
+  return `<section class="vault-home-section"><div class="vault-home-section-head"><div class="vault-home-section-title">${model ? 'Actividad reciente' : 'Últimas reviews'}</div><div class="vault-home-section-note">Abrir ficha</div></div><div class="vault-home-feed">${rooms.length ? rooms.map(room => {
+    const catalogRoom = catalogRoomFor(room) || room;
+    const key = jsString(model ? userRoomKey(catalogRoom) : roomKey(catalogRoom));
+    const meta = [catalogRoom.empresa, catalogRoom.ciudad].filter(Boolean).join(' · ') || 'Escape room';
+    return `<button class="vault-home-feed-item" type="button" onclick="openDetail('${model ? 'catalogo' : 'hechos'}','${key}')">${vaultHomeThumbHtml(catalogRoom)}<span><strong>${escapeHtml(catalogRoom.nombre || 'Escape room')}</strong><span>${escapeHtml(meta)}</span></span><span class="vault-home-feed-score">${model ? 'Hecha' : (catalogRoom.valoracion ? Number(catalogRoom.valoracion).toFixed(1).replace('.0', '') : 'Ver')}</span></button>`;
+  }).join('') : '<div class="vault-home-empty">Tu actividad aparecerá aquí cuando marques tu primera sala.</div>'}</div></section>`;
+}
+
+function vaultHomeDiscoveryHtml() {
+  const rooms = uniqueRooms(CATALOGO.map(canonicalRoomForListing))
+    .map(room => ({ room, score: rankingScore(room) }))
+    .filter(item => item.score > 0)
+    .sort((a, b) => b.score - a.score || (a.room.nombre || '').localeCompare(b.room.nombre || '', 'es'))
+    .slice(0, 3);
+  return `<section class="vault-home-section"><div class="vault-home-section-head"><div class="vault-home-section-title">Descubre algo nuevo</div><button class="vault-guide-action secondary" type="button" onclick="switchTab('catalogo')">Ver catálogo</button></div><div class="vault-home-feed">${rooms.map(({ room, score }) => `<button class="vault-home-feed-item" type="button" onclick="openDetail('catalogo','${jsString(userRoomKey(room))}')">${vaultHomeThumbHtml(room)}<span><strong>${escapeHtml(room.nombre || 'Escape room')}</strong><span>${escapeHtml([room.empresa, room.ciudad].filter(Boolean).join(' · '))}</span></span><span class="vault-home-feed-score">${score.toFixed(1)}</span></button>`).join('')}</div></section>`;
+}
+
+function vaultGuestOverviewHtml() {
+  return `<div class="vault-guide-hero">
+    <div>
+      <div class="vault-guide-kicker">The Vault Escape</div>
+      <div class="vault-guide-title">Un archivo vivo para descubrir, comparar y recordar escape rooms.</div>
+      <p class="vault-guide-copy">Catálogo nacional, reviews propias, ranking ponderado, premios y herramientas personales para guardar pendientes, hechos, favoritos y grupos escapistas.</p>
+      <div class="vault-guide-proof"><span>Reviews con criterio propio</span><span>Ranking con varias fuentes</span><span>Grupos privados</span></div>
+      <div class="vault-guide-actions">
+        <button class="vault-guide-action" type="button" onclick="switchTab('catalogo')">Explorar catálogo</button>
+        <button class="vault-guide-action secondary" type="button" onclick="switchTab('hechos')">Leer reviews</button>
+        <a class="vault-guide-action secondary" href="ranking-escape-rooms/">Ranking escape rooms</a>
+        <a class="vault-guide-action secondary" href="mejores-escape-rooms/">Mejores salas</a>
+        <button class="vault-guide-action secondary" type="button" onclick="signInGoogle()">Crear cuenta</button>
+      </div>
+    </div>
+    <div class="vault-guide-stats">
+      <div class="vault-guide-stat"><strong>${publicCatalogCount()}</strong><span>salas en catálogo</span></div>
+      <div class="vault-guide-stat"><strong>${publicReviewCount()}</strong><span>reviews publicadas</span></div>
+      <div class="vault-guide-stat"><strong>${publicRankingCount()}</strong><span>salas con ranking</span></div>
+      <div class="vault-guide-stat"><strong>-</strong><span>grupos escapistas</span></div>
+    </div>
+  </div>
+  <div class="vault-section-head"><div class="vault-section-title">Últimas reviews</div><div class="vault-section-note">Listas para abrir y compartir</div></div>
+  <div class="vault-latest-grid">${vaultLatestReviewsHtml()}</div>
+  <div class="vault-guide-grid">
+    <div class="vault-guide-card"><div class="vault-guide-icon">01</div><h2>Catálogo vivo</h2><p>Busca por comunidad, provincia, ciudad, jugadores, dificultad, terror y premios. Cada sala abre una ficha completa con sinopsis, datos y acciones personales.</p></div>
+    <div class="vault-guide-card"><div class="vault-guide-icon">02</div><h2>Ranking con contexto</h2><p>La nota global mezcla fuentes externas, reviews The Vault y reconocimiento en premios para que una sala con varias señales pese mejor que una nota aislada.</p></div>
+    <div class="vault-guide-card"><div class="vault-guide-icon">03</div><h2>Reviews The Vault</h2><p>Las reviews del grupo mantienen la memoria de lo jugado: opinión, puntuación, fotos, datos útiles y acceso al detalle de cada experiencia.</p></div>
+    <div class="vault-guide-card"><div class="vault-guide-icon">04</div><h2>Cuenta personal</h2><p>Al entrar con Google puedes guardar favoritos, pendientes y hechos, escribir reseñas públicas y conservar tu lista entre móvil, PC y app instalada.</p></div>
+    <div class="vault-guide-card"><div class="vault-guide-icon">05</div><h2>Grupos escapistas</h2><p>Crea grupos privados, invita compañeros y separa qué salas tenéis pendientes o hechas juntos, incluso si perteneces a varios grupos diferentes.</p></div>
+    <div class="vault-guide-card"><div class="vault-guide-icon">06</div><h2>Recomendador</h2><p>El asistente flotante ayuda a encontrar salas por zona, jugadores, estilo, terror o premios cuando no sabes por dónde empezar.</p></div>
+  </div>
+  <div class="vault-community-band">
+    <div><div class="vault-guide-kicker">Progreso escapista</div><div class="vault-community-title">Juega, comparte y desbloquea tu identidad en The Vault.</div><p class="vault-community-copy">Las salas hechas y las reseñas conceden experiencia. Desbloquea avatares, marcos, títulos y trofeos de rutas; destaca tus tres favoritos en la vitrina y comparte tu tarjeta escapista en redes.</p><div class="vault-guide-actions"><button class="vault-guide-action" type="button" onclick="signInGoogle()">Crear mi perfil escapista</button></div></div>
+    <div class="vault-mini-list"><div class="vault-mini-item"><span>Niveles escapistas</span><strong>6</strong></div><div class="vault-mini-item"><span>Logros disponibles</span><strong>18</strong></div><div class="vault-mini-item"><span>Rutas escapistas</span><strong>10</strong></div><div class="vault-mini-item"><span>Avatares y cosméticos</span><strong>+</strong></div></div>
+  </div>
+  <div class="vault-community-band">
+    <div><div class="vault-community-title">Pensado para escapistas que juegan solos, en pareja o en varios grupos.</div><p class="vault-community-copy">Puedes tener tu lista personal y, a la vez, separar lo que haces con cada grupo. Así The Vault no solo guarda salas: guarda con quién las viviste y qué queda por jugar.</p></div>
+    <div class="vault-mini-list"><div class="vault-mini-item"><span>Pendientes personales</span><strong>-</strong></div><div class="vault-mini-item"><span>Hechos personales</span><strong>-</strong></div><div class="vault-mini-item"><span>Favoritos guardados</span><strong>-</strong></div></div>
+  </div>
+  <div class="vault-guide-flow">
+    <div class="vault-guide-step"><div class="vault-guide-step-num">1</div><div><strong>Explora</strong><span>Filtra el catálogo y abre fichas de sala.</span></div></div>
+    <div class="vault-guide-step"><div class="vault-guide-step-num">2</div><div><strong>Guarda</strong><span>Marca favoritos, pendientes y hechos.</span></div></div>
+    <div class="vault-guide-step"><div class="vault-guide-step-num">3</div><div><strong>Comparte</strong><span>Crea grupos e invita a tus compañeros.</span></div></div>
+    <div class="vault-guide-step"><div class="vault-guide-step-num">4</div><div><strong>Recuerda</strong><span>Consulta reviews, fotos, notas y ranking.</span></div></div>
+  </div>`;
+}
+
+function vaultHomeGuestHtml() {
+  return `<section class="vault-home-guest"><div><h2>Haz que The Vault recuerde contigo</h2><p>Guarda pendientes y favoritos, registra tus salas hechas, crea grupos, escribe reseñas y desbloquea logros, rutas y personalización desde cualquier dispositivo.</p></div><button class="vault-guide-action" type="button" onclick="signInGoogle()">Crear mi perfil escapista</button></section>`;
 }
 
 function reviewPublishedTime(room) {
@@ -7722,6 +8062,7 @@ function updateGuestStripVisibility() {
 
 function syncNavigationForAuth() {
   const signed = !!AUTH_USER;
+  document.getElementById('main-tabs')?.classList.toggle('authenticated', signed);
   document.querySelectorAll('.auth-tab,.auth-only').forEach(el => {
     el.style.display = signed ? '' : 'none';
   });
@@ -7730,7 +8071,7 @@ function syncNavigationForAuth() {
   });
   const pendTab = document.getElementById('tab-pend');
   if (pendTab) {
-    pendTab.innerHTML = `🔒 Pendientes <span class="count-badge" id="badge-pend">${personalPendingRooms().length}</span>`;
+    pendTab.innerHTML = `<img class="tab-icon" src="${versionedLocalAsset('images/navigation/pendientes.png')}" alt="">Pendientes <span class="count-badge" id="badge-pend">${personalPendingRooms().length}</span>`;
   }
   if (!signed) {
     showOnlyFavs = false;
@@ -8865,7 +9206,7 @@ function communityScoreMeta(room) {
   return count > 0 ? metaItem('Comunidad', `🗳 ${(avg * 2).toFixed(1)}/10 (${count})`) : '';
 }
 
-function reviewScoreMeta(room) {
+function legacyReviewScoreMeta(room) {
   const categoryScore = reviewCategoryScore(room);
   return [
     metaItem('Escapistas', room.rating ? `★ ${room.rating}` : ''),
@@ -9498,7 +9839,7 @@ function renderCatalogo() {
   document.getElementById('catalog-more').innerHTML = moreHtml;
 }
 
-function rankingRooms() {
+function legacyRankingRooms() {
   const byKey = new Map();
   const mergeRoom = (room, source) => {
     const key = reviewRoomKey(room) || slugify(room.nombre || room.empresa || source);
@@ -9521,7 +9862,7 @@ function rankingRooms() {
   return [...byKey.values()];
 }
 
-function rankingScore(room, type) {
+function legacyRankingScore(room, type) {
   if (type === 'escapistas') return parseFloat(displayRating(room)) || 0;
   if (type === 'comunidad') {
     const { avg } = voteStatsForRoom(room);
@@ -9542,7 +9883,7 @@ function rankingTheme(room) {
   ].find(Boolean) || 'Sin temática';
 }
 
-function renderRanking() {
+function legacyRenderRanking() {
   const rows = rankingRooms()
     .map(room => ({ room, global: globalRatingForRoom(room) }))
     .sort((a, b) => {

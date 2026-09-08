@@ -23,6 +23,7 @@ REVIEW_SOCIAL_DIR = Path("images/seo/reviews")
 LATEST_REVIEW_THUMB_DIR = Path("images/seo/latest")
 CITY_PAGE_MIN_ROOMS = 8
 REGION_PAGE_MIN_ROOMS = 10
+LEGACY_LOCATION_SLUGS = {"escape-rooms-vigo"}
 ROOM_LOCATIONS_CACHE = None
 SEO_ROOM_SLUGS = {}
 
@@ -678,6 +679,7 @@ def published_review_rooms(data):
         room["_reviewKey"] = identity
         room["_publishedAt"] = record.get("publishedAt") or record.get("updatedAt") or 0
         room["_updatedAt"] = record.get("updatedAt") or record.get("publishedAt") or 0
+        room["_reviewHasText"] = len(plain_review_text(review.get("descripcion"))) >= 80
         room["_reviewAuthorName"] = record.get("publishedByName") or review.get("_reviewAuthorName") or "The Vault"
         room["_arkkadiaCommunityReview"] = room["_reviewAuthorName"] not in ("", "The Vault")
         rooms.append(apply_canonical_room_fields(room))
@@ -1225,7 +1227,8 @@ def review_page(room, photos, social_image_path=""):
         '<meta property="article:tag" content="review escape room">',
         f'<meta property="article:tag" content="{escape(name)}">',
     ])
-    return base_head(title, description, canonical, image) + f"""
+    robots = "index, follow, max-image-preview:large" if review_is_indexable(room) else "noindex, follow"
+    return base_head(title, description, canonical, image, robots=robots) + f"""
 {article_meta}
 <script type="application/ld+json">
 {json_ld(schema)}
@@ -1267,7 +1270,7 @@ def review_page(room, photos, social_image_path=""):
     <h2>Valoración por categorías</h2>
     <div class="cats">{cat_html}</div>
   </section>
-  {f'<section class="section"><h2>Fotos de la experiencia</h2><div class="photos">{photo_html}</div></section>' if photo_html else ''}
+{f'<section class="section"><h2>Fotos de la experiencia</h2><div class="photos">{photo_html}</div></section>' if photo_html else ''}
 </main>
 {seo_footer()}
 </body>
@@ -1910,6 +1913,14 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
     if video_url and not video_url.startswith(("http://", "https://")):
         video_url = ""
     video_provider = folded(video.get("provider"))
+    video_source_url = text(video.get("source_page_url"))
+    if "escapistas.club/" in folded(video_source_url):
+        video_source_note = (
+            f'Vídeo verificado en la <a href="{escape(video_source_url)}" rel="nofollow noopener">'
+            'ficha de Escapistas.club</a>.'
+        )
+    else:
+        video_source_note = "Vídeo localizado en la web oficial de la sala."
     video_thumbnail = text(video.get("thumbnail"))
     if video_thumbnail and not video_thumbnail.startswith(("http://", "https://")):
         video_thumbnail = asset_url(video_thumbnail)
@@ -2004,7 +2015,9 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
             "isPartOf": {"@id": canonical},
         }
         schema["@graph"].append({key: value for key, value in video_schema.items() if value})
-    return base_head(title, description, canonical, image) + f"""
+    indexable = room_is_indexable(item, review_slugs, videos_data)
+    robots = "index, follow, max-image-preview:large" if indexable else "noindex, follow"
+    return base_head(title, description, canonical, image, robots=robots) + f"""
 <script type="application/ld+json">
 {json_ld(schema)}
 </script>
@@ -2027,22 +2040,22 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
       </div>
     </div>
   </article>
-  {f'''<section class="section">
+{f'''<section class="section">
     <h2>Datos rápidos de {escape(name)}</h2>
     <dl class="facts">{facts_html}</dl>
   </section>''' if facts_html else ''}
-  {f'''<section class="section">
+{f'''<section class="section">
     <h2>Fuentes del ranking</h2>
     <div class="meta">{sources_html}</div>
     <p class="explain">La nota global combina las fuentes disponibles para esta sala, las reviews publicadas en The Vault, la comunidad y el peso moderado de premios o nominaciones. En caso de empate se prioriza la sala contrastada por más fuentes.</p>
   </section>''' if sources_html else ''}
-  {f'<section class="section"><h2>Sinopsis</h2><div class="review">{escape(synopsis)}</div></section>' if synopsis and folded(synopsis) != 'sin sinopsis' else ''}
-  {f'''<section class="section">
+{f'<section class="section"><h2>Sinopsis</h2><div class="review">{escape(synopsis)}</div></section>' if synopsis and folded(synopsis) != 'sin sinopsis' else ''}
+{f'''<section class="section">
     <h2>Vídeo de introducción</h2>
     {video_html}
-    <p class="media-note">Vídeo localizado en la web oficial de la sala.</p>
+    <p class="media-note">{video_source_note}</p>
   </section>''' if video_html else ''}
-  {f'''<section class="section">
+{f'''<section class="section">
     <h2>Fotos del grupo</h2>
     <div class="photos">{photo_html}</div>
   </section>''' if photo_html else ''}
@@ -2057,8 +2070,65 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
 """
 
 
-def sitemap_xml(review_rooms, sala_rows, location_specs=None):
-    entries = [
+def room_quality_score(item, review_slugs=None, videos_data=None):
+    room = item.get("room") or {}
+    synopsis = text(room.get("descripcion"))
+    score = 0
+    if synopsis and folded(synopsis) != "sin sinopsis":
+        score += 40 if len(synopsis) >= 150 else 20
+    if text(room.get("imagen")):
+        score += 15
+    if text(room.get("ciudad")) and text(room.get("provincia")):
+        score += 15
+    if text(room.get("web")):
+        score += 10
+    if text(room.get("duracion")):
+        score += 5
+    if decimal((item.get("rating") or {}).get("global_score")) > 0:
+        score += 10
+    if room_url_slug(room) in (review_slugs or set()):
+        score += 15
+    video = video_entry(room, videos_data or {})
+    if text(video.get("upload_date")) and text(video.get("thumbnail")):
+        score += 10
+    return score
+
+
+def room_is_indexable(item, review_slugs=None, videos_data=None):
+    room = item.get("room") or {}
+    synopsis = text(room.get("descripcion"))
+    has_synopsis = folded(synopsis) != "sin sinopsis" and len(synopsis) >= 80
+    has_review = room_url_slug(room) in (review_slugs or set())
+    video = video_entry(room, videos_data or {})
+    has_video = bool(text(video.get("upload_date")) and text(video.get("thumbnail")))
+    return (has_synopsis or has_review or has_video) and room_quality_score(item, review_slugs, videos_data) >= 35
+
+
+def review_is_indexable(room):
+    return room.get("_reviewHasText") is not False and len(plain_review_text(room.get("descripcion"))) >= 80
+
+
+def urlset_xml(entries):
+    unique_entries = []
+    seen_urls = set()
+    for url in entries:
+        if url in seen_urls:
+            continue
+        unique_entries.append(url)
+        seen_urls.add(url)
+    body = "\n".join(f"  <url><loc>{escape(url)}</loc></url>" for url in unique_entries)
+    return f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{body}\n</urlset>\n'
+
+
+def sitemap_index_xml(names):
+    body = "\n".join(
+        f"  <sitemap><loc>{escape(site_url('/' + name))}</loc></sitemap>" for name in names
+    )
+    return f'<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{body}\n</sitemapindex>\n'
+
+
+def sitemap_groups(review_rooms, sala_rows, location_specs=None, review_slugs=None, videos_data=None):
+    core = [
         site_url("/"),
         site_url("/escape-rooms/"),
         site_url("/reviews/"),
@@ -2067,27 +2137,27 @@ def sitemap_xml(review_rooms, sala_rows, location_specs=None):
         site_url("/mejores-escape-rooms/"),
         site_url("/mejores-escape-rooms-terror/"),
     ]
-    entries.extend(site_url(f"/reviews/{room_url_slug(room)}/") for room in review_rooms)
-    entries.extend(site_url(f"/{spec['slug']}/") for spec in (location_specs or []))
-    entries.extend(site_url(f"/salas/{seo_room_url_slug(item['room'])}/") for item in sala_rows)
-    unique_entries = []
-    seen_urls = set()
-    for url in entries:
-        if url in seen_urls:
-            continue
-        unique_entries.append(url)
-        seen_urls.add(url)
-    # Omit lastmod until each URL has a reliable per-page modification date.
-    # Google ignores changefreq/priority and misleading dates waste crawl signals.
-    body = "\n".join(f"  <url><loc>{escape(url)}</loc></url>" for url in unique_entries)
-    return f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{body}\n</urlset>\n'
+    reviews = [
+        site_url(f"/reviews/{room_url_slug(room)}/")
+        for room in review_rooms
+        if review_is_indexable(room)
+    ]
+    locations = [site_url(f"/{spec['slug']}/") for spec in (location_specs or [])]
+    rooms = [
+        site_url(f"/salas/{seo_room_url_slug(item['room'])}/")
+        for item in sala_rows
+        if room_is_indexable(item, review_slugs, videos_data)
+    ]
+    return {"core": core, "reviews": reviews, "locations": locations, "rooms": rooms}
 
 
-def video_sitemap_xml(sala_rows, videos_data):
+def video_sitemap_xml(sala_rows, videos_data, review_slugs=None):
     entries = []
     seen_pages = set()
     for item in sala_rows:
         room = item.get("room") or {}
+        if not room_is_indexable(item, review_slugs, videos_data):
+            continue
         video = video_entry(room, videos_data or {})
         upload_date = text(video.get("upload_date"))
         thumbnail = text(video.get("thumbnail"))
@@ -2134,13 +2204,17 @@ def robots_txt():
 Allow: /
 
 Sitemap: {site_url('/sitemap.xml')}
-Sitemap: {site_url('/video-sitemap.xml')}
 """
 
 
 def site_stats_json(review_rooms, sala_rows, location_specs):
+    unique_catalog = {}
+    for room in catalog_rooms():
+        parts = (folded(room.get("nombre")), folded(room.get("empresa")), folded(room.get("ciudad")))
+        key = parts if all(parts) else ("id", room_identity(room))
+        unique_catalog[key] = room
     payload = {
-        "catalog": len(catalog_rooms()),
+        "catalog": len(unique_catalog),
         "reviews": len(review_rooms),
         "ranking": sum(1 for item in sala_rows if decimal(item.get("rating", {}).get("global_score")) > 0),
         "locations": len(location_specs or []),
@@ -2160,6 +2234,13 @@ def update_inline_site_stats(stats_json):
     replacement = f"const FALLBACK_SITE_STATS = {inline};"
     next_html, count = re.subn(pattern, replacement, html, count=1)
     if count:
+        for key in ("catalog", "reviews", "ranking"):
+            next_html = re.sub(
+                rf'(<strong id="vault-stat-{key}">).*?(</strong>)',
+                rf'\g<1>{stats[key]}\g<2>',
+                next_html,
+                count=1,
+            )
         index_path.write_text(next_html, encoding="utf-8", newline="\n")
 
 
@@ -2237,7 +2318,8 @@ def main():
         )
         legacy_review_pages += 1
 
-    (reviews_dir / "index.html").write_text(reviews_index_page(rooms), encoding="utf-8", newline="\n")
+    indexable_review_rooms = [room for room in rooms if review_is_indexable(room)]
+    (reviews_dir / "index.html").write_text(reviews_index_page(indexable_review_rooms), encoding="utf-8", newline="\n")
     ranking_dir = ROOT / "ranking"
     ranking_dir.mkdir(exist_ok=True)
     (ranking_dir / "index.html").write_text(ranking_index_page(ranking_rows), encoding="utf-8", newline="\n")
@@ -2280,6 +2362,9 @@ def main():
             newline="\n",
         )
 
+    old_location_slugs = LEGACY_LOCATION_SLUGS | {
+        old_location_dir.name for old_location_dir in ROOT.glob("escape-rooms-*") if old_location_dir.is_dir()
+    }
     for old_location_dir in ROOT.glob("escape-rooms-*"):
         if old_location_dir.is_dir():
             shutil.rmtree(old_location_dir)
@@ -2312,7 +2397,7 @@ def main():
         (spec["kind"], slugify(spec["label"])): spec["slug"]
         for spec in location_specs
     }
-    review_slugs = {room_url_slug(room) for room in rooms}
+    review_slugs = {room_url_slug(room) for room in indexable_review_rooms}
     generated_sala_slugs = set()
     for item in sala_rows:
         sala_slug = seo_room_url_slug(item["room"])
@@ -2324,12 +2409,25 @@ def main():
             encoding="utf-8",
             newline="\n",
         )
+    generated_location_slugs = {spec["slug"] for spec in location_specs}
+    retired_location_pages = 0
+    for old_slug in sorted(old_location_slugs - generated_location_slugs):
+        page_dir = ROOT / old_slug
+        page_dir.mkdir(exist_ok=True)
+        label = old_slug.removeprefix("escape-rooms-").replace("-", " ").title()
+        (page_dir / "index.html").write_text(
+            legacy_seo_page(f"Escape rooms en {label}", site_url("/escape-rooms/"), target=site_url("/escape-rooms/")),
+            encoding="utf-8",
+            newline="\n",
+        )
+        retired_location_pages += 1
 
     sala_by_identity = {room_identity(item["room"]): item for item in sala_rows}
     closed_rooms = read_json(ROOT / "private" / "closed_rooms.json", {}).get("rooms", [])
     closed_by_slug = {slugify(room.get("id") or room.get("nombre")): room for room in closed_rooms}
     legacy_sala_pages = 0
     retired_sala_pages = 0
+    orphan_sala_pages = 0
     for old_page in salas_dir.glob("*/index.html"):
         old_slug = old_page.parent.name
         if old_slug in generated_sala_slugs:
@@ -2353,12 +2451,29 @@ def main():
                 newline="\n",
             )
             retired_sala_pages += 1
+            continue
+        old_page.write_text(
+            legacy_seo_page(old_slug.replace("-", " ").title(), site_url(f"/salas/{old_slug}/"), retired=True),
+            encoding="utf-8",
+            newline="\n",
+        )
+        orphan_sala_pages += 1
 
     stats_json = site_stats_json(rooms, sala_rows, location_specs)
     if args.update_main_stats:
         update_inline_site_stats(stats_json)
-    (ROOT / "sitemap.xml").write_text(sitemap_xml(rooms, sala_rows, location_specs), encoding="utf-8", newline="\n")
-    (ROOT / "video-sitemap.xml").write_text(video_sitemap_xml(sala_rows, videos_data), encoding="utf-8", newline="\n")
+    sitemap_names = [
+        "sitemap-core.xml",
+        "sitemap-reviews.xml",
+        "sitemap-locations.xml",
+        "sitemap-rooms.xml",
+        "video-sitemap.xml",
+    ]
+    sitemap_data = sitemap_groups(rooms, sala_rows, location_specs, review_slugs, videos_data)
+    for group, entries in sitemap_data.items():
+        (ROOT / f"sitemap-{group}.xml").write_text(urlset_xml(entries), encoding="utf-8", newline="\n")
+    (ROOT / "sitemap.xml").write_text(sitemap_index_xml(sitemap_names), encoding="utf-8", newline="\n")
+    (ROOT / "video-sitemap.xml").write_text(video_sitemap_xml(sala_rows, videos_data, review_slugs), encoding="utf-8", newline="\n")
     (ROOT / "robots.txt").write_text(robots_txt(), encoding="utf-8", newline="\n")
     (ROOT / "llms.txt").write_text(llms_txt(), encoding="utf-8", newline="\n")
     (ROOT / "site_stats.json").write_text(stats_json, encoding="utf-8", newline="\n")
@@ -2368,9 +2483,11 @@ def main():
         f"{len(sala_rows)} salas, "
         f"{len(location_specs)} landings por ubicacion, "
         f"{legacy_sala_pages + legacy_review_pages} alias redirigidos, "
-        f"{retired_sala_pages} fichas cerradas retiradas, "
+        f"{retired_sala_pages + orphan_sala_pages} fichas retiradas, "
+        f"{retired_location_pages} landings históricas conservadas, "
         f"{len(generated_review_pages)} tarjetas sociales, "
-        "ranking, landings SEO, sitemap.xml, video-sitemap.xml, robots.txt y llms.txt"
+        f"{len(sitemap_data['rooms'])} salas indexables, ranking, landings SEO, "
+        "sitemaps separados, video-sitemap.xml, robots.txt y llms.txt"
     )
 
 

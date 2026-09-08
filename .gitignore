@@ -50,6 +50,7 @@ images/catalgo_propio_web_escape/*
 
 # Local marketing workspace
 marketing/
+/artifacts/
 scripts/generate_marketing_assets.ps1
 scripts/generate_review_carousel.ps1
 scripts/generate_all_review_carousels.ps1

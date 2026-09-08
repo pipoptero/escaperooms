@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'the-vault-v36';
+const CACHE_VERSION = 'the-vault-v40';
 const APP_SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -13,7 +13,13 @@ const APP_SHELL = [
   './images/brand/the-vault-round-logo.jpg',
   './images/brand/the-vault-wordmark.jpg',
   './images/brand/the-vault-wordmark-transparent.png',
-  './images/brand/social-card.png'
+  './images/brand/social-card.png',
+  './images/navigation/progreso.png',
+  './images/navigation/catalogo.png',
+  './images/navigation/pendientes.png',
+  './images/navigation/hechos.png',
+  './images/navigation/reviews-tab.png',
+  './images/navigation/ranking.png'
 ];
 
 const DATA_FILES = [
@@ -26,7 +32,9 @@ const DATA_FILES = [
   'review_photos.json',
   'official_videos.json',
   'room_aliases.json',
-  'room_locations.json'
+  'room_locations.json',
+  'room_relationships.json',
+  'site_stats.json'
 ];
 
 self.addEventListener('install', event => {

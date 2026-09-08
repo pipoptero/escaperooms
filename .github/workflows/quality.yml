@@ -1,0 +1,22 @@
+name: Validar calidad
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validar sintaxis y datos
+        run: |
+          python -m py_compile scripts/build_seo_pages.py scripts/validate_site_data.py
+          python -m unittest discover -s tests -v
+          python scripts/validate_site_data.py --strict
+          python -c "import pathlib,re; s=pathlib.Path('index.html').read_text(encoding='utf-8'); m=re.search(r'<script>([\\s\\S]*?)</script>\\s*</body>',s); assert m; pathlib.Path('/tmp/index.js').write_text(m.group(1),encoding='utf-8')"
+          node --check /tmp/index.js

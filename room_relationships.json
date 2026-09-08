@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "families": [
+    {
+      "id": "krugger-hotel",
+      "parentId": "el-secreto-de-los-krugger",
+      "parentName": "El Secreto de los Krugger",
+      "map_mode": "parent_only",
+      "members": [
+        {"id": "aradia-insomnia-hotel", "name": "Aradia"},
+        {"id": "xperiment-insomnia-hotel", "name": "Xperiment"},
+        {"id": "madre-insomnia-hotel", "name": "Madre"},
+        {"id": "doctor-insomnia-hotel", "name": "Doctor"},
+        {"id": "sr-krugger-insomnia-hotel", "name": "Sr. Krugger"},
+        {"id": "jack-insomnia-hotel", "name": "Jack"}
+      ]
+    }
+  ]
+}

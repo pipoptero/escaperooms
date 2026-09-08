@@ -61,23 +61,13 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/el-lechero/</loc>
+    <loc>https://thevaultescape.com/salas/laboratorio-x96/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/zt58jFRaP-c/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/BfTGXsreOn4/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia El Lechero de Sabotaje Rooms.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/zt58jFRaP-c</video:player_loc>
-      <video:publication_date>2024-12-07T04:01:26-08:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/horror-club/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/Dzn2-MsRsC0/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Horror Club de Madrid Terror.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/Dzn2-MsRsC0</video:player_loc>
-      <video:publication_date>2021-12-14T07:10:43-08:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia Laboratorio X96 de MyEscape.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/BfTGXsreOn4</video:player_loc>
+      <video:publication_date>2016-11-29T08:04:27-08:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -98,16 +88,6 @@
       <video:description>Vídeo de introducción oficial de la experiencia Bites Motel de Bite The Fly.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/yfl0v7Qu0-M</video:player_loc>
       <video:publication_date>2020-10-17T13:41:35-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/la-tienda-de-te-del-sr-miyagi/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/sn4_PPkTxdw/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia La Tienda de Té del Sr. Miyagi de Don Escape.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/sn4_PPkTxdw</video:player_loc>
-      <video:publication_date>2024-02-12T07:55:32-08:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -141,16 +121,6 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/paranormal-experience/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/ko9K9kTN3VI/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Paranormal Experience de Madrid Terror.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/ko9K9kTN3VI</video:player_loc>
-      <video:publication_date>2021-08-06T02:56:18-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
     <loc>https://thevaultescape.com/salas/parasomnia-bajo-2/</loc>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/23v_99lH0GQ/hqdefault.jpg</video:thumbnail_loc>
@@ -158,6 +128,26 @@
       <video:description>Vídeo de introducción oficial de la experiencia Parasomnia Bajo 2ª de Plastic Robot.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/23v_99lH0GQ</video:player_loc>
       <video:publication_date>2025-07-02T10:54:11-07:00</video:publication_date>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://thevaultescape.com/salas/la-entrevista/</loc>
+    <video:video>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/EfMF0rrapRU/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>Intro oficial</video:title>
+      <video:description>Vídeo de introducción oficial de la experiencia La Entrevista de Cubick Room Escape Madrid.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/EfMF0rrapRU</video:player_loc>
+      <video:publication_date>2017-11-22T10:18:19-08:00</video:publication_date>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://thevaultescape.com/salas/la-gran-final/</loc>
+    <video:video>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/cclYoTiDfgU/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>Intro oficial</video:title>
+      <video:description>Vídeo de introducción oficial de la experiencia La Gran Final de La Ratonera.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/cclYoTiDfgU</video:player_loc>
+      <video:publication_date>2018-06-21T01:10:05-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -174,37 +164,17 @@
     <loc>https://thevaultescape.com/salas/nunca-jamas/</loc>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/oVU8jy0IePI/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>ESCAPE ROOM Peter Pan</video:title>
+      <video:title>Nunca Jamás | Intro oficial</video:title>
       <video:description>Vídeo de introducción oficial de la experiencia Nunca Jamás de Key Play.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/oVU8jy0IePI</video:player_loc>
       <video:publication_date>2026-04-27T03:25:35-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/el-camerino/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/Gk47ugIktAI/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia El Camerino de Esfinge.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/Gk47ugIktAI</video:player_loc>
-      <video:publication_date>2022-06-22T10:25:10-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/el-caso-w-e-n/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/KyTNKcdGRmY/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia El caso W.E.N. de Clue Hunter.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/KyTNKcdGRmY</video:player_loc>
-      <video:publication_date>2016-12-05T14:29:16-08:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
     <loc>https://thevaultescape.com/salas/ritual/</loc>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/wD_4NmMYGEg/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Ritual Escape Room tráiler</video:title>
+      <video:title>Ritual | Trailer oficial</video:title>
       <video:description>Vídeo de introducción oficial de la experiencia Ritual de Locked ZGZ.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/wD_4NmMYGEg</video:player_loc>
       <video:publication_date>2023-09-12T23:27:50-07:00</video:publication_date>
@@ -231,33 +201,33 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/almacen-oculto/</loc>
+    <loc>https://thevaultescape.com/salas/el-espiritu-de-la-movida/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/KUD7Vo2IEnY/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/LMFIm2i6Msc/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Almacén Oculto de Fauna.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/KUD7Vo2IEnY</video:player_loc>
-      <video:publication_date>2017-05-25T04:55:20-07:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia El Espíritu de la Movida de El Secreto de Madrid.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/LMFIm2i6Msc</video:player_loc>
+      <video:publication_date>2017-10-25T10:10:35-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/el-tesoro-de-calico-jack/</loc>
+    <loc>https://thevaultescape.com/salas/el-secreto-de-amelia/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/h-plC2yhk0A/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/_9VWg8qTwME/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia El Tesoro de Calicó Jack de Clue Hunter.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/h-plC2yhk0A</video:player_loc>
-      <video:publication_date>2017-10-29T07:11:44-07:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia El Secreto de Amelia de El Desafio del Lobo.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/_9VWg8qTwME</video:player_loc>
+      <video:publication_date>2018-11-30T06:39:40-08:00</video:publication_date>
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/la-misteriosa-herencia-de-cal-pere/</loc>
+    <loc>https://thevaultescape.com/salas/heirloom/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/_-h_vOBoiSg/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/jFhKNwz83fg/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia La Misteriosa Herencia de Cal Pere de The Bunker Escape.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/_-h_vOBoiSg</video:player_loc>
-      <video:publication_date>2018-02-03T11:44:53-08:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia Heirloom de Exitus.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/jFhKNwz83fg</video:player_loc>
+      <video:publication_date>2018-06-22T13:32:23-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -273,41 +243,41 @@
   <url>
     <loc>https://thevaultescape.com/salas/la-mina/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/McHENnNXlpc/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/8bCw-C4mi1o/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>TRAILER ESCAPE ROOM: LA MINA</video:title>
       <video:description>Vídeo de introducción oficial de la experiencia La Mina de Unreal Room Escape.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/McHENnNXlpc</video:player_loc>
-      <video:publication_date>2020-05-14T10:30:15-07:00</video:publication_date>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/8bCw-C4mi1o</video:player_loc>
+      <video:publication_date>2017-05-15T02:38:16-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/apophis/</loc>
+    <loc>https://thevaultescape.com/salas/en-la-mente-del-asesino/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/aL7IfJSMth8/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>documental</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Apophis de Vortex Escapes.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/aL7IfJSMth8</video:player_loc>
-      <video:publication_date>2016-10-24T00:57:43-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/yucatan-el-ultimo-templo/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/gDCNgae1GeA/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/rWrIZtbA4mQ/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Yucatán: El último Templo de Coco Room.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/gDCNgae1GeA</video:player_loc>
-      <video:publication_date>2020-09-15T03:17:45-07:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia En la Mente del Asesino de Encrypt.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/rWrIZtbA4mQ</video:player_loc>
+      <video:publication_date>2016-11-28T21:12:29-08:00</video:publication_date>
     </video:video>
   </url>
   <url>
     <loc>https://thevaultescape.com/salas/atrapado-en-el-museo/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/9hCT_8zk3hc/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/PV0kA5XwQGY/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
       <video:description>Vídeo de introducción oficial de la experiencia Atrapado en el Museo de EXIT/SALIDA.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/9hCT_8zk3hc</video:player_loc>
-      <video:publication_date>2014-01-30T10:00:37-08:00</video:publication_date>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/PV0kA5XwQGY</video:player_loc>
+      <video:publication_date>2016-01-25T07:52:09-08:00</video:publication_date>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://thevaultescape.com/salas/el-doctor-frankenstein/</loc>
+    <video:video>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/6dXbDv36r7A/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>Intro oficial</video:title>
+      <video:description>Vídeo de introducción oficial de la experiencia El Doctor Frankenstein de Komnata.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/6dXbDv36r7A</video:player_loc>
+      <video:publication_date>2016-01-21T10:54:05-08:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -318,6 +288,16 @@
       <video:description>Vídeo de introducción oficial de la experiencia El Misterio de La Sagra de Illusion Escape Room.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/fyZ83d00m0E</video:player_loc>
       <video:publication_date>2019-10-21T10:04:51-07:00</video:publication_date>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://thevaultescape.com/salas/el-nucleo/</loc>
+    <video:video>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/JON463F1ya0/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>Intro oficial</video:title>
+      <video:description>Vídeo de introducción oficial de la experiencia El Núcleo de MyEscape.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/JON463F1ya0</video:player_loc>
+      <video:publication_date>2018-12-11T06:16:19-08:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -341,16 +321,6 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/la-oficina-de-john-monroe/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/7RU2uof2-LE/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>scale-with-grid</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia La oficina de John Monroe de Room Escape Salamanca.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/7RU2uof2-LE</video:player_loc>
-      <video:publication_date>2018-11-06T04:13:23-08:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
     <loc>https://thevaultescape.com/salas/mental-experiment/</loc>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/py_Y0cQkGG4/hqdefault.jpg</video:thumbnail_loc>
@@ -361,13 +331,13 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/megachef/</loc>
+    <loc>https://thevaultescape.com/salas/a-bordo/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/74VTGyZKyxs/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/8o-Q_h-f5MM/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Megachef de Clue Hunter.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/74VTGyZKyxs</video:player_loc>
-      <video:publication_date>2012-12-31T04:10:04-08:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia A Bordo de Mystery Time.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/8o-Q_h-f5MM</video:player_loc>
+      <video:publication_date>2018-05-25T09:09:04-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -381,23 +351,13 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/el-tesoro-de-calatravo/</loc>
+    <loc>https://thevaultescape.com/salas/la-herencia-montenegro/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/D6vagI_M_hc/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>El Tesoro Calatravo</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia El tesoro de Calatravo de Escapa Teruel.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/D6vagI_M_hc</video:player_loc>
-      <video:publication_date>2019-12-12T12:49:30-08:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/indiana-y-el-idolo-maldito/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/-bTpp8PQSog/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/PmH97FQ0P6E/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Indiana y el Ídolo Maldito de Clue Hunter.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/-bTpp8PQSog</video:player_loc>
-      <video:publication_date>2011-02-02T13:31:07-08:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia La Herencia Montenegro de Teatromántica.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/PmH97FQ0P6E</video:player_loc>
+      <video:publication_date>2014-03-16T04:23:28-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -411,13 +371,23 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/conquista-de-troya/</loc>
+    <loc>https://thevaultescape.com/salas/daemonium/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/y3VwYksChgc/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/7mCsNkv8ojY/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Conquista de Troya de Neverland Escape.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/y3VwYksChgc</video:player_loc>
-      <video:publication_date>2024-03-29T08:13:51-07:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia Daemonium de Sala La Clave.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/7mCsNkv8ojY</video:player_loc>
+      <video:publication_date>2019-11-26T00:11:03-08:00</video:publication_date>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://thevaultescape.com/salas/catalepsia/</loc>
+    <video:video>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/ufZpQDBFgNY/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>Intro oficial</video:title>
+      <video:description>Vídeo de introducción oficial de la experiencia Catalepsia de Horror Box.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/ufZpQDBFgNY</video:player_loc>
+      <video:publication_date>2017-11-01T06:21:44-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -441,6 +411,36 @@
     </video:video>
   </url>
   <url>
+    <loc>https://thevaultescape.com/salas/el-psiquiatrico/</loc>
+    <video:video>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/QaLAVEWq98E/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>Intro oficial</video:title>
+      <video:description>Vídeo de introducción oficial de la experiencia El psiquiatrico de Limit Time.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/QaLAVEWq98E</video:player_loc>
+      <video:publication_date>2018-10-04T04:52:51-07:00</video:publication_date>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://thevaultescape.com/salas/escape-del-secuestro/</loc>
+    <video:video>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/IhS5LPSUm7c/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>Intro oficial</video:title>
+      <video:description>Vídeo de introducción oficial de la experiencia Escape del Secuestro de Golden Celebraciones.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/IhS5LPSUm7c</video:player_loc>
+      <video:publication_date>2015-07-20T16:12:24-07:00</video:publication_date>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://thevaultescape.com/salas/la-cura/</loc>
+    <video:video>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/YmAErBkEwgY/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>Intro oficial</video:title>
+      <video:description>Vídeo de introducción oficial de la experiencia La Cura de Dark Street.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/YmAErBkEwgY</video:player_loc>
+      <video:publication_date>2020-03-03T03:50:38-08:00</video:publication_date>
+    </video:video>
+  </url>
+  <url>
     <loc>https://thevaultescape.com/salas/suite-405/</loc>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/hXKx9HrS7Nc/hqdefault.jpg</video:thumbnail_loc>
@@ -461,53 +461,13 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/the-narcos/</loc>
+    <loc>https://thevaultescape.com/salas/el-invernadero/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/McHENnNXlpc/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/WQtW7xl_oJY/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia The Narcos de Unreal Room Escape.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/McHENnNXlpc</video:player_loc>
-      <video:publication_date>2020-05-14T10:30:15-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/la-mansion/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/0vEgK0cuyCM/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia La Mansion de TimeSkp.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/0vEgK0cuyCM</video:player_loc>
-      <video:publication_date>2018-02-07T12:05:57-08:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/dementia/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/_BPULSjvvUc/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Dementia de SineQuaNon.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/_BPULSjvvUc</video:player_loc>
-      <video:publication_date>2019-10-27T03:59:49-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/seven-the-game/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/NSYJyFJDz70/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>test</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Seven - The Game de Quimera Escape.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/NSYJyFJDz70</video:player_loc>
-      <video:publication_date>2025-03-13T07:24:47-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/el-tesoro-de-barba-verde/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/7RU2uof2-LE/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>scale-with-grid</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia El Tesoro de Barba Verde de Room Escape Salamanca.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/7RU2uof2-LE</video:player_loc>
-      <video:publication_date>2018-11-06T04:13:23-08:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia El Invernadero de Resident Riddle.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/WQtW7xl_oJY</video:player_loc>
+      <video:publication_date>2019-07-24T09:34:07-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -521,43 +481,43 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/area-51/</loc>
+    <loc>https://thevaultescape.com/salas/el-preso-136/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/E4fL7YpuZXY/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/euG_hVbxl-E/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Area 51 de MindClue.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/E4fL7YpuZXY</video:player_loc>
-      <video:publication_date>2016-02-05T13:14:10-08:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia El Preso 136 de Room60.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/euG_hVbxl-E</video:player_loc>
+      <video:publication_date>2017-07-25T04:18:12-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/c-s-i-95/</loc>
+    <loc>https://thevaultescape.com/salas/mausoleum/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/iavZdzQiugw/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/8ECjXpgag6A/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia C.S.I 95 de Parapark.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/iavZdzQiugw</video:player_loc>
-      <video:publication_date>2016-08-20T14:55:28-07:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia Mausoleum de Encrypted.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/8ECjXpgag6A</video:player_loc>
+      <video:publication_date>2020-08-24T13:37:46-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/nathael/</loc>
+    <loc>https://thevaultescape.com/salas/un-plan-perfecto/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/qB9K7YfYkto/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/xQkzlbdBIiM/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Nathael de Cubick.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/qB9K7YfYkto</video:player_loc>
-      <video:publication_date>2020-12-08T03:01:24-08:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia Un Plan Perfecto de Scaparium 2.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/xQkzlbdBIiM</video:player_loc>
+      <video:publication_date>2020-11-19T12:54:22-08:00</video:publication_date>
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/la-tienda-de-munecas-de-lilith/</loc>
+    <loc>https://thevaultescape.com/salas/balamku/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/J006ZIhOX7Q/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Ver Trailer</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia La tienda de muñecas de Lilith de Escape Mania.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/J006ZIhOX7Q</video:player_loc>
-      <video:publication_date>2020-05-08T11:38:06-07:00</video:publication_date>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/8a7oNmRaDh4/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>Intro oficial</video:title>
+      <video:description>Vídeo de introducción oficial de la experiencia Balamkú de Illusion Escape Room.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/8a7oNmRaDh4</video:player_loc>
+      <video:publication_date>2021-02-25T23:57:10-08:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -571,16 +531,6 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/olimpo/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/d9FUrlNirXc/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Olimpo de Olimpo Escape Room.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/d9FUrlNirXc</video:player_loc>
-      <video:publication_date>2021-07-26T06:19:05-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
     <loc>https://thevaultescape.com/salas/el-secreto-de-los-magos/</loc>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/ytp0TzZeIcI/hqdefault.jpg</video:thumbnail_loc>
@@ -588,16 +538,6 @@
       <video:description>Vídeo de introducción oficial de la experiencia El Secreto de los Magos de Mayto Kingdom.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/ytp0TzZeIcI</video:player_loc>
       <video:publication_date>2025-09-25T09:52:51-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/portales-malffoy/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/XHOmBV4js_E/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Portales Malffoy de Moment Escape.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/XHOmBV4js_E</video:player_loc>
-      <video:publication_date>2019-01-23T01:41:21-08:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -618,6 +558,16 @@
       <video:description>Vídeo de introducción oficial de la experiencia Agencia 360 de Arroyo Escape Room.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/zjUDhXZXyTc</video:player_loc>
       <video:publication_date>2024-04-22T15:00:37-07:00</video:publication_date>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://thevaultescape.com/salas/nuclear-error/</loc>
+    <video:video>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/wjNJGqHHF8U/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>Intro oficial</video:title>
+      <video:description>Vídeo de introducción oficial de la experiencia Nuclear Error de NoEscape.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/wjNJGqHHF8U</video:player_loc>
+      <video:publication_date>2017-01-25T11:50:16-08:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -651,13 +601,23 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/ambar-la-visita/</loc>
+    <loc>https://thevaultescape.com/salas/el-testamento/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/pjeNHSksAGs/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/Qgyt_gmcG_k/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Ambar, La Visita de Coco Room.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/pjeNHSksAGs</video:player_loc>
-      <video:publication_date>2017-06-13T03:34:32-07:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia El Testamento de Locus Fugae.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/Qgyt_gmcG_k</video:player_loc>
+      <video:publication_date>2016-05-18T02:29:37-07:00</video:publication_date>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://thevaultescape.com/salas/franky-resurrection/</loc>
+    <video:video>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/vjSbxX_Oc20/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>Intro oficial</video:title>
+      <video:description>Vídeo de introducción oficial de la experiencia Franky Resurrection de Scaparium 2.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/vjSbxX_Oc20</video:player_loc>
+      <video:publication_date>2016-08-08T09:20:43-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -674,30 +634,20 @@
     <loc>https://thevaultescape.com/salas/los-mundos-de-alicia/</loc>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/Ks0q2VX4dQ8/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Los Mundos de Alicia - vídeo oficial</video:title>
+      <video:title>Los mundos de Alicia | Intro oficial</video:title>
       <video:description>Vídeo de introducción oficial de la experiencia Los Mundos de Alicia de KeyPlay.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/Ks0q2VX4dQ8</video:player_loc>
       <video:publication_date>2025-11-28T02:57:16-08:00</video:publication_date>
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/ouija/</loc>
+    <loc>https://thevaultescape.com/salas/ley-seca/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/1fzGr2wokYA/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/X4ie44jolbE/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Ouija de Horror Box.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/1fzGr2wokYA</video:player_loc>
-      <video:publication_date>2026-03-05T11:00:01-08:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/vikingos/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/McHENnNXlpc/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Vikingos de Unreal Room Escape.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/McHENnNXlpc</video:player_loc>
-      <video:publication_date>2020-05-14T10:30:15-07:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia Ley Seca de Top Secret.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/X4ie44jolbE</video:player_loc>
+      <video:publication_date>2016-09-27T13:57:34-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -731,43 +681,13 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/el-misterio-de-don-quijote/</loc>
+    <loc>https://thevaultescape.com/salas/la-pelicula/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/-nend7wr1i0/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/D1DyagZGi0c/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia El Misterio de Don Quijote de The Rombo Code.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/-nend7wr1i0</video:player_loc>
-      <video:publication_date>2016-08-27T10:32:41-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/la-jugueteria-mimitos/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/QTs7JTrdJ84/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia La Juguetería Mimitos de Tortugas a la Fuga.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/QTs7JTrdJ84</video:player_loc>
-      <video:publication_date>2025-01-27T11:00:13-08:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/la-divina-comedia/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/X2oDK6iDIl8/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia La Divina Comedia de Evasión Rebelde.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/X2oDK6iDIl8</video:player_loc>
-      <video:publication_date>2018-01-03T09:28:26-08:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/jigsaw/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/4CYyV_PpbUQ/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Jigsaw de Horror Box.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/4CYyV_PpbUQ</video:player_loc>
-      <video:publication_date>2026-03-04T12:07:35-08:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia La Pelicula de La Pelicula.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/D1DyagZGi0c</video:player_loc>
+      <video:publication_date>2020-08-01T12:00:01-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -781,43 +701,13 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/asesinato-en-el-tren/</loc>
+    <loc>https://thevaultescape.com/salas/t-virus-apocalypse/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/uAk39coySj8/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/9fIP7SeqRk4/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Asesinato en el Tren de Clue Hunter.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/uAk39coySj8</video:player_loc>
-      <video:publication_date>2017-06-02T11:32:30-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/abduccion-alien/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/QqikNE8I7Hw/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Abduccion Alien de El Secreto Escape Room.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/QqikNE8I7Hw</video:player_loc>
-      <video:publication_date>2017-05-24T03:20:47-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/scubick-doo/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/qB9K7YfYkto/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Scubick-Doo de Cubick.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/qB9K7YfYkto</video:player_loc>
-      <video:publication_date>2020-12-08T03:01:24-08:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/la-hora-de-las-bestias-cubick/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/sJNZfxKPSGk/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Katharsis Room Escape</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia La Hora de las Bestias de Cubick.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/sJNZfxKPSGk</video:player_loc>
-      <video:publication_date>2025-10-12T05:52:37-07:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia T-Virus Apocalypse de Madness Toledo.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/9fIP7SeqRk4</video:player_loc>
+      <video:publication_date>2020-10-09T03:03:42-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -831,16 +721,6 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/la-iniciativa/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/JE0WKXhDHOE/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Teaser La Iniciativa</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia La Iniciativa de La Iniciativa.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/JE0WKXhDHOE</video:player_loc>
-      <video:publication_date>2019-12-26T11:01:38-08:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
     <loc>https://thevaultescape.com/salas/boom-escape/</loc>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/6UAzV8Gj7wo/hqdefault.jpg</video:thumbnail_loc>
@@ -848,16 +728,6 @@
       <video:description>Vídeo de introducción oficial de la experiencia Boom Escape de Runaway Escape Room.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/6UAzV8Gj7wo</video:player_loc>
       <video:publication_date>2025-06-03T15:00:14-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/atrapados-en-el-sotano/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/47VfPySyxIo/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Atrapados en el Sótano de Clue Hunter.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/47VfPySyxIo</video:player_loc>
-      <video:publication_date>2021-04-02T10:42:45-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -891,6 +761,26 @@
     </video:video>
   </url>
   <url>
+    <loc>https://thevaultescape.com/salas/la-habitacion-de-nanako/</loc>
+    <video:video>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/JJWfn9miGL8/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>Intro oficial</video:title>
+      <video:description>Vídeo de introducción oficial de la experiencia La Habitación de Nanako de Escape College.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/JJWfn9miGL8</video:player_loc>
+      <video:publication_date>2016-11-28T04:04:26-08:00</video:publication_date>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://thevaultescape.com/salas/el-secreto-de-malaespera/</loc>
+    <video:video>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/J9kNRlCcAcs/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>Intro oficial</video:title>
+      <video:description>Vídeo de introducción oficial de la experiencia El Secreto de Malaespera de BILBAOUT.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/J9kNRlCcAcs</video:player_loc>
+      <video:publication_date>2018-03-26T02:50:41-07:00</video:publication_date>
+    </video:video>
+  </url>
+  <url>
     <loc>https://thevaultescape.com/salas/el-caso-ridel/</loc>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/Sr1QVdsXwyI/hqdefault.jpg</video:thumbnail_loc>
@@ -901,63 +791,43 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/la-casa-encantada/</loc>
+    <loc>https://thevaultescape.com/salas/wild-west/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/u6cB8ncLoIg/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/lPEGYnxKiq4/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia La Casa Encantada de Xcapate.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/u6cB8ncLoIg</video:player_loc>
-      <video:publication_date>2016-12-27T05:06:28-08:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia Wild West de Escapa-T.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/lPEGYnxKiq4</video:player_loc>
+      <video:publication_date>2016-07-06T09:19:37-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/el-destino-del-embajador/</loc>
+    <loc>https://thevaultescape.com/salas/goya-la-ruta-del-sordo/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/tZc3wN-JE34/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/AGoqEHcJkpA/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia El Destino del Embajador de Evasión Rebelde.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/tZc3wN-JE34</video:player_loc>
-      <video:publication_date>2018-01-08T21:49:47-08:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia Goya: La Ruta del Sordo de Enigma Exprés.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/AGoqEHcJkpA</video:player_loc>
+      <video:publication_date>2017-03-27T05:36:51-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/vuelo-a-0714/</loc>
+    <loc>https://thevaultescape.com/salas/operacion-castillejos/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/OiL1JPAUCTA/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/fIlopkNStb0/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Vuelo A-0714 de Coco Room.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/OiL1JPAUCTA</video:player_loc>
-      <video:publication_date>2016-11-22T03:31:04-08:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia Operacion Castillejos de Escape4Room.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/fIlopkNStb0</video:player_loc>
+      <video:publication_date>2020-12-09T08:20:51-08:00</video:publication_date>
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/en-la-mente-del-genio/</loc>
+    <loc>https://thevaultescape.com/salas/victus/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/zg_F4FJRba8/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>En la mente de un genio Trailer</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia En la mente del genio de Protagonist.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/zg_F4FJRba8</video:player_loc>
-      <video:publication_date>2019-07-27T05:05:58-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/la-caja-diabolica/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/0dM4o8bkpBI/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/vSHpE_JFDY8/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia La Caja Diabólica de Eskapark.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/0dM4o8bkpBI</video:player_loc>
-      <video:publication_date>2019-05-27T01:47:54-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/tras-el-espejo/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/FjqxCG79aJ8/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Tras el Espejo de The Rombo Code.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/FjqxCG79aJ8</video:player_loc>
-      <video:publication_date>2016-07-19T01:59:31-07:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia Victus de Sabadell.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/vSHpE_JFDY8</video:player_loc>
+      <video:publication_date>2017-03-24T06:00:23-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -981,43 +851,23 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/aliens/</loc>
+    <loc>https://thevaultescape.com/salas/residence/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/J006ZIhOX7Q/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Ver Trailer</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Aliens de Escape Mania.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/J006ZIhOX7Q</video:player_loc>
-      <video:publication_date>2020-05-08T11:38:06-07:00</video:publication_date>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/aWUI2rrrg0U/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>Intro oficial</video:title>
+      <video:description>Vídeo de introducción oficial de la experiencia Residence de Zona Room Escape.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/aWUI2rrrg0U</video:player_loc>
+      <video:publication_date>2018-10-23T09:07:59-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
     <loc>https://thevaultescape.com/salas/el-enigma-de-goya/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/NgMTMT2qsqU/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/yf8-rLRH-YQ/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
       <video:description>Vídeo de introducción oficial de la experiencia El Enigma de Goya de Coco Room.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/NgMTMT2qsqU</video:player_loc>
-      <video:publication_date>2019-10-21T02:22:13-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/casanova-la-fuga-de-bilbao/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/-nend7wr1i0/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Casanova – La Fuga de Bilbao de The Rombo Code.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/-nend7wr1i0</video:player_loc>
-      <video:publication_date>2016-08-27T10:32:41-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/secuestro/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/fQzQZz1KAtw/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Secuestro de Escape Game Evolution.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/fQzQZz1KAtw</video:player_loc>
-      <video:publication_date>2026-06-10T14:22:04-07:00</video:publication_date>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/yf8-rLRH-YQ</video:player_loc>
+      <video:publication_date>2016-01-28T10:31:06-08:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -1031,13 +881,23 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/la-casa-paranormal/</loc>
+    <loc>https://thevaultescape.com/salas/la-vieja-carniceria/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/w1PhNT572PI/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/w4h1rXfp-3g/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia La Casa Paranormal de The Hive.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/w1PhNT572PI</video:player_loc>
-      <video:publication_date>2020-05-03T09:44:11-07:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia La Vieja Carnicería de End House.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/w4h1rXfp-3g</video:player_loc>
+      <video:publication_date>2020-02-02T08:15:34-08:00</video:publication_date>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://thevaultescape.com/salas/red-ribbon/</loc>
+    <video:video>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/pLqMxokNxt4/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>Intro oficial</video:title>
+      <video:description>Vídeo de introducción oficial de la experiencia Red Ribbon de Red Ribbon.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/pLqMxokNxt4</video:player_loc>
+      <video:publication_date>2019-05-20T01:45:55-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -1061,16 +921,6 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/la-mazmorra-de-hood/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/bqLUp7GuUTg/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Find out why a good domain name is important</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia La Mazmorra de Hood de scap&amp;go.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/bqLUp7GuUTg</video:player_loc>
-      <video:publication_date>2021-05-17T12:39:26-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
     <loc>https://thevaultescape.com/salas/galeria-de-cadaveres/</loc>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/92fwoeINXeA/hqdefault.jpg</video:thumbnail_loc>
@@ -1078,16 +928,6 @@
       <video:description>Vídeo de introducción oficial de la experiencia Galeria de Cadaveres de Xcape.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/92fwoeINXeA</video:player_loc>
       <video:publication_date>2019-01-26T03:33:00-08:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/final-code-bermudas/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/U-rkPsWAWZ4/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Atrévete a adentrarte en el TRIANGULO DE LAS BERMUDAS</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Final Code: Bermudas de Plastic Robot.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/U-rkPsWAWZ4</video:player_loc>
-      <video:publication_date>2021-12-02T10:24:20-08:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -1101,23 +941,13 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/alkatraz-medieval-eskapark/</loc>
+    <loc>https://thevaultescape.com/salas/007-hollywood-escape-zaragoza/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/RT5Ty4aGQZo/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/LCoAvvpd_wI/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Alkatraz Medieval de Eskapark.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/RT5Ty4aGQZo</video:player_loc>
-      <video:publication_date>2019-05-27T01:04:37-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/alkatraz-medieval-golden-escape-room/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/x3KG3_GNXmI/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Alkatraz Medieval de Golden Escape Room.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/x3KG3_GNXmI</video:player_loc>
-      <video:publication_date>2019-01-12T07:19:21-08:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia 007 de Hollywood Escape Zaragoza.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/LCoAvvpd_wI</video:player_loc>
+      <video:publication_date>2020-12-30T04:34:09-08:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -1131,96 +961,6 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/ambar-la-visita-coco-room/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/pjeNHSksAGs/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Ambar, La Visita de Coco Room.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/pjeNHSksAGs</video:player_loc>
-      <video:publication_date>2017-06-13T03:34:32-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/ambar-la-visita-zaragoza/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/pjeNHSksAGs/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Ambar, La Visita de Coco Room.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/pjeNHSksAGs</video:player_loc>
-      <video:publication_date>2017-06-13T03:34:32-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/asesinato-en-el-orient-express/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/WGigXXk2Eqk/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Asesinato en el Orient Express de GAME OVER Malaga.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/WGigXXk2Eqk</video:player_loc>
-      <video:publication_date>2024-06-20T00:59:08-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/atlantida/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/DXcsrM_zc0A/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Keops Space Project Trailer</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Atlantida de Keops Room Escape.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/DXcsrM_zc0A</video:player_loc>
-      <video:publication_date>2022-12-18T15:06:25-08:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/atrapados-en-el-sotano-clue-hunter/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/47VfPySyxIo/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Atrapados en el Sótano de Clue Hunter.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/47VfPySyxIo</video:player_loc>
-      <video:publication_date>2021-04-02T10:42:45-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/atrapados-en-el-sotano-a-coruna/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/47VfPySyxIo/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Atrapados en el Sótano de Clue Hunter.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/47VfPySyxIo</video:player_loc>
-      <video:publication_date>2021-04-02T10:42:45-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/atrapados-en-el-sotano-madrid/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/47VfPySyxIo/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Atrapados en el Sótano de Clue Hunter.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/47VfPySyxIo</video:player_loc>
-      <video:publication_date>2021-04-02T10:42:45-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/atrapados-en-el-sotano-murcia/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/47VfPySyxIo/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Atrapados en el Sótano de Clue Hunter.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/47VfPySyxIo</video:player_loc>
-      <video:publication_date>2021-04-02T10:42:45-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/aventura-medieval/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/bqLUp7GuUTg/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Find out why a good domain name is important</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Aventura Medieval de Escape SBD.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/bqLUp7GuUTg</video:player_loc>
-      <video:publication_date>2021-05-17T12:39:26-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
     <loc>https://thevaultescape.com/salas/beyond-medusa/</loc>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/mC_ZT23km-4/hqdefault.jpg</video:thumbnail_loc>
@@ -1228,66 +968,6 @@
       <video:description>Vídeo de introducción oficial de la experiencia Beyond Medusa de Secret Code.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/mC_ZT23km-4</video:player_loc>
       <video:publication_date>2019-04-23T01:19:30-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/boom-escape-skproom/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/6UAzV8Gj7wo/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Boom Escape de Skproom.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/6UAzV8Gj7wo</video:player_loc>
-      <video:publication_date>2025-06-03T15:00:14-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/capitulo-0-la-zona-terror-stories-by-experiencity/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/Brf8SjIaBDw/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Capítulo 0: La Zona de Terror Stories by Experiencity.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/Brf8SjIaBDw</video:player_loc>
-      <video:publication_date>2022-08-30T06:41:15-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/chernobil/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/S8V9FhIERL4/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Chernóbil de Game Over.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/S8V9FhIERL4</video:player_loc>
-      <video:publication_date>2024-05-29T02:43:36-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/contagio/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/cpEUQ5dlj8s/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Contagio de Escape Game Evolution.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/cpEUQ5dlj8s</video:player_loc>
-      <video:publication_date>2026-06-10T14:11:25-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/criogenic-barcelona/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/IhhLIRSTKZk/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Criogenic de Criogenic.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/IhhLIRSTKZk</video:player_loc>
-      <video:publication_date>2023-06-27T12:30:07-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/crisys-shock/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/rBrgUseWEYk/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Crisys de Shock.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/rBrgUseWEYk</video:player_loc>
-      <video:publication_date>2020-07-21T06:24:55-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -1301,63 +981,63 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/el-4o-elemento-parapark/</loc>
+    <loc>https://thevaultescape.com/salas/destiny/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/peCUlVuY38s/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/T_i-738Umxc/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia El 4o Elemento de Parapark.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/peCUlVuY38s</video:player_loc>
-      <video:publication_date>2016-08-20T15:11:12-07:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia Destiny de Roomboescape.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/T_i-738Umxc</video:player_loc>
+      <video:publication_date>2017-03-15T03:49:25-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/el-caso-w-e-n-clue-hunter/</loc>
+    <loc>https://thevaultescape.com/salas/el-consul/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/KyTNKcdGRmY/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/ld8KVU0iMBg/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia El caso W.E.N de Clue Hunter.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/KyTNKcdGRmY</video:player_loc>
-      <video:publication_date>2016-12-05T14:29:16-08:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia El Consul de Red Room.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/ld8KVU0iMBg</video:player_loc>
+      <video:publication_date>2017-09-06T02:38:22-07:00</video:publication_date>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://thevaultescape.com/salas/el-codigo-de-los-mendoza/</loc>
+    <video:video>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/aPi1z6S3Rsg/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>Intro oficial</video:title>
+      <video:description>Vídeo de introducción oficial de la experiencia El Código de los Mendoza de Outfinders.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/aPi1z6S3Rsg</video:player_loc>
+      <video:publication_date>2018-08-28T04:23:10-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
     <loc>https://thevaultescape.com/salas/el-enigma-de-goya-coco-room/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/NgMTMT2qsqU/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/yf8-rLRH-YQ/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
       <video:description>Vídeo de introducción oficial de la experiencia El Enigma de Goya de Coco Room.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/NgMTMT2qsqU</video:player_loc>
-      <video:publication_date>2019-10-21T02:22:13-07:00</video:publication_date>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/yf8-rLRH-YQ</video:player_loc>
+      <video:publication_date>2016-01-28T10:31:06-08:00</video:publication_date>
     </video:video>
   </url>
   <url>
     <loc>https://thevaultescape.com/salas/el-enigma-de-goya-zaragoza/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/NgMTMT2qsqU/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/yf8-rLRH-YQ/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
       <video:description>Vídeo de introducción oficial de la experiencia El Enigma de Goya de Coco Room.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/NgMTMT2qsqU</video:player_loc>
-      <video:publication_date>2019-10-21T02:22:13-07:00</video:publication_date>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/yf8-rLRH-YQ</video:player_loc>
+      <video:publication_date>2016-01-28T10:31:06-08:00</video:publication_date>
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/el-hechizo-de-la-dama-oscura/</loc>
+    <loc>https://thevaultescape.com/salas/el-funeral/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/-kTbvaK_nL4/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/s0zZVYb8ME4/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia El Hechizo de la Dama Oscura de The Fantasy Box.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/-kTbvaK_nL4</video:player_loc>
-      <video:publication_date>2026-05-20T18:09:05-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/el-hijo-del-posadero-dragon-born-vitoria/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/479hktaG3CM/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Reproductor de vídeo youtube</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia El hijo del posadero de Dragon Born Vitoria.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/479hktaG3CM</video:player_loc>
-      <video:publication_date>2019-01-21T09:37:11-08:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia El Funeral de La Caja del Terror.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/s0zZVYb8ME4</video:player_loc>
+      <video:publication_date>2017-04-18T01:03:12-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -1371,6 +1051,16 @@
     </video:video>
   </url>
   <url>
+    <loc>https://thevaultescape.com/salas/el-impostor/</loc>
+    <video:video>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/gaX2arMKgxo/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>Intro oficial</video:title>
+      <video:description>Vídeo de introducción oficial de la experiencia El Impostor de Get Out.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/gaX2arMKgxo</video:player_loc>
+      <video:publication_date>2021-03-26T14:32:18-07:00</video:publication_date>
+    </video:video>
+  </url>
+  <url>
     <loc>https://thevaultescape.com/salas/el-manicomio-newdimension/</loc>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/6yU3uANwct4/hqdefault.jpg</video:thumbnail_loc>
@@ -1381,23 +1071,23 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/el-misterio-de-don-quijote-the-rombo-code/</loc>
+    <loc>https://thevaultescape.com/salas/el-neonato/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/-nend7wr1i0/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/tdpSKOvXtvU/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia El Misterio de Don Quijote de The Rombo Code.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/-nend7wr1i0</video:player_loc>
-      <video:publication_date>2016-08-27T10:32:41-07:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia El Neonato de MyEscape.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/tdpSKOvXtvU</video:player_loc>
+      <video:publication_date>2015-05-29T09:57:55-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/el-misterio-de-la-familia-van-landen-escape-mania/</loc>
+    <loc>https://thevaultescape.com/salas/el-oro-del-gran-capitan/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/J006ZIhOX7Q/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Ver Trailer</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia El misterio de la familia Van Landen de Escape Mania.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/J006ZIhOX7Q</video:player_loc>
-      <video:publication_date>2020-05-08T11:38:06-07:00</video:publication_date>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/AzwZ_zxHRgg/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>Intro oficial</video:title>
+      <video:description>Vídeo de introducción oficial de la experiencia El oro del Gran Capitán de Outfinders.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/AzwZ_zxHRgg</video:player_loc>
+      <video:publication_date>2018-11-07T06:50:35-08:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -1431,56 +1121,6 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/el-templo-maya-escape-the-box/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/ineLAb5zhHk/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia El Templo Maya de Escape The Box.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/ineLAb5zhHk</video:player_loc>
-      <video:publication_date>2020-06-30T12:56:07-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/el-tesoro-de-calico-jack-escape-room/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/h-plC2yhk0A/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia El Tesoro de Calicó Jack de Clue Hunter.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/h-plC2yhk0A</video:player_loc>
-      <video:publication_date>2017-10-29T07:11:44-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/el-tesoro-de-calico-jack-clue-hunter/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/h-plC2yhk0A/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia El Tesoro de Calicó Jack de Clue Hunter.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/h-plC2yhk0A</video:player_loc>
-      <video:publication_date>2017-10-29T07:11:44-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/el-tesoro-de-calico-jack-murcia/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/h-plC2yhk0A/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia El Tesoro de Calicó Jack de Clue Hunter.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/h-plC2yhk0A</video:player_loc>
-      <video:publication_date>2017-10-29T07:11:44-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/el-ultimo-vampiro/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/icUAOwAgqzY/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia El Último Vampiro de Tempus 60.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/icUAOwAgqzY</video:player_loc>
-      <video:publication_date>2024-06-28T16:14:48-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
     <loc>https://thevaultescape.com/salas/emisario/</loc>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/ZlQrBJJivWc/hqdefault.jpg</video:thumbnail_loc>
@@ -1488,16 +1128,6 @@
       <video:description>Vídeo de introducción oficial de la experiencia Emisario de Epikana.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/ZlQrBJJivWc</video:player_loc>
       <video:publication_date>2025-05-31T10:01:44-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/escape-bus-sevilla-transporte-de-prisioneros/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/js_wBPOGnck/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Escape Bus Sevilla: Transporte de Prisioneros de The Rombo Code.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/js_wBPOGnck</video:player_loc>
-      <video:publication_date>2022-10-25T09:46:34-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -1531,13 +1161,13 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/expediente-paranormal/</loc>
+    <loc>https://thevaultescape.com/salas/fake-hunters/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/uEcX1pGqvSU/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/K36-unCBY9U/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Expediente Paranormal de Madrid Terror.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/uEcX1pGqvSU</video:player_loc>
-      <video:publication_date>2023-02-14T02:48:38-08:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia Fake Hunters de Intringulis.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/K36-unCBY9U</video:player_loc>
+      <video:publication_date>2017-10-07T03:52:40-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -1551,13 +1181,13 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/harrison-jones-en-busca-del-sexto-elemento-escape-mania/</loc>
+    <loc>https://thevaultescape.com/salas/imperio-romano-escape-room/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/J006ZIhOX7Q/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Ver Trailer</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Harrison Jones en busca del Sexto Elemento de Escape Mania.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/J006ZIhOX7Q</video:player_loc>
-      <video:publication_date>2020-05-08T11:38:06-07:00</video:publication_date>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/pfzi9Vw0Muk/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>Intro oficial</video:title>
+      <video:description>Vídeo de introducción oficial de la experiencia Imperio Romano de Coco Room.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/pfzi9Vw0Muk</video:player_loc>
+      <video:publication_date>2016-12-07T09:42:05-08:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -1641,93 +1271,33 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/la-caja-diabolica-eskapark/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/0dM4o8bkpBI/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia La Caja Diabólica de Eskapark.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/0dM4o8bkpBI</video:player_loc>
-      <video:publication_date>2019-05-27T01:47:54-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
     <loc>https://thevaultescape.com/salas/la-caja-diabolica-golden-escape-room/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/x3KG3_GNXmI/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/bhmF6PP51vk/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
       <video:description>Vídeo de introducción oficial de la experiencia La Caja Diabólica de Golden Escape Room.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/x3KG3_GNXmI</video:player_loc>
-      <video:publication_date>2019-01-12T07:19:21-08:00</video:publication_date>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/bhmF6PP51vk</video:player_loc>
+      <video:publication_date>2019-01-12T07:21:34-08:00</video:publication_date>
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/la-casa-en-piezas-terror-stories/</loc>
+    <loc>https://thevaultescape.com/salas/la-entrevista-cubick/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/DYHqVNXve9M/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/EfMF0rrapRU/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia La Casa en Piezas de Terror Stories.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/DYHqVNXve9M</video:player_loc>
-      <video:publication_date>2025-03-13T04:32:16-07:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia La Entrevista de Cubick.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/EfMF0rrapRU</video:player_loc>
+      <video:publication_date>2017-11-22T10:18:19-08:00</video:publication_date>
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/la-casa-maldita-the-box/</loc>
+    <loc>https://thevaultescape.com/salas/la-entrevista-cubick-valencia/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/fcIyxcXH8DQ/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/EfMF0rrapRU/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia La Casa Maldita de The Box.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/fcIyxcXH8DQ</video:player_loc>
-      <video:publication_date>2020-06-30T12:48:56-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/la-casa-paranormal-tactic/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/w1PhNT572PI/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia La Casa Paranormal de Tactic.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/w1PhNT572PI</video:player_loc>
-      <video:publication_date>2020-05-03T09:44:11-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/la-fabula/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/_BPULSjvvUc/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia La Fabula de SineQuaNon.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/_BPULSjvvUc</video:player_loc>
-      <video:publication_date>2019-10-27T03:59:49-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/la-fuga-de-casanova/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/-nend7wr1i0/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia La fuga de Casanova de The Rombo Code.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/-nend7wr1i0</video:player_loc>
-      <video:publication_date>2016-08-27T10:32:41-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/la-herencia-escape-room-badajoz/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/5WPivzI_5ps/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia La Herencia de Escape Room Badajoz.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/5WPivzI_5ps</video:player_loc>
-      <video:publication_date>2021-01-06T05:21:04-08:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/la-mansion-la-mancha-escape-room/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/0vEgK0cuyCM/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia La Mansión de La Mancha Escape Room.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/0vEgK0cuyCM</video:player_loc>
-      <video:publication_date>2018-02-07T12:05:57-08:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia La Entrevista de Cubick Valencia.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/EfMF0rrapRU</video:player_loc>
+      <video:publication_date>2017-11-22T10:18:19-08:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -1743,41 +1313,41 @@
   <url>
     <loc>https://thevaultescape.com/salas/la-mina-hidden-escape-room/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/McHENnNXlpc/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/8bCw-C4mi1o/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>TRAILER ESCAPE ROOM: LA MINA</video:title>
       <video:description>Vídeo de introducción oficial de la experiencia La Mina de Hidden Escape Room.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/McHENnNXlpc</video:player_loc>
-      <video:publication_date>2020-05-14T10:30:15-07:00</video:publication_date>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/8bCw-C4mi1o</video:player_loc>
+      <video:publication_date>2017-05-15T02:38:16-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
     <loc>https://thevaultescape.com/salas/la-mina-share-lock/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/McHENnNXlpc/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/8bCw-C4mi1o/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>TRAILER ESCAPE ROOM: LA MINA</video:title>
       <video:description>Vídeo de introducción oficial de la experiencia La Mina de Share-Lock.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/McHENnNXlpc</video:player_loc>
-      <video:publication_date>2020-05-14T10:30:15-07:00</video:publication_date>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/8bCw-C4mi1o</video:player_loc>
+      <video:publication_date>2017-05-15T02:38:16-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
     <loc>https://thevaultescape.com/salas/la-nave-rk-games/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/bqLUp7GuUTg/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Find out why a good domain name is important</video:title>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/19r-B8djUDE/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>Intro oficial</video:title>
       <video:description>Vídeo de introducción oficial de la experiencia La Nave de RK Games.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/bqLUp7GuUTg</video:player_loc>
-      <video:publication_date>2021-05-17T12:39:26-07:00</video:publication_date>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/19r-B8djUDE</video:player_loc>
+      <video:publication_date>2017-10-16T00:06:02-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/la-purga/</loc>
+    <loc>https://thevaultescape.com/salas/la-salvacion/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/sJNZfxKPSGk/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Katharsis Room Escape</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia La Purga de The Exit.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/sJNZfxKPSGk</video:player_loc>
-      <video:publication_date>2025-10-12T05:52:37-07:00</video:publication_date>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/2X4mdhtlt8w/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>Intro oficial</video:title>
+      <video:description>Vídeo de introducción oficial de la experiencia La Salvación de Sin Escape.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/2X4mdhtlt8w</video:player_loc>
+      <video:publication_date>2017-11-30T11:40:54-08:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -1788,16 +1358,6 @@
       <video:description>Vídeo de introducción oficial de la experiencia Los Castillejos de Escape4room.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/fIlopkNStb0</video:player_loc>
       <video:publication_date>2020-12-09T08:20:51-08:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/los-crimenes-de-la-abadia-golden-escape-room/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/x3KG3_GNXmI/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Los Crímenes de la Abadía de Golden Escape Room.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/x3KG3_GNXmI</video:player_loc>
-      <video:publication_date>2019-01-12T07:19:21-08:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -1821,33 +1381,13 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/maxx391/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/Qw12t2Oztos/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>embed-responsive-item</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia MaxX391 de Virtual Bilbao.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/Qw12t2Oztos</video:player_loc>
-      <video:publication_date>2024-04-25T08:02:40-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/megachef-clue-hunter/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/74VTGyZKyxs/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Megachef de Clue Hunter.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/74VTGyZKyxs</video:player_loc>
-      <video:publication_date>2012-12-31T04:10:04-08:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
     <loc>https://thevaultescape.com/salas/mental-experiment-hollywood-escape-zaragoza/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/py_Y0cQkGG4/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/NSaGuyYp19I/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
       <video:description>Vídeo de introducción oficial de la experiencia Mental Experiment de Hollywood Escape Zaragoza.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/py_Y0cQkGG4</video:player_loc>
-      <video:publication_date>2021-11-22T07:22:01-08:00</video:publication_date>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/NSaGuyYp19I</video:player_loc>
+      <video:publication_date>2019-02-20T02:08:58-08:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -1868,36 +1408,6 @@
       <video:description>Vídeo de introducción oficial de la experiencia Obsesion de Inside Escape Room.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/hhUSrzcx3SE</video:player_loc>
       <video:publication_date>2023-09-02T15:29:23-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/offline-2-0/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/ENr7HM_lW1g/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Offline 2.0 de Área 60.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/ENr7HM_lW1g</video:player_loc>
-      <video:publication_date>2026-03-19T08:24:30-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/operacion-diamante-escape-kids/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/5_axpYM1wgo/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Operacion Diamante de Escape kids.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/5_axpYM1wgo</video:player_loc>
-      <video:publication_date>2025-10-28T08:41:13-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/operacion-diamante-golden-pop/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/W0WtMLoF3hk/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Operacion Diamante de Golden Pop.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/W0WtMLoF3hk</video:player_loc>
-      <video:publication_date>2022-05-13T04:55:52-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -1931,16 +1441,6 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/origen-eskapark/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/RT5Ty4aGQZo/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Origen de Eskapark.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/RT5Ty4aGQZo</video:player_loc>
-      <video:publication_date>2019-05-27T01:04:37-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
     <loc>https://thevaultescape.com/salas/pesadillas-pesadillas-escape-room/</loc>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/X_ZFrfdPPVQ/hqdefault.jpg</video:thumbnail_loc>
@@ -1951,13 +1451,13 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/piratas-la-busqueda-del-caliz-de-la-vida-eterna/</loc>
+    <loc>https://thevaultescape.com/salas/piratas-la-isla-malvada/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/J006ZIhOX7Q/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Ver Trailer</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Piratas: La búsqueda del Cáliz de la Vida Eterna de Escape Mania.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/J006ZIhOX7Q</video:player_loc>
-      <video:publication_date>2020-05-08T11:38:06-07:00</video:publication_date>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/2bmY7-ma85A/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>Intro oficial</video:title>
+      <video:description>Vídeo de introducción oficial de la experiencia Piratas: La Isla Malvada de Best Quest.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/2bmY7-ma85A</video:player_loc>
+      <video:publication_date>2016-09-24T01:37:06-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -1971,6 +1471,16 @@
     </video:video>
   </url>
   <url>
+    <loc>https://thevaultescape.com/salas/proyecto-target/</loc>
+    <video:video>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/cmUlW7G-G7E/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>Intro oficial</video:title>
+      <video:description>Vídeo de introducción oficial de la experiencia Proyecto Target de Proyecto Target.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/cmUlW7G-G7E</video:player_loc>
+      <video:publication_date>2015-04-07T02:48:53-07:00</video:publication_date>
+    </video:video>
+  </url>
+  <url>
     <loc>https://thevaultescape.com/salas/racoon-corporation/</loc>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/IdcbLGdX7qo/hqdefault.jpg</video:thumbnail_loc>
@@ -1978,26 +1488,6 @@
       <video:description>Vídeo de introducción oficial de la experiencia Racoon Corporation de TerrorEscapeRoom.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/IdcbLGdX7qo</video:player_loc>
       <video:publication_date>2024-02-05T04:10:41-08:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/ratas-de-laboratorio/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/5L-yibO8bxE/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Ratas de Laboratorio de Room Escape Corporation.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/5L-yibO8bxE</video:player_loc>
-      <video:publication_date>2023-03-05T05:47:41-08:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/raices-antiguo-el-invernadero-good-lock-escape-room/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/OL0msjX7Z3s/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Trailer El Invernadero Escape Room</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Raíces (antiguo El Invernadero) de Good Lock Escape Room.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/OL0msjX7Z3s</video:player_loc>
-      <video:publication_date>2023-06-23T10:10:44-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -2021,63 +1511,13 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/roomin-escape/</loc>
+    <loc>https://thevaultescape.com/salas/shambhala/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/Nb0mE0dfL0c/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>ROOMIN - DAUVILLE ESCAPE 2017</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Roomin Escape de Roomin Escape.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/Nb0mE0dfL0c</video:player_loc>
-      <video:publication_date>2018-11-18T01:13:08-08:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/sherlock-se-viste-de-negro-area-60/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/ENr7HM_lW1g/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/0YLLfNpO7jo/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Sherlock se viste de negro de Área 60.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/ENr7HM_lW1g</video:player_loc>
-      <video:publication_date>2026-03-19T08:24:30-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/sherlock-se-viste-de-negro-vigo/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/ENr7HM_lW1g/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Sherlock se viste de negro de Área 60.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/ENr7HM_lW1g</video:player_loc>
-      <video:publication_date>2026-03-19T08:24:30-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/sherlock-se-viste-de-negro-golden-escape-room/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/x3KG3_GNXmI/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Sherlock se viste de negro de Golden Escape Room.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/x3KG3_GNXmI</video:player_loc>
-      <video:publication_date>2019-01-12T07:19:21-08:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/sopar-de-l-enigma/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/L8ZrWPk2seg/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Sopar de l&#x27;enigma de Sternalia.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/L8ZrWPk2seg</video:player_loc>
-      <video:publication_date>2019-02-01T03:56:29-08:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/sustos-s-a/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/wAKowWQNN_Q/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Sustos S.A. de Quimera Escape.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/wAKowWQNN_Q</video:player_loc>
-      <video:publication_date>2025-03-13T07:29:07-07:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia Shambhala de Best Quest.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/0YLLfNpO7jo</video:player_loc>
+      <video:publication_date>2016-03-22T16:04:14-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -2088,16 +1528,6 @@
       <video:description>Vídeo de introducción oficial de la experiencia The Black Proyect de Cubick Escape Room.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/j6QtFRd3YdQ</video:player_loc>
       <video:publication_date>2020-10-19T07:01:47-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/the-magic-anden-9-3-4/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/HqZIPeHMBW0/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia The Magic (Andén 9 3/4) de Coco Room.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/HqZIPeHMBW0</video:player_loc>
-      <video:publication_date>2020-07-14T10:00:47-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -2121,13 +1551,13 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/tras-el-espejo-de-la-prision/</loc>
+    <loc>https://thevaultescape.com/salas/vendetta/</loc>
     <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/FjqxCG79aJ8/hqdefault.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/IqJxnjmrmBQ/hqdefault.jpg</video:thumbnail_loc>
       <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Tras el Espejo de la Prisión de The Rombo Code.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/FjqxCG79aJ8</video:player_loc>
-      <video:publication_date>2016-07-19T01:59:31-07:00</video:publication_date>
+      <video:description>Vídeo de introducción oficial de la experiencia Vendetta de Matarraña.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/IqJxnjmrmBQ</video:player_loc>
+      <video:publication_date>2017-07-17T08:20:41-07:00</video:publication_date>
     </video:video>
   </url>
   <url>
@@ -2138,56 +1568,6 @@
       <video:description>Vídeo de introducción oficial de la experiencia Venganza de Runaway Escape Room.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/gr6Co3WTgJM</video:player_loc>
       <video:publication_date>2025-06-03T10:08:35-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/vuelo-a-0714-escape-room/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/OiL1JPAUCTA/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Vuelo A-0714 de Coco Room.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/OiL1JPAUCTA</video:player_loc>
-      <video:publication_date>2016-11-22T03:31:04-08:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/vuelo-a-0714-coco-room/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/OiL1JPAUCTA/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Vuelo A-0714 de Coco Room.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/OiL1JPAUCTA</video:player_loc>
-      <video:publication_date>2016-11-22T03:31:04-08:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/vuelo-a-0714-vuelo-a-0714-granada/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/OiL1JPAUCTA/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Vuelo A-0714 de Coco Room.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/OiL1JPAUCTA</video:player_loc>
-      <video:publication_date>2016-11-22T03:31:04-08:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/yucatan-el-ultimo-templo-coco-room/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/gDCNgae1GeA/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Yucatán: El último Templo de Coco Room.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/gDCNgae1GeA</video:player_loc>
-      <video:publication_date>2020-09-15T03:17:45-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://thevaultescape.com/salas/yucatan-el-ultimo-templo-santand-er/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/gDCNgae1GeA/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>Intro oficial</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Yucatán: El Último Templo de Santand&#x27;ER.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/gDCNgae1GeA</video:player_loc>
-      <video:publication_date>2020-09-15T03:17:45-07:00</video:publication_date>
     </video:video>
   </url>
 </urlset>
