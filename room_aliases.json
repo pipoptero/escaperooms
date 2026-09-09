@@ -56,7 +56,9 @@
     "encryptroom_encrypt": "en_la_mente_del_asesino",
     "encrypt_encrypt_escape_room_barcelona": "en_la_mente_del_asesino",
     "en_la_mente_del_asesino_encrypt": "en_la_mente_del_asesino",
-    "willy_el_tuerto_willy_el_tuerto_escape_room": "willy_el_tuerto"
+    "willy_el_tuerto_willy_el_tuerto_escape_room": "willy_el_tuerto",
+    "parasomnia_bajo_segunda": "bajo_segunda",
+    "parasomnia_bajo_segunda_plastic_robot": "bajo_segunda"
   },
   "rooms": {
     "seccion_esoterica_exorcista": {

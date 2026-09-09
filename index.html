@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>The Vault Escape | Ranking y catálogo de escape rooms en España</title>
 <meta name="description" content="Ranking de escape rooms en España, mejores salas, reviews propias, premios, catálogo nacional y herramientas para guardar pendientes, hechos, favoritos y grupos escapistas.">
 <meta name="robots" content="index, follow, max-image-preview:large">
@@ -733,14 +733,15 @@
   /* ── DETAIL MODAL ── */
   .detail-modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);}
   .detail-modal.open{display:flex;}
-  .detail-dialog{width:min(1380px,100%);height:min(94vh,960px);background:var(--card);border:1px solid rgba(125,187,63,.28);box-shadow:0 24px 80px rgba(0,0,0,.75);display:grid;grid-template-columns:minmax(250px,360px) minmax(0,1fr);overflow:hidden;}
+  .detail-shell{position:relative;width:min(1380px,100%);height:min(94vh,960px);min-height:0;}
+  .detail-dialog{width:100%;height:100%;background:var(--card);border:1px solid rgba(125,187,63,.28);box-shadow:0 24px 80px rgba(0,0,0,.75);display:grid;grid-template-columns:minmax(250px,360px) minmax(0,1fr);overflow:hidden;}
   .detail-media{position:relative;background:linear-gradient(135deg,#171927,#2a1b0d 55%,#101018);min-height:0;border-right:1px solid var(--border);display:flex;align-items:flex-start;justify-content:center;padding:20px;overflow:hidden;}
   .detail-media img{display:block;background:radial-gradient(ellipse at center,rgba(255,255,255,.05),rgba(0,0,0,.28));}
   .detail-media img.detail-cover-img{width:auto;height:auto;max-width:100%;max-height:100%;object-fit:contain;background:transparent;}
   .detail-media img + .card-media-fallback{display:none;}
   .detail-media .card-media-fallback{font-size:4.2rem;}
-  .detail-content{padding:20px 22px;overflow:auto;min-height:0;}
-  .detail-close{position:absolute;top:14px;right:14px;z-index:4;width:36px;height:36px;border:1px solid rgba(125,187,63,.35);background:rgba(10,10,15,.8);color:var(--amber);font-family:'Share Tech Mono',monospace;font-size:1.1rem;cursor:pointer;}
+  .detail-content{padding:24px 64px 24px 22px;overflow:auto;min-height:0;}
+  .detail-close{position:absolute;top:max(10px,env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right));z-index:10;width:44px;height:44px;border:1px solid rgba(125,187,63,.35);background:rgba(10,10,15,.8);color:var(--amber);font-family:'Share Tech Mono',monospace;font-size:1.1rem;cursor:pointer;}
   .detail-close:hover{border-color:var(--amber);background:rgba(125,187,63,.08);}
   .detail-kicker{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--text3);letter-spacing:.13em;text-transform:uppercase;margin-bottom:6px;}
   .detail-title{font-family:'Cinzel',serif;font-size:clamp(1.45rem,2.35vw,2.2rem);line-height:1.04;color:var(--text);margin-bottom:6px;}
@@ -1374,12 +1375,13 @@
     .auth-name{max-width:72px;}
     .catalog-result-row{align-items:flex-start;flex-direction:column;}
     .catalog-result-row .catalog-more{justify-content:flex-start;}
-    .detail-modal{padding:0;align-items:stretch;background:var(--card);backdrop-filter:none;overflow:hidden;}
+    .detail-modal{padding:0;align-items:stretch;background:var(--card);backdrop-filter:none;overflow:hidden;bottom:auto;top:var(--detail-viewport-top,0px);height:100vh;height:var(--detail-viewport-height,100dvh);overscroll-behavior:none;}
     .detail-modal.open{display:block;}
-    .detail-dialog{width:100%;height:100dvh;display:block;border:none;box-shadow:none;overflow:auto;background:var(--card);}
+    .detail-shell{width:100%;height:100%;}
+    .detail-dialog{width:100%;height:100%;display:block;padding-top:calc(54px + env(safe-area-inset-top));overscroll-behavior:contain;-webkit-overflow-scrolling:touch;border:none;box-shadow:none;overflow:auto;background:var(--card);}
     .detail-media{height:clamp(238px,62vw,360px);min-height:238px;border-right:none;border-bottom:1px solid var(--border);padding:10px 14px;}
-    .detail-close{position:fixed;top:10px;right:10px;width:40px;height:40px;background:rgba(10,10,15,.92);}
-    .detail-content{padding:14px 14px 24px;overflow:visible;}
+    .detail-close{position:absolute;background:rgba(10,10,15,.96);}
+    .detail-content{padding:14px max(14px,env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left));overflow:visible;}
     .detail-title{font-size:1.35rem;}
     .detail-tags{margin-bottom:10px;}
     .detail-meta{grid-template-columns:1fr 1fr;}
@@ -1878,6 +1880,15 @@
 .escapist-leaflet-cluster.pending{background:#17150e;border-color:#ffb000;color:#ffca55}
 .escapist-leaflet-cluster.mixed{box-shadow:0 5px 18px rgba(0,0,0,.5),inset 0 -5px 0 #ffb000}
 .escapist-map-dot.done{background:#80d34b}.escapist-map-dot.pending{background:#ffb000}.escapist-map-dot.approx{background:transparent;border:1px dashed #aaa4bd}
+#pending-choice{position:fixed;inset:0;margin:auto;width:min(480px,calc(100% - 24px));max-height:calc(100dvh - 32px);overflow:auto;border:1px solid var(--green);background:var(--card);color:var(--text);padding:24px;border-radius:10px;z-index:1000;}
+#pending-choice::backdrop{background:rgba(0,0,0,.78);}
+#pending-choice h2{padding-right:30px;font-size:1.2rem;margin-bottom:12px;}
+#pending-choice p{font-size:.9rem;line-height:1.5;margin-bottom:12px;}
+.pending-choice-close{position:absolute;right:8px;top:8px;width:44px;height:44px;background:var(--card);color:var(--text);border:0;font-size:1.6rem;cursor:pointer;}
+.pending-destination{display:flex;flex-direction:column;gap:6px;text-align:left;width:100%;padding:14px;margin:8px 0;border:1px solid var(--border);background:var(--bg);color:var(--text);cursor:pointer;min-height:60px;}
+.pending-destination:disabled{opacity:.6;cursor:default;}
+.pending-destination span{font-size:.8rem;color:var(--text2);}
+#pending-choice-error{color:#ff8989;}
 </style>
 </head>
 <body>
@@ -2199,11 +2210,21 @@
   </div>
 </div>
 
+<dialog id="pending-choice" aria-labelledby="pending-choice-title">
+  <form method="dialog"><button class="pending-choice-close" aria-label="Cerrar elección de pendiente">×</button></form>
+  <h2 id="pending-choice-title">¿Con quién quieres hacerlo?</h2>
+  <p>Elige una lista. Si eliges un grupo, lo verán todos sus miembros. Las demás listas no cambian.</p>
+  <div id="pending-choice-content"></div>
+  <p id="pending-choice-error" role="alert"></p>
+</dialog>
+
 <div class="detail-modal" id="detail-modal" aria-hidden="true" onclick="closeDetail(event)">
-  <div class="detail-dialog" role="dialog" aria-modal="true" aria-labelledby="detail-title" onclick="event.stopPropagation()">
+  <div class="detail-shell" role="dialog" aria-modal="true" aria-labelledby="detail-title" onclick="event.stopPropagation()">
     <button class="detail-close" type="button" onclick="closeDetail()" aria-label="Cerrar detalle">×</button>
+    <div class="detail-dialog">
     <div class="detail-media" id="detail-media"></div>
     <div class="detail-content" id="detail-content"></div>
+    </div>
   </div>
 </div>
 
@@ -2236,6 +2257,7 @@
   </div>
 </div>
 <script src="firebase-config.js"></script>
+<script src="room-state.js"></script>
 <script>
 // ════════════════════════════════════════════════════════════
 //  🔥 CONFIGURACIÓN FIREBASE
@@ -2439,6 +2461,8 @@ let USER_GROUPS = {};
 let GROUP_MEMBERS = {};
 let GROUP_ROOMS = {};
 let GROUP_PENDING_ROOMS = {};
+let USER_STATE_ORIGINS = {};
+let ROOM_STATE_SAVING = false;
 let PENDING_INVITE_ID = new URLSearchParams(window.location.search).get('invite') || '';
 let INVITE_NOTICE_SHOWN = false;
 let SETTINGS_TAB = 'profile';
@@ -2469,7 +2493,7 @@ let STATIC_ENHANCEMENTS_PROMISE = null;
 let PROFILE_MAP_DATA_PROMISE = null;
 let PHOTO_LIGHTBOX_GALLERIES = {};
 const LIVE_REFRESH_MIN_INTERVAL = 5 * 60 * 1000;
-const STATIC_ASSET_VERSION = '20260908-vault-home';
+const STATIC_ASSET_VERSION = '20260909-pending-covers';
 
 function invalidateReviewRoomsCache() {
   REVIEW_ROOMS_CACHE = null;
@@ -2775,8 +2799,12 @@ function groupStateFor(room) {
   };
 }
 
+function scopeRoomKey(room) {
+  return VaultRoomState.identity(room?._personalStateKey || room?._groupRoomKey || userRoomKey(room), room, REVIEW_ROOM_ALIASES);
+}
+
 function userStateFor(room) {
-  return USER_ROOM_STATES[userRoomKey(room)] || {};
+  return USER_ROOM_STATES[scopeRoomKey(room)] || {};
 }
 
 function parsePositiveMinutes(value) {
@@ -2924,6 +2952,7 @@ function personalStateRooms() {
       votos: null,
       verificado: false,
       estado_verificacion: 'recuperada_personal',
+      _personalStateKey: key,
       _personalRecovered: true
     }));
 }
@@ -3354,17 +3383,23 @@ async function refreshSignedSession() {
   await handlePendingInvite();
 }
 
-async function loadUserRoomStates() {
+async function loadUserRoomStates(strict = false) {
   if (!AUTH_USER || !FIREBASE_ENABLED) {
     USER_ROOM_STATES = {};
+    USER_STATE_ORIGINS = {};
     return;
   }
   try {
-    const data = await fbGet(`users/${USER_ID}/roomStates`);
-    USER_ROOM_STATES = data || {};
+    const loadingUid = USER_ID;
+    if (!await loadRoomAliases()) throw new Error('No se pudieron cargar las identidades de las salas. Inténtalo de nuevo.');
+    const data = await fbGet(`users/${loadingUid}/roomStates`);
+    if (!AUTH_USER || USER_ID !== loadingUid) throw new Error('La sesión ha cambiado.');
+    const normalized = VaultRoomState.normalize(data, REVIEW_ROOM_ALIASES, true);
+    USER_ROOM_STATES = normalized.data;
+    USER_STATE_ORIGINS = normalized.origins;
   } catch(e) {
+    if (strict) throw e;
     console.warn('No se pudieron cargar tus listas personales:', e.message);
-    USER_ROOM_STATES = {};
   }
 }
 
@@ -3373,9 +3408,13 @@ async function saveUserRoomState(room, patch) {
     alert('Inicia sesión con Google para guardar tus pendientes y hechos personales.');
     return;
   }
-  const key = userRoomKey(room);
+  const savingUid = USER_ID;
+  await loadUserRoomStates(true);
+  if (!AUTH_USER || USER_ID !== savingUid) throw new Error('La sesión ha cambiado. Vuelve a abrir la sala.');
+  const key = scopeRoomKey(room);
   if (!key) return;
   const previous = USER_ROOM_STATES[key] || {};
+  if (patch.pending && previous.done) throw new Error('La sala ya figura como hecha. Actualiza tus listas antes de cambiarla.');
   const next = {
     ...previous,
     id: room.id || previous.id || key,
@@ -3404,19 +3443,19 @@ async function saveUserRoomState(room, patch) {
     if (completed) next.completedMinutes = completed;
     else delete next.completedMinutes;
   }
-  if (!next.pending && !next.done) {
-    delete USER_ROOM_STATES[key];
-    await fbDelete(`users/${USER_ID}/roomStates/${key}`);
-  } else {
-    USER_ROOM_STATES[key] = next;
-    await fbPut(`users/${USER_ID}/roomStates/${key}`, next);
-  }
+  const value = next.pending || next.done ? next : null;
+  await fbPatch('', VaultRoomState.patchFor(`users/${USER_ID}/roomStates`, key, value, USER_STATE_ORIGINS));
+  if (value) USER_ROOM_STATES[key] = value;
+  else delete USER_ROOM_STATES[key];
+  USER_STATE_ORIGINS[key] = value ? [key] : [];
 }
 
 async function setPersonalRoomState(kind, key, state) {
+  if (ROOM_STATE_SAVING || !AUTH_USER) return;
   const room = findDetailRoom(kind, key);
   if (!room) return;
   const progressBefore = AUTH_USER ? progressModel() : null;
+  ROOM_STATE_SAVING = true;
   const current = userStateFor(room);
   const patch = state === 'pending'
     ? { pending: !current.pending, done: false }
@@ -3431,12 +3470,12 @@ async function setPersonalRoomState(kind, key, state) {
     renderCatalogo();
     announceProgressChange(progressBefore, progressModel());
     if (document.getElementById('detail-modal')?.classList.contains('open')) {
-      openDetail(kind, key);
+      openDetail(kind, key, { preserveScroll: true });
     }
   } catch(e) {
     console.error('No se pudo guardar tu estado personal:', e);
     alert(`No se pudo guardar en tu cuenta.\n\nDetalle: ${e.message}\n\nRevisa las reglas de Firebase para users/{uid}/roomStates.`);
-  }
+  } finally { ROOM_STATE_SAVING = false; }
 }
 
 async function saveCompletedMinutes(kind, key, context = 'detail') {
@@ -3495,7 +3534,7 @@ function findRoomByUserKey(key) {
 
 function roomFromGroupRecord(key, record) {
   const base = findRoomByUserKey(key);
-  if (base) return { ...base, _groupDone: true };
+  if (base) return { ...base, _groupDone: true, _groupRoomKey: key };
   return {
     id: key,
     nombre: record.roomName || record.nombre || key,
@@ -3520,7 +3559,7 @@ function groupDoneEntriesForKey(key) {
 }
 
 function groupDoneEntriesForRoom(room) {
-  return groupDoneEntriesForKey(room?._groupRoomKey || userRoomKey(room));
+  return groupDoneEntriesForKey(scopeRoomKey(room));
 }
 
 function groupPendingEntriesForKey(key) {
@@ -3531,13 +3570,13 @@ function groupPendingEntriesForKey(key) {
 }
 
 function groupPendingEntriesForRoom(room) {
-  return groupPendingEntriesForKey(room?._groupRoomKey || userRoomKey(room));
+  return groupPendingEntriesForKey(scopeRoomKey(room));
 }
 
 function mineGroupMatches(room, selectedGroup) {
   if (!selectedGroup) return true;
   if (selectedGroup === '__personal') return !!userStateFor(room).done;
-  const key = room?._groupRoomKey || userRoomKey(room);
+  const key = scopeRoomKey(room);
   return !!(GROUP_ROOMS[selectedGroup] && GROUP_ROOMS[selectedGroup][key]);
 }
 
@@ -3795,44 +3834,32 @@ async function syncProfileIdentityToReviews() {
   }
 }
 
-async function loadUserGroups() {
+async function loadUserGroups(strict = false) {
   if (!AUTH_USER || !FIREBASE_ENABLED) {
-    USER_GROUPS = {};
-    GROUP_MEMBERS = {};
-    GROUP_ROOMS = {};
-    GROUP_PENDING_ROOMS = {};
+    USER_GROUPS = {}; GROUP_MEMBERS = {}; GROUP_ROOMS = {}; GROUP_PENDING_ROOMS = {};
     return;
   }
-  let rawGroups = {};
+  const loadingUid = USER_ID;
   try {
-    rawGroups = await fbGet(`userGroups/${USER_ID}`) || {};
-  } catch (e) {
-    console.warn('No se pudieron cargar tus grupos:', e.message);
-  }
-  USER_GROUPS = {};
-  GROUP_MEMBERS = {};
-  GROUP_ROOMS = {};
-  GROUP_PENDING_ROOMS = {};
-  for (const [groupId, group] of Object.entries(rawGroups || {})) {
-    if (!group || group.status === 'left' || group.status === 'removed') continue;
-    try {
+    if (!await loadRoomAliases()) throw new Error('No se pudieron cargar las identidades de las salas.');
+    const rawGroups = await fbGet(`userGroups/${loadingUid}`) || {};
+    const groups = {}, membersByGroup = {}, done = {}, pending = {};
+    for (const [groupId, group] of Object.entries(rawGroups)) {
+      if (!group || group.status === 'left' || group.status === 'removed') continue;
       const members = await fbGet(`groupMembers/${groupId}`) || {};
-      const myMember = members[USER_ID];
-      if (!myMember || myMember.status !== 'active') {
-        try { await fbDelete(`userGroups/${USER_ID}/${groupId}`); } catch {}
-        continue;
-      }
-      USER_GROUPS[groupId] = { ...group, role: myMember.role || group.role || 'member', status: 'active' };
-      GROUP_MEMBERS[groupId] = members;
-    } catch (e) {
-      console.warn('No se pudo validar la membresia del grupo:', groupId, e.message);
-      try { await fbDelete(`userGroups/${USER_ID}/${groupId}`); } catch {}
-      continue;
+      const me = members[loadingUid];
+      if (!me || me.status !== 'active') continue;
+      groups[groupId] = { ...group, role: me.role || group.role || 'member', status: 'active' };
+      membersByGroup[groupId] = members;
+      const [rawDone, rawPending] = await Promise.all([fbGet(`groupRooms/${groupId}`), fbGet(`groupPendingRooms/${groupId}`)]);
+      const normalized = VaultRoomState.groups(rawDone, rawPending, REVIEW_ROOM_ALIASES);
+      done[groupId] = normalized.done.data; pending[groupId] = normalized.pending.data;
     }
-    try { GROUP_ROOMS[groupId] = await fbGet(`groupRooms/${groupId}`) || {}; }
-    catch (e) { console.warn('No se pudieron cargar salas del grupo:', groupId, e.message); GROUP_ROOMS[groupId] = {}; }
-    try { GROUP_PENDING_ROOMS[groupId] = await fbGet(`groupPendingRooms/${groupId}`) || {}; }
-    catch (e) { console.warn('No se pudieron cargar pendientes del grupo:', groupId, e.message); GROUP_PENDING_ROOMS[groupId] = {}; }
+    if (!AUTH_USER || USER_ID !== loadingUid) throw new Error('La sesión ha cambiado.');
+    USER_GROUPS = groups; GROUP_MEMBERS = membersByGroup; GROUP_ROOMS = done; GROUP_PENDING_ROOMS = pending;
+  } catch (e) {
+    if (strict) throw e;
+    console.warn('No se pudieron cargar tus grupos:', e.message);
   }
 }
 
@@ -4988,10 +5015,12 @@ async function deleteEscapistGroup(groupId) {
   const name = group.name || 'este grupo';
   if (!confirm(`Eliminar ${name}?\n\nSe borraran sus salas hechas y miembros para todos los integrantes. Esta accion no se puede deshacer.`)) return;
   try {
-    for (const roomKeyValue of Object.keys(GROUP_ROOMS[groupId] || {})) {
+    // Read persisted keys: the visible lists have already collapsed legacy aliases.
+    const [rawDone, rawPending] = await Promise.all([fbGet(`groupRooms/${groupId}`), fbGet(`groupPendingRooms/${groupId}`)]);
+    for (const roomKeyValue of Object.keys(rawDone || {})) {
       await fbDelete(`groupRooms/${groupId}/${roomKeyValue}`);
     }
-    for (const roomKeyValue of Object.keys(GROUP_PENDING_ROOMS[groupId] || {})) {
+    for (const roomKeyValue of Object.keys(rawPending || {})) {
       await fbDelete(`groupPendingRooms/${groupId}/${roomKeyValue}`);
     }
     await fbDelete(`groups/${groupId}`);
@@ -5026,51 +5055,40 @@ function openMineGroupFilter(groupId) {
 }
 
 async function removeRoomFromGroup(groupId, roomKeyValue) {
-  if (!AUTH_USER || !FIREBASE_ENABLED || !USER_GROUPS[groupId]) return;
-  if (!confirm('Quitar esta sala del historial del grupo?')) return;
+  if (!AUTH_USER || !FIREBASE_ENABLED || !USER_GROUPS[groupId] || ROOM_STATE_SAVING) return;
+  if (!confirm('¿Quitar esta sala del historial del grupo?')) return;
+  ROOM_STATE_SAVING = true;
   try {
-    await fbDelete(`groupRooms/${groupId}/${roomKeyValue}`);
-    if (GROUP_ROOMS[groupId]) delete GROUP_ROOMS[groupId][roomKeyValue];
-    populateFilters(); renderStats(); renderMisHechos(); renderCatalogo();
+    await saveGroupRoomStatus(groupId, roomFromGroupRecord(roomKeyValue, GROUP_ROOMS[groupId]?.[roomKeyValue] || {}), 'remove-done');
+    renderRoomStateChange('catalogo', roomKeyValue);
     renderGroupDetail(groupId, 'Sala quitada del grupo.', 'done');
-  } catch (e) {
-    console.error(e);
-    renderGroupDetail(groupId, `No se pudo quitar la sala. ${escapeHtml(e.message)}`, 'done');
-  }
+  } catch (e) { renderGroupDetail(groupId, `No se pudo quitar la sala. ${escapeHtml(e.message)}`, 'done'); }
+  finally { ROOM_STATE_SAVING = false; }
 }
 
 async function removePendingRoomFromGroup(groupId, roomKeyValue) {
-  if (!AUTH_USER || !FIREBASE_ENABLED || !USER_GROUPS[groupId]) return;
-  if (!confirm('Quitar esta sala de pendientes del grupo?')) return;
+  if (!AUTH_USER || !FIREBASE_ENABLED || !USER_GROUPS[groupId] || ROOM_STATE_SAVING) return;
+  if (!confirm('¿Quitar esta sala de pendientes del grupo?')) return;
+  ROOM_STATE_SAVING = true;
   try {
-    await fbDelete(`groupPendingRooms/${groupId}/${roomKeyValue}`);
-    if (GROUP_PENDING_ROOMS[groupId]) delete GROUP_PENDING_ROOMS[groupId][roomKeyValue];
-    populateFilters(); renderStats(); renderPendientes(); renderCatalogo();
+    await saveGroupRoomStatus(groupId, roomFromGroupRecord(roomKeyValue, GROUP_PENDING_ROOMS[groupId]?.[roomKeyValue] || {}), 'remove-pending');
+    renderRoomStateChange('catalogo', roomKeyValue);
     renderGroupDetail(groupId, 'Sala quitada de pendientes.', 'pending');
-  } catch (e) {
-    console.error(e);
-    renderGroupDetail(groupId, `No se pudo quitar el pendiente. ${escapeHtml(e.message)}`, 'pending');
-  }
+  } catch (e) { renderGroupDetail(groupId, `No se pudo quitar el pendiente. ${escapeHtml(e.message)}`, 'pending'); }
+  finally { ROOM_STATE_SAVING = false; }
 }
 
 async function markGroupPendingAsDone(groupId, roomKeyValue) {
-  if (!AUTH_USER || !FIREBASE_ENABLED || !USER_GROUPS[groupId]) return;
+  if (!AUTH_USER || !FIREBASE_ENABLED || !USER_GROUPS[groupId] || ROOM_STATE_SAVING) return;
   const pending = GROUP_PENDING_ROOMS[groupId]?.[roomKeyValue];
   if (!pending) return;
+  ROOM_STATE_SAVING = true;
   try {
-    const baseRoom = roomFromGroupRecord(roomKeyValue, pending);
-    const record = { ...pending, ...groupRecordFromRoom(baseRoom), addedAt: Date.now(), movedFromPendingAt: Date.now() };
-    await fbPut(`groupRooms/${groupId}/${roomKeyValue}`, record);
-    await fbDelete(`groupPendingRooms/${groupId}/${roomKeyValue}`);
-    if (!GROUP_ROOMS[groupId]) GROUP_ROOMS[groupId] = {};
-    GROUP_ROOMS[groupId][roomKeyValue] = record;
-    delete GROUP_PENDING_ROOMS[groupId][roomKeyValue];
-    populateFilters(); renderStats(); renderPendientes(); renderMisHechos(); renderCatalogo();
+    await saveGroupRoomStatus(groupId, roomFromGroupRecord(roomKeyValue, pending), 'done');
+    renderRoomStateChange('catalogo', roomKeyValue);
     renderGroupDetail(groupId, 'Sala marcada como hecha por el grupo.', 'done');
-  } catch (e) {
-    console.error(e);
-    renderGroupDetail(groupId, `No se pudo marcar como hecha. ${escapeHtml(e.message)}`, 'pending');
-  }
+  } catch (e) { renderGroupDetail(groupId, `No se pudo marcar como hecha. ${escapeHtml(e.message)}`, 'pending'); }
+  finally { ROOM_STATE_SAVING = false; }
 }
 async function openProfile(message = '', refresh = true) {
   const modal = document.getElementById('profile-modal');
@@ -6536,7 +6554,7 @@ function groupRoomControlsHtml(room, kind) {
     <div class="group-room-title">Grupos escapistas</div>
     <div class="group-room-list">
       ${groups.map(([groupId, group]) => {
-        const roomStateKey = userRoomKey(room);
+        const roomStateKey = scopeRoomKey(room);
         const done = !!GROUP_ROOMS[groupId]?.[roomStateKey];
         const pending = !!GROUP_PENDING_ROOMS[groupId]?.[roomStateKey];
         const groupNameText = escapeHtml(group.name || 'Grupo');
@@ -6548,63 +6566,97 @@ function groupRoomControlsHtml(room, kind) {
   </div>`;
 }
 
+async function saveGroupRoomStatus(groupId, room, status) {
+  if (!AUTH_USER || !FIREBASE_ENABLED || !activeUserGroups().some(([id]) => id === groupId)) throw new Error('El grupo ya no está disponible.');
+  const key = scopeRoomKey(room);
+  const savingUid = USER_ID;
+  // Refresh only this shared scope before constructing a sparse atomic update.
+  const [done, pending] = await Promise.all([fbGet(`groupRooms/${groupId}`), fbGet(`groupPendingRooms/${groupId}`)]);
+  if (!AUTH_USER || USER_ID !== savingUid) throw new Error('La sesión ha cambiado. Vuelve a abrir la sala.');
+  const current = VaultRoomState.groups(done, pending, REVIEW_ROOM_ALIASES);
+  if (status === 'pending' && current.done.data[key]) throw new Error('Esta sala ya está hecha con este grupo.');
+  const record = { ...(current.done.data[key] || current.pending.data[key] || {}), ...groupRecordFromRoom(room), id: room.id || key };
+  const nextDone = status === 'done' ? record : status === 'remove-pending' ? current.done.data[key] || null : null;
+  const nextPending = status === 'pending' ? record : status === 'remove-done' && !current.done.data[key] ? current.pending.data[key] || null : null;
+  const patch = {
+    ...VaultRoomState.patchFor(`groupRooms/${groupId}`, key, nextDone, current.done.origins),
+    ...VaultRoomState.patchFor(`groupPendingRooms/${groupId}`, key, nextPending, current.pending.origins)
+  };
+  await fbPatch('', patch);
+  if (nextDone) current.done.data[key] = nextDone;
+  else delete current.done.data[key];
+  if (nextPending) current.pending.data[key] = nextPending;
+  else delete current.pending.data[key];
+  GROUP_ROOMS[groupId] = current.done.data;
+  GROUP_PENDING_ROOMS[groupId] = current.pending.data;
+}
+
+function renderRoomStateChange(kind, key) {
+  populateFilters(); renderStats(); renderPendientes(); renderMisHechos(); renderHechos(); renderCatalogo();
+  if (document.getElementById('profile-modal')?.classList.contains('open')) renderProfile();
+  if (document.getElementById('detail-modal')?.classList.contains('open')) openDetail(kind, key, { preserveScroll: true });
+}
+
 async function toggleGroupRoom(kind, key, groupId) {
-  if (!AUTH_USER || !FIREBASE_ENABLED) return;
+  if (ROOM_STATE_SAVING) return;
   const room = findDetailRoom(kind, key);
-  if (!room || !USER_GROUPS[groupId]) return;
-  const roomStateKey = userRoomKey(room);
-  const exists = !!GROUP_ROOMS[groupId]?.[roomStateKey];
+  if (!room || !AUTH_USER) return;
+  ROOM_STATE_SAVING = true;
   try {
-    if (exists) {
-      await fbDelete(`groupRooms/${groupId}/${roomStateKey}`);
-      if (GROUP_ROOMS[groupId]) delete GROUP_ROOMS[groupId][roomStateKey];
-    } else {
-      const record = groupRecordFromRoom(room);
-      await fbPut(`groupRooms/${groupId}/${roomStateKey}`, record);
-      if (!GROUP_ROOMS[groupId]) GROUP_ROOMS[groupId] = {};
-      GROUP_ROOMS[groupId][roomStateKey] = record;
-      if (GROUP_PENDING_ROOMS[groupId]?.[roomStateKey]) {
-        await fbDelete(`groupPendingRooms/${groupId}/${roomStateKey}`);
-        delete GROUP_PENDING_ROOMS[groupId][roomStateKey];
-      }
-    }
-    populateFilters(); renderStats(); renderPendientes(); renderMisHechos(); renderCatalogo();
-    if (document.getElementById('profile-modal')?.classList.contains('open')) renderProfile();
-    if (document.getElementById('detail-modal')?.classList.contains('open')) openDetail(kind, key);
-  } catch (e) {
-    console.error(e);
-    alert(`No se pudo actualizar el grupo.\n\nDetalle: ${e.message}`);
-  }
+    const before = progressModel();
+    await saveGroupRoomStatus(groupId, room, GROUP_ROOMS[groupId]?.[scopeRoomKey(room)] ? 'remove-done' : 'done');
+    renderRoomStateChange(kind, key);
+    announceProgressChange(before, progressModel());
+  } catch (e) { alert(`No se pudo actualizar el grupo. ${e.message}`); }
+  finally { ROOM_STATE_SAVING = false; }
 }
 
 async function toggleGroupPendingRoom(kind, key, groupId) {
-  if (!AUTH_USER || !FIREBASE_ENABLED) return;
-  const room = findDetailRoom(kind, key);
-  if (!room || !USER_GROUPS[groupId]) return;
-  const roomStateKey = userRoomKey(room);
-  const exists = !!GROUP_PENDING_ROOMS[groupId]?.[roomStateKey];
-  if (!exists && GROUP_ROOMS[groupId]?.[roomStateKey]) {
-    alert('Esta sala ya está marcada como hecha con este grupo.');
-    return;
-  }
-  try {
-    if (exists) {
-      await fbDelete(`groupPendingRooms/${groupId}/${roomStateKey}`);
-      if (GROUP_PENDING_ROOMS[groupId]) delete GROUP_PENDING_ROOMS[groupId][roomStateKey];
-    } else {
-      const record = groupRecordFromRoom(room);
-      await fbPut(`groupPendingRooms/${groupId}/${roomStateKey}`, record);
-      if (!GROUP_PENDING_ROOMS[groupId]) GROUP_PENDING_ROOMS[groupId] = {};
-      GROUP_PENDING_ROOMS[groupId][roomStateKey] = record;
-    }
-    populateFilters(); renderStats(); renderPendientes(); renderCatalogo();
-    if (document.getElementById('profile-modal')?.classList.contains('open')) renderProfile();
-    if (document.getElementById('detail-modal')?.classList.contains('open')) openDetail(kind, key);
-  } catch (e) {
-    console.error(e);
-    alert(`No se pudo actualizar pendientes del grupo.\n\nDetalle: ${e.message}`);
-  }
+  await applyPendingChoice(kind, key, groupId);
 }
+
+async function openPendingChoice(kind, key) {
+  if (!AUTH_USER) return alert('Inicia sesión con Google para guardar pendientes.');
+  const room = findDetailRoom(kind, key);
+  if (!room) return;
+  const dialog = document.getElementById('pending-choice');
+  const content = document.getElementById('pending-choice-content');
+  content.textContent = 'Cargando tus grupos…';
+  document.getElementById('pending-choice-error').textContent = '';
+  dialog.showModal();
+  try {
+    await Promise.all([loadUserGroups(true), loadUserRoomStates(true)]);
+    if (!dialog.open) return;
+    const button = (groupId, label, state) => `<button type="button" class="pending-destination" ${state.done ? 'disabled' : ''} onclick="applyPendingChoice('${jsString(kind)}','${jsString(key)}','${jsString(groupId)}')"><strong>${escapeHtml(label)}</strong><span>${state.done ? 'Ya realizada en esta lista' : state.pending ? '✓ Pendiente · pulsar para quitar' : 'Añadir a pendientes'}</span></button>`;
+    content.innerHTML = `<p>${escapeHtml(room.nombre)}</p>` + button('', 'Solo para mí', userStateFor(room)) + activeUserGroups().map(([id, group]) => button(id, group.name || 'Grupo', { done: !!GROUP_ROOMS[id]?.[scopeRoomKey(room)], pending: !!GROUP_PENDING_ROOMS[id]?.[scopeRoomKey(room)] })).join('');
+  } catch (e) { document.getElementById('pending-choice-error').textContent = e.message; }
+}
+
+async function applyPendingChoice(kind, key, groupId = '') {
+  if (ROOM_STATE_SAVING) return;
+  const room = findDetailRoom(kind, key);
+  if (!room || !AUTH_USER) return;
+  ROOM_STATE_SAVING = true;
+  const dialog = document.getElementById('pending-choice');
+  try {
+    const before = progressModel();
+    if (groupId) {
+      const removing = !!GROUP_PENDING_ROOMS[groupId]?.[scopeRoomKey(room)];
+      await saveGroupRoomStatus(groupId, room, removing ? 'remove-pending' : 'pending');
+    } else {
+      const current = userStateFor(room);
+      if (current.done) throw new Error('La sala ya está hecha en tu lista personal.');
+      await saveUserRoomState(room, { pending: !current.pending, done: false });
+    }
+    if (dialog.open) dialog.close();
+    renderRoomStateChange(kind, key);
+    announceProgressChange(before, progressModel());
+  } catch (e) {
+    if (dialog.open) document.getElementById('pending-choice-error').textContent = e.message;
+    else alert(`No se pudo actualizar el pendiente. ${e.message}`);
+  } finally { ROOM_STATE_SAVING = false; }
+}
+
 async function migrateAnonymousDataToAccount() {
   if (!AUTH_USER || USER_ID === LOCAL_USER_ID) return;
   const localFavs = readStoredFavs('er_favs');
@@ -6747,6 +6799,14 @@ async function fbGet(path) {
     throw new Error(`Firebase GET error ${r.status}: ${body}`);
   }
   return r.json();
+}
+
+async function fbPatch(path, values) {
+  const response = await fetch(fbUrl(path), {
+    method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(values)
+  });
+  if (!response.ok) throw new Error(`No se pudo guardar (${response.status}). Revisa tu conexión y los permisos de la cuenta.`);
+  return response.json();
 }
 
 async function fbPut(path, value) {
@@ -7429,7 +7489,7 @@ async function loadRoomAliases() {
 }
 
 async function refreshLiveData({ force = false, reason = 'auto' } = {}) {
-  if (!FIREBASE_ENABLED || LIVE_REFRESH_IN_PROGRESS) return false;
+  if (!FIREBASE_ENABLED || LIVE_REFRESH_IN_PROGRESS || ROOM_STATE_SAVING) return false;
   const now = Date.now();
   if (!force && now - LAST_LIVE_REFRESH_AT < LIVE_REFRESH_MIN_INTERVAL) return false;
   LIVE_REFRESH_IN_PROGRESS = true;
@@ -8083,6 +8143,18 @@ function syncNavigationForAuth() {
   renderVaultGuide();
 }
 
+let ROOM_LIST_REFRESH = null;
+function refreshRoomLists() {
+  if (!AUTH_USER || ROOM_STATE_SAVING) return Promise.resolve();
+  if (ROOM_LIST_REFRESH) return ROOM_LIST_REFRESH;
+  ROOM_LIST_REFRESH = Promise.all([loadUserRoomStates(true), loadUserGroups(true)])
+    .then(() => { populateFilters(); renderStats(); renderPendientes(); renderMisHechos(); renderCatalogo(); })
+    .catch(error => { console.warn('No se pudieron actualizar tus listas:', error.message); })
+    .finally(() => { ROOM_LIST_REFRESH = null; });
+  return ROOM_LIST_REFRESH;
+}
+window.addEventListener('focus', () => { if (ACTIVE_TAB === 'pendientes') refreshRoomLists(); });
+
 function switchTab(t) {
   if ((t === 'mis-hechos' || t === 'pendientes') && !AUTH_USER) t = 'thevault';
   ACTIVE_TAB = t;
@@ -8105,7 +8177,7 @@ function switchTab(t) {
   }
   else if (t === 'hechos') renderHechos();
   else if (t === 'mis-hechos') renderMisHechos();
-  else if (t === 'pendientes') renderPendientes();
+  else if (t === 'pendientes') { renderPendientes(); refreshRoomLists(); }
   else if (t === 'thevault') renderVaultGuide();
   updateGuestStripVisibility();
 }
@@ -9319,7 +9391,7 @@ function personalActionsHtml(room, kind) {
   const state = userStateFor(room);
   if (!AUTH_USER) return '<span class="personal-hint">Entra con Google para guardar tu lista</span>';
   return `<div class="personal-actions">
-    <button class="personal-btn pending ${state.pending ? 'active' : ''}" type="button" onclick="setPersonalRoomState('${kind}','${key}','pending')">${state.pending ? 'Quitar pendiente' : 'Mi pendiente'}</button>
+    <button class="personal-btn pending ${state.pending ? 'active' : ''}" type="button" onclick="openPendingChoice('${kind}','${key}')">${state.pending || groupPendingEntriesForRoom(room).length ? 'Gestionar pendiente' : 'Pendiente…'}</button>
     <button class="personal-btn done ${state.done ? 'active' : ''}" type="button" onclick="setPersonalRoomState('${kind}','${key}','done')">${state.done ? 'Quitar hecho' : 'Hecho por mi'}</button>
   </div>`;
 }
@@ -9376,7 +9448,7 @@ function detailAccountHtml(room, kind) {
       <div class="detail-account-state">${stateLabel}</div>
     </div>
     <div class="detail-personal-grid">
-      <button class="detail-personal-btn pending ${state.pending ? 'active' : ''}" type="button" onclick="setPersonalRoomState('${kind}','${key}','pending')">${state.pending ? '✓ Pendiente' : 'Mi pendiente'}</button>
+      <button class="detail-personal-btn pending ${state.pending ? 'active' : ''}" type="button" onclick="openPendingChoice('${kind}','${key}')">${state.pending || groupPending.length ? 'Gestionar pendiente' : 'Pendiente…'}</button>
       <button class="detail-personal-btn done ${state.done ? 'active' : ''}" type="button" onclick="setPersonalRoomState('${kind}','${key}','done')">${state.done ? '✓ Hecho' : 'Hecho por mi'}</button>
       <button class="detail-personal-btn favorite ${favorite ? 'active' : ''}" data-slug="${slug}" type="button" onclick="toggleFav('${slug}',this)">${favorite ? '♥ Favorito' : '♡ Favorito'} <span class="fav-likes">${likeCount(slug)}</span></button>
     </div>
@@ -9390,6 +9462,18 @@ function openDetailFromCard(event, kind, key) {
   openDetail(kind, key);
 }
 
+let DETAIL_RETURN_FOCUS = null;
+let DETAIL_PREVIOUS_OVERFLOW = '';
+function syncDetailViewport() {
+  const modal = document.getElementById('detail-modal');
+  const viewport = window.visualViewport;
+  modal.style.setProperty('--detail-viewport-height', `${viewport?.height || window.innerHeight}px`);
+  modal.style.setProperty('--detail-viewport-top', `${viewport?.offsetTop || 0}px`);
+}
+window.visualViewport?.addEventListener('resize', syncDetailViewport);
+window.visualViewport?.addEventListener('scroll', syncDetailViewport);
+window.addEventListener('resize', syncDetailViewport);
+
 function openDetail(kind, key, options = {}) {
   const room = findDetailRoom(kind, key);
   if (!room) return;
@@ -9401,6 +9485,12 @@ function openDetail(kind, key, options = {}) {
   const isReview = kind === 'hechos';
   const synopsis = !isReview ? escapeHtml(room.descripcion || 'Sin sinopsis') : '';
   const modal = document.getElementById('detail-modal');
+  const wasOpen = modal.classList.contains('open');
+  const keepScroll = options.preserveScroll ?? (wasOpen && modal.dataset.roomRef === `${kind}:${key}`);
+  const previousDialogScroll = modal.querySelector('.detail-dialog').scrollTop;
+  const previousContentScroll = document.getElementById('detail-content').scrollTop;
+  modal.dataset.roomRef = `${kind}:${key}`;
+  if (!wasOpen) { DETAIL_RETURN_FOCUS = document.activeElement; DETAIL_PREVIOUS_OVERFLOW = document.body.style.overflow; }
 
   document.getElementById('detail-media').innerHTML = detailImageHtml(room, kind);
   document.getElementById('detail-content').innerHTML = `
@@ -9440,6 +9530,10 @@ function openDetail(kind, key, options = {}) {
   modal.classList.add('open');
   modal.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
+  syncDetailViewport();
+  modal.querySelector('.detail-dialog').scrollTop = keepScroll ? previousDialogScroll : 0;
+  document.getElementById('detail-content').scrollTop = keepScroll ? previousContentScroll : 0;
+  if (!wasOpen) modal.querySelector('.detail-close').focus({ preventScroll: true });
   if (options.updateHash !== false) setDetailHash(kind, room);
 }
 
@@ -9448,16 +9542,27 @@ function closeDetail(event) {
   const modal = document.getElementById('detail-modal');
   modal.classList.remove('open');
   modal.setAttribute('aria-hidden', 'true');
-  document.body.style.overflow = '';
+  document.body.style.overflow = document.getElementById('profile-modal')?.classList.contains('open') ? 'hidden' : DETAIL_PREVIOUS_OVERFLOW;
+  modal.querySelectorAll('video').forEach(video => video.pause());
+  modal.querySelectorAll('iframe').forEach(frame => frame.remove());
+  if (DETAIL_RETURN_FOCUS?.isConnected) DETAIL_RETURN_FOCUS.focus({ preventScroll: true });
   clearDetailHashIfCurrent();
 }
 
 document.addEventListener('keydown', event => {
+  if (document.getElementById('pending-choice')?.open) return;
   if (document.getElementById('photo-lightbox')?.classList.contains('open')) {
     if (event.key === 'Escape') closePhotoLightbox();
     if (event.key === 'ArrowLeft') stepPhotoLightbox(-1);
     if (event.key === 'ArrowRight') stepPhotoLightbox(1);
     return;
+  }
+  if (event.key === 'Tab' && document.getElementById('detail-modal')?.classList.contains('open')) {
+    const focusable = [...document.querySelectorAll('.detail-shell button, .detail-shell a[href], .detail-shell input, .detail-shell select, .detail-shell textarea, .detail-shell [tabindex]')]
+      .filter(el => !el.disabled && el.tabIndex >= 0 && el.getClientRects().length);
+    const first = focusable[0], last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
   }
   if (event.key === 'Escape' && document.getElementById('detail-modal')?.classList.contains('open')) {
     closeDetail();
@@ -9699,7 +9804,7 @@ function renderPendientes() {
   else if (sortPend==='name')   f.sort((a,b)=>a.nombre.localeCompare(b.nombre));
   else if (sortPend==='dur')    f.sort((a,b)=>parseInt(b.duracion||0)-parseInt(a.duracion||0));
   else if (sortPend==='dif')    f.sort((a,b)=>do_(b.dificultad)-do_(a.dificultad));
-  const pendingLabel = AUTH_USER ? 'pendientes personales' : 'pendientes del grupo';
+  const pendingLabel = AUTH_USER ? 'pendientes personales y de tus grupos' : 'pendientes del grupo';
   document.getElementById('result-info-pend').textContent = `Mostrando ${f.length} de ${pendingRooms.length} ${pendingLabel}`;
   const g = document.getElementById('grid-pendientes');
   g.innerHTML = f.length ? f.map(cardPend).join('') : `<div class="empty-state"><div class="lock">🔒</div><p>${AUTH_USER ? 'AÚN NO TIENES PENDIENTES — MARCA SALAS DESDE EL CATÁLOGO' : 'NO SE ENCONTRARON RESULTADOS'}</p></div>`;

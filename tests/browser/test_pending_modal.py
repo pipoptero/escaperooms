@@ -1,0 +1,246 @@
+"""Local browser regressions. All external traffic is blocked; Firebase is simulated.
+
+Run: python -B -m unittest discover -s tests/browser -v
+Set VAULT_TEST_BROWSER=webkit for the second engine.
+Requires: pip install playwright; python -m playwright install chromium webkit
+"""
+import copy
+import json
+import os
+from functools import partial
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+from threading import Thread
+import unittest
+from urllib.parse import urlparse
+from playwright.sync_api import sync_playwright, expect
+
+ROOT = Path(__file__).resolve().parents[2]
+
+
+class QuietHandler(SimpleHTTPRequestHandler):
+    def log_message(self, *args):
+        pass
+
+    def handle(self):
+        try:
+            super().handle()
+        except (ConnectionResetError, ConnectionAbortedError, BrokenPipeError):
+            pass  # Closing a test page cancels its in-flight image requests.
+
+
+class PendingModalTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.server = ThreadingHTTPServer(('127.0.0.1', 0), partial(QuietHandler, directory=str(ROOT)))
+        cls.thread = Thread(target=cls.server.serve_forever, daemon=True)
+        cls.thread.start()
+        cls.url = f'http://127.0.0.1:{cls.server.server_port}'
+        cls.playwright = sync_playwright().start()
+        cls.browser_name = os.getenv('VAULT_TEST_BROWSER', 'chromium')
+        cls.browser = getattr(cls.playwright, cls.browser_name).launch()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.browser.close()
+        cls.playwright.stop()
+        cls.server.shutdown()
+        cls.server.server_close()
+
+    def setUp(self):
+        self.db = {
+            'users': {'a': {'roomStates': {
+                'parasomnia_bajo_segunda': {'nombre': 'Parasomnia Bajo Segunda', 'pending': True, 'done': False, 'updatedAt': 100},
+                'parasomnia_bajo_2': {'nombre': 'Parasomnia Bajo 2ª', 'done': True, 'pending': False, 'updatedAt': 200}
+            }}, 'b': {'roomStates': {}}},
+            'userGroups': {uid: {'g1': {'name': 'Grupo Uno'}, 'g2': {'name': 'Grupo Dos'}} for uid in ['a', 'b']},
+            'groupMembers': {gid: {uid: {'role': 'member', 'status': 'active'} for uid in ['a', 'b']} for gid in ['g1', 'g2']},
+            'groupRooms': {}, 'groupPendingRooms': {}
+        }
+        self.patches = []
+        self.deny = False
+        self.context = self.browser.new_context(viewport={'width': 390, 'height': 844}, is_mobile=True, has_touch=True, service_workers='block')
+        self.context.route('**/*', self.route)
+
+    def tearDown(self):
+        self.context.close()
+
+    def route(self, route):
+        request = route.request
+        url = urlparse(request.url)
+        if url.hostname == 'test.invalid':
+            path = url.path.removesuffix('.json').strip('/')
+            if request.method == 'PATCH':
+                if self.deny:
+                    return route.fulfill(status=403, content_type='application/json', body='{"error":"Permission denied"}', headers={'Access-Control-Allow-Origin': '*'})
+                patch = json.loads(request.post_data)
+                self.patches.append(patch)
+                for key, value in patch.items():
+                    parts = key.split('/')
+                    node = self.db
+                    for part in parts[:-1]:
+                        node = node.setdefault(part, {})
+                    if value is None:
+                        node.pop(parts[-1], None)
+                    else:
+                        node[parts[-1]] = value
+                value = patch
+            elif request.method == 'GET':
+                value = self.db
+                for part in filter(None, path.split('/')):
+                    value = value.get(part, {})
+            else:
+                value = {}
+            return route.fulfill(content_type='application/json', body=json.dumps(value), headers={
+                'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET,PATCH,OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type'
+            })
+        if url.path == '/firebase-config.js':
+            return route.fulfill(content_type='application/javascript', body="window.THE_VAULT_FIREBASE_CONFIG={databaseURL:'https://test.invalid',apiKey:'',authDomain:'',projectId:'',appId:''};")
+        if url.hostname == '127.0.0.1':
+            return route.continue_()
+        route.abort()
+
+    def page_for(self, uid='a'):
+        page = self.context.new_page()
+        page.goto(self.url, wait_until='load')
+        page.evaluate("""async uid => {
+            loadLiveDataAfterInitialRender = async () => {};
+            AUTH_USER = {uid}; USER_ID = uid; USER_PROFILE = {};
+            CATALOGO = (await (await fetch('catalog.json')).json()).catalogo;
+            CATALOG_LOADED = true;
+            await ensureStaticEnhancementsLoaded();
+            await loadRoomAliases(); await loadUserRoomStates(true); await loadUserGroups(true);
+            renderAuthStatus(); switchTab('catalogo');
+        }""", uid)
+        return page
+
+    def visible_input_point(self, page, box):
+        # The Windows WebKit port can expose CSS pixels at the OS display scale.
+        # Native input uses the configured viewport coordinate space.
+        if self.browser_name != 'webkit':
+            return (box['x'] + box['width'] / 2, box['y'] + box['height'] / 2)
+        dimensions = page.evaluate('({width:innerWidth,height:innerHeight})')
+        viewport = page.viewport_size
+        return ((box['x'] + box['width'] / 2) * viewport['width'] / dimensions['width'],
+                (box['y'] + box['height'] / 2) * viewport['height'] / dimensions['height'])
+
+    def test_group_choice_shared_with_second_member_and_personal_scope_separate(self):
+        first, second = self.page_for(), self.page_for('b')
+        first.locator('#tab-cat').click()
+        first.locator('#mobile-filter-toggle-cat').click()
+        expect(first.locator('#search-cat')).to_be_visible()
+        first.locator('#search-cat').fill('Olimpo')
+        first.locator('#grid-catalogo').get_by_role('button', name='Pendiente…', exact=True).click()
+        first.locator('.pending-destination', has_text='Grupo Dos').click()
+        first.wait_for_function("!document.getElementById('pending-choice').open")
+        self.assertIn('olimpo', self.db['groupPendingRooms']['g2'])
+        self.assertNotIn('olimpo', self.db['users']['a']['roomStates'])
+        self.assertNotIn('g1', self.db['groupPendingRooms'])
+        second.evaluate("async () => { switchTab('pendientes'); await refreshRoomLists(); }")
+        self.assertTrue(second.evaluate("personalPendingRooms().some(r => r.id === 'olimpo')"))
+        self.assertEqual(second.evaluate("groupPendingEntriesForRoom(CATALOGO.find(r => r.id === 'olimpo'))[0].name"), 'Grupo Dos')
+        first.evaluate("openPendingChoice('catalogo','katrina')")
+        first.locator('.pending-destination', has_text='Solo para mí').click()
+        first.wait_for_function("!document.getElementById('pending-choice').open")
+        second.evaluate("refreshRoomLists()")
+        self.assertFalse(second.evaluate("personalPendingRooms().some(r => r.id === 'katrina')"))
+
+    def test_legacy_case_and_failed_write_do_not_mutate_local_state(self):
+        page = self.page_for()
+        self.assertFalse(page.evaluate("personalPendingRooms().some(r => /Parasomnia/.test(r.nombre))"))
+        self.assertEqual(page.evaluate("progressPersonalDoneRooms().filter(r => /Parasomnia/.test(r.nombre)).length"), 1)
+        before = copy.deepcopy(self.db)
+        self.deny = True
+        page.evaluate("openPendingChoice('catalogo','olimpo')")
+        page.locator('.pending-destination', has_text='Grupo Uno').click()
+        page.wait_for_function("document.getElementById('pending-choice-error').textContent.length > 0")
+        self.assertEqual(self.db, before)
+        self.assertFalse(page.evaluate("!!GROUP_PENDING_ROOMS.g1?.olimpo"))
+        self.assertTrue(page.locator('#pending-choice').evaluate('(el) => el.open'))
+
+    def test_group_completion_cleans_aliases_atomically_and_keeps_other_group(self):
+        self.db['groupPendingRooms'] = {
+            'g1': {'parasomnia_bajo_segunda': {'roomName': 'Parasomnia Bajo Segunda'}},
+            'g2': {'parasomnia_bajo_segunda': {'roomName': 'Parasomnia Bajo Segunda'}}
+        }
+        page = self.page_for()
+        page.evaluate("markGroupPendingAsDone('g1','bajo_segunda')")
+        self.assertIn('bajo_segunda', self.db['groupRooms']['g1'])
+        self.assertEqual(self.db['groupPendingRooms']['g1'], {})
+        self.assertIn('parasomnia_bajo_segunda', self.db['groupPendingRooms']['g2'])
+        self.assertEqual(len(self.patches), 1)
+
+    def test_personal_edit_consolidates_legacy_keys_without_touching_another_user(self):
+        page = self.page_for()
+        other = copy.deepcopy(self.db['users']['b'])
+        page.evaluate("saveUserRoomState(CATALOGO.find(r => r.id === 'bajo-segunda'), {done: true, pending: false, completedMinutes: 75})")
+        records = self.db['users']['a']['roomStates']
+        self.assertEqual(list(records), ['bajo_segunda'])
+        self.assertEqual(records['bajo_segunda']['completedMinutes'], 75)
+        self.assertEqual(self.db['users']['b'], other)
+        self.assertEqual(len(self.patches), 1)
+
+    def test_stale_pending_removal_preserves_a_group_completion_from_another_member(self):
+        self.db['groupPendingRooms'] = {'g1': {'olimpo': {'roomName': 'Olimpo'}}}
+        page = self.page_for()
+        # Another member completes the room after this page has loaded its pending list.
+        self.db['groupRooms'] = {'g1': {'olimpo': {'roomName': 'Olimpo', 'updatedAt': 999}}}
+        self.db['groupPendingRooms']['g1'] = {}
+        page.evaluate("applyPendingChoice('catalogo','olimpo','g1')")
+        self.assertEqual(self.db['groupRooms']['g1']['olimpo']['updatedAt'], 999)
+        self.assertEqual(self.db['groupPendingRooms']['g1'], {})
+
+    def test_desktop_close_works_with_mouse_and_focus_returns(self):
+        self.context.close()
+        self.context = self.browser.new_context(viewport={'width': 1280, 'height': 800}, service_workers='block')
+        self.context.route('**/*', self.route)
+        page = self.page_for()
+        page.locator('#search-cat').focus()
+        page.evaluate("openDetail('catalogo','olimpo')")
+        page.evaluate("() => {const x=document.querySelector('.detail-content');x.insertAdjacentHTML('beforeend','<p>Texto</p>'.repeat(300));x.scrollTop=x.scrollHeight;}")
+        button = page.locator('.detail-close')
+        self.assertTrue(button.evaluate('(el) => {const r=el.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)===el;}'))
+        box = button.bounding_box()
+        page.mouse.click(box['x'] + box['width'] / 2, box['y'] + box['height'] / 2)
+        expect(page.locator('#detail-modal')).to_have_attribute('aria-hidden', 'true')
+        self.assertTrue(page.locator('#search-cat').evaluate('(el) => document.activeElement === el'))
+
+    def test_close_remains_clickable_after_scroll_resize_and_reopen(self):
+        page = self.page_for()
+        for width, height in [(390, 844), (844, 390), (390, 430), (1280, 800)]:
+            with self.subTest(viewport=f'{width}x{height}'):
+                page.set_viewport_size({'width': width, 'height': height})
+                page.evaluate("openDetail('catalogo','olimpo')")
+                scroll_top = page.evaluate("""() => {
+                    document.getElementById('detail-content').insertAdjacentHTML('beforeend', '<p>Texto largo</p>'.repeat(300));
+                    const containers = [document.querySelector('.detail-dialog'), document.querySelector('.detail-content')];
+                    const scroll = containers.find(el => el.scrollHeight > el.clientHeight + 1);
+                    if (!scroll) return 0;
+                    scroll.scrollTop = scroll.scrollHeight;
+                    return scroll.scrollTop;
+                }""")
+                self.assertGreater(scroll_top, 0)
+                button = page.locator('.detail-close')
+                self.assertTrue(button.is_visible())
+                box = button.bounding_box()
+                self.assertGreaterEqual(box['x'], 0)
+                self.assertGreaterEqual(box['y'], 0)
+                self.assertLessEqual(box['y'] + box['height'], height + 1)
+                hit = button.evaluate('(el) => {const r=el.getBoundingClientRect(); return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2) === el;}')
+                self.assertTrue(hit, f'Close obscured at {width}x{height}')
+                # Use a real touch at the visible viewport position in mobile emulation.
+                # Assert hit testing first; do not force a click through an overlay.
+                page.touchscreen.tap(*self.visible_input_point(page, box))
+                expect(page.locator('#detail-modal')).to_have_attribute('aria-hidden', 'true')
+        page.set_viewport_size({'width': 390, 'height': 844})
+        page.evaluate("openDetail('catalogo','katrina')")
+        self.assertEqual(page.locator('.detail-dialog').evaluate('(el) => el.scrollTop'), 0)
+        page.evaluate("openPendingChoice('catalogo','olimpo')")
+        page.keyboard.press('Escape')
+        expect(page.locator('#detail-modal')).to_have_attribute('aria-hidden', 'false')
+        page.keyboard.press('Escape')
+        expect(page.locator('#detail-modal')).to_have_attribute('aria-hidden', 'true')
+
+
+if __name__ == '__main__':
+    unittest.main()
