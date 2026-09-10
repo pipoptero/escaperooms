@@ -1,6 +1,8 @@
 # Endurecimiento de Firebase sin interrumpir producción
 
-Estado: preparado y probado localmente; `database.rules.json` **no está desplegado**. GitHub Pages tampoco despliega reglas de Realtime Database.
+Estado: `database.rules.json` desplegado el **10 de septiembre de 2026** después de publicar el cliente compatible v43. GitHub Pages no despliega reglas de Realtime Database; el despliegue se hizo por separado con Firebase CLI.
+
+La exportación privada anterior al cambio es `private/firebase_backups/database-rules-live-20260910-095047.json`, SHA-256 `20C35BC0DE6579B61A79DC9D836531D87A68FF170CEA45332DBB4F58BF3AFBD0`. La relectura posterior coincidió semánticamente con este archivo versionado. Las lecturas públicas de votos y reviews respondieron 200; raíz, perfiles e invitaciones sin autenticar respondieron 401.
 
 ## Diagnóstico de solo lectura — 10 de septiembre de 2026
 
@@ -29,15 +31,16 @@ La lectura compatible de `room-state.js` mantiene la interfaz coherente. No se n
 - Eliminar un grupo intenta un único PATCH para borrar todos sus nodos e índices. Mientras sigan las reglas antiguas, un 403 activa un segundo PATCH compatible que conserva únicamente los índices ajenos, igual que hacía el flujo anterior. Con las reglas nuevas no se usa ese fallback.
 - Marcar hecho/pendiente y consolidar alias ya usaba PATCH multipath.
 
-## Orden de despliegue obligatorio
+## Orden seguido en el despliegue
 
-1. Publicar primero el cliente compatible y comprobar creación/aceptación/eliminación con un grupo de prueba.
-2. Confirmar que no quedan navegadores/PWA críticos usando una versión anterior. Este bloque prepara service worker v43 y assets `20260910-firebase-groups-v2` para renovar la shell.
-3. Desplegar `database.rules.json` por separado con `firebase deploy --only database`, nunca desde el workflow de Pages.
-4. Repetir smoke autenticado con propietario, invitado, miembro y usuario ajeno.
-5. Mantener una copia exportada de las reglas anteriores para rollback inmediato.
+1. Se publicó primero el cliente compatible y se comprobó creación/aceptación/eliminación con Firebase simulado.
+2. Service worker v43 y assets `20260910-firebase-groups-v2` renovaron la shell; producción se verificó antes de continuar.
+3. Se exportaron y validaron las reglas anteriores para rollback.
+4. Se auditaron de solo lectura las ramas vivas: todos los grupos, miembros, índices, salas e invitaciones cumplen la forma candidata.
+5. Se validó el despliegue con `--dry-run` y se desplegó `database.rules.json` por separado con `firebase deploy --only database`.
+6. Se releyeron las reglas activas y se comprobó que coinciden con el archivo versionado.
 
-No invertir los pasos 1 y 3: el cliente antiguo no incluye `inviteId` en el alta de miembros y las reglas nuevas rechazarían esa aceptación.
+No restaurar un cliente anterior a v42 mientras estas reglas estén activas: aquel cliente no incluye `inviteId` en el alta de miembros y la aceptación sería rechazada.
 
 ## Pruebas locales
 
