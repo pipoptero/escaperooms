@@ -24,6 +24,7 @@ La lectura compatible de `room-state.js` mantiene la interfaz coherente. No se n
 
 ## Cambios de cliente compatibles con las reglas actuales
 
+- Crear un grupo guarda metadatos, miembro propietario e índice inverso en un único PATCH; un fallo no deja nodos incompletos.
 - Aceptar una invitación usa un único PATCH que añade `groupMembers`, `userGroups` y marca el token como aceptado. El miembro conserva `inviteId` como prueba de entrada.
 - Eliminar un grupo intenta un único PATCH para borrar todos sus nodos e índices. Mientras sigan las reglas antiguas, un 403 activa un segundo PATCH compatible que conserva únicamente los índices ajenos, igual que hacía el flujo anterior. Con las reglas nuevas no se usa ese fallback.
 - Marcar hecho/pendiente y consolidar alias ya usaba PATCH multipath.
@@ -31,7 +32,7 @@ La lectura compatible de `room-state.js` mantiene la interfaz coherente. No se n
 ## Orden de despliegue obligatorio
 
 1. Publicar primero el cliente compatible y comprobar creación/aceptación/eliminación con un grupo de prueba.
-2. Confirmar que no quedan navegadores/PWA críticos usando una versión anterior. Este bloque prepara service worker v42 y assets `20260910-firebase-groups` para renovar la shell.
+2. Confirmar que no quedan navegadores/PWA críticos usando una versión anterior. Este bloque prepara service worker v43 y assets `20260910-firebase-groups-v2` para renovar la shell.
 3. Desplegar `database.rules.json` por separado con `firebase deploy --only database`, nunca desde el workflow de Pages.
 4. Repetir smoke autenticado con propietario, invitado, miembro y usuario ajeno.
 5. Mantener una copia exportada de las reglas anteriores para rollback inmediato.

@@ -58,9 +58,11 @@ test('el perfil completo, incluido el email, solo lo puede leer su propietario',
 
 test('el propietario puede crear el grupo y registrar su pertenencia', async () => {
   const db = env.authenticatedContext('owner').database();
-  await assertSucceeds(set(ref(db, 'groups/g1'), group()));
-  await assertSucceeds(set(ref(db, 'groupMembers/g1/owner'), member('owner')));
-  await assertSucceeds(set(ref(db, 'userGroups/owner/g1'), index('owner')));
+  await assertSucceeds(update(ref(db), {
+    'groups/g1': group(),
+    'groupMembers/g1/owner': member('owner'),
+    'userGroups/owner/g1': index('owner')
+  }));
   await assertSucceeds(get(ref(db, 'groups/g1')));
 });
 

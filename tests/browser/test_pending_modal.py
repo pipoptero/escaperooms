@@ -58,7 +58,10 @@ class PendingModalTest(unittest.TestCase):
             'groupRooms': {}, 'groupPendingRooms': {}
         }
         self.patches = []
+        self.puts = []
+        self.deletes = []
         self.deny = False
+        self.deny_group_membership_patch = False
         self.legacy_group_index_rules = False
         self.context = self.browser.new_context(viewport={'width': 390, 'height': 844}, is_mobile=True, has_touch=True, service_workers='block')
         self.context.route('**/*', self.route)
@@ -74,7 +77,8 @@ class PendingModalTest(unittest.TestCase):
             if request.method == 'PATCH':
                 patch = json.loads(request.post_data)
                 foreign_group_index = any(key.startswith('userGroups/') and not key.startswith('userGroups/a/') for key in patch)
-                if self.deny or (self.legacy_group_index_rules and foreign_group_index):
+                group_membership = any(key.startswith('groupMembers/') for key in patch)
+                if self.deny or (self.legacy_group_index_rules and foreign_group_index) or (self.deny_group_membership_patch and group_membership):
                     return route.fulfill(status=403, content_type='application/json', body='{"error":"Permission denied"}', headers={'Access-Control-Allow-Origin': '*'})
                 self.patches.append(patch)
                 for key, value in patch.items():
@@ -87,6 +91,22 @@ class PendingModalTest(unittest.TestCase):
                     else:
                         node[parts[-1]] = value
                 value = patch
+            elif request.method == 'PUT':
+                value = json.loads(request.post_data)
+                self.puts.append((path, value))
+                parts = list(filter(None, path.split('/')))
+                node = self.db
+                for part in parts[:-1]:
+                    node = node.setdefault(part, {})
+                node[parts[-1]] = value
+            elif request.method == 'DELETE':
+                self.deletes.append(path)
+                parts = list(filter(None, path.split('/')))
+                node = self.db
+                for part in parts[:-1]:
+                    node = node.setdefault(part, {})
+                node.pop(parts[-1], None)
+                value = None
             elif request.method == 'GET':
                 value = self.db
                 for part in filter(None, path.split('/')):
@@ -94,7 +114,7 @@ class PendingModalTest(unittest.TestCase):
             else:
                 value = {}
             return route.fulfill(content_type='application/json', body=json.dumps(value), headers={
-                'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET,PATCH,OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type'
+                'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET,PUT,PATCH,DELETE,OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type'
             })
         if url.path == '/firebase-config.js':
             return route.fulfill(content_type='application/javascript', body="window.THE_VAULT_FIREBASE_CONFIG={databaseURL:'https://test.invalid',apiKey:'',authDomain:'',projectId:'',appId:''};")
@@ -207,6 +227,28 @@ class PendingModalTest(unittest.TestCase):
         self.assertEqual(self.db['userGroups']['a']['g3']['status'], 'active')
         self.assertEqual(self.db['groupInvites']['token']['status'], 'accepted')
         self.assertEqual(len(self.patches), 1)
+
+    def test_creating_group_registers_owner_and_index_together(self):
+        page = self.page_for()
+        page.evaluate("SETTINGS_TAB = 'profile'; openProfile('', false)")
+        page.locator('#new-group-name').fill('Grupo Seguro')
+        page.evaluate("createEscapistGroup()")
+        page.wait_for_function("Object.values(USER_GROUPS).some(group => group.name === 'Grupo Seguro')")
+        group_id = next(key for key, value in self.db['groups'].items() if value['name'] == 'Grupo Seguro')
+        self.assertEqual(self.db['groupMembers'][group_id]['a']['role'], 'owner')
+        self.assertEqual(self.db['userGroups']['a'][group_id]['role'], 'owner')
+        owner_patch = next(patch for patch in self.patches if f'groupMembers/{group_id}/a' in patch)
+        self.assertIn(f'userGroups/a/{group_id}', owner_patch)
+
+    def test_failed_group_creation_leaves_no_incomplete_nodes(self):
+        self.deny_group_membership_patch = True
+        page = self.page_for()
+        page.evaluate("SETTINGS_TAB = 'profile'; openProfile('', false)")
+        page.locator('#new-group-name').fill('Grupo Fallido')
+        page.evaluate("createEscapistGroup()")
+        page.wait_for_function("document.getElementById('profile-status')?.textContent.includes('No se pudo crear')")
+        self.assertFalse(any(value.get('name') == 'Grupo Fallido' for value in self.db.get('groups', {}).values()))
+        self.assertFalse(any('Grupo Fallido' in json.dumps(patch) for patch in self.patches))
 
     def test_deleting_group_removes_all_members_states_and_indexes_atomically(self):
         self.db['groups'] = {'owned': {'name': 'Propio', 'ownerUid': 'a'}}

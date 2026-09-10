@@ -2493,7 +2493,7 @@ let STATIC_ENHANCEMENTS_PROMISE = null;
 let PROFILE_MAP_DATA_PROMISE = null;
 let PHOTO_LIGHTBOX_GALLERIES = {};
 const LIVE_REFRESH_MIN_INTERVAL = 5 * 60 * 1000;
-const STATIC_ASSET_VERSION = '20260910-firebase-groups';
+const STATIC_ASSET_VERSION = '20260910-firebase-groups-v2';
 
 function invalidateReviewRoomsCache() {
   REVIEW_ROOMS_CACHE = null;
@@ -6402,10 +6402,13 @@ async function createEscapistGroup() {
   const profileName = shortDisplayName();
   const profilePhoto = publicPhotoURL();
   try {
-    await saveUserProfile();
-    await fbPut(`groups/${groupId}`, { name, ownerUid: USER_ID, createdAt: now, updatedAt: now });
-    await fbPut(`groupMembers/${groupId}/${USER_ID}`, { role: 'owner', status: 'active', displayName: profileName, photoURL: profilePhoto, joinedAt: now });
-    await fbPut(`userGroups/${USER_ID}/${groupId}`, { name, role: 'owner', status: 'active', joinedAt: now });
+    if (!await saveUserProfile()) throw new Error('No se pudo guardar el perfil antes de crear el grupo.');
+    // Metadata, owner membership and reverse index are one indivisible operation.
+    await fbPatch('', {
+      [`groups/${groupId}`]: { name, ownerUid: USER_ID, createdAt: now, updatedAt: now },
+      [`groupMembers/${groupId}/${USER_ID}`]: { role: 'owner', status: 'active', displayName: profileName, photoURL: profilePhoto, joinedAt: now },
+      [`userGroups/${USER_ID}/${groupId}`]: { name, role: 'owner', status: 'active', joinedAt: now }
+    });
     await loadUserGroups();
     renderProfile('Grupo creado. Ya puedes copiar una invitacion.');
     populateFilters(); renderStats(); renderMisHechos(); renderCatalogo();
