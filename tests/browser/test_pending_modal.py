@@ -59,6 +59,7 @@ class PendingModalTest(unittest.TestCase):
         }
         self.patches = []
         self.deny = False
+        self.legacy_group_index_rules = False
         self.context = self.browser.new_context(viewport={'width': 390, 'height': 844}, is_mobile=True, has_touch=True, service_workers='block')
         self.context.route('**/*', self.route)
 
@@ -71,9 +72,10 @@ class PendingModalTest(unittest.TestCase):
         if url.hostname == 'test.invalid':
             path = url.path.removesuffix('.json').strip('/')
             if request.method == 'PATCH':
-                if self.deny:
-                    return route.fulfill(status=403, content_type='application/json', body='{"error":"Permission denied"}', headers={'Access-Control-Allow-Origin': '*'})
                 patch = json.loads(request.post_data)
+                foreign_group_index = any(key.startswith('userGroups/') and not key.startswith('userGroups/a/') for key in patch)
+                if self.deny or (self.legacy_group_index_rules and foreign_group_index):
+                    return route.fulfill(status=403, content_type='application/json', body='{"error":"Permission denied"}', headers={'Access-Control-Allow-Origin': '*'})
                 self.patches.append(patch)
                 for key, value in patch.items():
                     parts = key.split('/')
@@ -189,6 +191,63 @@ class PendingModalTest(unittest.TestCase):
         page.evaluate("applyPendingChoice('catalogo','olimpo','g1')")
         self.assertEqual(self.db['groupRooms']['g1']['olimpo']['updatedAt'], 999)
         self.assertEqual(self.db['groupPendingRooms']['g1'], {})
+
+    def test_accepting_invite_updates_member_index_and_token_atomically(self):
+        self.db['groups'] = {'g3': {'name': 'Grupo Tres', 'ownerUid': 'owner'}}
+        self.db['groupMembers']['g3'] = {'owner': {'role': 'owner', 'status': 'active'}}
+        self.db['groupInvites'] = {'token': {
+            'groupId': 'g3', 'groupName': 'Grupo Tres', 'createdBy': 'owner',
+            'status': 'pending', 'expiresAt': 9_999_999_999_999
+        }}
+        page = self.page_for()
+        page.evaluate("acceptGroupInvite('token')")
+        page.wait_for_function("GROUP_MEMBERS.g3?.a?.status === 'active'")
+        self.assertEqual(self.db['groupMembers']['g3']['a']['role'], 'member')
+        self.assertEqual(self.db['groupMembers']['g3']['a']['inviteId'], 'token')
+        self.assertEqual(self.db['userGroups']['a']['g3']['status'], 'active')
+        self.assertEqual(self.db['groupInvites']['token']['status'], 'accepted')
+        self.assertEqual(len(self.patches), 1)
+
+    def test_deleting_group_removes_all_members_states_and_indexes_atomically(self):
+        self.db['groups'] = {'owned': {'name': 'Propio', 'ownerUid': 'a'}}
+        self.db['userGroups']['a']['owned'] = {'name': 'Propio', 'role': 'owner', 'status': 'active'}
+        self.db['userGroups']['b']['owned'] = {'name': 'Propio', 'role': 'member', 'status': 'active'}
+        self.db['groupMembers']['owned'] = {
+            'a': {'role': 'owner', 'status': 'active'},
+            'b': {'role': 'member', 'status': 'active'}
+        }
+        self.db['groupRooms']['owned'] = {'olimpo': {'roomName': 'Olimpo'}}
+        self.db['groupPendingRooms']['owned'] = {'katrina': {'roomName': 'Katrina'}}
+        page = self.page_for()
+        page.on('dialog', lambda dialog: dialog.accept())
+        page.evaluate("deleteEscapistGroup('owned')")
+        page.wait_for_function("!USER_GROUPS.owned")
+        self.assertNotIn('owned', self.db['groups'])
+        self.assertFalse(self.db['groupMembers'].get('owned'))
+        self.assertFalse(self.db['groupRooms'].get('owned'))
+        self.assertFalse(self.db['groupPendingRooms'].get('owned'))
+        self.assertNotIn('owned', self.db['userGroups']['a'])
+        self.assertNotIn('owned', self.db['userGroups']['b'])
+        self.assertEqual(len(self.patches), 1)
+
+    def test_group_deletion_falls_back_safely_with_current_production_rules(self):
+        self.legacy_group_index_rules = True
+        self.db['groups'] = {'owned': {'name': 'Propio', 'ownerUid': 'a'}}
+        self.db['userGroups']['a']['owned'] = {'name': 'Propio', 'role': 'owner', 'status': 'active'}
+        self.db['userGroups']['b']['owned'] = {'name': 'Propio', 'role': 'member', 'status': 'active'}
+        self.db['groupMembers']['owned'] = {
+            'a': {'role': 'owner', 'status': 'active'},
+            'b': {'role': 'member', 'status': 'active'}
+        }
+        page = self.page_for()
+        page.on('dialog', lambda dialog: dialog.accept())
+        page.evaluate("deleteEscapistGroup('owned')")
+        page.wait_for_function("!USER_GROUPS.owned")
+        self.assertNotIn('owned', self.db['groups'])
+        self.assertFalse(self.db['groupMembers'].get('owned'))
+        self.assertNotIn('owned', self.db['userGroups']['a'])
+        self.assertIn('owned', self.db['userGroups']['b'])
+        self.assertEqual(len(self.patches), 1)
 
     def test_desktop_close_works_with_mouse_and_focus_returns(self):
         self.context.close()

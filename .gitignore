@@ -10,6 +10,9 @@ private/
 public-site/
 __pycache__/
 *.pyc
+node_modules/
+.firebase/
+*-debug.log
 scripts/__pycache__/
 scripts/update_catalog_and_awards.py
 run-maintenance-local.ps1

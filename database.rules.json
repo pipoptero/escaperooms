@@ -1,0 +1,117 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "votes": {
+      ".read": true,
+      "$room": {
+        "$uid": {
+          ".write": "auth != null && auth.uid === $uid",
+          ".validate": "newData.isNumber() && newData.val() >= 0.5 && newData.val() <= 5"
+        }
+      }
+    },
+    "likes": {
+      ".read": true,
+      "$room": {
+        "$uid": {
+          ".write": "auth != null && auth.uid === $uid",
+          ".validate": "newData.val() === true || !newData.exists()"
+        }
+      }
+    },
+    "roomReviews": {
+      ".read": true,
+      "$room": {
+        "$uid": {
+          ".write": "auth != null && auth.uid === $uid"
+        }
+      }
+    },
+    "users": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid",
+        "roomStates": {
+          "$room": {
+            ".validate": "!newData.exists() || (newData.hasChildren(['id', 'nombre', 'updatedAt']) && newData.child('id').isString() && newData.child('id').val().length <= 160 && newData.child('nombre').isString() && newData.child('nombre').val().length <= 180 && newData.child('updatedAt').isNumber() && ((newData.child('done').val() === true && newData.child('pending').val() === false) || (newData.child('pending').val() === true && newData.child('done').val() === false)))"
+          }
+        }
+      }
+    },
+    "profiles": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    },
+    "admins": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": false
+      }
+    },
+    "adminReviewDrafts": {
+      ".read": "auth != null && root.child('admins/' + auth.uid).val() === true",
+      "$draftId": {
+        ".write": "auth != null && root.child('admins/' + auth.uid).val() === true"
+      }
+    },
+    "adminPublishedReviews": {
+      ".read": true,
+      "$room": {
+        ".write": "auth != null && root.child('admins/' + auth.uid).val() === true"
+      }
+    },
+    "groups": {
+      "$groupId": {
+        ".read": "auth != null && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active'",
+        ".write": "auth != null && ((!data.exists() && newData.child('ownerUid').val() === auth.uid) || (root.child('groupMembers/' + $groupId + '/' + auth.uid + '/role').val() === 'owner' && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active') || (!newData.exists() && data.child('ownerUid').val() === auth.uid && !root.child('groupMembers/' + $groupId).exists()))",
+        ".validate": "!newData.exists() || (newData.hasChildren(['name', 'ownerUid', 'createdAt', 'updatedAt']) && newData.child('name').isString() && newData.child('name').val().length > 0 && newData.child('name').val().length <= 60 && newData.child('ownerUid').isString() && newData.child('ownerUid').val().length <= 128 && newData.child('createdAt').isNumber() && newData.child('updatedAt').isNumber())"
+      }
+    },
+    "groupMembers": {
+      "$groupId": {
+        ".read": "auth != null && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active'",
+        "$uid": {
+          ".write": "auth != null && ((data.exists() && auth.uid === $uid && (!newData.exists() || (newData.child('role').val() === data.child('role').val() && newData.child('status').val() === data.child('status').val()))) || (!data.exists() && auth.uid === $uid && newData.child('role').val() === 'owner' && newData.child('status').val() === 'active' && root.child('groups/' + $groupId + '/ownerUid').val() === auth.uid) || (!data.exists() && auth.uid === $uid && newData.child('role').val() === 'member' && newData.child('status').val() === 'active' && newData.child('inviteId').isString() && root.child('groupInvites/' + newData.child('inviteId').val() + '/groupId').val() === $groupId && root.child('groupInvites/' + newData.child('inviteId').val() + '/status').val() === 'pending' && root.child('groupInvites/' + newData.child('inviteId').val() + '/expiresAt').val() >= now) || (root.child('groupMembers/' + $groupId + '/' + auth.uid + '/role').val() === 'owner' && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active' && auth.uid !== $uid && (!newData.exists() || newData.child('role').val() === data.child('role').val())))",
+          ".validate": "!newData.exists() || (newData.hasChildren(['role', 'status', 'displayName', 'joinedAt']) && (newData.child('role').val() === 'owner' || newData.child('role').val() === 'member') && newData.child('status').val() === 'active' && newData.child('displayName').isString() && newData.child('displayName').val().length <= 80 && newData.child('joinedAt').isNumber() && (!newData.child('photoURL').exists() || (newData.child('photoURL').isString() && newData.child('photoURL').val().length <= 2048)) && (!newData.child('inviteId').exists() || (newData.child('inviteId').isString() && newData.child('inviteId').val().length <= 160)))"
+        }
+      }
+    },
+    "userGroups": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        "$groupId": {
+          ".write": "auth != null && (auth.uid === $uid || (!newData.exists() && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/role').val() === 'owner' && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active'))",
+          ".validate": "!newData.exists() || (newData.hasChildren(['name', 'role', 'status', 'joinedAt']) && newData.child('name').isString() && newData.child('name').val().length > 0 && newData.child('name').val().length <= 60 && (newData.child('role').val() === 'owner' || newData.child('role').val() === 'member') && newData.child('status').val() === 'active' && newData.child('joinedAt').isNumber())"
+        }
+      }
+    },
+    "groupRooms": {
+      "$groupId": {
+        ".read": "auth != null && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active'",
+        "$room": {
+          ".write": "auth != null && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active'",
+          ".validate": "!newData.exists() || (newData.hasChildren(['roomName', 'addedBy', 'addedAt', 'updatedAt']) && newData.child('roomName').isString() && newData.child('roomName').val().length > 0 && newData.child('roomName').val().length <= 180 && newData.child('addedBy').isString() && newData.child('addedBy').val() === auth.uid && newData.child('addedAt').isNumber() && newData.child('updatedAt').isNumber())"
+        }
+      }
+    },
+    "groupPendingRooms": {
+      "$groupId": {
+        ".read": "auth != null && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active'",
+        "$room": {
+          ".write": "auth != null && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active'",
+          ".validate": "!newData.exists() || (newData.hasChildren(['roomName', 'addedBy', 'addedAt', 'updatedAt']) && newData.child('roomName').isString() && newData.child('roomName').val().length > 0 && newData.child('roomName').val().length <= 180 && newData.child('addedBy').isString() && newData.child('addedBy').val() === auth.uid && newData.child('addedAt').isNumber() && newData.child('updatedAt').isNumber())"
+        }
+      }
+    },
+    "groupInvites": {
+      "$inviteId": {
+        ".read": "auth != null && (data.child('status').val() === 'pending' || data.child('createdBy').val() === auth.uid || data.child('acceptedBy').val() === auth.uid || root.child('groupMembers/' + data.child('groupId').val() + '/' + auth.uid + '/status').val() === 'active')",
+        ".write": "auth != null && ((!data.exists() && newData.child('status').val() === 'pending' && newData.child('createdBy').val() === auth.uid && root.child('groupMembers/' + newData.child('groupId').val() + '/' + auth.uid + '/status').val() === 'active') || (data.child('status').val() === 'pending' && data.child('expiresAt').val() >= now && newData.child('status').val() === 'accepted' && newData.child('acceptedBy').val() === auth.uid && newData.child('groupId').val() === data.child('groupId').val() && newData.child('createdBy').val() === data.child('createdBy').val()) || (!newData.exists() && (data.child('createdBy').val() === auth.uid || root.child('groupMembers/' + data.child('groupId').val() + '/' + auth.uid + '/role').val() === 'owner'))) ",
+        ".validate": "!newData.exists() || (newData.hasChildren(['groupId', 'groupName', 'createdBy', 'createdByName', 'status', 'createdAt', 'expiresAt']) && newData.child('groupId').isString() && newData.child('groupId').val().length <= 160 && newData.child('groupName').isString() && newData.child('groupName').val().length > 0 && newData.child('groupName').val().length <= 60 && newData.child('createdBy').isString() && newData.child('createdBy').val().length <= 128 && newData.child('createdByName').isString() && newData.child('createdByName').val().length <= 80 && (newData.child('status').val() === 'pending' || newData.child('status').val() === 'accepted') && newData.child('createdAt').isNumber() && newData.child('expiresAt').isNumber() && (!newData.child('acceptedBy').exists() || (newData.child('acceptedBy').isString() && newData.child('acceptedBy').val().length <= 128)))"
+      }
+    }
+  }
+}

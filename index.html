@@ -2493,7 +2493,7 @@ let STATIC_ENHANCEMENTS_PROMISE = null;
 let PROFILE_MAP_DATA_PROMISE = null;
 let PHOTO_LIGHTBOX_GALLERIES = {};
 const LIVE_REFRESH_MIN_INTERVAL = 5 * 60 * 1000;
-const STATIC_ASSET_VERSION = '20260909-pending-covers';
+const STATIC_ASSET_VERSION = '20260910-firebase-groups';
 
 function invalidateReviewRoomsCache() {
   REVIEW_ROOMS_CACHE = null;
@@ -5017,19 +5017,25 @@ async function deleteEscapistGroup(groupId) {
   try {
     // Read persisted keys: the visible lists have already collapsed legacy aliases.
     const [rawDone, rawPending] = await Promise.all([fbGet(`groupRooms/${groupId}`), fbGet(`groupPendingRooms/${groupId}`)]);
-    for (const roomKeyValue of Object.keys(rawDone || {})) {
-      await fbDelete(`groupRooms/${groupId}/${roomKeyValue}`);
-    }
-    for (const roomKeyValue of Object.keys(rawPending || {})) {
-      await fbDelete(`groupPendingRooms/${groupId}/${roomKeyValue}`);
-    }
-    await fbDelete(`groups/${groupId}`);
     const members = GROUP_MEMBERS[groupId] || {};
-    for (const uid of Object.keys(members).filter(uid => uid !== USER_ID)) {
-      await fbDelete(`groupMembers/${groupId}/${uid}`);
+    const deletion = {
+      [`groups/${groupId}`]: null,
+      ...Object.fromEntries(Object.keys(rawDone || {}).map(roomKeyValue => [`groupRooms/${groupId}/${roomKeyValue}`, null])),
+      ...Object.fromEntries(Object.keys(rawPending || {}).map(roomKeyValue => [`groupPendingRooms/${groupId}/${roomKeyValue}`, null])),
+      ...Object.fromEntries(Object.keys(members).map(uid => [`groupMembers/${groupId}/${uid}`, null])),
+      ...Object.fromEntries(Object.keys(members).map(uid => [`userGroups/${uid}/${groupId}`, null]))
+    };
+    try {
+      await fbPatch('', deletion);
+    } catch (error) {
+      // Production rules prior to database.rules.json only let users remove their own index.
+      // Retrying without foreign indexes preserves the old behavior until the hardened rules land.
+      if (!/\b403\b/.test(String(error?.message || ''))) throw error;
+      const compatibleDeletion = Object.fromEntries(Object.entries(deletion).filter(([path]) =>
+        !path.startsWith('userGroups/') || path === `userGroups/${USER_ID}/${groupId}`
+      ));
+      await fbPatch('', compatibleDeletion);
     }
-    await fbDelete(`groupMembers/${groupId}/${USER_ID}`);
-    await fbDelete(`userGroups/${USER_ID}/${groupId}`);
     delete USER_GROUPS[groupId];
     delete GROUP_MEMBERS[groupId];
     delete GROUP_ROOMS[groupId];
@@ -6528,9 +6534,11 @@ async function acceptGroupInvite(inviteId) {
     if (invite.expiresAt && invite.expiresAt < Date.now()) throw new Error('Invitacion caducada');
     const now = Date.now();
     await saveUserProfile();
-    await fbPut(`groupMembers/${invite.groupId}/${USER_ID}`, { role: 'member', status: 'active', displayName: shortDisplayName(), photoURL: publicPhotoURL(), joinedAt: now });
-    await fbPut(`userGroups/${USER_ID}/${invite.groupId}`, { name: invite.groupName || 'Grupo escapista', role: 'member', status: 'active', joinedAt: now });
-    await fbPut(`groupInvites/${inviteId}`, { ...invite, status: 'accepted', acceptedBy: USER_ID, acceptedByName: shortDisplayName(), acceptedAt: now });
+    await fbPatch('', {
+      [`groupMembers/${invite.groupId}/${USER_ID}`]: { role: 'member', status: 'active', displayName: shortDisplayName(), photoURL: publicPhotoURL(), joinedAt: now, inviteId },
+      [`userGroups/${USER_ID}/${invite.groupId}`]: { name: invite.groupName || 'Grupo escapista', role: 'member', status: 'active', joinedAt: now },
+      [`groupInvites/${inviteId}`]: { ...invite, status: 'accepted', acceptedBy: USER_ID, acceptedByName: shortDisplayName(), acceptedAt: now }
+    });
     PENDING_INVITE_ID = '';
     window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
     await loadUserGroups();

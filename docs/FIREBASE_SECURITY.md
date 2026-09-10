@@ -1,5 +1,7 @@
 # Seguridad de Firebase
 
+Las reglas candidatas versionadas están en `database.rules.json` y su plan de transición en `docs/FIREBASE_RULES_ROLLOUT.md`. Todavía no están desplegadas; no sustituir las reglas de producción antes de completar ese orden.
+
 Esta web usa Firebase Realtime Database directamente desde el navegador. La clave web de Firebase identifica el proyecto, pero la protección real depende de Authentication y de las reglas de la base de datos.
 
 ## Revisión antes de publicar
@@ -22,4 +24,4 @@ Esta web usa Firebase Realtime Database directamente desde el navegador. La clav
 4. Confirmar que un usuario no puede leer ni modificar el perfil, grupos o progreso de otro.
 5. Revisar dominios autorizados de Authentication y eliminar entornos obsoletos.
 
-No se incluyen reglas desplegables en este repositorio porque deben mantenerse sincronizadas con todas las ramas reales de la base de datos. Las reglas orientativas de `README.md` no sustituyen una exportación verificada desde Firebase Console.
+Las reglas desplegables se mantienen ahora en el repositorio y se prueban con el emulador. Antes de cualquier despliegue hay que comparar `database.rules.json` con una exportación actual de `/.settings/rules`, conservar rollback y ejecutar el smoke autenticado indicado en el plan.

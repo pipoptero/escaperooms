@@ -1,0 +1,11 @@
+{
+  "name": "the-vault-quality",
+  "private": true,
+  "scripts": {
+    "test:firebase-rules": "npx --yes firebase-tools@15.14.0 emulators:exec --only database --project demo-the-vault --config firebase.json \"node --test tests/firebase/database.rules.test.mjs\""
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "5.0.2",
+    "firebase": "12.19.0"
+  }
+}

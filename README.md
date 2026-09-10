@@ -314,90 +314,11 @@ Para que funcione el login:
 5. Crear Realtime Database.
 6. Publicar reglas de seguridad.
 
-### Reglas Orientativas
+### Reglas de Realtime Database
 
-```json
-{
-  "rules": {
-    "votes": {
-      ".read": true,
-      "$room": {
-        "$uid": {
-          ".write": "auth != null && auth.uid === $uid",
-          ".validate": "newData.isNumber() && newData.val() >= 0.5 && newData.val() <= 5"
-        }
-      }
-    },
-    "likes": {
-      ".read": true,
-      "$room": {
-        "$uid": {
-          ".write": "auth != null && auth.uid === $uid",
-          ".validate": "newData.val() === true || !newData.exists()"
-        }
-      }
-    },
-    "users": {
-      "$uid": {
-        ".read": "auth != null && auth.uid === $uid",
-        ".write": "auth != null && auth.uid === $uid"
-      }
-    }
-  }
-}
-```
+Las reglas se mantienen en `database.rules.json` y se prueban con Firebase Emulator Suite mediante `npm run test:firebase-rules`. No copiar fragmentos antiguos desde este README ni modificar reglas directamente en producción sin actualizar el archivo versionado.
 
-
-### Reglas adicionales para grupos escapistas
-
-Para activar perfiles, grupos privados, invitaciones por enlace y salas hechas por grupo, anade tambien estas ramas a las reglas de Firebase Realtime Database. La invitacion simple funciona mediante un enlace con un identificador largo; para email verificado o auditoria completa, el siguiente paso natural seria Firebase Cloud Functions.
-
-```json
-{
-  "profiles": {
-    "$uid": {
-      ".read": "auth != null",
-      ".write": "auth != null && auth.uid === $uid"
-    }
-  },
-  "groups": {
-    "$groupId": {
-      ".read": "auth != null && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active'",
-      ".write": "auth != null && ((!data.exists() && newData.child('ownerUid').val() === auth.uid) || root.child('groupMembers/' + $groupId + '/' + auth.uid + '/role').val() === 'owner')"
-    }
-  },
-  "groupMembers": {
-    "$groupId": {
-      ".read": "auth != null && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active'",
-      "$uid": {
-        ".write": "auth != null && (auth.uid === $uid || root.child('groupMembers/' + $groupId + '/' + auth.uid + '/role').val() === 'owner')"
-      }
-    }
-  },
-  "userGroups": {
-    "$uid": {
-      ".read": "auth != null && auth.uid === $uid",
-      "$groupId": {
-        ".write": "auth != null && auth.uid === $uid"
-      }
-    }
-  },
-  "groupRooms": {
-    "$groupId": {
-      ".read": "auth != null && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active'",
-      "$room": {
-        ".write": "auth != null && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active'"
-      }
-    }
-  },
-  "groupInvites": {
-    "$inviteId": {
-      ".read": "auth != null",
-      ".write": "auth != null"
-    }
-  }
-}
-```
+El orden de transición, las comprobaciones y el rollback están documentados en `docs/FIREBASE_RULES_ROLLOUT.md`. Las reglas candidatas no se publican mediante GitHub Pages.
 
 ## Excel del Grupo
 
