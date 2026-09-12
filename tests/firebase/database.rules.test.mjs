@@ -58,12 +58,78 @@ test('el perfil completo, incluido el email, solo lo puede leer su propietario',
 
 test('el propietario puede crear el grupo y registrar su pertenencia', async () => {
   const db = env.authenticatedContext('owner').database();
-  await assertSucceeds(update(ref(db), {
-    'groups/g1': group(),
-    'groupMembers/g1/owner': member('owner'),
-    'userGroups/owner/g1': index('owner')
-  }));
+  await assertSucceeds(set(ref(db, 'groupMembers/g1/owner'), member('owner')));
+  await assertSucceeds(set(ref(db, 'userGroups/owner/g1'), index('owner')));
+  await assertSucceeds(set(ref(db, 'groups/g1'), group()));
   await assertSucceeds(get(ref(db, 'groups/g1')));
+});
+
+test('no se puede crear únicamente el nodo groups', async () => {
+  const db = env.authenticatedContext('owner').database();
+  await assertFails(set(ref(db, 'groups/g1'), group()));
+});
+
+test('un propietario coherente puede actualizar metadatos sin cambiar ownerUid', async () => {
+  await seed({
+    groups: { g1: group() },
+    groupMembers: { g1: { owner: member('owner') } },
+    userGroups: { owner: { g1: index('owner') } }
+  });
+  const db = env.authenticatedContext('owner').database();
+  await assertSucceeds(set(ref(db, 'groups/g1'), { ...group(), name: 'Equipo actualizado', updatedAt: 200 }));
+});
+
+test('el propietario no puede degradarse ni borrar su pertenencia o índice', async () => {
+  await seed({
+    groups: { g1: group() },
+    groupMembers: { g1: { owner: member('owner') } },
+    userGroups: { owner: { g1: index('owner') } }
+  });
+  const db = env.authenticatedContext('owner').database();
+  await assertFails(set(ref(db, 'groupMembers/g1/owner'), member('member')));
+  await assertFails(remove(ref(db, 'groupMembers/g1/owner')));
+  await assertFails(set(ref(db, 'userGroups/owner/g1'), index('member')));
+  await assertFails(remove(ref(db, 'userGroups/owner/g1')));
+});
+
+test('ownerUid es inmutable aunque el destino sea un miembro activo', async () => {
+  await seed({
+    groups: { g1: group() },
+    groupMembers: { g1: { owner: member('owner'), alice: member('member') } },
+    userGroups: { owner: { g1: index('owner') }, alice: { g1: index('member') } }
+  });
+  const db = env.authenticatedContext('owner').database();
+  await assertFails(set(ref(db, 'groups/g1/ownerUid'), 'alice'));
+  await assertFails(update(ref(db), { 'groups/g1/ownerUid': 'alice' }));
+});
+
+test('un miembro no puede cambiar ownerUid, proclamarse owner ni eliminar al propietario', async () => {
+  await seed({
+    groups: { g1: group() },
+    groupMembers: { g1: { owner: member('owner'), alice: member('member') } },
+    userGroups: { owner: { g1: index('owner') }, alice: { g1: index('member') } }
+  });
+  const db = env.authenticatedContext('alice').database();
+  await assertFails(set(ref(db, 'groups/g1/ownerUid'), 'alice'));
+  await assertFails(set(ref(db, 'groupMembers/g1/alice'), member('owner')));
+  await assertFails(set(ref(db, 'userGroups/alice/g1'), index('owner')));
+  await assertFails(remove(ref(db, 'groupMembers/g1/owner')));
+});
+
+test('la transferencia de propiedad permanece deshabilitada aunque el PATCH sea coherente', async () => {
+  await seed({
+    groups: { g1: group() },
+    groupMembers: { g1: { owner: member('owner'), alice: member('member') } },
+    userGroups: { owner: { g1: index('owner') }, alice: { g1: index('member') } }
+  });
+  const db = env.authenticatedContext('owner').database();
+  await assertFails(update(ref(db), {
+    'groups/g1/ownerUid': 'alice',
+    'groupMembers/g1/owner/role': 'member',
+    'userGroups/owner/g1/role': 'member',
+    'groupMembers/g1/alice/role': 'owner',
+    'userGroups/alice/g1/role': 'owner'
+  }));
 });
 
 test('nadie puede autoañadirse ni ascender a propietario sin invitación', async () => {
@@ -98,7 +164,7 @@ test('una invitación válida añade al miembro en una única actualización y n
 });
 
 test('una invitación caducada no permite entrar', async () => {
-  await seed({ groups: { g1: group() }, groupMembers: { g1: { owner: member('owner') } }, groupInvites: { old: invite({ expiresAt: 1 }) } });
+  await seed({ groups: { g1: group() }, groupMembers: { g1: { owner: member('owner') } }, userGroups: { owner: { g1: index('owner') } }, groupInvites: { old: invite({ expiresAt: 1 }) } });
   const db = env.authenticatedContext('alice').database();
   await assertFails(set(ref(db, 'groupMembers/g1/alice'), member('member', { inviteId: 'old' })));
 });
@@ -114,7 +180,7 @@ test('solo miembros activos modifican salas y el cambio hecho/pendiente puede se
   await assertFails(set(ref(outsider, 'groupPendingRooms/g1/olimpo'), room('outsider')));
 });
 
-test('el propietario puede eliminar atómicamente grupo, miembros, estados e índices', async () => {
+test('el propietario puede eliminar primero el grupo y después sus datos auxiliares', async () => {
   await seed({
     groups: { g1: group() },
     groupMembers: { g1: { owner: member('owner'), alice: member('member') } },
@@ -122,8 +188,9 @@ test('el propietario puede eliminar atómicamente grupo, miembros, estados e ín
     groupRooms: { g1: { room: room('owner') } }, groupPendingRooms: { g1: { pending: room('owner') } }
   });
   const db = env.authenticatedContext('owner').database();
+  await assertSucceeds(remove(ref(db, 'groups/g1')));
   await assertSucceeds(update(ref(db), {
-    'groups/g1': null, 'groupMembers/g1/owner': null, 'groupMembers/g1/alice': null,
+    'groupMembers/g1/owner': null, 'groupMembers/g1/alice': null,
     'userGroups/owner/g1': null, 'userGroups/alice/g1': null,
     'groupRooms/g1/room': null, 'groupPendingRooms/g1/pending': null
   }));
