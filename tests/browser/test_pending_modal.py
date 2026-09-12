@@ -63,6 +63,9 @@ class PendingModalTest(unittest.TestCase):
         self.deny = False
         self.deny_group_membership_patch = False
         self.legacy_group_index_rules = False
+        self.deny_put_prefixes = set()
+        self.fail_patch_once = False
+        self.fail_delete_once_prefixes = set()
         self.context = self.browser.new_context(viewport={'width': 390, 'height': 844}, is_mobile=True, has_touch=True, service_workers='block')
         self.context.route('**/*', self.route)
 
@@ -80,6 +83,9 @@ class PendingModalTest(unittest.TestCase):
                 group_membership = any(key.startswith('groupMembers/') for key in patch)
                 if self.deny or (self.legacy_group_index_rules and foreign_group_index) or (self.deny_group_membership_patch and group_membership):
                     return route.fulfill(status=403, content_type='application/json', body='{"error":"Permission denied"}', headers={'Access-Control-Allow-Origin': '*'})
+                if self.fail_patch_once:
+                    self.fail_patch_once = False
+                    return route.fulfill(status=503, content_type='application/json', body='{"error":"Temporary failure"}', headers={'Access-Control-Allow-Origin': '*'})
                 self.patches.append(patch)
                 for key, value in patch.items():
                     parts = key.split('/')
@@ -93,6 +99,8 @@ class PendingModalTest(unittest.TestCase):
                 value = patch
             elif request.method == 'PUT':
                 value = json.loads(request.post_data)
+                if self.deny or (self.deny_group_membership_patch and path.startswith('groupMembers/')) or any(path.startswith(prefix) for prefix in self.deny_put_prefixes):
+                    return route.fulfill(status=403, content_type='application/json', body='{"error":"Permission denied"}', headers={'Access-Control-Allow-Origin': '*'})
                 self.puts.append((path, value))
                 parts = list(filter(None, path.split('/')))
                 node = self.db
@@ -100,6 +108,10 @@ class PendingModalTest(unittest.TestCase):
                     node = node.setdefault(part, {})
                 node[parts[-1]] = value
             elif request.method == 'DELETE':
+                failed_prefix = next((prefix for prefix in self.fail_delete_once_prefixes if path.startswith(prefix)), None)
+                if failed_prefix:
+                    self.fail_delete_once_prefixes.remove(failed_prefix)
+                    return route.fulfill(status=503, content_type='application/json', body='{"error":"Temporary failure"}', headers={'Access-Control-Allow-Origin': '*'})
                 self.deletes.append(path)
                 parts = list(filter(None, path.split('/')))
                 node = self.db
@@ -228,7 +240,7 @@ class PendingModalTest(unittest.TestCase):
         self.assertEqual(self.db['groupInvites']['token']['status'], 'accepted')
         self.assertEqual(len(self.patches), 1)
 
-    def test_creating_group_registers_owner_and_index_together(self):
+    def test_creating_group_prepares_owner_and_index_before_metadata(self):
         page = self.page_for()
         page.evaluate("SETTINGS_TAB = 'profile'; openProfile('', false)")
         page.locator('#new-group-name').fill('Grupo Seguro')
@@ -237,8 +249,10 @@ class PendingModalTest(unittest.TestCase):
         group_id = next(key for key, value in self.db['groups'].items() if value['name'] == 'Grupo Seguro')
         self.assertEqual(self.db['groupMembers'][group_id]['a']['role'], 'owner')
         self.assertEqual(self.db['userGroups']['a'][group_id]['role'], 'owner')
-        owner_patch = next(patch for patch in self.patches if f'groupMembers/{group_id}/a' in patch)
-        self.assertIn(f'userGroups/a/{group_id}', owner_patch)
+        creation_paths = [path for path, _ in self.puts if group_id in path]
+        self.assertEqual(creation_paths, [
+            f'groupMembers/{group_id}/a', f'userGroups/a/{group_id}', f'groups/{group_id}'
+        ])
 
     def test_failed_group_creation_leaves_no_incomplete_nodes(self):
         self.deny_group_membership_patch = True
@@ -247,10 +261,30 @@ class PendingModalTest(unittest.TestCase):
         page.locator('#new-group-name').fill('Grupo Fallido')
         page.evaluate("createEscapistGroup()")
         page.wait_for_function("document.getElementById('profile-status')?.textContent.includes('No se pudo crear')")
+        self.assertIn('Recarga la aplicación', page.locator('#profile-status').text_content())
         self.assertFalse(any(value.get('name') == 'Grupo Fallido' for value in self.db.get('groups', {}).values()))
         self.assertFalse(any('Grupo Fallido' in json.dumps(patch) for patch in self.patches))
 
-    def test_deleting_group_removes_all_members_states_and_indexes_atomically(self):
+    def test_group_creation_cleans_failures_after_each_preparatory_step(self):
+        page = self.page_for()
+        page.evaluate("SETTINGS_TAB = 'profile'; openProfile('', false)")
+        for denied_prefix, name in [('userGroups/', 'Fallo Indice'), ('groups/', 'Fallo Metadata')]:
+            put_count = len(self.puts)
+            self.deny_put_prefixes = {denied_prefix}
+            if denied_prefix == 'groups/':
+                self.fail_delete_once_prefixes = {'userGroups/'}
+            page.locator('#new-group-name').fill(name)
+            page.evaluate("createEscapistGroup()")
+            page.wait_for_function("name => document.getElementById('profile-status')?.textContent.includes('No se pudo crear') && !Object.values(USER_GROUPS).some(group => group.name === name)", arg=name)
+            self.deny_put_prefixes.clear()
+            new_paths = [path for path, _ in self.puts[put_count:] if path.startswith('groupMembers/')]
+            self.assertEqual(len(new_paths), 1)
+            group_id = new_paths[0].split('/')[1]
+            self.assertFalse(any(value.get('name') == name for value in self.db.get('groups', {}).values()))
+            self.assertFalse(self.db.get('groupMembers', {}).get(group_id))
+            self.assertNotIn(group_id, self.db.get('userGroups', {}).get('a', {}))
+
+    def test_deleting_group_removes_metadata_before_auxiliary_data(self):
         self.db['groups'] = {'owned': {'name': 'Propio', 'ownerUid': 'a'}}
         self.db['userGroups']['a']['owned'] = {'name': 'Propio', 'role': 'owner', 'status': 'active'}
         self.db['userGroups']['b']['owned'] = {'name': 'Propio', 'role': 'member', 'status': 'active'}
@@ -261,6 +295,7 @@ class PendingModalTest(unittest.TestCase):
         self.db['groupRooms']['owned'] = {'olimpo': {'roomName': 'Olimpo'}}
         self.db['groupPendingRooms']['owned'] = {'katrina': {'roomName': 'Katrina'}}
         page = self.page_for()
+        self.fail_patch_once = True
         page.on('dialog', lambda dialog: dialog.accept())
         page.evaluate("deleteEscapistGroup('owned')")
         page.wait_for_function("!USER_GROUPS.owned")
@@ -270,6 +305,7 @@ class PendingModalTest(unittest.TestCase):
         self.assertFalse(self.db['groupPendingRooms'].get('owned'))
         self.assertNotIn('owned', self.db['userGroups']['a'])
         self.assertNotIn('owned', self.db['userGroups']['b'])
+        self.assertIn('groups/owned', self.deletes)
         self.assertEqual(len(self.patches), 1)
 
     def test_group_deletion_falls_back_safely_with_current_production_rules(self):
@@ -289,6 +325,7 @@ class PendingModalTest(unittest.TestCase):
         self.assertFalse(self.db['groupMembers'].get('owned'))
         self.assertNotIn('owned', self.db['userGroups']['a'])
         self.assertIn('owned', self.db['userGroups']['b'])
+        self.assertIn('groups/owned', self.deletes)
         self.assertEqual(len(self.patches), 1)
 
     def test_desktop_close_works_with_mouse_and_focus_returns(self):

@@ -5019,14 +5019,16 @@ async function deleteEscapistGroup(groupId) {
     const [rawDone, rawPending] = await Promise.all([fbGet(`groupRooms/${groupId}`), fbGet(`groupPendingRooms/${groupId}`)]);
     const members = GROUP_MEMBERS[groupId] || {};
     const deletion = {
-      [`groups/${groupId}`]: null,
       ...Object.fromEntries(Object.keys(rawDone || {}).map(roomKeyValue => [`groupRooms/${groupId}/${roomKeyValue}`, null])),
       ...Object.fromEntries(Object.keys(rawPending || {}).map(roomKeyValue => [`groupPendingRooms/${groupId}/${roomKeyValue}`, null])),
       ...Object.fromEntries(Object.keys(members).map(uid => [`groupMembers/${groupId}/${uid}`, null])),
       ...Object.fromEntries(Object.keys(members).map(uid => [`userGroups/${uid}/${groupId}`, null]))
     };
+    // RTDB rules see sibling branches before a multipath update. Remove metadata
+    // first so owner membership can then be cleaned without leaving a live ownerless group.
+    await fbDelete(`groups/${groupId}`);
     try {
-      await fbPatch('', deletion);
+      await fbPatchWithRetry('', deletion);
     } catch (error) {
       // Production rules prior to database.rules.json only let users remove their own index.
       // Retrying without foreign indexes preserves the old behavior until the hardened rules land.
@@ -5034,7 +5036,7 @@ async function deleteEscapistGroup(groupId) {
       const compatibleDeletion = Object.fromEntries(Object.entries(deletion).filter(([path]) =>
         !path.startsWith('userGroups/') || path === `userGroups/${USER_ID}/${groupId}`
       ));
-      await fbPatch('', compatibleDeletion);
+      await fbPatchWithRetry('', compatibleDeletion);
     }
     delete USER_GROUPS[groupId];
     delete GROUP_MEMBERS[groupId];
@@ -5044,8 +5046,14 @@ async function deleteEscapistGroup(groupId) {
     renderProfile('Grupo eliminado.');
   } catch (e) {
     console.error(e);
-    renderGroupDetail(groupId, `No se pudo eliminar el grupo. ${escapeHtml(e.message)}`);
+    renderGroupDetail(groupId, `No se pudo eliminar el grupo. ${escapeHtml(groupWriteErrorMessage(e))}`);
   }
+}
+
+function groupWriteErrorMessage(error) {
+  const message = String(error?.message || error || 'Error desconocido.');
+  if (/\b403\b/.test(message)) return 'La versión abierta puede estar desactualizada. Recarga la aplicación e inténtalo de nuevo.';
+  return message;
 }
 function openGroupRoomDetail(kind, key) {
   closeProfile();
@@ -6401,20 +6409,29 @@ async function createEscapistGroup() {
   const now = Date.now();
   const profileName = shortDisplayName();
   const profilePhoto = publicPhotoURL();
+  const ownerMemberPath = `groupMembers/${groupId}/${USER_ID}`;
+  const ownerIndexPath = `userGroups/${USER_ID}/${groupId}`;
+  const groupPath = `groups/${groupId}`;
+  let groupCreated = false;
   try {
     if (!await saveUserProfile()) throw new Error('No se pudo guardar el perfil antes de crear el grupo.');
-    // Metadata, owner membership and reverse index are one indivisible operation.
-    await fbPatch('', {
-      [`groups/${groupId}`]: { name, ownerUid: USER_ID, createdAt: now, updatedAt: now },
-      [`groupMembers/${groupId}/${USER_ID}`]: { role: 'owner', status: 'active', displayName: profileName, photoURL: profilePhoto, joinedAt: now },
-      [`userGroups/${USER_ID}/${groupId}`]: { name, role: 'owner', status: 'active', joinedAt: now }
-    });
+    // Security rules cannot inspect post-write sibling branches. Prepare both
+    // owner records first; only then publish the group metadata that makes it live.
+    await fbPut(ownerMemberPath, { role: 'owner', status: 'active', displayName: profileName, photoURL: profilePhoto, joinedAt: now });
+    await fbPut(ownerIndexPath, { name, role: 'owner', status: 'active', joinedAt: now });
+    await fbPut(groupPath, { name, ownerUid: USER_ID, createdAt: now, updatedAt: now });
+    groupCreated = true;
     await loadUserGroups();
     renderProfile('Grupo creado. Ya puedes copiar una invitacion.');
     populateFilters(); renderStats(); renderMisHechos(); renderCatalogo();
   } catch (e) {
     console.error(e);
-    setProfileStatus(`No se pudo crear el grupo. ${escapeHtml(e.message)}`);
+    if (!groupCreated) {
+      // Best effort cleanup of preparatory nodes. If the group write actually
+      // committed but its response was lost, the rules reject this cleanup.
+      await Promise.allSettled([fbDeleteWithRetry(ownerIndexPath), fbDeleteWithRetry(ownerMemberPath)]);
+    }
+    setProfileStatus(`No se pudo crear el grupo. ${escapeHtml(groupWriteErrorMessage(e))}`);
   }
 }
 
@@ -6820,6 +6837,19 @@ async function fbPatch(path, values) {
   return response.json();
 }
 
+async function fbPatchWithRetry(path, values, attempts = 2) {
+  let lastError;
+  for (let attempt = 0; attempt < attempts; attempt++) {
+    try {
+      return await fbPatch(path, values);
+    } catch (error) {
+      lastError = error;
+      if (/\b403\b/.test(String(error?.message || ''))) throw error;
+    }
+  }
+  throw lastError;
+}
+
 async function fbPut(path, value) {
   const r = await fetch(fbUrl(path), {
     method: 'PUT',
@@ -6840,6 +6870,19 @@ async function fbDelete(path) {
     throw new Error(`Firebase DELETE error ${r.status}: ${body}`);
   }
   return r.json();
+}
+
+async function fbDeleteWithRetry(path, attempts = 2) {
+  let lastError;
+  for (let attempt = 0; attempt < attempts; attempt++) {
+    try {
+      return await fbDelete(path);
+    } catch (error) {
+      lastError = error;
+      if (/\b403\b/.test(String(error?.message || ''))) throw error;
+    }
+  }
+  throw lastError;
 }
 
 // Calcular media y número de votos para un slug
