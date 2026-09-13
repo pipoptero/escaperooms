@@ -93,6 +93,97 @@ def canonical_metadata_mismatches(catalog, room_metadata):
     return mismatches
 
 
+def comparable_text(value):
+    value = unicodedata.normalize("NFKD", str(value or "")).encode("ascii", "ignore").decode().lower()
+    return re.sub(r"\s+", " ", value).strip()
+
+
+def comparable_open_state(record):
+    if not isinstance(record, dict):
+        return None
+    if "abierto" in record and isinstance(record.get("abierto"), bool):
+        return record["abierto"]
+    state = comparable_text(record.get("estado"))
+    if state in {"abierto", "activa", "activo", "open"}:
+        return True
+    if state in {"cerrado", "cerrada", "closed"}:
+        return False
+    return None
+
+
+def editorial_cross_source_mismatches(catalog, reviews, aliases):
+    """Compare structured editorial fields without treating free text as authoritative."""
+    catalog_by_exact = defaultdict(list)
+    catalog_by_identity = defaultdict(list)
+    for room in catalog:
+        exact = slug(room.get("id") or room.get("nombre"))
+        if exact:
+            catalog_by_exact[exact].append(room)
+        identity = resolve_alias(room.get("id") or room.get("nombre"), aliases)
+        if identity:
+            catalog_by_identity[identity].append(room)
+    mismatches = []
+    for review_key, record in (reviews or {}).items():
+        review = record.get("review") if isinstance(record, dict) else None
+        if not isinstance(review, dict):
+            continue
+        candidates = [review.get("id"), record.get("roomKey"), record.get("sourceRoomKey"), review_key]
+        matches = []
+        identity = ""
+        for candidate in candidates:
+            exact_matches = catalog_by_exact.get(slug(candidate), [])
+            if len(exact_matches) == 1:
+                matches = exact_matches
+                identity = slug(candidate)
+                break
+        if not matches:
+            for candidate in candidates:
+                identity = resolve_alias(candidate, aliases)
+                alias_matches = catalog_by_identity.get(identity, [])
+                if len(alias_matches) == 1:
+                    matches = alias_matches
+                    break
+        if len(matches) != 1:
+            continue
+        room = matches[0]
+        comparisons = [
+            ("name", room.get("nombre"), review.get("nombre"), comparable_text),
+            ("company", room.get("empresa"), review.get("empresa"), comparable_text),
+            ("city", room.get("ciudad"), review.get("ciudad"), comparable_text),
+            ("duration", room.get("duracion"), review.get("duracion"), lambda value: float(value)),
+            ("min_players", room.get("min_personas"), review.get("min_personas"), lambda value: int(value)),
+            ("max_players", room.get("max_personas"), review.get("max_personas"), lambda value: int(value)),
+        ]
+        for field, catalog_value, review_value, normalizer in comparisons:
+            if catalog_value in (None, "") or review_value in (None, ""):
+                continue
+            try:
+                same = normalizer(catalog_value) == normalizer(review_value)
+            except (TypeError, ValueError):
+                same = comparable_text(catalog_value) == comparable_text(review_value)
+            if not same:
+                mismatches.append({
+                    "room": room.get("nombre") or review.get("nombre") or identity,
+                    "catalog_id": room.get("id"),
+                    "review_key": review_key,
+                    "field": field,
+                    "catalog": catalog_value,
+                    "review": review_value,
+                })
+        catalog_open = comparable_open_state(room)
+        review_open = comparable_open_state(review)
+        if catalog_open is not None and review_open is not None and catalog_open != review_open:
+            mismatches.append({
+                "room": room.get("nombre") or review.get("nombre") or identity,
+                "catalog_id": room.get("id"),
+                "review_key": review_key,
+                "field": "open_state",
+                "catalog": catalog_open,
+                "review": review_open,
+            })
+    return mismatches
+
+
 def validate():
     errors, warnings = [], []
     catalog_payload = load_json("catalog.json", errors)
@@ -153,6 +244,14 @@ def validate():
         errors.append(
             f"Alias editorial: {mismatch['key']}.{mismatch['field']} "
             f"canonical «{mismatch['canonical']}» frente a catálogo «{mismatch['catalog']}»"
+        )
+
+    editorial_source_mismatches = editorial_cross_source_mismatches(catalog, reviews, aliases)
+    for mismatch in editorial_source_mismatches:
+        warnings.append(
+            f"Editorial: {mismatch['room']} ({mismatch['field']}) "
+            f"catalog.{mismatch['field']} = {mismatch['catalog']!r}; "
+            f"review.{mismatch['field']} = {mismatch['review']!r}"
         )
 
     catalog_tokens = {slug(value) for value in ids}
@@ -253,6 +352,7 @@ def validate():
             "errors": len(errors),
             "warnings": len(warnings),
             "editorial_alias_inconsistencies": len(alias_metadata_mismatches),
+            "editorial_cross_source_inconsistencies": len(editorial_source_mismatches),
         },
         "sitemaps": sitemap_counts,
         "errors": errors,

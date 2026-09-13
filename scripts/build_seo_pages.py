@@ -187,6 +187,35 @@ p { color: var(--text2); }
 .review-link { display: block; border: 1px solid rgba(255,255,255,.08); background: var(--bg2); padding: 14px; text-decoration: none; }
 .review-link strong { display: block; color: var(--gold); font-size: 1.05rem; }
 .review-link span { display: block; color: var(--text2); margin-top: 3px; }
+.review-toolbar { display: grid; grid-template-columns: minmax(220px, 1.5fr) repeat(4, minmax(130px, .7fr)); gap: 9px; margin: 22px 0 12px; padding: 12px; border: 1px solid rgba(125,187,63,.2); background: rgba(125,187,63,.035); }
+.review-filter { min-width: 0; min-height: 44px; border: 1px solid rgba(255,255,255,.12); background: #0b0b12; color: var(--text); padding: 9px 10px; font: 600 .78rem 'Rajdhani', sans-serif; }
+.review-filter:focus-visible, .review-card:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+.review-results { color: var(--text2); font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: .07em; text-transform: uppercase; }
+.review-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(265px, 1fr)); gap: 13px; margin-top: 12px; }
+.review-card { min-width: 0; display: flex; flex-direction: column; border: 1px solid rgba(255,255,255,.09); background: linear-gradient(180deg,rgba(255,255,255,.025),rgba(0,0,0,.08)),var(--bg2); color: inherit; text-decoration: none; overflow: hidden; }
+.review-card[hidden] { display: none; }
+.review-card:hover { border-color: rgba(125,187,63,.44); transform: translateY(-1px); }
+.review-card-media { position: relative; aspect-ratio: 16/10; overflow: hidden; background: radial-gradient(circle at 50% 45%,rgba(125,187,63,.12),transparent 48%),#08080d; }
+.review-card-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.review-card-fallback { width: 100%; height: 100%; display: grid; place-items: center; color: var(--green); font: 700 2.5rem 'Cinzel', serif; }
+.review-card-score { position: absolute; right: 9px; bottom: 9px; border: 1px solid rgba(125,187,63,.5); background: rgba(8,8,12,.92); color: var(--green); padding: 6px 9px; font: 700 .86rem 'Cinzel', serif; }
+.review-card-body { flex: 1; display: flex; flex-direction: column; padding: 13px; }
+.review-card-company, .review-card-meta, .review-card-cta { font-family: 'Share Tech Mono', monospace; text-transform: uppercase; }
+.review-card-company { color: var(--text3); font-size: .63rem; letter-spacing: .08em; }
+.review-card h2 { margin: 4px 0 6px; color: var(--gold); font-size: 1.05rem; line-height: 1.2; }
+.review-card-meta { display: flex; flex-wrap: wrap; gap: 5px; margin: 3px 0 9px; color: var(--text2); font-size: .58rem; }
+.review-card-meta span { border: 1px solid rgba(255,255,255,.09); padding: 4px 6px; }
+.review-card-summary { flex: 1; margin: 0; color: var(--text2); font-size: .88rem; line-height: 1.45; }
+.review-card-seal { width: fit-content; margin: 0 0 7px; border: 1px solid rgba(125,187,63,.3); color: var(--green); padding: 3px 6px; font: .62rem 'Share Tech Mono', monospace; text-transform: uppercase; }
+.review-card-cta { margin-top: 12px; color: var(--green); font-size: .65rem; letter-spacing: .08em; }
+.review-empty-state { margin-top: 14px; border: 1px dashed rgba(125,187,63,.28); padding: 22px; color: var(--text2); text-align: center; }
+.score-comparison { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; margin: 12px 0 8px; }
+.score-panel { border: 1px solid rgba(255,255,255,.1); background: var(--bg2); padding: 12px; }
+.score-panel.global { border-color: rgba(76,201,240,.25); }
+.score-panel.vault { border-color: rgba(125,187,63,.36); background: rgba(125,187,63,.055); }
+.score-panel span { display: block; color: var(--text3); font: .62rem 'Share Tech Mono', monospace; letter-spacing: .1em; text-transform: uppercase; }
+.score-panel strong { display: block; margin-top: 4px; color: var(--gold); font: 700 1.35rem 'Cinzel', serif; }
+.score-panel.vault strong { color: var(--green); }
 .summary { margin-top: 16px; }
 .method h2, .faq h2 { margin-top: 0; }
 .faq { margin-top: 26px; }
@@ -210,6 +239,8 @@ p { color: var(--text2); }
   .detail-hero { grid-template-columns: 1fr; }
   .cover { max-height: 430px; }
   .facts { grid-template-columns: 1fr 1fr; }
+  .review-toolbar { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .review-toolbar .review-search { grid-column: 1/-1; }
 }
 @media (max-width: 620px) {
   body { font-size: 16px; }
@@ -225,6 +256,10 @@ p { color: var(--text2); }
   .rank-link em { grid-column: 2; grid-row: auto; }
   .site-footer-inner { align-items: flex-start; flex-direction: column; }
   .footer-links { justify-content: flex-start; }
+  .review-toolbar { grid-template-columns: 1fr; padding: 9px; }
+  .review-toolbar .review-search { grid-column: auto; }
+  .review-grid { grid-template-columns: 1fr; }
+  .score-comparison { grid-template-columns: 1fr; }
 }
 @media (max-width: 420px) {
   .facts { grid-template-columns: 1fr; }
@@ -1278,20 +1313,64 @@ def review_page(room, photos, social_image_path=""):
 """
 
 
+def review_index_image(room):
+    """Use only a real room/review image; leave a semantic fallback otherwise."""
+    value = text(room.get("imagen"))
+    return page_asset(value) if value and local_asset_path(value) else ""
+
+
+def review_index_seal(room):
+    """Return an explicit editorial seal when the source contains one."""
+    for field in ("sello", "seal", "veredicto"):
+        value = text(room.get(field))
+        if value:
+            return value
+    return ""
+
+
 def reviews_index_page(rooms):
     canonical = site_url("/reviews/")
     description = "Reviews de escape rooms jugados por The Vault Escape, con opinión del grupo, puntuaciones y fotos."
-    image = site_url("/images/brand/social-card.png")
+    social_image = site_url("/images/brand/social-card.png")
     title = f"Reviews de escape rooms | {SITE_NAME}"
     items = []
     list_items = []
+    cities = sorted({text(room.get("ciudad")) for room in rooms if text(room.get("ciudad"))}, key=folded)
+    companies = sorted({canonical_room_company(room) for room in rooms if canonical_room_company(room)}, key=folded)
+    seals = sorted({review_index_seal(room) for room in rooms if review_index_seal(room)}, key=folded)
     for idx, room in enumerate(rooms, 1):
         name = canonical_room_name(room) or "Escape room"
+        company = canonical_room_company(room)
+        city = text(room.get("ciudad"))
         slug = room_url_slug(room)
         url = site_url(f"/reviews/{slug}/")
+        score = score_label(room.get("valoracion"))
+        seal = review_index_seal(room)
+        terror = "terror" if room.get("terror") is True else "no-terror" if room.get("terror") is False else "unknown"
+        duration = text(room.get("duracion"))
+        card_image = review_index_image(room)
+        initial = (name[:1] or "V").upper()
+        cover_html = (
+            f'<img src="{escape(card_image)}" alt="Portada de {escape(name)}" loading="lazy" decoding="async">'
+            if card_image else f'<div class="review-card-fallback" aria-hidden="true">{escape(initial)}</div>'
+        )
+        meta = [city, f"{duration} min" if duration else "", "Terror" if terror == "terror" else "Sin terror" if terror == "no-terror" else ""]
+        meta_html = "".join(f"<span>{escape(value)}</span>" for value in meta if value)
+        summary = short_text(plain_review_text(room.get("descripcion")), 175)
+        search = " ".join(filter(None, (name, company, city, seal)))
+        score_html = f'<span class="review-card-score">The Vault {escape(score)}/10</span>' if score else ""
+        seal_html = f'<div class="review-card-seal">{escape(seal)}</div>' if seal else ""
         items.append(
-            f'<a class="review-link" href="{escape(url)}"><strong>{escape(name)}</strong>'
-            f'<span>{escape(canonical_room_company(room))}{(" - " + escape(room_location(room))) if room_location(room) else ""}</span></a>'
+            f'<a class="review-card" href="{escape(url)}" data-review-card '
+            f'data-search="{escape(folded(search))}" data-city="{escape(city)}" '
+            f'data-company="{escape(company)}" data-terror="{terror}" data-seal="{escape(seal)}" '
+            f'data-score="{decimal(room.get("valoracion")):.2f}">'
+            f'<div class="review-card-media">{cover_html}{score_html}</div>'
+            f'<div class="review-card-body"><div class="review-card-company">{escape(company or "Review The Vault")}</div>'
+            f'<h2>{escape(name)}</h2>{seal_html}'
+            f'<div class="review-card-meta">{meta_html}</div>'
+            f'<p class="review-card-summary">{escape(summary or "Review disponible con la información editorial publicada.")}</p>'
+            f'<span class="review-card-cta">Ver review →</span></div></a>'
         )
         list_items.append({"@type": "ListItem", "position": idx, "name": name, "url": url})
     schema = {
@@ -1302,7 +1381,11 @@ def reviews_index_page(rooms):
         "description": description,
         "mainEntity": {"@type": "ItemList", "itemListElement": list_items},
     }
-    return base_head(title, description, canonical, image, "website") + f"""
+    city_options = "".join(f'<option value="{escape(value)}">{escape(value)}</option>' for value in cities)
+    company_options = "".join(f'<option value="{escape(value)}">{escape(value)}</option>' for value in companies)
+    seal_options = "".join(f'<option value="{escape(value)}">{escape(value)}</option>' for value in seals)
+    seal_filter = f'<select class="review-filter" id="review-seal" aria-label="Filtrar por sello"><option value="">Todos los sellos</option>{seal_options}</select>' if seals else ""
+    return base_head(title, description, canonical, social_image, "website") + f"""
 <script type="application/ld+json">
 {json_ld(schema)}
 </script>
@@ -1315,11 +1398,51 @@ def reviews_index_page(rooms):
     <h1>Reviews de escape rooms</h1>
     <p class="lead">Opiniones del grupo The Vault Escape sobre salas jugadas, con puntuaciones, fotos y enlaces a la ficha interactiva.</p>
   </section>
-  <div class="list">
+  <div class="review-toolbar" role="search" aria-label="Filtrar reviews">
+    <input class="review-filter review-search" id="review-search" type="search" placeholder="Buscar sala, empresa o ciudad" aria-label="Buscar reviews">
+    <select class="review-filter" id="review-city" aria-label="Filtrar por ciudad"><option value="">Todas las ciudades</option>{city_options}</select>
+    <select class="review-filter" id="review-terror" aria-label="Filtrar por terror"><option value="">Terror y no terror</option><option value="terror">Terror</option><option value="no-terror">Sin terror</option></select>
+    <select class="review-filter" id="review-score" aria-label="Filtrar por nota"><option value="">Cualquier nota</option><option value="9">9 o más</option><option value="8">8 o más</option><option value="7">7 o más</option></select>
+    <select class="review-filter" id="review-company" aria-label="Filtrar por empresa"><option value="">Todas las empresas</option>{company_options}</select>
+{seal_filter}
+  </div>
+  <div class="review-results" id="review-results" aria-live="polite">{len(items)} reviews</div>
+  <div class="review-grid" id="review-grid">
     {''.join(items)}
   </div>
+  <div class="review-empty-state" id="review-empty" hidden>No hay reviews que coincidan con estos filtros. Prueba a ampliar la búsqueda.</div>
 </main>
 {seo_footer()}
+<script>
+(() => {{
+  const cards = [...document.querySelectorAll('[data-review-card]')];
+  const controls = [...document.querySelectorAll('.review-filter')];
+  const folded = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+  const apply = () => {{
+    const search = folded(document.getElementById('review-search')?.value);
+    const city = document.getElementById('review-city')?.value || '';
+    const terror = document.getElementById('review-terror')?.value || '';
+    const company = document.getElementById('review-company')?.value || '';
+    const seal = document.getElementById('review-seal')?.value || '';
+    const minimum = Number(document.getElementById('review-score')?.value || 0);
+    let visible = 0;
+    cards.forEach(card => {{
+      const match = (!search || card.dataset.search.includes(search))
+        && (!city || card.dataset.city === city)
+        && (!terror || card.dataset.terror === terror)
+        && (!company || card.dataset.company === company)
+        && (!seal || card.dataset.seal === seal)
+        && (!minimum || Number(card.dataset.score || 0) >= minimum);
+      card.hidden = !match;
+      if (match) visible += 1;
+    }});
+    document.getElementById('review-results').textContent = `${{visible}} review${{visible === 1 ? '' : 's'}}`;
+    document.getElementById('review-empty').hidden = visible !== 0;
+  }};
+  controls.forEach(control => control.addEventListener(control.tagName === 'INPUT' ? 'input' : 'change', apply));
+  apply();
+}})();
+</script>
 </body>
 </html>
 """
@@ -1847,6 +1970,7 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
     app_link = site_url(f"/#room/{app_hash_key(room)}")
     score = decimal(rating.get("global_score"))
     has_score = score > 0
+    vault_score = decimal(room.get("valoracion"))
     synopsis = text(room.get("descripcion"))
     location_data = exact_room_location(room)
     city = text(location_data.get("city")) or text(room.get("ciudad"))
@@ -2017,6 +2141,20 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
         schema["@graph"].append({key: value for key, value in video_schema.items() if value})
     indexable = room_is_indexable(item, review_slugs, videos_data)
     robots = "index, follow, max-image-preview:large" if indexable else "noindex, follow"
+    ranking_method_html = ""
+    if has_score:
+        ranking_method_html = """
+      <details class="method"><summary>¿Cómo se calcula?</summary><p class="explain">La nota global combina las fuentes disponibles, reviews The Vault, comunidad y un peso moderado de premios o nominaciones.</p><p><a href="../../condiciones/#criterio-ranking">Consulta el criterio completo</a></p></details>"""
+        vault_panel_html = ""
+        if vault_score:
+            vault_panel_html = f'\n        <div class="score-panel vault"><span>The Vault Score</span><strong>{vault_score:.1f}/10</strong></div>'
+        score_comparison_html = f'''<div class="score-comparison" aria-label="Comparación de puntuaciones">
+        <div class="score-panel global"><span>Índice / nota global</span><strong>{score:.1f}/10</strong></div>{vault_panel_html}
+      </div>'''
+    elif vault_score:
+        score_comparison_html = f'<div class="score-panel vault"><span>The Vault Score</span><strong>{vault_score:.1f}/10</strong></div>'
+    else:
+        score_comparison_html = ""
     return base_head(title, description, canonical, image, robots=robots) + f"""
 <script type="application/ld+json">
 {json_ld(schema)}
@@ -2032,8 +2170,8 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
       <h1>{escape(name)}</h1>
       <div class="company">{escape(company)}</div>
       <div class="meta">{meta_html}</div>
-      {f'<div class="score">Nota global: {score:.1f}/10</div>' if has_score else ''}
-      <p>{escape(description)}</p>
+      {score_comparison_html}
+      <p>{escape(description)}</p>{ranking_method_html}
       <div class="actions">
         <a class="btn" href="{escape(app_link)}">Abrir ficha interactiva</a>
         {f'<a class="btn secondary" href="../../ranking/">Ver ranking completo</a>' if has_score else '<a class="btn secondary" href="../../">Ver catálogo</a>'}
@@ -2047,7 +2185,7 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
 {f'''<section class="section">
     <h2>Fuentes del ranking</h2>
     <div class="meta">{sources_html}</div>
-    <p class="explain">La nota global combina las fuentes disponibles para esta sala, las reviews publicadas en The Vault, la comunidad y el peso moderado de premios o nominaciones. En caso de empate se prioriza la sala contrastada por más fuentes.</p>
+    <p class="explain">Estas son las fuentes disponibles para la sala, junto con sus votos conocidos cuando constan en los datos.</p>
   </section>''' if sources_html else ''}
 {f'<section class="section"><h2>Sinopsis</h2><div class="review">{escape(synopsis)}</div></section>' if synopsis and folded(synopsis) != 'sin sinopsis' else ''}
 {f'''<section class="section">
@@ -2208,13 +2346,8 @@ Sitemap: {site_url('/sitemap.xml')}
 
 
 def site_stats_json(review_rooms, sala_rows, location_specs):
-    unique_catalog = {}
-    for room in catalog_rooms():
-        parts = (folded(room.get("nombre")), folded(room.get("empresa")), folded(room.get("ciudad")))
-        key = parts if all(parts) else ("id", room_identity(room))
-        unique_catalog[key] = room
     payload = {
-        "catalog": len(unique_catalog),
+        "catalog": len(catalog_rooms()),
         "reviews": len(review_rooms),
         "ranking": sum(1 for item in sala_rows if decimal(item.get("rating", {}).get("global_score")) > 0),
         "locations": len(location_specs or []),
@@ -2223,7 +2356,46 @@ def site_stats_json(review_rooms, sala_rows, location_specs):
     return json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
 
 
-def update_inline_site_stats(stats_json):
+def static_home_fallback(stats, rooms):
+    latest = sorted(rooms or [], key=review_timestamp, reverse=True)[:3]
+    latest_html = "".join(
+        f'<a class="vault-latest-card" href="reviews/{escape(room_url_slug(room))}/">'
+        f'<span class="vault-latest-img"><span>{escape((canonical_room_name(room) or "V")[:1].upper())}</span></span>'
+        f'<span><span class="vault-latest-kicker">{escape(canonical_room_company(room) or "Review The Vault")}</span>'
+        f'<strong class="vault-latest-name">{escape(canonical_room_name(room) or "Escape room")}</strong>'
+        f'<span class="vault-latest-meta">{escape(room_location(room) or "Review publicada")}</span></span></a>'
+        for room in latest
+    )
+    return f'''<!-- STATIC_HOME_START -->
+      <div class="vault-guide-hero" data-static-home-fallback>
+        <div>
+          <div class="vault-guide-kicker">The Vault Escape</div>
+          <div class="vault-guide-title">Encuentra tu próximo escape.</div>
+          <p class="vault-guide-copy">Descubre salas, compara rankings y construye tu historial escapista.</p>
+          <div class="vault-guide-proof"><span>Encuentra</span><span>Registra</span><span>Comparte</span></div>
+          <div class="vault-guide-actions">
+            <a class="vault-guide-action" href="escape-rooms/" onclick="if(window.switchTab){{event.preventDefault();switchTab('catalogo')}}">Explorar salas</a>
+            <a class="vault-guide-action secondary" href="ranking/" onclick="if(window.switchTab){{event.preventDefault();switchTab('ranking')}}">Ver ranking</a>
+            <a class="vault-guide-action secondary" href="#perfil-escapista" onclick="if(window.openEscapistProfileCta){{event.preventDefault();openEscapistProfileCta()}}">Mi perfil escapista</a>
+          </div>
+        </div>
+        <div class="vault-guide-stats" aria-label="Datos actuales de The Vault">
+          <div class="vault-guide-stat"><strong id="vault-stat-catalog">{stats['catalog']}</strong><span>salas catalogadas</span></div>
+          <div class="vault-guide-stat"><strong id="vault-stat-reviews">{stats['reviews']}</strong><span>reviews The Vault</span></div>
+          <div class="vault-guide-stat"><strong id="vault-stat-ranking">{stats['ranking']}</strong><span>salas con ranking</span></div>
+          <div class="vault-guide-stat"><strong id="vault-stat-locations">{stats['locations']}</strong><span>zonas para explorar</span></div>
+        </div>
+      </div>
+      <section class="vault-community-band" id="perfil-escapista">
+        <div><div class="vault-guide-kicker">Perfil escapista</div><div class="vault-community-title">Cada partida construye tu historia.</div><p class="vault-community-copy">Reúne escapes hechos y pendientes, XP, niveles, logros, mapa, rutas, grupos y tu colección de avatares, marcos, títulos y auras.</p><div class="vault-guide-actions"><a class="vault-guide-action" href="#perfil-escapista" onclick="if(window.openEscapistProfileCta){{event.preventDefault();openEscapistProfileCta()}}">Ver mi perfil escapista</a></div></div>
+        <div class="vault-mini-list"><div class="vault-mini-item"><span>Historial y pendientes</span><strong>✓</strong></div><div class="vault-mini-item"><span>Mapa, XP y logros</span><strong>✓</strong></div><div class="vault-mini-item"><span>Grupos y rutas</span><strong>✓</strong></div><div class="vault-mini-item"><span>Avatares y cosméticos</span><strong>✓</strong></div></div>
+      </section>
+      <div class="vault-section-head"><div class="vault-section-title">Últimas reviews</div><div class="vault-section-note">Contenido disponible sin iniciar sesión</div></div>
+      <div class="vault-latest-grid">{latest_html}</div>
+      <!-- STATIC_HOME_END -->'''
+
+
+def update_inline_site_stats(stats_json, rooms=None):
     index_path = ROOT / "index.html"
     if not index_path.exists():
         return
@@ -2234,13 +2406,22 @@ def update_inline_site_stats(stats_json):
     replacement = f"const FALLBACK_SITE_STATS = {inline};"
     next_html, count = re.subn(pattern, replacement, html, count=1)
     if count:
-        for key in ("catalog", "reviews", "ranking"):
+        for key in ("catalog", "reviews", "ranking", "locations"):
             next_html = re.sub(
                 rf'(<strong id="vault-stat-{key}">).*?(</strong>)',
                 rf'\g<1>{stats[key]}\g<2>',
                 next_html,
                 count=1,
             )
+        next_html = re.sub(r'(<span class="count-badge" id="badge-cat">).*?(</span>)', rf'\g<1>{stats["catalog"]}\g<2>', next_html, count=1)
+        next_html = re.sub(r'(<span class="count-badge" id="badge-hecho">).*?(</span>)', rf'\g<1>{stats["reviews"]}\g<2>', next_html, count=1)
+        next_html = re.sub(
+            r'<!-- STATIC_HOME_START -->.*?<!-- STATIC_HOME_END -->',
+            static_home_fallback(stats, rooms or []),
+            next_html,
+            count=1,
+            flags=re.DOTALL,
+        )
         index_path.write_text(next_html, encoding="utf-8", newline="\n")
 
 
@@ -2461,7 +2642,7 @@ def main():
 
     stats_json = site_stats_json(rooms, sala_rows, location_specs)
     if args.update_main_stats:
-        update_inline_site_stats(stats_json)
+        update_inline_site_stats(stats_json, rooms)
     sitemap_names = [
         "sitemap-core.xml",
         "sitemap-reviews.xml",

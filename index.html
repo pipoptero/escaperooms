@@ -93,12 +93,12 @@
   @keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.4)}100%{transform:scale(1)}}
 
   /* ── LOADING / ERROR ── */
-  #loading{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;gap:20px;}
+  #loading{display:none;}
   .spinner{width:40px;height:40px;border:2px solid var(--border);border-top-color:var(--amber);border-radius:50%;animation:spin 0.8s linear infinite;}
   .loading-text{font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--text3);letter-spacing:.2em;text-transform:uppercase;}
-  #error-screen{display:none;position:fixed;inset:0;background:var(--bg);flex-direction:column;align-items:center;justify-content:center;z-index:100;gap:16px;padding:32px;}
+  #error-screen{display:none;position:relative;z-index:2;flex-direction:column;align-items:center;justify-content:center;gap:8px;margin:12px auto;padding:14px 18px;width:min(920px,calc(100% - 24px));border:1px solid rgba(125,187,63,.25);background:rgba(125,187,63,.045);}
   .error-icon{font-size:3rem;opacity:.5;}
-  .error-title{font-family:'Cinzel',serif;color:var(--red);font-size:1.2rem;letter-spacing:.1em;}
+  .error-title{font-family:'Cinzel',serif;color:var(--amber);font-size:1rem;letter-spacing:.08em;}
   .error-msg{font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--text3);letter-spacing:.08em;text-align:center;line-height:1.8;max-width:480px;white-space:pre-line;}
 
   /* ── SETUP BANNER ── */
@@ -106,7 +106,8 @@
   #setup-banner a{color:var(--amber);text-decoration:underline;}
 
   /* ── HEADER ── */
-  #app{display:none;position:relative;z-index:1;}
+  #app{display:block;position:relative;z-index:1;}
+  button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--amber);outline-offset:3px;}
   header{
     padding:18px 32px 16px;text-align:center;position:relative;overflow:hidden;
     background:
@@ -749,6 +750,14 @@
   .detail-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px;}
   .detail-meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:12px;}
   .detail-meta .meta-item{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.05);padding:8px 10px;}
+  .detail-score-comparison{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:10px 0 14px;}
+  .detail-score-panel{min-width:0;border:1px solid rgba(76,201,240,.25);background:rgba(76,201,240,.035);padding:11px 12px;}
+  .detail-score-panel.vault{border-color:rgba(125,187,63,.38);background:rgba(125,187,63,.06);}
+  .detail-score-label{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;}
+  .detail-score-value{display:block;margin:4px 0 2px;color:var(--text);font-family:'Cinzel',serif;font-size:1.3rem;}
+  .detail-score-panel.vault .detail-score-value{color:var(--amber);}
+  .detail-score-context{color:var(--text3);font-size:.76rem;line-height:1.35;}
+  .ranking-method{margin:9px 0 12px;}
   .detail-section-title{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--text3);letter-spacing:.13em;text-transform:uppercase;margin:12px 0 7px;display:flex;align-items:center;gap:10px;}
   .detail-section-title::after{content:'';height:1px;background:var(--border);flex:1;}
   .detail-desc{font-size:.95rem;line-height:1.55;color:var(--text2);white-space:pre-line;}
@@ -1385,6 +1394,7 @@
     .detail-title{font-size:1.35rem;}
     .detail-tags{margin-bottom:10px;}
     .detail-meta{grid-template-columns:1fr 1fr;}
+    .detail-score-comparison{grid-template-columns:1fr;}
     .detail-meta .meta-item{padding:7px 8px;}
     .detail-awards{grid-template-columns:1fr;gap:7px;}
     .detail-award{grid-template-columns:38px minmax(0,1fr);padding:8px;gap:9px;}
@@ -1900,7 +1910,7 @@
 
 <div id="error-screen">
   <div class="error-icon">🔓</div>
-  <div class="error-title">Error al cargar datos</div>
+  <div class="error-title">Modo de consulta disponible</div>
   <div class="error-msg" id="error-msg"></div>
 </div>
 
@@ -1952,10 +1962,10 @@
   <div style="max-width:1400px;margin:0 auto;padding:0 32px;">
     <div class="tabs-container" id="main-tabs">
       <button class="tab active" id="tab-vault" onclick="switchTab('thevault')"><img class="tab-icon" src="images/navigation/progreso.png" alt="">The Vault</button>
-      <button class="tab" id="tab-cat" onclick="switchTab('catalogo')"><img class="tab-icon" src="images/navigation/catalogo.png" alt="">Catálogo <span class="count-badge" id="badge-cat">0</span></button>
+      <button class="tab" id="tab-cat" onclick="switchTab('catalogo')"><img class="tab-icon" src="images/navigation/catalogo.png" alt="">Catálogo <span class="count-badge" id="badge-cat">1735</span></button>
       <button class="tab auth-tab" id="tab-pend" onclick="switchTab('pendientes')" style="display:none"><img class="tab-icon" src="images/navigation/pendientes.png" alt="">Pendientes <span class="count-badge" id="badge-pend">0</span></button>
       <button class="tab auth-tab" id="tab-mine" onclick="switchTab('mis-hechos')" style="display:none"><img class="tab-icon" src="images/navigation/hechos.png" alt="">Hechos <span class="count-badge" id="badge-mine">0</span></button>
-      <button class="tab" id="tab-hecho" onclick="switchTab('hechos')"><img class="tab-icon" src="images/navigation/reviews-tab.png" alt="">Reviews <span class="count-badge" id="badge-hecho">0</span></button>
+      <button class="tab" id="tab-hecho" onclick="switchTab('hechos')"><img class="tab-icon" src="images/navigation/reviews-tab.png" alt="">Reviews <span class="count-badge" id="badge-hecho">39</span></button>
       <button class="tab" id="tab-rank" onclick="switchTab('ranking')"><img class="tab-icon" src="images/navigation/ranking.png" alt="">Ranking</button>
     </div>
   </div>
@@ -1975,7 +1985,33 @@
 
     <!-- THE VAULT -->
     <div id="panel-thevault" class="panel vault-home">
-      <div id="vault-home-content" class="vault-home-loading">Preparando The Vault...</div>
+      <div id="vault-home-content" class="vault-home-guest-shell"><!-- STATIC_HOME_START -->
+      <div class="vault-guide-hero" data-static-home-fallback>
+        <div>
+          <div class="vault-guide-kicker">The Vault Escape</div>
+          <div class="vault-guide-title">Encuentra tu próximo escape.</div>
+          <p class="vault-guide-copy">Descubre salas, compara rankings y construye tu historial escapista.</p>
+          <div class="vault-guide-proof"><span>Encuentra</span><span>Registra</span><span>Comparte</span></div>
+          <div class="vault-guide-actions">
+            <a class="vault-guide-action" href="escape-rooms/" onclick="if(window.switchTab){event.preventDefault();switchTab('catalogo')}">Explorar salas</a>
+            <a class="vault-guide-action secondary" href="ranking/" onclick="if(window.switchTab){event.preventDefault();switchTab('ranking')}">Ver ranking</a>
+            <a class="vault-guide-action secondary" href="#perfil-escapista" onclick="if(window.openEscapistProfileCta){event.preventDefault();openEscapistProfileCta()}">Mi perfil escapista</a>
+          </div>
+        </div>
+        <div class="vault-guide-stats" aria-label="Datos actuales de The Vault">
+          <div class="vault-guide-stat"><strong id="vault-stat-catalog">1735</strong><span>salas catalogadas</span></div>
+          <div class="vault-guide-stat"><strong id="vault-stat-reviews">39</strong><span>reviews The Vault</span></div>
+          <div class="vault-guide-stat"><strong id="vault-stat-ranking">948</strong><span>salas con ranking</span></div>
+          <div class="vault-guide-stat"><strong id="vault-stat-locations">44</strong><span>zonas para explorar</span></div>
+        </div>
+      </div>
+      <section class="vault-community-band" id="perfil-escapista">
+        <div><div class="vault-guide-kicker">Perfil escapista</div><div class="vault-community-title">Cada partida construye tu historia.</div><p class="vault-community-copy">Reúne escapes hechos y pendientes, XP, niveles, logros, mapa, rutas, grupos y tu colección de avatares, marcos, títulos y auras.</p><div class="vault-guide-actions"><a class="vault-guide-action" href="#perfil-escapista" onclick="if(window.openEscapistProfileCta){event.preventDefault();openEscapistProfileCta()}">Ver mi perfil escapista</a></div></div>
+        <div class="vault-mini-list"><div class="vault-mini-item"><span>Historial y pendientes</span><strong>✓</strong></div><div class="vault-mini-item"><span>Mapa, XP y logros</span><strong>✓</strong></div><div class="vault-mini-item"><span>Grupos y rutas</span><strong>✓</strong></div><div class="vault-mini-item"><span>Avatares y cosméticos</span><strong>✓</strong></div></div>
+      </section>
+      <div class="vault-section-head"><div class="vault-section-title">Últimas reviews</div><div class="vault-section-note">Contenido disponible sin iniciar sesión</div></div>
+      <div class="vault-latest-grid"><a class="vault-latest-card" href="reviews/nunca-jamas/"><span class="vault-latest-img"><span>N</span></span><span><span class="vault-latest-kicker">Key Play</span><strong class="vault-latest-name">Nunca Jamás</strong><span class="vault-latest-meta">Granollers - Barcelona</span></span></a><a class="vault-latest-card" href="reviews/jurasico/"><span class="vault-latest-img"><span>J</span></span><span><span class="vault-latest-kicker">Golden Pop</span><strong class="vault-latest-name">Jurásico</strong><span class="vault-latest-meta">Barcelona - Barcelona</span></span></a><a class="vault-latest-card" href="reviews/forbidden-room/"><span class="vault-latest-img"><span>F</span></span><span><span class="vault-latest-kicker">Shallow Grave</span><strong class="vault-latest-name">Forbidden Room</strong><span class="vault-latest-meta">Terrassa - Barcelona</span></span></a></div>
+      <!-- STATIC_HOME_END --></div>
     </div>
 
     <!-- PENDIENTES -->
@@ -2052,7 +2088,10 @@
         <span class="filter-label">Ranking global:</span>
         <span class="tag tag-feature">Media de fuentes externas y reviews The Vault</span>
       </div>
-      <div class="result-info">Ranking orientativo con fuentes ponderadas, comunidad, reviews y premios. <a href="condiciones/#criterio-ranking">Ver criterio</a></div>
+      <details class="progress-details ranking-method">
+        <summary>¿Cómo se calcula?</summary>
+        <div class="progress-details-body">La nota global combina las fuentes disponibles, reviews The Vault, votos conocidos y un peso moderado de premios o nominaciones. Las fuentes no pesan necesariamente igual y las notas aisladas se moderan. <a href="condiciones/#criterio-ranking">Consulta el criterio completo</a>.</div>
+      </details>
       <div class="sort-row">
         <span class="filter-label">Tipo:</span>
         <button class="sort-btn active" id="rank-terror-all" onclick="setRankTerrorFilter('all')">Todos</button>
@@ -2486,14 +2525,14 @@ let CATALOG_LOAD_PROMISE = null;
 let OFFICIAL_VIDEOS_LOADED = false;
 let OFFICIAL_VIDEOS_LOAD_PROMISE = null;
 let ROOM_RELATIONSHIPS_LOADED = false;
-const FALLBACK_SITE_STATS = {"catalog":1728,"reviews":39,"ranking":948,"locations":44,"updated":"2026-09-10"};
+const FALLBACK_SITE_STATS = {"catalog":1735,"reviews":39,"ranking":948,"locations":44,"updated":"2026-09-13"};
 let PUBLIC_SITE_STATS = { ...FALLBACK_SITE_STATS };
 let STATIC_ENHANCEMENTS_LOADED = false;
 let STATIC_ENHANCEMENTS_PROMISE = null;
 let PROFILE_MAP_DATA_PROMISE = null;
 let PHOTO_LIGHTBOX_GALLERIES = {};
 const LIVE_REFRESH_MIN_INTERVAL = 5 * 60 * 1000;
-const STATIC_ASSET_VERSION = '20260910-firebase-groups-v2';
+const STATIC_ASSET_VERSION = '20260913-ux-sprint-v45';
 
 function invalidateReviewRoomsCache() {
   REVIEW_ROOMS_CACHE = null;
@@ -7687,8 +7726,7 @@ async function loadData() {
     const es = document.getElementById('error-screen');
     es.style.display = 'flex';
     document.getElementById('error-msg').textContent =
-      'No se pudo cargar data.json.\n' + err.message +
-      '\n\nAsegúrate de que el archivo existe y la GitHub Action se ejecutó correctamente.';
+      'La parte interactiva no está disponible en este momento. Puedes seguir explorando las páginas estáticas, reviews y ranking.\n' + err.message;
   }
 }
 
@@ -7850,6 +7888,7 @@ function renderVaultGuide() {
   const model = progressModel();
   root.className = 'vault-home-shell';
   root.innerHTML = `${vaultHomeIdentityHtml(model)}
+    ${vaultHomeActionsHtml(model)}
     <div class="vault-home-grid">
       ${vaultHomeMapHtml(model)}
       ${vaultHomeProgressHtml(model)}
@@ -7868,6 +7907,15 @@ function renderVaultGuide() {
       if (AUTH_USER && ACTIVE_TAB === 'thevault') renderVaultGuide();
     }).catch(error => console.warn('No se pudo cargar el mapa de inicio:', error.message));
   });
+}
+
+function openEscapistProfileCta() {
+  if (AUTH_USER) {
+    SETTINGS_TAB = 'profile';
+    openProfile('', false);
+    return;
+  }
+  signInGoogle();
 }
 
 function vaultHomeIdentityHtml(model) {
@@ -8072,22 +8120,20 @@ function vaultGuestOverviewHtml() {
   return `<div class="vault-guide-hero">
     <div>
       <div class="vault-guide-kicker">The Vault Escape</div>
-      <div class="vault-guide-title">Un archivo vivo para descubrir, comparar y recordar escape rooms.</div>
-      <p class="vault-guide-copy">Catálogo nacional, reviews propias, ranking ponderado, premios y herramientas personales para guardar pendientes, hechos, favoritos y grupos escapistas.</p>
-      <div class="vault-guide-proof"><span>Reviews con criterio propio</span><span>Ranking con varias fuentes</span><span>Grupos privados</span></div>
+      <div class="vault-guide-title">Encuentra tu próximo escape.</div>
+      <p class="vault-guide-copy">Descubre salas, compara rankings y construye tu historial escapista.</p>
+      <div class="vault-guide-proof"><span>Encuentra</span><span>Registra</span><span>Comparte</span></div>
       <div class="vault-guide-actions">
-        <button class="vault-guide-action" type="button" onclick="switchTab('catalogo')">Explorar catálogo</button>
-        <button class="vault-guide-action secondary" type="button" onclick="switchTab('hechos')">Leer reviews</button>
-        <a class="vault-guide-action secondary" href="ranking-escape-rooms/">Ranking escape rooms</a>
-        <a class="vault-guide-action secondary" href="mejores-escape-rooms/">Mejores salas</a>
-        <button class="vault-guide-action secondary" type="button" onclick="signInGoogle()">Crear cuenta</button>
+        <button class="vault-guide-action" type="button" onclick="switchTab('catalogo')">Explorar salas</button>
+        <button class="vault-guide-action secondary" type="button" onclick="switchTab('ranking')">Ver ranking</button>
+        <button class="vault-guide-action secondary" type="button" onclick="openEscapistProfileCta()">Mi perfil escapista</button>
       </div>
     </div>
     <div class="vault-guide-stats">
       <div class="vault-guide-stat"><strong>${publicCatalogCount()}</strong><span>salas en catálogo</span></div>
       <div class="vault-guide-stat"><strong>${publicReviewCount()}</strong><span>reviews publicadas</span></div>
       <div class="vault-guide-stat"><strong>${publicRankingCount()}</strong><span>salas con ranking</span></div>
-      <div class="vault-guide-stat"><strong>-</strong><span>grupos escapistas</span></div>
+      <div class="vault-guide-stat"><strong>${Number(PUBLIC_SITE_STATS.locations) || '—'}</strong><span>zonas para explorar</span></div>
     </div>
   </div>
   <div class="vault-section-head"><div class="vault-section-title">Últimas reviews</div><div class="vault-section-note">Listas para abrir y compartir</div></div>
@@ -8101,8 +8147,8 @@ function vaultGuestOverviewHtml() {
     <div class="vault-guide-card"><div class="vault-guide-icon">06</div><h2>Recomendador</h2><p>El asistente flotante ayuda a encontrar salas por zona, jugadores, estilo, terror o premios cuando no sabes por dónde empezar.</p></div>
   </div>
   <div class="vault-community-band">
-    <div><div class="vault-guide-kicker">Progreso escapista</div><div class="vault-community-title">Juega, comparte y desbloquea tu identidad en The Vault.</div><p class="vault-community-copy">Las salas hechas y las reseñas conceden experiencia. Desbloquea avatares, marcos, títulos y trofeos de rutas; destaca tus tres favoritos en la vitrina y comparte tu tarjeta escapista en redes.</p><div class="vault-guide-actions"><button class="vault-guide-action" type="button" onclick="signInGoogle()">Crear mi perfil escapista</button></div></div>
-    <div class="vault-mini-list"><div class="vault-mini-item"><span>Niveles escapistas</span><strong>6</strong></div><div class="vault-mini-item"><span>Logros disponibles</span><strong>18</strong></div><div class="vault-mini-item"><span>Rutas escapistas</span><strong>10</strong></div><div class="vault-mini-item"><span>Avatares y cosméticos</span><strong>+</strong></div></div>
+    <div><div class="vault-guide-kicker">Perfil escapista</div><div class="vault-community-title">Cada partida construye tu historia.</div><p class="vault-community-copy">Reúne escapes hechos y pendientes, XP, niveles, logros, mapa, rutas, grupos y tu colección de avatares, marcos, títulos y auras.</p><div class="vault-guide-actions"><button class="vault-guide-action" type="button" onclick="openEscapistProfileCta()">Ver mi perfil escapista</button></div></div>
+    <div class="vault-mini-list"><div class="vault-mini-item"><span>Historial y pendientes</span><strong>✓</strong></div><div class="vault-mini-item"><span>Mapa, XP y logros</span><strong>✓</strong></div><div class="vault-mini-item"><span>Grupos y rutas</span><strong>✓</strong></div><div class="vault-mini-item"><span>Avatares y cosméticos</span><strong>✓</strong></div></div>
   </div>
   <div class="vault-community-band">
     <div><div class="vault-community-title">Pensado para escapistas que juegan solos, en pareja o en varios grupos.</div><p class="vault-community-copy">Puedes tener tu lista personal y, a la vez, separar lo que haces con cada grupo. Así The Vault no solo guarda salas: guarda con quién las viviste y qué queda por jugar.</p></div>
@@ -9552,6 +9598,7 @@ function openDetail(kind, key, options = {}) {
     <h2 class="detail-title" id="detail-title">${escapeHtml(room.nombre || 'Escape room')}</h2>
     <div class="detail-company">${escapeHtml(room.empresa || '')}</div>
     <div class="detail-tags">${detailTags(room, kind)}</div>
+    ${detailScoreComparisonHtml(room)}
     ${isReview ? detailSharePanelHtml(room, kind, key) : ''}
     <div class="detail-meta">
       ${!isReview ? metaItem('Rating', rating ? `★ ${rating}` : '') : ''}
@@ -10109,7 +10156,7 @@ function globalSourcesDetailHtml(room) {
   const { sources } = globalRatingForRoom(room);
   if (!sources.length) return '';
   return `
-    <div class="detail-section-title">Puntuación global</div>
+    <div class="detail-section-title">Fuentes del índice global</div>
     <div class="detail-awards">
       ${sources.map(source => {
         const votes = source.votes ? ` · ${source.votes} votos` : '';
@@ -10127,11 +10174,25 @@ function globalSourcesDetailHtml(room) {
 
 function reviewScoreMeta(room) {
   return [
-    globalScoreMeta(room),
     metaItem('Escapistas', room.rating ? `★ ${room.rating}` : ''),
-    metaItem('Grupo', room.valoracion ? `★ ${room.valoracion}/10` : ''),
     communityScoreMeta(room)
   ].join('');
+}
+
+function detailScoreComparisonHtml(room) {
+  const global = globalRatingForRoom(room);
+  const vault = reviewOnlyScore(room);
+  if (!global.score && !vault) return '';
+  const knownVotes = global.sources.reduce((sum, source) => sum + (parseInt(source.votes, 10) || 0), 0);
+  const globalContext = [
+    global.sourceCount ? `${global.sourceCount} fuente${global.sourceCount === 1 ? '' : 's'}` : '',
+    knownVotes ? `${knownVotes} votos conocidos` : '',
+    global.awardCount ? `${global.awardCount} premio${global.awardCount === 1 ? '' : 's'} o nominaciones` : ''
+  ].filter(Boolean).join(' · ');
+  return `<section class="detail-score-comparison" aria-label="Comparación de puntuaciones">
+    ${global.score ? `<div class="detail-score-panel global"><span class="detail-score-label">Índice / nota global</span><strong class="detail-score-value">${global.score.toFixed(1)}/10</strong><span class="detail-score-context">${escapeHtml(globalContext || 'Ranking agregado')}</span></div>` : ''}
+    ${vault ? `<div class="detail-score-panel vault"><span class="detail-score-label">The Vault Score</span><strong class="detail-score-value">${vault.toFixed(1)}/10</strong><span class="detail-score-context">Valoración editorial de la review The Vault</span></div>` : ''}
+  </section>`;
 }
 
 // Ranking global: fuentes externas + reviews The Vault.

@@ -42,6 +42,24 @@ class SiteQualityHelpersTest(unittest.TestCase):
         report = MODULE.validate()
         self.assertEqual(report["summary"]["editorial_alias_inconsistencies"], 0)
 
+    def test_editorial_cross_source_mismatch_shows_catalog_and_review_values(self):
+        catalog = [{
+            "id": "room", "nombre": "Sala", "empresa": "Empresa actual", "ciudad": "Madrid", "duracion": 90,
+        }]
+        reviews = {"room": {"roomKey": "room", "review": {
+            "nombre": "Sala", "empresa": "Empresa histórica", "ciudad": "Madrid", "duracion": 60,
+        }}}
+        result = MODULE.editorial_cross_source_mismatches(catalog, reviews, {})
+        self.assertEqual({item["field"] for item in result}, {"company", "duration"})
+        self.assertEqual(result[0]["catalog_id"], "room")
+        self.assertIn("catalog", result[0])
+        self.assertIn("review", result[0])
+
+    def test_editorial_cross_source_ignores_missing_structured_fields(self):
+        catalog = [{"id": "room", "nombre": "Sala", "empresa": "Empresa", "duracion": 90}]
+        reviews = {"room": {"roomKey": "room", "review": {"nombre": "Sala", "descripcion": "Dice 60 minutos"}}}
+        self.assertEqual(MODULE.editorial_cross_source_mismatches(catalog, reviews, {}), [])
+
 
 if __name__ == "__main__":
     unittest.main()
