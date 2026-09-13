@@ -420,6 +420,70 @@ class PendingModalTest(unittest.TestCase):
         expect(comparison.get_by_text('The Vault Score')).to_be_visible()
         self.assertIn('fuente', comparison.text_content())
 
+    def test_route_planner_personal_and_group_pending_stay_separate(self):
+        page = self.page_for()
+        page.evaluate("openRoutePlanner('g2')")
+        page.wait_for_selector('#route-scope')
+        self.assertEqual(page.locator('#route-scope').input_value(), 'g2')
+        self.assertEqual(page.locator('#route-scope option').count(), 3)
+        expect(page.locator('#route-priority option[value="pending"]')).to_have_count(1)
+        expect(page.locator('#route-priority option[value="unplayed"]')).to_have_text('Sin registrar como hecha en el grupo')
+        self.assertEqual(page.locator('#route-players').input_value(), '2')
+        page.locator('#route-zone-level').select_option('city')
+        page.locator('#route-zone-value').select_option(label='Madrid')
+        page.locator('#route-count').select_option('1')
+        page.get_by_role('button', name='Generar rutas').click()
+        expect(page.locator('.route-room-card').first).to_be_visible()
+        planner_text = page.locator('#route-planner-content').inner_text()
+        self.assertIn('No consta como hecha por el grupo', planner_text)
+        self.assertNotIn('Nadie del grupo', planner_text)
+        self.assertNotRegex(planner_text, r'\b\d+ de \d+.*hech')
+        personal_before = copy.deepcopy(self.db['users']['a']['roomStates'])
+        page.locator('.route-room-card').first.get_by_role('button', name='Marcar pendiente').click()
+        page.wait_for_function("Object.keys(GROUP_PENDING_ROOMS.g2 || {}).length > 0")
+        self.assertEqual(self.db['users']['a']['roomStates'], personal_before)
+        self.assertTrue(self.db['groupPendingRooms']['g2'])
+
+    def test_route_planner_without_groups_uses_personal_scope(self):
+        self.db['userGroups']['a'] = {}
+        page = self.page_for()
+        page.evaluate("openRoutePlanner()")
+        page.wait_for_selector('#route-scope')
+        self.assertEqual(page.locator('#route-scope option').count(), 1)
+        self.assertEqual(page.locator('#route-scope').input_value(), '')
+        page.locator('#route-zone-value').select_option(label='Madrid')
+        page.locator('#route-count').select_option('1')
+        page.get_by_role('button', name='Generar rutas').click()
+        expect(page.locator('.route-room-card').first).to_be_visible()
+        page.evaluate("""() => {
+            USER_GROUPS = {g1: {name: 'Grupo único', status: 'active'}};
+            const config = {...ROUTE_PLANNER_STATE, scope: 'g1'};
+            document.getElementById('route-planner-content').innerHTML = routePlannerFormHtml(config);
+        }""")
+        self.assertEqual(page.locator('#route-scope option').count(), 2)
+
+    def test_route_planner_mobile_sizes_close_focus_and_no_overflow(self):
+        page = self.page_for()
+        for width, height in ((375, 812), (390, 844), (430, 900), (768, 1024), (1280, 800)):
+            with self.subTest(viewport=f'{width}x{height}'):
+                page.set_viewport_size({'width': width, 'height': height})
+                page.evaluate("openRoutePlanner('g1')")
+                page.wait_for_selector('#route-scope')
+                page.locator('#route-zone-value').select_option(label='Madrid')
+                page.locator('#route-count').select_option('5')
+                page.get_by_role('button', name='Generar rutas').click()
+                expect(page.locator('.route-proposal').first).to_be_visible()
+                dimensions = page.locator('.route-planner-dialog').evaluate("el => ({scrollWidth:el.scrollWidth,clientWidth:el.clientWidth})")
+                self.assertLessEqual(dimensions['scrollWidth'], dimensions['clientWidth'] + 1)
+                close = page.locator('#route-planner-modal .profile-close')
+                self.assertTrue(close.is_visible())
+                if width == 390:
+                    close.focus()
+                    page.keyboard.press('Shift+Tab')
+                    self.assertTrue(page.evaluate("document.querySelector('.route-planner-dialog').contains(document.activeElement)"))
+                page.keyboard.press('Escape')
+                expect(page.locator('#route-planner-modal')).to_have_attribute('aria-hidden', 'true')
+
     def test_home_reviews_and_controls_have_no_horizontal_overflow(self):
         page = self.context.new_page()
         for path in ('/', '/reviews/'):

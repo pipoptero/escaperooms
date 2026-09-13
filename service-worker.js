@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'the-vault-v45';
+const CACHE_VERSION = 'the-vault-v46';
 const APP_SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -6,6 +6,7 @@ const APP_SHELL = [
   './',
   './index.html',
   './room-state.js',
+  './route-planner.js',
   './site.webmanifest',
   './images/brand/favicon-round-32.png',
   './images/brand/apple-touch-icon-round.png',

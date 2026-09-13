@@ -21,6 +21,8 @@ jobs:
           python -c "import pathlib,re; s=pathlib.Path('index.html').read_text(encoding='utf-8'); m=re.search(r'<script>([\\s\\S]*?)</script>\\s*</body>',s); assert m; pathlib.Path('/tmp/index.js').write_text(m.group(1),encoding='utf-8')"
           node --check /tmp/index.js
           node --check room-state.js
+          node --check route-planner.js
+          node --test tests/route_planner.test.cjs
           node --check service-worker.js
 
   browser:
