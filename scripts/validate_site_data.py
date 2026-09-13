@@ -68,6 +68,31 @@ def resolve_alias(value, aliases):
     return current
 
 
+def canonical_metadata_mismatches(catalog, room_metadata):
+    """Compare canonical metadata with its unique catalog room; historical aliases are ignored."""
+    catalog_by_key = defaultdict(list)
+    for room in catalog:
+        catalog_by_key[slug(room.get("id") or room.get("nombre"))].append(room)
+    mismatches = []
+    for key, metadata in (room_metadata or {}).items():
+        matches = catalog_by_key.get(slug(key), [])
+        if len(matches) != 1 or not isinstance(metadata, dict):
+            continue
+        room = matches[0]
+        for canonical_field, catalog_field in (("canonical_name", "nombre"), ("canonical_company", "empresa")):
+            canonical_value = str(metadata.get(canonical_field) or "").strip()
+            catalog_value = str(room.get(catalog_field) or "").strip()
+            if canonical_value and canonical_value != catalog_value:
+                mismatches.append({
+                    "key": slug(key),
+                    "catalog_id": room.get("id"),
+                    "field": canonical_field,
+                    "canonical": canonical_value,
+                    "catalog": catalog_value,
+                })
+    return mismatches
+
+
 def validate():
     errors, warnings = [], []
     catalog_payload = load_json("catalog.json", errors)
@@ -122,6 +147,13 @@ def validate():
     cycles = detect_alias_cycles(aliases)
     if cycles:
         errors.append(f"Alias: {len(cycles)} ciclos detectados")
+
+    alias_metadata_mismatches = canonical_metadata_mismatches(catalog, aliases_payload.get("rooms") or {})
+    for mismatch in alias_metadata_mismatches:
+        errors.append(
+            f"Alias editorial: {mismatch['key']}.{mismatch['field']} "
+            f"canonical «{mismatch['canonical']}» frente a catálogo «{mismatch['catalog']}»"
+        )
 
     catalog_tokens = {slug(value) for value in ids}
     catalog_tokens.update(slug(room.get("nombre")) for room in catalog)
@@ -220,6 +252,7 @@ def validate():
             "review_media": len(review_media),
             "errors": len(errors),
             "warnings": len(warnings),
+            "editorial_alias_inconsistencies": len(alias_metadata_mismatches),
         },
         "sitemaps": sitemap_counts,
         "errors": errors,

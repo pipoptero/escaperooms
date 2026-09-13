@@ -62,7 +62,7 @@
   },
   "rooms": {
     "seccion_esoterica_exorcista": {
-      "canonical_name": "Sección Esotérica: Exorcista",
+      "canonical_name": "Sección Esoterismo: Exorcista",
       "canonical_company": "Terror Stories",
       "aliases": [
         "Exorcista",
@@ -85,7 +85,7 @@
     },
     "la_historia_de_charlotte": {
       "canonical_name": "La Historia de Charlotte",
-      "canonical_company": "Whitechapel",
+      "canonical_company": "Room Whitechapel",
       "aliases": [
         "WHITECHAPEL",
         "Room Whitechapel",

@@ -21,6 +21,27 @@ class SiteQualityHelpersTest(unittest.TestCase):
         self.assertTrue(MODULE.local_asset_exists("catalog.json"))
         self.assertFalse(MODULE.local_asset_exists("images/no-existe.png"))
 
+    def test_canonical_metadata_mismatches_show_both_values_and_ignore_historical_aliases(self):
+        catalog = [{"id": "room", "nombre": "Current name", "empresa": "Current company"}]
+        metadata = {
+            "room": {
+                "canonical_name": "Old name",
+                "canonical_company": "Current company",
+                "aliases": ["Old name", "Historical company"],
+            }
+        }
+        self.assertEqual(MODULE.canonical_metadata_mismatches(catalog, metadata), [{
+            "key": "room",
+            "catalog_id": "room",
+            "field": "canonical_name",
+            "canonical": "Old name",
+            "catalog": "Current name",
+        }])
+
+    def test_current_alias_metadata_matches_catalog(self):
+        report = MODULE.validate()
+        self.assertEqual(report["summary"]["editorial_alias_inconsistencies"], 0)
+
 
 if __name__ == "__main__":
     unittest.main()
