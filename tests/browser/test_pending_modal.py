@@ -55,7 +55,7 @@ class PendingModalTest(unittest.TestCase):
             }}, 'b': {'roomStates': {}}},
             'userGroups': {uid: {'g1': {'name': 'Grupo Uno'}, 'g2': {'name': 'Grupo Dos'}} for uid in ['a', 'b']},
             'groupMembers': {gid: {uid: {'role': 'member', 'status': 'active'} for uid in ['a', 'b']} for gid in ['g1', 'g2']},
-            'groupRooms': {}, 'groupPendingRooms': {}
+            'groupRooms': {}, 'groupPendingRooms': {}, 'userRoutes': {'a': {}, 'b': {}}, 'groupRoutes': {}
         }
         self.patches = []
         self.puts = []
@@ -143,7 +143,7 @@ class PendingModalTest(unittest.TestCase):
             CATALOGO = (await (await fetch('catalog.json')).json()).catalogo;
             CATALOG_LOADED = true;
             await ensureStaticEnhancementsLoaded();
-            await loadRoomAliases(); await loadUserRoomStates(true); await loadUserGroups(true);
+            await loadRoomAliases(); await loadUserRoomStates(true); await loadUserGroups(true); await loadSavedRoutes(true);
             renderAuthStatus(); switchTab('catalogo');
         }""", uid)
         return page
@@ -284,7 +284,7 @@ class PendingModalTest(unittest.TestCase):
             self.assertFalse(self.db.get('groupMembers', {}).get(group_id))
             self.assertNotIn(group_id, self.db.get('userGroups', {}).get('a', {}))
 
-    def test_deleting_group_removes_metadata_before_auxiliary_data(self):
+    def test_v47_deletes_group_routes_before_metadata_and_auxiliary_data(self):
         self.db['groups'] = {'owned': {'name': 'Propio', 'ownerUid': 'a'}}
         self.db['userGroups']['a']['owned'] = {'name': 'Propio', 'role': 'owner', 'status': 'active'}
         self.db['userGroups']['b']['owned'] = {'name': 'Propio', 'role': 'member', 'status': 'active'}
@@ -294,6 +294,7 @@ class PendingModalTest(unittest.TestCase):
         }
         self.db['groupRooms']['owned'] = {'olimpo': {'roomName': 'Olimpo'}}
         self.db['groupPendingRooms']['owned'] = {'katrina': {'roomName': 'Katrina'}}
+        self.db['groupRoutes']['owned'] = {'r1': {'name': 'Ruta', 'scope': 'group', 'groupId': 'owned', 'ownerUid': 'a', 'roomIds': ['olimpo']}}
         page = self.page_for()
         self.fail_patch_once = True
         page.on('dialog', lambda dialog: dialog.accept())
@@ -303,10 +304,28 @@ class PendingModalTest(unittest.TestCase):
         self.assertFalse(self.db['groupMembers'].get('owned'))
         self.assertFalse(self.db['groupRooms'].get('owned'))
         self.assertFalse(self.db['groupPendingRooms'].get('owned'))
+        self.assertFalse(self.db['groupRoutes'].get('owned'))
         self.assertNotIn('owned', self.db['userGroups']['a'])
         self.assertNotIn('owned', self.db['userGroups']['b'])
         self.assertIn('groups/owned', self.deletes)
-        self.assertEqual(len(self.patches), 1)
+        self.assertEqual(len(self.patches), 2)
+        self.assertEqual(self.patches[0], {'groupRoutes/owned/r1': None})
+
+    def test_v47_restores_group_routes_if_metadata_deletion_fails(self):
+        route = {'name': 'Ruta', 'description': '', 'scope': 'group', 'groupId': 'owned', 'ownerUid': 'a', 'roomIds': ['olimpo'], 'createdAt': 100, 'updatedAt': 100, 'status': 'active', 'schemaVersion': 1}
+        self.db['groups'] = {'owned': {'name': 'Propio', 'ownerUid': 'a'}}
+        self.db['userGroups']['a']['owned'] = {'name': 'Propio', 'role': 'owner', 'status': 'active'}
+        self.db['groupMembers']['owned'] = {'a': {'role': 'owner', 'status': 'active'}}
+        self.db['groupRoutes']['owned'] = {'r1': copy.deepcopy(route)}
+        self.fail_delete_once_prefixes = {'groups/'}
+        page = self.page_for()
+        page.on('dialog', lambda dialog: dialog.accept())
+        page.evaluate("deleteEscapistGroup('owned')")
+        page.wait_for_function("document.getElementById('profile-status')?.textContent.includes('No se pudo eliminar')")
+        self.assertIn('owned', self.db['groups'])
+        self.assertEqual(self.db['groupRoutes']['owned']['r1'], route)
+        self.assertEqual(self.patches[0], {'groupRoutes/owned/r1': None})
+        self.assertEqual(self.patches[1], {'groupRoutes/owned/r1': route})
 
     def test_group_deletion_falls_back_safely_with_current_production_rules(self):
         self.legacy_group_index_rules = True
@@ -473,7 +492,7 @@ class PendingModalTest(unittest.TestCase):
                 page.locator('#route-count').select_option('5')
                 page.get_by_role('button', name='Generar rutas').click()
                 expect(page.locator('.route-proposal').first).to_be_visible()
-                dimensions = page.locator('.route-planner-dialog').evaluate("el => ({scrollWidth:el.scrollWidth,clientWidth:el.clientWidth})")
+                dimensions = page.locator('#route-planner-modal .route-planner-dialog').evaluate("el => ({scrollWidth:el.scrollWidth,clientWidth:el.clientWidth})")
                 self.assertLessEqual(dimensions['scrollWidth'], dimensions['clientWidth'] + 1)
                 close = page.locator('#route-planner-modal .profile-close')
                 self.assertTrue(close.is_visible())
@@ -483,6 +502,134 @@ class PendingModalTest(unittest.TestCase):
                     self.assertTrue(page.evaluate("document.querySelector('.route-planner-dialog').contains(document.activeElement)"))
                 page.keyboard.press('Escape')
                 expect(page.locator('#route-planner-modal')).to_have_attribute('aria-hidden', 'true')
+
+    def test_save_personal_route_from_planner_and_derive_progress(self):
+        page = self.page_for()
+        page.evaluate("SETTINGS_TAB='profile';const m=document.getElementById('profile-modal');m.classList.add('open');m.setAttribute('aria-hidden','false');renderProfile()")
+        expect(page.locator('.profile-section', has_text='Mis rutas')).to_contain_text('Todavía no tienes rutas guardadas')
+        page.evaluate("closeProfile()")
+        page.evaluate("openRoutePlanner()")
+        page.locator('#route-zone-value').select_option(label='Madrid')
+        page.locator('#route-count').select_option('3')
+        page.get_by_role('button', name='Generar rutas').click()
+        page.locator('.route-proposal').first.get_by_role('button', name='Guardar ruta').click()
+        expect(page.locator('#saved-route-modal')).to_have_attribute('aria-hidden', 'false')
+        page.locator('#saved-route-name').fill('Vitoria 2027')
+        page.locator('#saved-route-date').fill('2027-04-10')
+        page.locator('#saved-route-modal').get_by_role('button', name='Guardar ruta', exact=True).click()
+        page.wait_for_function("Object.values(USER_ROUTES).some(route => route.name === 'Vitoria 2027')")
+        route = next(iter(self.db['userRoutes']['a'].values()))
+        self.assertEqual(route['scope'], 'personal')
+        self.assertEqual(len(route['roomIds']), 3)
+        self.assertFalse(any('done' in key.lower() or 'pending' in key.lower() for key in route))
+        first_id = route['roomIds'][0]
+        page.evaluate("id => { const room=savedRouteCatalogRoom(id); USER_ROOM_STATES[scopeRoomKey(room)]={done:true,pending:false}; renderProfile(); }", first_id)
+        page.evaluate("SETTINGS_TAB='profile'; const m=document.getElementById('profile-modal');m.classList.add('open');m.setAttribute('aria-hidden','false');renderProfile()")
+        card = page.locator('.saved-route-card', has_text='Vitoria 2027')
+        expect(card).to_contain_text('1 / 3 completadas')
+
+    def test_group_route_owner_can_create_and_member_can_only_read(self):
+        self.db['groups'] = {'g1': {'name': 'Grupo Uno', 'ownerUid': 'a'}}
+        self.db['groupMembers']['g1']['a']['role'] = 'owner'
+        self.db['userGroups']['a']['g1'].update({'role': 'owner', 'status': 'active'})
+        owner = self.page_for('a')
+        owner.evaluate("openRoutePlanner('g1')")
+        owner.locator('#route-zone-value').select_option(label='Madrid')
+        owner.locator('#route-count').select_option('2')
+        owner.get_by_role('button', name='Generar rutas').click()
+        owner.locator('.route-proposal').first.get_by_role('button', name='Guardar ruta').click()
+        owner.locator('#saved-route-name').fill('Ruta Grupo Uno')
+        owner.locator('#saved-route-modal').get_by_role('button', name='Guardar ruta', exact=True).click()
+        owner.wait_for_function("!!Object.values(GROUP_ROUTES.g1 || {}).length")
+        route_id = next(iter(self.db['groupRoutes']['g1']))
+        self.assertEqual(self.db['groupRoutes']['g1'][route_id]['ownerUid'], 'a')
+        member = self.page_for('b')
+        member.evaluate("SETTINGS_TAB='profile';const m=document.getElementById('profile-modal');m.classList.add('open');m.setAttribute('aria-hidden','false');renderProfile()")
+        card = member.locator('.saved-route-card', has_text='Ruta Grupo Uno')
+        expect(card).to_be_visible()
+        card.get_by_role('button', name='Ver ruta').click()
+        expect(member.locator('#saved-route-edit-name')).to_be_disabled()
+        expect(member.get_by_role('button', name='Guardar cambios')).to_have_count(0)
+
+    def test_edit_reorder_add_remove_and_delete_saved_route(self):
+        self.db['userRoutes']['a']['r1'] = {
+            'name': 'Ruta editable', 'description': '', 'scope': 'personal', 'ownerUid': 'a',
+            'roomIds': ['olimpo', 'katrina'], 'createdAt': 100, 'updatedAt': 100, 'status': 'active', 'schemaVersion': 1
+        }
+        page = self.page_for()
+        page.evaluate("openSavedRoute('r1','personal','')")
+        page.locator('.saved-route-detail-room').nth(1).get_by_role('button', name='Subir Katrina').click()
+        page.wait_for_function("USER_ROUTES.r1.roomIds[0] === 'katrina'")
+        self.assertEqual(self.db['userRoutes']['a']['r1']['roomIds'][0], 'katrina')
+        added_id = page.evaluate("""() => { const room=CATALOGO.find(item => !['olimpo','katrina'].includes(String(item.id))); const input=document.getElementById('saved-route-add-room'); input.value=`${room.nombre} · ${room.empresa || ''}`; return String(room.id); }""")
+        page.get_by_role('button', name='Añadir sala').click()
+        page.wait_for_function("id => USER_ROUTES.r1.roomIds.includes(id)", arg=added_id)
+        page.locator('.saved-route-detail-room').filter(has_text='Olimpo').get_by_role('button', name='Quitar Olimpo').click()
+        page.wait_for_function("!USER_ROUTES.r1.roomIds.includes('olimpo')")
+        page.locator('#saved-route-edit-name').fill('Ruta editada')
+        page.get_by_role('button', name='Guardar cambios').click()
+        page.wait_for_function("USER_ROUTES.r1.name === 'Ruta editada'")
+        page.on('dialog', lambda dialog: dialog.accept())
+        page.get_by_role('button', name='Eliminar ruta').click()
+        page.wait_for_function("!USER_ROUTES.r1")
+        self.assertNotIn('r1', self.db['userRoutes']['a'])
+
+    def test_official_route_is_immutable_and_can_be_registered(self):
+        page = self.page_for()
+        official_id = page.evaluate("PROGRESS_ROUTES.find(route => officialRouteResolved(route).complete)?.id || ''")
+        self.assertTrue(official_id, 'Se necesita al menos una ruta oficial completamente resoluble')
+        page.evaluate("id => openOfficialRoute(id)", official_id)
+        expect(page.locator('#saved-route-modal')).to_have_attribute('aria-hidden', 'false')
+        expect(page.get_by_role('button', name='Guardar cambios')).to_have_count(0)
+        page.get_by_role('button', name='Registrar esta ruta').click()
+        page.locator('#saved-route-name').fill('Mi ruta oficial')
+        page.locator('#saved-route-modal').get_by_role('button', name='Guardar ruta', exact=True).click()
+        page.wait_for_function("Object.values(USER_ROUTES).some(route => route.name === 'Mi ruta oficial')")
+        route = next(value for value in self.db['userRoutes']['a'].values() if value['name'] == 'Mi ruta oficial')
+        self.assertEqual(route['officialRouteId'], official_id)
+
+    def test_ambiguous_official_routes_stay_visible_but_cannot_be_registered(self):
+        page = self.page_for()
+        self.assertEqual(page.evaluate("PROGRESS_ROUTES.filter(route => officialRouteResolved(route).complete).length"), 8)
+        expected = {
+            'movie-route': ['room-angie', 'roomangie-2'],
+            'panic-tour': ['in', 'in-barcelona']
+        }
+        for route_id in ('movie-route', 'panic-tour'):
+            with self.subTest(route=route_id):
+                candidates = page.evaluate("""id => { const route=PROGRESS_ROUTES.find(item=>item.id===id); const entry=officialRouteResolved(route).entries.find(item=>item.matchCount>1); return CATALOGO.filter(room=>routeRoomMatches(room,entry.requirement)).map(room=>String(room.id)).sort(); }""", route_id)
+                self.assertEqual(candidates, expected[route_id])
+                page.evaluate("id => openOfficialRoute(id)", route_id)
+                expect(page.locator('#saved-route-modal')).to_have_attribute('aria-hidden', 'false')
+                expect(page.get_by_text('no tienen una ficha canónica inequívoca')).to_be_visible()
+                expect(page.get_by_role('button', name='Registrar esta ruta')).to_have_count(0)
+                page.keyboard.press('Escape')
+
+    def test_missing_catalog_room_and_saved_route_mobile_accessibility(self):
+        self.db['userRoutes']['a']['missing'] = {
+            'name': 'Ruta con sala cerrada', 'description': '', 'scope': 'personal', 'ownerUid': 'a',
+            'roomIds': ['olimpo', 'sala-retirada-del-catalogo'], 'createdAt': 100, 'updatedAt': 100, 'status': 'active', 'schemaVersion': 1
+        }
+        page = self.page_for()
+        self.assertEqual(page.evaluate("savedRouteCatalogRoom('abduction_enterprises')?.id"), 'enterprises')
+        self.assertEqual(page.evaluate("normalizeSavedRouteIdsForWrite(['abduction_enterprises','enterprises'])"), ['enterprises'])
+        self.assertEqual(page.evaluate("normalizeSavedRouteIdsForWrite(['olimpo'])"), ['olimpo'])
+        self.assertTrue(page.evaluate("() => { try { normalizeSavedRouteIdsForWrite(['sala-inexistente']); return false; } catch (_) { return true; } }"))
+        self.assertEqual(page.evaluate("normalizeSavedRouteIdsForWrite(['sala-retirada-del-catalogo'], true)"), ['sala-retirada-del-catalogo'])
+        self.assertTrue(page.evaluate("""() => { const rooms=CATALOGO.filter(room=>routePlannerReliableLocation(room)).slice(0,2); return !!savedRouteMapHtml({scope:'personal',roomIds:rooms.map(room=>String(room.id))}); }"""))
+        for width, height in ((375, 812), (390, 844), (430, 900), (768, 1024), (1280, 800)):
+            with self.subTest(viewport=f'{width}x{height}'):
+                page.set_viewport_size({'width': width, 'height': height})
+                page.evaluate("openSavedRoute('missing','personal','')")
+                expect(page.get_by_text('Sala no disponible en el catálogo')).to_be_visible()
+                self.assertEqual(page.locator('#saved-route-map').count(), 0)
+                dimensions = page.locator('#saved-route-modal .route-planner-dialog').evaluate("el => ({scrollWidth:el.scrollWidth,clientWidth:el.clientWidth})")
+                self.assertLessEqual(dimensions['scrollWidth'], dimensions['clientWidth'] + 1)
+                close = page.locator('#saved-route-modal .profile-close')
+                close.focus(); page.keyboard.press('Shift+Tab')
+                self.assertTrue(page.evaluate("document.querySelector('#saved-route-modal .route-planner-dialog').contains(document.activeElement)"))
+                page.keyboard.press('Escape')
+                expect(page.locator('#saved-route-modal')).to_have_attribute('aria-hidden', 'true')
 
     def test_home_reviews_and_controls_have_no_horizontal_overflow(self):
         page = self.context.new_page()

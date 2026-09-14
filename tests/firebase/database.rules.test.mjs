@@ -14,6 +14,10 @@ const invite = (overrides = {}) => ({
   groupId: 'g1', groupName: 'Equipo', createdBy: 'owner', createdByName: 'Owner',
   status: 'pending', createdAt: 100, expiresAt: Date.now() + 60_000, ...overrides
 });
+const savedRoute = (overrides = {}) => ({
+  name: 'Vitoria 2027', description: '', scope: 'personal', ownerUid: 'alice', roomIds: ['room-a', 'room-b'],
+  createdAt: 100, updatedAt: 100, status: 'active', schemaVersion: 1, ...overrides
+});
 
 async function seed(data) {
   await env.withSecurityRulesDisabled(async context => set(ref(context.database()), data));
@@ -205,4 +209,96 @@ test('un miembro no puede eliminar el grupo ni el índice de otra persona', asyn
   const db = env.authenticatedContext('alice').database();
   await assertFails(remove(ref(db, 'groups/g1')));
   await assertFails(remove(ref(db, 'userGroups/owner/g1')));
+});
+
+test('una ruta personal es privada y solo su propietario puede administrarla', async () => {
+  const alice = env.authenticatedContext('alice').database();
+  const bob = env.authenticatedContext('bob').database();
+  await assertSucceeds(set(ref(alice, 'userRoutes/alice/r1'), savedRoute()));
+  await assertSucceeds(get(ref(alice, 'userRoutes/alice')));
+  await assertSucceeds(set(ref(alice, 'userRoutes/alice/r1/name'), 'Vitoria actualizada'));
+  await assertFails(get(ref(bob, 'userRoutes/alice')));
+  await assertFails(set(ref(bob, 'userRoutes/alice/r1'), savedRoute({ ownerUid: 'bob' })));
+  await assertSucceeds(remove(ref(alice, 'userRoutes/alice/r1')));
+});
+
+test('las rutas personales validan ámbito, propietario e IDs de sala', async () => {
+  const alice = env.authenticatedContext('alice').database();
+  await assertFails(set(ref(alice, 'userRoutes/alice/bad-owner'), savedRoute({ ownerUid: 'bob' })));
+  await assertFails(set(ref(alice, 'userRoutes/alice/bad-scope'), savedRoute({ scope: 'group', groupId: 'g1' })));
+  await assertFails(set(ref(alice, 'userRoutes/alice/no-rooms'), savedRoute({ roomIds: [] })));
+  await assertFails(set(ref(alice, 'userRoutes/alice/bad-room'), savedRoute({ roomIds: [42] })));
+  await assertFails(set(ref(alice, 'userRoutes/alice/legacy-room'), savedRoute({ roomIds: ['Room Angie 2'] })));
+  await assertFails(set(ref(alice, 'userRoutes/alice/too-many'), savedRoute({ roomIds: Array.from({ length: 21 }, (_, i) => `room-${i}`) })));
+  await assertFails(set(ref(alice, 'userRoutes/alice/bad-time'), savedRoute({ createdAt: 200, updatedAt: 100 })));
+  await assertFails(set(ref(alice, 'userRoutes/alice/bad-date'), savedRoute({ plannedDate: -1 })));
+  await assertFails(set(ref(alice, 'userRoutes/alice/bad-official'), savedRoute({ officialRouteId: 'Movie Route' })));
+  await assertFails(set(ref(alice, 'userRoutes/alice/extra'), savedRoute({ copiedCatalogPayload: { price: 20 } })));
+  await assertFails(set(ref(alice, 'userRoutes/alice/progress'), savedRoute({ done: true, pending: false, percent: 100 })));
+});
+
+test('solo el propietario del grupo administra rutas grupales y los miembros las leen', async () => {
+  await seed({
+    groups: { g1: group() },
+    groupMembers: { g1: { owner: member('owner'), alice: member('member') } },
+    userGroups: { owner: { g1: index('owner') }, alice: { g1: index('member') } }
+  });
+  const owner = env.authenticatedContext('owner').database();
+  const alice = env.authenticatedContext('alice').database();
+  const outsider = env.authenticatedContext('outsider').database();
+  const route = savedRoute({ scope: 'group', ownerUid: 'owner', groupId: 'g1' });
+  await assertSucceeds(set(ref(owner, 'groupRoutes/g1/r1'), route));
+  await assertSucceeds(get(ref(alice, 'groupRoutes/g1')));
+  await assertFails(set(ref(alice, 'groupRoutes/g1/r1/name'), 'Cambio no autorizado'));
+  await assertFails(get(ref(outsider, 'groupRoutes/g1')));
+  await assertFails(set(ref(outsider, 'groupRoutes/g1/r2'), route));
+  await assertSucceeds(remove(ref(owner, 'groupRoutes/g1/r1')));
+});
+
+test('una ruta grupal no puede apuntar a otro grupo o propietario', async () => {
+  await seed({ groups: { g1: group() }, groupMembers: { g1: { owner: member('owner') } }, userGroups: { owner: { g1: index('owner') } } });
+  const owner = env.authenticatedContext('owner').database();
+  await assertFails(set(ref(owner, 'groupRoutes/g1/bad-group'), savedRoute({ scope: 'group', ownerUid: 'owner', groupId: 'g2' })));
+  await assertFails(set(ref(owner, 'groupRoutes/g1/bad-owner'), savedRoute({ scope: 'group', ownerUid: 'alice', groupId: 'g1' })));
+});
+
+test('v46 no puede borrar un grupo con rutas y deja todos sus datos intactos', async () => {
+  await seed({
+    groups: { g1: group() }, groupMembers: { g1: { owner: member('owner'), alice: member('member') } },
+    userGroups: { owner: { g1: index('owner') }, alice: { g1: index('member') } },
+    groupRooms: { g1: { room: room('owner') } }, groupPendingRooms: { g1: { pending: room('alice') } },
+    groupRoutes: { g1: { r1: savedRoute({ scope: 'group', ownerUid: 'owner', groupId: 'g1' }) } }
+  });
+  const owner = env.authenticatedContext('owner').database();
+  await assertFails(remove(ref(owner, 'groups/g1')));
+  await env.withSecurityRulesDisabled(async context => {
+    const value = (await get(ref(context.database()))).val() || {};
+    for (const path of ['groups', 'groupMembers', 'userGroups', 'groupRooms', 'groupPendingRooms', 'groupRoutes']) {
+      if (!value[path]) throw new Error(`v46 alteró ${path}`);
+    }
+  });
+});
+
+test('v47 elimina primero las rutas y después todo el grupo sin ramas huérfanas', async () => {
+  await seed({
+    groups: { g1: group() }, groupMembers: { g1: { owner: member('owner'), alice: member('member') } },
+    userGroups: { owner: { g1: index('owner') }, alice: { g1: index('member') } },
+    groupRooms: { g1: { room: room('owner') } }, groupPendingRooms: { g1: { pending: room('alice') } },
+    groupRoutes: { g1: { r1: savedRoute({ scope: 'group', ownerUid: 'owner', groupId: 'g1' }) } }
+  });
+  const owner = env.authenticatedContext('owner').database();
+  await assertSucceeds(remove(ref(owner, 'groupRoutes/g1/r1')));
+  await assertSucceeds(remove(ref(owner, 'groups/g1')));
+  await assertSucceeds(update(ref(owner), {
+    'groupMembers/g1/owner': null, 'groupMembers/g1/alice': null,
+    'userGroups/owner/g1': null, 'userGroups/alice/g1': null,
+    'groupRooms/g1/room': null, 'groupPendingRooms/g1/pending': null
+  }));
+  await env.withSecurityRulesDisabled(async context => {
+    const value = (await get(ref(context.database()))).val() || {};
+    for (const path of ['groups', 'groupMembers', 'userGroups', 'groupRooms', 'groupPendingRooms', 'groupRoutes']) {
+      const branch = value[path] || {};
+      if (path === 'userGroups' ? branch.owner?.g1 || branch.alice?.g1 : branch.g1) throw new Error(`Quedó una referencia en ${path}`);
+    }
+  });
 });

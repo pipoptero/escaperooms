@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'the-vault-v46';
+const CACHE_VERSION = 'the-vault-v47';
 const APP_SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -7,6 +7,7 @@ const APP_SHELL = [
   './index.html',
   './room-state.js',
   './route-planner.js',
+  './saved-routes.js',
   './site.webmanifest',
   './images/brand/favicon-round-32.png',
   './images/brand/apple-touch-icon-round.png',
@@ -91,7 +92,7 @@ self.addEventListener('fetch', event => {
   if (url.origin !== self.location.origin) return;
 
   const path = url.pathname.split('/').pop();
-  if (path === 'room-state.js') {
+  if (['room-state.js', 'route-planner.js', 'saved-routes.js'].includes(path)) {
     event.respondWith(cacheFirst(request));
     return;
   }

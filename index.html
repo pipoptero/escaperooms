@@ -604,6 +604,32 @@
   .route-room-actions{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px;}
   .route-room-actions .auth-btn{padding:6px 7px;font-size:.54rem;}
   .route-time{display:inline-block;color:var(--green);margin-bottom:3px;}
+  .saved-routes-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+  .saved-route-card{border:1px solid rgba(125,187,63,.2);background:rgba(125,187,63,.025);padding:12px;min-width:0;}
+  .saved-route-card.completed{border-color:rgba(255,176,0,.45);}
+  .saved-route-card-head{display:flex;gap:10px;align-items:flex-start;}
+  .saved-route-covers{display:flex;flex:0 0 auto;}
+  .saved-route-cover{width:38px;height:54px;object-fit:cover;border:1px solid var(--border);background:var(--bg2);}
+  .saved-route-cover+ .saved-route-cover{margin-left:-13px;}
+  .saved-route-cover-fallback{display:grid;place-items:center;color:var(--green);font-family:'Cinzel',serif;}
+  .saved-route-name{font-family:'Cinzel',serif;color:var(--text);font-weight:700;font-size:.9rem;line-height:1.2;}
+  .saved-route-meta{font-family:'Share Tech Mono',monospace;color:var(--text3);font-size:.54rem;line-height:1.55;text-transform:uppercase;margin-top:4px;}
+  .saved-route-progress{height:6px;background:rgba(255,255,255,.06);margin:10px 0 6px;overflow:hidden;}
+  .saved-route-progress span{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--amber));}
+  .saved-route-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px;}
+  .saved-route-detail-list{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
+  .saved-route-detail-room{display:grid;grid-template-columns:30px 58px minmax(0,1fr) auto;align-items:center;gap:9px;border:1px solid rgba(255,255,255,.08);padding:8px;}
+  .saved-route-position{font-family:'Share Tech Mono',monospace;color:var(--amber);text-align:center;}
+  .saved-route-detail-room .saved-route-cover{width:58px;height:82px;}
+  .saved-route-state{font-family:'Share Tech Mono',monospace;font-size:.55rem;text-transform:uppercase;color:var(--text3);}
+  .saved-route-state.done{color:var(--green);}.saved-route-state.pending{color:var(--amber);}
+  .saved-route-detail-room .route-link{border:0;background:transparent;padding:0;cursor:pointer;}
+  .saved-route-edit-actions{display:flex;flex-direction:column;gap:5px;}
+  .saved-route-edit-actions .auth-btn{min-width:38px;padding:6px;}
+  .saved-route-map{height:260px;margin-top:14px;border:1px solid rgba(125,187,63,.18);}
+  .saved-route-form{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;}
+  .saved-route-form .wide{grid-column:1/-1;}
+  .saved-route-section-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px;}
   .escapist-map-wrap{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,.65fr);gap:12px;align-items:stretch;}
   .escapist-map-canvas{position:relative;min-height:510px;border:1px solid rgba(125,187,63,.16);background:radial-gradient(circle at 50% 45%,rgba(125,187,63,.08),transparent 44%),linear-gradient(135deg,rgba(255,255,255,.024),rgba(0,0,0,.12));overflow:hidden;}
   .escapist-leaflet-map{position:absolute;inset:0;display:none;background:#10120f;z-index:4;}
@@ -1479,6 +1505,11 @@
     .route-proposal{padding:10px;}
     .route-room-card{grid-template-columns:68px minmax(0,1fr);}
     .route-room-cover,.route-room-cover-fallback{width:68px;height:96px;}
+    .saved-routes-grid{grid-template-columns:1fr;}
+    .saved-route-detail-room{grid-template-columns:24px 48px minmax(0,1fr);}
+    .saved-route-detail-room .saved-route-cover{width:48px;height:68px;}
+    .saved-route-edit-actions{grid-column:2/-1;flex-direction:row;justify-content:flex-end;}
+    .saved-route-form{grid-template-columns:1fr;}.saved-route-form .wide{grid-column:auto;}
     .settings-tabs{gap:6px;margin-bottom:11px;padding-bottom:9px;}
     .settings-tab{flex:1 1 auto;padding:9px 10px;}
     .profile-section{padding:11px 12px;margin-bottom:11px;}
@@ -2323,6 +2354,16 @@
   </div>
 </div>
 
+<div class="route-planner-modal" id="saved-route-modal" aria-hidden="true" onclick="closeSavedRouteModal(event)">
+  <div class="route-planner-dialog" role="dialog" aria-modal="true" aria-labelledby="saved-route-title" onclick="event.stopPropagation()">
+    <div class="route-planner-head">
+      <div><div class="route-planner-kicker" id="saved-route-kicker">Rutas guardadas</div><div class="route-planner-title" id="saved-route-title">Mi ruta</div></div>
+      <button class="profile-close" type="button" onclick="closeSavedRouteModal()" aria-label="Cerrar ruta">X</button>
+    </div>
+    <div class="route-planner-body" id="saved-route-content"></div>
+  </div>
+</div>
+
 
 <div class="profile-modal" id="profile-modal" aria-hidden="true" onclick="closeProfile(event)">
   <div class="profile-dialog" role="dialog" aria-modal="true" aria-labelledby="profile-title" onclick="event.stopPropagation()">
@@ -2354,6 +2395,7 @@
 <script src="firebase-config.js"></script>
 <script src="room-state.js"></script>
 <script src="route-planner.js"></script>
+<script src="saved-routes.js"></script>
 <script>
 // ════════════════════════════════════════════════════════════
 //  🔥 CONFIGURACIÓN FIREBASE
@@ -2557,6 +2599,11 @@ let USER_GROUPS = {};
 let GROUP_MEMBERS = {};
 let GROUP_ROOMS = {};
 let GROUP_PENDING_ROOMS = {};
+let USER_ROUTES = {};
+let GROUP_ROUTES = {};
+let ROUTE_PLANNER_LAST_RESULT = null;
+let SAVED_ROUTE_ACTIVE = null;
+let SAVED_ROUTE_MAP = null;
 let USER_STATE_ORIGINS = {};
 let ROOM_STATE_SAVING = false;
 let PENDING_INVITE_ID = new URLSearchParams(window.location.search).get('invite') || '';
@@ -2589,7 +2636,7 @@ let STATIC_ENHANCEMENTS_PROMISE = null;
 let PROFILE_MAP_DATA_PROMISE = null;
 let PHOTO_LIGHTBOX_GALLERIES = {};
 const LIVE_REFRESH_MIN_INTERVAL = 5 * 60 * 1000;
-const STATIC_ASSET_VERSION = '20260913-route-planner-v46';
+const STATIC_ASSET_VERSION = '20260913-saved-routes-v47';
 
 function invalidateReviewRoomsCache() {
   REVIEW_ROOMS_CACHE = null;
@@ -3959,6 +4006,26 @@ async function loadUserGroups(strict = false) {
   }
 }
 
+async function loadSavedRoutes(strict = false) {
+  if (!AUTH_USER || !FIREBASE_ENABLED) {
+    USER_ROUTES = {}; GROUP_ROUTES = {};
+    return;
+  }
+  const loadingUid = USER_ID;
+  try {
+    const personal = await fbGet(`userRoutes/${loadingUid}`) || {};
+    const grouped = {};
+    await Promise.all(activeUserGroups().map(async ([groupId]) => {
+      grouped[groupId] = await fbGet(`groupRoutes/${groupId}`) || {};
+    }));
+    if (!AUTH_USER || USER_ID !== loadingUid) throw new Error('La sesión ha cambiado.');
+    USER_ROUTES = personal; GROUP_ROUTES = grouped;
+  } catch (error) {
+    if (strict) throw error;
+    console.warn('Las rutas guardadas requieren las reglas v2:', error.message);
+  }
+}
+
 function groupRoomCount(groupId) {
   return Object.keys(GROUP_ROOMS[groupId] || {}).length;
 }
@@ -5092,6 +5159,10 @@ function renderGroupDetail(groupId, message = '', activeList = 'done') {
       ${groupMembersHtml(groupId)}
     </div>
     <div class="profile-section">
+      <div class="profile-section-title">Rutas del grupo</div>
+      ${savedGroupRoutesHtml(groupId)}
+    </div>
+    <div class="profile-section">
       <div class="group-list-tabs">
         <button class="group-list-tab ${selectedList === 'done' ? 'active' : ''}" type="button" onclick="renderGroupDetail('${groupId}','','done')">Hechos <span class="count-badge">${doneCount}</span></button>
         <button class="group-list-tab ${selectedList === 'pending' ? 'active' : ''}" type="button" onclick="renderGroupDetail('${groupId}','','pending')">Pendientes <span class="count-badge">${pendingCount}</span></button>
@@ -5113,17 +5184,35 @@ async function deleteEscapistGroup(groupId) {
   if (!confirm(`Eliminar ${name}?\n\nSe borraran sus salas hechas y miembros para todos los integrantes. Esta accion no se puede deshacer.`)) return;
   try {
     // Read persisted keys: the visible lists have already collapsed legacy aliases.
-    const [rawDone, rawPending] = await Promise.all([fbGet(`groupRooms/${groupId}`), fbGet(`groupPendingRooms/${groupId}`)]);
+    const routesRead = fbGet(`groupRoutes/${groupId}`).catch(error => {
+      // A v47 client can still run briefly before the new branch rules are deployed.
+      // Under those older rules no saved group route can exist, so a permission error is safely empty.
+      if (/\b(?:401|403)\b/.test(String(error?.message || ''))) return {};
+      throw error;
+    });
+    const [rawDone, rawPending, rawRoutes] = await Promise.all([fbGet(`groupRooms/${groupId}`), fbGet(`groupPendingRooms/${groupId}`), routesRead]);
     const members = GROUP_MEMBERS[groupId] || {};
+    const routeDeletion = Object.fromEntries(Object.keys(rawRoutes || {}).map(routeId => [`groupRoutes/${groupId}/${routeId}`, null]));
+    const routeRestore = Object.fromEntries(Object.entries(rawRoutes || {}).map(([routeId, route]) => [`groupRoutes/${groupId}/${routeId}`, route]));
     const deletion = {
       ...Object.fromEntries(Object.keys(rawDone || {}).map(roomKeyValue => [`groupRooms/${groupId}/${roomKeyValue}`, null])),
       ...Object.fromEntries(Object.keys(rawPending || {}).map(roomKeyValue => [`groupPendingRooms/${groupId}/${roomKeyValue}`, null])),
       ...Object.fromEntries(Object.keys(members).map(uid => [`groupMembers/${groupId}/${uid}`, null])),
       ...Object.fromEntries(Object.keys(members).map(uid => [`userGroups/${uid}/${groupId}`, null]))
     };
-    // RTDB rules see sibling branches before a multipath update. Remove metadata
-    // first so owner membership can then be cleaned without leaving a live ownerless group.
-    await fbDelete(`groups/${groupId}`);
+    // Rules intentionally deny deleting group metadata while saved routes exist,
+    // so an old v46 client cannot orphan them. v47 removes routes first and restores
+    // their exact payload if the subsequent metadata delete does not succeed.
+    if (Object.keys(routeDeletion).length) await fbPatchWithRetry('', routeDeletion);
+    try {
+      await fbDelete(`groups/${groupId}`);
+    } catch (error) {
+      if (Object.keys(routeRestore).length) {
+        try { await fbPatchWithRetry('', routeRestore); }
+        catch (restoreError) { throw new Error(`${error.message} Las rutas no pudieron restaurarse; recarga antes de reintentar. ${restoreError.message}`); }
+      }
+      throw error;
+    }
     try {
       await fbPatchWithRetry('', deletion);
     } catch (error) {
@@ -5139,6 +5228,7 @@ async function deleteEscapistGroup(groupId) {
     delete GROUP_MEMBERS[groupId];
     delete GROUP_ROOMS[groupId];
     delete GROUP_PENDING_ROOMS[groupId];
+    delete GROUP_ROUTES[groupId];
     populateFilters(); renderStats(); renderMisHechos(); renderCatalogo();
     renderProfile('Grupo eliminado.');
   } catch (e) {
@@ -6409,6 +6499,15 @@ function profileSettingsHtml(message = '') {
       <p class="route-planner-intro">Combina salas compatibles con tu equipo y tus listas. Las rutas y horarios son orientativos y no comprueban disponibilidad.</p>
       <button class="auth-btn" type="button" onclick="openRoutePlanner()">Planificar una ruta</button>
     </div>
+    <div class="profile-section">
+      <div class="profile-section-title">Mis rutas</div>
+      ${savedRoutesOverviewHtml()}
+    </div>
+    <div class="profile-section">
+      <div class="profile-section-title">Rutas oficiales The Vault</div>
+      <p class="route-planner-intro">Recorridos editoriales inmutables. Registra uno para seguir su progreso personal o con un grupo.</p>
+      ${officialRoutesOverviewHtml()}
+    </div>
     ${accountRoleInfoHtml()}
     ${escapistMapHtml()}
     <div class="profile-section">
@@ -6902,7 +7001,8 @@ function routePlannerProposalHtml(route, config) {
   const distance = Number.isFinite(route.distanceKm)
     ? route.distanceKm < .05 ? ' · misma ubicación registrada' : ` · ${route.distanceKm.toFixed(1)} km en línea recta entre salas`
     : '';
-  return `<section class="route-proposal"><div class="route-proposal-head"><div><div class="route-proposal-title">${escapeHtml(route.title)}</div><div class="route-proposal-meta">Horas orientativas desde las 10:00 · no indican disponibilidad · margen de 30 min${distance}</div></div><span class="tag tag-feature">${route.items.length} salas</span></div><div class="route-room-list">${cards}</div></section>`;
+  const canSave = !config.scope || USER_GROUPS[config.scope]?.role === 'owner';
+  return `<section class="route-proposal"><div class="route-proposal-head"><div><div class="route-proposal-title">${escapeHtml(route.title)}</div><div class="route-proposal-meta">Horas orientativas desde las 10:00 · no indican disponibilidad · margen de 30 min${distance}</div></div><div class="saved-route-actions"><span class="tag tag-feature">${route.items.length} salas</span><button class="auth-btn" type="button" onclick="openSaveRouteDialog('${jsString(route.id)}')" ${canSave ? '' : 'disabled title="Solo el propietario del grupo puede guardar esta ruta"'}>Guardar ruta</button></div></div><div class="route-room-list">${cards}</div></section>`;
 }
 
 function generateRoutePlanner() {
@@ -6921,6 +7021,7 @@ function generateRoutePlanner() {
   // operations and should only run for the selected area/constraints.
   const eligibleCatalog = CATALOGO.filter(room => VaultRoutePlanner.candidate(room, config));
   const result = VaultRoutePlanner.build(eligibleCatalog.map(room => routePlannerRoomData(room, config)), config);
+  ROUTE_PLANNER_LAST_RESULT = result;
   if (!result.proposals.length) {
     root.innerHTML = '<div class="route-empty">No hay salas compatibles con todos los filtros. Prueba otra zona, tamaño de equipo o experiencia.</div>';
     return;
@@ -6963,6 +7064,297 @@ async function toggleRoutePlannerPending(key) {
   } finally {
     ROOM_STATE_SAVING = false;
   }
+}
+
+function savedRouteCatalogRoom(id) {
+  const key = String(id || '');
+  const exact = CATALOGO.find(room => String(room.id || '') === key);
+  if (exact) return exact;
+  const identity = VaultRoomState.identity(key, { id: key, nombre: key }, REVIEW_ROOM_ALIASES);
+  const matches = CATALOGO.filter(room => scopeRoomKey(room) === identity);
+  return matches.length === 1 ? matches[0] : null;
+}
+
+function normalizeSavedRouteIdsForWrite(roomIds, preserveUnknown = false) {
+  const source = VaultSavedRoutes.uniqueRoomIds(roomIds);
+  const normalized = source.map(id => {
+    const room = savedRouteCatalogRoom(id);
+    if (room) return String(room.id || '');
+    return preserveUnknown ? id : '';
+  });
+  if (!preserveUnknown && normalized.some(id => !id)) throw new Error('La ruta contiene una sala que ya no puede resolverse de forma inequívoca en el catálogo.');
+  return VaultSavedRoutes.uniqueRoomIds(normalized);
+}
+
+function savedRouteRoomIds(route) {
+  return VaultSavedRoutes.uniqueRoomIds(route?.roomIds || []);
+}
+
+function savedRouteProgress(route) {
+  const personal = {}, group = {};
+  savedRouteRoomIds(route).forEach(id => {
+    const room = savedRouteCatalogRoom(id) || { id, nombre: id };
+    const key = scopeRoomKey(room);
+    personal[id] = USER_ROOM_STATES[key] || {};
+    group[id] = route.scope === 'group' ? {
+      done: !!GROUP_ROOMS[route.groupId]?.[key],
+      pending: !!GROUP_PENDING_ROOMS[route.groupId]?.[key]
+    } : {};
+  });
+  return VaultSavedRoutes.progress(route, { personal, group });
+}
+
+function savedRouteDateLabel(timestamp) {
+  return Number(timestamp) > 0 ? new Date(Number(timestamp)).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }) : 'Sin fecha prevista';
+}
+
+function savedRouteScopeLabel(route) {
+  return route.scope === 'group' ? `Grupo · ${groupName(route.groupId)}` : 'Personal';
+}
+
+function savedRouteMembersLabel(route) {
+  if (route.scope !== 'group') return '';
+  return Object.values(GROUP_MEMBERS[route.groupId] || {}).filter(member => member?.status === 'active').map(member => member.displayName || 'Escapista').join(' · ');
+}
+
+function savedRouteCanEdit(route) {
+  if (!AUTH_USER || !route) return false;
+  return route.scope === 'group' ? USER_GROUPS[route.groupId]?.role === 'owner' : route.ownerUid === USER_ID;
+}
+
+function savedRouteCoversHtml(route, limit = 3) {
+  return `<div class="saved-route-covers">${savedRouteRoomIds(route).slice(0, limit).map(id => {
+    const room = savedRouteCatalogRoom(id);
+    const image = room?.imagen ? versionedLocalAsset(room.imagen) : '';
+    return image ? `<img class="saved-route-cover" src="${escapeHtml(image)}" alt="" loading="lazy">` : `<span class="saved-route-cover saved-route-cover-fallback">${escapeHtml(String(room?.nombre || id).slice(0,1).toUpperCase())}</span>`;
+  }).join('')}</div>`;
+}
+
+function savedRouteCardHtml(routeId, route) {
+  const progress = savedRouteProgress(route);
+  const scopeArg = route.scope === 'group' ? `'group','${jsString(route.groupId)}'` : `'personal',''`;
+  return `<article class="saved-route-card ${progress.phase === 'completed' ? 'completed' : ''}"><div class="saved-route-card-head">${savedRouteCoversHtml(route)}<div><div class="saved-route-name">${escapeHtml(route.name)}</div><div class="saved-route-meta">${escapeHtml(savedRouteScopeLabel(route))}<br>${escapeHtml(savedRouteDateLabel(route.plannedDate))}</div></div></div><div class="saved-route-progress" aria-label="${progress.percent}% completado"><span style="width:${progress.percent}%"></span></div><div class="saved-route-meta">${progress.completed} / ${progress.target} completadas · ${progress.percent}%</div>${route.scope === 'group' ? `<div class="saved-route-meta">👥 ${routePlannerActiveMembers(route.groupId)} miembros activos</div>` : ''}<div class="saved-route-actions"><button class="auth-btn" type="button" onclick="openSavedRoute('${jsString(routeId)}',${scopeArg})">Ver ruta</button></div></article>`;
+}
+
+function savedRoutesOverviewHtml() {
+  const routes = [
+    ...Object.entries(USER_ROUTES || {}).map(([routeId, route]) => ({ routeId, route: { ...route, scope: 'personal' } })),
+    ...Object.entries(GROUP_ROUTES || {}).flatMap(([groupId, records]) => Object.entries(records || {}).map(([routeId, route]) => ({ routeId, route: { ...route, scope: 'group', groupId } })))
+  ];
+  if (!routes.length) return '<div class="review-empty">Todavía no tienes rutas guardadas. Genera una en el planificador o registra una ruta oficial.</div>';
+  const phases = [['upcoming','Próximas'],['in-progress','En progreso'],['completed','Completadas']];
+  return phases.map(([phase, label]) => {
+    const entries = routes.filter(item => savedRouteProgress(item.route).phase === phase).sort((a,b) => Number(a.route.plannedDate || Infinity) - Number(b.route.plannedDate || Infinity));
+    return entries.length ? `<div class="saved-route-section-head"><div class="route-planner-label">${label}</div><span class="tag tag-muted">${entries.length}</span></div><div class="saved-routes-grid">${entries.map(item => savedRouteCardHtml(item.routeId, item.route)).join('')}</div>` : '';
+  }).join('');
+}
+
+function savedGroupRoutesHtml(groupId) {
+  const routes = Object.entries(GROUP_ROUTES[groupId] || {});
+  return routes.length ? `<div class="saved-routes-grid">${routes.map(([routeId,route]) => savedRouteCardHtml(routeId,{ ...route,scope:'group',groupId })).join('')}</div>` : '<div class="review-empty">Este grupo todavía no tiene rutas guardadas.</div>';
+}
+
+function officialRouteResolved(route) {
+  // Resolve the historical editorial tuple to one current catalog identity.
+  const entries = route.rooms.map(requirement => {
+    const matches = CATALOGO.filter(candidate => routeRoomMatches(candidate, requirement));
+    const room = matches.length === 1 ? matches[0] : null;
+    return { requirement, room, id: room ? String(room.id || '') : '', matchCount: matches.length };
+  });
+  return { entries, roomIds: [...new Set(entries.map(entry => entry.id).filter(Boolean))], complete: entries.every(entry => entry.room) };
+}
+
+function officialRoutesOverviewHtml() {
+  const progress = new Map(progressRoutes().map(route => [route.id, route]));
+  return `<div class="saved-routes-grid">${PROGRESS_ROUTES.map(route => {
+    const current = progress.get(route.id);
+    const percent = current?.target ? Math.round(current.completed / current.target * 100) : 0;
+    return `<article class="saved-route-card ${current?.unlocked ? 'completed' : ''}"><div class="saved-route-card-head">${route.emblem ? `<img class="saved-route-cover" src="${escapeHtml(versionedLocalAsset(route.emblem))}" alt="">` : `<span class="saved-route-cover saved-route-cover-fallback">${escapeHtml(route.mark)}</span>`}<div><div class="saved-route-name">${escapeHtml(route.name)}</div><div class="saved-route-meta">Ruta oficial The Vault · ${escapeHtml(route.status || '')}</div></div></div><div class="saved-route-progress"><span style="width:${percent}%"></span></div><div class="saved-route-meta">${current?.completed || 0} / ${current?.target || route.rooms.length} completadas · ${percent}%</div><div class="saved-route-actions"><button class="auth-btn secondary" type="button" onclick="openOfficialRoute('${jsString(route.id)}')">Ver ruta oficial</button></div></article>`;
+  }).join('')}</div>`;
+}
+
+function closeSavedRouteModal(event) {
+  if (event && event.target !== document.getElementById('saved-route-modal')) return;
+  if (SAVED_ROUTE_MAP) { SAVED_ROUTE_MAP.remove(); SAVED_ROUTE_MAP = null; }
+  const modal = document.getElementById('saved-route-modal');
+  modal.classList.remove('open'); modal.setAttribute('aria-hidden','true');
+  document.body.style.overflow = document.getElementById('route-planner-modal')?.classList.contains('open') ? 'hidden' : '';
+  SAVED_ROUTE_ACTIVE = null;
+}
+
+function showSavedRouteModal(title, kicker, html) {
+  if (SAVED_ROUTE_MAP) { SAVED_ROUTE_MAP.remove(); SAVED_ROUTE_MAP = null; }
+  document.getElementById('saved-route-title').textContent = title;
+  document.getElementById('saved-route-kicker').textContent = kicker;
+  document.getElementById('saved-route-content').innerHTML = html;
+  const modal = document.getElementById('saved-route-modal');
+  modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); document.body.style.overflow = 'hidden';
+  requestAnimationFrame(() => modal.querySelector('button,input,select')?.focus());
+}
+
+function savedRouteMapHtml(route) {
+  const rooms = savedRouteRoomIds(route).map(savedRouteCatalogRoom);
+  if (!rooms.length || rooms.some(room => !room || !routePlannerReliableLocation(room))) return '';
+  return '<div class="route-planner-label" style="margin-top:16px">Recorrido orientativo</div><div class="saved-route-map" id="saved-route-map" aria-label="Mapa de las salas de la ruta"></div>';
+}
+
+async function initSavedRouteMap(route) {
+  const node = document.getElementById('saved-route-map');
+  if (!node) return;
+  const points = savedRouteRoomIds(route).map(savedRouteCatalogRoom).map(room => ({ room, coord: routePlannerReliableLocation(room) }));
+  if (points.some(item => !item.coord)) return;
+  await ensureLeafletAssets();
+  if (!node.isConnected) return;
+  SAVED_ROUTE_MAP = L.map(node, { zoomControl: true, scrollWheelZoom: false, tap: true });
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap' }).addTo(SAVED_ROUTE_MAP);
+  const latLngs = points.map((item,index) => {
+    const latLng = [item.coord.lat,item.coord.lon];
+    L.marker(latLng).addTo(SAVED_ROUTE_MAP).bindPopup(`${index + 1}. ${escapeHtml(item.room.nombre || '')}`);
+    return latLng;
+  });
+  if (latLngs.length > 1) L.polyline(latLngs, { color: '#7dbb3f', weight: 3 }).addTo(SAVED_ROUTE_MAP);
+  SAVED_ROUTE_MAP.fitBounds(L.latLngBounds(latLngs).pad(.2), { maxZoom: 15 });
+}
+
+function savedRouteDetailRoomHtml(route, id, index, canEdit, state) {
+  const room = savedRouteCatalogRoom(id);
+  const label = state.done ? (route.scope === 'group' ? 'Hecha por el grupo' : 'Hecha') : state.pending ? (route.scope === 'group' ? 'Pendiente del grupo' : 'Pendiente') : (route.scope === 'group' ? 'Sin registrar como hecha en el grupo' : 'Sin registrar');
+  const stateClass = state.done ? 'done' : state.pending ? 'pending' : '';
+  const image = room?.imagen ? `<img class="saved-route-cover" src="${escapeHtml(versionedLocalAsset(room.imagen))}" alt="">` : `<span class="saved-route-cover saved-route-cover-fallback">${escapeHtml(String(room?.nombre || id).slice(0,1).toUpperCase())}</span>`;
+  return `<article class="saved-route-detail-room"><div class="saved-route-position">${index + 1}</div>${image}<div><div class="saved-route-name">${escapeHtml(room?.nombre || 'Sala no disponible en el catálogo')}</div><div class="saved-route-meta">${escapeHtml([room?.empresa,room?.ciudad,room?.duracion ? `${room.duracion} min` : '',globalRatingForRoom(room || {}).score ? `★ ${globalRatingForRoom(room).score.toFixed(1)}` : ''].filter(Boolean).join(' · ') || id)}</div><div class="saved-route-state ${stateClass}">${state.done ? '✓' : state.pending ? '★' : '○'} ${escapeHtml(label)}</div>${room ? `<button class="route-link" type="button" onclick="openSavedRouteRoom('${jsString(id)}')">Ver sala</button>` : `<div class="saved-route-meta">ID conservado: ${escapeHtml(id)}</div>`}</div>${canEdit ? `<div class="saved-route-edit-actions"><button class="auth-btn secondary" type="button" onclick="moveSavedRouteRoom(${index},-1)" aria-label="Subir ${escapeHtml(room?.nombre || id)}" ${index === 0 ? 'disabled' : ''}>↑</button><button class="auth-btn secondary" type="button" onclick="moveSavedRouteRoom(${index},1)" aria-label="Bajar ${escapeHtml(room?.nombre || id)}" ${index === savedRouteRoomIds(route).length - 1 ? 'disabled' : ''}>↓</button><button class="auth-btn secondary" type="button" onclick="removeSavedRouteRoom('${jsString(id)}')" aria-label="Quitar ${escapeHtml(room?.nombre || id)}">×</button></div>` : ''}</article>`;
+}
+
+function savedRouteDetailHtml(route, canEdit) {
+  const progress = savedRouteProgress(route);
+  const stateById = Object.fromEntries(progress.rooms.map(item => [item.roomId,item]));
+  const options = CATALOGO.slice().sort((a,b) => String(a.nombre || '').localeCompare(String(b.nombre || ''),'es')).map(room => `<option value="${escapeHtml(`${room.nombre} · ${room.empresa || ''}`)}"></option>`).join('');
+  return `<div class="saved-route-form"><div class="route-planner-field wide"><label for="saved-route-edit-name">Nombre</label><input class="profile-input" id="saved-route-edit-name" maxlength="80" value="${escapeHtml(route.name)}" ${canEdit ? '' : 'disabled'}></div><div class="route-planner-field"><label for="saved-route-edit-date">Fecha prevista</label><input class="profile-input" id="saved-route-edit-date" type="date" value="${route.plannedDate ? new Date(route.plannedDate).toISOString().slice(0,10) : ''}" ${canEdit ? '' : 'disabled'}></div><div class="route-planner-field"><label>Ámbito</label><div class="profile-input">${escapeHtml(savedRouteScopeLabel(route))}</div></div><div class="route-planner-field wide"><label for="saved-route-edit-description">Descripción</label><textarea class="profile-textarea" id="saved-route-edit-description" maxlength="400" ${canEdit ? '' : 'disabled'}>${escapeHtml(route.description || '')}</textarea></div></div><div class="saved-route-progress"><span style="width:${progress.percent}%"></span></div><div class="saved-route-meta">${progress.completed} / ${progress.target} completadas · ${progress.percent}%${route.scope === 'group' ? ` · ${routePlannerActiveMembers(route.groupId)} miembros activos` : ''}</div>${route.scope === 'group' ? `<div class="saved-route-meta">Miembros: ${escapeHtml(savedRouteMembersLabel(route) || 'Sin miembros cargados')}</div>` : ''}${canEdit ? `<div class="saved-route-actions"><button class="auth-btn" type="button" onclick="updateSavedRouteMetadata()">Guardar cambios</button><button class="auth-btn secondary" type="button" onclick="deleteSavedRoute()">Eliminar ruta</button></div><div class="saved-route-form"><div class="route-planner-field wide"><label for="saved-route-add-room">Añadir sala del catálogo</label><input class="profile-input" id="saved-route-add-room" list="saved-route-room-options" placeholder="Escribe nombre o empresa"><datalist id="saved-route-room-options">${options}</datalist></div><div class="saved-route-actions"><button class="auth-btn secondary" type="button" onclick="addSavedRouteRoom()">Añadir sala</button></div></div>` : ''}<div class="saved-route-detail-list">${savedRouteRoomIds(route).map((id,index) => savedRouteDetailRoomHtml(route,id,index,canEdit,stateById[id] || {})).join('')}</div>${savedRouteMapHtml(route)}<div class="profile-status-msg" id="saved-route-status"></div>`;
+}
+
+function getSavedRoute(routeId, scope, groupId) {
+  return scope === 'group' ? GROUP_ROUTES[groupId]?.[routeId] : USER_ROUTES[routeId];
+}
+
+function openSavedRoute(routeId, scope = 'personal', groupId = '') {
+  const route = getSavedRoute(routeId, scope, groupId);
+  if (!route) return;
+  SAVED_ROUTE_ACTIVE = { routeId, scope, groupId, route: { ...route, scope, ...(scope === 'group' ? { groupId } : {}) } };
+  showSavedRouteModal(route.name, 'Ruta guardada', savedRouteDetailHtml(SAVED_ROUTE_ACTIVE.route, savedRouteCanEdit(SAVED_ROUTE_ACTIVE.route)));
+  requestAnimationFrame(() => initSavedRouteMap(SAVED_ROUTE_ACTIVE.route).catch(error => console.warn('No se pudo mostrar el mapa de ruta:', error.message)));
+}
+
+function openSavedRouteRoom(id) {
+  const room = savedRouteCatalogRoom(id); if (!room) return;
+  closeSavedRouteModal(); setTimeout(() => openDetail('catalogo', room.id || userRoomKey(room)), 0);
+}
+
+async function persistSavedRoute(routeId, route) {
+  const path = route.scope === 'group' ? `groupRoutes/${route.groupId}/${routeId}` : `userRoutes/${USER_ID}/${routeId}`;
+  await fbPut(path, route);
+  if (route.scope === 'group') { GROUP_ROUTES[route.groupId] ||= {}; GROUP_ROUTES[route.groupId][routeId] = route; }
+  else USER_ROUTES[routeId] = route;
+}
+
+function plannerProposalById(id) {
+  return ROUTE_PLANNER_LAST_RESULT?.proposals?.find(route => route.id === id) || null;
+}
+
+function savedRouteScopeOptions(selected = '') {
+  return `<option value="" ${selected ? '' : 'selected'}>Personal</option>` + activeUserGroups().filter(([,group]) => group.role === 'owner').map(([id,group]) => `<option value="${escapeHtml(id)}" ${selected === id ? 'selected' : ''}>Grupo · ${escapeHtml(group.name || 'Grupo')}</option>`).join('');
+}
+
+function openRouteSaveForm({ roomIds, scope = '', officialRouteId = '', defaultName = '', lockScope = false }) {
+  const date = new Date().toLocaleDateString('es-ES');
+  SAVED_ROUTE_ACTIVE = { draft: true, roomIds: VaultSavedRoutes.uniqueRoomIds(roomIds), officialRouteId, lockScope };
+  showSavedRouteModal('Guardar ruta', officialRouteId ? 'Registrar ruta oficial' : 'Desde el planificador', `<p class="route-planner-intro">Se guardarán únicamente el orden y los IDs canónicos. El progreso seguirá viniendo de tus estados actuales.</p><div class="saved-route-form"><div class="route-planner-field wide"><label for="saved-route-name">Nombre</label><input class="profile-input" id="saved-route-name" maxlength="80" value="${escapeHtml(defaultName || `Ruta ${ROUTE_PLANNER_STATE?.zoneValue || ''} · ${date}`)}"></div><div class="route-planner-field"><label for="saved-route-date">Fecha opcional</label><input class="profile-input" id="saved-route-date" type="date"></div><div class="route-planner-field"><label for="saved-route-scope">Ámbito</label><select class="route-planner-select" id="saved-route-scope" ${lockScope ? 'disabled' : ''}>${savedRouteScopeOptions(scope)}</select>${lockScope ? `<input type="hidden" id="saved-route-scope-fixed" value="${escapeHtml(scope)}">` : ''}</div><div class="route-planner-field wide"><label for="saved-route-description">Descripción opcional</label><textarea class="profile-textarea" id="saved-route-description" maxlength="400"></textarea></div></div><div class="saved-route-meta">${roomIds.length} salas · orden actual conservado</div><div class="saved-route-actions"><button class="auth-btn" type="button" onclick="createSavedRouteFromForm()">Guardar ruta</button><button class="auth-btn secondary" type="button" onclick="closeSavedRouteModal()">Cancelar</button></div><div class="profile-status-msg" id="saved-route-status"></div>`);
+}
+
+function openSaveRouteDialog(proposalId) {
+  const proposal = plannerProposalById(proposalId); if (!proposal) return;
+  const scope = ROUTE_PLANNER_STATE?.scope || '';
+  if (scope && USER_GROUPS[scope]?.role !== 'owner') return alert('Solo el propietario del grupo puede guardar una ruta grupal.');
+  openRouteSaveForm({ roomIds: proposal.items.map(item => String(item.room.id || '')), scope, lockScope: true });
+}
+
+async function createSavedRouteFromForm() {
+  if (!AUTH_USER || !SAVED_ROUTE_ACTIVE?.draft) return;
+  const status = document.getElementById('saved-route-status');
+  try {
+    const groupId = document.getElementById('saved-route-scope-fixed')?.value || document.getElementById('saved-route-scope')?.value || '';
+    if (groupId && USER_GROUPS[groupId]?.role !== 'owner') throw new Error('Solo el propietario puede guardar rutas para este grupo.');
+    const dateValue = document.getElementById('saved-route-date')?.value || '';
+    const route = VaultSavedRoutes.buildRecord({ name: document.getElementById('saved-route-name')?.value, description: document.getElementById('saved-route-description')?.value, scope: groupId ? 'group' : 'personal', ownerUid: USER_ID, groupId, roomIds: normalizeSavedRouteIdsForWrite(SAVED_ROUTE_ACTIVE.roomIds), plannedDate: dateValue ? new Date(`${dateValue}T12:00:00`).getTime() : 0, officialRouteId: SAVED_ROUTE_ACTIVE.officialRouteId });
+    const routeId = randomId('route');
+    await persistSavedRoute(routeId, route);
+    if (document.getElementById('route-planner-modal')?.classList.contains('open')) closeRoutePlanner();
+    SAVED_ROUTE_ACTIVE = { routeId, scope: route.scope, groupId: route.groupId || '', route };
+    showSavedRouteModal(route.name, 'Ruta guardada', savedRouteDetailHtml(route, true));
+    requestAnimationFrame(() => initSavedRouteMap(route).catch(() => {}));
+  } catch (error) { if (status) status.textContent = `No se pudo guardar. ${error.message}`; }
+}
+
+async function replaceActiveSavedRoute(nextRoomIds, metadata = {}) {
+  const active = SAVED_ROUTE_ACTIVE; if (!active?.routeId) return;
+  const route = VaultSavedRoutes.buildRecord({ ...active.route, ...metadata, roomIds: normalizeSavedRouteIdsForWrite(nextRoomIds, true), createdAt: active.route.createdAt }, Date.now());
+  await persistSavedRoute(active.routeId, route); active.route = route;
+  showSavedRouteModal(route.name, 'Ruta guardada', savedRouteDetailHtml(route, true));
+  requestAnimationFrame(() => initSavedRouteMap(route).catch(() => {}));
+}
+
+async function updateSavedRouteMetadata() {
+  try {
+    const date = document.getElementById('saved-route-edit-date')?.value || '';
+    await replaceActiveSavedRoute(savedRouteRoomIds(SAVED_ROUTE_ACTIVE.route), { name: document.getElementById('saved-route-edit-name')?.value, description: document.getElementById('saved-route-edit-description')?.value, plannedDate: date ? new Date(`${date}T12:00:00`).getTime() : 0 });
+  } catch (error) { document.getElementById('saved-route-status').textContent = error.message; }
+}
+
+async function moveSavedRouteRoom(index, direction) {
+  try { await replaceActiveSavedRoute(VaultSavedRoutes.moveRoom(savedRouteRoomIds(SAVED_ROUTE_ACTIVE.route), index, direction)); }
+  catch (error) { alert(`No se pudo reordenar. ${error.message}`); }
+}
+
+async function removeSavedRouteRoom(id) {
+  const ids = VaultSavedRoutes.removeRoom(savedRouteRoomIds(SAVED_ROUTE_ACTIVE.route), id);
+  if (!ids.length) return alert('Una ruta debe conservar al menos una sala. Puedes eliminar la ruta completa.');
+  try { await replaceActiveSavedRoute(ids); } catch (error) { alert(`No se pudo quitar la sala. ${error.message}`); }
+}
+
+async function addSavedRouteRoom() {
+  const value = String(document.getElementById('saved-route-add-room')?.value || '').trim();
+  const room = CATALOGO.find(item => `${item.nombre} · ${item.empresa || ''}` === value) || CATALOGO.find(item => String(item.id) === value);
+  if (!room) return alert('Selecciona una sala exacta del catálogo.');
+  try { await replaceActiveSavedRoute(VaultSavedRoutes.addRoom(savedRouteRoomIds(SAVED_ROUTE_ACTIVE.route), String(room.id))); }
+  catch (error) { alert(`No se pudo añadir la sala. ${error.message}`); }
+}
+
+async function deleteSavedRoute() {
+  const active = SAVED_ROUTE_ACTIVE; if (!active?.routeId || !confirm(`¿Eliminar ${active.route.name}?`)) return;
+  const path = active.scope === 'group' ? `groupRoutes/${active.groupId}/${active.routeId}` : `userRoutes/${USER_ID}/${active.routeId}`;
+  try {
+    await fbDelete(path);
+    if (active.scope === 'group') delete GROUP_ROUTES[active.groupId][active.routeId]; else delete USER_ROUTES[active.routeId];
+    closeSavedRouteModal(); renderProfile('Ruta eliminada.');
+  } catch (error) { alert(`No se pudo eliminar. ${error.message}`); }
+}
+
+function openOfficialRoute(id) {
+  const definition = PROGRESS_ROUTES.find(route => route.id === id); if (!definition) return;
+  const resolved = officialRouteResolved(definition);
+  const route = { name: definition.name, description: definition.description || '', scope: 'personal', ownerUid: USER_ID, roomIds: resolved.roomIds, officialRouteId: definition.id, plannedDate: 0 };
+  const progress = savedRouteProgress(route);
+  const officialProgress = progressRoutes().find(item => item.id === id) || { completed: progress.completed, target: definition.rooms.length };
+  const officialPercent = officialProgress.target ? Math.round(officialProgress.completed / officialProgress.target * 100) : 0;
+  const stateById = Object.fromEntries(progress.rooms.map(item => [item.roomId,item]));
+  const missing = resolved.entries.filter(entry => !entry.room);
+  SAVED_ROUTE_ACTIVE = { official: true, definition, route };
+  showSavedRouteModal(definition.name, 'Ruta oficial The Vault', `<p class="route-planner-intro">${escapeHtml(definition.description || `Recorrido ${definition.status || 'editorial'} definido por The Vault.`)}</p><div class="saved-route-progress"><span style="width:${officialPercent}%"></span></div><div class="saved-route-meta">${officialProgress.completed} / ${officialProgress.target} completadas · ${officialPercent}%</div>${missing.length ? `<div class="review-empty">${missing.length} requisitos históricos no tienen una ficha canónica inequívoca y esta ruta no puede registrarse todavía.</div>` : `<div class="saved-route-actions"><button class="auth-btn" type="button" onclick="registerOfficialRoute('${jsString(id)}')">Registrar esta ruta</button>${definition.url ? `<a class="auth-btn secondary" href="${escapeHtml(definition.url)}" target="_blank" rel="noopener">Web oficial</a>` : ''}</div>`}<div class="saved-route-detail-list">${resolved.entries.map((entry,index) => entry.room ? savedRouteDetailRoomHtml(route,entry.id,index,false,stateById[entry.id] || {}) : `<article class="saved-route-detail-room"><div class="saved-route-position">${index + 1}</div><span class="saved-route-cover saved-route-cover-fallback">?</span><div><div class="saved-route-name">${escapeHtml(entry.requirement[0])}</div><div class="saved-route-meta">${entry.matchCount > 1 ? 'Referencia histórica ambigua' : 'Referencia histórica sin ficha inequívoca'}</div></div></article>`).join('')}</div>${savedRouteMapHtml(route)}`);
+  requestAnimationFrame(() => initSavedRouteMap(route).catch(() => {}));
+}
+
+function registerOfficialRoute(id) {
+  const definition = PROGRESS_ROUTES.find(route => route.id === id); if (!definition) return;
+  const resolved = officialRouteResolved(definition); if (!resolved.complete) return;
+  openRouteSaveForm({ roomIds: resolved.roomIds, officialRouteId: id, defaultName: definition.name, lockScope: false });
 }
 
 async function toggleGroupRoom(kind, key, groupId) {
@@ -7151,6 +7543,8 @@ async function signOutGoogle() {
   GROUP_MEMBERS = {};
   GROUP_ROOMS = {};
   GROUP_PENDING_ROOMS = {};
+  USER_ROUTES = {};
+  GROUP_ROUTES = {};
   renderAuthStatus();
   await refreshSignedSession();
 }
@@ -7899,6 +8293,7 @@ async function refreshLiveData({ force = false, reason = 'auto' } = {}) {
     await loadVotes();
     await loadRoomReviews();
     await loadUserGroups();
+    await loadSavedRoutes();
     await loadLikes();
     refreshAllLikeCounts();
     populateFilters();
@@ -9953,6 +10348,17 @@ function closeDetail(event) {
 
 document.addEventListener('keydown', event => {
   if (document.getElementById('pending-choice')?.open) return;
+  if (document.getElementById('saved-route-modal')?.classList.contains('open')) {
+    if (event.key === 'Escape') { closeSavedRouteModal(); return; }
+    if (event.key === 'Tab') {
+      const focusable = [...document.querySelectorAll('#saved-route-modal .route-planner-dialog button, #saved-route-modal .route-planner-dialog a[href], #saved-route-modal .route-planner-dialog select, #saved-route-modal .route-planner-dialog input, #saved-route-modal .route-planner-dialog textarea')]
+        .filter(el => !el.disabled && el.tabIndex >= 0 && el.getClientRects().length);
+      const first = focusable[0], last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    }
+    return;
+  }
   if (document.getElementById('route-planner-modal')?.classList.contains('open')) {
     if (event.key === 'Escape') { closeRoutePlanner(); return; }
     if (event.key === 'Tab') {

@@ -45,6 +45,32 @@
         ".write": "auth != null && auth.uid === $uid"
       }
     },
+    "userRoutes": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        "$routeId": {
+          ".write": "auth != null && auth.uid === $uid",
+          ".validate": "!newData.exists() || (newData.hasChildren(['name', 'description', 'scope', 'ownerUid', 'roomIds', 'createdAt', 'updatedAt', 'status', 'schemaVersion']) && newData.child('name').isString() && newData.child('name').val().length > 0 && newData.child('name').val().length <= 80 && newData.child('description').isString() && newData.child('description').val().length <= 400 && newData.child('scope').val() === 'personal' && newData.child('ownerUid').val() === $uid && newData.child('createdAt').isNumber() && newData.child('createdAt').val() > 0 && newData.child('updatedAt').isNumber() && newData.child('updatedAt').val() >= newData.child('createdAt').val() && newData.child('status').val() === 'active' && newData.child('schemaVersion').val() === 1 && (!newData.child('plannedDate').exists() || (newData.child('plannedDate').isNumber() && newData.child('plannedDate').val() > 0)) && (!newData.child('officialRouteId').exists() || (newData.child('officialRouteId').isString() && newData.child('officialRouteId').val().length > 0 && newData.child('officialRouteId').val().length <= 100 && newData.child('officialRouteId').val().matches(/^[a-z0-9][a-z0-9-]*$/))))",
+          "name": { ".validate": true },
+          "description": { ".validate": true },
+          "scope": { ".validate": true },
+          "ownerUid": { ".validate": true },
+          "createdAt": { ".validate": true },
+          "updatedAt": { ".validate": true },
+          "plannedDate": { ".validate": true },
+          "status": { ".validate": true },
+          "schemaVersion": { ".validate": true },
+          "officialRouteId": { ".validate": true },
+          "roomIds": {
+            ".validate": "newData.hasChildren()",
+            "$index": {
+              ".validate": "$index.matches(/^(0|[1-9]|1[0-9])$/) && newData.isString() && newData.val().length > 0 && newData.val().length <= 160 && newData.val().matches(/^[a-z0-9][a-z0-9_-]*$/)"
+            }
+          },
+          "$other": { ".validate": false }
+        }
+      }
+    },
     "admins": {
       "$uid": {
         ".read": "auth != null && auth.uid === $uid",
@@ -66,7 +92,7 @@
     "groups": {
       "$groupId": {
         ".read": "auth != null && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active'",
-        ".write": "auth != null && ((!data.exists() && newData.exists() && newData.child('ownerUid').val() === auth.uid && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/role').val() === 'owner' && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active' && root.child('userGroups/' + auth.uid + '/' + $groupId + '/role').val() === 'owner' && root.child('userGroups/' + auth.uid + '/' + $groupId + '/status').val() === 'active') || (data.exists() && newData.exists() && data.child('ownerUid').val() === auth.uid && newData.child('ownerUid').val() === data.child('ownerUid').val() && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/role').val() === 'owner' && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active' && root.child('userGroups/' + auth.uid + '/' + $groupId + '/role').val() === 'owner' && root.child('userGroups/' + auth.uid + '/' + $groupId + '/status').val() === 'active') || (!newData.exists() && data.child('ownerUid').val() === auth.uid && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/role').val() === 'owner' && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active' && root.child('userGroups/' + auth.uid + '/' + $groupId + '/role').val() === 'owner' && root.child('userGroups/' + auth.uid + '/' + $groupId + '/status').val() === 'active'))",
+        ".write": "auth != null && ((!data.exists() && newData.exists() && newData.child('ownerUid').val() === auth.uid && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/role').val() === 'owner' && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active' && root.child('userGroups/' + auth.uid + '/' + $groupId + '/role').val() === 'owner' && root.child('userGroups/' + auth.uid + '/' + $groupId + '/status').val() === 'active') || (data.exists() && newData.exists() && data.child('ownerUid').val() === auth.uid && newData.child('ownerUid').val() === data.child('ownerUid').val() && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/role').val() === 'owner' && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active' && root.child('userGroups/' + auth.uid + '/' + $groupId + '/role').val() === 'owner' && root.child('userGroups/' + auth.uid + '/' + $groupId + '/status').val() === 'active') || (!newData.exists() && data.child('ownerUid').val() === auth.uid && !root.child('groupRoutes/' + $groupId).exists() && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/role').val() === 'owner' && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active' && root.child('userGroups/' + auth.uid + '/' + $groupId + '/role').val() === 'owner' && root.child('userGroups/' + auth.uid + '/' + $groupId + '/status').val() === 'active'))",
         ".validate": "!newData.exists() || (newData.hasChildren(['name', 'ownerUid', 'createdAt', 'updatedAt']) && newData.child('name').isString() && newData.child('name').val().length > 0 && newData.child('name').val().length <= 60 && newData.child('ownerUid').isString() && newData.child('ownerUid').val().length <= 128 && newData.child('createdAt').isNumber() && newData.child('updatedAt').isNumber())"
       }
     },
@@ -103,6 +129,33 @@
         "$room": {
           ".write": "auth != null && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active'",
           ".validate": "!newData.exists() || (newData.hasChildren(['roomName', 'addedBy', 'addedAt', 'updatedAt']) && newData.child('roomName').isString() && newData.child('roomName').val().length > 0 && newData.child('roomName').val().length <= 180 && newData.child('addedBy').isString() && newData.child('addedBy').val() === auth.uid && newData.child('addedAt').isNumber() && newData.child('updatedAt').isNumber())"
+        }
+      }
+    },
+    "groupRoutes": {
+      "$groupId": {
+        ".read": "auth != null && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active'",
+        "$routeId": {
+          ".write": "auth != null && ((root.child('groups/' + $groupId + '/ownerUid').val() === auth.uid && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/role').val() === 'owner' && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active') || (!newData.exists() && !root.child('groups/' + $groupId).exists() && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/role').val() === 'owner' && root.child('groupMembers/' + $groupId + '/' + auth.uid + '/status').val() === 'active'))",
+          ".validate": "!newData.exists() || (newData.hasChildren(['name', 'description', 'scope', 'ownerUid', 'groupId', 'roomIds', 'createdAt', 'updatedAt', 'status', 'schemaVersion']) && newData.child('name').isString() && newData.child('name').val().length > 0 && newData.child('name').val().length <= 80 && newData.child('description').isString() && newData.child('description').val().length <= 400 && newData.child('scope').val() === 'group' && newData.child('groupId').val() === $groupId && newData.child('ownerUid').val() === root.child('groups/' + $groupId + '/ownerUid').val() && newData.child('createdAt').isNumber() && newData.child('createdAt').val() > 0 && newData.child('updatedAt').isNumber() && newData.child('updatedAt').val() >= newData.child('createdAt').val() && newData.child('status').val() === 'active' && newData.child('schemaVersion').val() === 1 && (!newData.child('plannedDate').exists() || (newData.child('plannedDate').isNumber() && newData.child('plannedDate').val() > 0)) && (!newData.child('officialRouteId').exists() || (newData.child('officialRouteId').isString() && newData.child('officialRouteId').val().length > 0 && newData.child('officialRouteId').val().length <= 100 && newData.child('officialRouteId').val().matches(/^[a-z0-9][a-z0-9-]*$/))))",
+          "name": { ".validate": true },
+          "description": { ".validate": true },
+          "scope": { ".validate": true },
+          "ownerUid": { ".validate": true },
+          "groupId": { ".validate": true },
+          "createdAt": { ".validate": true },
+          "updatedAt": { ".validate": true },
+          "plannedDate": { ".validate": true },
+          "status": { ".validate": true },
+          "schemaVersion": { ".validate": true },
+          "officialRouteId": { ".validate": true },
+          "roomIds": {
+            ".validate": "newData.hasChildren()",
+            "$index": {
+              ".validate": "$index.matches(/^(0|[1-9]|1[0-9])$/) && newData.isString() && newData.val().length > 0 && newData.val().length <= 160 && newData.val().matches(/^[a-z0-9][a-z0-9_-]*$/)"
+            }
+          },
+          "$other": { ".validate": false }
         }
       }
     },
