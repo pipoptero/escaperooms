@@ -2558,10 +2558,10 @@ const PROGRESS_ROUTES = [
   { id: 'pain-route-3', mark: 'PR3', name: 'Pain Route 3', status: 'vigente', url: 'https://www.painroute.com/', emblem: 'images/progress/pain-route-3.png', rewardAvatar: 'avatar_pain_route_3', rooms: [
     ['Achijira', 'Red Dopamine'], ['Dark City', 'Obscura Experiences'], ['Sección Esoterismo: Exorcista', 'Terror Stories', 'Exorcista'], ['Forbidden Room', 'Shallow Grave', 'Forbidden'], ['La Isla de las Muñecas', 'Cindy Escape Box'], ['La Vitrina', 'Malorial Experience']
   ]},
-  { id: 'movie-route', mark: 'MR', name: 'Movie Route', status: 'vigente', url: 'https://movierouteescaperoom.es/', emblem: 'images/progress/movie-route.png', rewardAvatar: 'avatar_movie_route', rooms: [
+  { id: 'movie-route', mark: 'MR', name: 'Movie Route', status: 'vigente', url: 'https://movierouteescaperoom.es/', emblem: 'images/progress/movie-route.png', rewardAvatar: 'avatar_movie_route', registrationBlocked: 'Room Angie 2 mantiene pendiente la confirmación de su identidad canónica.', rooms: [
     ['Abduction Enterprises', 'Abduction', 'Abduction 4 Enterprises'], ['Escapafantasmas', 'Cubick', 'Escapa Fantasmas'], ['EscapeStory', 'Fugitivos Room Escape', 'Escape Story'], ['Nunca Jamás', 'Key Play'], ['Olimpo', 'Olimpo Escape Room'], ['Poison', 'Kadabra Escape Rooms'], ['Roomions', 'Virus Room Escape'], ['Room Angie 2', 'Ilusium Room Escape', 'Room Angie'], ['Sustos S.A.', 'Quimera Escape'], ['Willy el Tuerto', 'Willy el Tuerto Escape Room']
   ]},
-  { id: 'panic-tour', mark: 'PT', name: 'Panic Tour', status: 'histórica', rooms: [
+  { id: 'panic-tour', mark: 'PT', name: 'Panic Tour', status: 'histórica', registrationBlocked: 'IN mantiene pendiente la confirmación de su identidad canónica.', rooms: [
     ['Profana', 'Fear Factory Experience'], ['IN', 'Fear Factory Experiences'], ['El Orfanato (Fear Factory)', 'Fear Factory Experiences', 'El Orfanato'], ['Pesadillas', 'Golden Pop'], ['La Consulta', 'Escapism Experience'], ['El Claustre', 'El Claustre']
   ]},
   { id: 'achoporte', mark: 'AC', name: 'Achoporte', status: 'histórica', rooms: [
@@ -7161,7 +7161,14 @@ function officialRouteResolved(route) {
     const room = matches.length === 1 ? matches[0] : null;
     return { requirement, room, id: room ? String(room.id || '') : '', matchCount: matches.length };
   });
-  return { entries, roomIds: [...new Set(entries.map(entry => entry.id).filter(Boolean))], complete: entries.every(entry => entry.room) };
+  const catalogComplete = entries.every(entry => entry.room);
+  return {
+    entries,
+    roomIds: [...new Set(entries.map(entry => entry.id).filter(Boolean))],
+    catalogComplete,
+    registrationBlocked: String(route.registrationBlocked || ''),
+    complete: catalogComplete && !route.registrationBlocked
+  };
 }
 
 function officialRoutesOverviewHtml() {
@@ -7346,8 +7353,11 @@ function openOfficialRoute(id) {
   const officialPercent = officialProgress.target ? Math.round(officialProgress.completed / officialProgress.target * 100) : 0;
   const stateById = Object.fromEntries(progress.rooms.map(item => [item.roomId,item]));
   const missing = resolved.entries.filter(entry => !entry.room);
+  const blockReason = missing.length
+    ? `${missing.length} requisitos históricos no tienen una ficha canónica inequívoca y esta ruta no puede registrarse todavía.`
+    : resolved.registrationBlocked;
   SAVED_ROUTE_ACTIVE = { official: true, definition, route };
-  showSavedRouteModal(definition.name, 'Ruta oficial The Vault', `<p class="route-planner-intro">${escapeHtml(definition.description || `Recorrido ${definition.status || 'editorial'} definido por The Vault.`)}</p><div class="saved-route-progress"><span style="width:${officialPercent}%"></span></div><div class="saved-route-meta">${officialProgress.completed} / ${officialProgress.target} completadas · ${officialPercent}%</div>${missing.length ? `<div class="review-empty">${missing.length} requisitos históricos no tienen una ficha canónica inequívoca y esta ruta no puede registrarse todavía.</div>` : `<div class="saved-route-actions"><button class="auth-btn" type="button" onclick="registerOfficialRoute('${jsString(id)}')">Registrar esta ruta</button>${definition.url ? `<a class="auth-btn secondary" href="${escapeHtml(definition.url)}" target="_blank" rel="noopener">Web oficial</a>` : ''}</div>`}<div class="saved-route-detail-list">${resolved.entries.map((entry,index) => entry.room ? savedRouteDetailRoomHtml(route,entry.id,index,false,stateById[entry.id] || {}) : `<article class="saved-route-detail-room"><div class="saved-route-position">${index + 1}</div><span class="saved-route-cover saved-route-cover-fallback">?</span><div><div class="saved-route-name">${escapeHtml(entry.requirement[0])}</div><div class="saved-route-meta">${entry.matchCount > 1 ? 'Referencia histórica ambigua' : 'Referencia histórica sin ficha inequívoca'}</div></div></article>`).join('')}</div>${savedRouteMapHtml(route)}`);
+  showSavedRouteModal(definition.name, 'Ruta oficial The Vault', `<p class="route-planner-intro">${escapeHtml(definition.description || `Recorrido ${definition.status || 'editorial'} definido por The Vault.`)}</p><div class="saved-route-progress"><span style="width:${officialPercent}%"></span></div><div class="saved-route-meta">${officialProgress.completed} / ${officialProgress.target} completadas · ${officialPercent}%</div>${!resolved.complete ? `<div class="review-empty">${escapeHtml(blockReason)}</div>` : `<div class="saved-route-actions"><button class="auth-btn" type="button" onclick="registerOfficialRoute('${jsString(id)}')">Registrar esta ruta</button>${definition.url ? `<a class="auth-btn secondary" href="${escapeHtml(definition.url)}" target="_blank" rel="noopener">Web oficial</a>` : ''}</div>`}<div class="saved-route-detail-list">${resolved.entries.map((entry,index) => entry.room ? savedRouteDetailRoomHtml(route,entry.id,index,false,stateById[entry.id] || {}) : `<article class="saved-route-detail-room"><div class="saved-route-position">${index + 1}</div><span class="saved-route-cover saved-route-cover-fallback">?</span><div><div class="saved-route-name">${escapeHtml(entry.requirement[0])}</div><div class="saved-route-meta">${entry.matchCount > 1 ? 'Referencia histórica ambigua' : 'Referencia histórica sin ficha inequívoca'}</div></div></article>`).join('')}</div>${savedRouteMapHtml(route)}`);
   requestAnimationFrame(() => initSavedRouteMap(route).catch(() => {}));
 }
 

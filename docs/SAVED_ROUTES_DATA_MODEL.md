@@ -47,7 +47,7 @@ Las reglas propuestas viven solo en `database.rules.json` y deben permanecer sin
 
 Antes de cada alta se resuelve cada identificador con la identidad compartida de `room-state.js` y se persiste el `id` exacto de la única ficha coincidente del catálogo. Las reglas verifican además el formato léxico usado por todos los IDs actuales (`[a-z0-9][a-z0-9_-]*`), el máximo de 20 posiciones y los tipos/timestamps. Una sala retirada ya guardada conserva su ID al editar otros datos y se presenta como “No disponible”.
 
-La resolución local exige una única coincidencia por nombre histórico, empresa y alias ya declarado. Ocho de las diez definiciones actuales quedan completamente resolubles. `movie-route` mantiene una ambigüedad en “Room Angie 2” y `panic-tour` otra en “IN”; ambas siguen visibles y calculando su trofeo histórico, pero se bloquea “Registrar esta ruta” hasta que una decisión editorial asigne el ID canónico exacto. No se deduce una sala solo por similitud.
+La resolución local exige una única coincidencia por nombre histórico, empresa y alias ya declarado. Ocho de las diez definiciones actuales pueden registrarse. `movie-route` mantiene pendiente la confirmación editorial de “Room Angie 2” y `panic-tour` la de “IN”; ambas siguen visibles y calculando su trofeo histórico, pero llevan un bloqueo editorial explícito que impide “Registrar esta ruta” aunque una versión concreta del catálogo llegue a producir una sola coincidencia. No se deduce ni se desbloquea una sala solo por similitud o por cambios accidentales en el conjunto de candidatos.
 
 Los candidatos exactos pendientes de decisión editorial son:
 

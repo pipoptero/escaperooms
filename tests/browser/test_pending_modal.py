@@ -544,6 +544,7 @@ class PendingModalTest(unittest.TestCase):
         route_id = next(iter(self.db['groupRoutes']['g1']))
         self.assertEqual(self.db['groupRoutes']['g1'][route_id]['ownerUid'], 'a')
         member = self.page_for('b')
+        member.wait_for_function("Object.values(GROUP_ROUTES.g1 || {}).some(route => route.name === 'Ruta Grupo Uno')")
         member.evaluate("SETTINGS_TAB='profile';const m=document.getElementById('profile-modal');m.classList.add('open');m.setAttribute('aria-hidden','false');renderProfile()")
         card = member.locator('.saved-route-card', has_text='Ruta Grupo Uno')
         expect(card).to_be_visible()
@@ -597,6 +598,8 @@ class PendingModalTest(unittest.TestCase):
         }
         for route_id in ('movie-route', 'panic-tour'):
             with self.subTest(route=route_id):
+                self.assertTrue(page.evaluate("id => !!PROGRESS_ROUTES.find(item=>item.id===id)?.registrationBlocked", route_id))
+                self.assertFalse(page.evaluate("id => officialRouteResolved(PROGRESS_ROUTES.find(item=>item.id===id)).complete", route_id))
                 candidates = page.evaluate("""id => { const route=PROGRESS_ROUTES.find(item=>item.id===id); const entry=officialRouteResolved(route).entries.find(item=>item.matchCount>1); return CATALOGO.filter(room=>routeRoomMatches(room,entry.requirement)).map(room=>String(room.id)).sort(); }""", route_id)
                 self.assertEqual(candidates, expected[route_id])
                 page.evaluate("id => openOfficialRoute(id)", route_id)
