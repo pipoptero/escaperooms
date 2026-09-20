@@ -23,8 +23,14 @@ jobs:
           node --check room-state.js
           node --check route-planner.js
           node --check saved-routes.js
+          node --check public-profile.js
+          node --check public-profile-firebase.js
+          node --check public-profile-fixtures.js
+          node --check escapista/public-profile-page.js
           node --test tests/route_planner.test.cjs
           node --test tests/saved_routes.test.cjs
+          node --test tests/public_profile.test.cjs
+          node --test --test-isolation=none tests/public_profile_firebase.test.cjs
           node --check service-worker.js
 
   browser:
@@ -40,10 +46,23 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - run: npm ci
       - run: pip install -r tests/browser/requirements.txt
       - run: python -m playwright install --with-deps ${{ matrix.browser }}
       - name: Probar pendientes y modal con Firebase simulado
         run: python -B -m unittest discover -s tests/browser -v
+      - name: Probar perfil público autenticado con Firebase Emulator
+        env:
+          VAULT_FIREBASE_EMULATOR: "1"
+        run: npx --yes firebase-tools@15.14.0 emulators:exec --only auth,database --project demo-the-vault --config firebase.json "python -B -m unittest tests.browser.test_public_profile_emulator -v"
 
   firebase-rules:
     runs-on: ubuntu-latest

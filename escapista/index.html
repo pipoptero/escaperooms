@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Perfil escapista · The Vault Escape</title>
+  <meta name="description" content="Perfil escapista compartido desde The Vault Escape.">
+  <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+  <meta name="theme-color" content="#080b08">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="The Vault Escape">
+  <meta property="og:title" content="Perfil escapista · The Vault Escape">
+  <meta property="og:description" content="Perfil escapista compartido desde The Vault Escape.">
+  <meta property="og:image" content="https://thevaultescape.com/images/brand/social-card.png">
+  <link rel="icon" href="/images/brand/favicon-round-32.png" type="image/png">
+  <link rel="apple-touch-icon" href="/images/brand/apple-touch-icon-round.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/escapista/public-profile.css">
+</head>
+<body>
+  <div class="vault-ambient" aria-hidden="true"></div>
+  <header class="site-head">
+    <a class="brand" href="/" aria-label="Volver a The Vault Escape">
+      <img src="/images/brand/the-vault-wordmark-transparent.png" alt="The Vault Escape">
+    </a>
+    <span class="privacy-mark">Perfil compartible · Noindex</span>
+  </header>
+
+  <main id="public-profile-app" class="profile-page" aria-live="polite">
+    <section id="profile-loading" class="state-card loading-state">
+      <span class="loader" aria-hidden="true"></span>
+      <p>Abriendo la cámara escapista…</p>
+    </section>
+    <section id="profile-unavailable" class="state-card" hidden>
+      <div class="state-glyph" aria-hidden="true">⌁</div>
+      <p class="eyebrow">The Vault Escapist</p>
+      <h1>Este perfil no está disponible.</h1>
+      <p id="profile-unavailable-detail">Puede ser privado, haber cambiado de dirección o no existir.</p>
+      <a class="vault-button" href="/">Explorar The Vault</a>
+    </section>
+    <section id="profile-invalid" class="state-card" hidden>
+      <div class="state-glyph" aria-hidden="true">!</div>
+      <p class="eyebrow">Enlace no válido</p>
+      <h1>No podemos abrir este perfil.</h1>
+      <p>Revisa el enlace compartido.</p>
+      <a class="vault-button" href="/">Volver a The Vault</a>
+    </section>
+    <section id="profile-error" class="state-card" hidden>
+      <div class="state-glyph" aria-hidden="true">↻</div>
+      <p class="eyebrow">Conexión interrumpida</p>
+      <h1>No hemos podido comprobar el perfil.</h1>
+      <p>No podemos confirmar ahora si está disponible.</p>
+      <button class="vault-button" id="profile-retry" type="button">Reintentar</button>
+    </section>
+    <div id="profile-public" hidden></div>
+  </main>
+
+  <dialog class="share-dialog" id="share-dialog" aria-labelledby="share-title">
+    <div class="share-dialog-head">
+      <div>
+        <p class="eyebrow">Tarjeta compartible</p>
+        <h2 id="share-title">The Vault Escapist</h2>
+      </div>
+      <button class="icon-button" id="share-close" type="button" aria-label="Cerrar">×</button>
+    </div>
+    <div class="share-dialog-body">
+      <canvas id="share-card" width="1080" height="1350" aria-label="Vista previa de la tarjeta escapista"></canvas>
+      <div class="share-actions">
+        <button class="vault-button" id="share-native" type="button">Compartir</button>
+        <button class="vault-button secondary" id="share-copy" type="button">Copiar enlace</button>
+        <a class="vault-button secondary" id="share-whatsapp" href="#" target="_blank" rel="noopener">WhatsApp</a>
+        <button class="vault-button ghost" id="share-download" type="button">Descargar tarjeta</button>
+      </div>
+      <p class="share-status" id="share-status" role="status"></p>
+    </div>
+  </dialog>
+
+  <script src="/firebase-config.js"></script>
+  <script src="/public-profile.js"></script>
+  <script src="/public-profile-fixtures.js"></script>
+  <script src="/escapista/public-profile-page.js"></script>
+</body>
+</html>

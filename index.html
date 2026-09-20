@@ -559,6 +559,36 @@
   .admin-draft-title{font-family:'Cinzel',serif;color:var(--text);font-size:.9rem;}
   .admin-draft-meta{font-family:'Share Tech Mono',monospace;font-size:.55rem;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;margin-top:3px;}
   .profile-status-msg{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;line-height:1.5;margin-top:9px;overflow-wrap:anywhere;}
+  .public-profile-demo{border-color:rgba(125,187,63,.24);background:linear-gradient(145deg,rgba(125,187,63,.06),rgba(255,255,255,.018));}
+  .public-profile-demo-badge{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(255,176,0,.32);background:rgba(255,176,0,.06);color:#ffb000;font-family:'Share Tech Mono',monospace;font-size:.53rem;letter-spacing:.08em;text-transform:uppercase;padding:4px 7px;margin-bottom:10px;}
+  .public-profile-master{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:12px;border:1px solid rgba(125,187,63,.18);background:rgba(0,0,0,.14);}
+  .public-profile-master strong{display:block;font-family:'Cinzel',serif;font-size:.94rem;color:var(--text);}
+  .public-profile-master span{display:block;color:var(--text3);font-size:.78rem;line-height:1.35;margin-top:3px;}
+  .public-profile-switch{position:relative;display:inline-flex;flex:0 0 auto;width:46px;height:25px;}
+  .public-profile-switch input{position:absolute;opacity:0;pointer-events:none;}
+  .public-profile-switch i{position:absolute;inset:0;border:1px solid var(--border);background:rgba(255,255,255,.04);border-radius:99px;cursor:pointer;transition:.2s;}
+  .public-profile-switch i::after{content:'';position:absolute;width:17px;height:17px;left:3px;top:3px;border-radius:50%;background:var(--text3);transition:.2s;}
+  .public-profile-switch input:checked+i{border-color:rgba(125,187,63,.65);background:rgba(125,187,63,.16);}
+  .public-profile-switch input:checked+i::after{transform:translateX(21px);background:var(--amber);}
+  .public-profile-switch input:focus-visible+i{outline:2px solid var(--amber);outline-offset:3px;}
+  .public-profile-username{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:end;margin-top:10px;}
+  .public-profile-url{font-family:'Share Tech Mono',monospace;color:var(--amber);font-size:.61rem;line-height:1.45;overflow-wrap:anywhere;margin-top:7px;}
+  .public-profile-hint{font-size:.78rem;line-height:1.4;color:var(--text3);margin-top:5px;}
+  .public-profile-visibility{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:11px;}
+  .public-profile-visibility label{display:flex;align-items:flex-start;gap:8px;padding:9px 10px;border:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.12);font-size:.78rem;color:var(--text2);line-height:1.25;cursor:pointer;}
+  .public-profile-visibility input{margin-top:2px;accent-color:var(--amber);}
+  .public-profile-demo-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;}
+  .public-profile-demo-preview{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center;margin-top:12px;padding:10px 11px;border:1px solid rgba(125,187,63,.15);background:rgba(125,187,63,.025);}
+  .public-profile-demo-preview .progress-avatar-wrap{width:48px;height:48px;}
+  .public-profile-demo-preview strong{display:block;font-family:'Cinzel',serif;font-size:.88rem;}
+  .public-profile-demo-preview span{display:block;color:var(--text3);font-family:'Share Tech Mono',monospace;font-size:.54rem;line-height:1.45;margin-top:3px;}
+  @media(max-width:700px){
+    .public-profile-master{align-items:center;}
+    .public-profile-username{grid-template-columns:1fr;}
+    .public-profile-username .auth-btn{justify-self:start;}
+    .public-profile-visibility{grid-template-columns:1fr;}
+    .public-profile-demo-actions .auth-btn,.public-profile-demo-actions .auth-btn.secondary{flex:1 1 calc(50% - 7px);}
+  }
   .profile-groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;}
   .profile-group-card{border:1px solid rgba(125,187,63,.14);background:rgba(125,187,63,.035);padding:11px 12px;min-width:0;}
   .profile-group-name{font-family:'Cinzel',serif;color:var(--text);font-size:1rem;font-weight:700;line-height:1.15;margin-bottom:4px;overflow-wrap:anywhere;}
@@ -2396,6 +2426,9 @@
 <script src="room-state.js"></script>
 <script src="route-planner.js"></script>
 <script src="saved-routes.js"></script>
+<script src="public-profile.js"></script>
+<script src="public-profile-firebase.js"></script>
+<script src="public-profile-fixtures.js"></script>
 <script>
 // ════════════════════════════════════════════════════════════
 //  🔥 CONFIGURACIÓN FIREBASE
@@ -2609,6 +2642,8 @@ let ROOM_STATE_SAVING = false;
 let PENDING_INVITE_ID = new URLSearchParams(window.location.search).get('invite') || '';
 let INVITE_NOTICE_SHOWN = false;
 let SETTINGS_TAB = 'profile';
+let PUBLIC_PROFILE_CONTROL = null;
+let PUBLIC_PROFILE_REFRESH_TIMER = null;
 let PROFILE_MAP_ACTIVE_KEY = '';
 let PROFILE_MAP_SELECTED_ROOM_KEY = '';
 let PROFILE_MAP_SHEET_OPEN = false;
@@ -2636,7 +2671,7 @@ let STATIC_ENHANCEMENTS_PROMISE = null;
 let PROFILE_MAP_DATA_PROMISE = null;
 let PHOTO_LIGHTBOX_GALLERIES = {};
 const LIVE_REFRESH_MIN_INTERVAL = 5 * 60 * 1000;
-const STATIC_ASSET_VERSION = '20260913-saved-routes-v47';
+const STATIC_ASSET_VERSION = '20260915-public-profile-v48';
 
 function invalidateReviewRoomsCache() {
   REVIEW_ROOMS_CACHE = null;
@@ -3512,6 +3547,8 @@ async function refreshSignedSession() {
   await saveUserProfile();
   renderAuthStatus();
   await loadUserGroups();
+  await loadSavedRoutes();
+  await loadPublicProfileControl();
   await loadVotes();
   await loadRoomReviews();
   await loadLikes();
@@ -3924,6 +3961,7 @@ async function saveUserProfile(extra = {}) {
   };
   try {
     await fbPut(`profiles/${USER_ID}`, USER_PROFILE);
+    schedulePublicProfileRefresh();
     return true;
   } catch (e) {
     console.warn('No se pudo guardar el perfil:', e.message);
@@ -5321,7 +5359,9 @@ async function refreshProfileDataForSettings() {
     await Promise.all([
       loadAdminRole(),
       loadAdminReviewDrafts(),
-      loadUserGroups()
+      loadUserGroups(),
+      loadSavedRoutes(),
+      loadPublicProfileControl()
     ]);
     renderAuthStatus();
     renderStats();
@@ -5805,6 +5845,367 @@ async function unpublishAdminReview(explicitRoomKey = '') {
 
 function accountRoleInfoHtml() {
   return '';
+}
+
+function defaultPublicProfileVisibility() {
+  return {
+    showAvatar: false,
+    showProgress: false,
+    showStats: false,
+    showMap: false,
+    showAchievements: false,
+    showRoutes: false,
+    showRoutesInProgress: false,
+    showGroups: false
+  };
+}
+
+function publicProfileControls() {
+  const suggestedResult = VaultPublicProfile.validateUsername(shortDisplayName());
+  const suggested = suggestedResult.valid ? suggestedResult.normalized : 'mi-perfil-vault';
+  const stored = PUBLIC_PROFILE_CONTROL || {};
+  const username = stored.currentUsername || stored.pendingUsername || suggested;
+  return {
+    published: stored.published === true,
+    indexable: false,
+    username,
+    currentUsername: stored.currentUsername || '',
+    pendingUsername: stored.pendingUsername || '',
+    previousUsername: stored.previousUsername || '',
+    visibility: { ...defaultPublicProfileVisibility(), ...(stored.visibility || {}) },
+    updatedAt: Number(stored.updatedAt || 0)
+  };
+}
+
+async function loadPublicProfileControl() {
+  if (!AUTH_USER || !FIREBASE_ENABLED) {
+    PUBLIC_PROFILE_CONTROL = null;
+    return null;
+  }
+  try {
+    const value = await fbGet(`publicProfileControls/${USER_ID}`);
+    PUBLIC_PROFILE_CONTROL = VaultPublicProfileFirebase.normalizeControl(value || {});
+    return PUBLIC_PROFILE_CONTROL;
+  } catch (error) {
+    console.warn('No se pudo cargar la configuración del perfil público:', error.message);
+    PUBLIC_PROFILE_CONTROL = VaultPublicProfileFirebase.normalizeControl({});
+    return PUBLIC_PROFILE_CONTROL;
+  }
+}
+
+function publicProfileFirebaseApi() {
+  return {
+    now: () => Date.now(),
+    get: path => fbGet(path),
+    put: (path, value) => fbPut(path, value),
+    remove: path => fbDelete(path),
+    publicReadable: async username => {
+      const response = await fetch(firebaseRestUrl(`publicProfiles/${username}/view`, false), { cache: 'no-store' });
+      if (!response.ok) return false;
+      return (await response.json()) !== null;
+    }
+  };
+}
+
+function publicProfileSafeAchievements(model, stats) {
+  const personalTimed = Object.values(USER_ROOM_STATES || {}).filter(state => state?.done && Number(state.completedMinutes) > 0).length;
+  const checks = {
+    first_escape: stats.personalEscapes >= 1,
+    enthusiast: stats.personalEscapes >= 10,
+    veteran: stats.personalEscapes >= 50,
+    centurion: stats.personalEscapes >= 100,
+    first_review: model.reviews.length >= 1,
+    chronicler: model.reviews.length >= 10,
+    community_voice: model.reviews.length >= 25,
+    complete_review: model.completeReviews.length >= 1,
+    perfectionist: model.completeReviews.length >= 10,
+    timekeeper: personalTimed >= 10,
+    without_fear: stats.terror >= 10,
+    award_hunter: stats.awardedRooms >= 10,
+    explorer: stats.cities >= 5,
+    traveller: stats.zones >= 3
+  };
+  return Object.entries(checks).filter(([, unlocked]) => unlocked).map(([id]) => id);
+}
+
+function publicProfileRouteInput(model) {
+  const official = (model.routes || []).map(route => {
+    let missingRooms = route.registrationBlocked ? 1 : 0;
+    try {
+      const resolved = typeof officialRouteResolved === 'function' ? officialRouteResolved(route) : { missing: [] };
+      missingRooms = resolved.missing?.length || 0;
+    } catch (error) {
+      console.warn(`Ruta oficial ${route.id || ''} no resoluble para perfil público:`, error.message);
+    }
+    return { id: route.id, completed: route.completed, target: route.target, missingRooms };
+  });
+  const personal = Object.entries(USER_ROUTES || {}).map(([, route]) => {
+    const progress = savedRouteProgress(route);
+    const missingRooms = savedRouteRoomIds(route).filter(id => !savedRouteCatalogRoom(id)).length;
+    return { name: route.name, completed: progress.completed, target: progress.target, missingRooms };
+  });
+  return { official, personal };
+}
+
+function publicProfileCompletedRouteCount(routes) {
+  const completed = new Set();
+  (routes.official || []).forEach(route => {
+    if (route.completed >= route.target && route.target > 0) completed.add(`official:${route.id}`);
+  });
+  Object.entries(USER_ROUTES || {}).forEach(([routeId, route]) => {
+    const progress = savedRouteProgress(route);
+    if (progress.completed < progress.target || progress.target < 1) return;
+    if (route.officialRouteId && completed.has(`official:${route.officialRouteId}`)) return;
+    completed.add(`personal:${routeId}`);
+  });
+  return completed.size;
+}
+
+function buildPublicProfileProjection(controls = publicProfileControls()) {
+  const personalRooms = progressPersonalDoneRooms().map(room => {
+    let awarded = false;
+    try { awarded = publicAwardsFor(room).some(award => award.status !== 'ranked'); } catch {}
+    return { ...room, awarded };
+  });
+  const model = progressModel();
+  const routes = publicProfileRouteInput(model);
+  const stats = VaultPublicProfile.personalStats(personalRooms, {
+    routesCompleted: publicProfileCompletedRouteCount(routes),
+    reviews: model.reviews.length
+  });
+  const achievementIds = publicProfileSafeAchievements(model, stats);
+  const avatar = selectedProgressAvatar();
+  const frame = selectedProgressFrame();
+  const titleItem = selectedProgressTitleItem();
+  const avatarImage = avatar.source === 'google' ? publicPhotoURL() : (avatar.image || '');
+  const view = VaultPublicProfile.buildPublicProfileProjection({
+    username: controls.username,
+    displayName: shortDisplayName(),
+    updatedAt: Date.now(),
+    visibility: controls.visibility,
+    appearance: {
+      avatarId: avatar.id,
+      avatarImage,
+      frameId: frame.id,
+      titleId: titleItem?.id || 'title_none'
+    },
+    xp: model.xp,
+    stats,
+    mapRoomIds: personalRooms.map(room => room.id).filter(Boolean),
+    achievementIds,
+    featuredAchievementIds: (USER_PROFILE.featuredAchievements || []).filter(id => achievementIds.includes(id)),
+    routes,
+    groupCount: activeUserGroups().length
+  });
+  const privateValues = [USER_ID, AUTH_USER?.email].filter(Boolean);
+  const problems = VaultPublicProfile.forbiddenPublicData(view, privateValues);
+  if (problems.length) throw new Error(`La proyección contiene datos privados: ${problems[0]}`);
+  return view;
+}
+
+function publicProfileUrl(username) {
+  return VaultPublicProfile.profileUrl(username);
+}
+
+function publicProfileToggleHtml(id, label, checked, detail = '') {
+  return `<label for="${id}"><input id="${id}" type="checkbox" ${checked ? 'checked' : ''} onchange="updatePublicProfilePreview()"><span><strong>${escapeHtml(label)}</strong>${detail ? `<br><small>${escapeHtml(detail)}</small>` : ''}</span></label>`;
+}
+
+function publicProfileSettingsHtml() {
+  const controls = publicProfileControls();
+  const checked = VaultPublicProfile.validateUsername(controls.username);
+  const url = checked.valid ? publicProfileUrl(checked.normalized) : 'Username pendiente de validar';
+  const flags = controls.visibility;
+  return `<div class="profile-section public-profile-demo" id="public-profile-demo-settings">
+    <div class="profile-section-title">Perfil público</div>
+    <div class="public-profile-demo-badge">Privacidad opt-in · Firebase</div>
+    <div class="public-profile-master">
+      <div><strong>Perfil público</strong><span>Está desactivado por defecto. Al despublicar, la URL deja de entregar la proyección.</span></div>
+      <label class="public-profile-switch" title="Activar perfil público"><input id="public-profile-published" type="checkbox" ${controls.published ? 'checked' : ''} onchange="updatePublicProfilePreview()"><i></i></label>
+    </div>
+    <div class="public-profile-username">
+      <div><label class="profile-field-label" for="public-profile-username">Username</label><input class="profile-input" id="public-profile-username" maxlength="30" value="${escapeHtml(controls.username)}" autocomplete="off" autocapitalize="none" spellcheck="false" oninput="updatePublicProfilePreview()"></div>
+      <button class="auth-btn secondary" type="button" onclick="normalizePublicProfileUsername()">Normalizar</button>
+    </div>
+    <div class="public-profile-url" id="public-profile-url-preview">${escapeHtml(url)}</div>
+    <div class="public-profile-hint" id="public-profile-username-help">${checked.valid ? 'Las mayúsculas representan el mismo username. Los nombres anteriores permanecen reservados para tu cuenta.' : escapeHtml(checked.error)}</div>
+    <div class="public-profile-visibility">
+      ${publicProfileToggleHtml('public-show-avatar', 'Mostrar avatar', flags.showAvatar, 'Incluye marco y título equipados.')}
+      ${publicProfileToggleHtml('public-show-progress', 'Mostrar nivel y XP', flags.showProgress, 'Progreso de The Vault.')}
+      ${publicProfileToggleHtml('public-show-stats', 'Mostrar estadísticas', flags.showStats, 'Solo hechos personales explícitos.')}
+      ${publicProfileToggleHtml('public-show-map', 'Mostrar mapa', flags.showMap, 'Solo ubicaciones de salas personales.')}
+      ${publicProfileToggleHtml('public-show-achievements', 'Mostrar logros', flags.showAchievements, 'Sin rareza inventada.')}
+      ${publicProfileToggleHtml('public-show-routes', 'Mostrar rutas', flags.showRoutes, 'Solo personales y oficiales.')}
+      ${publicProfileToggleHtml('public-show-routes-progress', 'Rutas en progreso', flags.showRoutesInProgress, 'Nunca fechas ni rutas grupales.')}
+      ${publicProfileToggleHtml('public-show-groups', 'Mostrar grupos', flags.showGroups, 'Publica únicamente el número.')}
+    </div>
+    <div class="public-profile-demo-preview" id="public-profile-demo-preview">
+      ${progressAvatarHtml(selectedProgressAvatar(), selectedProgressFrame())}
+      <div><strong>${escapeHtml(shortDisplayName())}</strong><span>${controls.published ? 'Vista pública preparada' : 'Perfil privado'} · Las secciones ocultas se eliminan del payload.</span></div>
+    </div>
+    <div class="public-profile-demo-actions">
+      <button class="auth-btn" type="button" onclick="savePublicProfile()">Guardar perfil público</button>
+      <button class="auth-btn secondary" type="button" onclick="openPublicProfile()">Abrir perfil</button>
+      <button class="auth-btn secondary" type="button" onclick="copyPublicProfileLink()">Copiar enlace</button>
+      <button class="auth-btn secondary" type="button" onclick="sharePublicProfile()">Compartir</button>
+      <a class="auth-btn secondary" id="public-profile-whatsapp" href="https://wa.me/?text=${encodeURIComponent(`Mi perfil escapista en The Vault: ${url}`)}" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+    <div class="profile-status-msg" id="public-profile-demo-status"></div>
+    <div class="progress-note">MVP: <code>/escapista/?u=username</code>, compartible y noindex. La URL limpia y el Open Graph individual quedan para una futura capa de renderizado.</div>
+  </div>`;
+}
+
+function readPublicProfileForm() {
+  const username = document.getElementById('public-profile-username')?.value || '';
+  return {
+    published: document.getElementById('public-profile-published')?.checked === true,
+    indexable: false,
+    username: VaultPublicProfile.normalizeUsername(username),
+    visibility: {
+      showAvatar: document.getElementById('public-show-avatar')?.checked === true,
+      showProgress: document.getElementById('public-show-progress')?.checked === true,
+      showStats: document.getElementById('public-show-stats')?.checked === true,
+      showMap: document.getElementById('public-show-map')?.checked === true,
+      showAchievements: document.getElementById('public-show-achievements')?.checked === true,
+      showRoutes: document.getElementById('public-show-routes')?.checked === true,
+      showRoutesInProgress: document.getElementById('public-show-routes-progress')?.checked === true,
+      showGroups: document.getElementById('public-show-groups')?.checked === true
+    },
+    updatedAt: Date.now()
+  };
+}
+
+function setPublicProfileStatus(message) {
+  const node = document.getElementById('public-profile-demo-status');
+  if (node) node.textContent = message || '';
+}
+
+function normalizePublicProfileUsername() {
+  const input = document.getElementById('public-profile-username');
+  if (!input) return;
+  input.value = VaultPublicProfile.normalizeUsername(input.value);
+  updatePublicProfilePreview();
+}
+
+function updatePublicProfilePreview() {
+  const controls = readPublicProfileForm();
+  const checked = VaultPublicProfile.validateUsername(controls.username);
+  const urlNode = document.getElementById('public-profile-url-preview');
+  const help = document.getElementById('public-profile-username-help');
+  const whatsapp = document.getElementById('public-profile-whatsapp');
+  if (urlNode) urlNode.textContent = checked.valid ? publicProfileUrl(checked.normalized) : 'Username pendiente de validar';
+  if (help) help.textContent = checked.valid ? 'Username válido. La comparación es case-insensitive.' : checked.error;
+  if (whatsapp && checked.valid) whatsapp.href = `https://wa.me/?text=${encodeURIComponent(`Mi perfil escapista en The Vault: ${publicProfileUrl(checked.normalized)}`)}`;
+  const routeProgress = document.getElementById('public-show-routes-progress');
+  if (routeProgress) {
+    routeProgress.disabled = !controls.visibility.showRoutes;
+    if (!controls.visibility.showRoutes) routeProgress.checked = false;
+  }
+  const preview = document.querySelector('#public-profile-demo-preview span');
+  if (preview) {
+    const enabled = Object.entries(controls.visibility).filter(([key, value]) => value && key !== 'showRoutesInProgress').length;
+    preview.textContent = `${controls.published ? 'Vista pública preparada' : 'Perfil privado'} · ${enabled} secciones visibles`;
+  }
+}
+
+async function savePublicProfile({ silent = false } = {}) {
+  if (!AUTH_USER || !FIREBASE_ENABLED) {
+    setPublicProfileStatus('Inicia sesión para administrar tu perfil público.');
+    return false;
+  }
+  const controls = readPublicProfileForm();
+  const checked = VaultPublicProfile.validateUsername(controls.username);
+  if (!checked.valid) return setPublicProfileStatus(checked.error);
+  controls.username = checked.normalized;
+  if (!silent) setPublicProfileStatus(controls.published ? 'Publicando proyección saneada...' : 'Guardando en privado...');
+  try {
+    const result = await VaultPublicProfileFirebase.save(publicProfileFirebaseApi(), {
+      uid: USER_ID,
+      username: controls.username,
+      published: controls.published,
+      visibility: controls.visibility,
+      buildProjection: ({ username, visibility }) => buildPublicProfileProjection({ ...controls, username, visibility })
+    });
+    PUBLIC_PROFILE_CONTROL = VaultPublicProfileFirebase.normalizeControl(result.control);
+    const input = document.getElementById('public-profile-username');
+    if (input) input.value = result.username;
+    updatePublicProfilePreview();
+    if (!silent) setPublicProfileStatus(controls.published
+      ? 'Perfil publicado. La URL ya entrega únicamente los bloques autorizados.'
+      : 'Configuración guardada. El perfil no es legible públicamente.');
+    return true;
+  } catch (error) {
+    console.warn('No se pudo guardar el perfil público:', error);
+    await loadPublicProfileControl();
+    if (!silent) setPublicProfileStatus(error?.code === 'USERNAME_TAKEN'
+      ? 'Ese username ya está reservado. Elige otro.'
+      : `No se pudo guardar. ${error.message || 'Revisa conexión y permisos.'}`);
+    return false;
+  }
+}
+
+async function openPublicProfile() {
+  if (!await savePublicProfile()) return;
+  const username = publicProfileControls().currentUsername;
+  if (!username || !PUBLIC_PROFILE_CONTROL?.published) return setPublicProfileStatus('Activa el perfil público antes de abrirlo.');
+  window.open(publicProfileUrl(username), '_blank', 'noopener');
+}
+
+async function copyPublicProfileLink() {
+  const controls = readPublicProfileForm();
+  const checked = VaultPublicProfile.validateUsername(controls.username);
+  if (!checked.valid) return setPublicProfileStatus(checked.error);
+  if (!PUBLIC_PROFILE_CONTROL?.published || PUBLIC_PROFILE_CONTROL.currentUsername !== checked.normalized) {
+    return setPublicProfileStatus('Guarda y publica primero este username para compartirlo.');
+  }
+  try {
+    await copyTextToClipboard(publicProfileUrl(checked.normalized));
+    setPublicProfileStatus('Enlace público copiado.');
+  } catch {
+    setPublicProfileStatus('No se pudo copiar el enlace.');
+  }
+}
+
+async function sharePublicProfile() {
+  const controls = readPublicProfileForm();
+  const checked = VaultPublicProfile.validateUsername(controls.username);
+  if (!checked.valid) return setPublicProfileStatus(checked.error);
+  if (!PUBLIC_PROFILE_CONTROL?.published || PUBLIC_PROFILE_CONTROL.currentUsername !== checked.normalized) {
+    return setPublicProfileStatus('Guarda y publica primero este username para compartirlo.');
+  }
+  const url = publicProfileUrl(checked.normalized);
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: `${shortDisplayName()} · The Vault Escapist`, text: 'Mi perfil escapista en The Vault', url });
+      return setPublicProfileStatus('Perfil compartido.');
+    } catch (error) {
+      if (error?.name === 'AbortError') return;
+    }
+  }
+  await copyPublicProfileLink();
+}
+
+async function refreshPublicProfile({ silent = true } = {}) {
+  if (!AUTH_USER || !FIREBASE_ENABLED || !PUBLIC_PROFILE_CONTROL?.published) return false;
+  try {
+    const result = await VaultPublicProfileFirebase.refresh(publicProfileFirebaseApi(), {
+      uid: USER_ID,
+      buildProjection: ({ username, visibility }) => buildPublicProfileProjection({ username, visibility })
+    });
+    PUBLIC_PROFILE_CONTROL = VaultPublicProfileFirebase.normalizeControl(result.control);
+    if (!silent && !result.skipped) setPublicProfileStatus('Perfil público actualizado con tus datos actuales.');
+    return !result.skipped;
+  } catch (error) {
+    console.warn('No se pudo refrescar el perfil público:', error.message);
+    if (!silent) setPublicProfileStatus(`No se pudo refrescar. ${error.message}`);
+    return false;
+  }
+}
+
+function schedulePublicProfileRefresh(delay = 800) {
+  if (!AUTH_USER || !PUBLIC_PROFILE_CONTROL?.published) return;
+  clearTimeout(PUBLIC_PROFILE_REFRESH_TIMER);
+  PUBLIC_PROFILE_REFRESH_TIMER = setTimeout(() => refreshPublicProfile(), delay);
 }
 
 function progressDoneRooms() {
@@ -6494,6 +6895,7 @@ function profileSettingsHtml(message = '') {
       <div class="profile-row" style="margin-top:10px"><button class="auth-btn" type="button" onclick="saveProfileSettings()">Guardar perfil</button></div>
       <div class="profile-status-msg" id="profile-status">${message || ''}</div>
     </div>
+    ${publicProfileSettingsHtml()}
     <div class="profile-section">
       <div class="profile-section-title">Planificador de rutas</div>
       <p class="route-planner-intro">Combina salas compatibles con tu equipo y tus listas. Las rutas y horarios son orientativos y no comprueban disponibilidad.</p>
@@ -6596,6 +6998,7 @@ async function saveProfileSettings() {
   renderCatalogo();
   SETTINGS_TAB = 'profile';
   renderProfile('Perfil actualizado.');
+  schedulePublicProfileRefresh();
 }
 
 async function createEscapistGroup() {
@@ -6824,6 +7227,7 @@ function renderRoomStateChange(kind, key) {
   populateFilters(); renderStats(); renderPendientes(); renderMisHechos(); renderHechos(); renderCatalogo();
   if (document.getElementById('profile-modal')?.classList.contains('open')) renderProfile();
   if (document.getElementById('detail-modal')?.classList.contains('open')) openDetail(kind, key, { preserveScroll: true });
+  schedulePublicProfileRefresh();
 }
 
 let ROUTE_PLANNER_STATE = null;
@@ -7259,7 +7663,10 @@ async function persistSavedRoute(routeId, route) {
   const path = route.scope === 'group' ? `groupRoutes/${route.groupId}/${routeId}` : `userRoutes/${USER_ID}/${routeId}`;
   await fbPut(path, route);
   if (route.scope === 'group') { GROUP_ROUTES[route.groupId] ||= {}; GROUP_ROUTES[route.groupId][routeId] = route; }
-  else USER_ROUTES[routeId] = route;
+  else {
+    USER_ROUTES[routeId] = route;
+    schedulePublicProfileRefresh();
+  }
 }
 
 function plannerProposalById(id) {
@@ -7339,7 +7746,10 @@ async function deleteSavedRoute() {
   const path = active.scope === 'group' ? `groupRoutes/${active.groupId}/${active.routeId}` : `userRoutes/${USER_ID}/${active.routeId}`;
   try {
     await fbDelete(path);
-    if (active.scope === 'group') delete GROUP_ROUTES[active.groupId][active.routeId]; else delete USER_ROUTES[active.routeId];
+    if (active.scope === 'group') delete GROUP_ROUTES[active.groupId][active.routeId]; else {
+      delete USER_ROUTES[active.routeId];
+      schedulePublicProfileRefresh();
+    }
     closeSavedRouteModal(); renderProfile('Ruta eliminada.');
   } catch (error) { alert(`No se pudo eliminar. ${error.message}`); }
 }
@@ -7555,13 +7965,22 @@ async function signOutGoogle() {
   GROUP_PENDING_ROOMS = {};
   USER_ROUTES = {};
   GROUP_ROUTES = {};
+  PUBLIC_PROFILE_CONTROL = null;
+  clearTimeout(PUBLIC_PROFILE_REFRESH_TIMER);
+  PUBLIC_PROFILE_REFRESH_TIMER = null;
   renderAuthStatus();
   await refreshSignedSession();
 }
 
+function firebaseRestUrl(path, authenticated = true) {
+  const url = new URL(FIREBASE_URL);
+  url.pathname = `${url.pathname.replace(/\/$/, '')}/${String(path || '').replace(/^\//, '')}.json`;
+  if (authenticated && AUTH_TOKEN) url.searchParams.set('auth', AUTH_TOKEN);
+  return url.toString();
+}
+
 function fbUrl(path) {
-  const base = `${FIREBASE_URL.replace(/\/$/, '')}/${path}.json`;
-  return AUTH_TOKEN ? `${base}?auth=${encodeURIComponent(AUTH_TOKEN)}` : base;
+  return firebaseRestUrl(path, true);
 }
 
 async function fbGet(path) {
@@ -8033,6 +8452,7 @@ async function saveRoomReview(kind, key) {
     renderCatalogo();
     renderVaultGuide();
     announceProgressChange(progressBefore, progressModel());
+    schedulePublicProfileRefresh();
     openDetail(kind, key);
   } catch (err) {
     console.error(err);
@@ -8061,6 +8481,7 @@ async function deleteRoomReview(kind, key) {
     renderMisHechos();
     renderCatalogo();
     renderVaultGuide();
+    schedulePublicProfileRefresh();
     openDetail(kind, key);
   } catch (err) {
     console.error(err);
@@ -8304,6 +8725,7 @@ async function refreshLiveData({ force = false, reason = 'auto' } = {}) {
     await loadRoomReviews();
     await loadUserGroups();
     await loadSavedRoutes();
+    await loadPublicProfileControl();
     await loadLikes();
     refreshAllLikeCounts();
     populateFilters();
@@ -8316,6 +8738,7 @@ async function refreshLiveData({ force = false, reason = 'auto' } = {}) {
     renderVaultGuide();
     openDeepLinkFromHash();
     updateFavCount();
+    schedulePublicProfileRefresh();
     LAST_LIVE_REFRESH_AT = Date.now();
     if (reason === 'initial') await handlePendingInvite();
     return true;

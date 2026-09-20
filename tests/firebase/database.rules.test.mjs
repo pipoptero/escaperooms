@@ -1,10 +1,14 @@
 import { after, before, beforeEach, test } from 'node:test';
+import assert from 'node:assert/strict';
+import { createRequire } from 'node:module';
 import { readFile } from 'node:fs/promises';
 import { assertFails, assertSucceeds, initializeTestEnvironment } from '@firebase/rules-unit-testing';
 import { get, ref, remove, set, update } from 'firebase/database';
 
 const PROJECT_ID = 'demo-the-vault';
 let env;
+const require = createRequire(import.meta.url);
+const publicProfileClient = require('../../public-profile-firebase.js');
 
 const group = (owner = 'owner') => ({ name: 'Equipo', ownerUid: owner, createdAt: 100, updatedAt: 100 });
 const member = (role = 'member', extra = {}) => ({ role, status: 'active', displayName: role, photoURL: '', joinedAt: 100, ...extra });
@@ -18,9 +22,42 @@ const savedRoute = (overrides = {}) => ({
   name: 'Vitoria 2027', description: '', scope: 'personal', ownerUid: 'alice', roomIds: ['room-a', 'room-b'],
   createdAt: 100, updatedAt: 100, status: 'active', schemaVersion: 1, ...overrides
 });
+const publicVisibility = (overrides = {}) => ({
+  showAvatar: false, showProgress: false, showStats: false, showMap: false,
+  showAchievements: false, showRoutes: false, showRoutesInProgress: false, showGroups: false,
+  ...overrides
+});
+const publicControl = (overrides = {}) => ({
+  schemaVersion: 1, published: false, indexable: false,
+  currentUsername: '', pendingUsername: '', previousUsername: '',
+  visibility: publicVisibility(), updatedAt: 100, ...overrides
+});
+const publicOwner = (uid = 'alice', overrides = {}) => ({
+  ownerUid: uid, state: 'reserved', createdAt: 100, updatedAt: 100, ...overrides
+});
+const publicView = (username = 'isaac', overrides = {}) => ({
+  schemaVersion: 1, published: true, indexable: false, username,
+  displayName: 'Isaac', visibility: publicVisibility(), updatedAt: 100, ...overrides
+});
 
 async function seed(data) {
   await env.withSecurityRulesDisabled(async context => set(ref(context.database()), data));
+}
+
+function publicClientApi(database, anonymous, uid = 'alice') {
+  let now = 100;
+  return {
+    now: () => ++now,
+    get: async path => (await get(ref(database, path))).val(),
+    put: async (path, value) => set(ref(database, path), value),
+    remove: async path => remove(ref(database, path)),
+    publicReadable: async username => {
+      try { return (await get(ref(anonymous, `publicProfiles/${username}/view`))).exists(); }
+      catch { return false; }
+    },
+    uid,
+    tick: () => ++now
+  };
 }
 
 before(async () => {
@@ -301,4 +338,374 @@ test('v47 elimina primero las rutas y después todo el grupo sin ramas huérfana
       if (path === 'userGroups' ? branch.owner?.g1 || branch.alice?.g1 : branch.g1) throw new Error(`Quedó una referencia en ${path}`);
     }
   });
+});
+
+test('un username reservado no publica ningún perfil por sí solo', async () => {
+  const alice = env.authenticatedContext('alice').database();
+  const anonymous = env.unauthenticatedContext().database();
+  await assertSucceeds(set(ref(alice, 'publicProfileControls/alice'), publicControl({ pendingUsername: 'isaac' })));
+  await assertSucceeds(set(ref(alice, 'publicProfileOwners/isaac'), publicOwner()));
+  await assertFails(get(ref(anonymous, 'publicProfileOwners/isaac')));
+  await assertFails(get(ref(anonymous, 'publicProfiles/isaac/view')));
+});
+
+test('el visitante lee solo view cuando el owner y el control la activan', async () => {
+  const alice = env.authenticatedContext('alice').database();
+  const anonymous = env.unauthenticatedContext().database();
+  await assertSucceeds(set(ref(alice, 'publicProfileControls/alice'), publicControl({ pendingUsername: 'isaac' })));
+  await assertSucceeds(set(ref(alice, 'publicProfileOwners/isaac'), publicOwner()));
+  await assertSucceeds(set(ref(alice, 'publicProfiles/isaac/view'), publicView()));
+  await assertFails(get(ref(anonymous, 'publicProfiles/isaac/view')));
+  await assertSucceeds(set(ref(alice, 'publicProfileOwners/isaac/state'), 'active'));
+  await assertSucceeds(set(ref(alice, 'publicProfileControls/alice'), publicControl({
+    published: true, currentUsername: 'isaac', pendingUsername: '', updatedAt: 200
+  })));
+  await assertSucceeds(get(ref(anonymous, 'publicProfiles/isaac/view')));
+  await assertFails(get(ref(anonymous, 'publicProfiles/isaac')));
+  await assertFails(get(ref(anonymous, 'publicProfileOwners/isaac')));
+  await assertFails(get(ref(anonymous, 'publicProfileControls/alice')));
+});
+
+test('la reserva concurrente concede un username a exactamente un usuario', async () => {
+  const alice = env.authenticatedContext('alice').database();
+  const bob = env.authenticatedContext('bob').database();
+  await assertSucceeds(set(ref(alice, 'publicProfileControls/alice'), publicControl({ pendingUsername: 'isaac' })));
+  await assertSucceeds(set(ref(bob, 'publicProfileControls/bob'), publicControl({ pendingUsername: 'isaac' })));
+  const outcomes = await Promise.allSettled([
+    set(ref(alice, 'publicProfileOwners/isaac'), publicOwner('alice')),
+    set(ref(bob, 'publicProfileOwners/isaac'), publicOwner('bob'))
+  ]);
+  assert.equal(outcomes.filter(result => result.status === 'fulfilled').length, 1);
+  assert.equal(outcomes.filter(result => result.status === 'rejected').length, 1);
+});
+
+test('usernames inválidos, mayúsculas y reservados son denegados por reglas', async () => {
+  const alice = env.authenticatedContext('alice').database();
+  for (const username of ['Isaac', 'ab']) {
+    await assertFails(set(ref(alice, 'publicProfileControls/alice'), publicControl({ pendingUsername: username })));
+  }
+  for (const username of ['admin', 'administrador', 'profiles', 'escapistas', 'codex-smoke-user']) {
+    await assertSucceeds(set(ref(alice, 'publicProfileControls/alice'), publicControl({ pendingUsername: username })));
+    await assertFails(set(ref(alice, `publicProfileOwners/${username}`), publicOwner()));
+  }
+});
+
+test('el namespace codex-smoke permanece bloqueado para usuarios normales', async () => {
+  const alice = env.authenticatedContext('alice').database();
+  const username = 'codex-smoke-prueba';
+  await assertSucceeds(set(ref(alice, 'publicProfileControls/alice'), publicControl({ pendingUsername: username })));
+  await assertFails(set(ref(alice, `publicProfileOwners/${username}`), publicOwner()));
+});
+
+test('dos usernames operativos normales completan reserva, publicación y cleanup', async () => {
+  const alice = env.authenticatedContext('alice').database();
+  const outsider = env.authenticatedContext('outsider').database();
+  const anonymous = env.unauthenticatedContext().database();
+  for (const [index, username] of ['v48test-preflight-a', 'v48test-preflight-b'].entries()) {
+    const createdAt = 500 + index * 100;
+    await assertSucceeds(set(ref(alice, 'publicProfileControls/alice'), publicControl({
+      pendingUsername: username, updatedAt: createdAt
+    })));
+    await assertSucceeds(set(ref(alice, `publicProfileOwners/${username}`), publicOwner('alice', {
+      createdAt, updatedAt: createdAt
+    })));
+    await assertFails(set(ref(outsider, `publicProfileOwners/${username}`), publicOwner('outsider', {
+      createdAt, updatedAt: createdAt
+    })));
+    await assertSucceeds(set(ref(alice, `publicProfiles/${username}/view`), publicView(username, {
+      updatedAt: createdAt
+    })));
+    await assertFails(get(ref(anonymous, `publicProfiles/${username}/view`)));
+    await assertSucceeds(set(ref(alice, `publicProfileOwners/${username}/state`), 'active'));
+    await assertSucceeds(set(ref(alice, 'publicProfileControls/alice'), publicControl({
+      published: true, currentUsername: username, updatedAt: createdAt + 1
+    })));
+    await assertSucceeds(get(ref(anonymous, `publicProfiles/${username}/view`)));
+    await assertSucceeds(set(ref(alice, 'publicProfileControls/alice'), publicControl({
+      published: false, currentUsername: '', updatedAt: createdAt + 2
+    })));
+    await assertFails(get(ref(anonymous, `publicProfiles/${username}/view`)));
+    await assertSucceeds(remove(ref(alice, `publicProfiles/${username}/view`)));
+    await assertSucceeds(remove(ref(alice, `publicProfileOwners/${username}`)));
+  }
+});
+
+test('solo el owner administra la proyección y el ownerUid no puede cambiar', async () => {
+  await seed({
+    publicProfileControls: { alice: publicControl({ published: true, currentUsername: 'isaac' }) },
+    publicProfileOwners: { isaac: publicOwner('alice', { state: 'active' }) },
+    publicProfiles: { isaac: { view: publicView() } }
+  });
+  const bob = env.authenticatedContext('bob').database();
+  const alice = env.authenticatedContext('alice').database();
+  await assertFails(set(ref(bob, 'publicProfiles/isaac/view'), publicView('isaac', { displayName: 'Bob' })));
+  await assertFails(remove(ref(bob, 'publicProfiles/isaac/view')));
+  await assertFails(set(ref(bob, 'publicProfileOwners/isaac/ownerUid'), 'bob'));
+  await assertFails(set(ref(alice, 'publicProfileOwners/isaac/ownerUid'), 'bob'));
+  await assertSucceeds(set(ref(alice, 'publicProfiles/isaac/view'), publicView('isaac', { displayName: 'Isaac Vault', updatedAt: 200 })));
+});
+
+test('la view rechaza UID, email, campos internos y bloques ocultos', async () => {
+  await seed({
+    publicProfileControls: { alice: publicControl({ published: true, currentUsername: 'isaac' }) },
+    publicProfileOwners: { isaac: publicOwner('alice', { state: 'active' }) }
+  });
+  const alice = env.authenticatedContext('alice').database();
+  await assertFails(set(ref(alice, 'publicProfiles/isaac/view'), publicView('isaac', { uid: 'alice' })));
+  await assertFails(set(ref(alice, 'publicProfiles/isaac/view'), publicView('isaac', { email: 'private@example.test' })));
+  await assertFails(set(ref(alice, 'publicProfiles/isaac/view'), publicView('isaac', { displayName: 'private@example.test' })));
+  await assertFails(set(ref(alice, 'publicProfiles/isaac/view'), publicView('isaac', {
+    visibility: publicVisibility({ showMap: false }), map: { count: 1, roomIds: ['olimpo'] }
+  })));
+  await assertFails(set(ref(alice, 'publicProfiles/isaac/view'), publicView('isaac', {
+    visibility: publicVisibility({ showGroups: true }), groupCount: 2, groupIds: ['g1']
+  })));
+});
+
+test('una proyección completa válida admite solo sus secciones activas', async () => {
+  const visibility = publicVisibility({
+    showAvatar: true, showProgress: true, showStats: true, showMap: true,
+    showAchievements: true, showRoutes: true, showRoutesInProgress: true, showGroups: true
+  });
+  await seed({
+    publicProfileControls: { alice: publicControl({ published: true, currentUsername: 'isaac', visibility }) },
+    publicProfileOwners: { isaac: publicOwner('alice', { state: 'active' }) }
+  });
+  const alice = env.authenticatedContext('alice').database();
+  const anonymous = env.unauthenticatedContext().database();
+  const value = publicView('isaac', {
+    visibility,
+    appearance: { avatarId: 'avatar_vault', avatarImage: '/images/brand/icon-round-192.png', frameId: 'gold', titleId: 'title_legend' },
+    xp: 1500,
+    stats: { personalEscapes: 100, cities: 20, zones: 8, terror: 30, nonTerror: 65, unclassifiedTerror: 5, routesCompleted: 4, reviews: 12, awardedRooms: 18 },
+    map: { count: 2, roomIds: ['olimpo', 'katrina'] },
+    achievements: { count: 2, unlocked: ['first_escape', 'enthusiast'], featured: ['enthusiast'] },
+    routes: {
+      completedCount: 1,
+      official: [{ id: 'achoporte', completed: 4, target: 4, state: 'completed', missingRooms: 0 }],
+      personal: [{ name: 'Ruta con retirada', completed: 2, target: 4, state: 'degraded', missingRooms: 1 }]
+    },
+    groupCount: 3
+  });
+  await assertSucceeds(set(ref(alice, 'publicProfiles/isaac/view'), value));
+  await assertSucceeds(get(ref(anonymous, 'publicProfiles/isaac/view')));
+});
+
+test('cada bloque público permitido valida de forma independiente', async () => {
+  await seed({
+    publicProfileControls: { alice: publicControl({ published: true, currentUsername: 'isaac' }) },
+    publicProfileOwners: { isaac: publicOwner('alice', { state: 'active' }) }
+  });
+  const alice = env.authenticatedContext('alice').database();
+  const cases = [
+    publicView('isaac', {
+      visibility: publicVisibility({ showAvatar: true }),
+      appearance: { avatarId: 'avatar_vault', avatarImage: '/images/brand/icon-round-192.png', frameId: 'gold', titleId: 'title_legend' }
+    }),
+    publicView('isaac', { visibility: publicVisibility({ showProgress: true }), xp: 1500 }),
+    publicView('isaac', {
+      visibility: publicVisibility({ showStats: true }),
+      stats: { personalEscapes: 1, cities: 1, zones: 1, terror: 0, nonTerror: 1, unclassifiedTerror: 0, routesCompleted: 0, reviews: 0, awardedRooms: 0 }
+    }),
+    publicView('isaac', { visibility: publicVisibility({ showMap: true }), map: { count: 2, roomIds: ['olimpo', 'katrina'] } }),
+    publicView('isaac', {
+      visibility: publicVisibility({ showAchievements: true }),
+      achievements: { count: 2, unlocked: ['first_escape', 'enthusiast'], featured: ['enthusiast'] }
+    }),
+    publicView('isaac', {
+      visibility: publicVisibility({ showRoutes: true, showRoutesInProgress: true }),
+      routes: { completedCount: 1 }
+    }),
+    publicView('isaac', {
+      visibility: publicVisibility({ showRoutes: true, showRoutesInProgress: true }),
+      routes: {
+        completedCount: 1,
+        official: [{ id: 'achoporte', completed: 4, target: 4, state: 'completed', missingRooms: 0 }]
+      }
+    }),
+    publicView('isaac', {
+      visibility: publicVisibility({ showRoutes: true, showRoutesInProgress: true }),
+      routes: {
+        completedCount: 1,
+        personal: [{ name: 'Ruta con retirada', completed: 2, target: 4, state: 'degraded', missingRooms: 1 }]
+      }
+    }),
+    publicView('isaac', { visibility: publicVisibility({ showGroups: true }), groupCount: 3 })
+  ];
+  const labels = ['appearance', 'progress', 'stats', 'map', 'achievements', 'routes-base', 'routes-official', 'routes-personal', 'groups'];
+  for (const [index, value] of cases.entries()) {
+    try {
+      await assertSucceeds(set(ref(alice, 'publicProfiles/isaac/view'), { ...value, updatedAt: 200 + index }));
+    } catch (error) {
+      throw new Error(`bloque ${labels[index]} rechazado`, { cause: error });
+    }
+  }
+});
+
+test('ocultar logros sustituye la view completa y elimina el bloque', async () => {
+  await seed({
+    publicProfileControls: { alice: publicControl({ published: true, currentUsername: 'isaac' }) },
+    publicProfileOwners: { isaac: publicOwner('alice', { state: 'active' }) },
+    publicProfiles: { isaac: { view: publicView('isaac', {
+      visibility: publicVisibility({ showAchievements: true }),
+      achievements: { count: 1, unlocked: ['first_escape'], featured: ['first_escape'] }
+    }) } }
+  });
+  const alice = env.authenticatedContext('alice').database();
+  const anonymous = env.unauthenticatedContext().database();
+  await assertSucceeds(set(ref(alice, 'publicProfiles/isaac/view'), publicView('isaac', { updatedAt: 200 })));
+  const result = (await get(ref(anonymous, 'publicProfiles/isaac/view'))).val();
+  assert.equal(Object.hasOwn(result, 'achievements'), false);
+});
+
+test('despublicar corta primero la lectura y después permite borrar la view', async () => {
+  await seed({
+    publicProfileControls: { alice: publicControl({ published: true, currentUsername: 'isaac' }) },
+    publicProfileOwners: { isaac: publicOwner('alice', { state: 'active' }) },
+    publicProfiles: { isaac: { view: publicView() } }
+  });
+  const alice = env.authenticatedContext('alice').database();
+  const anonymous = env.unauthenticatedContext().database();
+  await assertSucceeds(set(ref(alice, 'publicProfileControls/alice/published'), false));
+  await assertFails(get(ref(anonymous, 'publicProfiles/isaac/view')));
+  await assertSucceeds(remove(ref(alice, 'publicProfiles/isaac/view')));
+  await assertFails(get(ref(anonymous, 'publicProfiles/isaac/view')));
+});
+
+test('cambiar username prepara la nueva view y conmuta una sola URL pública', async () => {
+  await seed({
+    publicProfileControls: { alice: publicControl({ published: true, currentUsername: 'isaac' }) },
+    publicProfileOwners: { isaac: publicOwner('alice', { state: 'active' }) },
+    publicProfiles: { isaac: { view: publicView() } }
+  });
+  const alice = env.authenticatedContext('alice').database();
+  const anonymous = env.unauthenticatedContext().database();
+  await assertSucceeds(set(ref(alice, 'publicProfileControls/alice/pendingUsername'), 'isaac-vault'));
+  await assertSucceeds(set(ref(alice, 'publicProfileOwners/isaac-vault'), publicOwner('alice', { createdAt: 200, updatedAt: 200 })));
+  await assertSucceeds(set(ref(alice, 'publicProfiles/isaac-vault/view'), publicView('isaac-vault', { updatedAt: 200 })));
+  await assertFails(get(ref(anonymous, 'publicProfiles/isaac-vault/view')));
+  await assertSucceeds(set(ref(alice, 'publicProfileOwners/isaac-vault/state'), 'active'));
+  await assertSucceeds(set(ref(alice, 'publicProfileControls/alice'), publicControl({
+    published: true, currentUsername: 'isaac-vault', pendingUsername: 'isaac-vault', previousUsername: 'isaac', updatedAt: 300
+  })));
+  await assertFails(get(ref(anonymous, 'publicProfiles/isaac/view')));
+  await assertSucceeds(get(ref(anonymous, 'publicProfiles/isaac-vault/view')));
+  await assertSucceeds(remove(ref(alice, 'publicProfiles/isaac/view')));
+  await assertSucceeds(set(ref(alice, 'publicProfileOwners/isaac/state'), 'retired'));
+  await assertSucceeds(set(ref(alice, 'publicProfileControls/alice'), publicControl({
+    published: true, currentUsername: 'isaac-vault', updatedAt: 400
+  })));
+  await assertFails(get(ref(anonymous, 'publicProfiles/isaac/view')));
+  await assertSucceeds(get(ref(anonymous, 'publicProfiles/isaac-vault/view')));
+});
+
+test('un cambio de visibilidad corta la lectura hasta reemplazar la proyección', async () => {
+  await seed({
+    publicProfileControls: { alice: publicControl({ published: true, currentUsername: 'isaac' }) },
+    publicProfileOwners: { isaac: publicOwner('alice', { state: 'active' }) },
+    publicProfiles: { isaac: { view: publicView() } }
+  });
+  const alice = env.authenticatedContext('alice').database();
+  const anonymous = env.unauthenticatedContext().database();
+  const visibility = publicVisibility({ showStats: true });
+  await assertSucceeds(set(ref(alice, 'publicProfileControls/alice/visibility'), visibility));
+  await assertFails(get(ref(anonymous, 'publicProfiles/isaac/view')));
+  await assertSucceeds(set(ref(alice, 'publicProfiles/isaac/view'), publicView('isaac', {
+    visibility,
+    stats: { personalEscapes: 1, cities: 1, zones: 1, terror: 0, nonTerror: 1, unclassifiedTerror: 0, routesCompleted: 0, reviews: 0, awardedRooms: 0 },
+    updatedAt: 200
+  })));
+  await assertSucceeds(get(ref(anonymous, 'publicProfiles/isaac/view')));
+});
+
+test('el cliente real publica, renombra y despublica usando exclusivamente las ramas autorizadas', async () => {
+  const alice = env.authenticatedContext('alice').database();
+  const anonymous = env.unauthenticatedContext().database();
+  const api = publicClientApi(alice, anonymous);
+  const buildProjection = ({ username, visibility }) => publicView(username, { visibility, updatedAt: api.tick() });
+
+  await publicProfileClient.save(api, { uid: 'alice', username: 'isaac', published: true, visibility: publicVisibility(), buildProjection });
+  assert.equal(await api.publicReadable('isaac'), true);
+  await publicProfileClient.save(api, { uid: 'alice', username: 'isaac-vault', published: true, visibility: publicVisibility(), buildProjection });
+  assert.equal(await api.publicReadable('isaac'), false);
+  assert.equal(await api.publicReadable('isaac-vault'), true);
+  await publicProfileClient.unpublish(api, 'alice');
+  assert.equal(await api.publicReadable('isaac-vault'), false);
+  await assertFails(get(ref(anonymous, 'publicProfileOwners/isaac-vault')));
+  await assertFails(get(ref(anonymous, 'publicProfileControls/alice')));
+});
+
+test('fallos parciales del cliente son privados, recuperables e idempotentes en Emulator', async () => {
+  const publishSteps = ['control-intent', 'owner-reserved', 'view-staged', 'owner-activated'];
+  for (const [index, failStep] of publishSteps.entries()) {
+    await env.clearDatabase();
+    const alice = env.authenticatedContext('alice').database();
+    const anonymous = env.unauthenticatedContext().database();
+    const api = publicClientApi(alice, anonymous);
+    const username = `publish-${index}`;
+    const buildProjection = ({ username: name, visibility }) => publicView(name, { visibility, updatedAt: api.tick() });
+    const input = { uid: 'alice', username, published: true, visibility: publicVisibility(), buildProjection };
+    await assert.rejects(publicProfileClient.save(api, input, {
+      afterStep(step) { if (step === failStep) throw new Error(failStep); }
+    }));
+    assert.equal(await api.publicReadable(username), false, `${failStep} no debe publicar`);
+    await publicProfileClient.save(api, input);
+    assert.equal(await api.publicReadable(username), true, `${failStep} debe recuperarse`);
+  }
+
+  const renameSteps = ['rename-control-intent', 'rename-owner-reserved', 'rename-view-staged', 'rename-owner-activated', 'rename-control-switched', 'rename-old-view-removed', 'rename-old-owner-retired'];
+  for (const [index, failStep] of renameSteps.entries()) {
+    await env.clearDatabase();
+    const alice = env.authenticatedContext('alice').database();
+    const anonymous = env.unauthenticatedContext().database();
+    const api = publicClientApi(alice, anonymous);
+    const oldUsername = `old-${index}`;
+    const nextUsername = `next-${index}`;
+    const buildProjection = ({ username, visibility }) => publicView(username, { visibility, updatedAt: api.tick() });
+    await publicProfileClient.save(api, { uid: 'alice', username: oldUsername, published: true, visibility: publicVisibility(), buildProjection });
+    const input = { uid: 'alice', username: nextUsername, published: true, visibility: publicVisibility(), buildProjection };
+    await assert.rejects(publicProfileClient.save(api, input, {
+      afterStep(step) { if (step === failStep) throw new Error(failStep); }
+    }));
+    const visibleCount = Number(await api.publicReadable(oldUsername)) + Number(await api.publicReadable(nextUsername));
+    assert.ok(visibleCount <= 1, `${failStep} activó dos URLs`);
+    await publicProfileClient.save(api, input);
+    assert.equal(await api.publicReadable(oldUsername), false);
+    assert.equal(await api.publicReadable(nextUsername), true);
+    const oldOwner = (await get(ref(alice, `publicProfileOwners/${oldUsername}`))).val();
+    assert.equal(oldOwner.state, 'retired');
+  }
+
+  await env.clearDatabase();
+  const alice = env.authenticatedContext('alice').database();
+  const anonymous = env.unauthenticatedContext().database();
+  const api = publicClientApi(alice, anonymous);
+  const buildProjection = ({ username, visibility }) => publicView(username, { visibility, updatedAt: api.tick() });
+  await publicProfileClient.save(api, { uid: 'alice', username: 'cleanup-fail', published: true, visibility: publicVisibility(), buildProjection });
+  await assert.rejects(publicProfileClient.unpublish(api, 'alice', {
+    afterStep(step) { if (step === 'unpublish-verified-private') throw new Error(step); }
+  }));
+  assert.equal(await api.publicReadable('cleanup-fail'), false);
+  await publicProfileClient.unpublish(api, 'alice');
+  await env.withSecurityRulesDisabled(async context => {
+    assert.equal((await get(ref(context.database(), 'publicProfiles/cleanup-fail/view'))).exists(), false);
+  });
+});
+
+test('outsider y anónimo no administran ninguna rama pública ajena', async () => {
+  await seed({
+    publicProfileControls: { alice: publicControl({ published: true, currentUsername: 'isaac' }) },
+    publicProfileOwners: { isaac: publicOwner('alice', { state: 'active' }) },
+    publicProfiles: { isaac: { view: publicView() } }
+  });
+  const bob = env.authenticatedContext('bob').database();
+  const anonymous = env.unauthenticatedContext().database();
+  await assertFails(set(ref(bob, 'publicProfileControls/alice/published'), false));
+  await assertFails(set(ref(bob, 'publicProfileOwners/isaac/state'), 'retired'));
+  await assertFails(set(ref(bob, 'publicProfileOwners/isaac'), publicOwner('bob')));
+  await assertFails(set(ref(bob, 'publicProfiles/isaac/view'), publicView('isaac', { displayName: 'Ataque' })));
+  await assertFails(remove(ref(bob, 'publicProfiles/isaac/view')));
+  await assertFails(set(ref(anonymous, 'publicProfiles/isaac/view'), publicView()));
+  await assertFails(remove(ref(anonymous, 'publicProfiles/isaac/view')));
+  await assertSucceeds(get(ref(anonymous, 'publicProfiles/isaac/view')));
 });

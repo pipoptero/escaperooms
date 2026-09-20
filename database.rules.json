@@ -45,6 +45,138 @@
         ".write": "auth != null && auth.uid === $uid"
       }
     },
+    "publicProfileControls": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid",
+        ".validate": "!newData.exists() || (newData.hasChildren(['schemaVersion', 'published', 'indexable', 'currentUsername', 'pendingUsername', 'previousUsername', 'visibility', 'updatedAt']) && newData.child('schemaVersion').val() === 1 && newData.child('published').isBoolean() && newData.child('indexable').val() === false && newData.child('currentUsername').isString() && newData.child('pendingUsername').isString() && newData.child('previousUsername').isString() && newData.child('updatedAt').isNumber() && newData.child('updatedAt').val() > 0)",
+        "schemaVersion": { ".validate": "newData.val() === 1" },
+        "published": { ".validate": "newData.isBoolean()" },
+        "indexable": { ".validate": "newData.val() === false" },
+        "currentUsername": { ".validate": "newData.isString() && (newData.val() === '' || (newData.val().length >= 3 && newData.val().length <= 30 && newData.val().matches(/^[a-z0-9]+(-[a-z0-9]+)*$/)))" },
+        "pendingUsername": { ".validate": "newData.isString() && (newData.val() === '' || (newData.val().length >= 3 && newData.val().length <= 30 && newData.val().matches(/^[a-z0-9]+(-[a-z0-9]+)*$/)))" },
+        "previousUsername": { ".validate": "newData.isString() && (newData.val() === '' || (newData.val().length >= 3 && newData.val().length <= 30 && newData.val().matches(/^[a-z0-9]+(-[a-z0-9]+)*$/)))" },
+        "visibility": {
+          ".validate": "newData.hasChildren(['showAvatar', 'showProgress', 'showStats', 'showMap', 'showAchievements', 'showRoutes', 'showRoutesInProgress', 'showGroups']) && (newData.child('showRoutesInProgress').val() === false || newData.child('showRoutes').val() === true)",
+          "showAvatar": { ".validate": "newData.isBoolean()" },
+          "showProgress": { ".validate": "newData.isBoolean()" },
+          "showStats": { ".validate": "newData.isBoolean()" },
+          "showMap": { ".validate": "newData.isBoolean()" },
+          "showAchievements": { ".validate": "newData.isBoolean()" },
+          "showRoutes": { ".validate": "newData.isBoolean()" },
+          "showRoutesInProgress": { ".validate": "newData.isBoolean()" },
+          "showGroups": { ".validate": "newData.isBoolean()" },
+          "$other": { ".validate": false }
+        },
+        "updatedAt": { ".validate": "newData.isNumber() && newData.val() > 0" },
+        "$other": { ".validate": false }
+      }
+    },
+    "publicProfileOwners": {
+      "$username": {
+        ".read": "auth != null && data.child('ownerUid').val() === auth.uid",
+        ".write": "auth != null && ((!data.exists() && newData.exists() && newData.child('ownerUid').val() === auth.uid && newData.child('state').val() === 'reserved' && root.child('publicProfileControls/' + auth.uid + '/pendingUsername').val() === $username) || (data.exists() && data.child('ownerUid').val() === auth.uid && ((!newData.exists() && !root.child('publicProfiles/' + $username + '/view').exists() && root.child('publicProfileControls/' + auth.uid + '/currentUsername').val() !== $username) || (newData.exists() && newData.child('ownerUid').val() === auth.uid))))",
+        ".validate": "!newData.exists() || ($username.length >= 3 && $username.length <= 30 && $username.matches(/^[a-z0-9]+(-[a-z0-9]+)*$/) && !$username.matches(/^codex-smoke-/) && $username !== 'admin' && $username !== 'administrador' && $username !== 'api' && $username !== 'app' && $username !== 'assets' && $username !== 'auth' && $username !== 'cuenta' && $username !== 'escapista' && $username !== 'escapistas' && $username !== 'escape-rooms' && $username !== 'firebase' && $username !== 'grupo' && $username !== 'grupos' && $username !== 'images' && $username !== 'login' && $username !== 'logout' && $username !== 'manifest' && $username !== 'null' && $username !== 'perfil' && $username !== 'profiles' && $username !== 'privacidad' && $username !== 'ranking' && $username !== 'review' && $username !== 'reviews' && $username !== 'robots' && $username !== 'root' && $username !== 'route' && $username !== 'routes' && $username !== 'rutas' && $username !== 'salas' && $username !== 'scripts' && $username !== 'service-worker' && $username !== 'sitemap' && $username !== 'soporte' && $username !== 'support' && $username !== 'system' && $username !== 'the-vault' && $username !== 'thevault' && $username !== 'thevaultescape' && $username !== 'undefined' && $username !== 'vault' && $username !== 'www' && newData.hasChildren(['ownerUid', 'state', 'createdAt', 'updatedAt']) && newData.child('ownerUid').isString() && newData.child('ownerUid').val().length > 0 && newData.child('ownerUid').val().length <= 128 && (newData.child('state').val() === 'reserved' || newData.child('state').val() === 'active' || newData.child('state').val() === 'retired') && newData.child('createdAt').isNumber() && newData.child('createdAt').val() > 0 && newData.child('updatedAt').isNumber() && newData.child('updatedAt').val() >= newData.child('createdAt').val() && (!data.exists() || (newData.child('createdAt').val() === data.child('createdAt').val() && ((data.child('state').val() === 'reserved' && (newData.child('state').val() === 'reserved' || newData.child('state').val() === 'active' || newData.child('state').val() === 'retired')) || (data.child('state').val() === 'active' && (newData.child('state').val() === 'active' || newData.child('state').val() === 'retired')) || (data.child('state').val() === 'retired' && (newData.child('state').val() === 'retired' || (newData.child('state').val() === 'reserved' && root.child('publicProfileControls/' + auth.uid + '/pendingUsername').val() === $username)))))))",
+        "ownerUid": { ".validate": "newData.isString() && (!data.exists() || newData.val() === data.val())" },
+        "state": { ".validate": "newData.val() === 'reserved' || newData.val() === 'active' || newData.val() === 'retired'" },
+        "createdAt": { ".validate": "newData.isNumber() && (!data.exists() || newData.val() === data.val())" },
+        "updatedAt": { ".validate": "newData.isNumber()" },
+        "$other": { ".validate": false }
+      }
+    },
+    "publicProfiles": {
+      "$username": {
+        "view": {
+          ".read": "data.exists() && data.child('published').val() === true && root.child('publicProfileOwners/' + $username + '/state').val() === 'active' && root.child('publicProfileControls/' + root.child('publicProfileOwners/' + $username + '/ownerUid').val() + '/published').val() === true && root.child('publicProfileControls/' + root.child('publicProfileOwners/' + $username + '/ownerUid').val() + '/currentUsername').val() === $username && data.child('visibility/showAvatar').val() === root.child('publicProfileControls/' + root.child('publicProfileOwners/' + $username + '/ownerUid').val() + '/visibility/showAvatar').val() && data.child('visibility/showProgress').val() === root.child('publicProfileControls/' + root.child('publicProfileOwners/' + $username + '/ownerUid').val() + '/visibility/showProgress').val() && data.child('visibility/showStats').val() === root.child('publicProfileControls/' + root.child('publicProfileOwners/' + $username + '/ownerUid').val() + '/visibility/showStats').val() && data.child('visibility/showMap').val() === root.child('publicProfileControls/' + root.child('publicProfileOwners/' + $username + '/ownerUid').val() + '/visibility/showMap').val() && data.child('visibility/showAchievements').val() === root.child('publicProfileControls/' + root.child('publicProfileOwners/' + $username + '/ownerUid').val() + '/visibility/showAchievements').val() && data.child('visibility/showRoutes').val() === root.child('publicProfileControls/' + root.child('publicProfileOwners/' + $username + '/ownerUid').val() + '/visibility/showRoutes').val() && data.child('visibility/showRoutesInProgress').val() === root.child('publicProfileControls/' + root.child('publicProfileOwners/' + $username + '/ownerUid').val() + '/visibility/showRoutesInProgress').val() && data.child('visibility/showGroups').val() === root.child('publicProfileControls/' + root.child('publicProfileOwners/' + $username + '/ownerUid').val() + '/visibility/showGroups').val()",
+          ".write": "auth != null && root.child('publicProfileOwners/' + $username + '/ownerUid').val() === auth.uid",
+          ".validate": "!newData.exists() || (newData.hasChildren(['schemaVersion', 'published', 'indexable', 'username', 'displayName', 'visibility', 'updatedAt']) && newData.child('schemaVersion').val() === 1 && newData.child('published').val() === true && newData.child('indexable').val() === false && newData.child('username').val() === $username && newData.child('displayName').isString() && newData.child('displayName').val().length > 0 && newData.child('displayName').val().length <= 40 && newData.child('displayName').val().matches(/^[^@]+$/) && newData.child('displayName').val() !== root.child('publicProfileOwners/' + $username + '/ownerUid').val() && newData.child('updatedAt').isNumber() && newData.child('updatedAt').val() > 0 && (newData.child('visibility/showAvatar').val() === newData.child('appearance').exists()) && (newData.child('visibility/showProgress').val() === newData.child('xp').exists()) && (newData.child('visibility/showStats').val() === newData.child('stats').exists()) && (newData.child('visibility/showMap').val() === newData.child('map').exists()) && (newData.child('visibility/showAchievements').val() === newData.child('achievements').exists()) && (newData.child('visibility/showRoutes').val() === newData.child('routes').exists()) && (newData.child('visibility/showGroups').val() === newData.child('groupCount').exists()))",
+          "schemaVersion": { ".validate": "newData.val() === 1" },
+          "published": { ".validate": "newData.val() === true" },
+          "indexable": { ".validate": "newData.val() === false" },
+          "username": { ".validate": "newData.val() === $username" },
+          "displayName": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 40 && newData.val().matches(/^[^@]+$/) && newData.val() !== root.child('publicProfileOwners/' + $username + '/ownerUid').val()" },
+          "visibility": {
+            ".validate": "newData.hasChildren(['showAvatar', 'showProgress', 'showStats', 'showMap', 'showAchievements', 'showRoutes', 'showRoutesInProgress', 'showGroups']) && (newData.child('showRoutesInProgress').val() === false || newData.child('showRoutes').val() === true)",
+            "showAvatar": { ".validate": "newData.isBoolean()" },
+            "showProgress": { ".validate": "newData.isBoolean()" },
+            "showStats": { ".validate": "newData.isBoolean()" },
+            "showMap": { ".validate": "newData.isBoolean()" },
+            "showAchievements": { ".validate": "newData.isBoolean()" },
+            "showRoutes": { ".validate": "newData.isBoolean()" },
+            "showRoutesInProgress": { ".validate": "newData.isBoolean()" },
+            "showGroups": { ".validate": "newData.isBoolean()" },
+            "$other": { ".validate": false }
+          },
+          "appearance": {
+            ".validate": "newData.hasChildren(['avatarId', 'frameId', 'titleId'])",
+            "avatarId": { ".validate": "newData.isString() && newData.val().matches(/^[a-z0-9][a-z0-9_-]{0,159}$/)" },
+            "avatarImage": { ".validate": "newData.isString() && newData.val().length <= 2048 && (newData.val().matches(/^\\/images\\/[a-zA-Z0-9_.\\/-]+$/) || newData.val().matches(/^https:\\/\\/([a-zA-Z0-9-]+\\.)*googleusercontent\\.com\\/[a-zA-Z0-9_?&=.%\\/-]+$/))" },
+            "frameId": { ".validate": "newData.isString() && newData.val().matches(/^[a-z0-9][a-z0-9_-]{0,159}$/)" },
+            "titleId": { ".validate": "newData.isString() && newData.val().matches(/^[a-z0-9][a-z0-9_-]{0,159}$/)" },
+            "$other": { ".validate": false }
+          },
+          "xp": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10000000" },
+          "stats": {
+            ".validate": "newData.hasChildren(['personalEscapes', 'cities', 'zones', 'terror', 'nonTerror', 'unclassifiedTerror', 'routesCompleted', 'reviews', 'awardedRooms'])",
+            "personalEscapes": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000" },
+            "cities": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000" },
+            "zones": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000" },
+            "terror": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000" },
+            "nonTerror": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000" },
+            "unclassifiedTerror": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000" },
+            "routesCompleted": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000" },
+            "reviews": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000" },
+            "awardedRooms": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000" },
+            "$other": { ".validate": false }
+          },
+          "map": {
+            ".validate": "newData.hasChildren(['count']) && newData.child('count').isNumber() && newData.child('count').val() >= 0 && newData.child('count').val() <= 500",
+            "count": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 500" },
+            "roomIds": {
+              "$index": { ".validate": "$index.matches(/^(0|[1-9]|[1-9][0-9]|[1-4][0-9][0-9])$/) && newData.isString() && newData.val().matches(/^[a-z0-9][a-z0-9_-]{0,159}$/)" }
+            },
+            "$other": { ".validate": false }
+          },
+          "achievements": {
+            ".validate": "newData.hasChildren(['count']) && newData.child('count').isNumber() && newData.child('count').val() >= 0 && newData.child('count').val() <= 50",
+            "count": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 50" },
+            "unlocked": { "$index": { ".validate": "$index.matches(/^(0|[1-9]|[1-4][0-9])$/) && newData.isString() && newData.val().matches(/^[a-z0-9][a-z0-9_-]{0,159}$/)" } },
+            "featured": { "$index": { ".validate": "$index.matches(/^[0-2]$/) && newData.isString() && newData.val().matches(/^[a-z0-9][a-z0-9_-]{0,159}$/)" } },
+            "$other": { ".validate": false }
+          },
+          "routes": {
+            ".validate": "newData.hasChildren(['completedCount']) && newData.child('completedCount').isNumber() && newData.child('completedCount').val() >= 0 && newData.child('completedCount').val() <= 60",
+            "completedCount": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 60" },
+            "official": {
+              "$index": {
+                ".validate": "$index.matches(/^(0|[1-9]|[12][0-9])$/) && newData.hasChildren(['id', 'completed', 'target', 'state', 'missingRooms'])",
+                "id": { ".validate": "newData.isString() && newData.val().matches(/^[a-z0-9][a-z0-9_-]{0,159}$/)" },
+                "completed": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100" },
+                "target": { ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= 100" },
+                "state": { ".validate": "newData.val() === 'completed' || newData.val() === 'in-progress' || newData.val() === 'degraded'" },
+                "missingRooms": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100" },
+                "$other": { ".validate": false }
+              }
+            },
+            "personal": {
+              "$index": {
+                ".validate": "$index.matches(/^(0|[1-9]|[12][0-9])$/) && newData.hasChildren(['name', 'completed', 'target', 'state', 'missingRooms'])",
+                "name": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 80 && newData.val().matches(/^[^@]+$/)" },
+                "completed": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 20" },
+                "target": { ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= 20" },
+                "state": { ".validate": "newData.val() === 'completed' || newData.val() === 'in-progress' || newData.val() === 'degraded'" },
+                "missingRooms": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 20" },
+                "$other": { ".validate": false }
+              }
+            },
+            "$other": { ".validate": false }
+          },
+          "groupCount": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1000" },
+          "updatedAt": { ".validate": "newData.isNumber() && newData.val() > 0" },
+          "$other": { ".validate": false }
+        }
+      }
+    },
     "userRoutes": {
       "$uid": {
         ".read": "auth != null && auth.uid === $uid",

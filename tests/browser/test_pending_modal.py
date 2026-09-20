@@ -55,7 +55,8 @@ class PendingModalTest(unittest.TestCase):
             }}, 'b': {'roomStates': {}}},
             'userGroups': {uid: {'g1': {'name': 'Grupo Uno'}, 'g2': {'name': 'Grupo Dos'}} for uid in ['a', 'b']},
             'groupMembers': {gid: {uid: {'role': 'member', 'status': 'active'} for uid in ['a', 'b']} for gid in ['g1', 'g2']},
-            'groupRooms': {}, 'groupPendingRooms': {}, 'userRoutes': {'a': {}, 'b': {}}, 'groupRoutes': {}
+            'groupRooms': {}, 'groupPendingRooms': {}, 'userRoutes': {'a': {}, 'b': {}}, 'groupRoutes': {},
+            'publicProfileControls': {}, 'publicProfileOwners': {}, 'publicProfiles': {}
         }
         self.patches = []
         self.puts = []
@@ -123,6 +124,15 @@ class PendingModalTest(unittest.TestCase):
                 value = self.db
                 for part in filter(None, path.split('/')):
                     value = value.get(part, {})
+                if path.startswith('publicProfiles/') and not url.query:
+                    username = path.split('/')[1]
+                    owner = self.db.get('publicProfileOwners', {}).get(username, {})
+                    control = self.db.get('publicProfileControls', {}).get(owner.get('ownerUid'), {})
+                    view = self.db.get('publicProfiles', {}).get(username, {}).get('view')
+                    allowed = bool(view and owner.get('state') == 'active' and control.get('published') is True
+                                   and control.get('currentUsername') == username
+                                   and view.get('visibility') == control.get('visibility'))
+                    value = view if allowed else None
             else:
                 value = {}
             return route.fulfill(content_type='application/json', body=json.dumps(value), headers={
@@ -139,11 +149,11 @@ class PendingModalTest(unittest.TestCase):
         page.goto(self.url, wait_until='load')
         page.evaluate("""async uid => {
             loadLiveDataAfterInitialRender = async () => {};
-            AUTH_USER = {uid}; USER_ID = uid; USER_PROFILE = {};
+            AUTH_USER = {uid}; AUTH_TOKEN = 'browser-test-token'; USER_ID = uid; USER_PROFILE = {};
             CATALOGO = (await (await fetch('catalog.json')).json()).catalogo;
             CATALOG_LOADED = true;
             await ensureStaticEnhancementsLoaded();
-            await loadRoomAliases(); await loadUserRoomStates(true); await loadUserGroups(true); await loadSavedRoutes(true);
+            await loadRoomAliases(); await loadUserRoomStates(true); await loadUserGroups(true); await loadSavedRoutes(true); await loadPublicProfileControl();
             renderAuthStatus(); switchTab('catalogo');
         }""", uid)
         return page
@@ -431,6 +441,47 @@ class PendingModalTest(unittest.TestCase):
             openEscapistProfileCta(); return called;
         }"""), 'profile')
 
+    def test_public_profile_settings_publish_hide_and_withdraw_a_sanitized_firebase_projection(self):
+        page = self.page_for()
+        private_uid = 'private-fixture-uid-should-never-render'
+        private_email = 'private-fixture@example.test'
+        page.evaluate("""([uid,email]) => {
+            AUTH_USER = {uid,email}; AUTH_TOKEN = 'browser-test-token'; USER_ID = uid; PUBLIC_PROFILE_CONTROL = null;
+            USER_PROFILE = {publicName:'Isaac',equippedAvatar:'avatar_vault',equippedFrame:'gold',equippedTitle:'Escapista legendario'};
+            USER_ROOM_STATES = {olimpo:{id:'olimpo',nombre:'Olimpo',done:true,pending:false,updatedAt:100}};
+            GROUP_ROOMS = {g1:{katrina:{roomName:'Katrina'},enterprises:{roomName:'Abduction Enterprises'}}};
+            openProfile('',false);
+        }""", [private_uid, private_email])
+        expect(page.locator('#public-profile-demo-settings .public-profile-demo-badge')).to_be_visible()
+        self.assertFalse(page.locator('#public-profile-published').is_checked())
+        page.locator('#public-profile-username').fill('ISAAC')
+        page.locator('#public-profile-published').check(force=True)
+        page.locator('#public-show-avatar').check()
+        page.locator('#public-show-stats').check()
+        page.locator('#public-show-achievements').check()
+        page.locator('#public-show-groups').check()
+        page.get_by_role('button', name='Guardar perfil público').click()
+        page.wait_for_function("document.getElementById('public-profile-demo-status')?.textContent.trim().length > 0")
+        expect(page.locator('#public-profile-demo-status')).to_contain_text('Perfil publicado')
+        page.wait_for_function("PUBLIC_PROFILE_CONTROL?.published === true")
+        view = self.db['publicProfiles']['isaac']['view']
+        serialized = json.dumps(view)
+        self.assertNotIn(private_uid, serialized)
+        self.assertNotIn(private_email, serialized)
+        self.assertEqual(self.db['publicProfileControls'][private_uid]['currentUsername'], 'isaac')
+        self.assertEqual(view['stats']['personalEscapes'], 1)
+        self.assertEqual(view['groupCount'], 2)
+        self.assertNotIn('groupRooms', serialized)
+        self.assertNotIn('groupPendingRooms', serialized)
+        page.locator('#public-show-achievements').uncheck()
+        page.get_by_role('button', name='Guardar perfil público').click()
+        page.wait_for_function("!PUBLIC_PROFILE_CONTROL.visibility.showAchievements")
+        self.assertNotIn('achievements', self.db['publicProfiles']['isaac']['view'])
+        page.locator('#public-profile-published').uncheck(force=True)
+        page.get_by_role('button', name='Guardar perfil público').click()
+        page.wait_for_function("PUBLIC_PROFILE_CONTROL?.published === false")
+        self.assertNotIn('view', self.db['publicProfiles'].get('isaac', {}))
+
     def test_detail_separates_global_index_and_vault_score(self):
         page = self.page_for()
         page.evaluate("openDetail('hechos','jurasico')")
@@ -517,7 +568,7 @@ class PendingModalTest(unittest.TestCase):
         page.locator('#saved-route-name').fill('Vitoria 2027')
         page.locator('#saved-route-date').fill('2027-04-10')
         page.locator('#saved-route-modal').get_by_role('button', name='Guardar ruta', exact=True).click()
-        page.wait_for_function("Object.values(USER_ROUTES).some(route => route.name === 'Vitoria 2027')")
+        page.wait_for_function("Object.values(USER_ROUTES).some(route => route.name === 'Vitoria 2027')", timeout=60_000)
         route = next(iter(self.db['userRoutes']['a'].values()))
         self.assertEqual(route['scope'], 'personal')
         self.assertEqual(len(route['roomIds']), 3)

@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'the-vault-v47';
+const CACHE_VERSION = 'the-vault-v48';
 const APP_SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -8,6 +8,13 @@ const APP_SHELL = [
   './room-state.js',
   './route-planner.js',
   './saved-routes.js',
+  './public-profile.js',
+  './public-profile-firebase.js',
+  './public-profile-fixtures.js',
+  './escapista/',
+  './escapista/index.html',
+  './escapista/public-profile.css',
+  './escapista/public-profile-page.js',
   './site.webmanifest',
   './images/brand/favicon-round-32.png',
   './images/brand/apple-touch-icon-round.png',
@@ -92,7 +99,7 @@ self.addEventListener('fetch', event => {
   if (url.origin !== self.location.origin) return;
 
   const path = url.pathname.split('/').pop();
-  if (['room-state.js', 'route-planner.js', 'saved-routes.js'].includes(path)) {
+  if (['room-state.js', 'route-planner.js', 'saved-routes.js', 'public-profile.js', 'public-profile-firebase.js', 'public-profile-fixtures.js', 'public-profile-page.js', 'public-profile.css'].includes(path)) {
     event.respondWith(cacheFirst(request));
     return;
   }

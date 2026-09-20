@@ -7,7 +7,7 @@ import unittest
 class RoomStateRegressionTest(unittest.TestCase):
     def test_client_state_regressions(self):
         result = subprocess.run(
-            ["node", "--test", str(Path(__file__).with_name("room_state.test.cjs"))],
+            ["node", "--test", "--test-isolation=none", str(Path(__file__).with_name("room_state.test.cjs"))],
             capture_output=True, text=True, encoding="utf-8", timeout=60,
         )
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)

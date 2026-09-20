@@ -55,11 +55,11 @@ jobs:
       - name: Prepare public site artifact
         run: |
           mkdir -p public-site
-          cp index.html room-state.js route-planner.js saved-routes.js public-site/
+          cp index.html room-state.js route-planner.js saved-routes.js public-profile.js public-profile-firebase.js public-profile-fixtures.js public-site/
           cp CNAME data.json catalog.json external_ratings.json extra_awards.json terpeca_awards.json official_videos.json published_reviews.json public-site/
           cp review_photos.json room_aliases.json room_locations.json room_relationships.json site_stats.json robots.txt sitemap*.xml video-sitemap.xml llms.txt public-site/
           cp site.webmanifest service-worker.js seo.css public-site/
-          cp -R aviso-legal condiciones cookies privacidad ranking ranking-escape-rooms mejores-escape-rooms mejores-escape-rooms-terror escape-rooms reviews salas public-site/
+          cp -R aviso-legal condiciones cookies privacidad ranking ranking-escape-rooms mejores-escape-rooms mejores-escape-rooms-terror escape-rooms escapista reviews salas public-site/
           find . -maxdepth 1 -type d -name 'escape-rooms-*' -exec cp -R {} public-site/ \;
           mkdir -p public-site/images
           rsync -a --delete \
