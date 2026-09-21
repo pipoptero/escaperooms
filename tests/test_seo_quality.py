@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import re
 import unittest
 from pathlib import Path
 
@@ -11,6 +12,30 @@ SPEC.loader.exec_module(MODULE)
 
 
 class SeoQualityTest(unittest.TestCase):
+    def test_canonical_review_registry_drives_every_public_surface(self):
+        root = MODULE.ROOT
+        registry = json.loads((root / "published_reviews.json").read_text(encoding="utf-8"))["reviews"]
+        stats = json.loads((root / "site_stats.json").read_text(encoding="utf-8"))
+        review_pages = {
+            path.parent.name
+            for path in (root / "reviews").glob("*/index.html")
+            if 'http-equiv="refresh"' not in path.read_text(encoding="utf-8")
+        }
+        index_html = (root / "reviews" / "index.html").read_text(encoding="utf-8")
+        home_html = (root / "index.html").read_text(encoding="utf-8")
+        sitemap = (root / "sitemap-reviews.xml").read_text(encoding="utf-8")
+        self.assertEqual(len(registry), 41)
+        self.assertEqual(stats["reviews"], len(registry))
+        self.assertEqual(len(review_pages), len(registry))
+        self.assertEqual(index_html.count("data-review-card "), len(registry))
+        self.assertIn("Abduction Enterprises", index_html)
+        self.assertIn("/reviews/abduction-enterprises/", sitemap)
+        self.assertIn("function publicReviewCount()", home_html)
+        nav_count = int(re.search(r'id="badge-hecho">(\d+)<', home_html).group(1))
+        home_count = int(re.search(r'id="vault-stat-reviews">(\d+)<', home_html).group(1))
+        self.assertEqual((nav_count, home_count), (len(registry), len(registry)))
+        self.assertEqual(len(review_pages), len(set(review_pages)))
+
     def test_thin_room_is_not_indexable(self):
         item = {"room": {"id": "thin", "nombre": "Thin", "descripcion": "Sin sinopsis"}, "rating": {}}
         self.assertFalse(MODULE.room_is_indexable(item))

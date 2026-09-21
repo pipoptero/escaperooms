@@ -330,6 +330,9 @@
   .vault-home-map-canvas{position:relative;min-height:278px;background:radial-gradient(circle at 46% 48%,rgba(125,187,63,.09),transparent 35%),linear-gradient(135deg,#0b0c10,#12151a);overflow:hidden;}
   .vault-home-map-canvas::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:32px 32px;}
   .vault-home-map-canvas .escapist-map-svg{opacity:.33;}
+  .vault-home-map-placeholder{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;text-align:center;padding:24px;color:var(--text2);}
+  .vault-home-map-placeholder strong{font-family:'Cinzel',serif;color:var(--text);font-size:1.05rem;}
+  .vault-home-map-placeholder span{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);}
   .vault-home-leaflet-map{position:absolute;inset:0;z-index:4;background:#10120f;}
   .vault-home-leaflet-map .leaflet-tile-pane{filter:grayscale(1) invert(.88) hue-rotate(180deg) brightness(.62) contrast(1.18);}
   .vault-home-leaflet-map .leaflet-control-container{font-family:'Share Tech Mono',monospace;}
@@ -1997,15 +2000,16 @@
 .escapist-leaflet-cluster.pending{background:#17150e;border-color:#ffb000;color:#ffca55}
 .escapist-leaflet-cluster.mixed{box-shadow:0 5px 18px rgba(0,0,0,.5),inset 0 -5px 0 #ffb000}
 .escapist-map-dot.done{background:#80d34b}.escapist-map-dot.pending{background:#ffb000}.escapist-map-dot.approx{background:transparent;border:1px dashed #aaa4bd}
-#pending-choice{position:fixed;inset:0;margin:auto;width:min(480px,calc(100% - 24px));max-height:calc(100dvh - 32px);overflow:auto;border:1px solid var(--green);background:var(--card);color:var(--text);padding:24px;border-radius:10px;z-index:1000;}
-#pending-choice::backdrop{background:rgba(0,0,0,.78);}
-#pending-choice h2{padding-right:30px;font-size:1.2rem;margin-bottom:12px;}
-#pending-choice p{font-size:.9rem;line-height:1.5;margin-bottom:12px;}
+#pending-choice,#played-at-choice{position:fixed;inset:0;margin:auto;width:min(480px,calc(100% - 24px));max-height:calc(100dvh - 32px);overflow:auto;border:1px solid var(--green);background:var(--card);color:var(--text);padding:24px;border-radius:10px;z-index:1000;}
+#pending-choice::backdrop,#played-at-choice::backdrop{background:rgba(0,0,0,.78);}
+#pending-choice h2,#played-at-choice h2{padding-right:30px;font-size:1.2rem;margin-bottom:12px;}
+#pending-choice p,#played-at-choice p{font-size:.9rem;line-height:1.5;margin-bottom:12px;}
+#played-at-date{width:100%;padding:9px 10px;border:1px solid var(--border);background:var(--card2);color:var(--text);color-scheme:dark;font:600 .9rem 'Rajdhani',sans-serif;}
 .pending-choice-close{position:absolute;right:8px;top:8px;width:44px;height:44px;background:var(--card);color:var(--text);border:0;font-size:1.6rem;cursor:pointer;}
 .pending-destination{display:flex;flex-direction:column;gap:6px;text-align:left;width:100%;padding:14px;margin:8px 0;border:1px solid var(--border);background:var(--bg);color:var(--text);cursor:pointer;min-height:60px;}
 .pending-destination:disabled{opacity:.6;cursor:default;}
 .pending-destination span{font-size:.8rem;color:var(--text2);}
-#pending-choice-error{color:#ff8989;}
+#pending-choice-error,#played-at-choice-error{color:#ff8989;}
 </style>
 </head>
 <body>
@@ -2061,6 +2065,7 @@
         <span class="auth-name" id="auth-name">Sin iniciar sesión</span>
       </div>
       <button class="auth-btn" id="auth-login" type="button" onclick="signInGoogle()">Entrar con Google</button>
+      <a class="auth-btn secondary" id="auth-browser" href="/" target="_blank" rel="noopener" style="display:none">Abrir en navegador</a>
       <button class="auth-btn secondary" id="auth-profile" type="button" onclick="openProfile()" style="display:none">Ajustes</button>
       <button class="auth-btn secondary" id="auth-logout" type="button" onclick="signOutGoogle()" style="display:none">Salir</button>
     </div>
@@ -2072,7 +2077,7 @@
       <button class="tab" id="tab-cat" onclick="switchTab('catalogo')"><img class="tab-icon" src="images/navigation/catalogo.png" alt="">Catálogo <span class="count-badge" id="badge-cat">1735</span></button>
       <button class="tab auth-tab" id="tab-pend" onclick="switchTab('pendientes')" style="display:none"><img class="tab-icon" src="images/navigation/pendientes.png" alt="">Pendientes <span class="count-badge" id="badge-pend">0</span></button>
       <button class="tab auth-tab" id="tab-mine" onclick="switchTab('mis-hechos')" style="display:none"><img class="tab-icon" src="images/navigation/hechos.png" alt="">Hechos <span class="count-badge" id="badge-mine">0</span></button>
-      <button class="tab" id="tab-hecho" onclick="switchTab('hechos')"><img class="tab-icon" src="images/navigation/reviews-tab.png" alt="">Reviews <span class="count-badge" id="badge-hecho">39</span></button>
+      <button class="tab" id="tab-hecho" onclick="switchTab('hechos')"><img class="tab-icon" src="images/navigation/reviews-tab.png" alt="">Reviews <span class="count-badge" id="badge-hecho">41</span></button>
       <button class="tab" id="tab-rank" onclick="switchTab('ranking')"><img class="tab-icon" src="images/navigation/ranking.png" alt="">Ranking</button>
     </div>
   </div>
@@ -2107,7 +2112,7 @@
         </div>
         <div class="vault-guide-stats" aria-label="Datos actuales de The Vault">
           <div class="vault-guide-stat"><strong id="vault-stat-catalog">1735</strong><span>salas catalogadas</span></div>
-          <div class="vault-guide-stat"><strong id="vault-stat-reviews">39</strong><span>reviews The Vault</span></div>
+          <div class="vault-guide-stat"><strong id="vault-stat-reviews">41</strong><span>reviews The Vault</span></div>
           <div class="vault-guide-stat"><strong id="vault-stat-ranking">948</strong><span>salas con ranking</span></div>
           <div class="vault-guide-stat"><strong id="vault-stat-locations">44</strong><span>zonas para explorar</span></div>
         </div>
@@ -2117,7 +2122,7 @@
         <div class="vault-mini-list"><div class="vault-mini-item"><span>Historial y pendientes</span><strong>✓</strong></div><div class="vault-mini-item"><span>Mapa, XP y logros</span><strong>✓</strong></div><div class="vault-mini-item"><span>Grupos y rutas</span><strong>✓</strong></div><div class="vault-mini-item"><span>Avatares y cosméticos</span><strong>✓</strong></div></div>
       </section>
       <div class="vault-section-head"><div class="vault-section-title">Últimas reviews</div><div class="vault-section-note">Contenido disponible sin iniciar sesión</div></div>
-      <div class="vault-latest-grid"><a class="vault-latest-card" href="reviews/nunca-jamas/"><span class="vault-latest-img"><span>N</span></span><span><span class="vault-latest-kicker">Key Play</span><strong class="vault-latest-name">Nunca Jamás</strong><span class="vault-latest-meta">Granollers - Barcelona</span></span></a><a class="vault-latest-card" href="reviews/jurasico/"><span class="vault-latest-img"><span>J</span></span><span><span class="vault-latest-kicker">Golden Pop</span><strong class="vault-latest-name">Jurásico</strong><span class="vault-latest-meta">Barcelona - Barcelona</span></span></a><a class="vault-latest-card" href="reviews/forbidden-room/"><span class="vault-latest-img"><span>F</span></span><span><span class="vault-latest-kicker">Shallow Grave</span><strong class="vault-latest-name">Forbidden Room</strong><span class="vault-latest-meta">Terrassa - Barcelona</span></span></a></div>
+      <div class="vault-latest-grid"><a class="vault-latest-card" href="reviews/olimpo/"><span class="vault-latest-img"><span>O</span></span><span><span class="vault-latest-kicker">Olimpo Escape Room</span><strong class="vault-latest-name">Olimpo</strong><span class="vault-latest-meta">Review publicada</span></span></a><a class="vault-latest-card" href="reviews/abduction-enterprises/"><span class="vault-latest-img"><span>A</span></span><span><span class="vault-latest-kicker">Abduction</span><strong class="vault-latest-name">Abduction Enterprises</strong><span class="vault-latest-meta">Badalona - Barcelona</span></span></a><a class="vault-latest-card" href="reviews/nunca-jamas/"><span class="vault-latest-img"><span>N</span></span><span><span class="vault-latest-kicker">Key Play</span><strong class="vault-latest-name">Nunca Jamás</strong><span class="vault-latest-meta">Granollers - Barcelona</span></span></a></div>
       <!-- STATIC_HOME_END --></div>
     </div>
 
@@ -2364,6 +2369,19 @@
   <p id="pending-choice-error" role="alert"></p>
 </dialog>
 
+<dialog id="played-at-choice" aria-labelledby="played-at-choice-title">
+  <form method="dialog"><button class="pending-choice-close" aria-label="Cerrar fecha de realización">×</button></form>
+  <h2 id="played-at-choice-title">¿Cuándo lo hiciste?</h2>
+  <p>La fecha es opcional y solo se guarda en tu historial privado.</p>
+  <div id="played-at-choice-content">
+    <button class="pending-destination" type="button" onclick="applyPlayedAtChoice('today')"><strong>Hoy</strong><span>Guardar la fecha de hoy</span></button>
+    <label class="pending-destination"><strong>Elegir fecha</strong><input id="played-at-date" type="date" aria-label="Fecha de realización"></label>
+    <button class="pending-destination" type="button" onclick="applyPlayedAtChoice('custom')"><strong>Guardar fecha elegida</strong><span>Formato día, mes y año</span></button>
+    <button class="pending-destination" type="button" onclick="applyPlayedAtChoice('unknown')"><strong>No recuerdo</strong><span>Guardar la sala sin fecha</span></button>
+  </div>
+  <p id="played-at-choice-error" role="alert"></p>
+</dialog>
+
 <div class="detail-modal" id="detail-modal" aria-hidden="true" onclick="closeDetail(event)">
   <div class="detail-shell" role="dialog" aria-modal="true" aria-labelledby="detail-title" onclick="event.stopPropagation()">
     <button class="detail-close" type="button" onclick="closeDetail()" aria-label="Cerrar detalle">×</button>
@@ -2466,6 +2484,10 @@ let USER_ID = LOCAL_USER_ID;
 let AUTH_USER = null;
 let AUTH_TOKEN = '';
 let FIREBASE_APP = null;
+let AUTH_FLOW_STATE = 'idle';
+let AUTH_FLOW_ERROR = '';
+let AUTH_REDIRECT_CHECKED = false;
+const AUTH_FLOW_TIMEOUT_MS = 15000;
 let FIREBASE_AUTH = null;
 let GOOGLE_PROVIDER = null;
 
@@ -2535,7 +2557,7 @@ const TERPECA_AWARD_INDEX = new Map();
 const EXTRA_AWARD_INDEX = new Map();
 
 // Preparado para el siguiente paso con Google/Firebase Auth:
-// users/{uid}/roomStates/{roomKey} -> { pending, done, completedMinutes, updatedAt }
+// users/{uid}/roomStates/{roomKey} -> { pending, done, completedMinutes?, playedAt?, updatedAt }
 let CURRENT_USER = null;
 let USER_ROOM_STATES = {};
 let USER_PROFILE = {};
@@ -2664,14 +2686,14 @@ let CATALOG_LOAD_PROMISE = null;
 let OFFICIAL_VIDEOS_LOADED = false;
 let OFFICIAL_VIDEOS_LOAD_PROMISE = null;
 let ROOM_RELATIONSHIPS_LOADED = false;
-const FALLBACK_SITE_STATS = {"catalog":1735,"reviews":39,"ranking":948,"locations":44,"updated":"2026-09-13"};
+const FALLBACK_SITE_STATS = {"catalog":1735,"reviews":41,"ranking":948,"locations":44,"updated":"2026-09-21"};
 let PUBLIC_SITE_STATS = { ...FALLBACK_SITE_STATS };
 let STATIC_ENHANCEMENTS_LOADED = false;
 let STATIC_ENHANCEMENTS_PROMISE = null;
 let PROFILE_MAP_DATA_PROMISE = null;
 let PHOTO_LIGHTBOX_GALLERIES = {};
 const LIVE_REFRESH_MIN_INTERVAL = 5 * 60 * 1000;
-const STATIC_ASSET_VERSION = '20260915-public-profile-v48';
+const STATIC_ASSET_VERSION = '20260921-stability-v49';
 
 function invalidateReviewRoomsCache() {
   REVIEW_ROOMS_CACHE = null;
@@ -3331,22 +3353,9 @@ function arkkadiaCommunityReviewRooms(sources = null) {
 
 function reviewRooms() {
   if (REVIEW_ROOMS_CACHE) return REVIEW_ROOMS_CACHE;
-  const publishedRooms = publishedReviewRooms();
-  const roomSources = uniqueRooms([...CATALOGO, ...PENDIENTES, ...HECHOS, ...publishedRooms]);
-  const byKey = new Map();
-  HECHOS.forEach((room, index) => {
-    const key = reviewRoomKey(room);
-    if (key) byKey.set(key, canonicalizeReviewRoom({ ...room, _reviewOrder: index + 1 }));
-  });
-  publishedRooms.forEach(room => {
-    const key = reviewRoomKey(room);
-    if (key) byKey.set(key, canonicalizeReviewRoom(room));
-  });
-  arkkadiaCommunityReviewRooms(roomSources).forEach(room => {
-    const key = reviewRoomKey(room);
-    if (key && !byKey.has(key)) byKey.set(key, canonicalizeReviewRoom(room));
-  });
-  REVIEW_ROOMS_CACHE = [...byKey.values()];
+  // published_reviews.json is the only public registry. Live community reviews
+  // remain available inside a room, but never alter public pages or counters.
+  REVIEW_ROOMS_CACHE = publishedReviewRooms().map(canonicalizeReviewRoom);
   return REVIEW_ROOMS_CACHE;
 }
 
@@ -3366,6 +3375,26 @@ function firebaseAuthConfigured() {
 function isEmbeddedSocialBrowser() {
   const ua = navigator.userAgent || '';
   return /Instagram|FBAN|FBAV|FBIOS|FB_IAB|FB4A|Line|Twitter/i.test(ua);
+}
+
+function isStandaloneApp() {
+  return window.matchMedia?.('(display-mode: standalone)').matches || window.navigator.standalone === true;
+}
+
+function setAuthFlowState(state, error = '') {
+  AUTH_FLOW_STATE = state;
+  AUTH_FLOW_ERROR = String(error || '');
+  document.documentElement.dataset.authState = state;
+  window.dispatchEvent(new CustomEvent('vault:auth-state', { detail: { state, error: AUTH_FLOW_ERROR } }));
+  renderAuthStatus();
+}
+
+function withAuthTimeout(promise, timeoutMs = AUTH_FLOW_TIMEOUT_MS) {
+  let timer;
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => { timer = setTimeout(() => reject(Object.assign(new Error('auth/timeout'), { code: 'auth/timeout' })), timeoutMs); })
+  ]).finally(() => clearTimeout(timer));
 }
 
 function externalBrowserAuthMessage() {
@@ -3456,11 +3485,16 @@ function renderAuthStatus() {
   const loginBtn = document.getElementById('auth-login');
   const logoutBtn = document.getElementById('auth-logout');
   const profileBtn = document.getElementById('auth-profile');
+  const browserBtn = document.getElementById('auth-browser');
   const nameEl = document.getElementById('auth-name');
   const statusEl = document.getElementById('auth-status');
   if (!loginBtn || !logoutBtn || !nameEl || !statusEl) return;
 
   statusEl.querySelector('.auth-avatar')?.remove();
+  if (browserBtn) {
+    browserBtn.href = window.location.href;
+    browserBtn.style.display = AUTH_FLOW_STATE === 'error' && isStandaloneApp() ? '' : 'none';
+  }
   if (!firebaseAuthConfigured()) {
     nameEl.textContent = 'Configura Firebase Auth';
     loginBtn.disabled = true;
@@ -3484,7 +3518,27 @@ function renderAuthStatus() {
     return;
   }
 
+  if (['connecting', 'redirecting'].includes(AUTH_FLOW_STATE)) {
+    nameEl.textContent = AUTH_FLOW_STATE === 'redirecting' ? 'Volviendo de Google…' : 'Conectando…';
+    loginBtn.textContent = 'Conectando…';
+    loginBtn.disabled = true;
+    loginBtn.style.display = '';
+    logoutBtn.style.display = 'none';
+    if (profileBtn) profileBtn.style.display = 'none';
+    return;
+  }
+  if (AUTH_FLOW_STATE === 'error') {
+    nameEl.textContent = 'No hemos podido completar el acceso';
+    loginBtn.textContent = 'Reintentar';
+    loginBtn.disabled = false;
+    loginBtn.style.display = '';
+    logoutBtn.style.display = 'none';
+    if (profileBtn) profileBtn.style.display = 'none';
+    return;
+  }
+
   loginBtn.disabled = false;
+  loginBtn.textContent = 'Entrar con Google';
   loginBtn.title = 'Entrar con tu cuenta de Google';
   if (AUTH_USER) {
     const publicPhoto = publicPhotoURL();
@@ -3525,15 +3579,34 @@ async function initFirebaseAuth() {
     GOOGLE_PROVIDER = new firebase.auth.GoogleAuthProvider();
     await FIREBASE_AUTH.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
   }
-  return new Promise(resolve => {
+  if (!AUTH_REDIRECT_CHECKED) {
+    AUTH_REDIRECT_CHECKED = true;
+    const redirectPending = sessionStorage.getItem('vault-auth-redirect-pending') === '1';
+    if (redirectPending) setAuthFlowState('redirecting');
+    try {
+      await withAuthTimeout(FIREBASE_AUTH.getRedirectResult());
+      sessionStorage.removeItem('vault-auth-redirect-pending');
+    } catch (error) {
+      sessionStorage.removeItem('vault-auth-redirect-pending');
+      if (redirectPending || error?.code !== 'auth/no-auth-event') {
+        setAuthFlowState('error', error?.code || error?.message);
+        return null;
+      }
+    }
+  }
+  return withAuthTimeout(new Promise(resolve => {
     const off = FIREBASE_AUTH.onAuthStateChanged(async user => {
       AUTH_USER = user;
       USER_ID = user ? user.uid : LOCAL_USER_ID;
       AUTH_TOKEN = user ? await user.getIdToken() : '';
+      setAuthFlowState(user ? 'authenticated' : (AUTH_FLOW_STATE === 'connecting' ? 'connecting' : 'unauthenticated'));
       renderAuthStatus();
       off();
       resolve(user);
     });
+  })).catch(error => {
+    setAuthFlowState('error', error?.code || error?.message);
+    return null;
   });
 }
 
@@ -3555,11 +3628,7 @@ async function refreshSignedSession() {
   refreshAllLikeCounts();
   populateFilters();
   renderStats();
-  renderPendientes();
-  renderMisHechos();
-  renderHechos();
-  renderRanking();
-  renderCatalogo();
+  renderActivePanel();
   await handlePendingInvite();
 }
 
@@ -3623,6 +3692,8 @@ async function saveUserRoomState(room, patch) {
     if (completed) next.completedMinutes = completed;
     else delete next.completedMinutes;
   }
+  if (!next.done || next.playedAt === null || next.playedAt === '') delete next.playedAt;
+  if (next.playedAt && !isValidPlayedAt(next.playedAt)) throw new Error('La fecha de realización no es válida.');
   const value = next.pending || next.done ? next : null;
   await fbPatch('', VaultRoomState.patchFor(`users/${USER_ID}/roomStates`, key, value, USER_STATE_ORIGINS));
   if (value) USER_ROOM_STATES[key] = value;
@@ -3634,9 +3705,13 @@ async function setPersonalRoomState(kind, key, state) {
   if (ROOM_STATE_SAVING || !AUTH_USER) return;
   const room = findDetailRoom(kind, key);
   if (!room) return;
+  const current = userStateFor(room);
+  if (state === 'done' && !current.done) {
+    openPlayedAtChoice(kind, key, false);
+    return;
+  }
   const progressBefore = AUTH_USER ? progressModel() : null;
   ROOM_STATE_SAVING = true;
-  const current = userStateFor(room);
   const patch = state === 'pending'
     ? { pending: !current.pending, done: false }
     : { done: !current.done, pending: false };
@@ -3644,10 +3719,7 @@ async function setPersonalRoomState(kind, key, state) {
     await saveUserRoomState(room, patch);
     populateFilters();
     renderStats();
-    renderPendientes();
-    renderMisHechos();
-    renderHechos();
-    renderCatalogo();
+    renderActivePanel();
     announceProgressChange(progressBefore, progressModel());
     if (document.getElementById('detail-modal')?.classList.contains('open')) {
       openDetail(kind, key, { preserveScroll: true });
@@ -3655,6 +3727,61 @@ async function setPersonalRoomState(kind, key, state) {
   } catch(e) {
     console.error('No se pudo guardar tu estado personal:', e);
     alert(`No se pudo guardar en tu cuenta.\n\nDetalle: ${e.message}\n\nRevisa las reglas de Firebase para users/{uid}/roomStates.`);
+  } finally { ROOM_STATE_SAVING = false; }
+}
+
+function localTodayIso() {
+  const now = new Date();
+  const offset = now.getTimezoneOffset() * 60000;
+  return new Date(now.getTime() - offset).toISOString().slice(0, 10);
+}
+
+function isValidPlayedAt(value) {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value || ''));
+  if (!match) return false;
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  if (year < 1900 || year > 2099) return false;
+  const parsed = new Date(Date.UTC(year, month - 1, day));
+  return parsed.getUTCFullYear() === year && parsed.getUTCMonth() === month - 1 && parsed.getUTCDate() === day;
+}
+
+function openPlayedAtChoice(kind, key, editing = false) {
+  const room = findDetailRoom(kind, key);
+  if (!room || !AUTH_USER) return;
+  const dialog = document.getElementById('played-at-choice');
+  const input = document.getElementById('played-at-date');
+  dialog.dataset.kind = kind;
+  dialog.dataset.key = key;
+  dialog.dataset.editing = editing ? 'true' : 'false';
+  input.max = localTodayIso();
+  input.value = userStateFor(room).playedAt || '';
+  document.getElementById('played-at-choice-error').textContent = '';
+  dialog.showModal();
+}
+
+async function applyPlayedAtChoice(mode) {
+  const dialog = document.getElementById('played-at-choice');
+  const room = findDetailRoom(dialog.dataset.kind, dialog.dataset.key);
+  if (!room || ROOM_STATE_SAVING) return;
+  const input = document.getElementById('played-at-date');
+  const playedAt = mode === 'today' ? localTodayIso() : mode === 'custom' ? input.value : '';
+  if (mode === 'custom' && (!isValidPlayedAt(playedAt) || playedAt > localTodayIso())) {
+    document.getElementById('played-at-choice-error').textContent = 'Elige una fecha válida que no sea futura.';
+    input.focus();
+    return;
+  }
+  ROOM_STATE_SAVING = true;
+  const progressBefore = progressModel();
+  try {
+    await saveUserRoomState(room, { done: true, pending: false, playedAt: playedAt || null });
+    dialog.close();
+    populateFilters(); renderStats(); renderActivePanel();
+    announceProgressChange(progressBefore, progressModel());
+    if (document.getElementById('detail-modal')?.classList.contains('open')) openDetail(dialog.dataset.kind, dialog.dataset.key, { preserveScroll: true });
+  } catch (error) {
+    document.getElementById('played-at-choice-error').textContent = `No se pudo guardar la fecha. ${error.message}`;
   } finally { ROOM_STATE_SAVING = false; }
 }
 
@@ -6306,7 +6433,7 @@ function progressModel() {
   const unlockedIds = new Set(achievements.filter(item => item.unlocked).map(item => item.id));
   const featuredAchievementIds = (Array.isArray(USER_PROFILE.featuredAchievements) ? USER_PROFILE.featuredAchievements : [])
     .filter((id, index, list) => unlockedIds.has(id) && list.indexOf(id) === index)
-    .slice(0, 3);
+    .slice(0, 5);
   const routes = progressRoutes(personalDoneRooms);
   const unlockedRouteIds = new Set(routes.filter(route => route.unlocked).map(route => route.id));
   const featuredRouteIds = (Array.isArray(USER_PROFILE.featuredRoutes) ? USER_PROFILE.featuredRoutes : [])
@@ -7224,7 +7351,7 @@ async function saveGroupRoomStatus(groupId, room, status) {
 }
 
 function renderRoomStateChange(kind, key) {
-  populateFilters(); renderStats(); renderPendientes(); renderMisHechos(); renderHechos(); renderCatalogo();
+  populateFilters(); renderStats(); renderActivePanel();
   if (document.getElementById('profile-modal')?.classList.contains('open')) renderProfile();
   if (document.getElementById('detail-modal')?.classList.contains('open')) openDetail(kind, key, { preserveScroll: true });
   schedulePublicProfileRefresh();
@@ -7874,12 +8001,7 @@ async function signInGoogle() {
     alert('Falta rellenar FIREBASE_CONFIG en index.html.');
     return;
   }
-  const loginBtn = document.getElementById('auth-login');
-  const originalText = loginBtn?.textContent || 'Entrar con Google';
-  if (loginBtn) {
-    loginBtn.disabled = true;
-    loginBtn.textContent = 'Conectando...';
-  }
+  setAuthFlowState('connecting');
   if (!FIREBASE_AUTH || !GOOGLE_PROVIDER) {
     await initFirebaseAuth();
   }
@@ -7890,23 +8012,23 @@ async function signInGoogle() {
       const detail = FIREBASE_SDK_ERROR ? `\n\nDetalle: ${FIREBASE_SDK_ERROR}` : '';
       alert(`No se pudo cargar Firebase Auth. Revisa la conexion o prueba a recargar la pagina.${detail}`);
     }
-    if (loginBtn) {
-      loginBtn.disabled = false;
-      loginBtn.textContent = originalText;
-    }
+    setAuthFlowState('error', FIREBASE_SDK_ERROR || 'sdk-unavailable');
     return;
   }
   let result;
   try {
     if (isEmbeddedSocialBrowser()) {
       alert(externalBrowserAuthMessage());
-      if (loginBtn) {
-        loginBtn.disabled = false;
-        loginBtn.textContent = originalText;
-      }
+      setAuthFlowState('error', 'embedded-browser');
       return;
     }
-    result = await FIREBASE_AUTH.signInWithPopup(GOOGLE_PROVIDER);
+    if (isStandaloneApp()) {
+      sessionStorage.setItem('vault-auth-redirect-pending', '1');
+      setAuthFlowState('redirecting');
+      await withAuthTimeout(FIREBASE_AUTH.signInWithRedirect(GOOGLE_PROVIDER));
+      return;
+    }
+    result = await withAuthTimeout(FIREBASE_AUTH.signInWithPopup(GOOGLE_PROVIDER));
   } catch(e) {
     console.error('Error al iniciar sesión con Google:', e);
     const redirectCodes = new Set([
@@ -7915,24 +8037,23 @@ async function signInGoogle() {
     ]);
     if (redirectCodes.has(e.code)) {
       try {
-        await FIREBASE_AUTH.signInWithRedirect(GOOGLE_PROVIDER);
+        sessionStorage.setItem('vault-auth-redirect-pending', '1');
+        setAuthFlowState('redirecting');
+        await withAuthTimeout(FIREBASE_AUTH.signInWithRedirect(GOOGLE_PROVIDER));
         return;
       } catch (redirectError) {
         console.error('Error al iniciar sesión con redirect:', redirectError);
       }
     }
-    const detail = e.code ? `\n\nDetalle: ${e.code}` : '';
-    alert(`No se pudo iniciar sesión con Google. Revisa la configuración de Firebase Auth.${detail}`);
-    if (loginBtn) {
-      loginBtn.disabled = false;
-      loginBtn.textContent = originalText;
-    }
+    sessionStorage.removeItem('vault-auth-redirect-pending');
+    setAuthFlowState('error', e.code || e.message);
     return;
   }
 
   AUTH_USER = result.user || FIREBASE_AUTH.currentUser;
   USER_ID = AUTH_USER ? AUTH_USER.uid : LOCAL_USER_ID;
   AUTH_TOKEN = AUTH_USER ? await AUTH_USER.getIdToken() : '';
+  setAuthFlowState(AUTH_USER ? 'authenticated' : 'unauthenticated');
   await loadAdminRole();
   renderAuthStatus();
 
@@ -7942,11 +8063,6 @@ async function signInGoogle() {
   } catch(e) {
     console.warn('Sesion iniciada, pero no se pudieron sincronizar todos los datos:', e.message);
     await refreshSignedSession();
-  } finally {
-    if (loginBtn) {
-      loginBtn.disabled = false;
-      loginBtn.textContent = originalText;
-    }
   }
 }
 
@@ -7955,6 +8071,7 @@ async function signOutGoogle() {
   await FIREBASE_AUTH.signOut();
   AUTH_USER = null;
   AUTH_TOKEN = '';
+  setAuthFlowState('unauthenticated');
   USER_ID = LOCAL_USER_ID;
   IS_ADMIN = false;
   FAVS = readStoredFavs('er_favs');
@@ -8730,12 +8847,7 @@ async function refreshLiveData({ force = false, reason = 'auto' } = {}) {
     refreshAllLikeCounts();
     populateFilters();
     renderStats();
-    renderPendientes();
-    renderMisHechos();
-    renderHechos();
-    if (ACTIVE_TAB === 'ranking') renderRanking();
-    renderCatalogo();
-    renderVaultGuide();
+    renderActivePanel();
     openDeepLinkFromHash();
     updateFavCount();
     schedulePublicProfileRefresh();
@@ -8788,10 +8900,7 @@ async function loadStaticEnhancementsAfterInitialRender() {
     await loadRoomLocations();
     populateFilters();
     renderStats();
-    renderCatalogo();
-    renderHechos();
-    if (ACTIVE_TAB === 'ranking') renderRanking();
-    renderVaultGuide();
+    renderActivePanel();
     updateFavCount();
     openDeepLinkFromHash();
     STATIC_ENHANCEMENTS_LOADED = true;
@@ -8813,7 +8922,9 @@ function ensureStaticEnhancementsLoaded() {
 }
 
 function scheduleStaticEnhancementsAfterInitialRender() {
-  setTimeout(() => ensureStaticEnhancementsLoaded(), 8000);
+  // Keep the first screen small; tabs call ensureStaticEnhancementsLoaded on demand.
+  // The delayed warm-up only runs after the initial interaction window.
+  setTimeout(() => ensureStaticEnhancementsLoaded(), 10000);
 }
 
 async function loadData() {
@@ -8821,10 +8932,7 @@ async function loadData() {
     const earlyReviewsPromise = Promise.allSettled([
       loadSiteStats(),
       loadRoomAliases(),
-      loadStaticPublishedReviews(),
-      loadCatalogo(),
-      loadOfficialVideos(),
-      loadRoomRelationships()
+      loadStaticPublishedReviews()
     ]);
     const r = await fetch('data.json');
     if (!r.ok) throw new Error(`HTTP ${r.status} — no se encontró data.json`);
@@ -8844,7 +8952,7 @@ async function loadData() {
     document.body.classList.add('app-ready');
     if (!FIREBASE_ENABLED) document.getElementById('setup-banner').style.display = 'block';
 
-    populateFilters(); renderStats(); renderPendientes(); renderMisHechos(); renderHechos(); renderCatalogo(); renderVaultGuide(); updateGuestStripVisibility();
+    populateFilters(); renderStats(); renderActivePanel(); updateGuestStripVisibility();
     openDeepLinkFromHash();
     updateFavCount();
     scheduleStaticEnhancementsAfterInitialRender();
@@ -8908,7 +9016,7 @@ function publicCatalogCount() {
 }
 
 function publicReviewCount() {
-  return Number(PUBLIC_SITE_STATS.reviews) || Object.keys(STATIC_PUBLISHED_REVIEWS || {}).length || 0;
+  return Object.keys(STATIC_PUBLISHED_REVIEWS || {}).length;
 }
 
 function publicRankingCount() {
@@ -9017,7 +9125,6 @@ function renderVaultGuide() {
   const model = progressModel();
   root.className = 'vault-home-shell';
   root.innerHTML = `${vaultHomeIdentityHtml(model)}
-    ${vaultHomeActionsHtml(model)}
     <div class="vault-home-grid">
       ${vaultHomeMapHtml(model)}
       ${vaultHomeProgressHtml(model)}
@@ -9027,15 +9134,6 @@ function renderVaultGuide() {
       ${vaultHomeDiscoveryHtml()}
     </div>
     `;
-  requestAnimationFrame(() => {
-    if (Object.keys(ROOM_LOCATIONS || {}).length) {
-      initVaultHomeLeafletMap();
-      return;
-    }
-    ensureProfileMapDataLoaded().then(() => {
-      if (AUTH_USER && ACTIVE_TAB === 'thevault') renderVaultGuide();
-    }).catch(error => console.warn('No se pudo cargar el mapa de inicio:', error.message));
-  });
 }
 
 function openEscapistProfileCta() {
@@ -9109,7 +9207,7 @@ function vaultHomeMapHtml(model) {
   return `<section class="vault-home-section">
     <div class="vault-home-section-head"><div class="vault-home-section-title">Mi mapa escapista</div><div class="vault-home-section-note">Solo salas realizadas</div></div>
     <div class="vault-home-map">
-      <div class="vault-home-map-canvas"><div id="vault-home-leaflet-map" class="vault-home-leaflet-map"></div></div>
+      <div class="vault-home-map-canvas"><div class="vault-home-map-placeholder"><strong>${rooms.length} salas registradas</strong><span>El mapa y Leaflet se cargan al abrirlo.</span><button class="vault-guide-action" type="button" onclick="openVaultHomeMap()">Abrir mapa</button></div></div>
       <div class="vault-home-map-summary">
         <div class="vault-home-map-stat"><strong>${rooms.length}</strong><span>salas hechas</span></div>
         <div class="vault-home-map-stat"><strong>${cities.size}</strong><span>ciudades</span></div>
@@ -9216,24 +9314,44 @@ function vaultHomeAchievementsHtml(model) {
 }
 
 function vaultHomeThumbHtml(room) {
-  const src = roomImageSrc(room || {});
+  const identities = new Set(reviewIdentityKeys(room || {}));
+  const publishedReview = reviewRooms().find(candidate => reviewIdentityKeys(candidate).some(key => identities.has(key)));
+  const src = publishedReview ? latestReviewThumbPath(publishedReview) : roomImageSrc(room || {});
+  const fallback = publishedReview ? canonicalReviewCoverPath(publishedReview) : '';
   const initial = escapeHtml((room?.nombre || '?').trim().slice(0, 1).toUpperCase());
-  return `<span class="vault-home-feed-thumb">${src ? `<img src="${escapeHtml(src)}" alt="" loading="lazy" onerror="this.replaceWith(document.createTextNode('${initial}'))">` : initial}</span>`;
+  return `<span class="vault-home-feed-thumb">${src ? `<img src="${escapeHtml(versionedLocalAsset(src))}" alt="" loading="lazy" decoding="async"${fallback ? ` data-fallback="${escapeHtml(versionedLocalAsset(fallback))}"` : ''} onerror="if(this.dataset.fallback){this.src=this.dataset.fallback;this.dataset.fallback=''}else{this.replaceWith(document.createTextNode('${initial}'))}">` : initial}</span>`;
 }
 
 function vaultHomeActivityHtml(model) {
-  let rooms = [];
-  if (model) {
-    rooms = [...model.personalDoneRooms].sort((a, b) => Number(userStateFor(b).updatedAt || 0) - Number(userStateFor(a).updatedAt || 0)).slice(0, 3);
-  } else {
-    rooms = reviewRooms().filter(room => room?.nombre).sort((a, b) => reviewTimeValue(b) - reviewTimeValue(a)).slice(0, 3);
-  }
-  return `<section class="vault-home-section"><div class="vault-home-section-head"><div class="vault-home-section-title">${model ? 'Actividad reciente' : 'Últimas reviews'}</div><div class="vault-home-section-note">Abrir ficha</div></div><div class="vault-home-feed">${rooms.length ? rooms.map(room => {
-    const catalogRoom = catalogRoomFor(room) || room;
-    const key = jsString(model ? userRoomKey(catalogRoom) : roomKey(catalogRoom));
-    const meta = [catalogRoom.empresa, catalogRoom.ciudad].filter(Boolean).join(' · ') || 'Escape room';
-    return `<button class="vault-home-feed-item" type="button" onclick="openDetail('${model ? 'catalogo' : 'hechos'}','${key}')">${vaultHomeThumbHtml(catalogRoom)}<span><strong>${escapeHtml(catalogRoom.nombre || 'Escape room')}</strong><span>${escapeHtml(meta)}</span></span><span class="vault-home-feed-score">${model ? 'Hecha' : (catalogRoom.valoracion ? Number(catalogRoom.valoracion).toFixed(1).replace('.0', '') : 'Ver')}</span></button>`;
-  }).join('') : '<div class="vault-home-empty">Tu actividad aparecerá aquí cuando marques tu primera sala.</div>'}</div></section>`;
+  const reviewEvents = reviewRooms().filter(room => room?.nombre && reviewTimeValue(room)).map(room => ({
+    room, timestamp: reviewTimeValue(room), kind: 'hechos', label: 'Review publicada'
+  }));
+  const personalEvents = model ? personalRoomSources().map(room => {
+    const state = userStateFor(room);
+    if (!state.updatedAt || (!state.done && !state.pending)) return null;
+    return { room, timestamp: Number(state.updatedAt), kind: 'catalogo', label: state.done ? 'Has registrado esta sala' : 'Añadida a pendientes', playedAt: state.playedAt || '' };
+  }).filter(Boolean) : [];
+  const events = [...reviewEvents, ...personalEvents]
+    .sort((a, b) => b.timestamp - a.timestamp || String(a.room.nombre || '').localeCompare(String(b.room.nombre || ''), 'es'))
+    .slice(0, 5);
+  return `<section class="vault-home-section"><div class="vault-home-section-head"><div class="vault-home-section-title">${model ? 'Actividad reciente' : 'Últimas reviews'}</div><div class="vault-home-section-note">Por fecha de registro</div></div><div class="vault-home-feed">${events.length ? events.map(event => {
+    const catalogRoom = catalogRoomFor(event.room) || event.room;
+    const key = jsString(event.kind === 'hechos' ? roomKey(catalogRoom) : userRoomKey(catalogRoom));
+    const played = event.playedAt ? ` · Jugada ${formatPlayedAt(event.playedAt)}` : '';
+    return `<button class="vault-home-feed-item" type="button" onclick="openDetail('${event.kind}','${key}')">${vaultHomeThumbHtml(catalogRoom)}<span><strong>${escapeHtml(catalogRoom.nombre || 'Escape room')}</strong><span>${escapeHtml(event.label + played)}</span></span><span class="vault-home-feed-score">${escapeHtml(formatActivityDate(event.timestamp))}</span></button>`;
+  }).join('') : '<div class="vault-home-empty">Tu actividad aparecerá aquí cuando registres tu primera acción.</div>'}</div></section>`;
+}
+
+function formatActivityDate(timestamp) {
+  const value = Number(timestamp || 0);
+  if (!value) return '';
+  return new Date(value).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
+}
+
+function formatPlayedAt(value) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(value || ''))) return '';
+  const [year, month, day] = String(value).split('-').map(Number);
+  return new Date(year, month - 1, day).toLocaleDateString('es-ES');
 }
 
 function vaultHomeDiscoveryHtml() {
@@ -9305,10 +9423,17 @@ function seoSlug(str) {
     .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 }
 
+function canonicalReviewCoverPath(room) {
+  const specific = cleanValue(room?._reviewImage || room?.reviewImage || room?.imagen);
+  if (specific) return specific;
+  const canonical = catalogRoomForReview(room || {});
+  return cleanValue(canonical?.imagen || canonical?.image) || 'images/brand/the-vault-round-logo.jpg';
+}
+
 function latestReviewThumbPath(room) {
-  const meta = canonicalReviewRoomMeta(roomKey(room));
-  const slug = seoSlug(meta.canonical_name || room.nombre || room.id || '');
-  return slug ? `images/seo/latest/${slug}.webp` : '';
+  const meta = canonicalReviewRoomMeta(reviewRoomKey(room || {}));
+  const slug = seoSlug(meta.canonical_name || room?.nombre || room?.id || '');
+  return slug ? `images/seo/latest/${slug}.webp` : canonicalReviewCoverPath(room);
 }
 
 function vaultLatestReviewsHtml() {
@@ -9325,9 +9450,8 @@ function vaultLatestReviewsHtml() {
     const key = jsString(roomKey(room));
     const initial = escapeHtml((room.nombre || '?').trim().slice(0, 1).toUpperCase());
     const thumbSrc = latestReviewThumbPath(room);
-    const img = thumbSrc
-      ? `<img src="${escapeHtml(thumbSrc)}" alt="" width="78" height="104" loading="lazy" decoding="async" onerror="this.replaceWith(document.createTextNode('${initial}'))">`
-      : initial;
+    const coverSrc = canonicalReviewCoverPath(room);
+    const img = `<img src="${escapeHtml(versionedLocalAsset(thumbSrc))}" alt="" width="78" height="104" loading="lazy" decoding="async" data-fallback="${escapeHtml(versionedLocalAsset(coverSrc))}" onerror="if(this.dataset.fallback){this.src=this.dataset.fallback;this.dataset.fallback=''}else{this.onerror=null;this.src='images/brand/the-vault-round-logo.jpg'}">`;
     const meta = [room.empresa, room.ciudad, room.provincia].filter(Boolean).join(' - ');
     const score = room.valoracion ? Number(room.valoracion).toFixed(1).replace('.0', '') : '';
     const kicker = room._arkkadiaCommunityReview ? 'Review Arkkadia' : 'Review The Vault';
@@ -9383,6 +9507,15 @@ function refreshRoomLists() {
   return ROOM_LIST_REFRESH;
 }
 window.addEventListener('focus', () => { if (ACTIVE_TAB === 'pendientes') refreshRoomLists(); });
+
+function renderActivePanel() {
+  if (ACTIVE_TAB === 'ranking') renderRanking();
+  else if (ACTIVE_TAB === 'catalogo') renderCatalogo();
+  else if (ACTIVE_TAB === 'hechos') renderHechos();
+  else if (ACTIVE_TAB === 'mis-hechos') renderMisHechos();
+  else if (ACTIVE_TAB === 'pendientes') renderPendientes();
+  else renderVaultGuide();
+}
 
 function switchTab(t) {
   if ((t === 'mis-hechos' || t === 'pendientes') && !AUTH_USER) t = 'thevault';
@@ -10165,12 +10298,17 @@ function detailUrlFor(kind, room) {
   const hash = detailHashFor(kind, room);
   if (!hash) return '';
   if (kind === 'hechos') {
-    const reviewKey = hash.replace(/^review\//, '');
-    return new URL(`/reviews/${reviewKey}/`, window.location.origin).toString();
+    return getReviewShareUrl(room);
   }
   const url = new URL(window.location.href);
   url.hash = hash;
   return url.toString();
+}
+
+function getReviewShareUrl(review) {
+  const meta = canonicalReviewRoomMeta(reviewRoomKey(review || {}));
+  const slug = seoSlug(meta.canonical_name || review?.nombre || review?.roomName || review?.id || '');
+  return slug ? new URL(`/reviews/${slug}/`, window.location.origin).toString() : '';
 }
 
 function detailShareText(kind, room) {
@@ -10632,6 +10770,7 @@ function completionTimeHtml(room, kind, context = 'detail') {
   const inputId = completionInputId(room, context);
   const completed = completedMinutesForRoom(room);
   const official = officialMinutesForRoom(room);
+  const playedAt = state.playedAt ? formatPlayedAt(state.playedAt) : 'Fecha no recordada';
   const current = completed
     ? `Tiempo real: ${formatPlayedMinutes(completed)}`
     : official ? `Usando duracion: ${formatPlayedMinutes(official)}` : 'Sin tiempo calculado';
@@ -10648,6 +10787,10 @@ function completionTimeHtml(room, kind, context = 'detail') {
       <button class="completion-time-save" type="button" onclick="saveCompletedMinutes('${kind}','${key}','${jsString(context)}')">Guardar</button>
     </div>
     <div class="completion-time-help">${escapeHtml(help)}</div>
+    <div class="completion-time-row" style="margin-top:8px">
+      <span class="completion-time-current" style="text-align:left">${escapeHtml(playedAt)}</span>
+      <button class="completion-time-save" type="button" onclick="openPlayedAtChoice('${kind}','${key}',true)">Editar fecha</button>
+    </div>
   </div>`;
 }
 
@@ -11592,6 +11735,18 @@ function registerServiceWorker() {
   if (!('serviceWorker' in navigator)) return;
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./service-worker.js')
+      .then(registration => {
+        const hadController = !!navigator.serviceWorker.controller;
+        let reloading = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          if (!hadController || reloading) return;
+          reloading = true;
+          window.location.reload();
+        });
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'visible') registration.update().catch(() => {});
+        });
+      })
       .catch(error => console.warn('No se pudo registrar la PWA:', error.message));
   });
 }

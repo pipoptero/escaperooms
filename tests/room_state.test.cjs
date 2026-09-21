@@ -25,9 +25,16 @@ test('general alias chains, accents and separators work beyond Parasomnia', () =
 });
 
 test('latest explicit personal state wins without resurrecting removed completion time', () => {
-  const result = state.normalize({ old: { done: true, completedMinutes: 60, updatedAt: 1 }, room: { pending: true, updatedAt: 2 } }, { old: 'room' }, true);
+  const result = state.normalize({ old: { done: true, completedMinutes: 60, playedAt: '2024-05-17', updatedAt: 1 }, room: { pending: true, updatedAt: 2 } }, { old: 'room' }, true);
   assert.equal(result.data.room.pending, true);
   assert.equal(result.data.room.completedMinutes, undefined);
+  assert.equal(result.data.room.playedAt, undefined);
+});
+
+test('optional playedAt survives done normalization and legacy done remains valid', () => {
+  const result = state.normalize({ dated: { done: true, pending: false, playedAt: '2024-05-17' }, legacy: { done: true, pending: false } }, {}, true);
+  assert.equal(result.data.dated.playedAt, '2024-05-17');
+  assert.equal(result.data.legacy.playedAt, undefined);
 });
 
 test('done wins an undated tie; metadata and unknown rooms survive', () => {

@@ -2490,6 +2490,13 @@ def main():
             continue
         current_room = review_by_identity.get(canonical_room_identity(old_slug))
         if not current_room:
+            target = site_url("/reviews/")
+            old_page.write_text(
+                legacy_seo_page("Review no disponible", target, target=target),
+                encoding="utf-8",
+                newline="\n",
+            )
+            legacy_review_pages += 1
             continue
         target = site_url(f"/reviews/{room_url_slug(current_room)}/")
         old_page.write_text(

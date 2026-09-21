@@ -78,6 +78,14 @@ test('cada usuario solo puede leer y modificar sus estados', async () => {
   await assertFails(get(ref(other, 'users/alice/roomStates')));
   await assertFails(set(ref(other, 'users/alice/roomStates/olimpo'), state));
   await assertFails(set(ref(mine, 'users/alice/roomStates/invalid'), { ...state, pending: true, done: true }));
+  await assertSucceeds(set(ref(mine, 'users/alice/roomStates/dated'), { ...state, id: 'dated', pending: false, done: true, playedAt: '2024-05-17' }));
+  await assertSucceeds(set(ref(mine, 'users/alice/roomStates/leap-date'), { ...state, id: 'leap-date', pending: false, done: true, playedAt: '2024-02-29' }));
+  await assertSucceeds(set(ref(mine, 'users/alice/roomStates/legacy'), { ...state, id: 'legacy', pending: false, done: true }));
+  await assertFails(set(ref(mine, 'users/alice/roomStates/bad-date'), { ...state, id: 'bad-date', pending: false, done: true, playedAt: '17/05/2024' }));
+  await assertFails(set(ref(mine, 'users/alice/roomStates/impossible-date'), { ...state, id: 'impossible-date', pending: false, done: true, playedAt: '2024-02-31' }));
+  await assertFails(set(ref(mine, 'users/alice/roomStates/non-leap-date'), { ...state, id: 'non-leap-date', pending: false, done: true, playedAt: '2023-02-29' }));
+  await assertFails(set(ref(mine, 'users/alice/roomStates/unexpected-date-payload'), { ...state, id: 'unexpected-date-payload', pending: false, done: true, playedAt: { value: '2024-05-17' } }));
+  await assertFails(set(ref(mine, 'users/alice/roomStates/pending-date'), { ...state, id: 'pending-date', playedAt: '2024-05-17' }));
 });
 
 test('el PATCH de alias personal sigue permitido y es atómico', async () => {

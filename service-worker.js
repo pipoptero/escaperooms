@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'the-vault-v48';
+const CACHE_VERSION = 'the-vault-v49';
 const APP_SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -100,7 +100,9 @@ self.addEventListener('fetch', event => {
 
   const path = url.pathname.split('/').pop();
   if (['room-state.js', 'route-planner.js', 'saved-routes.js', 'public-profile.js', 'public-profile-firebase.js', 'public-profile-fixtures.js', 'public-profile-page.js', 'public-profile.css'].includes(path)) {
-    event.respondWith(cacheFirst(request));
+    // Code must not remain pinned to an older shell while the document has
+    // already updated. Offline clients still receive the last good response.
+    event.respondWith(networkFirst(request));
     return;
   }
   if (DATA_FILES.includes(path)) {

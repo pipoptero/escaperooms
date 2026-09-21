@@ -37,7 +37,10 @@
       if (personal) {
         data[key].done = !!record.done;
         data[key].pending = !record.done && !!record.pending;
-        if (!data[key].done) delete data[key].completedMinutes;
+        if (!data[key].done) {
+          delete data[key].completedMinutes;
+          delete data[key].playedAt;
+        }
       }
     }
     return { data, origins };

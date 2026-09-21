@@ -32,10 +32,10 @@
       "$uid": {
         ".read": "auth != null && auth.uid === $uid",
         ".write": "auth != null && auth.uid === $uid",
-        "roomStates": {
-          "$room": {
-            ".validate": "!newData.exists() || (newData.hasChildren(['id', 'nombre', 'updatedAt']) && newData.child('id').isString() && newData.child('id').val().length <= 160 && newData.child('nombre').isString() && newData.child('nombre').val().length <= 180 && newData.child('updatedAt').isNumber() && ((newData.child('done').val() === true && newData.child('pending').val() === false) || (newData.child('pending').val() === true && newData.child('done').val() === false)))"
-          }
+          "roomStates": {
+            "$room": {
+              ".validate": "!newData.exists() || (newData.hasChildren(['id', 'nombre', 'updatedAt']) && newData.child('id').isString() && newData.child('id').val().length <= 160 && newData.child('nombre').isString() && newData.child('nombre').val().length <= 180 && newData.child('updatedAt').isNumber() && ((newData.child('done').val() === true && newData.child('pending').val() === false) || (newData.child('pending').val() === true && newData.child('done').val() === false)) && (!newData.child('playedAt').exists() || (newData.child('done').val() === true && newData.child('playedAt').isString() && newData.child('playedAt').val().matches(/^((19|20)[0-9]{2}-((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01])|(0[469]|11)-(0[1-9]|[12][0-9]|30)|02-(0[1-9]|1[0-9]|2[0-8]))|(19(0[48]|[2468][048]|[13579][26])|2000|20(0[48]|[2468][048]|[13579][26]))-02-29)$/))))"
+            }
         }
       }
     },
