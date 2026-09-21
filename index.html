@@ -1378,6 +1378,29 @@
       justify-content:center;
       flex-wrap:wrap;
     }
+    .tabs-container{
+      padding:18px 20px 0;
+      gap:4px;
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+    }
+    .tab{
+      min-width:0;
+      padding:7px 8px;
+      gap:5px;
+      font-size:.62rem;
+      letter-spacing:.04em;
+      text-align:center;
+    }
+    .tab-icon{
+      width:28px;
+      height:28px;
+      flex-basis:28px;
+    }
+    .tab .count-badge{
+      margin-left:2px;
+      padding:1px 5px;
+    }
   }
 
   @media(max-width:640px){

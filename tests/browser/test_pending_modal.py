@@ -743,6 +743,10 @@ class PendingModalTest(unittest.TestCase):
         activity = page.locator('.vault-home-section', has_text='Actividad reciente')
         expect(activity).to_contain_text('Abduction Enterprises')
         expect(activity).to_contain_text('Review publicada')
+        page.set_viewport_size({'width': 768, 'height': 1024})
+        dimensions = page.evaluate('({scrollWidth: document.documentElement.scrollWidth, clientWidth: document.documentElement.clientWidth})')
+        available_width = 768 if self.browser_name == 'webkit' else dimensions['clientWidth']
+        self.assertLessEqual(dimensions['scrollWidth'], available_width + 1)
 
     def test_done_played_at_today_custom_unknown_and_legacy(self):
         page = self.page_for()
