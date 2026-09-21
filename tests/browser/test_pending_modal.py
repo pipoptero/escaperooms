@@ -772,15 +772,175 @@ class PendingModalTest(unittest.TestCase):
 
     def test_auth_timeout_exits_connecting_state(self):
         page = self.context.new_page()
-        page.goto(self.url, wait_until='load')
+        page.goto(f'{self.url}/?authdebug=1', wait_until='load')
         result = page.evaluate("""async () => {
           setAuthFlowState('connecting');
-          try { await withAuthTimeout(new Promise(() => {}), 20); } catch (error) { setAuthFlowState('error', error.code); }
-          return {state: AUTH_FLOW_STATE, error: AUTH_FLOW_ERROR, hasRecoveryCopy: renderAuthStatus.toString().includes('No hemos podido completar el acceso') && renderAuthStatus.toString().includes('Reintentar')};
+          try { await withAuthTimeout(new Promise(() => {}), 20, 'test-timeout'); } catch (error) { setAuthFailureState(error); }
+          return {state: AUTH_FLOW_STATE, error: AUTH_FLOW_ERROR, hasRecoveryCopy: renderAuthStatus.toString().includes('TIMEOUT') && renderAuthStatus.toString().includes('Reintentar')};
         }""")
-        self.assertEqual(result['state'], 'error')
+        self.assertEqual(result['state'], 'timeout')
         self.assertEqual(result['error'], 'auth/timeout')
         self.assertTrue(result['hasRecoveryCopy'])
+
+    def test_auth_debug_context_methods_popup_redirect_events_and_redaction(self):
+        normal = self.context.new_page()
+        normal.goto(self.url, wait_until='load')
+        self.assertEqual(normal.locator('#auth-debug-panel').count(), 0)
+        normal.close()
+
+        popup_without_debug = self.context.new_page()
+        popup_without_debug.goto(f'{self.url}/?authmethod=popup', wait_until='load')
+        popup_override_ignored = popup_without_debug.evaluate("""() => ({
+          debug: AUTH_DEBUG_ENABLED,
+          requested: AUTH_DEBUG_REQUESTED_METHOD,
+          standalone: authMethodForContext({embedded:false, standalone:true, requested:'popup'})
+        })""")
+        self.assertEqual(popup_override_ignored, {'debug': False, 'requested': '', 'standalone': 'redirect'})
+        popup_without_debug.close()
+
+        redirect_without_debug = self.context.new_page()
+        redirect_without_debug.goto(f'{self.url}/?authmethod=redirect', wait_until='load')
+        redirect_override_ignored = redirect_without_debug.evaluate("""() => ({
+          debug: AUTH_DEBUG_ENABLED,
+          requested: AUTH_DEBUG_REQUESTED_METHOD,
+          browser: authMethodForContext({embedded:false, standalone:false, requested:'redirect'})
+        })""")
+        self.assertEqual(redirect_override_ignored, {'debug': False, 'requested': '', 'browser': 'popup'})
+        redirect_without_debug.close()
+
+        page = self.context.new_page()
+        page.goto(f'{self.url}/?authdebug=1&authmethod=popup', wait_until='load')
+        expect(page.locator('#auth-debug-panel')).to_be_visible()
+        methods = page.evaluate("""() => ({
+          desktop:authMethodForContext({embedded:false,standalone:false,requested:''}),
+          mobileBrowser:authMethodForContext({embedded:false,standalone:false,requested:''}),
+          standaloneDefault:authMethodForContext({embedded:false,standalone:true,requested:''}),
+          standalonePopup:authMethodForContext({embedded:false,standalone:true,requested:'popup'}),
+          standaloneRedirect:authMethodForContext({embedded:false,standalone:true,requested:'redirect'})
+        })""")
+        self.assertEqual(methods, {
+            'desktop': 'popup', 'mobileBrowser': 'popup', 'standaloneDefault': 'redirect',
+            'standalonePopup': 'popup', 'standaloneRedirect': 'redirect'
+        })
+
+        init_result = page.evaluate("""async () => {
+          window.__authCallbacks=[];
+          const authObject={
+            currentUser:null,
+            setPersistence:async () => {},
+            getRedirectResult:async () => null,
+            onAuthStateChanged:callback => {
+              window.__authCallbacks.push(callback);
+              setTimeout(() => callback(null), 0);
+              return () => { window.__authCallbacks=window.__authCallbacks.filter(item => item !== callback); };
+            }
+          };
+          const authFactory=() => authObject;
+          authFactory.Auth={Persistence:{LOCAL:'local'}};
+          authFactory.GoogleAuthProvider=function(){};
+          window.firebase={apps:[],initializeApp:()=>({}),auth:authFactory};
+          firebaseAuthConfigured=()=>true;
+          FIREBASE_APP=null; FIREBASE_AUTH=null; GOOGLE_PROVIDER=null; AUTH_REDIRECT_CHECKED=false;
+          await initFirebaseAuth();
+          return authDebugSnapshot();
+        }""")
+        self.assertEqual(init_result['persistence'], 'LOCAL')
+        self.assertTrue(any(event['phase'] == 'getRedirectResult' and event['status'] == 'null' for event in init_result['events']))
+        self.assertTrue(any(event['phase'] == 'onAuthStateChanged' and event['status'] == 'fired' and event['detail'] == 'null' for event in init_result['events']))
+
+        popup_result = page.evaluate("""async () => {
+          let popup=0, redirect=0;
+          const user={uid:'private-uid-that-must-never-appear-123456789',getIdToken:async()=> 'private-token'};
+          FIREBASE_AUTH={
+            currentUser:user,
+            signInWithPopup:async()=>{
+              popup++;
+              window.__authCallbacks.forEach(callback => callback(user));
+              return {user};
+            },
+            signInWithRedirect:async()=>{redirect++;}
+          };
+          GOOGLE_PROVIDER={};
+          firebaseAuthConfigured=()=>true;
+          loadAdminRole=async()=>{};
+          migrateAnonymousDataToAccount=async()=>{};
+          refreshSignedSession=async()=>{};
+          await signInGoogle();
+          await new Promise(resolve => setTimeout(resolve, 0));
+          return {popup,redirect,state:AUTH_FLOW_STATE,diagnostic:JSON.stringify(authDebugSnapshot()),events:AUTH_DEBUG_EVENTS};
+        }""")
+        self.assertEqual((popup_result['popup'], popup_result['redirect'], popup_result['state']), (1, 0, 'authenticated'))
+        self.assertTrue(any(event['phase'] == 'popup' and event['status'] == 'requested' for event in popup_result['events']))
+        self.assertTrue(any(event['phase'] == 'popup' and event['status'] == 'opened' for event in popup_result['events']))
+        self.assertTrue(any(event['phase'] == 'popup' and event['status'] == 'credential-returned' for event in popup_result['events']))
+        self.assertTrue(any(event['phase'] == 'onAuthStateChanged' and event['detail'] == 'user' for event in popup_result['events']))
+        self.assertTrue(any(event['phase'] == 'auth-flow' and event['status'] == 'authenticated' for event in popup_result['events']))
+        self.assertNotIn('private-uid-that-must-never-appear', popup_result['diagnostic'])
+        self.assertNotIn('private-token', popup_result['diagnostic'])
+
+        redacted = page.evaluate("sanitizeAuthDebugText('person@example.com token=secret 1234567890123456789012345678')")
+        self.assertNotIn('person@example.com', redacted)
+        self.assertNotIn('secret', redacted)
+        self.assertNotIn('1234567890123456789012345678', redacted)
+
+        failure_states = page.evaluate("""async () => {
+          const run = async code => {
+            FIREBASE_AUTH={
+              currentUser:null,
+              signInWithPopup:async()=>{throw Object.assign(new Error(`unsafe person@example.com token=secret-value ${code}`),{code});},
+              signInWithRedirect:async()=>{throw new Error('redirect must not run');}
+            };
+            await signInGoogle();
+            return {state:AUTH_FLOW_STATE,error:AUTH_FLOW_ERROR,events:[...AUTH_DEBUG_EVENTS]};
+          };
+          const cancelled=await run('auth/popup-closed-by-user');
+          const failed=await run('auth/internal-error');
+          return {cancelled,failed};
+        }""")
+        self.assertEqual(failure_states['cancelled']['state'], 'error')
+        self.assertEqual(failure_states['cancelled']['error'], 'auth/popup-closed-by-user')
+        self.assertTrue(any(event['phase'] == 'popup' and event['status'] == 'cancelled' for event in failure_states['cancelled']['events']))
+        self.assertEqual(failure_states['failed']['state'], 'error')
+        self.assertEqual(failure_states['failed']['error'], 'auth/internal-error')
+        self.assertTrue(any(event['phase'] == 'popup' and event['status'] == 'error' and event['detail'] == 'auth/internal-error' for event in failure_states['failed']['events']))
+
+        copied = page.evaluate("""async () => {
+          AUTH_FLOW_ERROR='unsafe person@example.com token=secret-value eyJhbGciOiJSUzI1NiJ9.abcdefghijklmnopqrstuvwxyz0123456789.abcdefghijklmnopqrstuvwxyz0123456789';
+          copyTextToClipboard=async text => { window.__copiedAuthDiagnostic=text; return true; };
+          await copyAuthDiagnostic();
+          return window.__copiedAuthDiagnostic;
+        }""")
+        self.assertNotIn('person@example.com', copied)
+        self.assertNotIn('secret-value', copied)
+        self.assertNotIn('eyJhbGciOiJSUzI1NiJ9', copied)
+        self.assertNotIn('private-uid-that-must-never-appear', copied)
+        self.assertNotIn('private-token', copied)
+
+        timeout = page.evaluate("""async () => {
+          setAuthFlowState('connecting');
+          try { await withAuthTimeout(new Promise(() => {}), 20, 'signInWithPopup'); }
+          catch (error) { setAuthFailureState(error); }
+          return authDebugSnapshot();
+        }""")
+        self.assertEqual(timeout['authFlowState'], 'timeout')
+        self.assertEqual(timeout['authError'], 'auth/timeout')
+        self.assertTrue(timeout['timeout'])
+        self.assertEqual(timeout['pendingPhase'], 'signInWithPopup')
+
+        redirect_page = self.context.new_page()
+        redirect_page.goto(f'{self.url}/?authdebug=1&authmethod=redirect', wait_until='load')
+        redirect_result = redirect_page.evaluate("""async () => {
+          let popup=0, redirect=0;
+          FIREBASE_AUTH={
+            signInWithPopup:async()=>{popup++;},
+            signInWithRedirect:async()=>{redirect++;}
+          };
+          GOOGLE_PROVIDER={}; firebaseAuthConfigured=()=>true;
+          await signInGoogle();
+          return {popup,redirect,state:AUTH_FLOW_STATE,events:AUTH_DEBUG_EVENTS};
+        }""")
+        self.assertEqual((redirect_result['popup'], redirect_result['redirect'], redirect_result['state']), (0, 1, 'redirecting'))
+        self.assertTrue(any(event['phase'] == 'signInWithRedirect' and event['status'] == 'success' for event in redirect_result['events']))
 
 
 if __name__ == '__main__':

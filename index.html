@@ -2033,6 +2033,10 @@
 .pending-destination:disabled{opacity:.6;cursor:default;}
 .pending-destination span{font-size:.8rem;color:var(--text2);}
 #pending-choice-error,#played-at-choice-error{color:#ff8989;}
+#auth-debug-panel{position:fixed;z-index:5000;right:max(10px,env(safe-area-inset-right));bottom:max(10px,env(safe-area-inset-bottom));width:min(520px,calc(100vw - 20px));max-height:min(72vh,680px);display:grid;grid-template-rows:auto minmax(0,1fr);border:1px solid #80d34b;background:rgba(8,10,8,.98);color:#eef7e8;box-shadow:0 18px 55px rgba(0,0,0,.72);font-family:'Share Tech Mono',monospace;}
+.auth-debug-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 10px;border-bottom:1px solid rgba(128,211,75,.28);font-size:.68rem;letter-spacing:.08em;}
+.auth-debug-head button{border:1px solid rgba(128,211,75,.48);background:#11170f;color:#ffca55;padding:7px 9px;font:inherit;cursor:pointer;}
+#auth-debug-output{margin:0;padding:10px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.62rem;line-height:1.45;color:#d8e6d1;}
 </style>
 </head>
 <body>
@@ -2513,6 +2517,19 @@ let AUTH_REDIRECT_CHECKED = false;
 const AUTH_FLOW_TIMEOUT_MS = 15000;
 let FIREBASE_AUTH = null;
 let GOOGLE_PROVIDER = null;
+let AUTH_PENDING_PHASE = '';
+let AUTH_PERSISTENCE_MODE = 'not-initialized';
+const AUTH_DEBUG_PARAMS = new URLSearchParams(window.location.search);
+const AUTH_DEBUG_ENABLED = AUTH_DEBUG_PARAMS.get('authdebug') === '1';
+const AUTH_DEBUG_REQUESTED_METHOD = AUTH_DEBUG_ENABLED && ['popup', 'redirect'].includes(AUTH_DEBUG_PARAMS.get('authmethod'))
+  ? AUTH_DEBUG_PARAMS.get('authmethod')
+  : '';
+const AUTH_DEBUG_STARTED_AT = performance.now();
+let AUTH_DEBUG_CLICK_AT = 0;
+let AUTH_DEBUG_STORAGE = { localStorage: 'pending', sessionStorage: 'pending', indexedDB: 'pending' };
+let AUTH_DEBUG_SW_VERSION = 'pending';
+const AUTH_DEBUG_EVENTS = [];
+let AUTH_DEBUG_AUTH_OBSERVER_READY = false;
 
 function favStorageKey(userId = USER_ID) {
   return userId === LOCAL_USER_ID ? 'er_favs' : `er_favs_${userId}`;
@@ -3404,20 +3421,164 @@ function isStandaloneApp() {
   return window.matchMedia?.('(display-mode: standalone)').matches || window.navigator.standalone === true;
 }
 
+function authMethodForContext({ embedded = isEmbeddedSocialBrowser(), standalone = isStandaloneApp(), requested = AUTH_DEBUG_REQUESTED_METHOD } = {}) {
+  if (embedded) return 'blocked-embedded-browser';
+  if (AUTH_DEBUG_ENABLED && ['popup', 'redirect'].includes(requested)) return requested;
+  return standalone ? 'redirect' : 'popup';
+}
+
+function sanitizeAuthDebugText(value) {
+  return String(value || '')
+    .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, '[email]')
+    .replace(/\b[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\b/g, '[jwt]')
+    .replace(/\b[A-Za-z0-9_-]{28,}\b/g, '[redacted-id]')
+    .replace(/(token|credential|code|state)=([^\s&]+)/gi, '$1=[redacted]')
+    .slice(0, 500);
+}
+
+function sanitizeAuthDebugUrl() {
+  const url = new URL(window.location.href);
+  [...url.searchParams.keys()].forEach(key => {
+    if (!['authdebug', 'authmethod'].includes(key)) url.searchParams.set(key, '[redacted]');
+  });
+  url.hash = '';
+  return url.toString();
+}
+
+function authDebugLog(phase, status, detail = '') {
+  if (!AUTH_DEBUG_ENABLED) return;
+  AUTH_DEBUG_EVENTS.push({
+    ms: Math.round(performance.now() - AUTH_DEBUG_STARTED_AT),
+    phase: sanitizeAuthDebugText(phase),
+    status: sanitizeAuthDebugText(status),
+    detail: sanitizeAuthDebugText(detail)
+  });
+  if (AUTH_DEBUG_EVENTS.length > 80) AUTH_DEBUG_EVENTS.shift();
+  renderAuthDebugPanel();
+}
+
+function authDebugStorageProbe(storage, key) {
+  try {
+    storage.setItem(key, '1');
+    const ok = storage.getItem(key) === '1';
+    storage.removeItem(key);
+    return ok ? 'available' : 'unavailable';
+  } catch (error) {
+    return `unavailable (${sanitizeAuthDebugText(error?.name || error?.message)})`;
+  }
+}
+
+function authDebugSnapshot() {
+  return {
+    href: sanitizeAuthDebugUrl(),
+    displayModeStandalone: !!window.matchMedia?.('(display-mode: standalone)').matches,
+    navigatorStandalone: typeof navigator.standalone === 'boolean' ? navigator.standalone : 'not-exposed',
+    userAgent: navigator.userAgent,
+    selectedMethod: authMethodForContext(),
+    requestedMethod: AUTH_DEBUG_REQUESTED_METHOD || 'none',
+    authDomain: FIREBASE_CONFIG.authDomain || 'missing',
+    projectId: FIREBASE_CONFIG.projectId || 'missing',
+    redirectHelper: FIREBASE_CONFIG.authDomain ? `https://${FIREBASE_CONFIG.authDomain}/__/auth/handler` : 'missing',
+    appOrigin: window.location.origin,
+    crossOriginHelper: !!FIREBASE_CONFIG.authDomain && FIREBASE_CONFIG.authDomain !== window.location.host,
+    persistence: AUTH_PERSISTENCE_MODE,
+    authFlowState: AUTH_FLOW_STATE,
+    authError: sanitizeAuthDebugText(AUTH_FLOW_ERROR || 'none'),
+    timeout: AUTH_FLOW_STATE === 'timeout' || AUTH_FLOW_ERROR === 'auth/timeout',
+    pendingPhase: AUTH_PENDING_PHASE || 'none',
+    elapsedSinceClickMs: AUTH_DEBUG_CLICK_AT ? Math.round(performance.now() - AUTH_DEBUG_CLICK_AT) : 'not-clicked',
+    serviceWorkerVersion: AUTH_DEBUG_SW_VERSION,
+    serviceWorkerController: navigator.serviceWorker?.controller?.scriptURL || 'none',
+    storage: AUTH_DEBUG_STORAGE,
+    events: AUTH_DEBUG_EVENTS
+  };
+}
+
+function renderAuthDebugPanel() {
+  if (!AUTH_DEBUG_ENABLED || !document.body) return;
+  let panel = document.getElementById('auth-debug-panel');
+  if (!panel) {
+    panel = document.createElement('aside');
+    panel.id = 'auth-debug-panel';
+    panel.innerHTML = `<div class="auth-debug-head"><strong>AUTH DEBUG</strong><button type="button" onclick="copyAuthDiagnostic()">COPIAR DIAGNÓSTICO</button></div><pre id="auth-debug-output"></pre>`;
+    document.body.appendChild(panel);
+  }
+  const output = document.getElementById('auth-debug-output');
+  if (output) output.textContent = JSON.stringify(authDebugSnapshot(), null, 2);
+}
+
+async function copyAuthDiagnostic() {
+  const text = JSON.stringify(authDebugSnapshot(), null, 2);
+  const copied = await copyTextToClipboard(text);
+  authDebugLog('diagnostic', copied ? 'copied' : 'copy-failed');
+}
+
+async function probeAuthDebugEnvironment() {
+  if (!AUTH_DEBUG_ENABLED) return;
+  AUTH_DEBUG_STORAGE.localStorage = authDebugStorageProbe(localStorage, 'vault-auth-debug-local');
+  AUTH_DEBUG_STORAGE.sessionStorage = authDebugStorageProbe(sessionStorage, 'vault-auth-debug-session');
+  AUTH_DEBUG_STORAGE.indexedDB = await new Promise(resolve => {
+    if (!window.indexedDB) return resolve('unavailable');
+    const request = indexedDB.open('vault-auth-debug-probe', 1);
+    request.onerror = () => resolve(`unavailable (${sanitizeAuthDebugText(request.error?.name)})`);
+    request.onblocked = () => resolve('blocked');
+    request.onsuccess = () => {
+      request.result.close();
+      indexedDB.deleteDatabase('vault-auth-debug-probe');
+      resolve('available');
+    };
+  });
+  try {
+    const response = await fetch('service-worker.js', { cache: 'no-store' });
+    const source = response.ok ? await response.text() : '';
+    AUTH_DEBUG_SW_VERSION = source.match(/CACHE_VERSION\s*=\s*['\"]([^'\"]+)/)?.[1] || `HTTP ${response.status}`;
+  } catch (error) {
+    AUTH_DEBUG_SW_VERSION = `error (${sanitizeAuthDebugText(error?.message)})`;
+  }
+  authDebugLog('environment', 'ready');
+}
+
+function initAuthDebug() {
+  if (!AUTH_DEBUG_ENABLED) return;
+  authDebugLog('diagnostic', 'enabled', AUTH_DEBUG_REQUESTED_METHOD ? `forced-${AUTH_DEBUG_REQUESTED_METHOD}` : 'observe-current-policy');
+  renderAuthDebugPanel();
+  probeAuthDebugEnvironment();
+  navigator.serviceWorker?.addEventListener('controllerchange', () => authDebugLog('service-worker', 'controllerchange'));
+  setInterval(renderAuthDebugPanel, 1000);
+}
+
 function setAuthFlowState(state, error = '') {
   AUTH_FLOW_STATE = state;
   AUTH_FLOW_ERROR = String(error || '');
+  authDebugLog('auth-flow', state, AUTH_FLOW_ERROR);
   document.documentElement.dataset.authState = state;
   window.dispatchEvent(new CustomEvent('vault:auth-state', { detail: { state, error: AUTH_FLOW_ERROR } }));
   renderAuthStatus();
 }
 
-function withAuthTimeout(promise, timeoutMs = AUTH_FLOW_TIMEOUT_MS) {
+function setAuthFailureState(error) {
+  const code = error?.code || error?.message || String(error || 'auth/error');
+  setAuthFlowState(code === 'auth/timeout' && AUTH_DEBUG_ENABLED ? 'timeout' : 'error', code);
+}
+
+function withAuthTimeout(promise, timeoutMs = AUTH_FLOW_TIMEOUT_MS, phase = 'auth-operation') {
   let timer;
+  AUTH_PENDING_PHASE = phase;
+  authDebugLog(phase, 'start');
   return Promise.race([
     promise,
-    new Promise((_, reject) => { timer = setTimeout(() => reject(Object.assign(new Error('auth/timeout'), { code: 'auth/timeout' })), timeoutMs); })
-  ]).finally(() => clearTimeout(timer));
+    new Promise((_, reject) => { timer = setTimeout(() => {
+      authDebugLog(phase, 'timeout');
+      reject(Object.assign(new Error('auth/timeout'), { code: 'auth/timeout', phase }));
+    }, timeoutMs); })
+  ]).then(value => {
+    authDebugLog(phase, 'success');
+    if (AUTH_PENDING_PHASE === phase) AUTH_PENDING_PHASE = '';
+    return value;
+  }).catch(error => {
+    authDebugLog(phase, 'error', `${error?.code || 'unknown'}: ${error?.message || ''}`);
+    throw error;
+  }).finally(() => clearTimeout(timer));
 }
 
 function externalBrowserAuthMessage() {
@@ -3516,7 +3677,7 @@ function renderAuthStatus() {
   statusEl.querySelector('.auth-avatar')?.remove();
   if (browserBtn) {
     browserBtn.href = window.location.href;
-    browserBtn.style.display = AUTH_FLOW_STATE === 'error' && isStandaloneApp() ? '' : 'none';
+    browserBtn.style.display = ['error', 'timeout'].includes(AUTH_FLOW_STATE) && isStandaloneApp() ? '' : 'none';
   }
   if (!firebaseAuthConfigured()) {
     nameEl.textContent = 'Configura Firebase Auth';
@@ -3550,8 +3711,8 @@ function renderAuthStatus() {
     if (profileBtn) profileBtn.style.display = 'none';
     return;
   }
-  if (AUTH_FLOW_STATE === 'error') {
-    nameEl.textContent = 'No hemos podido completar el acceso';
+  if (['error', 'timeout'].includes(AUTH_FLOW_STATE)) {
+    nameEl.textContent = AUTH_FLOW_STATE === 'timeout' ? 'TIMEOUT · El acceso no ha respondido' : 'No hemos podido completar el acceso';
     loginBtn.textContent = 'Reintentar';
     loginBtn.disabled = false;
     loginBtn.style.display = '';
@@ -3600,25 +3761,38 @@ async function initFirebaseAuth() {
     FIREBASE_APP = firebase.apps.length ? firebase.app() : firebase.initializeApp(FIREBASE_CONFIG);
     FIREBASE_AUTH = firebase.auth();
     GOOGLE_PROVIDER = new firebase.auth.GoogleAuthProvider();
+    authDebugLog('persistence', 'start', 'LOCAL');
     await FIREBASE_AUTH.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+    AUTH_PERSISTENCE_MODE = 'LOCAL';
+    authDebugLog('persistence', 'success', AUTH_PERSISTENCE_MODE);
+  }
+  if (AUTH_DEBUG_ENABLED && !AUTH_DEBUG_AUTH_OBSERVER_READY) {
+    AUTH_DEBUG_AUTH_OBSERVER_READY = true;
+    FIREBASE_AUTH.onAuthStateChanged(user => {
+      authDebugLog('onAuthStateChanged', 'fired', user ? 'user' : 'null');
+    });
   }
   if (!AUTH_REDIRECT_CHECKED) {
     AUTH_REDIRECT_CHECKED = true;
     const redirectPending = sessionStorage.getItem('vault-auth-redirect-pending') === '1';
     if (redirectPending) setAuthFlowState('redirecting');
     try {
-      await withAuthTimeout(FIREBASE_AUTH.getRedirectResult());
+      authDebugLog('getRedirectResult', 'start', redirectPending ? 'pending-flag-present' : 'no-pending-flag');
+      const redirectResult = await withAuthTimeout(FIREBASE_AUTH.getRedirectResult(), AUTH_FLOW_TIMEOUT_MS, 'getRedirectResult');
+      authDebugLog('getRedirectResult', redirectResult?.user ? 'success' : 'null');
       sessionStorage.removeItem('vault-auth-redirect-pending');
     } catch (error) {
+      authDebugLog('getRedirectResult', 'error', `${error?.code || 'unknown'}: ${error?.message || ''}`);
       sessionStorage.removeItem('vault-auth-redirect-pending');
       if (redirectPending || error?.code !== 'auth/no-auth-event') {
-        setAuthFlowState('error', error?.code || error?.message);
+        setAuthFailureState(error);
         return null;
       }
     }
   }
   return withAuthTimeout(new Promise(resolve => {
     const off = FIREBASE_AUTH.onAuthStateChanged(async user => {
+      authDebugLog('onAuthStateChanged', 'fired', user ? 'user' : 'null');
       AUTH_USER = user;
       USER_ID = user ? user.uid : LOCAL_USER_ID;
       AUTH_TOKEN = user ? await user.getIdToken() : '';
@@ -3627,8 +3801,8 @@ async function initFirebaseAuth() {
       off();
       resolve(user);
     });
-  })).catch(error => {
-    setAuthFlowState('error', error?.code || error?.message);
+  }), AUTH_FLOW_TIMEOUT_MS, 'onAuthStateChanged').catch(error => {
+    setAuthFailureState(error);
     return null;
   });
 }
@@ -8024,12 +8198,15 @@ async function signInGoogle() {
     alert('Falta rellenar FIREBASE_CONFIG en index.html.');
     return;
   }
+  AUTH_DEBUG_CLICK_AT = performance.now();
+  const selectedMethod = authMethodForContext();
+  authDebugLog('signInGoogle', 'click', selectedMethod);
   setAuthFlowState('connecting');
   if (!FIREBASE_AUTH || !GOOGLE_PROVIDER) {
     await initFirebaseAuth();
   }
   if (!FIREBASE_AUTH || !GOOGLE_PROVIDER) {
-    if (isEmbeddedSocialBrowser()) {
+    if (selectedMethod === 'blocked-embedded-browser') {
       alert(externalBrowserAuthMessage());
     } else {
       const detail = FIREBASE_SDK_ERROR ? `\n\nDetalle: ${FIREBASE_SDK_ERROR}` : '';
@@ -8045,31 +8222,37 @@ async function signInGoogle() {
       setAuthFlowState('error', 'embedded-browser');
       return;
     }
-    if (isStandaloneApp()) {
+    if (selectedMethod === 'redirect') {
       sessionStorage.setItem('vault-auth-redirect-pending', '1');
       setAuthFlowState('redirecting');
-      await withAuthTimeout(FIREBASE_AUTH.signInWithRedirect(GOOGLE_PROVIDER));
+      await withAuthTimeout(FIREBASE_AUTH.signInWithRedirect(GOOGLE_PROVIDER), AUTH_FLOW_TIMEOUT_MS, 'signInWithRedirect');
       return;
     }
-    result = await withAuthTimeout(FIREBASE_AUTH.signInWithPopup(GOOGLE_PROVIDER));
+    authDebugLog('popup', 'requested');
+    const popupPromise = FIREBASE_AUTH.signInWithPopup(GOOGLE_PROVIDER);
+    authDebugLog('popup', 'opened');
+    result = await withAuthTimeout(popupPromise, AUTH_FLOW_TIMEOUT_MS, 'signInWithPopup');
+    authDebugLog('popup', 'credential-returned');
   } catch(e) {
     console.error('Error al iniciar sesión con Google:', e);
+    const cancelledCodes = new Set(['auth/popup-closed-by-user', 'auth/cancelled-popup-request']);
+    authDebugLog('popup', cancelledCodes.has(e?.code) ? 'cancelled' : 'error', e?.code || e?.message || 'unknown');
     const redirectCodes = new Set([
       'auth/popup-blocked',
       'auth/operation-not-supported-in-this-environment'
     ]);
-    if (redirectCodes.has(e.code)) {
+    if (!AUTH_DEBUG_REQUESTED_METHOD && redirectCodes.has(e.code)) {
       try {
         sessionStorage.setItem('vault-auth-redirect-pending', '1');
         setAuthFlowState('redirecting');
-        await withAuthTimeout(FIREBASE_AUTH.signInWithRedirect(GOOGLE_PROVIDER));
+        await withAuthTimeout(FIREBASE_AUTH.signInWithRedirect(GOOGLE_PROVIDER), AUTH_FLOW_TIMEOUT_MS, 'popupFallbackRedirect');
         return;
       } catch (redirectError) {
         console.error('Error al iniciar sesión con redirect:', redirectError);
       }
     }
     sessionStorage.removeItem('vault-auth-redirect-pending');
-    setAuthFlowState('error', e.code || e.message);
+    setAuthFailureState(e);
     return;
   }
 
@@ -8991,6 +9174,7 @@ async function loadData() {
 }
 
 loadData();
+initAuthDebug();
 
 // ── Filtros y UI ──────────────────────────────────────────────────────────────
 function fillOptions(id, vals, ph) {

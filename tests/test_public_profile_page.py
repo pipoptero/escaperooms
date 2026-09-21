@@ -42,7 +42,7 @@ class PublicProfilePageTests(unittest.TestCase):
         self.assertIn("public-profile.js", workflow)
         self.assertIn("public-profile-fixtures.js", workflow)
         self.assertIn(" escapista ", workflow)
-        self.assertIn("the-vault-v49", service_worker)
+        self.assertIn("the-vault-v50", service_worker)
         for asset in ("public-profile.js", "public-profile-firebase.js", "public-profile-fixtures.js", "escapista/public-profile-page.js"):
             self.assertIn(asset.split("/")[-1], service_worker)
 
