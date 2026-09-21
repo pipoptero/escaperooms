@@ -795,7 +795,7 @@ class PendingModalTest(unittest.TestCase):
           requested: AUTH_DEBUG_REQUESTED_METHOD,
           standalone: authMethodForContext({embedded:false, standalone:true, requested:'popup'})
         })""")
-        self.assertEqual(popup_override_ignored, {'debug': False, 'requested': '', 'standalone': 'redirect'})
+        self.assertEqual(popup_override_ignored, {'debug': False, 'requested': '', 'standalone': 'popup'})
         popup_without_debug.close()
 
         redirect_without_debug = self.context.new_page()
@@ -819,8 +819,8 @@ class PendingModalTest(unittest.TestCase):
           standaloneRedirect:authMethodForContext({embedded:false,standalone:true,requested:'redirect'})
         })""")
         self.assertEqual(methods, {
-            'desktop': 'popup', 'mobileBrowser': 'popup', 'standaloneDefault': 'redirect',
-            'standalonePopup': 'popup', 'standaloneRedirect': 'redirect'
+            'desktop': 'popup', 'mobileBrowser': 'popup', 'standaloneDefault': 'popup',
+            'standalonePopup': 'popup', 'standaloneRedirect': 'popup'
         })
 
         init_result = page.evaluate("""async () => {
@@ -847,6 +847,18 @@ class PendingModalTest(unittest.TestCase):
         self.assertEqual(init_result['persistence'], 'LOCAL')
         self.assertTrue(any(event['phase'] == 'getRedirectResult' and event['status'] == 'null' for event in init_result['events']))
         self.assertTrue(any(event['phase'] == 'onAuthStateChanged' and event['status'] == 'fired' and event['detail'] == 'null' for event in init_result['events']))
+
+        legacy_redirect = page.evaluate("""async () => {
+          const user={uid:'legacy-transition-user',getIdToken:async()=> 'legacy-transition-token'};
+          FIREBASE_AUTH.currentUser=user;
+          FIREBASE_AUTH.getRedirectResult=async()=>({user});
+          FIREBASE_AUTH.onAuthStateChanged=callback => { setTimeout(()=>callback(user),0); return () => {}; };
+          AUTH_REDIRECT_CHECKED=false;
+          await initFirebaseAuth();
+          return {state:AUTH_FLOW_STATE,events:[...AUTH_DEBUG_EVENTS]};
+        }""")
+        self.assertEqual(legacy_redirect['state'], 'authenticated')
+        self.assertTrue(any(event['phase'] == 'getRedirectResult' and event['status'] == 'success' for event in legacy_redirect['events']))
 
         popup_result = page.evaluate("""async () => {
           let popup=0, redirect=0;
@@ -927,20 +939,78 @@ class PendingModalTest(unittest.TestCase):
         self.assertTrue(timeout['timeout'])
         self.assertEqual(timeout['pendingPhase'], 'signInWithPopup')
 
-        redirect_page = self.context.new_page()
-        redirect_page.goto(f'{self.url}/?authdebug=1&authmethod=redirect', wait_until='load')
-        redirect_result = redirect_page.evaluate("""async () => {
+        legacy_override_page = self.context.new_page()
+        legacy_override_page.goto(f'{self.url}/?authdebug=1&authmethod=redirect', wait_until='load')
+        legacy_override_result = legacy_override_page.evaluate("""async () => {
           let popup=0, redirect=0;
+          const user={uid:'popup-only-user',getIdToken:async()=> 'popup-only-token'};
           FIREBASE_AUTH={
-            signInWithPopup:async()=>{popup++;},
+            currentUser:user,
+            signInWithPopup:async()=>{popup++;return {user};},
             signInWithRedirect:async()=>{redirect++;}
           };
           GOOGLE_PROVIDER={}; firebaseAuthConfigured=()=>true;
+          loadAdminRole=async()=>{}; migrateAnonymousDataToAccount=async()=>{}; refreshSignedSession=async()=>{};
           await signInGoogle();
           return {popup,redirect,state:AUTH_FLOW_STATE,events:AUTH_DEBUG_EVENTS};
         }""")
-        self.assertEqual((redirect_result['popup'], redirect_result['redirect'], redirect_result['state']), (0, 1, 'redirecting'))
-        self.assertTrue(any(event['phase'] == 'signInWithRedirect' and event['status'] == 'success' for event in redirect_result['events']))
+        self.assertEqual((legacy_override_result['popup'], legacy_override_result['redirect'], legacy_override_result['state']), (1, 0, 'authenticated'))
+        self.assertFalse(any(event['phase'] == 'signInWithRedirect' for event in legacy_override_result['events']))
+
+    def test_standalone_popup_recovery_retry_external_browser_and_hidden_debug_gesture(self):
+        page = self.context.new_page()
+        page.goto(self.url, wait_until='load')
+        expect(page.locator('#pwa-version')).to_have_text('PWA v51')
+        for _ in range(5):
+            page.locator('#pwa-version').click()
+        self.assertEqual(page.locator('#auth-debug-panel').count(), 0)
+
+        page.evaluate("isStandaloneApp=()=>true")
+        for _ in range(5):
+            page.locator('#pwa-version').click()
+        expect(page.locator('#auth-debug-panel')).to_be_visible()
+        gesture = page.evaluate("""() => ({
+          enabled:AUTH_DEBUG_ENABLED,
+          event:AUTH_DEBUG_EVENTS.find(item => item.phase === 'diagnostic' && item.detail === 'standalone-version-5-taps')
+        })""")
+        self.assertTrue(gesture['enabled'])
+        self.assertIsNotNone(gesture['event'])
+
+        recovery = page.evaluate("""async () => {
+          let popup=0, redirect=0;
+          const user={uid:'retry-user',getIdToken:async()=> 'retry-token'};
+          window.firebase=window.firebase || {};
+          window.firebase.auth=window.firebase.auth || (()=>{});
+          FIREBASE_AUTH={
+            currentUser:null,
+            signInWithPopup:async()=>{
+              popup++;
+              if (popup === 1) throw Object.assign(new Error('blocked'),{code:'auth/popup-blocked'});
+              FIREBASE_AUTH.currentUser=user;
+              return {user};
+            },
+            signInWithRedirect:async()=>{redirect++;}
+          };
+          GOOGLE_PROVIDER={}; firebaseAuthConfigured=()=>true;
+          loadAdminRole=async()=>{}; migrateAnonymousDataToAccount=async()=>{}; refreshSignedSession=async()=>{};
+          await signInGoogle();
+          const first={
+            state:AUTH_FLOW_STATE,error:AUTH_FLOW_ERROR,
+            message:document.getElementById('auth-name').textContent,
+            retry:document.getElementById('auth-login').textContent,
+            browserHref:document.getElementById('auth-browser').href,
+            browserVisible:getComputedStyle(document.getElementById('auth-browser')).display !== 'none'
+          };
+          await signInGoogle();
+          return {first,finalState:AUTH_FLOW_STATE,popup,redirect};
+        }""")
+        self.assertEqual(recovery['first']['state'], 'error')
+        self.assertEqual(recovery['first']['error'], 'auth/popup-blocked')
+        self.assertEqual(recovery['first']['message'], 'No hemos podido completar el acceso con Google.')
+        self.assertEqual(recovery['first']['retry'], 'Reintentar')
+        self.assertEqual(recovery['first']['browserHref'], 'https://thevaultescape.com/')
+        self.assertTrue(recovery['first']['browserVisible'])
+        self.assertEqual((recovery['finalState'], recovery['popup'], recovery['redirect']), ('authenticated', 2, 0))
 
 
 if __name__ == '__main__':

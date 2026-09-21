@@ -2037,6 +2037,7 @@
 .auth-debug-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 10px;border-bottom:1px solid rgba(128,211,75,.28);font-size:.68rem;letter-spacing:.08em;}
 .auth-debug-head button{border:1px solid rgba(128,211,75,.48);background:#11170f;color:#ffca55;padding:7px 9px;font:inherit;cursor:pointer;}
 #auth-debug-output{margin:0;padding:10px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.62rem;line-height:1.45;color:#d8e6d1;}
+.pwa-version{display:inline-block;user-select:none;-webkit-user-select:none;touch-action:manipulation;}
 </style>
 </head>
 <body>
@@ -2295,6 +2296,7 @@
   <footer class="seo-footer" aria-label="Enlaces de reviews">
     <div class="seo-footer-inner">
       <span class="rights">&copy; 2026 The Vault Escape. Todos los derechos reservados.</span>
+      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v51</span>
       <span>Reviews de escape rooms con URL propia</span>
       <a href="ranking-escape-rooms/">Ranking escape rooms España</a>
       <a href="mejores-escape-rooms/">Mejores escape rooms</a>
@@ -2520,7 +2522,7 @@ let GOOGLE_PROVIDER = null;
 let AUTH_PENDING_PHASE = '';
 let AUTH_PERSISTENCE_MODE = 'not-initialized';
 const AUTH_DEBUG_PARAMS = new URLSearchParams(window.location.search);
-const AUTH_DEBUG_ENABLED = AUTH_DEBUG_PARAMS.get('authdebug') === '1';
+let AUTH_DEBUG_ENABLED = AUTH_DEBUG_PARAMS.get('authdebug') === '1';
 const AUTH_DEBUG_REQUESTED_METHOD = AUTH_DEBUG_ENABLED && ['popup', 'redirect'].includes(AUTH_DEBUG_PARAMS.get('authmethod'))
   ? AUTH_DEBUG_PARAMS.get('authmethod')
   : '';
@@ -2530,6 +2532,9 @@ let AUTH_DEBUG_STORAGE = { localStorage: 'pending', sessionStorage: 'pending', i
 let AUTH_DEBUG_SW_VERSION = 'pending';
 const AUTH_DEBUG_EVENTS = [];
 let AUTH_DEBUG_AUTH_OBSERVER_READY = false;
+let AUTH_DEBUG_INITIALIZED = false;
+let AUTH_DEBUG_TAP_COUNT = 0;
+let AUTH_DEBUG_LAST_TAP_AT = 0;
 
 function favStorageKey(userId = USER_ID) {
   return userId === LOCAL_USER_ID ? 'er_favs' : `er_favs_${userId}`;
@@ -3423,8 +3428,7 @@ function isStandaloneApp() {
 
 function authMethodForContext({ embedded = isEmbeddedSocialBrowser(), standalone = isStandaloneApp(), requested = AUTH_DEBUG_REQUESTED_METHOD } = {}) {
   if (embedded) return 'blocked-embedded-browser';
-  if (AUTH_DEBUG_ENABLED && ['popup', 'redirect'].includes(requested)) return requested;
-  return standalone ? 'redirect' : 'popup';
+  return 'popup';
 }
 
 function sanitizeAuthDebugText(value) {
@@ -3446,7 +3450,6 @@ function sanitizeAuthDebugUrl() {
 }
 
 function authDebugLog(phase, status, detail = '') {
-  if (!AUTH_DEBUG_ENABLED) return;
   AUTH_DEBUG_EVENTS.push({
     ms: Math.round(performance.now() - AUTH_DEBUG_STARTED_AT),
     phase: sanitizeAuthDebugText(phase),
@@ -3454,7 +3457,7 @@ function authDebugLog(phase, status, detail = '') {
     detail: sanitizeAuthDebugText(detail)
   });
   if (AUTH_DEBUG_EVENTS.length > 80) AUTH_DEBUG_EVENTS.shift();
-  renderAuthDebugPanel();
+  if (AUTH_DEBUG_ENABLED) renderAuthDebugPanel();
 }
 
 function authDebugStorageProbe(storage, key) {
@@ -3538,13 +3541,37 @@ async function probeAuthDebugEnvironment() {
   authDebugLog('environment', 'ready');
 }
 
-function initAuthDebug() {
-  if (!AUTH_DEBUG_ENABLED) return;
-  authDebugLog('diagnostic', 'enabled', AUTH_DEBUG_REQUESTED_METHOD ? `forced-${AUTH_DEBUG_REQUESTED_METHOD}` : 'observe-current-policy');
+function ensureAuthDebugObserver() {
+  if (!AUTH_DEBUG_ENABLED || AUTH_DEBUG_AUTH_OBSERVER_READY || !FIREBASE_AUTH) return;
+  AUTH_DEBUG_AUTH_OBSERVER_READY = true;
+  FIREBASE_AUTH.onAuthStateChanged(user => {
+    authDebugLog('onAuthStateChanged', 'fired', user ? 'user' : 'null');
+  });
+}
+
+function initAuthDebug(source = 'query') {
+  if (!AUTH_DEBUG_ENABLED || AUTH_DEBUG_INITIALIZED) return;
+  AUTH_DEBUG_INITIALIZED = true;
+  authDebugLog('diagnostic', 'enabled', source === 'standalone-version-5-taps'
+    ? source
+    : (AUTH_DEBUG_REQUESTED_METHOD ? `requested-${AUTH_DEBUG_REQUESTED_METHOD}` : 'observe-current-policy'));
   renderAuthDebugPanel();
   probeAuthDebugEnvironment();
+  ensureAuthDebugObserver();
   navigator.serviceWorker?.addEventListener('controllerchange', () => authDebugLog('service-worker', 'controllerchange'));
   setInterval(renderAuthDebugPanel, 1000);
+}
+
+function handlePwaVersionTap() {
+  if (!isStandaloneApp()) return false;
+  const now = performance.now();
+  AUTH_DEBUG_TAP_COUNT = now - AUTH_DEBUG_LAST_TAP_AT <= 1200 ? AUTH_DEBUG_TAP_COUNT + 1 : 1;
+  AUTH_DEBUG_LAST_TAP_AT = now;
+  if (AUTH_DEBUG_TAP_COUNT < 5) return false;
+  AUTH_DEBUG_TAP_COUNT = 0;
+  AUTH_DEBUG_ENABLED = true;
+  initAuthDebug('standalone-version-5-taps');
+  return true;
 }
 
 function setAuthFlowState(state, error = '') {
@@ -3676,7 +3703,7 @@ function renderAuthStatus() {
 
   statusEl.querySelector('.auth-avatar')?.remove();
   if (browserBtn) {
-    browserBtn.href = window.location.href;
+    browserBtn.href = 'https://thevaultescape.com/';
     browserBtn.style.display = ['error', 'timeout'].includes(AUTH_FLOW_STATE) && isStandaloneApp() ? '' : 'none';
   }
   if (!firebaseAuthConfigured()) {
@@ -3712,7 +3739,7 @@ function renderAuthStatus() {
     return;
   }
   if (['error', 'timeout'].includes(AUTH_FLOW_STATE)) {
-    nameEl.textContent = AUTH_FLOW_STATE === 'timeout' ? 'TIMEOUT · El acceso no ha respondido' : 'No hemos podido completar el acceso';
+    nameEl.textContent = AUTH_FLOW_STATE === 'timeout' ? 'TIMEOUT · El acceso no ha respondido' : 'No hemos podido completar el acceso con Google.';
     loginBtn.textContent = 'Reintentar';
     loginBtn.disabled = false;
     loginBtn.style.display = '';
@@ -3766,12 +3793,7 @@ async function initFirebaseAuth() {
     AUTH_PERSISTENCE_MODE = 'LOCAL';
     authDebugLog('persistence', 'success', AUTH_PERSISTENCE_MODE);
   }
-  if (AUTH_DEBUG_ENABLED && !AUTH_DEBUG_AUTH_OBSERVER_READY) {
-    AUTH_DEBUG_AUTH_OBSERVER_READY = true;
-    FIREBASE_AUTH.onAuthStateChanged(user => {
-      authDebugLog('onAuthStateChanged', 'fired', user ? 'user' : 'null');
-    });
-  }
+  ensureAuthDebugObserver();
   if (!AUTH_REDIRECT_CHECKED) {
     AUTH_REDIRECT_CHECKED = true;
     const redirectPending = sessionStorage.getItem('vault-auth-redirect-pending') === '1';
@@ -8222,12 +8244,6 @@ async function signInGoogle() {
       setAuthFlowState('error', 'embedded-browser');
       return;
     }
-    if (selectedMethod === 'redirect') {
-      sessionStorage.setItem('vault-auth-redirect-pending', '1');
-      setAuthFlowState('redirecting');
-      await withAuthTimeout(FIREBASE_AUTH.signInWithRedirect(GOOGLE_PROVIDER), AUTH_FLOW_TIMEOUT_MS, 'signInWithRedirect');
-      return;
-    }
     authDebugLog('popup', 'requested');
     const popupPromise = FIREBASE_AUTH.signInWithPopup(GOOGLE_PROVIDER);
     authDebugLog('popup', 'opened');
@@ -8237,20 +8253,6 @@ async function signInGoogle() {
     console.error('Error al iniciar sesión con Google:', e);
     const cancelledCodes = new Set(['auth/popup-closed-by-user', 'auth/cancelled-popup-request']);
     authDebugLog('popup', cancelledCodes.has(e?.code) ? 'cancelled' : 'error', e?.code || e?.message || 'unknown');
-    const redirectCodes = new Set([
-      'auth/popup-blocked',
-      'auth/operation-not-supported-in-this-environment'
-    ]);
-    if (!AUTH_DEBUG_REQUESTED_METHOD && redirectCodes.has(e.code)) {
-      try {
-        sessionStorage.setItem('vault-auth-redirect-pending', '1');
-        setAuthFlowState('redirecting');
-        await withAuthTimeout(FIREBASE_AUTH.signInWithRedirect(GOOGLE_PROVIDER), AUTH_FLOW_TIMEOUT_MS, 'popupFallbackRedirect');
-        return;
-      } catch (redirectError) {
-        console.error('Error al iniciar sesión con redirect:', redirectError);
-      }
-    }
     sessionStorage.removeItem('vault-auth-redirect-pending');
     setAuthFailureState(e);
     return;
