@@ -344,6 +344,7 @@
   .vault-home-map-stat{padding-bottom:7px;border-bottom:1px solid rgba(255,255,255,.06);}
   .vault-home-map-stat strong{display:block;font-family:'Cinzel',serif;color:var(--amber);font-size:1.18rem;}
   .vault-home-map-stat span{display:block;font-family:'Share Tech Mono',monospace;color:var(--text3);font-size:.49rem;text-transform:uppercase;margin-top:2px;}
+  .vault-home-map-summary #vault-home-map-coverage{text-align:left;font-size:.58rem;line-height:1.35;}
   .vault-home-map-city{display:flex;justify-content:space-between;gap:8px;font-family:'Share Tech Mono',monospace;font-size:.51rem;text-transform:uppercase;color:var(--text2);}
   .vault-home-map-city strong{color:var(--green);}
   .vault-home-map-summary .vault-guide-action{margin-top:auto;width:100%;}
@@ -1481,6 +1482,7 @@
     .vault-home-map-canvas{min-height:208px;}
     .vault-home-map-summary{border-left:none;border-top:1px solid rgba(255,255,255,.07);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;padding:9px;}
     .vault-home-map-stat{padding:0;border-bottom:none;}
+    .vault-home-map-summary #vault-home-map-coverage{grid-column:1/-1;max-width:none;font-size:.62rem;padding-left:48px;}
     .vault-home-map-city{display:none;}
     .vault-home-map-summary .vault-guide-action{grid-column:1/-1;margin:2px 0 0;}
     .vault-home-stats{grid-template-columns:repeat(4,minmax(72px,1fr));overflow-x:auto;padding-bottom:3px;}
@@ -2570,6 +2572,7 @@ const ARKKADIA_REVIEW_PRIORITY = [
 let REVIEW_ROOM_ALIASES = {
   whitechapel: 'la_historia_de_charlotte'
 };
+let ROOM_EXPLICIT_ALIASES = {};
 let REVIEW_ROOM_ALIAS_GROUPS = {};
 let REVIEW_ROOM_META = {};
 let ROOM_EXPERIENCE_FAMILIES = [
@@ -3206,6 +3209,38 @@ function personalRoomSources() {
   return uniqueRooms([...CATALOGO, ...PENDIENTES, ...reviewRooms(), ...personalStateRooms()]);
 }
 
+// Persisted personal states are the source of truth. Catalogue/review identity
+// is only presentation data and can collide with a different historical ID.
+function personalDoneRoomIds() {
+  // USER_ROOM_STATES has already been normalized when loaded from Firebase.
+  return Object.keys(USER_ROOM_STATES || {}).filter(key => USER_ROOM_STATES[key]?.done);
+}
+
+function userStateForKey(key) {
+  return USER_ROOM_STATES[key] || {};
+}
+
+function personalCompletedRooms() {
+  const recovered = new Map(personalStateRooms().map(room => [room._personalStateKey, room]));
+  const catalogById = new Map();
+  const catalogByExplicitAlias = new Map();
+  CATALOGO.forEach(candidate => {
+    const id = VaultRoomState.slug(candidate.id);
+    if (!id) return;
+    catalogById.set(id, candidate);
+    const target = ROOM_EXPLICIT_ALIASES[id];
+    if (target && !catalogByExplicitAlias.has(target)) catalogByExplicitAlias.set(target, candidate);
+  });
+  return personalDoneRoomIds().map(key => {
+    const room = recovered.get(key);
+    if (!room) return null;
+    const stateId = VaultRoomState.slug(userStateForKey(key).id || key);
+    const catalogRoom = catalogById.get(key) || catalogById.get(stateId)
+      || catalogByExplicitAlias.get(key) || null;
+    return catalogRoom ? { ...room, ...catalogRoom, _personalStateKey: key, _personalRecovered: false } : room;
+  }).filter(Boolean);
+}
+
 function personalPendingRooms() {
   return uniqueRooms([
     ...personalRoomSources().filter(room => userStateFor(room).pending),
@@ -3214,10 +3249,14 @@ function personalPendingRooms() {
 }
 
 function personalDoneRooms() {
-  return uniqueRooms([
-    ...personalRoomSources().filter(room => userStateFor(room).done),
-    ...groupDoneRooms()
-  ]);
+  const personal = personalCompletedRooms();
+  const seen = new Set(personal.map(room => scopeRoomKey(room)));
+  return [...personal, ...groupDoneRooms().filter(room => {
+    const key = scopeRoomKey(room);
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  })];
 }
 
 function currentPendingRooms() {
@@ -6555,19 +6594,13 @@ function schedulePublicProfileRefresh(delay = 800) {
 }
 
 function progressDoneRooms() {
-  // Usa la misma identidad canónica que la pestaña Hechos para no contar
-  // dos veces una sala conservada con nombres o alias históricos distintos.
+  // Group completions still contribute to the existing XP/achievement model.
+  // Visible "salas hechas" counters use personalDoneRoomIds instead.
   return personalDoneRooms();
 }
 
 function progressPersonalDoneRooms() {
-  const rooms = new Map();
-  Object.entries(USER_ROOM_STATES || {}).forEach(([key, state]) => {
-    if (!state?.done) return;
-    const room = findDetailRoom('catalogo', key) || state;
-    rooms.set(userRoomKey(room) || key, room);
-  });
-  return [...rooms.values()];
+  return personalCompletedRooms();
 }
 
 function routeRoomMatches(room, requirement) {
@@ -6613,6 +6646,7 @@ function progressUserReviews() {
 function progressModel() {
   const doneRooms = progressDoneRooms();
   const personalDoneRooms = progressPersonalDoneRooms();
+  const personalCities = new Set(personalDoneRooms.map(room => normalizedKey(room.ciudad)).filter(Boolean));
   const reviews = progressUserReviews();
   const completeReviews = reviews.filter(review => REVIEW_CATEGORIES.every(([id]) => Number(review.scores?.[id]) > 0));
   const textReviews = reviews.filter(review => String(review.text || '').trim().length >= 80);
@@ -6669,7 +6703,7 @@ function progressModel() {
   const nextLevel = PROGRESS_LEVELS[levelIndex + 1] || null;
   const levelProgress = nextLevel ? Math.max(0, Math.min(100, ((xp - level.min) / (nextLevel.min - level.min)) * 100)) : 100;
   const nextAchievement = achievements.filter(item => !item.unlocked).sort((a, b) => (b.current / b.target) - (a.current / a.target))[0] || null;
-  return { doneRooms, personalDoneRooms, reviews, completeReviews, timedRooms, pendingRooms, groupDoneCount, cities, communities, xp, levelIndex, level, nextLevel, levelProgress, achievements, featuredAchievementIds, featuredRouteIds, nextAchievement, routes, earnedCredits, spentCredits, balance: Math.max(0, earnedCredits - spentCredits), owned, purchasedRoomAvatars };
+  return { doneRooms, personalDoneRooms, personalCities, reviews, completeReviews, timedRooms, pendingRooms, groupDoneCount, cities, communities, xp, levelIndex, level, nextLevel, levelProgress, achievements, featuredAchievementIds, featuredRouteIds, nextAchievement, routes, earnedCredits, spentCredits, balance: Math.max(0, earnedCredits - spentCredits), owned, purchasedRoomAvatars };
 }
 
 function renderSettingsTabs() {
@@ -6974,7 +7008,7 @@ async function buildProgressCardCanvas() {
   ctx.font = '22px monospace';
   ctx.fillText(`NIVEL ${model.levelIndex + 1} · ${model.xp} XP`, 340, 400);
   const stats = [
-    [model.doneRooms.length, 'SALAS HECHAS'],
+    [model.personalDoneRooms.length, 'SALAS HECHAS'],
     [model.reviews.length, 'RESEÑAS'],
     [model.achievements.filter(item => item.unlocked).length, 'LOGROS'],
     [model.routes.filter(item => item.unlocked).length, 'RUTAS']
@@ -7115,7 +7149,7 @@ function progressSettingsHtml(message = '') {
       <div class="progress-balance">${model.balance}<small>Créditos Vault</small></div>
     </div>
     <div class="progress-stats">
-      <div class="progress-stat"><strong>${model.doneRooms.length}</strong><span class="progress-label">Salas hechas</span></div>
+      <div class="progress-stat"><strong>${model.personalDoneRooms.length}</strong><span class="progress-label">Salas hechas</span></div>
       <div class="progress-stat"><strong>${model.reviews.length}</strong><span class="progress-label">Reseñas</span></div>
       <div class="progress-stat"><strong>${model.achievements.filter(item => item.unlocked).length}</strong><span class="progress-label">Logros</span></div>
       <div class="progress-stat"><strong>${model.earnedCredits}</strong><span class="progress-label">Créditos ganados</span></div>
@@ -9002,6 +9036,9 @@ async function loadRoomAliases() {
     const data = await r.json();
     const aliases = data.aliases || {};
     const rooms = data.rooms || {};
+    ROOM_EXPLICIT_ALIASES = Object.fromEntries(Object.entries(aliases)
+      .map(([alias, target]) => [slugify(alias), slugify(target)])
+      .filter(([alias, target]) => alias && target));
     REVIEW_ROOM_ALIASES = Object.fromEntries(
       Object.entries({ ...REVIEW_ROOM_ALIASES, ...aliases })
         .map(([alias, target]) => [slugify(alias), slugify(target)])
@@ -9018,7 +9055,10 @@ async function loadRoomAliases() {
       REVIEW_ROOM_ALIASES[targetKey] = targetKey;
       (meta?.aliases || []).forEach(alias => {
         const aliasKey = slugify(alias);
-        if (aliasKey) REVIEW_ROOM_ALIASES[aliasKey] = targetKey;
+        if (aliasKey) {
+          REVIEW_ROOM_ALIASES[aliasKey] = targetKey;
+          ROOM_EXPLICIT_ALIASES[aliasKey] = targetKey;
+        }
       });
     });
     rebuildReviewAliasGroups();
@@ -9105,7 +9145,7 @@ async function loadStaticEnhancementsAfterInitialRender() {
     await loadExtraAwards();
     await loadExternalRatings();
     await loadReviewPhotos();
-    await loadRoomLocations();
+    // Locations are requested by maps and the route planner on demand.
     populateFilters();
     renderStats();
     renderActivePanel();
@@ -9268,7 +9308,7 @@ function populateFilters() {
   fill('filter-comunidad-rank', [...new Set(uniqueRooms([...CATALOGO, ...PENDIENTES, ...reviewRooms()]).map(c=>communityOf(c)).filter(Boolean))].sort(), 'Comunidad');
   rankCommunityFilter = document.getElementById('filter-comunidad-rank')?.value || '';
   document.getElementById('badge-pend').textContent  = pendingRooms.length;
-  document.getElementById('badge-mine').textContent = personalDoneRooms().length;
+  document.getElementById('badge-mine').textContent = personalDoneRoomIds().length;
   document.getElementById('badge-hecho').textContent = publicReviewCount();
   document.getElementById('badge-cat').textContent = publicCatalogCount();
   syncNavigationForAuth();
@@ -9279,7 +9319,7 @@ function populateMineGroupFilter() {
   if (!select) return;
   const current = select.value;
   select.innerHTML = '<option value="">Grupo</option>';
-  if (personalRoomSources().some(room => userStateFor(room).done)) {
+  if (personalDoneRoomIds().length) {
     select.appendChild(new Option('Hecho por mi', '__personal'));
   }
   activeUserGroups().forEach(([groupId, group]) => {
@@ -9297,7 +9337,7 @@ function renderStats() {
   }
   statsBar.style.display = '';
   const pendingRooms = allPendingRooms();
-  const doneRooms = allDoneRooms();
+  const doneRooms = personalCompletedRooms();
   const total = doneRooms.length + pendingRooms.length;
 
   // Media grupo (solo los que tienen valoración)
@@ -9319,14 +9359,42 @@ function renderStats() {
     </div>`;
 }
 
+let VAULT_HOME_MAP_OBSERVER = null;
+let VAULT_HOME_MAP_GENERATION = 0;
+
+function clearVaultHomeMap() {
+  VAULT_HOME_MAP_GENERATION += 1;
+  VAULT_HOME_MAP_OBSERVER?.disconnect();
+  VAULT_HOME_MAP_OBSERVER = null;
+  if (VAULT_HOME_LEAFLET_MAP) {
+    VAULT_HOME_LEAFLET_MAP.remove();
+    VAULT_HOME_LEAFLET_MAP = null;
+  }
+}
+
+function scheduleVaultHomeMap() {
+  const node = document.getElementById('vault-home-leaflet-map');
+  if (!node || !AUTH_USER || ACTIVE_TAB !== 'thevault') return;
+  const generation = VAULT_HOME_MAP_GENERATION;
+  const load = () => initVaultHomeLeafletMap(node, generation);
+  if (!window.IntersectionObserver) {
+    requestAnimationFrame(load);
+    return;
+  }
+  VAULT_HOME_MAP_OBSERVER = new IntersectionObserver(entries => {
+    if (!entries.some(entry => entry.isIntersecting) || ACTIVE_TAB !== 'thevault') return;
+    VAULT_HOME_MAP_OBSERVER?.disconnect();
+    VAULT_HOME_MAP_OBSERVER = null;
+    load();
+  }, { rootMargin: '180px 0px' });
+  VAULT_HOME_MAP_OBSERVER.observe(node.parentElement);
+}
+
 function renderVaultGuide() {
   const root = document.getElementById('vault-home-content');
   if (!root) return;
+  clearVaultHomeMap();
   if (!AUTH_USER) {
-    if (VAULT_HOME_LEAFLET_MAP) {
-      VAULT_HOME_LEAFLET_MAP.remove();
-      VAULT_HOME_LEAFLET_MAP = null;
-    }
     root.className = 'vault-home-guest-shell';
     root.innerHTML = vaultGuestOverviewHtml();
     return;
@@ -9343,6 +9411,7 @@ function renderVaultGuide() {
       ${vaultHomeDiscoveryHtml()}
     </div>
     `;
+  scheduleVaultHomeMap();
 }
 
 function openEscapistProfileCta() {
@@ -9374,7 +9443,7 @@ function vaultHomeIdentityHtml(model) {
   return `<section class="vault-home-identity">
     <div class="vault-home-user">
       ${progressAvatarHtml(selectedProgressAvatar(), selectedProgressFrame(), 'vault-home-avatar')}
-      <div><div class="vault-home-eyebrow">Mi identidad escapista</div><h1 class="vault-home-name">${escapeHtml(shortDisplayName())}</h1><p class="vault-home-subtitle">${escapeHtml(title?.name || model.level.name)} · ${model.doneRooms.length} salas hechas</p></div>
+      <div><div class="vault-home-eyebrow">Mi identidad escapista</div><h1 class="vault-home-name">${escapeHtml(shortDisplayName())}</h1><p class="vault-home-subtitle">${escapeHtml(title?.name || model.level.name)} · ${model.personalDoneRooms.length} salas hechas</p></div>
     </div>
     <div class="vault-home-level">
       <div class="vault-home-level-head"><strong>${escapeHtml(model.level.name)}</strong><span>${model.xp} XP</span></div>
@@ -9388,7 +9457,7 @@ function vaultHomeIdentityHtml(model) {
 function vaultHomeActionsHtml(model) {
   const actions = [
     ['images/navigation/catalogo.png', 'Catálogo', `${publicCatalogCount()} salas`, "switchTab('catalogo')"],
-    ['images/navigation/mapa.png', 'Mi mapa', model ? `${model.doneRooms.length} jugadas` : 'Explorar mapa', model ? 'openVaultHomeMap()' : 'signInGoogle()'],
+    ['images/navigation/mapa.png', 'Mi mapa', model ? `${model.personalDoneRooms.length} jugadas` : 'Explorar mapa', model ? 'openVaultHomeMap()' : 'signInGoogle()'],
     ['images/navigation/reviews.png', 'Reviews', `${publicReviewCount()} publicadas`, "switchTab('hechos')"],
     ['images/navigation/ranking.png', 'Ranking', `${publicRankingCount()} puntuadas`, "switchTab('ranking')"],
     ['images/navigation/progreso.png', 'Progreso', model ? `${model.achievements.filter(item => item.unlocked).length} logros` : 'Crea tu perfil', model ? 'openProgressSettings()' : 'signInGoogle()']
@@ -9403,12 +9472,12 @@ function openVaultHomeMap() {
 }
 
 function vaultHomeMapHtml(model) {
-  const rooms = model.doneRooms || [];
+  const rooms = model.personalDoneRooms || [];
   const cities = new Map();
   const provinces = new Set();
   rooms.forEach(room => {
-    const city = cleanValue(room.ciudad) || 'Sin ciudad';
-    cities.set(city, (cities.get(city) || 0) + 1);
+    const city = cleanValue(room.ciudad);
+    if (city) cities.set(city, (cities.get(city) || 0) + 1);
     const province = normalizedKey(room.provincia);
     if (province) provinces.add(province);
   });
@@ -9416,11 +9485,12 @@ function vaultHomeMapHtml(model) {
   return `<section class="vault-home-section">
     <div class="vault-home-section-head"><div class="vault-home-section-title">Mi mapa escapista</div><div class="vault-home-section-note">Solo salas realizadas</div></div>
     <div class="vault-home-map">
-      <div class="vault-home-map-canvas"><div class="vault-home-map-placeholder"><strong>${rooms.length} salas registradas</strong><span>El mapa y Leaflet se cargan al abrirlo.</span><button class="vault-guide-action" type="button" onclick="openVaultHomeMap()">Abrir mapa</button></div></div>
+      <div class="vault-home-map-canvas"><div id="vault-home-leaflet-map" class="vault-home-leaflet-map" data-map-state="waiting" aria-label="Mapa de tus escapes realizados" hidden></div><div class="vault-home-map-placeholder" role="status"><strong>Tu mapa de escapes</strong><span>Cargando mapa de tus salas…</span><button class="vault-guide-action" type="button" onclick="openVaultHomeMap()">Abrir mapa completo</button></div></div>
       <div class="vault-home-map-summary">
         <div class="vault-home-map-stat"><strong>${rooms.length}</strong><span>salas hechas</span></div>
         <div class="vault-home-map-stat"><strong>${cities.size}</strong><span>ciudades</span></div>
         <div class="vault-home-map-stat"><strong>${provinces.size}</strong><span>provincias</span></div>
+        <div class="vault-home-section-note" id="vault-home-map-coverage" hidden></div>
         ${topCities.map(([city, count]) => `<div class="vault-home-map-city"><span>${escapeHtml(city)}</span><strong>${count}</strong></div>`).join('')}
         <button class="vault-guide-action" type="button" onclick="openVaultHomeMap()">Abrir mapa completo</button>
       </div>
@@ -9428,49 +9498,104 @@ function vaultHomeMapHtml(model) {
   </section>`;
 }
 
-async function initVaultHomeLeafletMap() {
-  const node = document.getElementById('vault-home-leaflet-map');
-  if (!node || !AUTH_USER) return;
-  const leafletReady = await ensureLeafletAssets();
-  if (!leafletReady || !document.body.contains(node)) return;
-  if (VAULT_HOME_LEAFLET_MAP) VAULT_HOME_LEAFLET_MAP.remove();
-  const locations = escapistMapLocations(escapistDoneRoomItems());
-  const clusters = escapistMapClusters(locations);
-  const map = L.map(node, { zoomControl: true, scrollWheelZoom: false, tap: true });
-  VAULT_HOME_LEAFLET_MAP = map;
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-  }).addTo(map);
-  if (!clusters.length) {
-    map.setView([40.2, -3.7], 5);
-    setTimeout(() => map.invalidateSize(), 80);
-    return;
-  }
-  const bounds = [];
-  clusters.forEach(cluster => {
-    const size = cluster.rooms.length > 1 ? 34 : 28;
-    const label = cluster.rooms.length > 1 ? cluster.rooms.length : '•';
-    const icon = L.divIcon({
-      className: '',
-      html: `<button class="escapist-leaflet-marker ${escapistMapClusterMarkerClass(cluster)}" type="button" aria-label="${escapeHtml(mapClusterTitle(cluster))}"><span>${label}</span></button>`,
-      iconSize: [size, size],
-      iconAnchor: [size / 2, size / 2]
+function personalHomeMapLocations() {
+  const byLocation = new Map();
+  personalCompletedRooms().forEach(room => {
+    // An explicit catalogue ID is required. A shared title or a city centre
+    // is not evidence that this historical room has those coordinates.
+    const id = String(room.id || '').toLowerCase();
+    const location = ROOM_LOCATIONS[id];
+    const lat = Number(location?.lat), lon = Number(location?.lon);
+    const exactPrecision = ['manual_verified', 'exact_address', 'exact_with_geo'].includes(location?.precision);
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)
+      || (!exactPrecision && Number(location?.confidence) < 70)) return;
+    if (!exactPrecision && !Number.isFinite(Number(location?.confidence))) return;
+    const coord = { lat, lon, exact: true, fallback: false, address: location.address || '', precision: location.precision || '' };
+    const key = `exact_${lat.toFixed(5)}_${lon.toFixed(5)}`;
+    if (!byLocation.has(key)) byLocation.set(key, {
+      key, city: cleanValue(room.ciudad) || 'Sin ciudad',
+      province: cleanValue(room.provincia) || '', community: communityOf(room) || '',
+      coord, exact: true, address: coord.address, point: projectMapPoint(coord), rooms: []
     });
-    const latLng = [cluster.coord.lat, cluster.coord.lon];
-    bounds.push(latLng);
-    L.marker(latLng, { icon, title: mapClusterTitle(cluster) }).addTo(map).on('click', () => {
-      PROFILE_MAP_ACTIVE_KEY = cluster.key;
-      PROFILE_MAP_FOCUS_ACTIVE = true;
-      openVaultHomeMap();
-    });
+    byLocation.get(key).rooms.push({ key: room._personalStateKey, room, personal: true,
+      personalRecord: userStateForKey(room._personalStateKey), groups: [], personalPending: false, pendingGroups: [] });
   });
-  map.fitBounds(bounds, { padding: [26, 26], maxZoom: clusters.length <= 4 ? 13 : 8 });
-  setTimeout(() => map.invalidateSize(), 80);
+  return [...byLocation.values()];
+}
+
+async function initVaultHomeLeafletMap(node = document.getElementById('vault-home-leaflet-map'), generation = VAULT_HOME_MAP_GENERATION) {
+  const uid = AUTH_USER?.uid;
+  const current = () => !!uid && AUTH_USER?.uid === uid && ACTIVE_TAB === 'thevault'
+    && generation === VAULT_HOME_MAP_GENERATION && node?.isConnected;
+  if (!current() || node.dataset.mapState === 'loading' || node.dataset.mapState === 'ready') return;
+  node.dataset.mapState = 'loading';
+  try {
+    await ensureProfileMapDataLoaded();
+    if (!current()) return;
+    if (!Object.keys(ROOM_LOCATIONS || {}).length) throw new Error('Map locations unavailable');
+    const locations = personalHomeMapLocations();
+    const mappedCount = locations.reduce((sum, location) => sum + location.rooms.length, 0);
+    const coverage = document.getElementById('vault-home-map-coverage');
+    if (coverage) {
+      coverage.hidden = false;
+      coverage.textContent = `Ubicación fiable: ${mappedCount} de ${personalDoneRoomIds().length}`;
+    }
+    if (!locations.length) {
+      node.dataset.mapState = 'empty';
+      node.parentElement.querySelector('.vault-home-map-placeholder span').textContent =
+        'Aún no hay ubicaciones fiables para mostrar tus salas en el mapa.';
+      return;
+    }
+    const leafletReady = await ensureLeafletAssets();
+    if (!current()) return;
+    if (!leafletReady) throw new Error('Map assets unavailable');
+    const clusters = escapistMapClusters(locations);
+    node.hidden = false;
+    const map = L.map(node, { zoomControl: true, scrollWheelZoom: false, tap: true });
+    VAULT_HOME_LEAFLET_MAP = map;
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+    const bounds = [];
+    clusters.forEach(cluster => {
+      const size = cluster.rooms.length > 1 ? 34 : 28;
+      const label = cluster.rooms.length > 1 ? cluster.rooms.length : '•';
+      const icon = L.divIcon({
+        className: '',
+        html: `<button class="escapist-leaflet-marker ${escapistMapClusterMarkerClass(cluster)}" type="button" aria-label="${escapeHtml(mapClusterTitle(cluster))}"><span>${label}</span></button>`,
+        iconSize: [size, size],
+        iconAnchor: [size / 2, size / 2]
+      });
+      const latLng = [cluster.coord.lat, cluster.coord.lon];
+      bounds.push(latLng);
+      L.marker(latLng, { icon, title: mapClusterTitle(cluster) }).addTo(map).on('click', () => {
+        PROFILE_MAP_ACTIVE_KEY = cluster.key;
+        PROFILE_MAP_FOCUS_ACTIVE = true;
+        openVaultHomeMap();
+      });
+    });
+    if (bounds.length) map.fitBounds(bounds, { padding: [26, 26], maxZoom: clusters.length <= 4 ? 13 : 8 });
+    else map.setView([40.2, -3.7], 5);
+    node.dataset.mapState = 'ready';
+    node.parentElement.querySelector('.vault-home-map-placeholder').style.display = 'none';
+    setTimeout(() => { if (current()) map.invalidateSize(); }, 80);
+  } catch (error) {
+    if (!current()) return;
+    if (VAULT_HOME_LEAFLET_MAP) {
+      VAULT_HOME_LEAFLET_MAP.remove();
+      VAULT_HOME_LEAFLET_MAP = null;
+    }
+    node.hidden = true;
+    node.dataset.mapState = 'error';
+    const status = node.parentElement.querySelector('.vault-home-map-placeholder');
+    status.style.display = '';
+    status.querySelector('span').textContent = 'No hemos podido cargar el mapa. Puedes abrir el mapa completo.';
+  }
 }
 
 function vaultHomeProgressHtml(model) {
-  const minutes = model ? model.doneRooms.reduce((sum, room) => sum + playedMinutesForRoom(room), 0) : 0;
+  const minutes = model ? model.personalDoneRooms.reduce((sum, room) => sum + playedMinutesForRoom(room), 0) : 0;
   const unlocked = model ? model.achievements.filter(item => item.unlocked).length : 0;
   const next = model?.nextAchievement;
   const routes = [...(model?.routes || [])]
@@ -9482,8 +9607,8 @@ function vaultHomeProgressHtml(model) {
   return `<section class="vault-home-section">
     <div class="vault-home-section-head"><div class="vault-home-section-title">Progreso escapista</div><button class="vault-guide-action secondary" type="button" onclick="${model ? 'openProgressSettings()' : 'signInGoogle()'}">Ver progreso</button></div>
     <div class="vault-home-stats">
-      <div class="vault-home-stat"><strong>${model ? model.doneRooms.length : '-'}</strong><span>hechas</span></div>
-      <div class="vault-home-stat"><strong>${model ? model.cities.size : '-'}</strong><span>ciudades</span></div>
+      <div class="vault-home-stat"><strong>${model ? model.personalDoneRooms.length : '-'}</strong><span>hechas</span></div>
+      <div class="vault-home-stat"><strong>${model ? model.personalCities.size : '-'}</strong><span>ciudades</span></div>
       <div class="vault-home-stat"><strong>${model ? formatPlayedMinutes(minutes) : '-'}</strong><span>jugado</span></div>
       <div class="vault-home-stat"><strong>${model ? model.reviews.length : '-'}</strong><span>reseñas</span></div>
     </div>
