@@ -59,6 +59,13 @@ jobs:
           cp CNAME data.json catalog.json external_ratings.json extra_awards.json terpeca_awards.json official_videos.json published_reviews.json public-site/
           cp review_photos.json room_aliases.json room_locations.json room_relationships.json site_stats.json robots.txt sitemap*.xml video-sitemap.xml llms.txt public-site/
           cp site.webmanifest service-worker.js seo.css public-site/
+          cp -R __ public-site/
+          # Pages resolves extensionless HTML URLs from .html files and serves
+          # them with text/html. Preserve the official helper bytes verbatim.
+          for helper in handler iframe links; do
+            mv "public-site/__/auth/${helper}" "public-site/__/auth/${helper}.html"
+          done
+          touch public-site/.nojekyll
           cp -R aviso-legal condiciones cookies privacidad ranking ranking-escape-rooms mejores-escape-rooms mejores-escape-rooms-terror escape-rooms escapista reviews salas public-site/
           find . -maxdepth 1 -type d -name 'escape-rooms-*' -exec cp -R {} public-site/ \;
           mkdir -p public-site/images

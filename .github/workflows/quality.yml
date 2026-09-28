@@ -18,7 +18,7 @@ jobs:
           node-version: "24"
       - name: Validar sintaxis y datos
         run: |
-          python -m py_compile scripts/build_seo_pages.py scripts/validate_site_data.py
+          python -m py_compile scripts/build_seo_pages.py scripts/validate_site_data.py scripts/sync_firebase_auth_helpers.py scripts/check_firebase_auth_helpers_http.py
           python -m unittest discover -s tests -v
           python scripts/validate_site_data.py --strict
           python -c "import pathlib,re; s=pathlib.Path('index.html').read_text(encoding='utf-8'); m=re.search(r'<script>([\\s\\S]*?)</script>\\s*</body>',s); assert m; pathlib.Path('/tmp/index.js').write_text(m.group(1),encoding='utf-8')"

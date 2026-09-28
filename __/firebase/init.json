@@ -1,0 +1,12 @@
+{
+  "projectId": "scapesrooms",
+  "appId": "1:355203547760:web:25cb7dd64d2e793f12aab5",
+  "databaseURL": "https://scapesrooms-default-rtdb.europe-west1.firebasedatabase.app",
+  "storageBucket": "scapesrooms.firebasestorage.app",
+  "apiKey": "AIzaSyDr33ghQfJINQjkR94YI4k4y0zsUJPYpb4",
+  "authDomain": "scapesrooms.firebaseapp.com",
+  "messagingSenderId": "355203547760",
+  "measurementId": "G-NHXMPQBMNZ",
+  "projectNumber": "355203547760",
+  "version": "2"
+}

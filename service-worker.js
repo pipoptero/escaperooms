@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'the-vault-v52';
+const CACHE_VERSION = 'the-vault-v52-auth-helpers';
 const APP_SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -98,6 +98,9 @@ self.addEventListener('fetch', event => {
 
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
+
+  // The Firebase OAuth helper must bypass the app shell and all runtime caches.
+  if (url.pathname.startsWith('/__/auth/') || url.pathname === '/__/firebase/init.json') return;
 
   const path = url.pathname.split('/').pop();
   if (['room-state.js', 'route-planner.js', 'saved-routes.js', 'public-profile.js', 'public-profile-firebase.js', 'public-profile-fixtures.js', 'public-profile-page.js', 'public-profile.css'].includes(path)) {

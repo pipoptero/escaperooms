@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "upstream": "https://scapesrooms.firebaseapp.com",
+  "projectId": "scapesrooms",
+  "syncedAt": "2026-09-21T20:00:48.054268+00:00",
+  "initFallback": {
+    "source": "firebase-apps-sdkconfig",
+    "projectId": "scapesrooms",
+    "appId": "1:355203547760:web:25cb7dd64d2e793f12aab5",
+    "sha256": "257816bf1acd6af5806f5a2e5d0618c774708a676c16de5c90a6f5ae7506cee6"
+  },
+  "files": {
+    "__/auth/handler": {
+      "sha256": "ce225ee3bd2a8ad914e3da1ad3c2fb7dfb42e901d54d358b718c449eededb254",
+      "bytes": 462,
+      "contentType": "text/html; charset=utf-8"
+    },
+    "__/auth/handler.js": {
+      "sha256": "d85408b55b15a4eac503aed04fdb20312f4ba6be52d429d5da40ad413f37015f",
+      "bytes": 279769,
+      "contentType": "text/javascript; charset=utf-8"
+    },
+    "__/auth/experiments.js": {
+      "sha256": "91450aff1a84319cca71087830a639d6dcac4fee5bb60b4b13470374bbeae6dc",
+      "bytes": 831,
+      "contentType": "text/javascript; charset=utf-8"
+    },
+    "__/auth/iframe": {
+      "sha256": "d1eea8206093f3c645b999e44787c4798a867a5a26bc482313cf9007b778a47d",
+      "bytes": 364,
+      "contentType": "text/html; charset=utf-8"
+    },
+    "__/auth/iframe.js": {
+      "sha256": "21ec74329fcd1ab30ae6cbad379cad400e8ed47f8ae458ee710751df7a7cf4c2",
+      "bytes": 288469,
+      "contentType": "text/javascript; charset=utf-8"
+    },
+    "__/auth/links": {
+      "sha256": "b0cdfad081aa23ec6d28a5bb53dd58275029220afa10422a2fd21bac3f91ac53",
+      "bytes": 229,
+      "contentType": "text/html; charset=utf-8"
+    },
+    "__/auth/links.js": {
+      "sha256": "d110cda16ec2926397deb63d944d7465230a648555cceb1638963c55517ba93e",
+      "bytes": 84716,
+      "contentType": "text/javascript; charset=utf-8"
+    },
+    "__/firebase/init.json": {
+      "sha256": "257816bf1acd6af5806f5a2e5d0618c774708a676c16de5c90a6f5ae7506cee6",
+      "bytes": 458,
+      "contentType": "application/json; source=official-firebase-sdk-config"
+    }
+  }
+}
