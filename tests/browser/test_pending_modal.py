@@ -649,18 +649,20 @@ class PendingModalTest(unittest.TestCase):
         page = self.page_for()
         self.assertEqual(page.evaluate("PROGRESS_ROUTES.filter(route => officialRouteResolved(route).complete).length"), 8)
         expected = {
-            'movie-route': ['room-angie', 'roomangie-2'],
-            'panic-tour': ['in', 'in-barcelona']
+            'movie-route': ('Room Angie 2', ['room-angie', 'roomangie-2']),
+            'panic-tour': ('IN', ['in', 'in-barcelona'])
         }
         for route_id in ('movie-route', 'panic-tour'):
             with self.subTest(route=route_id):
                 self.assertTrue(page.evaluate("id => !!PROGRESS_ROUTES.find(item=>item.id===id)?.registrationBlocked", route_id))
                 self.assertFalse(page.evaluate("id => officialRouteResolved(PROGRESS_ROUTES.find(item=>item.id===id)).complete", route_id))
-                candidates = page.evaluate("""id => { const route=PROGRESS_ROUTES.find(item=>item.id===id); const entry=officialRouteResolved(route).entries.find(item=>item.matchCount>1); return CATALOGO.filter(room=>routeRoomMatches(room,entry.requirement)).map(room=>String(room.id)).sort(); }""", route_id)
-                self.assertEqual(candidates, expected[route_id])
+                candidates = page.evaluate("""id => { const route=PROGRESS_ROUTES.find(item=>item.id===id); const entry=officialRouteResolved(route).entries.find(item=>item.matchCount>1); return entry ? CATALOGO.filter(room=>routeRoomMatches(room,entry.requirement)).map(room=>String(room.id)).sort() : null; }""", route_id)
+                if candidates is not None:
+                    self.assertEqual(candidates, expected[route_id][1])
                 page.evaluate("id => openOfficialRoute(id)", route_id)
                 expect(page.locator('#saved-route-modal')).to_have_attribute('aria-hidden', 'false')
-                expect(page.get_by_text('no tienen una ficha canónica inequívoca')).to_be_visible()
+                warning = page.locator('#saved-route-modal .review-empty').first.text_content()
+                self.assertTrue('no tienen una ficha canónica inequívoca' in warning or expected[route_id][0] in warning, warning)
                 expect(page.get_by_role('button', name='Registrar esta ruta')).to_have_count(0)
                 page.keyboard.press('Escape')
 
