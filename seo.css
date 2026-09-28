@@ -116,6 +116,7 @@ p { color: var(--text2); }
 .photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; }
 .photos img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border: 1px solid rgba(125,187,63,.22); background: #050507; }
 .video-frame { width: 100%; aspect-ratio: 16/9; display: block; border: 1px solid rgba(125,187,63,.24); background: #050507; }
+.video-frame.portrait { width: min(100%, 340px); aspect-ratio: 9/16; margin-inline: auto; }
 .media-note, .note, .explain { color: var(--text2); }
 .share, .method { margin-top: 20px; border-left: 2px solid var(--green); background: rgba(125,187,63,.035); padding: 14px 16px; }
 .share strong { display: block; color: var(--gold); font-family: 'Cinzel', serif; }

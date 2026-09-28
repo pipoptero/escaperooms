@@ -106,6 +106,34 @@ class EditorialReviewBrowserTest(unittest.TestCase):
         finally:
             context.close()
 
+    def test_la_vitrina_official_video_uses_portrait_player(self):
+        for width in (390, 1280):
+            with self.subTest(width=width):
+                context = self.browser.new_context(viewport={'width': width, 'height': 844}, service_workers='block')
+                context.route('**/*', lambda route: route.continue_() if urlparse(route.request.url).hostname == '127.0.0.1' else route.abort())
+                page = context.new_page()
+                try:
+                    page.goto(self.url + '/', wait_until='domcontentloaded')
+                    page.evaluate('loadOfficialVideos()')
+                    page.evaluate("""() => {
+                      const room = {id:'la-vitrina', nombre:'La Vitrina',
+                        imagen:'images/catalgo_propio_web_escape/optimized/la-vitrina.jpg'};
+                      document.getElementById('detail-content').innerHTML = officialVideoHtml(room);
+                      document.getElementById('detail-modal').classList.add('open');
+                    }""")
+                    card = page.locator('.detail-video-card--portrait')
+                    self.assertEqual(card.count(), 1)
+                    box = card.bounding_box()
+                    self.assertLessEqual(box['width'], 340)
+                    self.assertAlmostEqual(box['height'] / box['width'], 16 / 9, delta=.02)
+                    self.assertEqual(page.locator('.detail-video-frame').count(), 0)
+                    page.locator('.detail-video-preview').click()
+                    src = page.locator('.detail-video-frame').get_attribute('src')
+                    self.assertIn('player.vimeo.com/video/1167130701', src)
+                    self.assertIn('autoplay=1', src)
+                finally:
+                    context.close()
+
 
 if __name__ == '__main__':
     unittest.main()

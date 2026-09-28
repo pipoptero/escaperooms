@@ -147,6 +147,7 @@ p { color: var(--text2); }
 .photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; }
 .photos img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border: 1px solid rgba(125,187,63,.22); background: #050507; }
 .video-frame { width: 100%; aspect-ratio: 16/9; display: block; border: 1px solid rgba(125,187,63,.24); background: #050507; }
+.video-frame.portrait { width: min(100%, 340px); aspect-ratio: 9/16; margin-inline: auto; }
 .media-note, .note, .explain { color: var(--text2); }
 .share, .method { margin-top: 20px; border-left: 2px solid var(--green); background: rgba(125,187,63,.035); padding: 14px 16px; }
 .share strong { display: block; color: var(--gold); font-family: 'Cinzel', serif; }
@@ -1987,6 +1988,10 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
             f'Vídeo verificado en la <a href="{escape(video_source_url)}" rel="nofollow noopener">'
             'ficha de Escapistas.club</a>.'
         )
+    elif video_source_url.startswith("https://vimeo.com/"):
+        video_source_note = (
+            f'Vídeo en <a href="{escape(video_source_url)}" rel="nofollow noopener">Vimeo</a>.'
+        )
     else:
         video_source_note = "Vídeo localizado en la web oficial de la sala."
     video_thumbnail = text(video.get("thumbnail"))
@@ -1999,8 +2004,9 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
         if photo.get("src")
     )
     if video_url and video_provider in {"youtube", "vimeo"}:
+        video_frame_class = "video-frame portrait" if video.get("aspect_ratio") == "9/16" else "video-frame"
         video_html = (
-            f'<iframe class="video-frame" src="{escape(video_url)}" title="Vídeo oficial de {escape(name)}" '
+            f'<iframe class="{video_frame_class}" src="{escape(video_url)}" title="Vídeo oficial de {escape(name)}" '
             'loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" '
             'allowfullscreen></iframe>'
         )

@@ -857,6 +857,7 @@
   .detail-section-title::after{content:'';height:1px;background:var(--border);flex:1;}
   .detail-desc{font-size:.95rem;line-height:1.55;color:var(--text2);white-space:pre-line;}
   .detail-video-card{position:relative;aspect-ratio:16/9;border:1px solid rgba(125,187,63,.22);background:#050609;overflow:hidden;margin:8px 0 14px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.025);}
+  .detail-video-card--portrait{width:min(100%,340px);aspect-ratio:9/16;margin-left:auto;margin-right:auto;}
   .detail-video-preview,.detail-video-frame{position:absolute;inset:0;width:100%;height:100%;}
   .detail-video-preview{border:0;background:radial-gradient(circle at center,rgba(125,187,63,.14),rgba(5,6,9,.98));cursor:pointer;color:var(--text);padding:0;display:block;text-align:left;}
   .detail-video-preview img{width:100%;height:100%;object-fit:cover;display:block;opacity:.68;filter:saturate(.9) contrast(1.08);}
@@ -10873,12 +10874,13 @@ function officialVideoHtml(room) {
   const embedUrl = safeExternalVideoUrl(video.embed_url || video.video_url);
   if (!embedUrl) return '';
   const provider = String(video.provider || '').toLowerCase();
+  const portraitClass = video.aspect_ratio === '9/16' ? ' detail-video-card--portrait' : '';
   const cardId = `detail-video-${cssSafe(roomKey(room) || slugify(room.nombre || 'room'))}`;
   const thumb = safeExternalVideoUrl(video.thumbnail) || room.imagen || '';
   const thumbHtml = thumb ? `<img src="${escapeHtml(thumb)}" alt="${escapeHtml(`Intro oficial de ${room.nombre || 'escape room'}`)}" loading="lazy">` : '';
   return `
     <div class="detail-section-title">Intro oficial</div>
-    <div class="detail-video-card" id="${cardId}">
+    <div class="detail-video-card${portraitClass}" id="${cardId}">
       <button class="detail-video-preview" type="button" onclick="playOfficialVideo('${jsString(cardId)}','${jsString(provider)}','${jsString(embedUrl)}')" aria-label="Reproducir intro oficial">
         ${thumbHtml}
         <span class="detail-video-play">▶</span>

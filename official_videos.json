@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-09-08T21:03:55",
-    "rooms": 221,
+    "generated_at": "2026-09-28T15:13:37Z",
+    "rooms": 222,
     "source": "official_web_high_confidence",
     "videos_with_upload_date": 147
   },
@@ -1495,6 +1495,17 @@
       "source_page_url": "https://www.escapistas.club/escape-room/la-vieja-carniceria",
       "score": 96,
       "upload_date": "2020-02-02T08:15:34-08:00"
+    },
+    "la-vitrina": {
+      "provider": "vimeo",
+      "embed_url": "https://player.vimeo.com/video/1167130701?badge=0&autopause=0&player_id=0&app_id=58479",
+      "video_url": "https://vimeo.com/1167130701",
+      "thumbnail": "",
+      "label": "La Vitrina - Horror Escaperoom",
+      "source_page_url": "https://vimeo.com/1167130701",
+      "score": 100,
+      "upload_date": "",
+      "aspect_ratio": "9/16"
     },
     "laboratorio-x96": {
       "provider": "youtube",
