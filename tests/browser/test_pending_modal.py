@@ -32,6 +32,7 @@ class QuietHandler(SimpleHTTPRequestHandler):
 class PendingModalTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        cls.review_count = len(json.loads((ROOT / 'published_reviews.json').read_text(encoding='utf-8'))['reviews'])
         cls.server = ThreadingHTTPServer(('127.0.0.1', 0), partial(QuietHandler, directory=str(ROOT)))
         cls.thread = Thread(target=cls.server.serve_forever, daemon=True)
         cls.thread.start()
@@ -416,7 +417,7 @@ class PendingModalTest(unittest.TestCase):
         page.goto(self.url, wait_until='load')
         expect(page.get_by_text('Encuentra tu próximo escape.')).to_be_visible()
         self.assertEqual(page.locator('#vault-stat-catalog').text_content(), '1735')
-        self.assertEqual(page.locator('#vault-stat-reviews').text_content(), '41')
+        self.assertEqual(page.locator('#vault-stat-reviews').text_content(), str(self.review_count))
         expect(page.get_by_text('Modo de consulta disponible')).to_be_hidden()
 
     def test_reviews_filters_missing_metadata_and_empty_state(self):
@@ -705,7 +706,7 @@ class PendingModalTest(unittest.TestCase):
     def test_canonical_review_registry_count_abduction_cover_and_share(self):
         page = self.context.new_page()
         page.goto(self.url, wait_until='load')
-        page.wait_for_function("STATIC_PUBLISHED_REVIEWS_LOADED && Object.keys(STATIC_PUBLISHED_REVIEWS).length === 41")
+        page.wait_for_function("count => STATIC_PUBLISHED_REVIEWS_LOADED && Object.keys(STATIC_PUBLISHED_REVIEWS).length === count", arg=self.review_count)
         result = page.evaluate("""() => {
           const room = reviewRooms().find(item => item.id === 'enterprises');
           return {
@@ -719,14 +720,14 @@ class PendingModalTest(unittest.TestCase):
             slugs: reviewRooms().map(getReviewShareUrl)
           };
         }""")
-        self.assertEqual((result['registry'], result['runtime'], result['count']), (41, 41, 41))
+        self.assertEqual((result['registry'], result['runtime'], result['count']), (self.review_count,) * 3)
         self.assertEqual(result['name'], 'Abduction Enterprises')
         self.assertIn('abduction-enterprises.webp', result['cover'])
         self.assertIn('enterprises.jpg', result['coverFallback'])
         self.assertEqual(result['share'], f'{self.url}/reviews/abduction-enterprises/')
         self.assertEqual(len(result['slugs']), len(set(result['slugs'])))
         page.goto(f'{self.url}/reviews/', wait_until='load')
-        self.assertEqual(page.locator('[data-review-card]').count(), 41)
+        self.assertEqual(page.locator('[data-review-card]').count(), self.review_count)
         expect(page.locator('[data-review-card]', has_text='Abduction Enterprises')).to_be_visible()
         page.goto(f'{self.url}/reviews/abduction-enterprises/', wait_until='load')
         expect(page.locator('h1')).to_have_text('Abduction Enterprises')
@@ -960,7 +961,7 @@ class PendingModalTest(unittest.TestCase):
     def test_standalone_popup_recovery_retry_external_browser_and_hidden_debug_gesture(self):
         page = self.context.new_page()
         page.goto(self.url, wait_until='load')
-        expect(page.locator('#pwa-version')).to_have_text('PWA v51')
+        expect(page.locator('#pwa-version')).to_have_text('PWA v52')
         for _ in range(5):
             page.locator('#pwa-version').click()
         self.assertEqual(page.locator('#auth-debug-panel').count(), 0)

@@ -1,9 +1,9 @@
 {
   "meta": {
-    "generated_at": "2026-09-21T10:36:31",
-    "source": "images/Hechos",
-    "groups": 19,
-    "photos": 55,
+    "generated_at": "2026-09-27T20:51:51",
+    "source": "panel-local",
+    "groups": 20,
+    "photos": 59,
     "unmatched": []
   },
   "photos": {
@@ -373,6 +373,31 @@
         {
           "src": "images/Hechos/Willy el tuerto 3.jpeg",
           "alt": "Willy el Tuerto - foto del grupo",
+          "type": "image"
+        }
+      ]
+    },
+    "la_vitrina": {
+      "room": "La Vitrina",
+      "photos": [
+        {
+          "src": "images/Hechos/la_vitrina_1.jpeg",
+          "alt": "La Vitrina - foto del grupo",
+          "type": "image"
+        },
+        {
+          "src": "images/Hechos/la_vitrina_2.jpeg",
+          "alt": "La Vitrina - foto del grupo",
+          "type": "image"
+        },
+        {
+          "src": "images/Hechos/la_vitrina_3.jpeg",
+          "alt": "La Vitrina - foto del grupo",
+          "type": "image"
+        },
+        {
+          "src": "images/Hechos/la_vitrina_4.jpeg",
+          "alt": "La Vitrina - foto del grupo",
           "type": "image"
         }
       ]

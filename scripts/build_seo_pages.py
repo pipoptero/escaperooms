@@ -2,6 +2,7 @@ import argparse
 import json
 import re
 import shutil
+import subprocess
 import unicodedata
 from datetime import date, datetime, timezone
 from html import escape
@@ -400,20 +401,6 @@ def clean_text(value):
     return value
 
 
-REVIEW_SECTION_HEADINGS = {
-    "historia",
-    "ambientacion",
-    "jugabilidad",
-    "game master",
-    "en resumen",
-    "nuestra opinion",
-    "datos importantes",
-    "valoracion the vault",
-    "veredicto the vault",
-    "the vault score",
-}
-
-
 def plain_review_text(value):
     source = text(value)
     source = re.sub(r"(?m)^\s*#{1,3}\s+", "", source)
@@ -423,56 +410,13 @@ def plain_review_text(value):
     return source
 
 
-def review_inline_html(value):
-    value = escape(text(value))
-    value = re.sub(r"\*\*([^*\n]+)\*\*", r"<strong>\1</strong>", value)
-    value = re.sub(r"__([^_\n]+)__", r"<u>\1</u>", value)
-    return re.sub(r"_([^_\n]+)_", r"<em>\1</em>", value)
-
-
 def review_text_html(value):
-    output, paragraph, items = [], [], []
-
-    def flush_paragraph():
-        if paragraph:
-            output.append(f"<p>{'<br>'.join(review_inline_html(line) for line in paragraph)}</p>")
-            paragraph.clear()
-
-    def flush_items():
-        if items:
-            output.append("<ul>" + "".join(f"<li>{review_inline_html(item)}</li>" for item in items) + "</ul>")
-            items.clear()
-
-    for raw_line in text(value).replace("\r\n", "\n").replace("\r", "\n").split("\n"):
-        line = raw_line.strip()
-        if not line:
-            flush_paragraph()
-            flush_items()
-            continue
-        heading = re.match(r"^(#{1,3})\s+(.+)$", line)
-        heading_candidate = re.sub(r"^[^\w]+", "", line, flags=re.UNICODE)
-        if heading or folded(heading_candidate) in REVIEW_SECTION_HEADINGS:
-            flush_paragraph()
-            flush_items()
-            tag = "h3" if not heading or len(heading.group(1)) == 1 else "h4"
-            label = heading.group(2) if heading else line
-            output.append(f"<{tag}>{review_inline_html(label)}</{tag}>")
-            continue
-        if re.match(r"^---+$", line):
-            flush_paragraph()
-            flush_items()
-            output.append("<hr>")
-            continue
-        bullet = re.match(r"^[-•]\s+(.+)$", line)
-        if bullet:
-            flush_paragraph()
-            items.append(bullet.group(1))
-            continue
-        flush_items()
-        paragraph.append(line)
-    flush_paragraph()
-    flush_items()
-    return "".join(output)
+    # The static SEO page uses the exact renderer shipped to the app and panel.
+    result = subprocess.run(
+        ["node", str(ROOT / "scripts" / "render_editorial_review.cjs")],
+        input=text(value), text=True, encoding="utf-8", capture_output=True, check=True,
+    )
+    return result.stdout
 
 
 def decimal(value):

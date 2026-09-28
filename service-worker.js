@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'the-vault-v51';
+const CACHE_VERSION = 'the-vault-v52';
 const APP_SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -11,6 +11,7 @@ const APP_SHELL = [
   './public-profile.js',
   './public-profile-firebase.js',
   './public-profile-fixtures.js',
+  './editorial-review-renderer.js',
   './escapista/',
   './escapista/index.html',
   './escapista/public-profile.css',

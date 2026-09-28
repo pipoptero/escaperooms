@@ -2107,7 +2107,7 @@
       <button class="tab" id="tab-cat" onclick="switchTab('catalogo')"><img class="tab-icon" src="images/navigation/catalogo.png" alt="">Catálogo <span class="count-badge" id="badge-cat">1735</span></button>
       <button class="tab auth-tab" id="tab-pend" onclick="switchTab('pendientes')" style="display:none"><img class="tab-icon" src="images/navigation/pendientes.png" alt="">Pendientes <span class="count-badge" id="badge-pend">0</span></button>
       <button class="tab auth-tab" id="tab-mine" onclick="switchTab('mis-hechos')" style="display:none"><img class="tab-icon" src="images/navigation/hechos.png" alt="">Hechos <span class="count-badge" id="badge-mine">0</span></button>
-      <button class="tab" id="tab-hecho" onclick="switchTab('hechos')"><img class="tab-icon" src="images/navigation/reviews-tab.png" alt="">Reviews <span class="count-badge" id="badge-hecho">41</span></button>
+      <button class="tab" id="tab-hecho" onclick="switchTab('hechos')"><img class="tab-icon" src="images/navigation/reviews-tab.png" alt="">Reviews <span class="count-badge" id="badge-hecho">42</span></button>
       <button class="tab" id="tab-rank" onclick="switchTab('ranking')"><img class="tab-icon" src="images/navigation/ranking.png" alt="">Ranking</button>
     </div>
   </div>
@@ -2142,7 +2142,7 @@
         </div>
         <div class="vault-guide-stats" aria-label="Datos actuales de The Vault">
           <div class="vault-guide-stat"><strong id="vault-stat-catalog">1735</strong><span>salas catalogadas</span></div>
-          <div class="vault-guide-stat"><strong id="vault-stat-reviews">41</strong><span>reviews The Vault</span></div>
+          <div class="vault-guide-stat"><strong id="vault-stat-reviews">42</strong><span>reviews The Vault</span></div>
           <div class="vault-guide-stat"><strong id="vault-stat-ranking">948</strong><span>salas con ranking</span></div>
           <div class="vault-guide-stat"><strong id="vault-stat-locations">44</strong><span>zonas para explorar</span></div>
         </div>
@@ -2152,7 +2152,7 @@
         <div class="vault-mini-list"><div class="vault-mini-item"><span>Historial y pendientes</span><strong>✓</strong></div><div class="vault-mini-item"><span>Mapa, XP y logros</span><strong>✓</strong></div><div class="vault-mini-item"><span>Grupos y rutas</span><strong>✓</strong></div><div class="vault-mini-item"><span>Avatares y cosméticos</span><strong>✓</strong></div></div>
       </section>
       <div class="vault-section-head"><div class="vault-section-title">Últimas reviews</div><div class="vault-section-note">Contenido disponible sin iniciar sesión</div></div>
-      <div class="vault-latest-grid"><a class="vault-latest-card" href="reviews/olimpo/"><span class="vault-latest-img"><span>O</span></span><span><span class="vault-latest-kicker">Olimpo Escape Room</span><strong class="vault-latest-name">Olimpo</strong><span class="vault-latest-meta">Review publicada</span></span></a><a class="vault-latest-card" href="reviews/abduction-enterprises/"><span class="vault-latest-img"><span>A</span></span><span><span class="vault-latest-kicker">Abduction</span><strong class="vault-latest-name">Abduction Enterprises</strong><span class="vault-latest-meta">Badalona - Barcelona</span></span></a><a class="vault-latest-card" href="reviews/nunca-jamas/"><span class="vault-latest-img"><span>N</span></span><span><span class="vault-latest-kicker">Key Play</span><strong class="vault-latest-name">Nunca Jamás</strong><span class="vault-latest-meta">Granollers - Barcelona</span></span></a></div>
+      <div class="vault-latest-grid"><a class="vault-latest-card" href="reviews/la-vitrina/"><span class="vault-latest-img"><span>L</span></span><span><span class="vault-latest-kicker">Malorial Experience</span><strong class="vault-latest-name">La Vitrina</strong><span class="vault-latest-meta">Terrassa - Barcelona</span></span></a><a class="vault-latest-card" href="reviews/olimpo/"><span class="vault-latest-img"><span>O</span></span><span><span class="vault-latest-kicker">Olimpo Escape Room</span><strong class="vault-latest-name">Olimpo</strong><span class="vault-latest-meta">Review publicada</span></span></a><a class="vault-latest-card" href="reviews/abduction-enterprises/"><span class="vault-latest-img"><span>A</span></span><span><span class="vault-latest-kicker">Abduction</span><strong class="vault-latest-name">Abduction Enterprises</strong><span class="vault-latest-meta">Badalona - Barcelona</span></span></a></div>
       <!-- STATIC_HOME_END --></div>
     </div>
 
@@ -2298,7 +2298,7 @@
   <footer class="seo-footer" aria-label="Enlaces de reviews">
     <div class="seo-footer-inner">
       <span class="rights">&copy; 2026 The Vault Escape. Todos los derechos reservados.</span>
-      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v51</span>
+      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v52</span>
       <span>Reviews de escape rooms con URL propia</span>
       <a href="ranking-escape-rooms/">Ranking escape rooms España</a>
       <a href="mejores-escape-rooms/">Mejores escape rooms</a>
@@ -2478,6 +2478,7 @@
 <script src="public-profile.js"></script>
 <script src="public-profile-firebase.js"></script>
 <script src="public-profile-fixtures.js"></script>
+<script src="editorial-review-renderer.js"></script>
 <script>
 // ════════════════════════════════════════════════════════════
 //  🔥 CONFIGURACIÓN FIREBASE
@@ -2734,7 +2735,7 @@ let CATALOG_LOAD_PROMISE = null;
 let OFFICIAL_VIDEOS_LOADED = false;
 let OFFICIAL_VIDEOS_LOAD_PROMISE = null;
 let ROOM_RELATIONSHIPS_LOADED = false;
-const FALLBACK_SITE_STATS = {"catalog":1735,"reviews":41,"ranking":948,"locations":44,"updated":"2026-09-21"};
+const FALLBACK_SITE_STATS = {"catalog":1735,"reviews":42,"ranking":948,"locations":44,"updated":"2026-09-27"};
 let PUBLIC_SITE_STATS = { ...FALLBACK_SITE_STATS };
 let STATIC_ENHANCEMENTS_LOADED = false;
 let STATIC_ENHANCEMENTS_PROMISE = null;
@@ -3331,6 +3332,7 @@ function publishedReviewRooms() {
       roomKey: key,
       _adminPublished: true,
       _adminReviewId: id,
+      _editorialPublishedBy: record.publishedBy || '',
       createdAt: record.createdAt || review.createdAt || '',
       publishedAt: record.publishedAt || review.publishedAt || '',
       updatedAt: record.updatedAt || review.updatedAt || ''
@@ -6022,14 +6024,14 @@ function renderSettingsEditHtml(message = '') {
       ${adminReviewField('admin-review-province', 'Provincia', 'Provincia', false, '', editingReview.provincia || '')}
       ${adminReviewField('admin-review-duration', 'Duracion', '60', false, 'inputmode="numeric"', editingReview.duracion || '')}
       ${adminReviewField('admin-review-difficulty', 'Dificultad', 'Media', false, '', editingReview.dificultad || '')}
-      ${adminReviewField('admin-review-rating', 'Valoración grupo', '8.5', false, 'inputmode="decimal"', editingReview.valoracion || '')}
+      ${adminReviewField('admin-review-rating', 'The Vault Score', '8.5', false, 'inputmode="decimal"', editingReview.valoracion || '')}
       ${adminReviewField('admin-review-history', 'Historia', '0-10', false, 'inputmode="decimal"', editingReview.historia || '')}
       ${adminReviewField('admin-review-ambient', 'Ambientacion', '0-10', false, 'inputmode="decimal"', editingReview.ambientacion || '')}
       ${adminReviewField('admin-review-gameplay', 'Jugabilidad', '0-10', false, 'inputmode="decimal"', editingReview.jugabilidad || '')}
       ${adminReviewField('admin-review-gamemaster', 'Game Master', '0-10', false, 'inputmode="decimal"', editingReview.gamemaster || '')}
       <div class="wide">
         <label class="profile-field-label" for="admin-review-text">Texto review</label>
-        <textarea class="profile-textarea" id="admin-review-text" maxlength="10000" placeholder="Review del grupo, sin spoilers.">${escapeHtml(editingReview.descripcion || '')}</textarea>
+        <textarea class="profile-textarea" id="admin-review-text" maxlength="10000" placeholder="Review editorial The Vault, sin spoilers.">${escapeHtml(editingReview.descripcion || '')}</textarea>
       </div>
     </div>
     <div class="profile-row" style="margin-top:10px">
@@ -6075,10 +6077,14 @@ function currentAdminPublishedReview() {
 }
 
 function adminReviewFromForm() {
-  const selectedRoom = adminFindRoomByLabel(adminReviewValue('admin-review-room-search'));
+  const roomLabel = adminReviewValue('admin-review-room-search');
+  const selectedRoom = adminReviewRoomSources().find(room => adminReviewRoomLabel(room) === roomLabel);
+  const canonicalRoom = selectedRoom && CATALOGO.find(room => room.id === selectedRoom.id);
+  if (!canonicalRoom) return { error: 'Selecciona una sala exacta del catálogo antes de guardar o publicar.' };
   const nombre = adminReviewValue('admin-review-name');
   if (!nombre) return { error: 'Falta nombre de sala.' };
   const review = {
+    id: canonicalRoom.id,
     nombre,
     empresa: adminReviewValue('admin-review-company'),
     ciudad: adminReviewValue('admin-review-city'),
@@ -6095,7 +6101,7 @@ function adminReviewFromForm() {
   return {
     selectedRoom,
     review,
-    roomKey: selectedRoom ? reviewRoomKey(selectedRoom) : canonicalReviewRoomKey(userRoomKey(review))
+    roomKey: reviewRoomKey(canonicalRoom)
   };
 }
 
@@ -6103,8 +6109,8 @@ function validateAdminReviewForPublish(form) {
   if (form.error) return form.error;
   const { review, roomKey } = form;
   if (!review.nombre) return 'Falta nombre de sala.';
-  if (review.valoracion === '') return 'Falta la valoracion grupo.';
-  if (review.valoracion < 0 || review.valoracion > 10) return 'La valoracion grupo debe estar entre 0 y 10.';
+  if (review.valoracion === '') return 'Falta The Vault Score.';
+  if (review.valoracion < 0 || review.valoracion > 10) return 'The Vault Score debe estar entre 0 y 10.';
   if (!String(review.descripcion || '').trim()) {
     const ok = confirm('La review no tiene texto. Publicar solo con puntuaciones?');
     if (!ok) return 'Publicación cancelada: falta texto de review.';
@@ -8629,8 +8635,10 @@ function scoreToTen(stars) {
   return Math.round(val * 20) / 10;
 }
 
-function reviewStats(slug) {
-  const reviews = Object.values(reviewsForSlug(slug) || {});
+function reviewStats(slug, editorialRoom = null) {
+  const reviews = Object.entries(reviewsForSlug(slug) || {})
+    .filter(([uid, review]) => !isEditorialCommunityDuplicate(editorialRoom, uid, review))
+    .map(([, review]) => review);
   return REVIEW_CATEGORIES.map(([id, label]) => {
     const vals = reviews.map(review => Number(review?.scores?.[id]) || 0).filter(Boolean);
     const avg = vals.length ? vals.reduce((sum, val) => sum + val, 0) / vals.length : 0;
@@ -8708,15 +8716,34 @@ function reviewFormHtml(room, kind, slug) {
   </div>`;
 }
 
-function reviewSummaryHtml(slug) {
-  const stats = reviewStats(slug);
+function reviewSummaryHtml(slug, editorialRoom = null) {
+  const stats = reviewStats(slug, editorialRoom);
   const hasStats = stats.some(item => item.count);
   if (!hasStats) return '';
   return `<div class="review-summary-grid">${stats.map(item => `<div class="review-summary-item"><div class="review-summary-label">${item.label}</div><div class="review-summary-score">${item.count ? scoreToTen(item.avg).toFixed(1) : '-'}<span class="vote-count">/10</span></div></div>`).join('')}</div>`;
 }
 
-function reviewListHtml(slug) {
-  const reviews = Object.entries(reviewsForSlug(slug) || {}).map(([uid, review]) => ({ uid, ...review })).sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+function isEditorialCommunityDuplicate(room, uid, review) {
+  if (!room?._adminPublished || !room._editorialPublishedBy || uid !== room._editorialPublishedBy) return false;
+  const editorial = String(room.descripcion || '').trim();
+  const community = String(review?.text || '').trim().replace(/\r\n?/g, '\n');
+  return !!editorial && !!community && (community === editorial || community.replace(/\n/g, ' ') === editorial);
+}
+
+function editorialTextForDisplay(room) {
+  const original = String(room?.descripcion || '');
+  if (!room?._adminPublished || original.includes('\n')) return original;
+  const slug = slugify(room.nombre || room.empresa || roomKey(room));
+  const entry = Object.entries(reviewsForSlug(slug) || {})
+    .find(([uid, review]) => isEditorialCommunityDuplicate(room, uid, review));
+  return entry ? String(entry[1].text || '').replace(/\r\n?/g, '\n') : original;
+}
+
+function reviewListHtml(slug, editorialRoom = null) {
+  const reviews = Object.entries(reviewsForSlug(slug) || {})
+    .filter(([uid, review]) => !isEditorialCommunityDuplicate(editorialRoom, uid, review))
+    .map(([uid, review]) => ({ uid, ...review }))
+    .sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
   if (!reviews.length) return '<div class="review-empty">Todavía no hay reseñas de la comunidad.</div>';
   return `<div class="review-list">${reviews.map(review => {
     const scores = REVIEW_CATEGORIES.filter(([id]) => review.scores?.[id]).map(([id, label]) => `<span class="review-score-pill">${label}: ${scoreToTen(review.scores[id]).toFixed(1)}/10</span>`).join('');
@@ -8737,9 +8764,9 @@ function communityReviewsHtml(room, kind) {
   const slug = slugify(room.nombre || room.empresa || roomKey(room));
   return `<section class="community-reviews">
     <div class="detail-section-title">Reseñas de la comunidad</div>
-    ${reviewSummaryHtml(slug)}
+    ${reviewSummaryHtml(slug, room)}
     ${reviewFormHtml(room, kind, slug)}
-    ${reviewListHtml(slug)}
+    ${reviewListHtml(slug, room)}
   </section>`;
 }
 
@@ -10542,45 +10569,8 @@ function escapeHtml(text) {
   }[ch]));
 }
 
-function reviewInlineHtml(text) {
-  return escapeHtml(text)
-    .replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>')
-    .replace(/__([^_\n]+)__/g, '<u>$1</u>')
-    .replace(/_([^_\n]+)_/g, '<em>$1</em>');
-}
-
 function reviewRichTextHtml(value) {
-  const knownHeadings = new Set(['HISTORIA', 'AMBIENTACIÓN', 'AMBIENTACION', 'JUGABILIDAD', 'GAME MASTER', 'EN RESUMEN', 'NUESTRA OPINIÓN', 'NUESTRA OPINION', 'DATOS IMPORTANTES', 'VALORACIÓN THE VAULT', 'VALORACION THE VAULT', 'VEREDICTO THE VAULT', 'THE VAULT SCORE']);
-  const output = [];
-  let paragraph = [];
-  let list = [];
-  const flushParagraph = () => {
-    if (paragraph.length) output.push(`<p>${paragraph.map(reviewInlineHtml).join('<br>')}</p>`);
-    paragraph = [];
-  };
-  const flushList = () => {
-    if (list.length) output.push(`<ul>${list.map(item => `<li>${reviewInlineHtml(item)}</li>`).join('')}</ul>`);
-    list = [];
-  };
-  String(value || '').replace(/\r\n?/g, '\n').split('\n').forEach(rawLine => {
-    const line = rawLine.trim();
-    if (!line) { flushParagraph(); flushList(); return; }
-    const heading = line.match(/^(#{1,3})\s+(.+)$/);
-    const headingCandidate = line.replace(/^[^A-Za-zÁÉÍÓÚÜÑ]+/u, '');
-    if (heading || knownHeadings.has(headingCandidate.toUpperCase())) {
-      flushParagraph(); flushList();
-      const tag = !heading || heading[1].length === 1 ? 'h3' : 'h4';
-      output.push(`<${tag}>${reviewInlineHtml(heading ? heading[2] : line)}</${tag}>`);
-      return;
-    }
-    if (/^---+$/.test(line)) { flushParagraph(); flushList(); output.push('<hr>'); return; }
-    const bullet = line.match(/^[-•]\s+(.+)$/);
-    if (bullet) { flushParagraph(); list.push(bullet[1]); return; }
-    flushList();
-    paragraph.push(line);
-  });
-  flushParagraph(); flushList();
-  return output.join('');
+  return TheVaultEditorialReview.renderEditorialReview(value);
 }
 
 function jsString(text) {
@@ -10991,13 +10981,13 @@ function legacyReviewScoreMeta(room) {
 function reviewBlockHtml(room) {
   const hasReview = !!(room.descripcion || room.historia || room.ambientacion || room.jugabilidad || room.gamemaster);
   if (!hasReview) return '';
-  const title = room._arkkadiaCommunityReview
+  const title = room._adminPublished ? 'Review The Vault' : room._arkkadiaCommunityReview
     ? `Review Arkkadia${room._reviewAuthorName ? ` - ${escapeHtml(room._reviewAuthorName)}` : ''}`
     : 'Review del grupo';
   return `
     <div class="detail-section-title">${title}</div>
     <div class="detail-review">
-      <div class="detail-review-text rich ${!room.descripcion ? 'empty' : ''}">${reviewRichTextHtml(room.descripcion || 'Sin opinión añadida aún.')}</div>
+      <div class="detail-review-text rich ${!room.descripcion ? 'empty' : ''}">${reviewRichTextHtml(editorialTextForDisplay(room) || 'Sin opinión añadida aún.')}</div>
       ${(room.historia || room.ambientacion || room.jugabilidad || room.gamemaster) ? `
       <div class="detail-section-title" style="margin-top:14px">Valoración por categorías</div>
       <div class="detail-cats">
@@ -11186,7 +11176,7 @@ function openDetail(kind, key, options = {}) {
   const rating = displayRating(room);
   const players = playerLabel(room);
   const price = priceLabel(room);
-  const sourceLabel = kind === 'catalogo' ? 'Catalogo general' : kind === 'hechos' ? (room._arkkadiaCommunityReview ? 'Review Arkkadia' : 'Review del grupo') : 'Pendiente';
+  const sourceLabel = kind === 'catalogo' ? 'Catalogo general' : kind === 'hechos' ? (room._adminPublished ? 'Review The Vault' : room._arkkadiaCommunityReview ? 'Review Arkkadia' : 'Review del grupo') : 'Pendiente';
   const location = [cleanValue(room.ciudad), cleanValue(room.provincia), cleanValue(communityOf(room))].filter(Boolean).join(' - ');
   const isReview = kind === 'hechos';
   const synopsis = !isReview ? escapeHtml(room.descripcion || 'Sin sinopsis') : '';

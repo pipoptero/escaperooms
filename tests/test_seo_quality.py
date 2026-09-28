@@ -3,6 +3,8 @@ import json
 import re
 import unittest
 from pathlib import Path
+from urllib.parse import urlparse
+from xml.etree import ElementTree
 
 
 SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "build_seo_pages.py"
@@ -24,12 +26,38 @@ class SeoQualityTest(unittest.TestCase):
         index_html = (root / "reviews" / "index.html").read_text(encoding="utf-8")
         home_html = (root / "index.html").read_text(encoding="utf-8")
         sitemap = (root / "sitemap-reviews.xml").read_text(encoding="utf-8")
-        self.assertEqual(len(registry), 41)
+        data = json.loads((root / "data.json").read_text(encoding="utf-8"))
+        canonical_rooms = MODULE.published_review_rooms(data)
+        catalog_ids = [room.get("id") for room in canonical_rooms]
+        canonical_ids = [MODULE.room_identity(room) for room in canonical_rooms]
+        slugs = {MODULE.room_url_slug(room) for room in canonical_rooms}
+        card_slugs = set(re.findall(r'href="https://thevaultescape\.com/reviews/([^/]+)/" data-review-card', index_html))
+        sitemap_slugs = {
+            urlparse(node.text or "").path.strip("/").split("/")[-1]
+            for node in ElementTree.fromstring(sitemap).iter()
+            if node.tag.endswith("loc") and "/reviews/" in (node.text or "")
+        }
+        self.assertGreater(len(registry), 0)
+        self.assertEqual(len(canonical_rooms), len(registry))
+        self.assertEqual(len(set(catalog_ids)), len(registry))
+        self.assertNotIn(None, catalog_ids)
+        self.assertEqual(len(set(canonical_ids)), len(registry))
+        self.assertEqual(len(slugs), len(registry))
+        self.assertIn('la_vitrina', registry)
         self.assertEqual(stats["reviews"], len(registry))
         self.assertEqual(len(review_pages), len(registry))
         self.assertEqual(index_html.count("data-review-card "), len(registry))
+        self.assertEqual(slugs, review_pages)
+        self.assertEqual(slugs, card_slugs)
+        self.assertEqual(slugs, sitemap_slugs)
         self.assertIn("Abduction Enterprises", index_html)
+        self.assertIn("La Vitrina", index_html)
         self.assertIn("/reviews/abduction-enterprises/", sitemap)
+        self.assertIn("/reviews/la-vitrina/", sitemap)
+        vitrina_page = (root / "reviews" / "la-vitrina" / "index.html").read_text(encoding="utf-8")
+        self.assertIn("HISTORIA", vitrina_page)
+        self.assertIn("NUESTRA OPINIÓN", vitrina_page)
+        self.assertGreater(vitrina_page.count("<p>"), 20)
         self.assertIn("function publicReviewCount()", home_html)
         nav_count = int(re.search(r'id="badge-hecho">(\d+)<', home_html).group(1))
         home_count = int(re.search(r'id="vault-stat-reviews">(\d+)<', home_html).group(1))

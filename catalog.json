@@ -29055,15 +29055,17 @@
       "max_personas": 6,
       "terror": true,
       "edad_recomendada": 16,
-      "descripcion": "Escape de terror ambientado en 1910 dentro de una inquietante galería de arte vinculada al artista Leandro Mourier. El grupo es convocado como tasador de una colección privada y se encuentra con una experiencia que combina narrativa, interpretación y enigmas.",
-      "fuente_tipo": "web_oficial",
+      "descripcion": "Escape de terror ambientado en 1910 dentro de una inquietante galería de arte vinculada al artista Leandro Mourier. El grupo es convocado como tasador de una colección privada y se encuentra con una experiencia que combina narrativa, interpretación y enigmas. Una carta sin remitente. Un sobre antiguo. El papel, frío. La tinta, oscura. La firma… desconocida. En su interior, una invitación a una exposición clausurada hace más de un siglo. La última exposición de Leandro Mourier. Su nombre apenas aparece en los registros. La gente se niega a hablar de ello, y los pocos que lo mencionan lo hacen entre susurros, como si pronunciarlo demasiado alto pudiera despertar algo. Se cuentan historias sobre él… rumores de obsesión, de piezas que nunca llegaron a exhibirse. No sabes cómo esta carta ha llegado hasta ti ni quién ha recomendado tu nombre. Solo sabes que, de algún modo, te han elegido. Como tasador de obras de arte, se te convoca a valorar esta colección antes de una posible venta privada. Las puertas están a punto de abrirse y, esta vez, el arte no se limitará a ser observado.",
+      "fuente_tipo": "edicion_manual_panel_local",
       "fuente_url": "https://malorialexperience.com/",
-      "fuente_revisada": "2026-08-07",
+      "fuente_revisada": "2026-09-27",
       "imagen": "images/catalgo_propio_web_escape/optimized/la-vitrina.jpg",
       "rating": null,
       "votos": null,
       "verificado": true,
-      "estado_verificacion": "verificada"
+      "estado_verificacion": "verificada",
+      "sinopsis_editada_manualmente": true,
+      "sinopsis_editada_fecha": "2026-09-27"
     },
     {
       "id": "la-viuda-negra",
@@ -43637,7 +43639,7 @@
   ],
   "meta": {
     "generated_at": "2026-08-08",
-    "updated_at": "2026-09-02T08:22:11",
+    "updated_at": "2026-09-27T20:53:32",
     "source": "webs oficiales verificadas",
     "source_policy": "webs oficiales exclusivamente",
     "images_policy": "placeholder",
