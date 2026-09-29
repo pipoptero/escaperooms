@@ -231,7 +231,7 @@ class FirebaseAuthHelperTests(unittest.TestCase):
         source = (ROOT / "service-worker.js").read_text(encoding="utf-8")
         bypass = "url.pathname.startsWith('/__/auth/') || url.pathname === '/__/firebase/init.json'"
         self.assertIn(bypass, source)
-        self.assertIn("the-vault-v52-auth-helpers", source)
+        self.assertIn("the-vault-v53", source)
         self.assertLess(source.index(bypass), source.index("request.mode === 'navigate'"))
         app_shell = source[source.index("const APP_SHELL"):source.index("const DATA_FILES")]
         self.assertNotIn("__/auth", app_shell)
@@ -240,8 +240,17 @@ class FirebaseAuthHelperTests(unittest.TestCase):
     def test_same_origin_candidate_is_documented_and_not_part_of_pages_artifact(self):
         plan = (ROOT / "docs/FIREBASE_AUTH_SAME_ORIGIN.md").read_text(encoding="utf-8")
         self.assertIn("authDomain    thevaultescape.com", plan)
+        candidate = (ROOT / "firebase-config.same-origin.example.js").read_text(encoding="utf-8")
+        self.assertIn("authDomain: 'thevaultescape.com'", candidate)
+        self.assertIn("projectId: 'scapesrooms'", candidate)
+        self.assertIn("<EXISTING_FIREBASE_API_KEY>", candidate)
+        html = (ROOT / "index.html").read_text(encoding="utf-8")
+        self.assertIn('<script src="firebase-config.js?v=53"></script>', html)
+        self.assertIn('>PWA v53</span>', html)
         workflow = (ROOT / ".github/workflows/deploy-pages.yml").read_text(encoding="utf-8")
         self.assertNotIn("firebase-config.same-origin.example.js", workflow)
+        self.assertIn("authDomain: 'thevaultescape.com'", workflow)
+        self.assertNotIn("secrets.FIREBASE_AUTH_DOMAIN", workflow)
 
 
 if __name__ == "__main__":

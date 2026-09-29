@@ -34,7 +34,6 @@ jobs:
       - name: Validate Firebase secrets
         run: |
           test -n "${{ secrets.FIREBASE_API_KEY }}" || (echo "Falta FIREBASE_API_KEY" && exit 1)
-          test -n "${{ secrets.FIREBASE_AUTH_DOMAIN }}" || (echo "Falta FIREBASE_AUTH_DOMAIN" && exit 1)
           test -n "${{ secrets.FIREBASE_PROJECT_ID }}" || (echo "Falta FIREBASE_PROJECT_ID" && exit 1)
           test -n "${{ secrets.FIREBASE_APP_ID }}" || (echo "Falta FIREBASE_APP_ID" && exit 1)
           test -n "${{ secrets.FIREBASE_DATABASE_URL }}" || (echo "Falta FIREBASE_DATABASE_URL" && exit 1)
@@ -45,7 +44,7 @@ jobs:
           cat > public-site/firebase-config.js <<'EOF'
           window.THE_VAULT_FIREBASE_CONFIG = {
             apiKey: '${{ secrets.FIREBASE_API_KEY }}',
-            authDomain: '${{ secrets.FIREBASE_AUTH_DOMAIN }}',
+            authDomain: 'thevaultescape.com',
             projectId: '${{ secrets.FIREBASE_PROJECT_ID }}',
             appId: '${{ secrets.FIREBASE_APP_ID }}',
             databaseURL: '${{ secrets.FIREBASE_DATABASE_URL }}'

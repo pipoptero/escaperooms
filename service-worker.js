@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'the-vault-v52-auth-helpers';
+const CACHE_VERSION = 'the-vault-v53';
 const APP_SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 

@@ -569,7 +569,9 @@ class PendingModalTest(unittest.TestCase):
         page.locator('#saved-route-name').fill('Vitoria 2027')
         page.locator('#saved-route-date').fill('2027-04-10')
         page.locator('#saved-route-modal').get_by_role('button', name='Guardar ruta', exact=True).click()
-        page.wait_for_function("Object.values(USER_ROUTES).some(route => route.name === 'Vitoria 2027')", timeout=60_000)
+        # WebKit can pause requestAnimationFrame while replacing the save modal;
+        # use interval polling for this asynchronous persistence assertion.
+        page.wait_for_function("Object.values(USER_ROUTES).some(route => route.name === 'Vitoria 2027')", polling=100, timeout=60_000)
         route = next(iter(self.db['userRoutes']['a'].values()))
         self.assertEqual(route['scope'], 'personal')
         self.assertEqual(len(route['roomIds']), 3)
@@ -818,12 +820,17 @@ class PendingModalTest(unittest.TestCase):
           desktop:authMethodForContext({embedded:false,standalone:false,requested:''}),
           mobileBrowser:authMethodForContext({embedded:false,standalone:false,requested:''}),
           standaloneDefault:authMethodForContext({embedded:false,standalone:true,requested:''}),
-          standalonePopup:authMethodForContext({embedded:false,standalone:true,requested:'popup'}),
-          standaloneRedirect:authMethodForContext({embedded:false,standalone:true,requested:'redirect'})
+          standaloneCrossOrigin:authMethodForContext({embedded:false,standalone:true,sameOriginHelper:false}),
+          standaloneSameOrigin:authMethodForContext({embedded:false,standalone:true,sameOriginHelper:true}),
+          embedded:authMethodForContext({embedded:true,standalone:true,sameOriginHelper:true}),
+          candidateSameOrigin:usesSameOriginAuthHelper('thevaultescape.com','https://thevaultescape.com'),
+          legacyCrossOrigin:usesSameOriginAuthHelper('scapesrooms.firebaseapp.com','https://thevaultescape.com')
         })""")
         self.assertEqual(methods, {
             'desktop': 'popup', 'mobileBrowser': 'popup', 'standaloneDefault': 'popup',
-            'standalonePopup': 'popup', 'standaloneRedirect': 'popup'
+            'standaloneCrossOrigin': 'popup', 'standaloneSameOrigin': 'redirect',
+            'embedded': 'blocked-embedded-browser', 'candidateSameOrigin': True,
+            'legacyCrossOrigin': False
         })
 
         init_result = page.evaluate("""async () => {
@@ -848,6 +855,7 @@ class PendingModalTest(unittest.TestCase):
           return authDebugSnapshot();
         }""")
         self.assertEqual(init_result['persistence'], 'LOCAL')
+        self.assertEqual(init_result['redirectResult'], 'null')
         self.assertTrue(any(event['phase'] == 'getRedirectResult' and event['status'] == 'null' for event in init_result['events']))
         self.assertTrue(any(event['phase'] == 'onAuthStateChanged' and event['status'] == 'fired' and event['detail'] == 'null' for event in init_result['events']))
 
@@ -862,6 +870,63 @@ class PendingModalTest(unittest.TestCase):
         }""")
         self.assertEqual(legacy_redirect['state'], 'authenticated')
         self.assertTrue(any(event['phase'] == 'getRedirectResult' and event['status'] == 'success' for event in legacy_redirect['events']))
+
+        current_redirect = page.evaluate("""async () => {
+          const user={uid:'redirect-private-user',getIdToken:async()=> 'redirect-private-token'};
+          FIREBASE_AUTH.currentUser=user;
+          FIREBASE_AUTH.getRedirectResult=async()=>({user});
+          FIREBASE_AUTH.onAuthStateChanged=callback=>{setTimeout(()=>callback(user),0);return ()=>{};};
+          AUTH_REDIRECT_CHECKED=false;
+          sessionStorage.setItem('vault-auth-redirect-pending','1');
+          await initFirebaseAuth();
+          return authDebugSnapshot();
+        }""")
+        self.assertEqual(current_redirect['authFlowState'], 'authenticated')
+        self.assertEqual(current_redirect['redirectResult'], 'success')
+        self.assertFalse(current_redirect['redirectPending'])
+        self.assertNotIn('redirect-private-user', json.dumps(current_redirect))
+        self.assertNotIn('redirect-private-token', json.dumps(current_redirect))
+
+        redirect_error = page.evaluate("""async () => {
+          FIREBASE_AUTH.currentUser=null;
+          FIREBASE_AUTH.getRedirectResult=async()=>{throw Object.assign(new Error('unsafe person@example.com'),{code:'auth/unauthorized-domain'});};
+          FIREBASE_AUTH.onAuthStateChanged=callback=>{setTimeout(()=>callback(null),0);return ()=>{};};
+          AUTH_REDIRECT_CHECKED=false;
+          sessionStorage.setItem('vault-auth-redirect-pending','1');
+          await initFirebaseAuth();
+          return authDebugSnapshot();
+        }""")
+        self.assertEqual(redirect_error['authFlowState'], 'error')
+        self.assertEqual(redirect_error['authError'], 'auth/unauthorized-domain')
+        self.assertEqual(redirect_error['redirectResult'], 'error:auth/unauthorized-domain')
+        self.assertFalse(redirect_error['redirectPending'])
+        self.assertNotIn('person@example.com', json.dumps(redirect_error))
+
+        no_result = page.evaluate("""async () => {
+          FIREBASE_AUTH.getRedirectResult=async()=>null;
+          AUTH_REDIRECT_CHECKED=false;
+          sessionStorage.setItem('vault-auth-redirect-pending','1');
+          await initFirebaseAuth();
+          return authDebugSnapshot();
+        }""")
+        self.assertEqual(no_result['authFlowState'], 'error')
+        self.assertEqual(no_result['authError'], 'auth/redirect-no-result')
+        self.assertFalse(no_result['redirectPending'])
+
+        existing_session = page.evaluate("""async () => {
+          const user={uid:'existing-private-user',getIdToken:async()=> 'existing-private-token'};
+          FIREBASE_AUTH.currentUser=user;
+          FIREBASE_AUTH.getRedirectResult=async()=>null;
+          FIREBASE_AUTH.onAuthStateChanged=callback=>{setTimeout(()=>callback(user),0);return ()=>{};};
+          AUTH_REDIRECT_CHECKED=false;
+          sessionStorage.setItem('vault-auth-redirect-pending','1');
+          await initFirebaseAuth();
+          return authDebugSnapshot();
+        }""")
+        self.assertEqual(existing_session['authFlowState'], 'authenticated')
+        self.assertFalse(existing_session['redirectPending'])
+        self.assertNotIn('existing-private-user', json.dumps(existing_session))
+        self.assertNotIn('existing-private-token', json.dumps(existing_session))
 
         popup_result = page.evaluate("""async () => {
           let popup=0, redirect=0;
@@ -960,10 +1025,100 @@ class PendingModalTest(unittest.TestCase):
         self.assertEqual((legacy_override_result['popup'], legacy_override_result['redirect'], legacy_override_result['state']), (1, 0, 'authenticated'))
         self.assertFalse(any(event['phase'] == 'signInWithRedirect' for event in legacy_override_result['events']))
 
+    def test_stage_b_standalone_redirect_marker_errors_and_navigation_guard(self):
+        page = self.context.new_page()
+        page.goto(self.url, wait_until='load')
+        outcome = page.evaluate("""async () => {
+          const calls=[];
+          const auth={
+            currentUser:null,
+            setPersistence:async mode=>{calls.push(`persistence:${mode}`);},
+            getRedirectResult:async()=>null,
+            onAuthStateChanged:callback=>{setTimeout(()=>callback(null),0);return ()=>{};},
+            signInWithPopup:async()=>{calls.push('popup');throw new Error('popup must not run');},
+            signInWithRedirect:async()=>{calls.push('redirect');}
+          };
+          const authFactory=()=>auth;
+          authFactory.Auth={Persistence:{LOCAL:'local'}};
+          authFactory.GoogleAuthProvider=function(){};
+          window.firebase={apps:[],initializeApp:()=>({}),auth:authFactory};
+          firebaseAuthConfigured=()=>true;
+          FIREBASE_APP=null; FIREBASE_AUTH=null; GOOGLE_PROVIDER=null; AUTH_REDIRECT_CHECKED=false;
+          await initFirebaseAuth();
+          isStandaloneApp=()=>true;
+          usesSameOriginAuthHelper=()=>true;
+          const realRedirectGuard=armRedirectNavigationGuard;
+          armRedirectNavigationGuard=()=>{calls.push('guard');};
+          await signInGoogle();
+          const started={calls:[...calls],state:AUTH_FLOW_STATE,pending:sessionStorage.getItem('vault-auth-redirect-pending'),result:AUTH_REDIRECT_RESULT_STATUS,
+            popupTimeout:AUTH_DEBUG_EVENTS.some(event=>event.phase==='signInWithPopup' && event.status==='timeout')};
+          auth.signInWithRedirect=async()=>{throw Object.assign(new Error('unsafe person@example.com'),{code:'auth/unauthorized-domain'});};
+          await signInGoogle();
+          const rejected={state:AUTH_FLOW_STATE,error:AUTH_FLOW_ERROR,pending:sessionStorage.getItem('vault-auth-redirect-pending'),result:AUTH_REDIRECT_RESULT_STATUS};
+          sessionStorage.setItem('vault-auth-redirect-pending','1');
+          setAuthFlowState('redirecting');
+          realRedirectGuard(10);
+          await new Promise(resolve=>setTimeout(resolve,40));
+          const navigationTimeout={state:AUTH_FLOW_STATE,error:AUTH_FLOW_ERROR,pending:sessionStorage.getItem('vault-auth-redirect-pending')};
+          return {started,rejected,navigationTimeout,diagnostic:JSON.stringify(authDebugSnapshot())};
+        }""")
+        self.assertEqual(outcome['started']['calls'], ['persistence:local', 'redirect', 'guard'])
+        self.assertEqual(outcome['started']['state'], 'redirecting')
+        self.assertEqual(outcome['started']['pending'], '1')
+        self.assertEqual(outcome['started']['result'], 'pending')
+        self.assertFalse(outcome['started']['popupTimeout'])
+        self.assertEqual(outcome['rejected']['state'], 'error')
+        self.assertEqual(outcome['rejected']['error'], 'auth/unauthorized-domain')
+        self.assertIsNone(outcome['rejected']['pending'])
+        self.assertEqual(outcome['rejected']['result'], 'error:auth/unauthorized-domain')
+        self.assertEqual(outcome['navigationTimeout']['state'], 'error')
+        self.assertEqual(outcome['navigationTimeout']['error'], 'auth/redirect-navigation-timeout')
+        self.assertIsNone(outcome['navigationTimeout']['pending'])
+        self.assertNotIn('person@example.com', outcome['diagnostic'])
+
+    def test_stage_b_candidate_origin_and_diagnostic_without_remote_auth(self):
+        context = self.browser.new_context(service_workers='block')
+        def local_candidate(route):
+            path = urlparse(route.request.url).path
+            if path == '/':
+                return route.fulfill(content_type='text/html', body=(ROOT / 'index.html').read_text(encoding='utf-8'))
+            if path == '/firebase-config.js':
+                return route.fulfill(content_type='application/javascript', body=(
+                    "window.THE_VAULT_FIREBASE_CONFIG={databaseURL:'https://test.invalid',"
+                    "apiKey:'test-key',authDomain:'thevaultescape.com',projectId:'scapesrooms',appId:'test-app'};"
+                ))
+            if path == '/service-worker.js':
+                return route.fulfill(content_type='application/javascript', body=(ROOT / 'service-worker.js').read_text(encoding='utf-8'))
+            route.abort()
+        context.route('**/*', local_candidate)
+        try:
+            page = context.new_page()
+            page.goto('https://thevaultescape.com/', wait_until='domcontentloaded')
+            diagnostic = page.evaluate("""async () => {
+              isStandaloneApp=()=>true;
+              AUTH_DEBUG_ENABLED=true;
+              await probeAuthDebugEnvironment();
+              return authDebugSnapshot();
+            }""")
+            self.assertEqual(diagnostic['authDomain'], 'thevaultescape.com')
+            self.assertEqual(diagnostic['projectId'], 'scapesrooms')
+            self.assertEqual(diagnostic['redirectHelper'], 'https://thevaultescape.com/__/auth/handler')
+            self.assertEqual(diagnostic['helperOrigin'], 'https://thevaultescape.com')
+            self.assertEqual(diagnostic['appOrigin'], 'https://thevaultescape.com')
+            self.assertTrue(diagnostic['sameOriginHelper'])
+            self.assertEqual(diagnostic['selectedMethod'], 'redirect')
+            self.assertEqual(diagnostic['serviceWorkerVersion'], 'the-vault-v53')
+            self.assertEqual(diagnostic['persistence'], 'not-initialized')
+            for field in ('href', 'displayModeStandalone', 'navigatorStandalone', 'authFlowState',
+                          'redirectPending', 'redirectResult', 'authError'):
+                self.assertIn(field, diagnostic)
+        finally:
+            context.close()
+
     def test_standalone_popup_recovery_retry_external_browser_and_hidden_debug_gesture(self):
         page = self.context.new_page()
         page.goto(self.url, wait_until='load')
-        expect(page.locator('#pwa-version')).to_have_text('PWA v52')
+        expect(page.locator('#pwa-version')).to_have_text('PWA v53')
         for _ in range(5):
             page.locator('#pwa-version').click()
         self.assertEqual(page.locator('#auth-debug-panel').count(), 0)
@@ -972,6 +1127,11 @@ class PendingModalTest(unittest.TestCase):
         for _ in range(5):
             page.locator('#pwa-version').click()
         expect(page.locator('#auth-debug-panel')).to_be_visible()
+        panel_widths = page.evaluate("""() => {
+          const panel = document.getElementById('auth-debug-panel');
+          return {scroll:panel.scrollWidth,client:panel.clientWidth};
+        }""")
+        self.assertLessEqual(panel_widths['scroll'], panel_widths['client'] + 1)
         gesture = page.evaluate("""() => ({
           enabled:AUTH_DEBUG_ENABLED,
           event:AUTH_DEBUG_EVENTS.find(item => item.phase === 'diagnostic' && item.detail === 'standalone-version-5-taps')

@@ -2036,10 +2036,10 @@
 .pending-destination:disabled{opacity:.6;cursor:default;}
 .pending-destination span{font-size:.8rem;color:var(--text2);}
 #pending-choice-error,#played-at-choice-error{color:#ff8989;}
-#auth-debug-panel{position:fixed;z-index:5000;right:max(10px,env(safe-area-inset-right));bottom:max(10px,env(safe-area-inset-bottom));width:min(520px,calc(100vw - 20px));max-height:min(72vh,680px);display:grid;grid-template-rows:auto minmax(0,1fr);border:1px solid #80d34b;background:rgba(8,10,8,.98);color:#eef7e8;box-shadow:0 18px 55px rgba(0,0,0,.72);font-family:'Share Tech Mono',monospace;}
-.auth-debug-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 10px;border-bottom:1px solid rgba(128,211,75,.28);font-size:.68rem;letter-spacing:.08em;}
+#auth-debug-panel{position:fixed;z-index:5000;right:max(10px,env(safe-area-inset-right));bottom:max(10px,env(safe-area-inset-bottom));width:min(520px,calc(100vw - 20px));max-height:min(72vh,680px);display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);border:1px solid #80d34b;background:rgba(8,10,8,.98);color:#eef7e8;box-shadow:0 18px 55px rgba(0,0,0,.72);font-family:'Share Tech Mono',monospace;}
+.auth-debug-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:9px 10px;border-bottom:1px solid rgba(128,211,75,.28);font-size:.68rem;letter-spacing:.08em;min-width:0;}
 .auth-debug-head button{border:1px solid rgba(128,211,75,.48);background:#11170f;color:#ffca55;padding:7px 9px;font:inherit;cursor:pointer;}
-#auth-debug-output{margin:0;padding:10px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.62rem;line-height:1.45;color:#d8e6d1;}
+#auth-debug-output{margin:0;padding:10px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.62rem;line-height:1.45;color:#d8e6d1;min-width:0;}
 .pwa-version{display:inline-block;user-select:none;-webkit-user-select:none;touch-action:manipulation;}
 </style>
 </head>
@@ -2299,7 +2299,7 @@
   <footer class="seo-footer" aria-label="Enlaces de reviews">
     <div class="seo-footer-inner">
       <span class="rights">&copy; 2026 The Vault Escape. Todos los derechos reservados.</span>
-      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v52</span>
+      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v53</span>
       <span>Reviews de escape rooms con URL propia</span>
       <a href="ranking-escape-rooms/">Ranking escape rooms España</a>
       <a href="mejores-escape-rooms/">Mejores escape rooms</a>
@@ -2472,7 +2472,7 @@
     </div>
   </div>
 </div>
-<script src="firebase-config.js"></script>
+<script src="firebase-config.js?v=53"></script>
 <script src="room-state.js"></script>
 <script src="route-planner.js"></script>
 <script src="saved-routes.js"></script>
@@ -2520,7 +2520,9 @@ let FIREBASE_APP = null;
 let AUTH_FLOW_STATE = 'idle';
 let AUTH_FLOW_ERROR = '';
 let AUTH_REDIRECT_CHECKED = false;
+let AUTH_REDIRECT_RESULT_STATUS = 'not-checked';
 const AUTH_FLOW_TIMEOUT_MS = 15000;
+const AUTH_REDIRECT_NAVIGATION_TIMEOUT_MS = 30000;
 let FIREBASE_AUTH = null;
 let GOOGLE_PROVIDER = null;
 let AUTH_PENDING_PHASE = '';
@@ -3468,8 +3470,25 @@ function isStandaloneApp() {
   return window.matchMedia?.('(display-mode: standalone)').matches || window.navigator.standalone === true;
 }
 
-function authMethodForContext({ embedded = isEmbeddedSocialBrowser(), standalone = isStandaloneApp(), requested = AUTH_DEBUG_REQUESTED_METHOD } = {}) {
+function firebaseAuthHelperOrigin(authDomain = FIREBASE_CONFIG.authDomain) {
+  const domain = String(authDomain || '').trim();
+  if (!/^[a-z0-9.-]+(?::\d+)?$/i.test(domain)) return '';
+  try {
+    const protocol = /^(localhost|127\.0\.0\.1)(:\d+)?$/i.test(domain) ? window.location.protocol : 'https:';
+    return new URL(`${protocol}//${domain}`).origin;
+  } catch (_) {
+    return '';
+  }
+}
+
+function usesSameOriginAuthHelper(authDomain = FIREBASE_CONFIG.authDomain, appOrigin = window.location.origin) {
+  const helperOrigin = firebaseAuthHelperOrigin(authDomain);
+  return !!helperOrigin && helperOrigin === appOrigin;
+}
+
+function authMethodForContext({ embedded = isEmbeddedSocialBrowser(), standalone = isStandaloneApp(), sameOriginHelper = usesSameOriginAuthHelper() } = {}) {
   if (embedded) return 'blocked-embedded-browser';
+  if (standalone && sameOriginHelper) return 'redirect';
   return 'popup';
 }
 
@@ -3514,6 +3533,7 @@ function authDebugStorageProbe(storage, key) {
 }
 
 function authDebugSnapshot() {
+  const helperOrigin = firebaseAuthHelperOrigin();
   return {
     href: sanitizeAuthDebugUrl(),
     displayModeStandalone: !!window.matchMedia?.('(display-mode: standalone)').matches,
@@ -3523,9 +3543,13 @@ function authDebugSnapshot() {
     requestedMethod: AUTH_DEBUG_REQUESTED_METHOD || 'none',
     authDomain: FIREBASE_CONFIG.authDomain || 'missing',
     projectId: FIREBASE_CONFIG.projectId || 'missing',
-    redirectHelper: FIREBASE_CONFIG.authDomain ? `https://${FIREBASE_CONFIG.authDomain}/__/auth/handler` : 'missing',
+    redirectHelper: helperOrigin ? `${helperOrigin}/__/auth/handler` : 'missing',
+    helperOrigin: helperOrigin || 'missing',
     appOrigin: window.location.origin,
-    crossOriginHelper: !!FIREBASE_CONFIG.authDomain && FIREBASE_CONFIG.authDomain !== window.location.host,
+    sameOriginHelper: !!helperOrigin && helperOrigin === window.location.origin,
+    crossOriginHelper: !!helperOrigin && helperOrigin !== window.location.origin,
+    redirectPending: sessionStorage.getItem('vault-auth-redirect-pending') === '1',
+    redirectResult: AUTH_REDIRECT_RESULT_STATUS,
     persistence: AUTH_PERSISTENCE_MODE,
     authFlowState: AUTH_FLOW_STATE,
     authError: sanitizeAuthDebugText(AUTH_FLOW_ERROR || 'none'),
@@ -3836,21 +3860,26 @@ async function initFirebaseAuth() {
     authDebugLog('persistence', 'success', AUTH_PERSISTENCE_MODE);
   }
   ensureAuthDebugObserver();
+  let redirectFailureCode = '';
   if (!AUTH_REDIRECT_CHECKED) {
     AUTH_REDIRECT_CHECKED = true;
     const redirectPending = sessionStorage.getItem('vault-auth-redirect-pending') === '1';
     if (redirectPending) setAuthFlowState('redirecting');
     try {
+      AUTH_REDIRECT_RESULT_STATUS = 'checking';
       authDebugLog('getRedirectResult', 'start', redirectPending ? 'pending-flag-present' : 'no-pending-flag');
       const redirectResult = await withAuthTimeout(FIREBASE_AUTH.getRedirectResult(), AUTH_FLOW_TIMEOUT_MS, 'getRedirectResult');
+      AUTH_REDIRECT_RESULT_STATUS = redirectResult?.user ? 'success' : 'null';
       authDebugLog('getRedirectResult', redirectResult?.user ? 'success' : 'null');
       sessionStorage.removeItem('vault-auth-redirect-pending');
+      if (redirectPending && !redirectResult?.user) redirectFailureCode = 'auth/redirect-no-result';
     } catch (error) {
+      AUTH_REDIRECT_RESULT_STATUS = `error:${sanitizeAuthDebugText(error?.code || 'unknown')}`;
       authDebugLog('getRedirectResult', 'error', `${error?.code || 'unknown'}: ${error?.message || ''}`);
       sessionStorage.removeItem('vault-auth-redirect-pending');
       if (redirectPending || error?.code !== 'auth/no-auth-event') {
-        setAuthFailureState(error);
-        return null;
+        redirectFailureCode = error?.code || 'auth/redirect-error';
+        setAuthFlowState('error', redirectFailureCode);
       }
     }
   }
@@ -3860,7 +3889,7 @@ async function initFirebaseAuth() {
       AUTH_USER = user;
       USER_ID = user ? user.uid : LOCAL_USER_ID;
       AUTH_TOKEN = user ? await user.getIdToken() : '';
-      setAuthFlowState(user ? 'authenticated' : (AUTH_FLOW_STATE === 'connecting' ? 'connecting' : 'unauthenticated'));
+      setAuthFlowState(user ? 'authenticated' : (redirectFailureCode ? 'error' : 'unauthenticated'), user ? '' : redirectFailureCode);
       renderAuthStatus();
       off();
       resolve(user);
@@ -8256,6 +8285,29 @@ async function migrateAnonymousDataToAccount() {
   writeStoredFavs();
 }
 
+function armRedirectNavigationGuard(timeoutMs = AUTH_REDIRECT_NAVIGATION_TIMEOUT_MS) {
+  const startedAt = Date.now();
+  let timer;
+  const cancel = () => {
+    clearTimeout(timer);
+    window.removeEventListener('pagehide', cancel);
+    document.removeEventListener('visibilitychange', check);
+  };
+  const check = () => {
+    if (Date.now() - startedAt < timeoutMs || document.visibilityState !== 'visible') return;
+    cancel();
+    if (AUTH_FLOW_STATE !== 'redirecting' || sessionStorage.getItem('vault-auth-redirect-pending') !== '1') return;
+    sessionStorage.removeItem('vault-auth-redirect-pending');
+    AUTH_REDIRECT_RESULT_STATUS = 'error:auth/redirect-navigation-timeout';
+    authDebugLog('redirect', 'navigation-timeout');
+    setAuthFlowState('error', 'auth/redirect-navigation-timeout');
+  };
+  window.addEventListener('pagehide', cancel, { once: true });
+  document.addEventListener('visibilitychange', check);
+  timer = setTimeout(check, timeoutMs);
+  return cancel;
+}
+
 async function signInGoogle() {
   if (!firebaseAuthConfigured()) {
     alert('Falta rellenar FIREBASE_CONFIG en index.html.');
@@ -8285,6 +8337,16 @@ async function signInGoogle() {
       setAuthFlowState('error', 'embedded-browser');
       return;
     }
+    if (selectedMethod === 'redirect') {
+      sessionStorage.setItem('vault-auth-redirect-pending', '1');
+      AUTH_REDIRECT_RESULT_STATUS = 'pending';
+      setAuthFlowState('redirecting');
+      authDebugLog('redirect', 'requested');
+      await FIREBASE_AUTH.signInWithRedirect(GOOGLE_PROVIDER);
+      authDebugLog('redirect', 'dispatched');
+      armRedirectNavigationGuard();
+      return;
+    }
     authDebugLog('popup', 'requested');
     const popupPromise = FIREBASE_AUTH.signInWithPopup(GOOGLE_PROVIDER);
     authDebugLog('popup', 'opened');
@@ -8293,8 +8355,10 @@ async function signInGoogle() {
   } catch(e) {
     console.error('Error al iniciar sesión con Google:', e);
     const cancelledCodes = new Set(['auth/popup-closed-by-user', 'auth/cancelled-popup-request']);
-    authDebugLog('popup', cancelledCodes.has(e?.code) ? 'cancelled' : 'error', e?.code || e?.message || 'unknown');
+    const phase = selectedMethod === 'redirect' ? 'redirect' : 'popup';
+    authDebugLog(phase, cancelledCodes.has(e?.code) ? 'cancelled' : 'error', e?.code || e?.message || 'unknown');
     sessionStorage.removeItem('vault-auth-redirect-pending');
+    if (phase === 'redirect') AUTH_REDIRECT_RESULT_STATUS = `error:${sanitizeAuthDebugText(e?.code || 'unknown')}`;
     setAuthFailureState(e);
     return;
   }
