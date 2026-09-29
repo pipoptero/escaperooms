@@ -12,6 +12,7 @@ from pathlib import Path
 from threading import Thread
 import unittest
 from urllib.error import HTTPError
+from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
 from playwright.sync_api import sync_playwright, expect
@@ -76,7 +77,7 @@ class PublicProfileEmulatorBrowserTest(unittest.TestCase):
 
         def route_request(route):
             url = route.request.url
-            if url.endswith('/firebase-config.js'):
+            if urlparse(url).path.endswith('/firebase-config.js'):
                 script = "window.THE_VAULT_FIREBASE_CONFIG={databaseURL:'http://127.0.0.1:9000?ns=demo-the-vault-default-rtdb',apiKey:'fake-key',authDomain:'localhost',projectId:'demo-the-vault',appId:'1:1:web:test'};"
                 return route.fulfill(content_type='application/javascript', body=script)
             if url.startswith(('http://127.0.0.1:', 'data:')):
