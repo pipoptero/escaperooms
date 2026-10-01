@@ -410,15 +410,51 @@ class PendingModalTest(unittest.TestCase):
         expect(page.locator('#detail-modal')).to_have_attribute('aria-hidden', 'true')
 
     def test_home_has_static_content_without_javascript(self):
+        catalog = json.loads((ROOT / 'catalog.json').read_text(encoding='utf-8'))
+        self.assertEqual(catalog['meta']['count'], len(catalog['catalogo']))
         self.context.close()
         self.context = self.browser.new_context(viewport={'width': 390, 'height': 844}, java_script_enabled=False, service_workers='block')
         self.context.route('**/*', self.route)
         page = self.context.new_page()
         page.goto(self.url, wait_until='load')
         expect(page.get_by_text('Encuentra tu próximo escape.')).to_be_visible()
-        self.assertEqual(page.locator('#vault-stat-catalog').text_content(), '1735')
+        self.assertEqual(page.locator('#vault-stat-catalog').text_content(), str(catalog['meta']['count']))
         self.assertEqual(page.locator('#vault-stat-reviews').text_content(), str(self.review_count))
         expect(page.get_by_text('Modo de consulta disponible')).to_be_hidden()
+
+    def test_removed_catalog_card_favicon_error_preserves_search_and_fallback(self):
+        page = self.page_for()
+        errors = []
+        page.on('pageerror', lambda error: errors.append(str(error)))
+        page.locator('#mobile-filter-toggle-cat').click()
+        page.locator('#search-cat').fill('La Sucursal')
+        expect(page.locator('#grid-catalogo .room-card')).to_have_count(1)
+        page.evaluate("""() => {
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = faviconHtml('https://example.test', 'card-logo');
+            const favicon = wrapper.firstElementChild;
+            const image = favicon.querySelector('img');
+            image.removeAttribute('src');
+            document.querySelector('#grid-catalogo .room-card').append(favicon);
+            window.__lateFavicon = image;
+        }""")
+        page.locator('#search-cat').fill('La Iglesia del Pacto Nuevo')
+        expect(page.locator('#grid-catalogo .room-card')).to_have_count(1)
+        self.assertFalse(page.evaluate('window.__lateFavicon.isConnected'))
+        page.evaluate("window.__lateFavicon.onerror(new Event('error'))")
+        self.assertIn('La Iglesia del Pacto Nuevo', page.locator('#grid-catalogo .room-card').inner_text())
+        fallback = page.evaluate("""() => {
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = faviconHtml('https://example.test', 'card-logo');
+            const favicon = wrapper.firstElementChild;
+            const image = favicon.querySelector('img');
+            image.removeAttribute('src');
+            document.querySelector('#grid-catalogo .room-card').append(favicon);
+            image.onerror(new Event('error'));
+            return [image.style.display, image.nextElementSibling.style.display];
+        }""")
+        self.assertEqual(fallback, ['none', 'block'])
+        self.assertEqual(errors, [])
 
     def test_reviews_filters_missing_metadata_and_empty_state(self):
         page = self.context.new_page()

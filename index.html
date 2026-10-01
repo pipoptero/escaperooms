@@ -10622,7 +10622,7 @@ function faviconHtml(webUrl, cssClass, room = null) {
   try {
     const domain = new URL(webUrl).hostname;
     const src = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
-    return `<div class="${cssClass}"><img src="${src}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">${fallbackImg}</div>`;
+    return `<div class="${cssClass}"><img src="${src}" alt="" onerror="if(this.isConnected && this.nextElementSibling){this.style.display='none';this.nextElementSibling.style.display='block'}">${fallbackImg}</div>`;
   } catch {
     return `<div class="${cssClass}">${fallbackImg}</div>`;
   }
