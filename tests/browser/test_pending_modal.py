@@ -159,6 +159,14 @@ class PendingModalTest(unittest.TestCase):
         }""", uid)
         return page
 
+    @staticmethod
+    def enter_saved_route_name(page, name):
+        field = page.locator('#saved-route-name')
+        field.click()
+        field.press('ControlOrMeta+A')
+        field.press_sequentially(name)
+        expect(field).to_have_value(name)
+
     def visible_input_point(self, page, box):
         # The Windows WebKit port can expose CSS pixels at the OS display scale.
         # Native input uses the configured viewport coordinate space.
@@ -602,7 +610,7 @@ class PendingModalTest(unittest.TestCase):
         page.get_by_role('button', name='Generar rutas').click()
         page.locator('.route-proposal').first.get_by_role('button', name='Guardar ruta').click()
         expect(page.locator('#saved-route-modal')).to_have_attribute('aria-hidden', 'false')
-        page.locator('#saved-route-name').fill('Vitoria 2027')
+        self.enter_saved_route_name(page, 'Vitoria 2027')
         page.locator('#saved-route-date').fill('2027-04-10')
         page.locator('#saved-route-modal').get_by_role('button', name='Guardar ruta', exact=True).click()
         # WebKit can pause requestAnimationFrame while replacing the save modal;
@@ -628,7 +636,7 @@ class PendingModalTest(unittest.TestCase):
         owner.locator('#route-count').select_option('2')
         owner.get_by_role('button', name='Generar rutas').click()
         owner.locator('.route-proposal').first.get_by_role('button', name='Guardar ruta').click()
-        owner.locator('#saved-route-name').fill('Ruta Grupo Uno')
+        self.enter_saved_route_name(owner, 'Ruta Grupo Uno')
         owner.locator('#saved-route-modal').get_by_role('button', name='Guardar ruta', exact=True).click()
         owner.wait_for_function("!!Object.values(GROUP_ROUTES.g1 || {}).length")
         route_id = next(iter(self.db['groupRoutes']['g1']))
