@@ -16054,11 +16054,12 @@
       },
       "sources": {
         "giba": {
-          "score": 8.8,
-          "weight": 1.0,
+          "score": 8.6,
+          "weight": 1,
+          "votes": null,
           "url": "https://www.gibaescape.com/ranking/ranking-salas-de-escape",
-          "updated_at": "2026-08-19",
-          "source_title": "FEAR FACTORY"
+          "updated_at": "2026-10-04T14:19:57.542855+00:00",
+          "source_hash": "d05e76f80567949fbbc34a3ba06213795eec5fed6179bb7253017bb68def20ea"
         },
         "ocioterror": {
           "score": 8.7,
@@ -16086,12 +16087,13 @@
           "source_brand": "Fear"
         }
       },
-      "raw_score": 8.52,
-      "confidence": 1.0,
+      "raw_score": 8.48,
+      "confidence": 1,
       "award_bonus": 0.27,
       "award_count": 1,
-      "global_score": 8.79,
-      "source_count": 4
+      "global_score": 8.75,
+      "source_count": 4,
+      "display_score": 8.8
     },
     "central_friends": {
       "room": {
@@ -17391,11 +17393,12 @@
       },
       "sources": {
         "giba": {
-          "score": 9.2,
-          "weight": 1.0,
+          "score": 7.2,
+          "weight": 1,
+          "votes": null,
           "url": "https://www.gibaescape.com/ranking/ranking-salas-de-escape",
-          "updated_at": "2026-08-19",
-          "source_title": "INFLUX"
+          "updated_at": "2026-10-04T14:19:57.542855+00:00",
+          "source_hash": "d05e76f80567949fbbc34a3ba06213795eec5fed6179bb7253017bb68def20ea"
         },
         "todoescaperooms": {
           "score": 9.4,
@@ -17423,12 +17426,13 @@
           "source_brand": "Influx"
         }
       },
-      "raw_score": 8.68,
-      "confidence": 1.0,
+      "raw_score": 8.15,
+      "confidence": 1,
       "award_bonus": 0,
       "award_count": 0,
-      "global_score": 8.68,
-      "source_count": 4
+      "global_score": 8.15,
+      "source_count": 4,
+      "display_score": 8.1
     },
     "9_1": {
       "room": {

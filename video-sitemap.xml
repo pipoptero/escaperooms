@@ -541,16 +541,6 @@
     </video:video>
   </url>
   <url>
-    <loc>https://thevaultescape.com/salas/zombie-outbreak/</loc>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/UryLw7SY2WQ/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>youtube-player</video:title>
-      <video:description>Vídeo de introducción oficial de la experiencia Zombie Outbreak de Fear.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/UryLw7SY2WQ</video:player_loc>
-      <video:publication_date>2018-03-30T11:26:09-07:00</video:publication_date>
-    </video:video>
-  </url>
-  <url>
     <loc>https://thevaultescape.com/salas/agencia-360/</loc>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/zjUDhXZXyTc/hqdefault.jpg</video:thumbnail_loc>
@@ -558,6 +548,16 @@
       <video:description>Vídeo de introducción oficial de la experiencia Agencia 360 de Arroyo Escape Room.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/zjUDhXZXyTc</video:player_loc>
       <video:publication_date>2024-04-22T15:00:37-07:00</video:publication_date>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://thevaultescape.com/salas/zombie-outbreak/</loc>
+    <video:video>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/UryLw7SY2WQ/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>youtube-player</video:title>
+      <video:description>Vídeo de introducción oficial de la experiencia Zombie Outbreak de Fear.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/UryLw7SY2WQ</video:player_loc>
+      <video:publication_date>2018-03-30T11:26:09-07:00</video:publication_date>
     </video:video>
   </url>
   <url>

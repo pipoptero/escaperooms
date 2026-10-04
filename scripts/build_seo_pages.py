@@ -1406,7 +1406,7 @@ def ranking_index_page(rows):
         rating = item["rating"]
         name = canonical_room_name(room) or "Escape room"
         url = site_url(f"/salas/{seo_room_url_slug(room)}/")
-        score = decimal(rating.get("global_score"))
+        score = decimal(rating.get("display_score", rating.get("global_score")))
         location = room_location(room)
         items.append(
             f'<a class="rank-link" href="{escape(url)}">'
@@ -1513,7 +1513,7 @@ def ranking_landing_page(slug, title, h1, description, intro, rows, keyword_note
         name = canonical_room_name(room) or "Escape room"
         company = canonical_room_company(room)
         url = site_url(f"/salas/{seo_room_url_slug(room)}/")
-        score = decimal(rating.get("global_score"))
+        score = decimal(rating.get("display_score", rating.get("global_score")))
         sources = int(rating.get("source_count") or 0)
         awards = int(rating.get("award_count") or 0)
         location = room_location(room)
@@ -1684,7 +1684,7 @@ def location_landing_page(slug, kind, label, rows, total_count):
         name = canonical_room_name(room) or "Escape room"
         company = canonical_room_company(room)
         url = site_url(f"/salas/{seo_room_url_slug(room)}/")
-        score = decimal(rating.get("global_score"))
+        score = decimal(rating.get("display_score", rating.get("global_score")))
         source_count = int(rating.get("source_count") or 0)
         awards = int(rating.get("award_count") or 0)
         location = room_location(room)
@@ -1913,7 +1913,7 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
     slug = seo_room_url_slug(room)
     canonical = site_url(f"/salas/{slug}/")
     app_link = site_url(f"/#room/{app_hash_key(room)}")
-    score = decimal(rating.get("global_score"))
+    score = decimal(rating.get("display_score", rating.get("global_score")))
     has_score = score > 0
     vault_score = decimal(room.get("valoracion"))
     synopsis = text(room.get("descripcion"))
