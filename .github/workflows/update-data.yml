@@ -11,7 +11,50 @@ on:
       - "images/Hechos/**"
 
 jobs:
+  detect_release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      managed: ${{ steps.mode.outputs.managed }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Detect exact managed release trailer
+        id: mode
+        run: python scripts/managed_release_guard.py detect --output "$GITHUB_OUTPUT"
+
+  validate_managed:
+    needs: detect_release
+    if: needs.detect_release.outputs.managed == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repo without push credentials
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate managed release without writers
+        run: |
+          echo "Managed release detected"
+          echo "Auto-update writers disabled"
+          echo "No child commit will be created"
+          python scripts/managed_release_guard.py verify --expected-sha "$GITHUB_SHA"
+
   convert-and-deploy:
+    needs: detect_release
+    if: needs.detect_release.outputs.managed != 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
