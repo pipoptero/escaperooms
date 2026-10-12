@@ -1020,6 +1020,19 @@
   .rv-opinion-label::after{content:'';flex:1;height:1px;background:var(--border);}
   .rv-opinion-text{font-family:'Rajdhani',sans-serif;font-size:.95rem;font-weight:400;color:var(--text2);line-height:1.7;flex:1;}
   .rv-opinion-text.empty{color:var(--text3);font-style:italic;font-size:.85rem;}
+  .rv-opinion-text.rich{white-space:normal;flex:0 1 auto;font-size:.9rem;line-height:1.5;}
+  .rv-opinion-text.rich p{margin:0 0 7px;}
+  .rv-opinion-text.rich p:last-child{margin-bottom:0;}
+  .rv-opinion-text.rich h3,.rv-opinion-text.rich h4{font-family:'Cinzel',serif;line-height:1.3;text-transform:uppercase;}
+  .rv-opinion-text.rich h3{margin:10px 0 7px;padding:6px 8px;border-left:2px solid var(--green);background:rgba(125,187,63,.07);color:var(--text);font-size:.78rem;}
+  .rv-opinion-text.rich h3:first-child{margin-top:0;}
+  .rv-opinion-text.rich h4{margin:10px 0 6px;color:var(--green);font-size:.72rem;}
+  .rv-opinion-text.rich ul{margin:0 0 9px;padding-left:19px;}
+  .rv-opinion-text.rich li{margin:2px 0;}
+  .rv-opinion-text.rich strong{color:var(--text);font-weight:700;}
+  .rv-opinion-text.rich hr{border:0;border-top:1px solid rgba(125,187,63,.22);margin:10px 0;}
+  .rv-read-full{align-self:flex-start;border:1px solid rgba(125,187,63,.4);background:rgba(125,187,63,.08);color:var(--green);font-family:'Share Tech Mono',monospace;font-size:.64rem;letter-spacing:.1em;padding:9px 12px;cursor:pointer;}
+  .rv-read-full:hover,.rv-read-full:focus-visible{border-color:var(--green);background:rgba(125,187,63,.16);}
   .review-photo-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:8px;margin-top:2px;}
   .review-photo{position:relative;display:block;overflow:hidden;border:1px solid rgba(125,187,63,.18);background:rgba(0,0,0,.18);aspect-ratio:4/3;}
   .review-photo img,.review-photo video{width:100%;height:100%;object-fit:cover;display:block;transition:transform .22s ease,filter .22s ease;background:#050609;}
@@ -11445,6 +11458,8 @@ function cardHecho(h, rank) {
   const opinionLabel = h._arkkadiaCommunityReview
     ? `Opinión Arkkadia${h._reviewAuthorName ? ` · ${escapeHtml(h._reviewAuthorName)}` : ''}`
     : 'Opinión personal';
+  const opinion = editorialTextForDisplay(h);
+  const preview = TheVaultEditorialReview.excerptEditorialReview(opinion, 600);
 
   return `<div class="review-row" tabindex="0" role="button" onclick="openDetailFromCard(event,'${detailKind}','${detailKey}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetail('${detailKind}','${detailKey}')}" style="animation-delay:${(rank-1)*.05}s">
 
@@ -11477,13 +11492,6 @@ function cardHecho(h, rank) {
         ${commPill}
       </div>
       ${voteWidget(slug)}
-    </div>
-
-    <div class="rv-opinion">
-      <div class="rv-opinion-label">${opinionLabel}</div>
-      <div class="rv-opinion-text ${!h.descripcion ? 'empty' : ''}">
-        ${h.descripcion || 'Sin descripción añadida aún.'}
-      </div>
       ${(h.historia || h.ambientacion || h.jugabilidad || h.gamemaster) ? `
       <div class="rv-opinion-label" style="margin-top:12px">Valoración por categorías</div>
       <div class="rv-cats">
@@ -11492,6 +11500,14 @@ function cardHecho(h, rank) {
         ${catStars('Jugabilidad',  h.jugabilidad)}
         ${catStars('Game Master',  h.gamemaster)}
       </div>` : ''}
+    </div>
+
+    <div class="rv-opinion">
+      <div class="rv-opinion-label">${opinionLabel}</div>
+      <div class="rv-opinion-text rich ${!opinion ? 'empty' : ''}">
+        ${reviewRichTextHtml(preview.text || 'Sin descripción añadida aún.')}
+      </div>
+      ${preview.truncated ? `<button class="rv-read-full" type="button" onclick="event.stopPropagation();openDetail('${detailKind}','${detailKey}')">LEER REVIEW COMPLETA</button>` : ''}
       ${reviewPhotosHtml(h)}
       ${h.web ? `<a class="rv-web" href="${h.web}" target="_blank">Ver web</a>` : ''}
       <div style="margin-top:12px">${personalActionsHtml(h, detailKind)}</div>

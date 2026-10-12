@@ -134,6 +134,88 @@ class EditorialReviewBrowserTest(unittest.TestCase):
                 finally:
                     context.close()
 
+    def test_review_listing_preview_is_compact_safe_and_opens_full_detail(self):
+        for width in (1440, 768, 390):
+            with self.subTest(width=width):
+                context = self.browser.new_context(viewport={'width': width, 'height': 900}, service_workers='block')
+                context.route('**/*', lambda route: route.continue_() if urlparse(route.request.url).hostname == '127.0.0.1' else route.abort())
+                page = context.new_page()
+                errors = []
+                page.on('pageerror', lambda error: errors.append(str(error)))
+                try:
+                    page.goto(self.url + '/', wait_until='domcontentloaded')
+                    page.wait_for_function("reviewRooms().some(room => room.id === 'la-vitrina')", timeout=30000)
+                    result = page.evaluate("""() => {
+                      switchTab('hechos');
+                      const room = reviewRooms().find(item => item.id === 'la-vitrina');
+                      document.getElementById('grid-hechos').innerHTML = cardHecho(room, 1);
+                      const row = document.querySelector('#grid-hechos .review-row');
+                      const text = row.querySelector('.rv-opinion-text');
+                      return {originalLength: room.descripcion.length, previewLength: text.textContent.length,
+                        excerptLength: Array.from(TheVaultEditorialReview.excerptEditorialReview(editorialTextForDisplay(room), 600).text).length,
+                        paragraphs: text.querySelectorAll('p').length,
+                        headings: text.querySelectorAll('h3,h4').length,
+                        buttonCount: row.querySelectorAll('.rv-read-full').length,
+                        height: row.getBoundingClientRect().height,
+                        overflow: document.documentElement.scrollWidth - innerWidth};
+                    }""")
+                    self.assertGreater(result['originalLength'], 9000)
+                    self.assertLessEqual(result['excerptLength'], 600)
+                    self.assertLessEqual(result['previewLength'], 650)
+                    self.assertGreater(result['paragraphs'], 1)
+                    self.assertGreater(result['headings'], 0)
+                    self.assertEqual(result['buttonCount'], 1)
+                    self.assertLess(result['height'], 1500)
+                    self.assertLessEqual(result['overflow'], 1)
+                    page.locator('#grid-hechos .rv-read-full').click()
+                    self.assertTrue(page.locator('#detail-modal').evaluate("el => el.classList.contains('open')"))
+                    self.assertGreater(page.locator('#detail-content .detail-review-text').inner_text().__len__(), 9000)
+                    self.assertEqual(errors, [])
+                finally:
+                    context.close()
+
+    def test_short_arkkadia_and_malicious_review_cards(self):
+        context = self.browser.new_context(service_workers='block')
+        context.route('**/*', lambda route: route.continue_() if urlparse(route.request.url).hostname == '127.0.0.1' else route.abort())
+        page = context.new_page()
+        errors = []
+        page.on('pageerror', lambda error: errors.append(str(error)))
+        try:
+            page.goto(self.url + '/', wait_until='domcontentloaded')
+            result = page.evaluate("""() => {
+              const room = {id:'fixture-review',nombre:'Fixture',empresa:'Fixture',
+                descripcion:'## OPINIÓN\\n\\n**Buena** 🔐\\n\\n- Uno\\n- Dos',
+                _arkkadiaCommunityReview:true,_reviewAuthorName:'Autor'};
+              const unsafe = {...room, descripcion:'<img src=x onerror="window.reviewPwned=1">'};
+              const host = document.createElement('div'); document.body.appendChild(host);
+              host.innerHTML = cardHecho(room, 1) + cardHecho(unsafe, 2);
+              const [short, attack] = host.querySelectorAll('.review-row');
+              const result = {
+                label:short.querySelector('.rv-opinion-label').textContent,
+                heading:short.querySelectorAll('.rv-opinion-text h4').length,
+                bold:short.querySelectorAll('.rv-opinion-text strong').length,
+                lists:short.querySelectorAll('.rv-opinion-text li').length,
+                emoji:short.querySelector('.rv-opinion-text').textContent.includes('🔐'),
+                shortButton:short.querySelectorAll('.rv-read-full').length,
+                injectedImage:attack.querySelectorAll('.rv-opinion-text img').length,
+                escaped:attack.querySelector('.rv-opinion-text').textContent.includes('<img'),
+                pwned:!!window.reviewPwned
+              };
+              host.remove(); return result;
+            }""")
+            self.assertIn('Arkkadia', result['label'])
+            self.assertEqual(result['heading'], 1)
+            self.assertEqual(result['bold'], 1)
+            self.assertEqual(result['lists'], 2)
+            self.assertTrue(result['emoji'])
+            self.assertEqual(result['shortButton'], 0)
+            self.assertEqual(result['injectedImage'], 0)
+            self.assertTrue(result['escaped'])
+            self.assertFalse(result['pwned'])
+            self.assertEqual(errors, [])
+        finally:
+            context.close()
+
 
 if __name__ == '__main__':
     unittest.main()

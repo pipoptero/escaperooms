@@ -2,7 +2,7 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const { spawnSync } = require('node:child_process');
 const { readFileSync } = require('node:fs');
-const { renderEditorialReview } = require('../editorial-review-renderer.js');
+const { renderEditorialReview, excerptEditorialReview } = require('../editorial-review-renderer.js');
 
 const source = '# LA VITRINA\n\n## HISTORIA\n\nPrimer párrafo.\nSegunda línea.\n\n## NUESTRA OPINIÓN\n\n**Intenso** y _elegante_.\n\n- Acierto uno\n- Acierto dos';
 
@@ -43,4 +43,33 @@ test('La Vitrina static editorial is self-contained with 285 line breaks and sco
   assert.match(html, /<h[34]>.*HISTORIA.*<\/h[34]>/);
   assert.match(html, /<h[34]>.*NUESTRA OPINIÓN.*<\/h[34]>/);
   assert.ok((html.match(/<p>/g) || []).length > 20);
+  const preview = excerptEditorialReview(review.descripcion, 600);
+  assert.equal(preview.truncated, true);
+  assert.ok(Array.from(preview.text).length <= 600);
+  assert.match(renderEditorialReview(preview.text), /<h[34]>.*HISTORIA.*<\/h[34]>/);
+  assert.doesNotMatch(preview.text, /VEREDICTO/);
+});
+
+test('short reviews remain complete; excerpts preserve whole editorial blocks', () => {
+  assert.deepEqual(excerptEditorialReview(source, 1000), {text: source, truncated: false});
+  const excerpt = excerptEditorialReview(source + '\n\n' + 'Cierre '.repeat(200), 140);
+  assert.equal(excerpt.truncated, true);
+  assert.ok(Array.from(excerpt.text).length <= 140);
+  const html = renderEditorialReview(excerpt.text);
+  assert.match(html, /<h3>LA VITRINA<\/h3>/);
+  assert.match(html, /<h4>HISTORIA<\/h4>/);
+  assert.match(html, /<p>Primer párrafo\.<br>Segunda línea\.<\/p>/);
+});
+
+test('lists, bold, emoji and unsafe HTML remain safe when excerpted', () => {
+  const text = '## OPINIÓN\n\n**Gran sala** 🔐\n\n- Primer punto\n- Segundo punto\n\n' +
+    '<img src=x onerror="window.pwned=1"> ' + 'texto '.repeat(200);
+  const preview = excerptEditorialReview(text, 160);
+  const html = renderEditorialReview(preview.text);
+  assert.equal(preview.truncated, true);
+  assert.match(html, /<strong>Gran sala<\/strong> 🔐/u);
+  assert.match(html, /<ul><li>Primer punto<\/li><li>Segundo punto<\/li><\/ul>/);
+  assert.ok(!html.includes('<img'));
+  assert.match(html, /&lt;img/);
+  assert.ok(!html.includes('onerror="window.pwned=1">'));
 });
