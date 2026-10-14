@@ -1904,6 +1904,41 @@ def room_facts(room, location_data):
     return [(label, value) for label, value in facts if value]
 
 
+def room_fallback_description(room, name, company, city, province):
+    identity = f"Ficha de {name}{' de ' + company if company else ''}"
+    community = canonical_region(room.get("comunidad"))
+    place = city or (f"la provincia de {province}" if province else community)
+    if place:
+        identity += f" en {place}"
+    duration = text(room.get("duracion"))
+    players = room_players(room)
+    if duration and players:
+        # Preserve the existing description where both advertised facts exist.
+        legacy = f"Ficha de {name}{' de ' + company if company else ''}"
+        if city:
+            legacy += f" en {city}"
+        return legacy + ", con datos de ubicación, duración, jugadores y enlaces de consulta."
+    if duration:
+        return f"{identity}: duración de {duration} minutos."
+    if players:
+        return f"{identity}: para {players} jugadores."
+    synopsis = text(room.get("descripcion"))
+    if synopsis:
+        if synopsis.casefold().startswith(name.casefold() + " "):
+            synopsis = synopsis[len(name):].lstrip(" ,-.: ")
+            if synopsis.startswith("es "):
+                synopsis = "Es " + synopsis[3:]
+        if company:
+            synopsis = re.sub(rf"\s+de\s+{re.escape(company)}(?=\W|$)", "", synopsis,
+                              count=1, flags=re.IGNORECASE)
+        if len(identity) + len(synopsis) + 2 > 155:
+            first_clause = re.split(r"[,;]", synopsis, maxsplit=1)[0].strip()
+            if len(first_clause) >= 30 and len(identity) + len(first_clause) + 2 <= 155:
+                synopsis = first_clause + "."
+        return f"{identity}. {synopsis}"
+    return f"{identity}."
+
+
 def room_page(item, position, location_links=None, review_slugs=None, videos_data=None, photos_data=None):
     room = item["room"]
     rating = item.get("rating") or {}
@@ -1922,10 +1957,11 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
     province = text(location_data.get("province")) or text(room.get("provincia"))
     source_count = int(rating.get("source_count") or 0)
     award_count = int(rating.get("award_count") or 0)
-    fallback_description = f"Ficha de {name}{' de ' + company if company else ''}"
+    body_fallback = f"Ficha de {name}{' de ' + company if company else ''}"
     if city:
-        fallback_description += f" en {city}"
-    fallback_description += ", con datos de ubicación, duración, jugadores y enlaces de consulta."
+        body_fallback += f" en {city}"
+    body_fallback += ", con datos de ubicación, duración, jugadores y enlaces de consulta."
+    fallback_description = room_fallback_description(room, name, company, city, province)
     if has_score:
         identity_detail = name
         if company:
@@ -1941,6 +1977,7 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
     else:
         seo_description = fallback_description
     description = short_description({"descripcion": seo_description})
+    body_description = description if has_score else short_description({"descripcion": body_fallback})
     image = asset_url(room.get("imagen") or "images/brand/social-card.png")
     cover = page_asset(room.get("imagen") or "images/brand/social-card.png")
     title = f"{name}: ranking y puntuaciones | {SITE_NAME}" if has_score else f"{name}: ficha de escape room | {SITE_NAME}"
@@ -2121,7 +2158,7 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
       <div class="company">{escape(company)}</div>
       <div class="meta">{meta_html}</div>
       {score_comparison_html}
-      <p>{escape(description)}</p>{ranking_method_html}
+      <p>{escape(body_description)}</p>{ranking_method_html}
       <div class="actions">
         <a class="btn" href="{escape(app_link)}">Abrir ficha interactiva</a>
         {f'<a class="btn secondary" href="../../ranking/">Ver ranking completo</a>' if has_score else '<a class="btn secondary" href="../../">Ver catálogo</a>'}

@@ -14,6 +14,39 @@ SPEC.loader.exec_module(MODULE)
 
 
 class SeoQualityTest(unittest.TestCase):
+    def test_room_description_only_advertises_available_duration_and_players(self):
+        room = {
+            "nombre": "Prueba", "empresa": "Operador", "provincia": "Barcelona",
+            "comunidad": "Catalunya",
+            "descripcion": "Prueba es una experiencia de misterio con ambientación inmersiva.",
+        }
+        describe = lambda: MODULE.room_fallback_description(
+            room, "Prueba", "Operador", "", "Barcelona"
+        )
+
+        room.update(duracion=60, min_personas=2, max_personas=6)
+        complete = describe()
+        self.assertIn("duración", complete)
+        self.assertIn("jugadores", complete)
+
+        room["max_personas"] = room["min_personas"] = None
+        duration_only = describe()
+        self.assertIn("duración de 60 minutos", duration_only)
+        self.assertNotIn("jugadores", duration_only)
+
+        room.update(duracion=None, min_personas=2, max_personas=6)
+        players_only = describe()
+        self.assertNotIn("duración", players_only)
+        self.assertIn("para 2 a 6 jugadores", players_only)
+
+        room["max_personas"] = room["min_personas"] = None
+        neither = describe()
+        self.assertNotIn("duración", neither)
+        self.assertNotIn("jugadores", neither)
+        self.assertIn("provincia de Barcelona", neither)
+        self.assertIn("experiencia de misterio", neither)
+        self.assertEqual(neither.count("Operador"), 1)
+
     def test_canonical_review_registry_drives_every_public_surface(self):
         root = MODULE.ROOT
         registry = json.loads((root / "published_reviews.json").read_text(encoding="utf-8"))["reviews"]

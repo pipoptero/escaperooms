@@ -3019,6 +3019,15 @@ function normalizeCommunityLabel(value) {
 function communityOf(p) {
   return normalizeCommunityLabel(p.comunidad || COMMUNITY_BY_PROVINCE[normalizedKey(p.provincia)] || '');
 }
+function publicRoomLocation(room, includeCommunity = false) {
+  const city = cleanValue(room?.ciudad);
+  const province = cleanValue(room?.provincia);
+  const community = cleanValue(communityOf(room || {}));
+  const place = city ? [city, province].filter(Boolean).join(' - ')
+    : province ? `Provincia de ${province}` : includeCommunity ? community : '';
+  if (!includeCommunity || !community || (!city && community === province) || place === community) return place;
+  return `${place} - ${community}`;
+}
 function priceLabel(p) {
   const direct = String(p.precio || '').trim();
   if (direct) return direct;
@@ -11142,7 +11151,7 @@ function detailTags(room, kind) {
   const genres = kind === 'catalogo' ? [] : listValues(room.generos || room.tematica);
   const features = kind === 'catalogo' ? [] : listValues(room.caracteristicas);
   return [
-    room.ciudad || room.provincia ? `<span class="tag tag-city">📍 ${escapeHtml([cleanValue(room.ciudad), cleanValue(room.provincia)].filter(Boolean).join(' - '))}</span>` : '',
+    room.ciudad || room.provincia ? `<span class="tag tag-city">📍 ${escapeHtml(publicRoomLocation(room))}</span>` : '',
     communityOf(room) ? `<span class="tag tag-muted">${escapeHtml(communityOf(room))}</span>` : '',
     groupStateTags(room),
     userStateTags(room),
@@ -11256,7 +11265,7 @@ function openDetail(kind, key, options = {}) {
   const players = playerLabel(room);
   const price = priceLabel(room);
   const sourceLabel = kind === 'catalogo' ? 'Catalogo general' : kind === 'hechos' ? (room._adminPublished ? 'Review The Vault' : room._arkkadiaCommunityReview ? 'Review Arkkadia' : 'Review del grupo') : 'Pendiente';
-  const location = [cleanValue(room.ciudad), cleanValue(room.provincia), cleanValue(communityOf(room))].filter(Boolean).join(' - ');
+  const location = publicRoomLocation(room, true);
   const isReview = kind === 'hechos';
   const synopsis = !isReview ? escapeHtml(room.descripcion || 'Sin sinopsis') : '';
   const modal = document.getElementById('detail-modal');
@@ -11521,7 +11530,7 @@ function cardCatalogo(c, i) {
   const rating = displayRating(c);
   const players = playerLabel(c);
   const price = priceLabel(c);
-  const location = [cleanValue(c.ciudad), cleanValue(c.provincia)].filter(Boolean).join(' - ');
+  const location = publicRoomLocation(c);
   const groupTags = groupStateTags(c);
   const userTags = userStateTags(c);
   const awardSeal = awardSeals(c, 3);
@@ -11551,7 +11560,7 @@ function cardCatalogo(c, i) {
   </div>
   <div class="card-body">
     <div class="card-tags">
-      ${location ? `<span class="tag tag-city">📍 ${location}</span>` : ''}
+      ${location ? `<span class="tag tag-city">📍 ${escapeHtml(location)}</span>` : ''}
       ${c.terror ? `<span class="tag tag-tema">Terror</span>` : ''}
       ${c.dificultad ? `<span class="tag tag-tipo">${c.dificultad}</span>` : ''}
       ${c.abierto ? `<span class="tag tag-feature">Abierto</span>` : `<span class="tag tag-muted">Estado no confirmado</span>`}
