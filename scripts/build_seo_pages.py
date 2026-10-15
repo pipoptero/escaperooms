@@ -2025,6 +2025,11 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
             f'Vídeo verificado en la <a href="{escape(video_source_url)}" rel="nofollow noopener">'
             'ficha de Escapistas.club</a>.'
         )
+    elif video_provider == "tiktok" and video_source_url.startswith("https://www.tiktok.com/"):
+        video_source_note = (
+            f'Vídeo publicado en el <a href="{escape(video_source_url)}" rel="nofollow noopener">'
+            "perfil oficial de TikTok</a>."
+        )
     elif video_source_url.startswith("https://vimeo.com/"):
         video_source_note = (
             f'Vídeo en <a href="{escape(video_source_url)}" rel="nofollow noopener">Vimeo</a>.'
@@ -2040,7 +2045,7 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
         for photo in photos
         if photo.get("src")
     )
-    if video_url and video_provider in {"youtube", "vimeo"}:
+    if video_url and video_provider in {"youtube", "vimeo", "tiktok"}:
         video_frame_class = "video-frame portrait" if video.get("aspect_ratio") == "9/16" else "video-frame"
         video_html = (
             f'<iframe class="{video_frame_class}" src="{escape(video_url)}" title="Vídeo oficial de {escape(name)}" '
@@ -2113,15 +2118,15 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
     video_upload_date = text(video.get("upload_date"))
     if video_html and video_upload_date:
         direct_video_url = text(video.get("video_url"))
-        if video_provider in {"youtube", "vimeo"}:
+        if video_provider in {"youtube", "vimeo", "tiktok"}:
             direct_video_url = ""
         video_schema = {
             "@type": "VideoObject",
             "name": text(video.get("label")) or f"Vídeo oficial de {name}",
             "description": f"Vídeo de introducción oficial de la experiencia {name}{' de ' + company if company else ''}.",
             "thumbnailUrl": video_thumbnail or image,
-            "embedUrl": video_url if video_provider in {"youtube", "vimeo"} else None,
-            "contentUrl": direct_video_url or (video_url if video_provider not in {"youtube", "vimeo"} else None),
+            "embedUrl": video_url if video_provider in {"youtube", "vimeo", "tiktok"} else None,
+            "contentUrl": direct_video_url or (video_url if video_provider not in {"youtube", "vimeo", "tiktok"} else None),
             "uploadDate": video_upload_date,
             "isPartOf": {"@id": canonical},
         }
@@ -2301,8 +2306,8 @@ def video_sitemap_xml(sala_rows, videos_data, review_slugs=None):
         company = canonical_room_company(room)
         title = text(video.get("label")) or f"Vídeo oficial de {name}"
         description = f"Vídeo de introducción oficial de la experiencia {name}{' de ' + company if company else ''}."
-        source_tag = "video:player_loc" if provider in {"youtube", "vimeo"} else "video:content_loc"
-        source_url = embed_url if provider in {"youtube", "vimeo"} else (direct_url or embed_url)
+        source_tag = "video:player_loc" if provider in {"youtube", "vimeo", "tiktok"} else "video:content_loc"
+        source_url = embed_url if provider in {"youtube", "vimeo", "tiktok"} else (direct_url or embed_url)
         entries.append(
             "  <url>\n"
             f"    <loc>{escape(page_url)}</loc>\n"

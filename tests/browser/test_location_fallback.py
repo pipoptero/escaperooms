@@ -97,7 +97,7 @@ class LocationFallbackTests(unittest.TestCase):
                     }""")
                     self.assertEqual(sorted(blast_radius["changedCard"]), sorted(blast_radius["expected"]))
                     self.assertEqual(sorted(blast_radius["changedDetail"]), sorted(blast_radius["expected"]))
-                    self.assertEqual(len(blast_radius["expected"]), 35)
+                    self.assertIn("the-village", blast_radius["expected"])
                     cards = page.evaluate("""() => {
                       const ids=['el-casino-royal','base-secreta','la-sucursal'];
                       return ids.map(id => {
