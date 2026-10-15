@@ -1939,6 +1939,19 @@ def room_fallback_description(room, name, company, city, province):
     return f"{identity}."
 
 
+def room_body_fallback_description(room, name, company, city):
+    identity = f"Ficha de {name}{' de ' + company if company else ''}"
+    if city:
+        identity += f" en {city}"
+    available = ["ubicación"]
+    if text(room.get("duracion")):
+        available.append("duración")
+    if room_players(room):
+        available.append("jugadores")
+    available.append("enlaces de consulta")
+    return f"{identity}, con datos de {', '.join(available[:-1])} y {available[-1]}."
+
+
 def room_page(item, position, location_links=None, review_slugs=None, videos_data=None, photos_data=None):
     room = item["room"]
     rating = item.get("rating") or {}
@@ -1957,10 +1970,7 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
     province = text(location_data.get("province")) or text(room.get("provincia"))
     source_count = int(rating.get("source_count") or 0)
     award_count = int(rating.get("award_count") or 0)
-    body_fallback = f"Ficha de {name}{' de ' + company if company else ''}"
-    if city:
-        body_fallback += f" en {city}"
-    body_fallback += ", con datos de ubicación, duración, jugadores y enlaces de consulta."
+    body_fallback = room_body_fallback_description(room, name, company, city)
     fallback_description = room_fallback_description(room, name, company, city, province)
     if has_score:
         identity_detail = name
