@@ -59,6 +59,7 @@ jobs:
           cp review_photos.json room_aliases.json room_locations.json room_relationships.json site_stats.json robots.txt sitemap*.xml video-sitemap.xml llms.txt public-site/
           cp site.webmanifest service-worker.js seo.css public-site/
           cp -R __ public-site/
+          cp -R scream-parks public-site/
           # Pages resolves extensionless HTML URLs from .html files and serves
           # them with text/html. Preserve the official helper bytes verbatim.
           for helper in handler iframe links; do
