@@ -238,6 +238,7 @@
   .tabs-container{display:flex;justify-content:center;padding:26px 32px 0;gap:4px;max-width:1400px;margin:0 auto;}
   .tab{font-family:'Cinzel',serif;font-weight:600;font-size:.76rem;letter-spacing:.08em;padding:8px 20px;border:1px solid var(--border);background:transparent;color:var(--text3);cursor:pointer;transition:all .2s;text-transform:uppercase;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:54px;}
   .tab-icon{width:36px;height:36px;flex:0 0 36px;object-fit:contain;filter:drop-shadow(0 3px 5px rgba(0,0,0,.5));}
+  .mobile-user-shortcuts{display:none;}
   .tab:hover{color:var(--amber);border-color:rgba(125,187,63,.3);}
   .tab.active{background:var(--card);border-color:var(--amber);color:var(--amber);border-bottom-color:var(--card);z-index:1;}
   .tab .count-badge{font-family:'Share Tech Mono',monospace;font-size:.62rem;background:rgba(125,187,63,.12);color:var(--amber);border:1px solid rgba(125,187,63,.25);padding:1px 6px;border-radius:20px;margin-left:7px;vertical-align:middle;}
@@ -1444,15 +1445,15 @@
     .auth-btn{padding:7px 8px;font-size:.54rem;letter-spacing:.04em;}
     .content{padding:0 14px 40px;}
     .main-tabs-shell{padding:0;}
-    .main-tabs-shell::before,.main-tabs-shell::after{content:'';position:absolute;top:18px;bottom:0;width:34px;pointer-events:none;z-index:2;opacity:0;transition:opacity .2s;}
-    .main-tabs-shell::before{left:0;background:linear-gradient(90deg,#08080b,transparent);}
-    .main-tabs-shell::after{right:0;background:linear-gradient(270deg,#08080b,transparent);}
-    .main-tabs-shell.can-scroll-left::before,.main-tabs-shell.can-scroll-right::after{opacity:1;}
-    .tabs-container,.tabs-container.authenticated{padding:18px 14px 0;gap:4px;display:flex;flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scroll-behavior:smooth;scrollbar-width:none;}
-    .tabs-container::-webkit-scrollbar{display:none;}
-    .tab{flex:0 0 auto;min-width:0;padding:6px 9px;font-size:.58rem;letter-spacing:.03em;text-align:center;gap:4px;min-height:50px;white-space:nowrap;}
-    .tab-icon{width:27px;height:27px;flex-basis:27px;}
-    .tab .count-badge{font-size:.5rem;padding:1px 4px;margin-left:1px;}
+    .tabs-container,.tabs-container.authenticated{padding:18px 8px 0;gap:3px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));overflow:visible;}
+    .tab{box-sizing:border-box;width:100%;min-width:0;min-height:64px;padding:5px 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:.56rem;letter-spacing:0;line-height:1.1;text-align:center;white-space:normal;}
+    .tab-icon{width:25px;height:25px;flex:0 0 25px;}
+    .tab .count-badge{display:none;}
+    .tabs-container .auth-tab{display:none!important;}
+    .mobile-user-shortcuts{display:flex;justify-content:center;gap:8px;padding:7px 8px 0;}
+    .mobile-user-shortcut{min-height:44px;padding:8px 14px;border:1px solid var(--border);background:var(--card);color:var(--text3);font-family:'Cinzel',serif;font-size:.65rem;text-transform:uppercase;cursor:pointer;}
+    .mobile-user-shortcut.active{border-color:var(--amber);color:var(--amber);}
+    .mobile-user-shortcut:focus-visible{outline:2px solid var(--amber);outline-offset:2px;}
     .panel{padding:14px;}.rooms-grid{grid-template-columns:1fr;}
     .vault-guest-strip{grid-template-columns:1fr;margin-top:12px;padding:11px 12px;gap:10px;}
     .vault-guest-actions{justify-content:flex-start;}
@@ -2134,6 +2135,10 @@
       <button class="tab auth-tab" id="tab-mine" onclick="switchTab('mis-hechos')" style="display:none"><img class="tab-icon" src="images/navigation/hechos.png" alt="">Hechos <span class="count-badge" id="badge-mine">0</span></button>
     </div>
   </nav>
+  <div class="mobile-user-shortcuts auth-only" id="mobile-user-shortcuts" style="display:none" role="group" aria-label="Mis salas">
+    <button class="mobile-user-shortcut" type="button" data-section="pendientes" onclick="switchTab('pendientes')">Pendientes</button>
+    <button class="mobile-user-shortcut" type="button" data-section="mis-hechos" onclick="switchTab('mis-hechos')">Hechos</button>
+  </div>
 
   <div class="content">
     <div class="vault-guest-strip guest-only" id="vault-guest-strip">
@@ -2335,7 +2340,7 @@
   <footer class="seo-footer" aria-label="Enlaces de reviews">
     <div class="seo-footer-inner">
       <span class="rights">&copy; 2026 The Vault Escape. Todos los derechos reservados.</span>
-      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v55</span>
+      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v56</span>
       <span>Reviews de escape rooms con URL propia</span>
       <a href="ranking-escape-rooms/">Ranking escape rooms España</a>
       <a href="mejores-escape-rooms/">Mejores escape rooms</a>
@@ -9994,32 +9999,6 @@ function mountScreamParksPreview() {
   window.TheVaultScreamParksPreview?.mount({root:document.getElementById('scream-parks-app'),endpoint:'scream-parks/data-2026.json',navigation:'inline',iconUrl:'images/brand/icon-round-192.png'});
 }
 
-function updateTabScrollCue() {
-  const scroller = document.getElementById('main-tabs');
-  const shell = scroller?.parentElement;
-  if (!shell) return;
-  shell.classList.toggle('can-scroll-left', scroller.scrollLeft > 2);
-  shell.classList.toggle('can-scroll-right', scroller.scrollLeft + scroller.clientWidth < scroller.scrollWidth - 2);
-}
-
-function revealMobileTab(tab) {
-  if (!tab || !window.matchMedia('(max-width: 640px)').matches) return;
-  const scroller = document.getElementById('main-tabs');
-  const viewport = scroller.getBoundingClientRect();
-  const target = tab.getBoundingClientRect();
-  const inset = 34;
-  let delta = 0;
-  if (target.left < viewport.left + inset) delta = target.left - viewport.left - inset;
-  else if (target.right > viewport.right - inset) delta = target.right - viewport.right + inset;
-  if (delta) scroller.scrollBy({left:delta,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
-  updateTabScrollCue();
-}
-
-document.getElementById('main-tabs').addEventListener('scroll', updateTabScrollCue, {passive:true});
-document.getElementById('main-tabs').addEventListener('focusin', event => revealMobileTab(event.target.closest('.tab')));
-window.addEventListener('resize', updateTabScrollCue);
-requestAnimationFrame(updateTabScrollCue);
-
 function switchTab(t) {
   if ((t === 'mis-hechos' || t === 'pendientes') && !AUTH_USER) t = 'thevault';
   ACTIVE_TAB = t;
@@ -10031,7 +10010,12 @@ function switchTab(t) {
     if (x === t) tab.setAttribute('aria-current', 'page');
     else tab.removeAttribute('aria-current');
   });
-  requestAnimationFrame(() => revealMobileTab(document.querySelector('#main-tabs .tab.active')));
+  document.querySelectorAll('.mobile-user-shortcut').forEach(shortcut => {
+    const active = shortcut.dataset.section === t;
+    shortcut.classList.toggle('active', active);
+    if (active) shortcut.setAttribute('aria-current', 'page');
+    else shortcut.removeAttribute('aria-current');
+  });
   if (t === 'ranking') {
     renderRanking();
     ensureStaticEnhancementsLoaded().then(() => {
