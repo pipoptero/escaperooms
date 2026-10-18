@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'the-vault-v53';
+const CACHE_VERSION = 'the-vault-v54';
 const APP_SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -30,7 +30,11 @@ const APP_SHELL = [
   './images/navigation/pendientes.png',
   './images/navigation/hechos.png',
   './images/navigation/reviews-tab.png',
-  './images/navigation/ranking.png'
+  './images/navigation/ranking.png',
+  './images/navigation/scream-parks.png',
+  './scream-parks/client.js',
+  './scream-parks/styles.css',
+  './scream-parks/data-2026.json'
 ];
 
 const DATA_FILES = [
@@ -106,6 +110,10 @@ self.addEventListener('fetch', event => {
   if (['room-state.js', 'route-planner.js', 'saved-routes.js', 'public-profile.js', 'public-profile-firebase.js', 'public-profile-fixtures.js', 'public-profile-page.js', 'public-profile.css'].includes(path)) {
     // Code must not remain pinned to an older shell while the document has
     // already updated. Offline clients still receive the last good response.
+    event.respondWith(networkFirst(request));
+    return;
+  }
+  if (url.pathname.startsWith('/scream-parks/') || url.pathname.startsWith('/images/scream-parks/')) {
     event.respondWith(networkFirst(request));
     return;
   }

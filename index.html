@@ -2055,6 +2055,7 @@
 #auth-debug-output{margin:0;padding:10px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.62rem;line-height:1.45;color:#d8e6d1;min-width:0;}
 .pwa-version{display:inline-block;user-select:none;-webkit-user-select:none;touch-action:manipulation;}
 </style>
+<link rel="stylesheet" href="scream-parks/styles.css">
 </head>
 <body>
 
@@ -2118,11 +2119,12 @@
   <div style="max-width:1400px;margin:0 auto;padding:0 32px;">
     <div class="tabs-container" id="main-tabs">
       <button class="tab active" id="tab-vault" onclick="switchTab('thevault')"><img class="tab-icon" src="images/navigation/progreso.png" alt="">The Vault</button>
-      <button class="tab" id="tab-cat" onclick="switchTab('catalogo')"><img class="tab-icon" src="images/navigation/catalogo.png" alt="">Catálogo <span class="count-badge" id="badge-cat">1741</span></button>
-      <button class="tab auth-tab" id="tab-pend" onclick="switchTab('pendientes')" style="display:none"><img class="tab-icon" src="images/navigation/pendientes.png" alt="">Pendientes <span class="count-badge" id="badge-pend">0</span></button>
-      <button class="tab auth-tab" id="tab-mine" onclick="switchTab('mis-hechos')" style="display:none"><img class="tab-icon" src="images/navigation/hechos.png" alt="">Hechos <span class="count-badge" id="badge-mine">0</span></button>
+      <button class="tab" id="tab-cat" onclick="switchTab('catalogo')"><img class="tab-icon" src="images/navigation/catalogo.png" alt="">Escapes <span class="count-badge" id="badge-cat">1741</span></button>
+      <button class="tab" id="tab-scream" onclick="switchTab('scream-parks')"><img class="tab-icon" src="images/navigation/scream-parks.png" alt="">Scream Parks</button>
       <button class="tab" id="tab-hecho" onclick="switchTab('hechos')"><img class="tab-icon" src="images/navigation/reviews-tab.png" alt="">Reviews <span class="count-badge" id="badge-hecho">43</span></button>
       <button class="tab" id="tab-rank" onclick="switchTab('ranking')"><img class="tab-icon" src="images/navigation/ranking.png" alt="">Ranking</button>
+      <button class="tab auth-tab" id="tab-pend" onclick="switchTab('pendientes')" style="display:none"><img class="tab-icon" src="images/navigation/pendientes.png" alt="">Pendientes <span class="count-badge" id="badge-pend">0</span></button>
+      <button class="tab auth-tab" id="tab-mine" onclick="switchTab('mis-hechos')" style="display:none"><img class="tab-icon" src="images/navigation/hechos.png" alt="">Hechos <span class="count-badge" id="badge-mine">0</span></button>
     </div>
   </div>
 
@@ -2225,6 +2227,20 @@
       <div class="rooms-grid" id="grid-mis-hechos"></div>
     </div>
 
+    <!-- SCREAM_PARKS_STATIC_CANDIDATE_V1 -->
+    <div id="panel-scream-parks" class="panel" style="display:none">
+      <div id="scream-parks-app">
+<section id="sp-landing"><div class="hero"><div class="eyebrow">Experiencias de terror · temporada 2026</div><h1>SCREAM<br><span>PARKS</span></h1><div class="rule"></div><p>Parques de terror, Halloween en parques de atracciones y eventos inmersivos. Cada formato conserva su identidad y su temporada.</p></div>
+<div class="taxonomy" aria-label="Tipos de experiencias"><span>Scream Park</span><span class="current">Parque de atracciones · Halloween</span><span>Evento de terror</span></div>
+<section id="sp-explorar"><div class="section-top"><h2>Experiencias y temporadas</h2><p id="sp-count" role="status">Cargando…</p></div>
+<div class="filters"><label>Tipo de experiencia<select id="sp-type-filter"><option value="all">Todos los tipos</option><option value="scream_park">Scream Park</option><option value="halloween_park">Parque de atracciones · Halloween</option><option value="evento_terror">Evento de terror</option></select></label>
+<label>Comunidad<select id="sp-region-filter"><option value="all">Todas</option></select></label><label>Provincia<select id="sp-province-filter"><option value="all">Todas</option></select></label></div>
+<div id="sp-cards" class="cards"></div></section></section>
+<section id="sp-detail" class="detail" hidden><button id="sp-back" type="button" class="back">← Volver a Scream Parks</button><div id="sp-detail-content"></div></section>
+<div id="sp-error" class="error" role="alert" hidden></div>
+      </div>
+    </div>
+
     <!-- HECHOS -->
     <div id="panel-hechos" class="panel" style="display:none">
       <div class="filters">
@@ -2312,7 +2328,7 @@
   <footer class="seo-footer" aria-label="Enlaces de reviews">
     <div class="seo-footer-inner">
       <span class="rights">&copy; 2026 The Vault Escape. Todos los derechos reservados.</span>
-      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v53</span>
+      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v54</span>
       <span>Reviews de escape rooms con URL propia</span>
       <a href="ranking-escape-rooms/">Ranking escape rooms España</a>
       <a href="mejores-escape-rooms/">Mejores escape rooms</a>
@@ -2493,6 +2509,7 @@
 <script src="public-profile-firebase.js"></script>
 <script src="public-profile-fixtures.js"></script>
 <script src="editorial-review-renderer.js"></script>
+<script src="scream-parks/client.js"></script>
 <script>
 // ════════════════════════════════════════════════════════════
 //  🔥 CONFIGURACIÓN FIREBASE
@@ -9959,18 +9976,23 @@ window.addEventListener('focus', () => { if (ACTIVE_TAB === 'pendientes') refres
 function renderActivePanel() {
   if (ACTIVE_TAB === 'ranking') renderRanking();
   else if (ACTIVE_TAB === 'catalogo') renderCatalogo();
+  else if (ACTIVE_TAB === 'scream-parks') mountScreamParksPreview();
   else if (ACTIVE_TAB === 'hechos') renderHechos();
   else if (ACTIVE_TAB === 'mis-hechos') renderMisHechos();
   else if (ACTIVE_TAB === 'pendientes') renderPendientes();
   else renderVaultGuide();
 }
 
+function mountScreamParksPreview() {
+  window.TheVaultScreamParksPreview?.mount({root:document.getElementById('scream-parks-app'),endpoint:'scream-parks/data-2026.json',navigation:'inline',iconUrl:'images/brand/icon-round-192.png'});
+}
+
 function switchTab(t) {
   if ((t === 'mis-hechos' || t === 'pendientes') && !AUTH_USER) t = 'thevault';
   ACTIVE_TAB = t;
-  ['pendientes','mis-hechos','hechos','ranking','catalogo','thevault'].forEach(x => {
+  ['pendientes','mis-hechos','hechos','ranking','catalogo','scream-parks','thevault'].forEach(x => {
     document.getElementById('panel-' + x).style.display = x === t ? 'block' : 'none';
-    const id = x==='pendientes'?'pend':x==='mis-hechos'?'mine':x==='hechos'?'hecho':x==='ranking'?'rank':x==='thevault'?'vault':'cat';
+    const id = x==='pendientes'?'pend':x==='mis-hechos'?'mine':x==='hechos'?'hecho':x==='ranking'?'rank':x==='scream-parks'?'scream':x==='thevault'?'vault':'cat';
     document.getElementById('tab-' + id).classList.toggle('active', x === t);
   });
   if (t === 'ranking') {
@@ -9985,6 +10007,7 @@ function switchTab(t) {
       if (ACTIVE_TAB === 'catalogo') renderCatalogo();
     });
   }
+  else if (t === 'scream-parks') mountScreamParksPreview();
   else if (t === 'hechos') renderHechos();
   else if (t === 'mis-hechos') renderMisHechos();
   else if (t === 'pendientes') { renderPendientes(); refreshRoomLists(); }
