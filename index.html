@@ -234,6 +234,7 @@
   .stat-label{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-top:2px;display:block;}
 
   /* ── TABS ── */
+  .main-tabs-shell{max-width:1400px;margin:0 auto;padding:0 32px;position:relative;}
   .tabs-container{display:flex;justify-content:center;padding:26px 32px 0;gap:4px;max-width:1400px;margin:0 auto;}
   .tab{font-family:'Cinzel',serif;font-weight:600;font-size:.76rem;letter-spacing:.08em;padding:8px 20px;border:1px solid var(--border);background:transparent;color:var(--text3);cursor:pointer;transition:all .2s;text-transform:uppercase;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:54px;}
   .tab-icon{width:36px;height:36px;flex:0 0 36px;object-fit:contain;filter:drop-shadow(0 3px 5px rgba(0,0,0,.5));}
@@ -1419,7 +1420,7 @@
   }
 
   @media(max-width:640px){
-    header{padding:8px 14px 7px;}
+    header{padding:calc(8px + var(--vault-safe-top, env(safe-area-inset-top, 0px))) 14px 7px;}
     .vault-brand::before{width:min(410px,93vw);height:78px;filter:blur(12px);opacity:.7;}
     .vault-brand-logo{width:min(348px,90vw);height:auto;aspect-ratio:1000/206;object-fit:contain;}
     h1{font-size:1.75rem;letter-spacing:.13em;filter:drop-shadow(0 2px 0 rgba(0,0,0,.8)) drop-shadow(0 5px 14px rgba(0,0,0,.75));}
@@ -1442,9 +1443,14 @@
     .auth-name{max-width:72px;}
     .auth-btn{padding:7px 8px;font-size:.54rem;letter-spacing:.04em;}
     .content{padding:0 14px 40px;}
-    .tabs-container{padding:18px 14px 0;gap:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));}
-    .tabs-container.authenticated{grid-template-columns:repeat(2,minmax(0,1fr));}
-    .tab{min-width:0;padding:6px 5px;font-size:.58rem;letter-spacing:.03em;text-align:center;gap:4px;min-height:50px;}
+    .main-tabs-shell{padding:0;}
+    .main-tabs-shell::before,.main-tabs-shell::after{content:'';position:absolute;top:18px;bottom:0;width:34px;pointer-events:none;z-index:2;opacity:0;transition:opacity .2s;}
+    .main-tabs-shell::before{left:0;background:linear-gradient(90deg,#08080b,transparent);}
+    .main-tabs-shell::after{right:0;background:linear-gradient(270deg,#08080b,transparent);}
+    .main-tabs-shell.can-scroll-left::before,.main-tabs-shell.can-scroll-right::after{opacity:1;}
+    .tabs-container,.tabs-container.authenticated{padding:18px 14px 0;gap:4px;display:flex;flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scroll-behavior:smooth;scrollbar-width:none;}
+    .tabs-container::-webkit-scrollbar{display:none;}
+    .tab{flex:0 0 auto;min-width:0;padding:6px 9px;font-size:.58rem;letter-spacing:.03em;text-align:center;gap:4px;min-height:50px;white-space:nowrap;}
     .tab-icon{width:27px;height:27px;flex-basis:27px;}
     .tab .count-badge{font-size:.5rem;padding:1px 4px;margin-left:1px;}
     .panel{padding:14px;}.rooms-grid{grid-template-columns:1fr;}
@@ -1625,6 +1631,7 @@
     .group-insights-grid{grid-template-columns:1fr;}
     .assistant-grid{grid-template-columns:1fr;}
   }
+  @media(max-width:640px) and (prefers-reduced-motion:reduce){.tabs-container{scroll-behavior:auto;}}
 
   /* -- PREPROD BRAND POLISH -------------------------------------------------- */
   body{
@@ -2116,9 +2123,9 @@
     </div>
   </div>
 
-  <div style="max-width:1400px;margin:0 auto;padding:0 32px;">
+  <nav class="main-tabs-shell" aria-label="Secciones principales">
     <div class="tabs-container" id="main-tabs">
-      <button class="tab active" id="tab-vault" onclick="switchTab('thevault')"><img class="tab-icon" src="images/navigation/progreso.png" alt="">The Vault</button>
+      <button class="tab active" id="tab-vault" aria-current="page" onclick="switchTab('thevault')"><img class="tab-icon" src="images/navigation/progreso.png" alt="">The Vault</button>
       <button class="tab" id="tab-cat" onclick="switchTab('catalogo')"><img class="tab-icon" src="images/navigation/catalogo.png" alt="">Escapes <span class="count-badge" id="badge-cat">1741</span></button>
       <button class="tab" id="tab-scream" onclick="switchTab('scream-parks')"><img class="tab-icon" src="images/navigation/scream-parks.png" alt="">Scream Parks</button>
       <button class="tab" id="tab-hecho" onclick="switchTab('hechos')"><img class="tab-icon" src="images/navigation/reviews-tab.png" alt="">Reviews <span class="count-badge" id="badge-hecho">43</span></button>
@@ -2126,7 +2133,7 @@
       <button class="tab auth-tab" id="tab-pend" onclick="switchTab('pendientes')" style="display:none"><img class="tab-icon" src="images/navigation/pendientes.png" alt="">Pendientes <span class="count-badge" id="badge-pend">0</span></button>
       <button class="tab auth-tab" id="tab-mine" onclick="switchTab('mis-hechos')" style="display:none"><img class="tab-icon" src="images/navigation/hechos.png" alt="">Hechos <span class="count-badge" id="badge-mine">0</span></button>
     </div>
-  </div>
+  </nav>
 
   <div class="content">
     <div class="vault-guest-strip guest-only" id="vault-guest-strip">
@@ -2328,7 +2335,7 @@
   <footer class="seo-footer" aria-label="Enlaces de reviews">
     <div class="seo-footer-inner">
       <span class="rights">&copy; 2026 The Vault Escape. Todos los derechos reservados.</span>
-      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v54</span>
+      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v55</span>
       <span>Reviews de escape rooms con URL propia</span>
       <a href="ranking-escape-rooms/">Ranking escape rooms España</a>
       <a href="mejores-escape-rooms/">Mejores escape rooms</a>
@@ -9987,14 +9994,44 @@ function mountScreamParksPreview() {
   window.TheVaultScreamParksPreview?.mount({root:document.getElementById('scream-parks-app'),endpoint:'scream-parks/data-2026.json',navigation:'inline',iconUrl:'images/brand/icon-round-192.png'});
 }
 
+function updateTabScrollCue() {
+  const scroller = document.getElementById('main-tabs');
+  const shell = scroller?.parentElement;
+  if (!shell) return;
+  shell.classList.toggle('can-scroll-left', scroller.scrollLeft > 2);
+  shell.classList.toggle('can-scroll-right', scroller.scrollLeft + scroller.clientWidth < scroller.scrollWidth - 2);
+}
+
+function revealMobileTab(tab) {
+  if (!tab || !window.matchMedia('(max-width: 640px)').matches) return;
+  const scroller = document.getElementById('main-tabs');
+  const viewport = scroller.getBoundingClientRect();
+  const target = tab.getBoundingClientRect();
+  const inset = 34;
+  let delta = 0;
+  if (target.left < viewport.left + inset) delta = target.left - viewport.left - inset;
+  else if (target.right > viewport.right - inset) delta = target.right - viewport.right + inset;
+  if (delta) scroller.scrollBy({left:delta,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+  updateTabScrollCue();
+}
+
+document.getElementById('main-tabs').addEventListener('scroll', updateTabScrollCue, {passive:true});
+document.getElementById('main-tabs').addEventListener('focusin', event => revealMobileTab(event.target.closest('.tab')));
+window.addEventListener('resize', updateTabScrollCue);
+requestAnimationFrame(updateTabScrollCue);
+
 function switchTab(t) {
   if ((t === 'mis-hechos' || t === 'pendientes') && !AUTH_USER) t = 'thevault';
   ACTIVE_TAB = t;
   ['pendientes','mis-hechos','hechos','ranking','catalogo','scream-parks','thevault'].forEach(x => {
     document.getElementById('panel-' + x).style.display = x === t ? 'block' : 'none';
     const id = x==='pendientes'?'pend':x==='mis-hechos'?'mine':x==='hechos'?'hecho':x==='ranking'?'rank':x==='scream-parks'?'scream':x==='thevault'?'vault':'cat';
-    document.getElementById('tab-' + id).classList.toggle('active', x === t);
+    const tab = document.getElementById('tab-' + id);
+    tab.classList.toggle('active', x === t);
+    if (x === t) tab.setAttribute('aria-current', 'page');
+    else tab.removeAttribute('aria-current');
   });
+  requestAnimationFrame(() => revealMobileTab(document.querySelector('#main-tabs .tab.active')));
   if (t === 'ranking') {
     renderRanking();
     ensureStaticEnhancementsLoaded().then(() => {
