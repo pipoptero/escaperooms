@@ -125,9 +125,9 @@
       const aside = create('aside');
       main.append(create('div', `${entry.typeLabel} · ${entry.seasonId}`, 'eyebrow'),
         create('h1', entry.name),
-        create('p', s4(entry)
+        create('p', entry.editorialSynopsis || (s4(entry)
           ? `Temporada ${entry.seasonId.slice(-4)}. Consulta la web del evento antes de planificar la visita.`
-          : `Temporada ${entry.seasonId.slice(-4)} confirmada según las evidencias editoriales vigentes. Esta ficha sigue en PREVIEW_ONLY.`, 'lead'));
+          : `Temporada ${entry.seasonId.slice(-4)} confirmada según las evidencias editoriales vigentes. Esta ficha sigue en PREVIEW_ONLY.`), 'lead'));
       const period = panel('Temporada y sesiones');
       if (entry.period.start && entry.period.end) fact(period,
         s4(entry) ? 'Fechas orientativas' : !entry.fieldSources || entry.period.source === 'VERIFIED_S2' ? 'Periodo verificado' : 'Periodo del Excel · sin verificar',
@@ -150,7 +150,7 @@
       if (entry.operator) fact(context, s4(entry) ? 'Organiza' : 'Organiza · verificado', entry.operator);
       const place = [entry.city, entry.province || entry.region, entry.country].filter(Boolean).join(' · ');
       if (place) fact(context, s4(entry) ? 'Zona indicada' : `Ubicación · ${sourceNote(entry, 'entity.location.city')}`, place);
-      if (entry.seasonStatus) fact(context, s4(entry) ? 'Temporada' : 'Estado de temporada · verificado', entry.seasonStatus === 'confirmed' ? 'Confirmada' : entry.seasonStatus);
+      if (entry.seasonStatus) fact(context, s4(entry) ? 'Temporada' : 'Estado de temporada · verificado', entry.seasonStatus === 'confirmed' ? 'Confirmada' : entry.seasonStatus === 'POSTPONED_2026' ? 'Edición 2026 aplazada' : entry.seasonStatus);
       else fact(context, s4(entry) ? 'Temporada' : 'Estado editorial', s4(entry) ? 'Por confirmar' : entry.editorialState === 'BLOCKED' ? 'Bloqueado' : 'Pendiente de verificar');
       if (entry.hours) fact(context, s4(entry) ? 'Horario orientativo' : 'Horario · verificado', entry.hours);
       else if (!s4(entry)) context.append(create('p', 'Horario no verificado; consulta la web oficial.', 'caution'));
@@ -161,6 +161,21 @@
         s4(entry) ? 'Información para visitantes' : `Advertencias · ${sourceNote(entry, 'season.warnings')}`,
         Array.isArray(entry.warnings) ? entry.warnings.join(' · ') : entry.warnings);
       main.append(context);
+      if (entry.practical && Object.keys(entry.practical).length) {
+        const practical = panel('Datos prácticos');
+        const labels = {
+          food: 'Restauración', openingHours: 'Horario de apertura', parking: 'Aparcamiento',
+          ticketOptions: 'Entradas y modalidades', venue: 'Recinto', accessAddress: 'Acceso indicado',
+          ageGuidance: 'Edad recomendada', minimumAge: 'Restricción de edad',
+          contactEmail: 'Correo de contacto', contactPhone: 'Teléfono',
+          sessionDatesPartial: 'Sesiones confirmadas parcialmente', locationApprox: 'Ubicación aproximada'
+        };
+        for (const [key, value] of Object.entries(entry.practical)) {
+          if (!labels[key] || value == null || value === '') continue;
+          fact(practical, labels[key], Array.isArray(value) ? value.map(fmtDay).join(' · ') : value);
+        }
+        main.append(practical);
+      }
       const officialUrl = safeExternalUrl(entry.officialUrl);
       const bookingUrl = safeExternalUrl(entry.bookingUrl);
       if (officialUrl || bookingUrl || !s4(entry)) {
