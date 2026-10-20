@@ -81,6 +81,13 @@ test('cada usuario solo puede leer y modificar sus estados', async () => {
   await assertSucceeds(set(ref(mine, 'users/alice/roomStates/dated'), { ...state, id: 'dated', pending: false, done: true, playedAt: '2024-05-17' }));
   await assertSucceeds(set(ref(mine, 'users/alice/roomStates/leap-date'), { ...state, id: 'leap-date', pending: false, done: true, playedAt: '2024-02-29' }));
   await assertSucceeds(set(ref(mine, 'users/alice/roomStates/legacy'), { ...state, id: 'legacy', pending: false, done: true }));
+  await assertFails(set(ref(mine, 'users/alice/roomStates/the_village'), { ...state, id: 'the-village' }));
+  await assertFails(set(ref(mine, 'users/alice/roomStates/the-village'), { ...state, id: 'the-village' }));
+  await seed({ users: { alice: { roomStates: { the_village: { ...state, id: 'the-village' } } } } });
+  assert.equal((await get(ref(mine, 'users/alice/roomStates/the_village'))).val().id, 'the-village');
+  await assertFails(get(ref(other, 'users/alice/roomStates/the_village')));
+  await assertSucceeds(remove(ref(mine, 'users/alice/roomStates/the_village')));
+  await assertFails(set(ref(mine, 'users/alice/roomStates/the_village'), { ...state, id: 'the-village' }));
   await assertFails(set(ref(mine, 'users/alice/roomStates/bad-date'), { ...state, id: 'bad-date', pending: false, done: true, playedAt: '17/05/2024' }));
   await assertFails(set(ref(mine, 'users/alice/roomStates/impossible-date'), { ...state, id: 'impossible-date', pending: false, done: true, playedAt: '2024-02-31' }));
   await assertFails(set(ref(mine, 'users/alice/roomStates/non-leap-date'), { ...state, id: 'non-leap-date', pending: false, done: true, playedAt: '2023-02-29' }));

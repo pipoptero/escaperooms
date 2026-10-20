@@ -1,42 +1,45 @@
-"""Release invariants for the single The Village catalog identity."""
+"""The Village is one Scream Park entity, never an escape-room identity."""
 
-import hashlib
 import json
 import unittest
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PLAYER = "https://www.tiktok.com/player/v1/7693957517554060566"
-COVER = "images/catalgo_propio_web_escape/optimized/the-village.webp"
-COVER_SHA256 = "bdd0dda1d5f79611e7321a2ebe23a3092122dc472969b16b2940dea3c1b47aae"
 
 
 class TheVillageReleaseTests(unittest.TestCase):
-    def test_room_is_one_location_honest_identity_with_approved_cover(self):
-        catalog = json.loads((ROOT / "catalog.json").read_text(encoding="utf-8"))["catalogo"]
-        rooms = [room for room in catalog if room["id"] == "the-village"]
-        self.assertEqual(len(rooms), 1)
-        room = rooms[0]
-        self.assertEqual(room["ciudad"], "")
-        self.assertEqual(room["provincia"], "Barcelona")
-        self.assertEqual(room["empresa"], "Insomnia Corporation")
-        self.assertIsNone(room["duracion"])
-        self.assertIsNone(room["min_personas"])
-        self.assertIsNone(room["max_personas"])
-        self.assertEqual(room["imagen"], COVER)
-        self.assertEqual(hashlib.sha256((ROOT / COVER).read_bytes()).hexdigest(), COVER_SHA256)
+    def test_only_scream_park_identity_remains(self):
+        catalog = json.loads((ROOT / "catalog.json").read_text(encoding="utf-8"))
+        parks = json.loads((ROOT / "scream-parks/data-2026.json").read_text(encoding="utf-8"))["entries"]
+        self.assertEqual(len(parks), 22)
+        self.assertEqual(len({park["id"] for park in parks}), 22)
+        self.assertEqual(len(catalog["catalogo"]), 1740)
+        self.assertEqual(catalog["meta"]["count"], 1740)
+        self.assertFalse(any(room.get("id") == "the-village" for room in catalog["catalogo"]))
+        village = [park for park in parks if park.get("id") == "the-village"]
+        self.assertEqual(len(village), 1)
+        self.assertEqual(village[0]["seasonId"], "the-village-2026")
+        self.assertEqual(village[0]["type"], "scream_park")
+        self.assertEqual(len(village[0]["sessionDates"]), 8)
+        self.assertEqual(len(village[0]["images"]), 1)
+        self.assertTrue((ROOT / village[0]["images"][0]).exists())
+        self.assertEqual(village[0]["officialVideo"]["embedUrl"], "https://www.tiktok.com/player/v1/7693957517554060566")
+        self.assertIn("Cerca de Berga", village[0]["practical"]["locationApprox"])
+        self.assertNotIn("the-village", (ROOT / "sitemap-rooms.xml").read_text(encoding="utf-8"))
 
-    def test_tiktok_embed_has_no_invented_sitemap_metadata(self):
+    def test_old_url_is_nonindexable_redirect_to_park(self):
+        page = (ROOT / "salas/the-village/index.html").read_text(encoding="utf-8")
+        self.assertIn('name="robots" content="noindex, follow"', page)
+        self.assertIn('url=/#scream-park/the-village', page)
+        self.assertIn('href="/#scream-park/the-village"', page)
+        self.assertNotIn('EntertainmentBusiness', page)
+
+    def test_video_is_preserved_without_fake_rating_or_review(self):
         videos = json.loads((ROOT / "official_videos.json").read_text(encoding="utf-8"))["videos"]
-        video = videos["the-village"]
-        self.assertEqual(video["provider"], "tiktok")
-        self.assertEqual(video["embed_url"], PLAYER)
-        self.assertEqual(video["aspect_ratio"], "9/16")
-        self.assertFalse(video["upload_date"])
-        self.assertFalse(video["thumbnail"])
-        self.assertIn("the-village", (ROOT / "sitemap-rooms.xml").read_text(encoding="utf-8"))
+        self.assertEqual(videos["the-village"]["embed_url"], "https://www.tiktok.com/player/v1/7693957517554060566")
         self.assertNotIn("the-village", (ROOT / "video-sitemap.xml").read_text(encoding="utf-8"))
+
 
 
 if __name__ == "__main__":

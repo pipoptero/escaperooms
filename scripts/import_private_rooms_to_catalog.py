@@ -49,6 +49,16 @@ AGGREGATOR_DOMAINS = {
     "www.room-escapers.com",
 }
 
+# This seasonal event has a permanent Scream Parks identity. A private-room
+# source must never recreate its retired escape-room catalogue record.
+NON_ESCAPE_IDENTITIES = {"the-village"}
+
+
+def non_escape_identity(row) -> bool:
+    return (enrich.slugify(clean(row["room_id"])) in NON_ESCAPE_IDENTITIES
+            or (compact(row["nombre"]) == "the village"
+                and compact(row["empresa"]) == "insomnia corporation"))
+
 
 def load_catalog_payload() -> dict:
     payload = json.loads(CATALOG_FILE.read_text(encoding="utf-8"))
@@ -269,6 +279,9 @@ def main() -> int:
             """
         ).fetchall()
         for row in private_rooms:
+            if non_escape_identity(row):
+                skipped_known.append({"room_id": row["room_id"], "reason": "scream_park_identity"})
+                continue
             if private_room_closed(row, closed_keys):
                 skipped_closed.append(
                     {

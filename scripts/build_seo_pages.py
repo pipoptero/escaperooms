@@ -25,6 +25,7 @@ LATEST_REVIEW_THUMB_DIR = Path("images/seo/latest")
 CITY_PAGE_MIN_ROOMS = 8
 REGION_PAGE_MIN_ROOMS = 10
 LEGACY_LOCATION_SLUGS = {"escape-rooms-vigo"}
+LEGACY_SCREAM_PARK_ROUTES = {"the-village": "/#scream-park/the-village"}
 ROOM_LOCATIONS_CACHE = None
 SEO_ROOM_SLUGS = {}
 
@@ -2621,6 +2622,15 @@ def main():
     for old_page in salas_dir.glob("*/index.html"):
         old_slug = old_page.parent.name
         if old_slug in generated_sala_slugs:
+            continue
+        if old_slug in LEGACY_SCREAM_PARK_ROUTES:
+            target = LEGACY_SCREAM_PARK_ROUTES[old_slug]
+            old_page.write_text(
+                legacy_seo_page("The Village", site_url("/"), target=target),
+                encoding="utf-8",
+                newline="\n",
+            )
+            legacy_sala_pages += 1
             continue
         current_item = sala_by_identity.get(canonical_room_identity(old_slug))
         if current_item:

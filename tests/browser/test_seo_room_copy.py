@@ -47,21 +47,16 @@ class SeoRoomCopyBrowserTest(unittest.TestCase):
         cls.server.server_close()
 
     def test_all_availability_cases_at_desktop_and_mobile_width(self):
-        village = next(room for room in json.loads((ROOT / "catalog.json").read_text(encoding="utf-8"))["catalogo"]
-                       if room.get("id") == "the-village")
         cases = (
             ("both", {"duracion": 60, "min_personas": 2, "max_personas": 4}, "ubicación, duración, jugadores"),
             ("duration", {"duracion": 60}, "ubicación, duración"),
             ("players", {"min_personas": 2}, "ubicación, jugadores"),
             ("neither", {}, "ubicación y enlaces"),
-            ("the-village", village, "ubicación y enlaces"),
         )
         for width in (1440, 390):
             for label, values, expected in cases:
                 with self.subTest(width=width, case=label):
                     room = {"id": "seo-copy-fixture", "nombre": "Prueba", "empresa": "Operador", "ciudad": "Bilbao", **values}
-                    if label == "the-village":
-                        room = values
                     html = SEO.room_page({"room": room, "rating": {}, "meta": {}}, 0)
                     context = self.browser.new_context(viewport={"width": width, "height": 850}, service_workers="block")
                     target = self.url + "/salas/seo-copy-fixture/"
@@ -78,7 +73,7 @@ class SeoRoomCopyBrowserTest(unittest.TestCase):
                         page.goto(target, wait_until="domcontentloaded")
                         copy = page.locator("main .detail-hero > div > p").first.inner_text()
                         self.assertIn(expected, copy)
-                        if label in ("neither", "the-village"):
+                        if label == "neither":
                             self.assertNotIn("duración", copy)
                             self.assertNotIn("jugadores", copy)
                         self.assertFalse(page.evaluate("document.documentElement.scrollWidth > innerWidth"))

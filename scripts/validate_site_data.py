@@ -195,6 +195,12 @@ def validate():
     reviews = (load_json("published_reviews.json", errors).get("reviews") or {})
     review_photos = (load_json("review_photos.json", errors).get("photos") or {})
     relationships = load_json("room_relationships.json", errors).get("families") or []
+    scream_parks = load_json("scream-parks/data-2026.json", errors).get("entries") or []
+    village_parks = [entry for entry in scream_parks if entry.get("id") == "the-village"]
+    if len(village_parks) != 1 or village_parks[0].get("seasonId") != "the-village-2026":
+        errors.append("Scream Parks: The Village requiere una entidad y temporada 2026 exactas")
+    if any(room.get("id") == "the-village" for room in catalog):
+        errors.append("Catálogo: The Village es Scream Park y no puede reaparecer como escape room")
 
     index_html = (ROOT / "index.html").read_text(encoding="utf-8")
     function_names = re.findall(r"(?m)^\s*(?:async\s+)?function\s+([A-Za-z_$][\w$]*)\s*\(", index_html)

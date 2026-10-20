@@ -256,6 +256,20 @@
         }
         aside.append(gallery);
       }
+      const officialVideo = entry.officialVideo?.embedUrl;
+      if (entry.officialVideo?.provider === 'tiktok'
+          && /^https:\/\/www\.tiktok\.com\/player\/v1\/[0-9]+$/.test(officialVideo || '')) {
+        const videoPanel = panel('Vídeo oficial');
+        const frame = create('iframe');
+        frame.className = 'sp-official-video';
+        frame.src = officialVideo;
+        frame.title = `Vídeo oficial de ${entry.name}`;
+        frame.loading = 'lazy';
+        frame.allow = 'fullscreen; picture-in-picture';
+        frame.referrerPolicy = 'strict-origin-when-cross-origin';
+        videoPanel.append(frame);
+        aside.append(videoPanel);
+      }
       const sidebar = panel('Antes de ir');
       sidebar.append(create('p', s4(entry)
         ? 'Consulta disponibilidad, precios y condiciones en la web del evento antes de ir.'

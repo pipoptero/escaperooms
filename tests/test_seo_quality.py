@@ -36,19 +36,6 @@ class SeoQualityTest(unittest.TestCase):
                 if not players:
                     self.assertNotIn("jugadores", page.split("<main", 1)[-1])
 
-    def test_the_village_visible_fallback_has_no_duration_or_players(self):
-        catalog = json.loads((MODULE.ROOT / "catalog.json").read_text(encoding="utf-8"))["catalogo"]
-        village = next(room for room in catalog if room.get("id") == "the-village")
-        self.assertIsNone(village.get("duracion"))
-        self.assertFalse(MODULE.room_players(village))
-        text = MODULE.room_body_fallback_description(
-            village, MODULE.canonical_room_name(village), MODULE.canonical_room_company(village),
-            MODULE.text(village.get("ciudad")),
-        )
-        self.assertEqual(text, "Ficha de The Village de Insomnia Corporation, con datos de ubicación y enlaces de consulta.")
-        page = (MODULE.ROOT / "salas" / "the-village" / "index.html").read_text(encoding="utf-8")
-        self.assertIn("<p>" + text + "</p>", page)
-
     def test_room_description_only_advertises_available_duration_and_players(self):
         room = {
             "nombre": "Prueba", "empresa": "Operador", "provincia": "Barcelona",
