@@ -1151,7 +1151,7 @@ class PendingModalTest(unittest.TestCase):
             self.assertEqual(diagnostic['appOrigin'], 'https://thevaultescape.com')
             self.assertTrue(diagnostic['sameOriginHelper'])
             self.assertEqual(diagnostic['selectedMethod'], 'redirect')
-            self.assertEqual(diagnostic['serviceWorkerVersion'], 'the-vault-v56')
+            self.assertEqual(diagnostic['serviceWorkerVersion'], 'the-vault-v57')
             self.assertEqual(diagnostic['persistence'], 'not-initialized')
             for field in ('href', 'displayModeStandalone', 'navigatorStandalone', 'authFlowState',
                           'redirectPending', 'redirectResult', 'authError'):
@@ -1162,7 +1162,7 @@ class PendingModalTest(unittest.TestCase):
     def test_standalone_popup_recovery_retry_external_browser_and_hidden_debug_gesture(self):
         page = self.context.new_page()
         page.goto(self.url, wait_until='load')
-        expect(page.locator('#pwa-version')).to_have_text('PWA v56')
+        expect(page.locator('#pwa-version')).to_have_text('PWA v57')
         for _ in range(5):
             page.locator('#pwa-version').click()
         self.assertEqual(page.locator('#auth-debug-panel').count(), 0)

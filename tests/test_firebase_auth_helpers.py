@@ -231,7 +231,7 @@ class FirebaseAuthHelperTests(unittest.TestCase):
         source = (ROOT / "service-worker.js").read_text(encoding="utf-8")
         bypass = "url.pathname.startsWith('/__/auth/') || url.pathname === '/__/firebase/init.json'"
         self.assertIn(bypass, source)
-        self.assertIn("the-vault-v56", source)
+        self.assertIn("the-vault-v57", source)
         self.assertLess(source.index(bypass), source.index("request.mode === 'navigate'"))
         app_shell = source[source.index("const APP_SHELL"):source.index("const DATA_FILES")]
         self.assertNotIn("__/auth", app_shell)
@@ -246,7 +246,7 @@ class FirebaseAuthHelperTests(unittest.TestCase):
         self.assertIn("<EXISTING_FIREBASE_API_KEY>", candidate)
         html = (ROOT / "index.html").read_text(encoding="utf-8")
         self.assertIn('<script src="firebase-config.js?v=53"></script>', html)
-        self.assertIn('>PWA v56</span>', html)
+        self.assertIn('>PWA v57</span>', html)
         workflow = (ROOT / ".github/workflows/deploy-pages.yml").read_text(encoding="utf-8")
         self.assertNotIn("firebase-config.same-origin.example.js", workflow)
         self.assertIn("authDomain: 'thevaultescape.com'", workflow)

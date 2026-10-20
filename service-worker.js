@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'the-vault-v56';
+const CACHE_VERSION = 'the-vault-v57';
 const APP_SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -32,6 +32,7 @@ const APP_SHELL = [
   './images/navigation/reviews-tab.png',
   './images/navigation/ranking.png',
   './images/navigation/scream-parks.png',
+  './scream-parks/personal-state.js',
   './scream-parks/client.js',
   './scream-parks/styles.css',
   './scream-parks/data-2026.json'

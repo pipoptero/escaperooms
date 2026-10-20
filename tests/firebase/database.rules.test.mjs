@@ -88,6 +88,32 @@ test('cada usuario solo puede leer y modificar sus estados', async () => {
   await assertFails(set(ref(mine, 'users/alice/roomStates/pending-date'), { ...state, id: 'pending-date', playedAt: '2024-05-17' }));
 });
 
+test('Scream Parks: estados por edición y favoritos por entidad son privados y aislados', async () => {
+  const alice = env.authenticatedContext('alice').database();
+  const bob = env.authenticatedContext('bob').database();
+  const guest = env.unauthenticatedContext().database();
+  const edition = { entityId: 'the-village', seasonId: 'the-village-2026', done: true, pending: false, updatedAt: 100 };
+  const path = 'screamParkUserStates/alice/editions/the-village-2026';
+  await assertSucceeds(set(ref(alice, path), edition));
+  await assertSucceeds(set(ref(alice, 'screamParkUserStates/alice/favorites/the-village'), true));
+  await assertSucceeds(get(ref(alice, 'screamParkUserStates/alice')));
+  await assertFails(get(ref(bob, 'screamParkUserStates/alice')));
+  await assertFails(get(ref(guest, path)));
+  await assertFails(set(ref(bob, path), edition));
+  await assertFails(set(ref(guest, path), edition));
+  await assertFails(set(ref(bob, 'screamParkUserStates/alice/favorites/the-village'), true));
+  await assertSucceeds(set(ref(bob, 'screamParkUserStates/bob/editions/the-village-2025'),
+    { ...edition, seasonId: 'the-village-2025' }));
+  assert.equal((await get(ref(alice, path))).val().done, true);
+  await assertFails(set(ref(alice, 'screamParkUserStates/alice/editions/the-village-2025'),
+    { ...edition, seasonId: 'the-village-2025', done: true, pending: true }));
+  await assertFails(set(ref(alice, 'screamParkUserStates/alice/editions/bad-key'), edition));
+  await assertFails(set(ref(alice, path), { ...edition, unknown: 'unsafe' }));
+  await assertFails(set(ref(alice, 'screamParkUserStates/alice/favorites/the-village'), 'yes'));
+  await assertSucceeds(remove(ref(alice, path)));
+  await assertSucceeds(remove(ref(alice, 'screamParkUserStates/alice/favorites/the-village')));
+});
+
 test('el PATCH de alias personal sigue permitido y es atómico', async () => {
   await seed({ users: { alice: { roomStates: { old: { id: 'old', nombre: 'Sala', pending: true, done: false, updatedAt: 1 } } } } });
   const db = env.authenticatedContext('alice').database();

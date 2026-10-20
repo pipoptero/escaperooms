@@ -39,6 +39,29 @@
         }
       }
     },
+    "screamParkUserStates": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid",
+        "editions": {
+          "$seasonId": {
+            ".validate": "!newData.exists() || ($seasonId.matches(/^[a-z0-9]+(-[a-z0-9]+)*-(19|20)[0-9]{2}$/) && newData.hasChildren(['entityId', 'seasonId', 'done', 'pending', 'updatedAt']) && newData.child('seasonId').val() === $seasonId && newData.child('entityId').isString() && newData.child('entityId').val().matches(/^[a-z0-9]+(-[a-z0-9]+)*$/) && newData.child('updatedAt').isNumber() && newData.child('updatedAt').val() > 0 && ((newData.child('done').val() === true && newData.child('pending').val() === false) || (newData.child('done').val() === false && newData.child('pending').val() === true)))",
+            "entityId": { ".validate": "newData.isString()" },
+            "seasonId": { ".validate": "newData.isString()" },
+            "done": { ".validate": "newData.isBoolean()" },
+            "pending": { ".validate": "newData.isBoolean()" },
+            "updatedAt": { ".validate": "newData.isNumber()" },
+            "$other": { ".validate": false }
+          }
+        },
+        "favorites": {
+          "$entityId": {
+            ".validate": "!newData.exists() || ($entityId.matches(/^[a-z0-9]+(-[a-z0-9]+)*$/) && newData.val() === true)"
+          }
+        },
+        "$other": { ".validate": false }
+      }
+    },
     "profiles": {
       "$uid": {
         ".read": "auth != null && auth.uid === $uid",

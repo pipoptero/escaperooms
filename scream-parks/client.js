@@ -2,6 +2,7 @@
 (function () {
   'use strict';
   const mounted = new WeakMap();
+  let activeController = null;
 
   function mount({ root, endpoint, navigation = 'inline', iconUrl }) {
     if (!root || !endpoint || !iconUrl) throw new Error('Scream Parks preview misconfigured');
@@ -75,6 +76,40 @@
         route();
       }
     }
+    function personalControls(entry, compact = false) {
+      const store = window.VaultScreamParkStates;
+      const section = create('section', undefined, compact ? 'sp-personal compact' : 'sp-personal');
+      if (!store?.authenticated) {
+        if (!compact) section.append(create('p', 'Entra con Google para guardar este parque y su edición en tus listas.', 'sp-personal-hint'));
+        return section;
+      }
+      const state = store.current(entry);
+      if (!compact) section.append(create('h2', `Mi edición ${entry.seasonId.slice(-4)}`));
+      const actions = create('div', undefined, 'sp-personal-actions');
+      for (const [action, label, activeLabel] of [
+        ['done', 'Hecho', '✓ Hecho'], ['pending', 'Pendiente', '✓ Pendiente'],
+        ['favorite', 'Favorito', '♥ Favorito']
+      ]) {
+        const button = create('button', state[action] ? activeLabel : label, `sp-state-button ${action}${state[action] ? ' active' : ''}`);
+        button.type = 'button';
+        button.setAttribute('aria-pressed', String(state[action]));
+        button.setAttribute('aria-label', `${label}: ${entry.name}${action === 'favorite' ? '' : `, edición ${entry.seasonId.slice(-4)}`}`);
+        button.onclick = async () => {
+          button.disabled = true;
+          status.textContent = 'Guardando…';
+          try { await store.transition(entry, action); }
+          catch (error) {
+            button.disabled = false;
+            status.textContent = `No se pudo guardar. ${error.message}`;
+          }
+        };
+        actions.append(button);
+      }
+      const status = create('span', '', 'sp-personal-status');
+      status.setAttribute('role', 'status');
+      section.append(actions, status);
+      return section;
+    }
     function card(entry) {
       const article = create('article', undefined, 'card');
       article.dataset.id = entry.id;
@@ -93,6 +128,7 @@
       button.type = 'button';
       button.onclick = () => showDetail(entry.id);
       bottom.append(button);
+      if (window.VaultScreamParkStates?.authenticated) bottom.append(personalControls(entry, true));
       body.append(bottom);
       article.append(art, body);
       return article;
@@ -128,6 +164,7 @@
         create('p', entry.editorialSynopsis || (s4(entry)
           ? `Temporada ${entry.seasonId.slice(-4)}. Consulta la web del evento antes de planificar la visita.`
           : `Temporada ${entry.seasonId.slice(-4)} confirmada según las evidencias editoriales vigentes. Esta ficha sigue en PREVIEW_ONLY.`), 'lead'));
+      main.append(personalControls(entry));
       const period = panel('Temporada y sesiones');
       if (entry.period.start && entry.period.end) fact(period,
         s4(entry) ? 'Fechas orientativas' : !entry.fieldSources || entry.period.source === 'VERIFIED_S2' ? 'Periodo verificado' : 'Periodo del Excel · sin verificar',
@@ -254,8 +291,15 @@
       else { selectedId = ''; route(); }
     };
     if (navigation === 'hash') window.addEventListener('hashchange', route);
-    const controller = { route, renderList };
+    function refreshStates() {
+      if (!model) return;
+      renderList();
+      const entry = model.entries.find(item => item.id === selectedId);
+      if (entry) detail(entry);
+    }
+    const controller = { route, renderList, refreshStates, open: showDetail };
     mounted.set(root, controller);
+    activeController = controller;
     fetch(endpoint, { cache: 'no-store' }).then(async response => {
       const data = await response.json();
       if (!response.ok) throw Error(data.error || 'Preview no disponible');
@@ -265,6 +309,7 @@
         || data.publishableApproved || data.productOperations?.length || data.firebaseOperations?.length))
         || !Array.isArray(data.entries)) throw Error('Datos de Scream Parks no disponibles');
       model = data;
+      if (staticCatalog && window.VaultScreamParkStates) window.VaultScreamParkStates.setEntries(data.entries);
       if (data.scope === 'private_scream_parks_s4' || staticCatalog) {
         const banner = root.closest('#panel-scream-parks')?.querySelector('.sp-private');
         if (banner) banner.textContent = 'VISTA LOCAL · NO PUBLICADA';
@@ -282,5 +327,5 @@
     return controller;
   }
 
-  window.TheVaultScreamParksPreview = Object.freeze({ mount });
+  window.TheVaultScreamParksPreview = Object.freeze({ mount, get current() { return activeController; } });
 })();

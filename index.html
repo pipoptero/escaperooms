@@ -2211,6 +2211,7 @@
       <div class="divider-line"></div>
       <div class="result-info" id="result-info-pend"></div>
       <div class="rooms-grid"  id="grid-pendientes"></div>
+      <section class="sp-saved-section" aria-label="Scream Parks pendientes"><h2>Scream Parks pendientes <span id="sp-pending-count">0</span></h2><p>Ediciones guardadas por ti; no cuentan como salas de escape.</p><div class="sp-saved-grid" id="sp-pending-list"></div></section>
     </div>
 
     <!-- MIS HECHOS -->
@@ -2237,6 +2238,7 @@
       <div class="divider-line"></div>
       <div class="result-info" id="result-info-mine"></div>
       <div class="rooms-grid" id="grid-mis-hechos"></div>
+      <section class="sp-saved-section" aria-label="Scream Parks hechos"><h2>Scream Parks hechos <span id="sp-done-count">0</span></h2><p>Visitas personales por edición; no cuentan como salas de escape.</p><div class="sp-saved-grid" id="sp-done-list"></div></section>
     </div>
 
     <!-- SCREAM_PARKS_STATIC_CANDIDATE_V1 -->
@@ -2340,7 +2342,7 @@
   <footer class="seo-footer" aria-label="Enlaces de reviews">
     <div class="seo-footer-inner">
       <span class="rights">&copy; 2026 The Vault Escape. Todos los derechos reservados.</span>
-      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v56</span>
+      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v57</span>
       <span>Reviews de escape rooms con URL propia</span>
       <a href="ranking-escape-rooms/">Ranking escape rooms España</a>
       <a href="mejores-escape-rooms/">Mejores escape rooms</a>
@@ -2521,6 +2523,7 @@
 <script src="public-profile-firebase.js"></script>
 <script src="public-profile-fixtures.js"></script>
 <script src="editorial-review-renderer.js"></script>
+<script src="scream-parks/personal-state.js"></script>
 <script src="scream-parks/client.js"></script>
 <script>
 // ════════════════════════════════════════════════════════════
@@ -3954,6 +3957,15 @@ async function initFirebaseAuth() {
 async function refreshSignedSession() {
   if (AUTH_USER) AUTH_TOKEN = await AUTH_USER.getIdToken();
   await loadUserRoomStates();
+  window.VaultScreamParkStates.setSession(AUTH_USER?.uid || null);
+  if (AUTH_USER) {
+    try {
+      await loadScreamParkEntries();
+      await window.VaultScreamParkStates.load();
+    } catch (error) {
+      console.warn('No se pudieron sincronizar tus Scream Parks:', error.message);
+    }
+  }
   await loadUserProfile();
   await loadAdminRole();
   await loadAdminReviewDrafts();
@@ -7363,6 +7375,7 @@ function profileSettingsHtml(message = '') {
       <div class="profile-status-msg" id="profile-status">${message || ''}</div>
     </div>
     ${publicProfileSettingsHtml()}
+    ${screamParkProfileHtml()}
     <div class="profile-section">
       <div class="profile-section-title">Planificador de rutas</div>
       <p class="route-planner-intro">Combina salas compatibles con tu equipo y tus listas. Las rutas y horarios son orientativos y no comprueban disponibilidad.</p>
@@ -8435,6 +8448,7 @@ async function signOutGoogle() {
   await FIREBASE_AUTH.signOut();
   AUTH_USER = null;
   AUTH_TOKEN = '';
+  window.VaultScreamParkStates.setSession(null);
   setAuthFlowState('unauthenticated');
   USER_ID = LOCAL_USER_ID;
   IS_ADMIN = false;
@@ -8528,6 +8542,67 @@ async function fbDeleteWithRetry(path, attempts = 2) {
   }
   throw lastError;
 }
+
+let SCREAM_PARK_CATALOG_REQUEST = null;
+function loadScreamParkEntries() {
+  if (!SCREAM_PARK_CATALOG_REQUEST) {
+    SCREAM_PARK_CATALOG_REQUEST = fetch('scream-parks/data-2026.json', { cache: 'no-store' })
+      .then(async response => {
+        if (!response.ok) throw new Error('No se pudo cargar el catálogo Scream Parks.');
+        const data = await response.json();
+        if (data.scope !== 'scream_parks_catalog_v1' || !Array.isArray(data.entries)) throw new Error('Catálogo Scream Parks no válido.');
+        window.VaultScreamParkStates.setEntries(data.entries);
+        return data.entries;
+      }).catch(error => { SCREAM_PARK_CATALOG_REQUEST = null; throw error; });
+  }
+  return SCREAM_PARK_CATALOG_REQUEST;
+}
+
+function screamParkSavedCard(entry, stateLabel) {
+  const image = entry.images?.[0] || 'images/brand/icon-round-192.png';
+  return `<article class="sp-saved-card"><img src="${escapeHtml(image)}" alt="" loading="lazy"><div><span>${escapeHtml(entry.typeLabel || 'Scream Park')} · ${escapeHtml(entry.seasonId.slice(-4))}</span><strong>${escapeHtml(entry.name)}</strong><small>${escapeHtml(stateLabel)}</small><button class="auth-btn secondary" type="button" onclick="openScreamParkFromLists('${jsString(entry.id)}')">Ver ficha</button></div></article>`;
+}
+
+function screamParkProfileHtml() {
+  const store = window.VaultScreamParkStates;
+  const done = store.selected('done');
+  const pending = store.selected('pending');
+  const favorites = store.selected('favorite');
+  const group = (label, list, stateLabel) => `<h3 class="sp-saved-heading">${label} · ${list.length}</h3><div class="sp-saved-grid">${list.length ? list.map(entry => screamParkSavedCard(entry, stateLabel)).join('') : '<p class="progress-note">Ninguno todavía.</p>'}</div>`;
+  return `<section class="profile-section" id="sp-profile-section"><div class="profile-section-title">Mis Scream Parks</div><p class="progress-note">${done.length} ediciones hechas · ${pending.length} pendientes · ${favorites.length} parques favoritos. Se guardan aparte de tus salas, rutas, grupos y XP.</p>${group('Hechos', done, 'Hecho · edición')}${group('Pendientes', pending, 'Pendiente · edición')}${group('Favoritos', favorites, 'Favorito · parque')}</section>`;
+}
+
+function renderScreamParkLists() {
+  const store = window.VaultScreamParkStates;
+  for (const [kind, countId, listId, label] of [
+    ['pending', 'sp-pending-count', 'sp-pending-list', 'Pendiente · edición'],
+    ['done', 'sp-done-count', 'sp-done-list', 'Hecho · edición']
+  ]) {
+    const entries = store.selected(kind);
+    const count = document.getElementById(countId);
+    const list = document.getElementById(listId);
+    if (count) count.textContent = entries.length;
+    if (list) list.innerHTML = entries.length ? entries.map(entry => screamParkSavedCard(entry, label)).join('')
+      : `<p class="progress-note">No tienes Scream Parks ${kind === 'done' ? 'hechos' : 'pendientes'}.</p>`;
+  }
+  const profile = document.getElementById('sp-profile-section');
+  if (profile) profile.outerHTML = screamParkProfileHtml();
+}
+
+function openScreamParkFromLists(entityId) {
+  const entry = window.VaultScreamParkStates.entries.find(item => item.id === entityId);
+  if (!entry) return;
+  switchTab('scream-parks');
+  mountScreamParksPreview()?.open(entityId);
+}
+
+window.VaultScreamParkStates = VaultScreamParkPersonalState.create({
+  read: fbGet, put: fbPut, remove: fbDelete,
+  onChange: () => {
+    window.TheVaultScreamParksPreview?.current?.refreshStates();
+    renderScreamParkLists();
+  }
+});
 
 // Calcular media y número de votos para un slug
 function voteStats(slug) {

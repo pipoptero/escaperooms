@@ -26,3 +26,28 @@
 #scream-parks-app .sp-gallery img{width:100%;height:160px;object-fit:cover;border:1px solid var(--border)}
 @media(max-width:900px){#scream-parks-app .cards{grid-template-columns:repeat(2,minmax(0,1fr))}#scream-parks-app .detail-grid{grid-template-columns:1fr}}
 @media(max-width:640px){#scream-parks-app .hero{padding:15px}#scream-parks-app .hero h1{font-size:1.5rem}#scream-parks-app .section-top{display:block}#scream-parks-app .section-top h2{font-size:1.05rem}#scream-parks-app .section-top p{margin-top:5px}#scream-parks-app .filters{grid-template-columns:1fr}#scream-parks-app .cards{grid-template-columns:1fr}#scream-parks-app .card-art{height:150px}#scream-parks-app .fact{display:block}#scream-parks-app .fact strong{display:block;text-align:left;margin-top:3px}}
+
+/* V4 personal lists stay separate from escape-room progress and ratings. */
+#scream-parks-app .sp-personal{margin:18px 0;padding:16px;border:1px solid var(--border);background:var(--bg2)}
+#scream-parks-app .sp-personal h2{margin:0 0 12px;color:var(--text);font:600 1.08rem 'Cinzel',serif}
+#scream-parks-app .sp-personal.compact{margin:12px 0 0;padding:0;border:0;background:none}
+#scream-parks-app .sp-personal-actions{display:flex;flex-wrap:wrap;gap:7px}
+#scream-parks-app .sp-personal-actions .sp-state-button{min-height:44px;padding:9px 11px;border:1px solid var(--border);background:var(--bg3);color:var(--text2);font:normal .68rem 'Share Tech Mono',monospace;letter-spacing:.02em;text-transform:none}
+#scream-parks-app .sp-personal-actions .sp-state-button:hover,#scream-parks-app .sp-personal-actions .sp-state-button:focus-visible{border-color:var(--amber);color:var(--text)}
+#scream-parks-app .sp-personal-actions .sp-state-button.active{border-color:var(--amber);background:rgba(125,187,63,.16);color:var(--amber)}
+#scream-parks-app .sp-personal-actions .sp-state-button:disabled{opacity:.65;cursor:wait}
+#scream-parks-app .sp-personal-hint,#scream-parks-app .sp-personal-status{color:var(--text2);font-size:.88rem}
+#scream-parks-app .sp-personal-status:not(:empty){display:block;margin-top:8px}
+.sp-saved-section{margin:24px 0;padding:18px;border:1px solid var(--border);background:var(--bg2)}
+.sp-saved-section h2{margin:0;color:var(--text);font:600 1.18rem 'Cinzel',serif}
+.sp-saved-section h2 span{color:var(--amber)}
+.sp-saved-heading{margin:16px 0 4px;color:var(--text);font:600 1rem 'Cinzel',serif}
+.sp-saved-section p{color:var(--text2)}
+.sp-saved-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.sp-saved-card{display:grid;grid-template-columns:72px minmax(0,1fr);gap:12px;min-width:0;padding:10px;border:1px solid var(--border);background:var(--bg3)}
+.sp-saved-card img{width:72px;height:96px;object-fit:cover}
+.sp-saved-card div{display:flex;flex-direction:column;align-items:flex-start;min-width:0;gap:3px}
+.sp-saved-card span,.sp-saved-card small{color:var(--text2);font:.68rem 'Share Tech Mono',monospace}
+.sp-saved-card strong{color:var(--text);font:600 1rem 'Rajdhani',sans-serif}
+.sp-saved-card button{min-height:40px;margin-top:auto}
+@media(max-width:640px){.sp-saved-grid{grid-template-columns:1fr}.sp-saved-section{padding:14px}#scream-parks-app .sp-personal-actions .sp-state-button{flex:1 1 85px}}
