@@ -90,7 +90,7 @@ class SeoQualityTest(unittest.TestCase):
         sitemap_slugs = {
             urlparse(node.text or "").path.strip("/").split("/")[-1]
             for node in ElementTree.fromstring(sitemap).iter()
-            if node.tag.endswith("loc") and "/reviews/" in (node.text or "")
+            if node.tag.endswith("loc") and urlparse(node.text or "").path.startswith("/reviews/")
         }
         self.assertGreater(len(registry), 0)
         self.assertEqual(len(canonical_rooms), len(registry))

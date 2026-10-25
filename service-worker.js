@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'the-vault-v57';
+const CACHE_VERSION = 'the-vault-v58';
 const APP_SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -35,7 +35,9 @@ const APP_SHELL = [
   './scream-parks/personal-state.js',
   './scream-parks/client.js',
   './scream-parks/styles.css',
-  './scream-parks/data-2026.json'
+  './scream-parks/data-2026.json',
+  './scream-parks/editorial-reviews.json',
+  './scream-parks/reviews/horrorland-2026/'
 ];
 
 const DATA_FILES = [
@@ -77,10 +79,11 @@ async function networkFirst(request) {
   const cache = await caches.open(RUNTIME_CACHE);
   try {
     const response = await fetch(request);
-    if (response && response.ok) cache.put(request, response.clone());
+    if (response && response.ok && !/\b(?:private|no-store)\b/i.test(response.headers.get('Cache-Control') || '')
+        && !request.headers.has('Authorization')) cache.put(request, response.clone());
     return response;
   } catch (error) {
-    const cached = await cache.match(request);
+    const cached = await caches.match(request);
     if (cached) return cached;
     throw error;
   }
@@ -106,6 +109,8 @@ self.addEventListener('fetch', event => {
 
   // The Firebase OAuth helper must bypass the app shell and all runtime caches.
   if (url.pathname.startsWith('/__/auth/') || url.pathname === '/__/firebase/init.json') return;
+  if (url.pathname.startsWith('/api/') || url.pathname.startsWith('/private/')
+      || url.pathname.startsWith('/admin/')) return;
 
   const path = url.pathname.split('/').pop();
   if (['room-state.js', 'route-planner.js', 'saved-routes.js', 'public-profile.js', 'public-profile-firebase.js', 'public-profile-fixtures.js', 'public-profile-page.js', 'public-profile.css'].includes(path)) {

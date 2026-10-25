@@ -2342,7 +2342,7 @@
   <footer class="seo-footer" aria-label="Enlaces de reviews">
     <div class="seo-footer-inner">
       <span class="rights">&copy; 2026 The Vault Escape. Todos los derechos reservados.</span>
-      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v57</span>
+      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v58</span>
       <span>Reviews de escape rooms con URL propia</span>
       <a href="ranking-escape-rooms/">Ranking escape rooms España</a>
       <a href="mejores-escape-rooms/">Mejores escape rooms</a>
@@ -10954,6 +10954,12 @@ function findDeepLinkTarget(type, key) {
 }
 
 function openDeepLinkFromHash() {
+  const screamReviewMatch = window.location.hash.match(/^#scream-park-review\/([a-z0-9-]+)$/);
+  if (screamReviewMatch) {
+    switchTab('scream-parks');
+    mountScreamParksPreview()?.openReview(screamReviewMatch[1]);
+    return true;
+  }
   const screamParkMatch = window.location.hash.match(/^#scream-park\/([a-z0-9-]+)$/);
   if (screamParkMatch) {
     switchTab('scream-parks');

@@ -42,11 +42,11 @@
     String(value ?? '').replace(/\r\n?/g, '\n').split('\n').forEach(rawLine => {
       const line = rawLine.trim();
       if (!line) { flushParagraph(); flushList(); return; }
-      const heading = line.match(/^(#{1,3})\s+(.+)$/);
+      const heading = line.match(/^(#{1,4})\s+(.+)$/);
       const candidate = line.replace(/^[^A-Za-zÁÉÍÓÚÜÑ]+/u, '');
       if (heading || HEADINGS.has(candidate.toUpperCase())) {
         flushParagraph(); flushList();
-        const tag = !heading || heading[1].length === 1 ? 'h3' : 'h4';
+        const tag = !heading || heading[1].length === 1 ? 'h3' : heading[1].length === 4 ? 'h5' : 'h4';
         blocks.push({kind: 'heading', source: line,
           html: `<${tag}>${inline(heading ? heading[2] : line)}</${tag}>`});
         return;

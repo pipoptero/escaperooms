@@ -181,7 +181,7 @@ class ScreamParkPersonalTests(unittest.TestCase):
             cached = page.evaluate("""async () => {
               await navigator.serviceWorker.register('/service-worker.js');
               await navigator.serviceWorker.ready;
-              const shell = await caches.open('the-vault-v57-shell');
+              const shell = await caches.open('the-vault-v58-shell');
               return !!(await shell.match('/scream-parks/personal-state.js'));
             }""")
             self.assertTrue(cached)

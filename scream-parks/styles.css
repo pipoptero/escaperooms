@@ -52,3 +52,20 @@
 .sp-saved-card strong{color:var(--text);font:600 1rem 'Rajdhani',sans-serif}
 .sp-saved-card button{min-height:40px;margin-top:auto}
 @media(max-width:640px){.sp-saved-grid{grid-template-columns:1fr}.sp-saved-section{padding:14px}#scream-parks-app .sp-personal-actions .sp-state-button{flex:1 1 85px}}
+
+/* V6 reviews reuse the product's green/charcoal tokens and editorial text renderer. */
+#scream-parks-app .sp-editorial-preview{border-color:rgba(125,187,63,.36)}
+#scream-parks-app .sp-editorial-preview h3{margin:0 0 10px;font:600 1.1rem 'Cinzel',serif}
+#scream-parks-app .sp-review-label{color:var(--amber);font:.68rem 'Share Tech Mono',monospace;letter-spacing:.08em;text-transform:uppercase}
+#scream-parks-app .sp-editorial-body{max-width:76ch;color:var(--text2);font-size:1rem;line-height:1.65;overflow-wrap:anywhere}
+#scream-parks-app .sp-editorial-body p{margin:0 0 1em;white-space:normal}
+#scream-parks-app .sp-editorial-body h3,#scream-parks-app .sp-editorial-body h4,#scream-parks-app .sp-editorial-body h5{color:var(--text);margin:1.4em 0 .5em;line-height:1.25}
+#scream-parks-app .sp-editorial-body h3{font:700 1.35rem 'Cinzel',serif}
+#scream-parks-app .sp-editorial-body h4{font:700 1.12rem 'Rajdhani',sans-serif}
+#scream-parks-app .sp-editorial-body h5{font:700 1rem 'Rajdhani',sans-serif}
+#scream-parks-app .sp-editorial-body ul{padding-left:1.5em;margin:.5em 0 1.2em}
+#scream-parks-app .sp-editorial-body hr{border:0;border-top:1px solid var(--border);margin:1.7em 0}
+#scream-parks-app .sp-editorial-full{max-width:900px;margin:auto;padding:12px 18px 32px;border:1px solid var(--border);background:var(--bg2)}
+#scream-parks-app .sp-editorial-full h1{margin:.4em 0;font-size:clamp(1.35rem,3vw,2rem)}
+#scream-parks-app .sp-editorial-preview button,#scream-parks-app .sp-editorial-preview a{display:inline-flex;align-items:center;min-height:44px;padding:9px 13px;border:1px solid var(--amber);background:rgba(125,187,63,.09);color:var(--amber);cursor:pointer;text-decoration:none}
+@media(max-width:640px){#scream-parks-app .sp-editorial-full{padding:12px}#scream-parks-app .sp-editorial-body{font-size:.96rem}}

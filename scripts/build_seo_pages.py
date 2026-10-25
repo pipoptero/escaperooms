@@ -1098,6 +1098,45 @@ def base_head(title, description, canonical, image, og_type="article", robots="i
 """
 
 
+def scream_park_review_page(review, entry):
+    """A seasonal editorial review with its own canonical URL and no invented rating."""
+    if (review.get("status") != "PUBLISHED" or review.get("entityId") != entry.get("id")
+            or review.get("seasonId") != entry.get("seasonId") or not review.get("body")):
+        raise ValueError("La review no está publicada o no corresponde a la ficha.")
+    season_id = review["seasonId"]
+    if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*-(?:19|20)[0-9]{2}", season_id):
+        raise ValueError("Temporada inválida.")
+    canonical = site_url(f"/scream-parks/reviews/{season_id}/")
+    title = f"{review['title']} | {SITE_NAME}"
+    description = f"Review de {entry['name']} {season_id[-4:]} por The Vault Escape. Nuestra experiencia completa, atracciones destacadas y veredicto."
+    image = asset_url((entry.get("images") or [DEFAULT_SOCIAL_CARD])[0])
+    cover = image.removeprefix(BASE_URL)
+    body_html = review_text_html(review["body"])
+    date_published = text(review.get("publishedAt"))
+    schema = {"@context": "https://schema.org", "@type": "Article", "headline": review["title"],
+              "author": {"@type": "Organization", "name": "The Vault Escape"},
+              "about": {"@type": "Event", "name": f"{entry['name']} {season_id[-4:]}"},
+              "url": canonical, "mainEntityOfPage": canonical, "image": image}
+    if date_published:
+        schema["datePublished"] = date_published
+    return base_head(title, description, canonical, image) + f"""
+<script type="application/ld+json">{json_ld(schema)}</script>
+</head><body>
+{seo_header("reviews")}
+<main class="wrap" id="contenido">
+  <article class="detail-hero">
+    <img class="cover" src="{escape(cover)}" alt="Portada de {escape(entry['name'])}">
+    <div><div class="kicker">Review The Vault · edición {escape(season_id[-4:])}</div>
+      <h1>{escape(review['title'])}</h1>
+      <p>{escape(description)}</p>
+      <div class="actions"><a class="btn" href="/#scream-park/{escape(entry['id'])}">Ver ficha Scream Park</a>
+      <a class="btn secondary" href="/">Abrir The Vault</a></div>
+    </div>
+  </article>
+  <section class="section"><div class="review">{body_html}</div></section>
+</main>{seo_footer()}</body></html>"""
+
+
 def review_page(room, photos, social_image_path=""):
     name = canonical_room_name(room) or "Escape room"
     company = canonical_room_company(room)
@@ -2485,6 +2524,22 @@ def main():
         (page_dir / "index.html").write_text(review_page(room, photos, social_card), encoding="utf-8", newline="\n")
         generated_review_pages.append(slug)
 
+    scream_reviews = read_json(ROOT / "scream-parks" / "editorial-reviews.json", {"reviews": []}).get("reviews", [])
+    scream_entries = {item["seasonId"]: item for item in
+                     read_json(ROOT / "scream-parks" / "data-2026.json", {"entries": []}).get("entries", [])}
+    generated_scream_review_urls = []
+    for review in scream_reviews:
+        if review.get("status") != "PUBLISHED":
+            continue
+        season_id = review.get("seasonId", "")
+        entry = scream_entries.get(season_id)
+        if not entry:
+            raise ValueError(f"Review Scream Park sin temporada: {season_id}")
+        target = ROOT / "scream-parks" / "reviews" / season_id
+        target.mkdir(parents=True, exist_ok=True)
+        (target / "index.html").write_text(scream_park_review_page(review, entry), encoding="utf-8", newline="\n")
+        generated_scream_review_urls.append(site_url(f"/scream-parks/reviews/{season_id}/"))
+
     review_by_identity = {room_identity(room): room for room in rooms}
     legacy_review_pages = 0
     for old_page in reviews_dir.glob("*/index.html"):
@@ -2670,6 +2725,7 @@ def main():
         "video-sitemap.xml",
     ]
     sitemap_data = sitemap_groups(rooms, sala_rows, location_specs, review_slugs, videos_data)
+    sitemap_data["reviews"].extend(generated_scream_review_urls)
     for group, entries in sitemap_data.items():
         (ROOT / f"sitemap-{group}.xml").write_text(urlset_xml(entries), encoding="utf-8", newline="\n")
     (ROOT / "sitemap.xml").write_text(sitemap_index_xml(sitemap_names), encoding="utf-8", newline="\n")

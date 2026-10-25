@@ -4,7 +4,8 @@
   const mounted = new WeakMap();
   let activeController = null;
 
-  function mount({ root, endpoint, navigation = 'inline', iconUrl }) {
+  function mount({ root, endpoint, navigation = 'inline', iconUrl,
+    editorialEndpoint = 'scream-parks/editorial-reviews.json' }) {
     if (!root || !endpoint || !iconUrl) throw new Error('Scream Parks preview misconfigured');
     if (mounted.has(root)) return mounted.get(root);
     // S3B prefixes IDs to avoid colliding with the product's detail modal.
@@ -48,6 +49,61 @@
     };
     let model = null;
     let selectedId = '';
+    let reviewMode = false;
+    let editorialReviews = [];
+
+    function editorialFor(entry) {
+      return editorialReviews.find(review => review.entityId === entry.id && review.seasonId === entry.seasonId);
+    }
+
+    function reviewDocument(entry, review) {
+      const section = create('article', undefined, 'sp-editorial-full');
+      const back = create('button', `← Volver a ${entry.name}`, 'back');
+      back.type = 'button';
+      back.onclick = () => {
+        reviewMode = false;
+        window.location.hash = `scream-park/${entry.id}`;
+        route();
+      };
+      section.append(back, create('div', `${entry.name} · edición ${entry.seasonId.slice(-4)}`, 'eyebrow'),
+        create('h1', review.title), create('p', review.status === 'DRAFT' ? 'BORRADOR PRIVADO · NO PUBLICADO' : 'REVIEW THE VAULT', 'sp-review-label'));
+      const body = create('div', undefined, 'sp-editorial-body');
+      // The shared editorial renderer escapes source text before adding markup.
+      body.innerHTML = window.TheVaultEditorialReview.renderEditorialReview(review.body);
+      section.append(body);
+      return section;
+    }
+
+    function editorialBlock(entry) {
+      const review = editorialFor(entry);
+      if (!review || !window.TheVaultEditorialReview) return null;
+      const section = panel('REVIEW THE VAULT');
+      section.classList.add('sp-editorial-preview');
+      section.append(create('h3', review.title));
+      if (review.status === 'DRAFT') section.append(create('p', 'Borrador privado · no publicado', 'sp-review-label'));
+      const excerpt = window.TheVaultEditorialReview.excerptEditorialReview(review.body, 720);
+      const body = create('div', undefined, 'sp-editorial-body');
+      body.innerHTML = window.TheVaultEditorialReview.renderEditorialReview(excerpt.text);
+      section.append(body);
+      const button = create(review.status === 'PUBLISHED' ? 'a' : 'button', 'LEER REVIEW COMPLETA');
+      if (review.status === 'PUBLISHED') button.href = `/scream-parks/reviews/${entry.seasonId}/`;
+      else {
+        button.type = 'button';
+        button.onclick = () => openReview(entry.seasonId);
+      }
+      section.append(button);
+      return section;
+    }
+
+    function openReview(seasonId) {
+      const entry = model?.entries.find(item => item.seasonId === seasonId);
+      if (!entry || !editorialFor(entry)) return false;
+      selectedId = entry.id;
+      reviewMode = true;
+      window.location.hash = `scream-park-review/${seasonId}`;
+      route();
+      return true;
+    }
 
     function option(select, value, label) {
       const item = create('option', label);
@@ -69,6 +125,7 @@
       return value === 'all' || (value === 'unverified' && !entry[key]) || value === entry[key];
     }
     function showDetail(id) {
+      reviewMode = false;
       if (navigation === 'hash') {
         window.location.hash = id;
       } else {
@@ -165,6 +222,8 @@
           ? `Temporada ${entry.seasonId.slice(-4)}. Consulta la web del evento antes de planificar la visita.`
           : `Temporada ${entry.seasonId.slice(-4)} confirmada según las evidencias editoriales vigentes. Esta ficha sigue en PREVIEW_ONLY.`), 'lead'));
       main.append(personalControls(entry));
+      const review = editorialBlock(entry);
+      if (review) main.append(review);
       const period = panel('Temporada y sesiones');
       if (entry.period.start && entry.period.end) fact(period,
         s4(entry) ? 'Fechas orientativas' : !entry.fieldSources || entry.period.source === 'VERIFIED_S2' ? 'Periodo verificado' : 'Periodo del Excel · sin verificar',
@@ -293,7 +352,12 @@
       $('landing').hidden = !!entry;
       $('detail').hidden = !entry;
       if (entry) {
-        detail(entry);
+        if (reviewMode && editorialFor(entry)) {
+          $('detail-content').replaceChildren(reviewDocument(entry, editorialFor(entry)));
+        } else {
+          reviewMode = false;
+          detail(entry);
+        }
         window.scrollTo(0, 0);
       } else if (id && navigation === 'hash') {
         window.location.hash = '';
@@ -301,6 +365,7 @@
     }
     for (const id of ['type-filter', 'region-filter', 'province-filter']) $(id).onchange = renderList;
     $('back').onclick = () => {
+      reviewMode = false;
       if (navigation === 'hash') window.location.hash = '';
       else { selectedId = ''; route(); }
     };
@@ -311,10 +376,11 @@
       const entry = model.entries.find(item => item.id === selectedId);
       if (entry) detail(entry);
     }
-    const controller = { route, renderList, refreshStates, open: showDetail };
+    const controller = { route, renderList, refreshStates, open: showDetail, openReview };
     mounted.set(root, controller);
     activeController = controller;
-    fetch(endpoint, { cache: 'no-store' }).then(async response => {
+    Promise.all([fetch(endpoint, { cache: 'no-store' }), fetch(editorialEndpoint, { cache: 'no-store' })
+    ]).then(async ([response, reviewsResponse]) => {
       const data = await response.json();
       if (!response.ok) throw Error(data.error || 'Preview no disponible');
       const staticCatalog = data.scope === 'scream_parks_catalog_v1';
@@ -323,6 +389,12 @@
         || data.publishableApproved || data.productOperations?.length || data.firebaseOperations?.length))
         || !Array.isArray(data.entries)) throw Error('Datos de Scream Parks no disponibles');
       model = data;
+      if (reviewsResponse.ok) {
+        const registry = await reviewsResponse.json();
+        if (registry.schemaVersion !== 1 || !Array.isArray(registry.reviews)) throw Error('Registro editorial no válido');
+        editorialReviews = registry.reviews.filter(review =>
+          review.status === 'PUBLISHED' || (registry.previewOnly === true && review.status === 'DRAFT'));
+      }
       if (staticCatalog && window.VaultScreamParkStates) window.VaultScreamParkStates.setEntries(data.entries);
       if (data.scope === 'private_scream_parks_s4' || staticCatalog) {
         const banner = root.closest('#panel-scream-parks')?.querySelector('.sp-private');
@@ -332,7 +404,10 @@
       }
       choices();
       renderList();
-      route();
+      const reviewLink = window.location.hash.match(/^#scream-park-review\/([a-z0-9-]+)$/);
+      const parkLink = window.location.hash.match(/^#scream-park\/([a-z0-9-]+)$/);
+      if (parkLink) selectedId = parkLink[1];
+      if (!reviewLink || !openReview(reviewLink[1])) route();
     }).catch(error => {
       $('error').hidden = false;
       $('error').textContent = error.message;
