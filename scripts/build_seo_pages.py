@@ -2411,15 +2411,33 @@ def site_stats_json(review_rooms, sala_rows, location_specs):
 
 
 def static_home_fallback(stats, rooms):
-    latest = sorted(rooms or [], key=review_timestamp, reverse=True)[:3]
-    latest_html = "".join(
-        f'<a class="vault-latest-card" href="reviews/{escape(room_url_slug(room))}/">'
-        f'<span class="vault-latest-img"><span>{escape((canonical_room_name(room) or "V")[:1].upper())}</span></span>'
-        f'<span><span class="vault-latest-kicker">{escape(canonical_room_company(room) or "Review The Vault")}</span>'
-        f'<strong class="vault-latest-name">{escape(canonical_room_name(room) or "Escape room")}</strong>'
-        f'<span class="vault-latest-meta">{escape(room_location(room) or "Review publicada")}</span></span></a>'
-        for room in latest
-    )
+    scream_reviews = read_json(ROOT / "scream-parks" / "editorial-reviews.json", {"reviews": []}).get("reviews", [])
+    scream_entries = {item.get("seasonId"): item for item in
+                      read_json(ROOT / "scream-parks" / "data-2026.json", {"entries": []}).get("entries", [])}
+    latest = [(int(room.get("_publishedAt") or room.get("publishedAt") or 0), "escape", room) for room in rooms or []]
+    for review in scream_reviews:
+        published = review.get("publishedAt")
+        if review.get("status") == "PUBLISHED" and isinstance(published, str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", published) and review.get("seasonId") in scream_entries:
+            latest.append((int(datetime.fromisoformat(published).replace(tzinfo=timezone.utc).timestamp() * 1000), "scream", review))
+    latest = sorted(latest, key=lambda item: item[0], reverse=True)[:3]
+    def latest_card(item):
+        _, kind, record = item
+        if kind == "scream":
+            entry = scream_entries[record["seasonId"]]
+            name = f'{entry["name"]} {record["seasonId"][-4:]}'
+            return (f'<a class="vault-latest-card" href="scream-parks/reviews/{escape(record["seasonId"])}/" '
+                    f'onclick="if(window.openScreamEditorialReview){{event.preventDefault();openScreamEditorialReview(\'{escape(record["seasonId"])}\')}}">'
+                    f'<span class="vault-latest-img"><img src="{escape((entry.get("images") or ["images/brand/the-vault-round-logo.jpg"])[0])}" alt="" width="78" height="104"></span>'
+                    f'<span><span class="vault-latest-kicker">Review The Vault · Scream Park</span>'
+                    f'<strong class="vault-latest-name">{escape(name)}</strong>'
+                    f'<span class="vault-latest-meta">{escape(entry.get("city") or "Scream Park")}</span></span></a>')
+        room = record
+        return (f'<a class="vault-latest-card" href="reviews/{escape(room_url_slug(room))}/">'
+                f'<span class="vault-latest-img"><span>{escape((canonical_room_name(room) or "V")[:1].upper())}</span></span>'
+                f'<span><span class="vault-latest-kicker">{escape(canonical_room_company(room) or "Review The Vault")}</span>'
+                f'<strong class="vault-latest-name">{escape(canonical_room_name(room) or "Escape room")}</strong>'
+                f'<span class="vault-latest-meta">{escape(room_location(room) or "Review publicada")}</span></span></a>')
+    latest_html = "".join(latest_card(item) for item in latest)
     return f'''<!-- STATIC_HOME_START -->
       <div class="vault-guide-hero" data-static-home-fallback>
         <div>

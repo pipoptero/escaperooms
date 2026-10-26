@@ -85,12 +85,9 @@
       const body = create('div', undefined, 'sp-editorial-body');
       body.innerHTML = window.TheVaultEditorialReview.renderEditorialReview(excerpt.text);
       section.append(body);
-      const button = create(review.status === 'PUBLISHED' ? 'a' : 'button', 'LEER REVIEW COMPLETA');
-      if (review.status === 'PUBLISHED') button.href = `/scream-parks/reviews/${entry.seasonId}/`;
-      else {
-        button.type = 'button';
-        button.onclick = () => openReview(entry.seasonId);
-      }
+      const button = create('button', 'LEER REVIEW COMPLETA');
+      button.type = 'button';
+      button.onclick = () => openReview(entry.seasonId);
       section.append(button);
       return section;
     }
@@ -99,6 +96,12 @@
       const entry = model?.entries.find(item => item.seasonId === seasonId);
       if (!entry || !editorialFor(entry)) return false;
       selectedId = entry.id;
+      if (editorialFor(entry).status === 'PUBLISHED' && window.openScreamEditorialReview) {
+        reviewMode = false;
+        if (root.closest('#panel-scream-parks')?.style.display !== 'none') route();
+        window.openScreamEditorialReview(seasonId);
+        return true;
+      }
       reviewMode = true;
       window.location.hash = `scream-park-review/${seasonId}`;
       route();

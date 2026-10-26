@@ -69,3 +69,20 @@
 #scream-parks-app .sp-editorial-full h1{margin:.4em 0;font-size:clamp(1.35rem,3vw,2rem)}
 #scream-parks-app .sp-editorial-preview button,#scream-parks-app .sp-editorial-preview a{display:inline-flex;align-items:center;min-height:44px;padding:9px 13px;border:1px solid var(--amber);background:rgba(125,187,63,.09);color:var(--amber);cursor:pointer;text-decoration:none}
 @media(max-width:640px){#scream-parks-app .sp-editorial-full{padding:12px}#scream-parks-app .sp-editorial-body{font-size:.96rem}}
+
+/* Editorial Scream Park reviews use the existing product detail dialog. */
+.scream-editorial-card .scream-review-cover{display:block;width:min(100%,180px);aspect-ratio:2/3;object-fit:cover;border:1px solid var(--border);margin-bottom:12px}
+.scream-editorial-card .rv-rank{min-width:0}
+.scream-editorial-modal .detail-media{background:var(--bg2)}
+.scream-editorial-modal .detail-content{padding-right:clamp(22px,4vw,64px)}
+.scream-editorial-modal .sp-editorial-body{max-width:76ch;color:var(--text2);font-size:1rem;line-height:1.7;overflow-wrap:anywhere}
+.scream-editorial-modal .sp-editorial-body p{margin:0 0 1em}
+.scream-editorial-modal .sp-editorial-body h3,.scream-editorial-modal .sp-editorial-body h4,.scream-editorial-modal .sp-editorial-body h5{color:var(--text);margin:1.4em 0 .5em;line-height:1.25}
+.scream-editorial-modal .sp-editorial-body h3{font:700 1.35rem 'Cinzel',serif}
+.scream-editorial-modal .sp-editorial-body h4{font:700 1.12rem 'Rajdhani',sans-serif}
+.scream-editorial-modal .sp-editorial-body h5{font:700 1rem 'Rajdhani',sans-serif}
+.scream-editorial-modal .sp-editorial-body ul{padding-left:1.5em;margin:.5em 0 1.2em}
+.scream-editorial-modal .sp-editorial-body hr{border:0;border-top:1px solid var(--border);margin:1.7em 0}
+.scream-editorial-modal .sp-modal-actions{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 22px}
+.scream-editorial-modal .sp-modal-actions .detail-link{display:inline-flex;align-items:center;min-height:44px;text-decoration:none}
+@media(max-width:640px){.scream-editorial-modal .detail-media{height:180px;min-height:180px}.scream-editorial-modal .detail-media img.detail-cover-img{max-height:100%}.scream-editorial-modal .detail-content{padding:16px max(16px,env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}.scream-editorial-modal .sp-editorial-body{font-size:.96rem}}

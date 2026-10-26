@@ -1476,8 +1476,9 @@
     .vault-section-note{text-align:left;}
     .vault-latest-grid{grid-template-columns:1fr;gap:8px;min-height:270px;}
     .vault-latest-card{grid-template-columns:64px minmax(0,1fr);padding:9px;}
+    .vault-latest-card > span:last-child{min-width:0;}
     .vault-latest-img{width:64px;}
-    .vault-latest-name{font-size:.9rem;}
+    .vault-latest-name{display:block;font-size:.9rem;overflow-wrap:anywhere;}
     .vault-community-band{grid-template-columns:1fr;padding:12px;}
     .vault-home{padding:10px;}
     .vault-home-shell{gap:12px;}
@@ -2180,7 +2181,7 @@
         <div class="vault-mini-list"><div class="vault-mini-item"><span>Historial y pendientes</span><strong>✓</strong></div><div class="vault-mini-item"><span>Mapa, XP y logros</span><strong>✓</strong></div><div class="vault-mini-item"><span>Grupos y rutas</span><strong>✓</strong></div><div class="vault-mini-item"><span>Avatares y cosméticos</span><strong>✓</strong></div></div>
       </section>
       <div class="vault-section-head"><div class="vault-section-title">Últimas reviews</div><div class="vault-section-note">Contenido disponible sin iniciar sesión</div></div>
-      <div class="vault-latest-grid"><a class="vault-latest-card" href="reviews/cronologic-la-creacion/"><span class="vault-latest-img"><span>C</span></span><span><span class="vault-latest-kicker">Cronologic</span><strong class="vault-latest-name">Cronologic: La Creacion</strong><span class="vault-latest-meta">Barcelona - Barcelona</span></span></a><a class="vault-latest-card" href="reviews/la-vitrina/"><span class="vault-latest-img"><span>L</span></span><span><span class="vault-latest-kicker">Malorial Experience</span><strong class="vault-latest-name">La Vitrina</strong><span class="vault-latest-meta">Terrassa - Barcelona</span></span></a><a class="vault-latest-card" href="reviews/olimpo/"><span class="vault-latest-img"><span>O</span></span><span><span class="vault-latest-kicker">Olimpo Escape Room</span><strong class="vault-latest-name">Olimpo</strong><span class="vault-latest-meta">Review publicada</span></span></a></div>
+      <div class="vault-latest-grid"><a class="vault-latest-card" href="scream-parks/reviews/horrorland-2026/" onclick="if(window.openScreamEditorialReview){event.preventDefault();openScreamEditorialReview('horrorland-2026')}"><span class="vault-latest-img"><img src="images/scream-parks/horrorland.jpg" alt="" width="78" height="104"></span><span><span class="vault-latest-kicker">Review The Vault · Scream Park</span><strong class="vault-latest-name">Horrorland 2026</strong><span class="vault-latest-meta">Vilassar de Dalt</span></span></a><a class="vault-latest-card" href="reviews/cronologic-la-creacion/"><span class="vault-latest-img"><span>C</span></span><span><span class="vault-latest-kicker">Cronologic</span><strong class="vault-latest-name">Cronologic: La Creacion</strong><span class="vault-latest-meta">Barcelona - Barcelona</span></span></a><a class="vault-latest-card" href="reviews/la-vitrina/"><span class="vault-latest-img"><span>L</span></span><span><span class="vault-latest-kicker">Malorial Experience</span><strong class="vault-latest-name">La Vitrina</strong><span class="vault-latest-meta">Terrassa - Barcelona</span></span></a></div>
       <!-- STATIC_HOME_END --></div>
     </div>
 
@@ -2257,6 +2258,12 @@
 
     <!-- HECHOS -->
     <div id="panel-hechos" class="panel" style="display:none">
+      <div class="sort-row" role="group" aria-label="Tipo de review">
+        <span class="filter-label">Reviews:</span>
+        <button class="sort-btn active" type="button" data-review-type="all" onclick="setReviewTypeFilter('all')">Todos</button>
+        <button class="sort-btn" type="button" data-review-type="escape" onclick="setReviewTypeFilter('escape')">Escape Rooms</button>
+        <button class="sort-btn" type="button" data-review-type="scream" onclick="setReviewTypeFilter('scream')">Scream Parks</button>
+      </div>
       <div class="filters">
         <span class="filter-label">Filtrar:</span>
         <input type="text" class="filter-input" id="search-hecho" placeholder="🔍  Nombre, empresa..." oninput="renderHechos()">
@@ -2745,6 +2752,9 @@ let ADMIN_ROLE_RAW = null;
 let ADMIN_REVIEW_DRAFTS = {};
 let ADMIN_EDITING_DRAFT_ID = '';
 let STATIC_PUBLISHED_REVIEWS = {};
+let SCREAM_EDITORIAL_REVIEWS = [];
+let SCREAM_EDITORIAL_REQUEST = null;
+let REVIEW_TYPE_FILTER = 'all';
 let ADMIN_PUBLISHED_REVIEWS = {};
 let REVIEW_ROOMS_CACHE = null;
 let USER_GROUPS = {};
@@ -4387,6 +4397,22 @@ async function loadStaticPublishedReviews() {
   }
   invalidateReviewRoomsCache();
   return STATIC_PUBLISHED_REVIEWS;
+}
+
+function loadScreamEditorialReviews() {
+  if (!SCREAM_EDITORIAL_REQUEST) {
+    SCREAM_EDITORIAL_REQUEST = fetch('scream-parks/editorial-reviews.json')
+      .then(async response => {
+        if (!response.ok) throw new Error('No se pudo cargar el registro editorial de Scream Parks.');
+        const registry = await response.json();
+        if (registry.schemaVersion !== 1 || !Array.isArray(registry.reviews)) throw new Error('Registro editorial no válido.');
+        SCREAM_EDITORIAL_REVIEWS = registry.reviews.filter(review => review.status === 'PUBLISHED'
+          && /^\d{4}-\d{2}-\d{2}$/.test(review.publishedAt || '')
+          && /^[a-z0-9-]+$/.test(review.seasonId || '') && /^[a-z0-9-]+$/.test(review.entityId || ''));
+        return SCREAM_EDITORIAL_REVIEWS;
+      }).catch(error => { SCREAM_EDITORIAL_REQUEST = null; throw error; });
+  }
+  return SCREAM_EDITORIAL_REQUEST;
 }
 
 async function loadSiteStats() {
@@ -8544,6 +8570,7 @@ async function fbDeleteWithRetry(path, attempts = 2) {
 }
 
 let SCREAM_PARK_CATALOG_REQUEST = null;
+let SCREAM_PARK_CATALOG_STORE = null;
 function loadScreamParkEntries() {
   if (!SCREAM_PARK_CATALOG_REQUEST) {
     SCREAM_PARK_CATALOG_REQUEST = fetch('scream-parks/data-2026.json', { cache: 'no-store' })
@@ -8551,11 +8578,17 @@ function loadScreamParkEntries() {
         if (!response.ok) throw new Error('No se pudo cargar el catálogo Scream Parks.');
         const data = await response.json();
         if (data.scope !== 'scream_parks_catalog_v1' || !Array.isArray(data.entries)) throw new Error('Catálogo Scream Parks no válido.');
-        window.VaultScreamParkStates.setEntries(data.entries);
         return data.entries;
       }).catch(error => { SCREAM_PARK_CATALOG_REQUEST = null; throw error; });
   }
-  return SCREAM_PARK_CATALOG_REQUEST;
+  return SCREAM_PARK_CATALOG_REQUEST.then(entries => {
+    const store = window.VaultScreamParkStates;
+    if (store && store !== SCREAM_PARK_CATALOG_STORE) {
+      store.setEntries(entries);
+      SCREAM_PARK_CATALOG_STORE = store;
+    }
+    return entries;
+  });
 }
 
 function screamParkSavedCard(entry, stateLabel) {
@@ -9398,7 +9431,9 @@ async function loadData() {
     const earlyReviewsPromise = Promise.allSettled([
       loadSiteStats(),
       loadRoomAliases(),
-      loadStaticPublishedReviews()
+      loadStaticPublishedReviews(),
+      loadScreamEditorialReviews(),
+      loadScreamParkEntries()
     ]);
     const r = await fetch('data.json');
     if (!r.ok) throw new Error(`HTTP ${r.status} — no se encontró data.json`);
@@ -9624,6 +9659,7 @@ function renderVaultGuide() {
       ${vaultHomeMapHtml(model)}
       ${vaultHomeProgressHtml(model)}
     </div>
+    <section class="vault-home-section"><div class="vault-home-section-head"><div class="vault-home-section-title">Últimas reviews</div><div class="vault-home-section-note">Escape Rooms y Scream Parks</div></div><div class="vault-latest-grid">${vaultLatestReviewsHtml()}</div></section>
     <div class="vault-home-lower">
       ${vaultHomeActivityHtml(model)}
       ${vaultHomeDiscoveryHtml()}
@@ -9966,7 +10002,7 @@ function vaultHomeGuestHtml() {
 }
 
 function reviewPublishedTime(room) {
-  return reviewTimeValue(room);
+  return reviewTimeValue({ publishedAt: room?.publishedAt || room?._publishedAt || '' });
 }
 
 function seoSlug(str) {
@@ -9989,16 +10025,25 @@ function latestReviewThumbPath(room) {
 }
 
 function vaultLatestReviewsHtml() {
-  const items = reviewRooms()
-    .filter(room => room && room.nombre)
-    .sort((a, b) => {
-      const timeDiff = reviewPublishedTime(b) - reviewPublishedTime(a);
-      if (timeDiff) return timeDiff;
-      return (Number(b._reviewOrder) || 0) - (Number(a._reviewOrder) || 0);
-    })
+  const items = [...reviewRooms().filter(room => room && room.nombre).map(room => ({ kind: 'escape', room,
+    time: reviewPublishedTime(room), order: Number(room._reviewOrder) || 0 })),
+    ...SCREAM_EDITORIAL_REVIEWS.map(review => ({ kind: 'scream', review,
+      time: Date.parse(`${review.publishedAt}T00:00:00Z`), order: 0 }))]
+    .sort((a, b) => b.time - a.time || b.order - a.order)
     .slice(0, 3);
   if (!items.length) return '<div class="review-empty">Aun no hay reviews publicadas.</div>';
-  return items.map(room => {
+  return items.map(item => {
+    if (item.kind === 'scream') {
+      const review = item.review;
+      const entry = window.VaultScreamParkStates?.entries?.find(candidate => candidate.id === review.entityId && candidate.seasonId === review.seasonId);
+      const name = `${entry?.name || review.entityId} ${review.seasonId.slice(-4)}`;
+      const image = entry?.images?.[0] || 'images/brand/the-vault-round-logo.jpg';
+      return `<button class="vault-latest-card" type="button" aria-label="Abrir review de ${escapeHtml(name)}" onclick="openScreamEditorialReview('${review.seasonId}')">
+        <div class="vault-latest-img"><img src="${escapeHtml(versionedLocalAsset(image))}" alt="" width="78" height="104" loading="lazy" onerror="this.onerror=null;this.src='images/brand/the-vault-round-logo.jpg'"></div>
+        <div><div class="vault-latest-kicker">Review The Vault · Scream Park</div><div class="vault-latest-name">${escapeHtml(name)}</div>
+        <div class="vault-latest-meta">${escapeHtml([entry?.city, entry?.province].filter(Boolean).join(' · ') || 'Scream Park')}</div></div></button>`;
+    }
+    const room = item.room;
     const key = jsString(roomKey(room));
     const initial = escapeHtml((room.nombre || '?').trim().slice(0, 1).toUpperCase());
     const thumbSrc = latestReviewThumbPath(room);
@@ -11454,9 +11499,91 @@ function openDetail(kind, key, options = {}) {
   if (options.updateHash !== false) setDetailHash(kind, room);
 }
 
+let SCREAM_REVIEW_RETURN_HASH = '';
+let SCREAM_REVIEW_PUSHED = false;
+async function openScreamEditorialReview(seasonId, options = {}) {
+  if (!/^[a-z0-9-]+$/.test(seasonId || '')) return false;
+  const [reviews, entries] = await Promise.all([loadScreamEditorialReviews(), loadScreamParkEntries()]);
+  const review = reviews.find(item => item.seasonId === seasonId);
+  const entry = entries.find(item => item.id === review?.entityId && item.seasonId === seasonId);
+  if (!review || !entry || !window.TheVaultEditorialReview) return false;
+  const modal = document.getElementById('detail-modal');
+  const wasOpen = modal.classList.contains('open');
+  if (!wasOpen) {
+    DETAIL_RETURN_FOCUS = document.activeElement;
+    DETAIL_PREVIOUS_OVERFLOW = document.body.style.overflow;
+  }
+  const hash = `#scream-park-review/${seasonId}`;
+  SCREAM_REVIEW_RETURN_HASH = window.location.hash === hash ? '' : window.location.hash;
+  SCREAM_REVIEW_PUSHED = options.updateHash !== false && window.location.hash !== hash;
+  modal.dataset.screamReview = seasonId;
+  modal.classList.add('scream-editorial-modal');
+  const image = entry.images?.[0] || 'images/brand/the-vault-round-logo.jpg';
+  const seoUrl = `/scream-parks/reviews/${seasonId}/`;
+  document.getElementById('detail-media').innerHTML = `<img class="detail-cover-img" src="${escapeHtml(versionedLocalAsset(image))}" alt="Portada de ${escapeHtml(entry.name)}" onerror="this.onerror=null;this.src='images/brand/the-vault-round-logo.jpg'">`;
+  document.getElementById('detail-content').innerHTML = `
+    <div class="detail-kicker">Review The Vault · Scream Park · edición ${escapeHtml(seasonId.slice(-4))}</div>
+    <h2 class="detail-title" id="detail-title">${escapeHtml(review.title)}</h2>
+    <div class="detail-company">${escapeHtml([entry.city, entry.province].filter(Boolean).join(' · '))} · Publicada ${escapeHtml(review.publishedAt)}</div>
+    <div class="sp-modal-actions"><button class="detail-link" type="button" onclick="shareScreamEditorialReview('${seasonId}')">Compartir</button>
+      <a class="detail-link" href="${seoUrl}">Abrir página SEO</a>
+      <button class="detail-link" type="button" onclick="returnToScreamPark('${entry.id}')">Volver a la ficha</button><span class="detail-share-status" role="status"></span></div>
+    <article class="sp-editorial-body">${reviewRichTextHtml(review.body)}</article>
+    <div class="sp-modal-actions"><button class="detail-link" type="button" onclick="closeDetail()">Cerrar review</button></div>`;
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+  syncDetailViewport();
+  modal.querySelector('.detail-dialog').scrollTop = 0;
+  document.getElementById('detail-content').scrollTop = 0;
+  modal.querySelector('.detail-close').focus({ preventScroll: true });
+  if (SCREAM_REVIEW_PUSHED) history.pushState({ screamReview: seasonId }, '', hash);
+  return true;
+}
+
+async function shareScreamEditorialReview(seasonId) {
+  const url = new URL(`/#scream-park-review/${seasonId}`, window.location.origin).href;
+  const review = SCREAM_EDITORIAL_REVIEWS.find(item => item.seasonId === seasonId);
+  if (navigator.share) {
+    try { await navigator.share({ title: review?.title || 'Review The Vault', url }); return; }
+    catch (error) { if (error?.name === 'AbortError') return; }
+  }
+  const copied = await copyTextToClipboard(url);
+  setDetailShareStatus(copied ? 'Enlace copiado' : url, copied);
+}
+
+function returnToScreamPark(entityId) {
+  closeDetail();
+  switchTab('scream-parks');
+  mountScreamParksPreview()?.open(entityId);
+}
+
+function closeScreamEditorialModal(fromHistory = false) {
+  const modal = document.getElementById('detail-modal');
+  const pushed = SCREAM_REVIEW_PUSHED;
+  modal.classList.remove('open', 'scream-editorial-modal');
+  modal.setAttribute('aria-hidden', 'true');
+  delete modal.dataset.screamReview;
+  document.body.style.overflow = DETAIL_PREVIOUS_OVERFLOW;
+  if (DETAIL_RETURN_FOCUS?.isConnected) DETAIL_RETURN_FOCUS.focus({ preventScroll: true });
+  if (!fromHistory) {
+    if (pushed) history.back();
+    else if (window.location.hash.startsWith('#scream-park-review/')) history.replaceState(null, '', `${window.location.pathname}${window.location.search}${SCREAM_REVIEW_RETURN_HASH || ''}`);
+  }
+  SCREAM_REVIEW_PUSHED = false;
+  SCREAM_REVIEW_RETURN_HASH = '';
+}
+
+window.addEventListener('popstate', () => {
+  const modal = document.getElementById('detail-modal');
+  if (modal.dataset.screamReview && window.location.hash !== `#scream-park-review/${modal.dataset.screamReview}`) closeScreamEditorialModal(true);
+  else if (!modal.classList.contains('open') && window.location.hash.startsWith('#scream-park-review/')) openDeepLinkFromHash();
+});
+
 function closeDetail(event) {
   if (event && event.target !== document.getElementById('detail-modal')) return;
   const modal = document.getElementById('detail-modal');
+  if (modal.dataset.screamReview) { closeScreamEditorialModal(); return; }
   modal.classList.remove('open');
   modal.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = document.getElementById('profile-modal')?.classList.contains('open') ? 'hidden' : DETAIL_PREVIOUS_OVERFLOW;
@@ -11787,6 +11914,27 @@ function renderMisHechos() {
     : `<div class="empty-state"><div class="lock">✓</div><p>AÚN NO TIENES HECHOS — MARCA SALAS DESDE EL CATÁLOGO</p></div>`;
 }
 
+function setReviewTypeFilter(type) {
+  REVIEW_TYPE_FILTER = ['all', 'escape', 'scream'].includes(type) ? type : 'all';
+  document.querySelectorAll('[data-review-type]').forEach(button => button.classList.toggle('active', button.dataset.reviewType === REVIEW_TYPE_FILTER));
+  renderHechos();
+}
+
+function screamEditorialCard(review) {
+  const entry = window.VaultScreamParkStates?.entries?.find(item => item.id === review.entityId && item.seasonId === review.seasonId);
+  const name = `${entry?.name || review.entityId} ${review.seasonId.slice(-4)}`;
+  const image = entry?.images?.[0] || 'images/brand/the-vault-round-logo.jpg';
+  const excerpt = TheVaultEditorialReview.excerptEditorialReview(review.body, 600);
+  return `<article class="review-row scream-editorial-card">
+    <div class="rv-rank"><span class="tag tag-feature">Scream Park</span></div>
+    <div class="rv-info"><img class="scream-review-cover" src="${escapeHtml(versionedLocalAsset(image))}" alt="" loading="lazy" onerror="this.onerror=null;this.src='images/brand/the-vault-round-logo.jpg'">
+      <div class="rv-name">${escapeHtml(name)}</div><div class="rv-empresa">Review editorial The Vault · ${escapeHtml(review.publishedAt)}</div>
+      <div class="rv-tags"><span class="tag tag-tipo">Scream Park</span>${entry?.city ? `<span class="tag tag-city">${escapeHtml(entry.city)}</span>` : ''}</div></div>
+    <div class="rv-opinion"><div class="rv-opinion-label">Nuestra opinión</div><div class="rv-opinion-text rich">${reviewRichTextHtml(excerpt.text)}</div>
+      <button class="rv-read-full" type="button" onclick="openScreamEditorialReview('${review.seasonId}')">LEER REVIEW COMPLETA</button></div>
+  </article>`;
+}
+
 function renderHechos() {
   const doneRooms = reviewRooms();
   const s = document.getElementById('search-hecho').value;
@@ -11808,8 +11956,15 @@ function renderHechos() {
     return (a.nombre || '').localeCompare(b.nombre || '');
   });
 
-  document.getElementById('result-info-hecho').textContent = `${f.length} reviews del grupo`;
-  document.getElementById('grid-hechos').innerHTML = f.map((h, i) => cardHecho(h, i + 1)).join('');
+  const scream = SCREAM_EDITORIAL_REVIEWS.filter(review => {
+    if (d) return false;
+    const entry = window.VaultScreamParkStates?.entries?.find(item => item.id === review.entityId);
+    return textMatchesSearch([review.title, entry?.name || '', entry?.city || ''], s);
+  });
+  const visibleEscape = REVIEW_TYPE_FILTER === 'scream' ? [] : f;
+  const visibleScream = REVIEW_TYPE_FILTER === 'escape' ? [] : scream;
+  document.getElementById('result-info-hecho').textContent = `${visibleEscape.length + visibleScream.length} reviews · ${visibleEscape.length} Escape Rooms · ${visibleScream.length} Scream Parks`;
+  document.getElementById('grid-hechos').innerHTML = [...visibleScream.map(screamEditorialCard), ...visibleEscape.map((h, i) => cardHecho(h, i + 1))].join('');
 }
 
 function renderCatalogo() {
