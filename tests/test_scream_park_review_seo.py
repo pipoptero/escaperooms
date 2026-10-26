@@ -25,6 +25,8 @@ class ScreamParkReviewSeoTests(unittest.TestCase):
         self.assertNotIn('ratingValue', html)
         self.assertIn('"@type": "Article"', html)
         self.assertNotIn('the-village', html)
+        self.assertNotIn('property="og:image:width"', html)
+        self.assertNotIn('property="og:image:height"', html)
 
     def test_candidate_is_complete_and_isolated(self):
         registry = json.loads((ROOT / "scream-parks/editorial-reviews.json").read_text(encoding="utf-8"))
@@ -35,6 +37,9 @@ class ScreamParkReviewSeoTests(unittest.TestCase):
         page = (ROOT / "scream-parks/reviews/horrorland-2026/index.html").read_text(encoding="utf-8")
         self.assertIn('https://thevaultescape.com/scream-parks/reviews/horrorland-2026/', page)
         self.assertIn('Pray For Us', page)
+        self.assertIn('<meta property="og:image:width" content="900">', page)
+        self.assertIn('<meta property="og:image:height" content="1350">', page)
+        self.assertNotIn('<meta property="og:image:width" content="1200">', page)
         self.assertIn('https://thevaultescape.com/scream-parks/reviews/horrorland-2026/',
                       (ROOT / "sitemap-reviews.xml").read_text(encoding="utf-8"))
         shell = (ROOT / "service-worker.js").read_text(encoding="utf-8")

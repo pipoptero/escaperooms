@@ -1065,7 +1065,11 @@ def legacy_seo_page(name, canonical, target="", retired=False):
 """
 
 
-def base_head(title, description, canonical, image, og_type="article", robots="index, follow, max-image-preview:large"):
+def base_head(title, description, canonical, image, og_type="article",
+              robots="index, follow, max-image-preview:large", image_dimensions=(1200, 630)):
+    dimensions_meta = (f'<meta property="og:image:width" content="{image_dimensions[0]}">\n'
+                       f'<meta property="og:image:height" content="{image_dimensions[1]}">\n'
+                       if image_dimensions else '')
     return f"""<!DOCTYPE html>
 <html lang="es">
 <head>
@@ -1089,9 +1093,7 @@ def base_head(title, description, canonical, image, og_type="article", robots="i
 <meta property="og:description" content="{escape(description)}">
 <meta property="og:url" content="{escape(canonical)}">
 <meta property="og:image" content="{escape(image)}">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
+{dimensions_meta}<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{escape(title)}">
 <meta name="twitter:description" content="{escape(description)}">
 <meta name="twitter:image" content="{escape(image)}">
@@ -1111,6 +1113,15 @@ def scream_park_review_page(review, entry):
     description = f"Review de {entry['name']} {season_id[-4:]} por The Vault Escape. Nuestra experiencia completa, atracciones destacadas y veredicto."
     image = asset_url((entry.get("images") or [DEFAULT_SOCIAL_CARD])[0])
     cover = image.removeprefix(BASE_URL)
+    dimensions = None
+    if Image is not None and cover.startswith("/images/"):
+        local_cover = (ROOT / cover.lstrip("/")).resolve()
+        if local_cover.is_relative_to((ROOT / "images").resolve()):
+            try:
+                with Image.open(local_cover) as cover_image:
+                    dimensions = cover_image.size
+            except OSError:
+                pass  # Omit dimensions rather than announce an unverified size.
     body_html = review_text_html(review["body"])
     date_published = text(review.get("publishedAt"))
     schema = {"@context": "https://schema.org", "@type": "Article", "headline": review["title"],
@@ -1119,7 +1130,8 @@ def scream_park_review_page(review, entry):
               "url": canonical, "mainEntityOfPage": canonical, "image": image}
     if date_published:
         schema["datePublished"] = date_published
-    return base_head(title, description, canonical, image) + f"""
+    return base_head(title, description, canonical, image,
+                     image_dimensions=dimensions) + f"""
 <script type="application/ld+json">{json_ld(schema)}</script>
 </head><body>
 {seo_header("reviews")}
