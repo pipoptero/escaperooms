@@ -1124,7 +1124,7 @@ def scream_park_review_page(review, entry):
 </head><body>
 {seo_header("reviews")}
 <main class="wrap" id="contenido">
-  <article class="detail-hero">
+  <article class="detail-hero scream-review-hero">
     <img class="cover" src="{escape(cover)}" alt="Portada de {escape(entry['name'])}">
     <div><div class="kicker">Review The Vault · edición {escape(season_id[-4:])}</div>
       <h1>{escape(review['title'])}</h1>

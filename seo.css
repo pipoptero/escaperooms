@@ -89,6 +89,10 @@ p { color: var(--text2); }
 .lead { max-width: 900px; margin: 0; font-size: 1.08rem; }
 .detail-hero { display: grid; grid-template-columns: minmax(220px, 360px) minmax(0, 1fr); gap: 30px; align-items: start; }
 .cover { width: 100%; max-height: 540px; object-fit: contain; background: #050507; border: 1px solid rgba(255,255,255,.09); }
+@media (max-width: 620px) {
+  .scream-review-hero > div { order: -1; }
+  .scream-review-hero .cover { width: auto; max-width: 100%; max-height: 260px; justify-self: center; }
+}
 .company { color: var(--text3); font-family: 'Share Tech Mono', monospace; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; }
 .meta, .summary, .nav, .actions, .internal-links { display: flex; flex-wrap: wrap; gap: 8px; }
 .meta { margin: 18px 0; }
