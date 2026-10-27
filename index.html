@@ -11502,6 +11502,9 @@ function openDetail(kind, key, options = {}) {
 
 let SCREAM_REVIEW_RETURN_HASH = '';
 let SCREAM_REVIEW_PUSHED = false;
+const SCREAM_EDITORIAL_BANNERS = Object.freeze({
+  'horrorland-2026': 'images/scream-parks/horrorland-2026-banner.webp'
+});
 function screamReviewIntro(body) {
   const opening = String(body || '').split(/^---\s*$/m, 1)[0];
   return opening.split(/\n\s*\n/).filter(part => part.trim() && !part.trim().startsWith('#')).slice(0, 4).join('\n\n');
@@ -11546,6 +11549,8 @@ async function openScreamEditorialReview(seasonId, options = {}) {
   modal.classList.add('scream-editorial-modal');
   const image = entry.images?.[0] || 'images/brand/the-vault-round-logo.jpg';
   const imageUrl = escapeHtml(versionedLocalAsset(image));
+  const bannerUrl = SCREAM_EDITORIAL_BANNERS[seasonId]
+    ? escapeHtml(versionedLocalAsset(SCREAM_EDITORIAL_BANNERS[seasonId])) : '';
   const label = `${entry.name} ${seasonId.slice(-4)}`;
   const location = [entry.city, entry.province].filter(Boolean).join(' · ');
   const qualities = screamReviewLabeledLines(review.body, 'VALORACIÓN THE VAULT');
@@ -11559,12 +11564,15 @@ async function openScreamEditorialReview(seasonId, options = {}) {
       <span class="sp-review-type">${escapeHtml(entry.typeLabel || 'Scream Park')}</span>
       <div class="sp-review-place"><span aria-hidden="true">⌖</span>${escapeHtml(location)}</div>
     </header>
-    <div class="sp-review-hero">
+    ${bannerUrl ? '' : `<div class="sp-review-hero">
       <img class="detail-cover-img" src="${imageUrl}" alt="" onerror="this.onerror=null;this.src='images/brand/the-vault-round-logo.jpg'">
       <div class="sp-review-hero-shade"></div>
       <div class="sp-review-hero-title"><span>Review editorial · ${escapeHtml(seasonId.slice(-4))}</span><strong>${escapeHtml(entry.name)}</strong></div>
-    </div>`;
+    </div>`}`;
   document.getElementById('detail-content').innerHTML = `
+    ${bannerUrl ? `<figure class="sp-review-banner"><a href="${bannerUrl}" target="_blank" rel="noopener noreferrer" aria-label="Ampliar banner de ${escapeHtml(label)} en una pestaña nueva">
+      <img src="${bannerUrl}" width="2048" height="768" alt="Banner promocional de ${escapeHtml(label)} con experiencias y modalidades de entrada" decoding="async" onerror="this.closest('.sp-review-banner').hidden=true">
+      <span>Ampliar imagen ↗</span></a></figure>` : ''}
     <div class="sp-review-layout"><div class="sp-review-main">
       <section class="sp-review-section"><h3 class="sp-review-section-title">Introducción</h3>
         <div class="sp-review-lead">${reviewRichTextHtml(screamReviewIntro(review.body))}</div></section>

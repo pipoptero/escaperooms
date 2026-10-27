@@ -93,6 +93,11 @@
 .scream-editorial-modal .sp-review-hero-title{position:absolute;left:clamp(24px,4vw,58px);bottom:clamp(20px,3vh,36px);display:grid;gap:2px;text-shadow:0 3px 15px #000}
 .scream-editorial-modal .sp-review-hero-title span{font:700 .74rem 'Rajdhani',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#d9dfd3}
 .scream-editorial-modal .sp-review-hero-title strong{font:900 clamp(2.5rem,6vw,5.4rem) 'Rajdhani',sans-serif;line-height:.9;letter-spacing:.025em;text-transform:uppercase;color:#f3f0e9}
+.scream-editorial-modal .sp-review-banner{margin:0;border-bottom:1px solid #465044;background:#08090b}
+.scream-editorial-modal .sp-review-banner a{display:block;color:#c9e995;text-decoration:none}
+.scream-editorial-modal .sp-review-banner img{display:block;width:100%;height:auto;aspect-ratio:8/3;object-fit:contain}
+.scream-editorial-modal .sp-review-banner span{display:flex;align-items:center;justify-content:flex-end;min-height:44px;padding:8px 20px;font:700 .78rem 'Rajdhani',sans-serif;letter-spacing:.07em;text-transform:uppercase}
+.scream-editorial-modal .sp-review-banner a:hover span,.scream-editorial-modal .sp-review-banner a:focus-visible span{color:#f1f7e8;background:#222b20}
 .scream-editorial-modal .detail-content{min-height:0;padding:0;overflow:auto;overscroll-behavior:contain;background:repeating-linear-gradient(90deg,#ffffff02 0,#ffffff02 1px,transparent 1px,transparent 9px),#0e1113}
 .scream-editorial-modal .sp-review-layout{display:grid;grid-template-columns:minmax(0,7fr) minmax(250px,3fr);min-height:100%}
 .scream-editorial-modal .sp-review-main{min-width:0;padding:24px clamp(20px,3vw,48px) 42px}

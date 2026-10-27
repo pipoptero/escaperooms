@@ -6,6 +6,7 @@ from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from threading import Thread
+from urllib.parse import urljoin
 
 from playwright.sync_api import sync_playwright
 
@@ -21,6 +22,8 @@ REVIEW = {
 
 
 class QuietHandler(SimpleHTTPRequestHandler):
+    extensions_map = {**SimpleHTTPRequestHandler.extensions_map, ".webp": "image/webp"}
+
     def log_message(self, *_args):
         pass
 
@@ -128,6 +131,7 @@ class V6BrowserTests(unittest.TestCase):
                     self.assertEqual(page.locator(".vault-latest-grid .vault-latest-card").count(), 3)
                     page.locator(".vault-latest-grid .vault-latest-card").first.click()
                     page.locator("#detail-modal.scream-editorial-modal.open").wait_for()
+                    page.wait_for_function("() => document.querySelector('.sp-review-banner img')?.naturalWidth === 2048")
                     if capture_dir:
                         page.screenshot(path=str(Path(capture_dir) / f"{self.browser.browser_type.name}-{width}-modal.png"))
                     text = page.locator("#detail-modal .sp-editorial-body").inner_text()
@@ -139,9 +143,27 @@ class V6BrowserTests(unittest.TestCase):
                     self.assertEqual(page.locator("#detail-modal .sp-review-qualities .sp-review-fact").count(), 6)
                     self.assertIn("espectacular", page.locator("#detail-modal .sp-review-qualities").inner_text().lower())
                     self.assertNotIn("★", page.locator("#detail-modal .sp-review-qualities").inner_text())
-                    self.assertEqual(page.locator("#detail-modal .detail-cover-img").evaluate("image => image.naturalWidth"), 900)
+                    banner = page.locator("#detail-modal .sp-review-banner img")
+                    self.assertEqual(banner.evaluate("image => [image.naturalWidth, image.naturalHeight]"), [2048, 768])
+                    self.assertEqual(banner.evaluate("image => getComputedStyle(image).objectFit"), "contain")
+                    self.assertEqual(page.locator("#detail-modal .sp-review-poster img").evaluate("image => image.naturalWidth"), 900)
+                    expanded = page.locator("#detail-modal .sp-review-banner a")
+                    self.assertEqual(expanded.get_attribute("target"), "_blank")
+                    self.assertEqual(expanded.get_attribute("rel"), "noopener noreferrer")
+                    asset_response = page.request.get(urljoin(page.url, expanded.get_attribute("href")))
+                    self.assertEqual(asset_response.status, 200)
+                    self.assertIn("image/webp", asset_response.headers.get("content-type", ""))
+                    self.assertEqual(page.locator("#detail-modal .sp-review-hero").count(), 0)
                     self.assertFalse(page.evaluate("document.documentElement.scrollWidth > document.documentElement.clientWidth"))
                     self.assertEqual(errors, [])
+                    if width == 390:
+                        with context.expect_page() as new_page:
+                            expanded.click()
+                        enlarged = new_page.value
+                        enlarged.wait_for_url("**/horrorland-2026-banner.webp*", wait_until="commit")
+                        self.assertIn("horrorland-2026-banner.webp", enlarged.url)
+                        self.assertEqual(enlarged.locator("img").evaluate("image => image.naturalWidth"), 2048)
+                        enlarged.close()
                     if capture_dir:
                         page.locator("#detail-modal .sp-editorial-body p").last.scroll_into_view_if_needed()
                         page.screenshot(path=str(Path(capture_dir) / f"{self.browser.browser_type.name}-{width}-modal-end.png"))
