@@ -2470,6 +2470,7 @@
     <div class="detail-dialog">
     <div class="detail-media" id="detail-media"></div>
     <div class="detail-content" id="detail-content"></div>
+    <div class="sp-editorial-footer" id="sp-editorial-footer"></div>
     </div>
   </div>
 </div>
@@ -11501,6 +11502,31 @@ function openDetail(kind, key, options = {}) {
 
 let SCREAM_REVIEW_RETURN_HASH = '';
 let SCREAM_REVIEW_PUSHED = false;
+function screamReviewIntro(body) {
+  const opening = String(body || '').split(/^---\s*$/m, 1)[0];
+  return opening.split(/\n\s*\n/).filter(part => part.trim() && !part.trim().startsWith('#')).slice(0, 4).join('\n\n');
+}
+
+function screamReviewLabeledLines(body, heading) {
+  const lines = String(body || '').split('\n');
+  const start = lines.findIndex(line => {
+    if (!line.startsWith('# ') || !line.toLocaleUpperCase('es').includes(heading)) return false;
+    return heading !== 'VALORACIÓN THE VAULT' || /VALORACI[ÓO]N THE VAULT\s*[—-]/i.test(line);
+  });
+  if (start < 0) return [];
+  const result = [];
+  for (const line of lines.slice(start + 1)) {
+    if (/^---\s*$|^#\s/.test(line)) break;
+    const match = line.match(/\*\*([^*]+):\*\*\s*(.+)$/);
+    if (match) result.push({ label: match[1].trim(), value: match[2].trim() });
+  }
+  return result;
+}
+
+function screamReviewFactCards(items) {
+  return items.map(item => `<div class="sp-review-fact"><span>${escapeHtml(item.label)}</span><strong>${escapeHtml(item.value)}</strong></div>`).join('');
+}
+
 async function openScreamEditorialReview(seasonId, options = {}) {
   if (!/^[a-z0-9-]+$/.test(seasonId || '')) return false;
   const [reviews, entries] = await Promise.all([loadScreamEditorialReviews(), loadScreamParkEntries()]);
@@ -11519,17 +11545,45 @@ async function openScreamEditorialReview(seasonId, options = {}) {
   modal.dataset.screamReview = seasonId;
   modal.classList.add('scream-editorial-modal');
   const image = entry.images?.[0] || 'images/brand/the-vault-round-logo.jpg';
-  const seoUrl = `/scream-parks/reviews/${seasonId}/`;
-  document.getElementById('detail-media').innerHTML = `<img class="detail-cover-img" src="${escapeHtml(versionedLocalAsset(image))}" alt="Portada de ${escapeHtml(entry.name)}" onerror="this.onerror=null;this.src='images/brand/the-vault-round-logo.jpg'">`;
+  const imageUrl = escapeHtml(versionedLocalAsset(image));
+  const label = `${entry.name} ${seasonId.slice(-4)}`;
+  const location = [entry.city, entry.province].filter(Boolean).join(' · ');
+  const qualities = screamReviewLabeledLines(review.body, 'VALORACIÓN THE VAULT');
+  const facts = screamReviewLabeledLines(review.body, 'DATOS IMPORTANTES')
+    .filter(item => ['Ubicación', 'Aparcamiento', 'Menores', 'Nuestra visita'].includes(item.label));
+  document.getElementById('detail-media').innerHTML = `
+    <header class="sp-review-head">
+      <img class="sp-review-brand" src="images/brand/the-vault-wordmark-wide.webp" alt="The Vault Escape" width="162" height="34">
+      <div class="sp-review-identity"><span class="sp-review-eyebrow">Review The Vault</span>
+        <h2 id="detail-title">${escapeHtml(label)}</h2></div>
+      <span class="sp-review-type">${escapeHtml(entry.typeLabel || 'Scream Park')}</span>
+      <div class="sp-review-place"><span aria-hidden="true">⌖</span>${escapeHtml(location)}</div>
+    </header>
+    <div class="sp-review-hero">
+      <img class="detail-cover-img" src="${imageUrl}" alt="" onerror="this.onerror=null;this.src='images/brand/the-vault-round-logo.jpg'">
+      <div class="sp-review-hero-shade"></div>
+      <div class="sp-review-hero-title"><span>Review editorial · ${escapeHtml(seasonId.slice(-4))}</span><strong>${escapeHtml(entry.name)}</strong></div>
+    </div>`;
   document.getElementById('detail-content').innerHTML = `
-    <div class="detail-kicker">Review The Vault · Scream Park · edición ${escapeHtml(seasonId.slice(-4))}</div>
-    <h2 class="detail-title" id="detail-title">${escapeHtml(review.title)}</h2>
-    <div class="detail-company">${escapeHtml([entry.city, entry.province].filter(Boolean).join(' · '))} · Publicada ${escapeHtml(review.publishedAt)}</div>
-    <div class="sp-modal-actions"><button class="detail-link" type="button" onclick="shareScreamEditorialReview('${seasonId}')">Compartir</button>
-      <a class="detail-link" href="${seoUrl}">Abrir página SEO</a>
-      <button class="detail-link" type="button" onclick="returnToScreamPark('${entry.id}')">Volver a la ficha</button><span class="detail-share-status" role="status"></span></div>
-    <article class="sp-editorial-body">${reviewRichTextHtml(review.body)}</article>
-    <div class="sp-modal-actions"><button class="detail-link" type="button" onclick="closeDetail()">Cerrar review</button></div>`;
+    <div class="sp-review-layout"><div class="sp-review-main">
+      <section class="sp-review-section"><h3 class="sp-review-section-title">Introducción</h3>
+        <div class="sp-review-lead">${reviewRichTextHtml(screamReviewIntro(review.body))}</div></section>
+      ${qualities.length ? `<section class="sp-review-section"><h3 class="sp-review-section-title">Valoración The Vault</h3>
+        <div class="sp-review-qualities">${screamReviewFactCards(qualities)}</div></section>` : ''}
+      ${facts.length ? `<section class="sp-review-section"><h3 class="sp-review-section-title">Información práctica de nuestra visita</h3>
+        <div class="sp-review-facts">${screamReviewFactCards(facts)}</div></section>` : ''}
+      <section class="sp-review-section sp-review-full"><h3 class="sp-review-section-title">Nuestra opinión completa</h3>
+        <article class="sp-editorial-body">${reviewRichTextHtml(review.body)}</article></section>
+    </div><aside class="sp-review-aside" aria-label="Portada y comunidad">
+      <figure class="sp-review-poster"><img src="${imageUrl}" alt="Portada autorizada de ${escapeHtml(label)}" loading="lazy"><figcaption>Portada de ${escapeHtml(label)}</figcaption></figure>
+      <div class="sp-review-aside-note"><span>Review editorial</span><strong>Publicado ${escapeHtml(review.publishedAt)}</strong><small>${escapeHtml(location)}</small></div>
+      <section class="sp-review-community"><h3 class="sp-review-section-title">Opiniones de visitantes</h3><span>Próximamente</span>
+        <p>Este espacio estará disponible cuando se active la comunidad de Scream Parks.</p></section>
+    </aside></div>`;
+  document.getElementById('sp-editorial-footer').innerHTML = `
+    <button class="sp-review-share" type="button" onclick="shareScreamEditorialReview('${seasonId}')">${detailShareIcon('share')}<span>Compartir</span></button>
+    <span class="detail-share-status" role="status"></span>
+    <button class="sp-review-return" type="button" onclick="returnToScreamPark('${entry.id}')"><span aria-hidden="true">‹</span> Volver a la ficha</button>`;
   modal.classList.add('open');
   modal.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
@@ -11542,7 +11596,7 @@ async function openScreamEditorialReview(seasonId, options = {}) {
 }
 
 async function shareScreamEditorialReview(seasonId) {
-  const url = new URL(`/#scream-park-review/${seasonId}`, window.location.origin).href;
+  const url = new URL(`/scream-parks/reviews/${seasonId}/`, window.location.origin).href;
   const review = SCREAM_EDITORIAL_REVIEWS.find(item => item.seasonId === seasonId);
   if (navigator.share) {
     try { await navigator.share({ title: review?.title || 'Review The Vault', url }); return; }
