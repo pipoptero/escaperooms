@@ -11572,9 +11572,9 @@ async function openScreamEditorialReview(seasonId, options = {}) {
   document.getElementById('detail-content').innerHTML = `
     ${bannerUrl ? `<figure class="sp-review-banner"><a href="${bannerUrl}" target="_blank" rel="noopener noreferrer" aria-label="Ampliar banner de ${escapeHtml(label)} en una pestaña nueva">
       <img src="${bannerUrl}" width="2048" height="768" alt="Banner promocional de ${escapeHtml(label)} con experiencias y modalidades de entrada" decoding="async" onerror="this.closest('.sp-review-banner').hidden=true">
-      <span>Ampliar imagen ↗</span></a></figure>` : ''}
+      </a></figure>` : ''}
     <div class="sp-review-layout"><div class="sp-review-main">
-      <section class="sp-review-section"><h3 class="sp-review-section-title">Introducción</h3>
+      <section class="sp-review-section">${bannerUrl ? `<div class="sp-review-intro-head"><h3 class="sp-review-section-title">Introducción</h3><a class="sp-review-expand" href="${bannerUrl}" target="_blank" rel="noopener noreferrer">Ampliar imagen ↗</a></div>` : `<h3 class="sp-review-section-title">Introducción</h3>`}
         <div class="sp-review-lead">${reviewRichTextHtml(screamReviewIntro(review.body))}</div></section>
       ${qualities.length ? `<section class="sp-review-section"><h3 class="sp-review-section-title">Valoración The Vault</h3>
         <div class="sp-review-qualities">${screamReviewFactCards(qualities)}</div></section>` : ''}
