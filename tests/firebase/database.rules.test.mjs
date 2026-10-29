@@ -750,3 +750,33 @@ test('outsider y anónimo no administran ninguna rama pública ajena', async () 
   await assertFails(remove(ref(anonymous, 'publicProfiles/isaac/view')));
   await assertSucceeds(get(ref(anonymous, 'publicProfiles/isaac/view')));
 });
+
+test('Scream Parks: lectura separada y todas las escrituras de opiniones reservadas al servidor', async () => {
+  const alice = env.authenticatedContext('alice').database();
+  const bob = env.authenticatedContext('bob').database();
+  const guest = env.unauthenticatedContext().database();
+  const path = 'screamParkReviews/horrorland-2026/approved/opaque1';
+  const privatePath = 'screamParkReviews/horrorland-2026/submissions/alice';
+  const value = { entityId: 'horrorland', seasonId: 'horrorland-2026', rating: 9,
+    comment: 'Opinión moderada', visitDate: '', displayName: 'Visitante', approvedAt: 1000 };
+  await seed({ screamParkReviews: { 'horrorland-2026': {
+    approved: { opaque1: value }, submissions: { alice: { ...value, status: 'APPROVED' } },
+    moderation: { alice: { action: 'APPROVED' } }, audit: { event1: { uid: 'alice' } }
+  } } });
+  await assertSucceeds(get(ref(guest, path)));
+  await assertSucceeds(get(ref(alice, privatePath)));
+  await assertFails(get(ref(bob, privatePath)));
+  await assertFails(get(ref(guest, privatePath)));
+  await assertFails(get(ref(alice, 'screamParkReviews/horrorland-2026/submissions')));
+  await assertFails(get(ref(guest, 'screamParkReviews/horrorland-2026')));
+  await assertFails(get(ref(alice, 'screamParkReviews/horrorland-2026/moderation')));
+  await assertFails(get(ref(alice, 'screamParkReviews/horrorland-2026/audit')));
+  await assertFails(set(ref(alice, path), value));
+  await assertFails(set(ref(bob, path), value));
+  await assertFails(remove(ref(bob, path)));
+  await assertFails(set(ref(alice, path), { ...value, rating: 10 }));
+  await assertFails(remove(ref(alice, path)));
+  await assertFails(set(ref(alice, privatePath), { ...value, status: 'PENDING' }));
+  await assertFails(remove(ref(alice, privatePath)));
+  await assertFails(set(ref(alice, 'screamParkReviews/unknown-2026/approved/opaque1'), value));
+});

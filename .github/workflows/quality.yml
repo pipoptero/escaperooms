@@ -26,6 +26,11 @@ jobs:
           node --check room-state.js
           node --check editorial-review-renderer.js
           node tests/editorial_reviews.test.cjs
+          node --check scream-parks/client.js
+          node --check scream-parks/reviews.js
+          node --test tests/scream_parks_reviews.test.cjs
+          node --check functions/index.js
+          node --test functions/scream-review-moderation.test.cjs
           node --check route-planner.js
           node --check saved-routes.js
           node --check public-profile.js
@@ -84,3 +89,6 @@ jobs:
       - run: npm ci
       - name: Probar reglas de Realtime Database en el emulador
         run: npm run test:firebase-rules
+      - run: npm ci --prefix functions
+      - name: Probar opiniones con Auth, Database y Functions emulados
+        run: npx --yes firebase-tools@15.14.0 emulators:exec --only auth,database,functions --project demo-the-vault --config firebase.json "node tests/firebase/scream_reviews.emulator.mjs"

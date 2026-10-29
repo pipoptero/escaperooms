@@ -4,8 +4,9 @@
   const mounted = new WeakMap();
   let activeController = null;
 
-  function mount({ root, endpoint, navigation = 'inline', iconUrl,
-    editorialEndpoint = 'scream-parks/editorial-reviews.json' }) {
+  function mount({ root, endpoint, navigation = 'inline', iconUrl, reviewStore = null,
+    editorialEndpoint = 'scream-parks/editorial-reviews.json',
+    reviewSeasonsEndpoint = 'scream-parks/review-seasons.json' }) {
     if (!root || !endpoint || !iconUrl) throw new Error('Scream Parks preview misconfigured');
     if (mounted.has(root)) return mounted.get(root);
     // S3B prefixes IDs to avoid colliding with the product's detail modal.
@@ -51,6 +52,12 @@
     let selectedId = '';
     let reviewMode = false;
     let editorialReviews = [];
+    let historicalReviewSeasons = [];
+    let communitySeasonId = '';
+    let communityError = '';
+    let communityFormOpen = false;
+    let communityVisible = 3;
+    let moderationOpen = false;
 
     function editorialFor(entry) {
       return editorialReviews.find(review => review.entityId === entry.id && review.seasonId === entry.seasonId);
@@ -92,6 +99,158 @@
       return section;
     }
 
+    function renderCommunity() {
+      const target = $('community');
+      if (!target || !reviewStore) return;
+      const state = reviewStore.snapshot();
+      if (!state.entry || state.entry.id !== selectedId) return;
+      target.replaceChildren(create('h2', 'OPINIONES DE LA COMUNIDAD'));
+      const currentSeason = model.entries.find(item => item.id === selectedId)?.seasonId;
+      const seasons = [currentSeason, ...historicalReviewSeasons
+        .filter(item => item.entityId === selectedId).map(item => item.seasonId)];
+      const choices = [...new Set(seasons)].sort().reverse();
+      if (choices.length > 1) {
+        const label = create('label', 'Edición que quieres consultar');
+        const select = create('select');
+        for (const season of choices) option(select, season, season.slice(-4));
+        select.value = communitySeasonId || currentSeason;
+        select.onchange = () => {
+          communitySeasonId = select.value;
+          reviewStore.load({ ...state.entry, seasonId: communitySeasonId }).catch(error => {
+            communityError = error.message; renderCommunity();
+          });
+        };
+        label.append(select);
+        target.append(label);
+      }
+      if (state.pending) { target.append(create('p', 'Cargando opiniones…')); return; }
+      if (communityError) target.append(create('p', communityError, 'caution'));
+      target.append(create('p', state.count
+        ? `Media de la comunidad: ${state.average.toFixed(1).replace('.', ',')}/10 · ${state.count} ${state.count === 1 ? 'voto' : 'votos'} aprobados`
+        : 'Aún no hay valoraciones aprobadas para esta edición.', 'sp-community-average'));
+      const uid = reviewStore.currentUid?.();
+      const own = state.own;
+      if (uid && state.writable) {
+        const writeButton = create('button', own ? 'EDITAR MI OPINIÓN' : 'ESCRIBIR MI OPINIÓN', 'sp-community-write');
+        writeButton.type = 'button';
+        writeButton.setAttribute('aria-expanded', String(communityFormOpen));
+        writeButton.onclick = () => { communityFormOpen = !communityFormOpen; renderCommunity(); };
+        target.append(writeButton);
+      }
+      if (uid && state.writable && communityFormOpen) {
+        const form = create('form', undefined, 'sp-community-form');
+        const nameLabel = create('label', 'Nombre público que se mostrará con tu opinión');
+        const displayName = create('input'); displayName.maxLength = 40;
+        displayName.value = own?.displayName === 'Visitante' ? '' : own?.displayName || '';
+        displayName.placeholder = 'Visitante'; nameLabel.append(displayName);
+        const ratingLabel = create('label', 'Tu valoración (1–10)');
+        const rating = create('input'); rating.type = 'number'; rating.min = '1'; rating.max = '10'; rating.step = '0.5';
+        rating.required = true; rating.value = String(own?.rating || ''); ratingLabel.append(rating);
+        const commentLabel = create('label', 'Tu opinión');
+        const comment = create('textarea'); comment.maxLength = 5000; comment.minLength = 10;
+        comment.required = true; comment.value = own?.comment || ''; commentLabel.append(comment);
+        const dateLabel = create('label', 'Fecha de visita (opcional)');
+        const visitDate = create('input'); visitDate.type = 'date'; visitDate.value = own?.visitDate || ''; dateLabel.append(visitDate);
+        const confirmLabel = create('label', undefined, 'sp-community-confirm');
+        const confirm = create('input'); confirm.type = 'checkbox'; confirm.required = true;
+        confirmLabel.append(confirm, document.createTextNode(' Confirmo que es mi experiencia, evito spoilers y acepto su revisión antes de publicarse.'));
+        const send = create('button', own ? 'REENVIAR A MODERACIÓN' : 'ENVIAR A MODERACIÓN'); send.type = 'submit';
+        const status = create('p', own ? 'Tu opinión está pendiente de revisión. Las ediciones vuelven a moderación.' : '', 'sp-community-status');
+        form.append(nameLabel, ratingLabel, commentLabel, dateLabel, confirmLabel, send, status);
+        form.onsubmit = async event => {
+          event.preventDefault();
+          if (!confirm.checked) return;
+          send.disabled = true;
+          try {
+            await reviewStore.submit({ rating: rating.value, comment: comment.value,
+              visitDate: visitDate.value, displayName: displayName.value });
+            communityError = '';
+            communityFormOpen = false;
+            renderCommunity();
+          } catch (error) { status.textContent = error.message; send.disabled = false; }
+        };
+        target.append(form);
+        if (own) {
+          const remove = create('button', 'ELIMINAR MI OPINIÓN', 'sp-review-delete');
+          remove.type = 'button';
+          remove.onclick = async () => {
+            if (!window.confirm('¿Eliminar tu opinión de esta edición?')) return;
+            remove.disabled = true;
+            try { await reviewStore.deleteOwn(); communityFormOpen = false; renderCommunity(); }
+            catch (error) { communityError = error.message; renderCommunity(); }
+          };
+          target.append(remove);
+        }
+      } else if (!uid || !state.writable) {
+        target.append(create('p', uid
+          ? 'El envío de opiniones no está disponible en este entorno.'
+          : 'Entra con Google para compartir tu opinión. Se publicará tras revisión.'));
+        if (!uid && state.writable) {
+          const login = create('button', 'ENTRAR CON GOOGLE', 'sp-community-write');
+          login.type = 'button'; login.onclick = () => window.signInGoogle?.();
+          target.append(login);
+        }
+      }
+      if (own) target.append(create('p',
+        own.status === 'APPROVED' ? 'Tu opinión está publicada.' :
+        own.status === 'REJECTED' ? 'Tu opinión fue rechazada; puedes revisarla y reenviarla.' :
+        own.status === 'HIDDEN' ? 'Tu opinión está oculta; puedes revisarla y reenviarla.' :
+        'Tu opinión está pendiente de revisión.', 'sp-community-status'));
+      const list = create('div', undefined, 'sp-community-list');
+      const rows = Object.values(state.approved).sort((a, b) =>
+        Number(b.approvedAt || 0) - Number(a.approvedAt || 0));
+      for (const item of rows.slice(0, communityVisible)) {
+        const article = create('article', undefined, 'sp-community-opinion');
+        const date = item.approvedAt ? new Date(item.approvedAt).toLocaleDateString('es-ES') : '';
+        article.append(create('strong', `${item.displayName || 'Visitante'} · ${Number(item.rating).toFixed(1).replace('.', ',')}/10 · ${date}`),
+          create('p', item.comment));
+        list.append(article);
+      }
+      target.append(list);
+      if (rows.length > communityVisible) {
+        const more = create('button', 'VER MÁS', 'sp-community-more');
+        more.type = 'button';
+        more.onclick = () => { communityVisible += 5; renderCommunity(); };
+        target.append(more);
+      }
+      if (state.moderator) {
+        const moderation = create('details', undefined, 'sp-community-moderation');
+        moderation.open = moderationOpen;
+        moderation.ontoggle = () => { moderationOpen = moderation.open; };
+        moderation.append(create('summary', 'MODERAR OPINIONES'));
+        const controls = create('div');
+        for (const [status, label] of [['PENDING', 'PENDIENTES'], ['APPROVED', 'PUBLICADAS']]) {
+          const button = create('button', label);
+          button.type = 'button';
+          button.onclick = async () => {
+            try { await reviewStore.loadQueue(status); communityError = ''; }
+            catch (error) { communityError = error.message; renderCommunity(); }
+          };
+          controls.append(button);
+        }
+        moderation.append(controls);
+        for (const row of state.queue) {
+          const item = create('article', undefined, 'sp-community-opinion');
+          item.append(create('strong', `${row.displayName || 'Visitante'} · ${Number(row.rating).toFixed(1).replace('.', ',')}/10`),
+            create('p', row.comment));
+          for (const [action, label] of state.queueStatus === 'PENDING'
+            ? [['APPROVED', 'APROBAR'], ['REJECTED', 'RECHAZAR']]
+            : [['HIDDEN', 'OCULTAR']]) {
+            const button = create('button', label);
+            button.type = 'button';
+            button.onclick = async () => {
+              button.disabled = true;
+              try { await reviewStore.moderate(row, action); communityError = ''; }
+              catch (error) { communityError = error.message; renderCommunity(); }
+            };
+            item.append(button);
+          }
+          moderation.append(item);
+        }
+        target.append(moderation);
+      }
+    }
+
     function openReview(seasonId) {
       const entry = model?.entries.find(item => item.seasonId === seasonId);
       if (!entry || !editorialFor(entry)) return false;
@@ -128,6 +287,7 @@
       return value === 'all' || (value === 'unverified' && !entry[key]) || value === entry[key];
     }
     function showDetail(id) {
+      if (selectedId !== id) { communitySeasonId = ''; communityFormOpen = false; communityVisible = 3; moderationOpen = false; }
       reviewMode = false;
       if (navigation === 'hash') {
         window.location.hash = id;
@@ -306,6 +466,11 @@
       if (entry.images?.length) fallback.classList.add('has-cover');
       fallback.append(coverImage(entry));
       aside.append(fallback);
+      if (reviewStore) {
+        const community = panel('OPINIONES DE LA COMUNIDAD');
+        community.id = 'sp-community';
+        aside.append(community);
+      }
       if (entry.images?.length > 1) {
         const gallery = create('div', undefined, 'sp-gallery');
         for (const source of entry.images.slice(1)) {
@@ -332,17 +497,9 @@
         videoPanel.append(frame);
         aside.append(videoPanel);
       }
-      const sidebar = panel('Antes de ir');
-      sidebar.append(create('p', s4(entry)
-        ? 'Consulta disponibilidad, precios y condiciones en la web del evento antes de ir.'
-        : 'Esta es una vista privada para evaluación. No ofrece disponibilidad ni reserva desde The Vault.'));
-      if (!s4(entry)) {
-        if (entry.priceOffers?.length) sidebar.append(create('p', 'Hay precios verificados; consulta condiciones y modalidad en la fuente oficial antes de comprar.', 'caution'));
-        else sidebar.append(create('p', 'Precio no verificado para esta ficha.', 'caution'));
-      }
-      aside.append(sidebar);
-      grid.append(main, aside);
+      grid.append(aside, main);
       rootNode.append(grid);
+      renderCommunity();
     }
     function route() {
       if (!model) return;
@@ -360,6 +517,8 @@
         } else {
           reviewMode = false;
           detail(entry);
+          if (reviewStore) reviewStore.load({ ...entry, seasonId: communitySeasonId || entry.seasonId })
+            .catch(error => { communityError = error.message; renderCommunity(); });
         }
         window.scrollTo(0, 0);
       } else if (id && navigation === 'hash') {
@@ -379,11 +538,13 @@
       const entry = model.entries.find(item => item.id === selectedId);
       if (entry) detail(entry);
     }
-    const controller = { route, renderList, refreshStates, open: showDetail, openReview };
+    const controller = { route, renderList, refreshStates, refreshReviews: renderCommunity,
+      reloadReviews: () => { const entry = model?.entries.find(item => item.id === selectedId); if (entry) return reviewStore?.load({ ...entry, seasonId: communitySeasonId || entry.seasonId }); },
+      open: showDetail, openReview };
     mounted.set(root, controller);
     activeController = controller;
-    Promise.all([fetch(endpoint, { cache: 'no-store' }), fetch(editorialEndpoint, { cache: 'no-store' })
-    ]).then(async ([response, reviewsResponse]) => {
+    Promise.all([fetch(endpoint, { cache: 'no-store' }), fetch(editorialEndpoint, { cache: 'no-store' }),
+      fetch(reviewSeasonsEndpoint, { cache: 'no-store' })]).then(async ([response, reviewsResponse, seasonsResponse]) => {
       const data = await response.json();
       if (!response.ok) throw Error(data.error || 'Preview no disponible');
       const staticCatalog = data.scope === 'scream_parks_catalog_v1';
@@ -397,6 +558,13 @@
         if (registry.schemaVersion !== 1 || !Array.isArray(registry.reviews)) throw Error('Registro editorial no válido');
         editorialReviews = registry.reviews.filter(review =>
           review.status === 'PUBLISHED' || (registry.previewOnly === true && review.status === 'DRAFT'));
+      }
+      if (seasonsResponse.ok) {
+        const seasons = await seasonsResponse.json();
+        if (seasons.schemaVersion !== 1 || !Array.isArray(seasons.historicalSeasons))
+          throw Error('Temporadas históricas no válidas');
+        historicalReviewSeasons = seasons.historicalSeasons.filter(item =>
+          model.entries.some(entry => entry.id === item.entityId));
       }
       if (staticCatalog && window.VaultScreamParkStates) window.VaultScreamParkStates.setEntries(data.entries);
       if (data.scope === 'private_scream_parks_s4' || staticCatalog) {

@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "historicalSeasons": [
+    {
+      "entityId": "horrorland",
+      "seasonId": "horrorland-2025",
+      "sourceUrl": "https://www.horrorlandpark.com/wp-content/uploads/2025/08/2025_ES_asustadores.pdf"
+    }
+  ]
+}

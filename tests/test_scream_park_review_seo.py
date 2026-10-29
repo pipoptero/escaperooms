@@ -45,9 +45,13 @@ class ScreamParkReviewSeoTests(unittest.TestCase):
         self.assertIn('https://thevaultescape.com/scream-parks/reviews/horrorland-2026/',
                       (ROOT / "sitemap-reviews.xml").read_text(encoding="utf-8"))
         shell = (ROOT / "service-worker.js").read_text(encoding="utf-8")
-        self.assertIn("the-vault-v58", shell)
+        self.assertIn("the-vault-v59", shell)
         self.assertIn("./scream-parks/reviews/horrorland-2026/", shell)
-        self.assertNotIn("scream-parks/reviews.js", (ROOT / "index.html").read_text(encoding="utf-8"))
+        app = (ROOT / "index.html").read_text(encoding="utf-8")
+        self.assertIn("scream-parks/reviews.js", app)
+        self.assertIn("const communityEnabled = FIREBASE_CONFIG.screamReviewsEnabled === true", app)
+        self.assertIn("&& !!FIREBASE_CONFIG.appCheckSiteKey", app)
+        self.assertIn("const communityPreview = localPreview || communityEnabled", app)
 
     def test_static_home_includes_latest_scream_review_without_changing_escape_count(self):
         stats = {"catalog": 1740, "reviews": 43, "ranking": 948, "locations": 44}

@@ -2349,7 +2349,7 @@
   <footer class="seo-footer" aria-label="Enlaces de reviews">
     <div class="seo-footer-inner">
       <span class="rights">&copy; 2026 The Vault Escape. Todos los derechos reservados.</span>
-      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v58</span>
+      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v59</span>
       <span>Reviews de escape rooms con URL propia</span>
       <a href="ranking-escape-rooms/">Ranking escape rooms España</a>
       <a href="mejores-escape-rooms/">Mejores escape rooms</a>
@@ -2532,6 +2532,7 @@
 <script src="public-profile-fixtures.js"></script>
 <script src="editorial-review-renderer.js"></script>
 <script src="scream-parks/personal-state.js"></script>
+<script src="scream-parks/reviews.js"></script>
 <script src="scream-parks/client.js"></script>
 <script>
 // ════════════════════════════════════════════════════════════
@@ -2543,6 +2544,8 @@ const FIREBASE_CONFIG = window.THE_VAULT_FIREBASE_CONFIG || {};
 const FIREBASE_URL = String(FIREBASE_CONFIG.databaseURL || '').trim();
 const FIREBASE_APP_SDK = 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js';
 const FIREBASE_AUTH_SDK = 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js';
+const FIREBASE_FUNCTIONS_SDK = 'https://www.gstatic.com/firebasejs/10.12.5/firebase-functions-compat.js';
+const FIREBASE_APPCHECK_SDK = 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app-check-compat.js';
 const LEAFLET_CSS = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
 const LEAFLET_CLUSTER_CSS = 'https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css';
 const LEAFLET_SDK = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
@@ -3969,6 +3972,8 @@ async function refreshSignedSession() {
   if (AUTH_USER) AUTH_TOKEN = await AUTH_USER.getIdToken();
   await loadUserRoomStates();
   window.VaultScreamParkStates.setSession(AUTH_USER?.uid || null);
+  window.TheVaultScreamParksPreview?.current?.reloadReviews?.()?.catch(error =>
+    console.warn('No se pudieron cargar las opiniones de esta edición:', error.message));
   if (AUTH_USER) {
     try {
       await loadScreamParkEntries();
@@ -10116,8 +10121,53 @@ function renderActivePanel() {
   else renderVaultGuide();
 }
 
+let SCREAM_REVIEW_STORE = null;
+let SCREAM_FUNCTIONS_PROMISE = null;
+async function callScreamReviewFunction(name, payload) {
+  if (!SCREAM_FUNCTIONS_PROMISE) {
+    SCREAM_FUNCTIONS_PROMISE = (async () => {
+      if (!await ensureFirebaseSdk()) throw new Error('Autenticación no disponible.');
+      await loadScriptOnce(FIREBASE_FUNCTIONS_SDK);
+      const emulator = /^http:\/\/(?:127\.0\.0\.1|localhost):9000(?:\/|$)/.test(FIREBASE_URL);
+      if (!emulator) {
+        if (!FIREBASE_CONFIG.appCheckSiteKey) throw new Error('Opiniones no disponibles.');
+        await loadScriptOnce(FIREBASE_APPCHECK_SDK);
+        firebase.appCheck().activate(FIREBASE_CONFIG.appCheckSiteKey, true);
+      }
+      const service = firebase.app().functions('europe-west1');
+      if (emulator) service.useEmulator('127.0.0.1', 5001);
+      return service;
+    })().catch(error => { SCREAM_FUNCTIONS_PROMISE = null; throw error; });
+  }
+  const service = await SCREAM_FUNCTIONS_PROMISE;
+  return (await service.httpsCallable(name)(payload)).data;
+}
 function mountScreamParksPreview() {
-  return window.TheVaultScreamParksPreview?.mount({root:document.getElementById('scream-parks-app'),endpoint:'scream-parks/data-2026.json',navigation:'inline',iconUrl:'images/brand/icon-round-192.png'});
+  const localPreview = ['127.0.0.1', 'localhost'].includes(window.location.hostname);
+  const communityEnabled = FIREBASE_CONFIG.screamReviewsEnabled === true
+    && !!FIREBASE_CONFIG.appCheckSiteKey;
+  const communityPreview = localPreview || communityEnabled;
+  if (communityPreview && !SCREAM_REVIEW_STORE && window.VaultScreamParkReviews) {
+    const emulator = /^http:\/\/(?:127\.0\.0\.1|localhost):9000(?:\/|$)/.test(FIREBASE_URL);
+    SCREAM_REVIEW_STORE = window.VaultScreamParkReviews.createStore({
+      getUid: () => AUTH_USER?.uid || null,
+      getModerator: async () => {
+        if (!AUTH_USER?.getIdTokenResult) return false;
+        try { return (await AUTH_USER.getIdTokenResult(true)).claims?.screamParksModerator === true; }
+        catch { return false; }
+      },
+      read: async (path, authenticated) => {
+        if (!FIREBASE_ENABLED) return null;
+        const response = await fetch(firebaseRestUrl(path, authenticated));
+        if (!response.ok) throw new Error('No se pudieron cargar las opiniones.');
+        return response.json();
+      },
+      call: callScreamReviewFunction,
+      writable: emulator || communityEnabled,
+      onChange: () => window.TheVaultScreamParksPreview?.current?.refreshReviews?.()
+    });
+  }
+  return window.TheVaultScreamParksPreview?.mount({root:document.getElementById('scream-parks-app'),endpoint:'scream-parks/data-2026.json',navigation:'inline',iconUrl:'images/brand/icon-round-192.png',reviewStore:communityPreview ? SCREAM_REVIEW_STORE : null});
 }
 
 function switchTab(t) {
@@ -11553,9 +11603,6 @@ async function openScreamEditorialReview(seasonId, options = {}) {
     ? escapeHtml(versionedLocalAsset(SCREAM_EDITORIAL_BANNERS[seasonId])) : '';
   const label = `${entry.name} ${seasonId.slice(-4)}`;
   const location = [entry.city, entry.province].filter(Boolean).join(' · ');
-  const qualities = screamReviewLabeledLines(review.body, 'VALORACIÓN THE VAULT');
-  const facts = screamReviewLabeledLines(review.body, 'DATOS IMPORTANTES')
-    .filter(item => ['Ubicación', 'Aparcamiento', 'Menores', 'Nuestra visita'].includes(item.label));
   document.getElementById('detail-media').innerHTML = `
     <header class="sp-review-head">
       <img class="sp-review-brand" src="images/brand/the-vault-wordmark-wide.webp" alt="The Vault Escape" width="162" height="34">
@@ -11574,20 +11621,9 @@ async function openScreamEditorialReview(seasonId, options = {}) {
       <img src="${bannerUrl}" width="2048" height="768" alt="Banner promocional de ${escapeHtml(label)} con experiencias y modalidades de entrada" decoding="async" onerror="this.closest('.sp-review-banner').hidden=true">
       </a></figure>` : ''}
     <div class="sp-review-layout"><div class="sp-review-main">
-      <section class="sp-review-section">${bannerUrl ? `<div class="sp-review-intro-head"><h3 class="sp-review-section-title">Introducción</h3><a class="sp-review-expand" href="${bannerUrl}" target="_blank" rel="noopener noreferrer">Ampliar imagen ↗</a></div>` : `<h3 class="sp-review-section-title">Introducción</h3>`}
-        <div class="sp-review-lead">${reviewRichTextHtml(screamReviewIntro(review.body))}</div></section>
-      ${qualities.length ? `<section class="sp-review-section"><h3 class="sp-review-section-title">Valoración The Vault</h3>
-        <div class="sp-review-qualities">${screamReviewFactCards(qualities)}</div></section>` : ''}
-      ${facts.length ? `<section class="sp-review-section"><h3 class="sp-review-section-title">Información práctica de nuestra visita</h3>
-        <div class="sp-review-facts">${screamReviewFactCards(facts)}</div></section>` : ''}
-      <section class="sp-review-section sp-review-full"><h3 class="sp-review-section-title">Nuestra opinión completa</h3>
-        <article class="sp-editorial-body">${reviewRichTextHtml(review.body)}</article></section>
-    </div><aside class="sp-review-aside" aria-label="Portada y comunidad">
-      <figure class="sp-review-poster"><img src="${imageUrl}" alt="Portada autorizada de ${escapeHtml(label)}" loading="lazy"><figcaption>Portada de ${escapeHtml(label)}</figcaption></figure>
-      <div class="sp-review-aside-note"><span>Review editorial</span><strong>Publicado ${escapeHtml(review.publishedAt)}</strong><small>${escapeHtml(location)}</small></div>
-      <section class="sp-review-community"><h3 class="sp-review-section-title">Opiniones de visitantes</h3><span>Próximamente</span>
-        <p>Este espacio estará disponible cuando se active la comunidad de Scream Parks.</p></section>
-    </aside></div>`;
+      ${bannerUrl ? `<div class="sp-review-intro-head"><h3 class="sp-review-section-title">Nuestra opinión</h3><a class="sp-review-expand" href="${bannerUrl}" target="_blank" rel="noopener noreferrer">Ampliar imagen ↗</a></div>` : '<h3 class="sp-review-section-title">Nuestra opinión</h3>'}
+      <article class="sp-editorial-body">${reviewRichTextHtml(review.body)}</article>
+    </div></div>`;
   document.getElementById('sp-editorial-footer').innerHTML = `
     <button class="sp-review-share" type="button" onclick="shareScreamEditorialReview('${seasonId}')">${detailShareIcon('share')}<span>Compartir</span></button>
     <span class="detail-share-status" role="status"></span>
