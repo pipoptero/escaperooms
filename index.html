@@ -2544,8 +2544,6 @@ const FIREBASE_CONFIG = window.THE_VAULT_FIREBASE_CONFIG || {};
 const FIREBASE_URL = String(FIREBASE_CONFIG.databaseURL || '').trim();
 const FIREBASE_APP_SDK = 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js';
 const FIREBASE_AUTH_SDK = 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js';
-const FIREBASE_FUNCTIONS_SDK = 'https://www.gstatic.com/firebasejs/10.12.5/firebase-functions-compat.js';
-const FIREBASE_APPCHECK_SDK = 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app-check-compat.js';
 const LEAFLET_CSS = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
 const LEAFLET_CLUSTER_CSS = 'https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css';
 const LEAFLET_SDK = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
@@ -10122,48 +10120,25 @@ function renderActivePanel() {
 }
 
 let SCREAM_REVIEW_STORE = null;
-let SCREAM_FUNCTIONS_PROMISE = null;
-async function callScreamReviewFunction(name, payload) {
-  if (!SCREAM_FUNCTIONS_PROMISE) {
-    SCREAM_FUNCTIONS_PROMISE = (async () => {
-      if (!await ensureFirebaseSdk()) throw new Error('Autenticación no disponible.');
-      await loadScriptOnce(FIREBASE_FUNCTIONS_SDK);
-      const emulator = /^http:\/\/(?:127\.0\.0\.1|localhost):9000(?:\/|$)/.test(FIREBASE_URL);
-      if (!emulator) {
-        if (!FIREBASE_CONFIG.appCheckSiteKey) throw new Error('Opiniones no disponibles.');
-        await loadScriptOnce(FIREBASE_APPCHECK_SDK);
-        firebase.appCheck().activate(FIREBASE_CONFIG.appCheckSiteKey, true);
-      }
-      const service = firebase.app().functions('europe-west1');
-      if (emulator) service.useEmulator('127.0.0.1', 5001);
-      return service;
-    })().catch(error => { SCREAM_FUNCTIONS_PROMISE = null; throw error; });
-  }
-  const service = await SCREAM_FUNCTIONS_PROMISE;
-  return (await service.httpsCallable(name)(payload)).data;
-}
 function mountScreamParksPreview() {
   const localPreview = ['127.0.0.1', 'localhost'].includes(window.location.hostname);
-  const communityEnabled = FIREBASE_CONFIG.screamReviewsEnabled === true
-    && !!FIREBASE_CONFIG.appCheckSiteKey;
+  const communityEnabled = FIREBASE_CONFIG.screamReviewsEnabled === true;
   const communityPreview = localPreview || communityEnabled;
   if (communityPreview && !SCREAM_REVIEW_STORE && window.VaultScreamParkReviews) {
     const emulator = /^http:\/\/(?:127\.0\.0\.1|localhost):9000(?:\/|$)/.test(FIREBASE_URL);
     SCREAM_REVIEW_STORE = window.VaultScreamParkReviews.createStore({
       getUid: () => AUTH_USER?.uid || null,
-      getModerator: async () => {
-        if (!AUTH_USER?.getIdTokenResult) return false;
-        try { return (await AUTH_USER.getIdTokenResult(true)).claims?.screamParksModerator === true; }
-        catch { return false; }
-      },
-      read: async (path, authenticated) => {
+      getUserName: () => shortDisplayName(),
+      isAdmin: () => IS_ADMIN === true,
+      read: async path => {
         if (!FIREBASE_ENABLED) return null;
-        const response = await fetch(firebaseRestUrl(path, authenticated));
+        const response = await fetch(firebaseRestUrl(path, false));
         if (!response.ok) throw new Error('No se pudieron cargar las opiniones.');
         return response.json();
       },
-      call: callScreamReviewFunction,
-      writable: emulator || communityEnabled,
+      put: async (path, value) => { AUTH_TOKEN = await AUTH_USER.getIdToken(true); return fbPut(path, value); },
+      remove: async path => { AUTH_TOKEN = await AUTH_USER.getIdToken(true); return fbDelete(path); },
+      writable: FIREBASE_ENABLED && (emulator || communityEnabled),
       onChange: () => window.TheVaultScreamParksPreview?.current?.refreshReviews?.()
     });
   }

@@ -1,12 +1,12 @@
-"""Generate the exact season/entity guard for RTDB review rules from public Scream Parks data."""
+"""Generate the season-scoped RTDB rules for public Scream Park reviews."""
 import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG = ROOT / "scream-parks" / "data-2026.json"
 RULES = ROOT / "database.rules.json"
-SERVER_IDENTITIES = ROOT / "functions" / "season-identities.json"
 MARKERS = ('    "screamParkReviewSubmissions": {', '    "screamParkReviews": {')
+CATEGORIES = ("ambientacion", "acting", "organizacion", "terror", "variedad")
 
 
 def main():
@@ -17,20 +17,53 @@ def main():
     pairs = sorted([(item["seasonId"], item["id"]) for item in catalog["entries"]]
                    + [(item["seasonId"], item["entityId"]) for item in historical["historicalSeasons"]])
     assert len(pairs) == len(set(pairs)) and all(entity in entity_ids for _, entity in pairs)
-    SERVER_IDENTITIES.parent.mkdir(parents=True, exist_ok=True)
-    SERVER_IDENTITIES.write_text(json.dumps(dict(pairs), ensure_ascii=False, sort_keys=True,
-                                           indent=2) + "\n", encoding="utf-8")
     season_expr = " || ".join(f"$seasonId === '{season}'" for season, _ in pairs)
+    identity_expr = " || ".join(
+        f"($seasonId === '{season}' && newData.child('entityId').val() === '{entity}')"
+        for season, entity in pairs
+    )
+    score_rule = "newData.isNumber() && newData.val() >= 0.5 && newData.val() <= 5 && (newData.val() * 2) % 1 === 0"
     branch = {
         "screamParkReviews": {
             "$seasonId": {
-                ".write": False,
-                "approved": {".read": season_expr},
-                "submissions": {"$uid": {".read": "auth != null && auth.uid === $uid"}},
-                "moderation": {".read": False},
-                "audit": {".read": False},
+                ".read": season_expr,
+                "$uid": {
+                    ".write": (
+                        f"auth != null && ({season_expr}) && ((auth.uid === $uid && newData.exists()) || "
+                        "(!newData.exists() && (auth.uid === $uid || "
+                        "root.child('admins/' + auth.uid).val() === true)))"
+                    ),
+                    ".validate": (
+                        "newData.hasChildren(['entityId','seasonId','userName','scores','text',"
+                        "'createdAt','updatedAt','revision']) && "
+                        f"({identity_expr}) && newData.child('seasonId').val() === $seasonId && "
+                        "newData.child('createdAt').isNumber() && "
+                        "(data.exists() ? newData.child('createdAt').val() === data.child('createdAt').val() : "
+                        "(newData.child('createdAt').val() >= now - 300000 && "
+                        "newData.child('createdAt').val() <= now + 300000)) && "
+                        "newData.child('updatedAt').isNumber() && "
+                        "newData.child('updatedAt').val() >= now - 300000 && "
+                        "newData.child('updatedAt').val() <= now + 300000 && "
+                        "newData.child('updatedAt').val() >= newData.child('createdAt').val() && "
+                        "newData.child('revision').isNumber() && "
+                        "newData.child('revision').val() === (data.exists() ? data.child('revision').val() + 1 : 1)"
+                    ),
+                    "entityId": {".validate": "newData.isString()"},
+                    "seasonId": {".validate": "newData.isString()"},
+                    "userName": {".validate": "newData.isString() && newData.val().length >= 2 && newData.val().length <= 40 && newData.val().matches(/^[^<>@]+$/)"},
+                    "scores": {
+                        ".validate": "newData.hasChildren(['ambientacion','acting','organizacion','terror','variedad'])",
+                        **{category: {".validate": score_rule} for category in CATEGORIES},
+                        "$other": {".validate": False},
+                    },
+                    "text": {".validate": "newData.isString() && newData.val().length >= 10 && newData.val().length <= 10000"},
+                    "createdAt": {".validate": "newData.isNumber()"},
+                    "updatedAt": {".validate": "newData.isNumber()"},
+                    "revision": {".validate": "newData.isNumber()"},
+                    "$other": {".validate": False},
+                },
             }
-        },
+        }
     }
     text = RULES.read_text(encoding="utf-8")
     marker = next((item for item in MARKERS if item in text), None)
@@ -38,9 +71,8 @@ def main():
         start = text.index(marker)
         end = text.index('    "profiles": {', start)
         text = text[:start] + text[end:]
-    payload = "".join(f"    {json.dumps(name)}: {json.dumps(value, ensure_ascii=False, indent=2)},\n"
+    payload = "".join(f"    {json.dumps(name)}: {json.dumps(value, ensure_ascii=False, indent=2).replace(chr(10), chr(10) + '    ')},\n"
                       for name, value in branch.items())
-    # Indentation is cosmetic; JSON rules are parsed before deployment.
     text = text.replace('    "profiles": {', payload + '    "profiles": {', 1)
     RULES.write_text(text, encoding="utf-8")
 

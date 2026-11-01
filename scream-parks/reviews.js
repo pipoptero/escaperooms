@@ -1,8 +1,12 @@
-/* Scream Park reviews: season-scoped and separate from escape-room reviews/votes. */
+/* Public Scream Park reviews: one author record per season, separate from escape rooms. */
 (function (root) {
   'use strict';
   const ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
   const SEASON = /^[a-z0-9]+(?:-[a-z0-9]+)*-(?:19|20)\d{2}$/;
+  const CATEGORIES = Object.freeze([
+    ['ambientacion', 'Ambientación'], ['acting', 'Acting'],
+    ['organizacion', 'Organización'], ['terror', 'Terror'], ['variedad', 'Variedad']
+  ]);
 
   function identity(entry) {
     const entityId = entry?.id || entry?.entityId;
@@ -12,110 +16,96 @@
     return { entityId, seasonId };
   }
 
+  function validStars(value) {
+    return typeof value === 'number' && Number.isFinite(value)
+      && value >= 0.5 && value <= 5 && value * 2 % 1 === 0;
+  }
+
   function normalizeOpinion(value) {
-    const rating = Number(value?.rating);
-    const comment = String(value?.comment ?? '').trim();
-    const visitDate = String(value?.visitDate ?? '').trim();
-    if (!Number.isFinite(rating) || rating < 1 || rating > 10 || rating * 2 % 1 !== 0)
-      throw new Error('La valoración debe estar entre 1 y 10, en pasos de 0,5.');
-    if (Array.from(comment).length < 10 || Array.from(comment).length > 5000)
-      throw new Error('La opinión debe tener entre 10 y 5000 caracteres.');
-    if (visitDate && !/^(?:19|20)\d\d-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])$/.test(visitDate))
-      throw new Error('Fecha de visita no válida.');
-    const displayName = String(value?.displayName ?? '').trim();
-    if (displayName && (Array.from(displayName).length > 40 || /[<>@\r\n]/.test(displayName)))
-      throw new Error('El nombre público debe tener como máximo 40 caracteres.');
-    return { rating, comment, visitDate, displayName };
+    const scores = value?.scores;
+    if (!scores || typeof scores !== 'object' || Array.isArray(scores)
+        || Object.keys(scores).length !== CATEGORIES.length
+        || CATEGORIES.some(([key]) => !validStars(scores[key])))
+      throw new Error('Puntúa las cinco categorías de 0,5 a 5 estrellas, en medios puntos.');
+    const text = String(value?.text ?? '').trim();
+    if (Array.from(text).length < 10 || Array.from(text).length > 10000)
+      throw new Error('La opinión debe tener entre 10 y 10.000 caracteres.');
+    const userName = String(value?.userName ?? '').trim() || 'Visitante';
+    if (Array.from(userName).length < 2 || Array.from(userName).length > 40 || /[<>@\r\n]/.test(userName))
+      throw new Error('El nombre público debe tener entre 2 y 40 caracteres y no ser un correo.');
+    return { scores: Object.fromEntries(CATEGORIES.map(([key]) => [key, scores[key]])), text, userName };
   }
 
-  function aggregate(approved) {
-    const records = Object.values(approved || {}).filter(item => item && Number.isFinite(Number(item.rating))
-      && Number(item.rating) >= 1 && Number(item.rating) <= 10);
-    return { count: records.length, average: records.length
-      ? Math.round(records.reduce((sum, item) => sum + Number(item.rating), 0) / records.length * 10) / 10 : null };
+  function aggregate(records) {
+    const valid = Object.values(records || {}).filter(item => item && CATEGORIES.every(([key]) => validStars(item.scores?.[key])));
+    const count = valid.length;
+    const categories = Object.fromEntries(CATEGORIES.map(([key]) => [key, count
+      ? Math.round(valid.reduce((sum, item) => sum + item.scores[key], 0) / count * 20) / 10 : null]));
+    const global = count ? Math.round(valid.reduce((sum, item) => sum
+      + CATEGORIES.reduce((subtotal, [key]) => subtotal + item.scores[key], 0), 0)
+      / (count * CATEGORIES.length) * 20) / 10 : null;
+    return { count, categories, global };
   }
 
-  function createStore({ read, call, getUid, getModerator = async () => false,
-    onChange = () => {}, writable = true }) {
+  function createStore({ read, put, remove, getUid, getUserName = () => 'Visitante',
+    isAdmin = () => false, onChange = () => {}, writable = true, clock = Date.now }) {
     let entry = null;
-    let generation = 0;
-    let own = null;
-    let approved = {};
+    let rows = {};
     let pending = false;
-    let moderator = false;
-    let queue = [];
-    let queueStatus = 'PENDING';
-    let loadedUid = null;
+    let generation = 0;
+    let viewerUid = null;
     async function load(nextEntry) {
       const { seasonId } = identity(nextEntry);
-      const localGeneration = ++generation;
-      const viewerUid = getUid();
-      if (entry?.seasonId !== seasonId || loadedUid !== viewerUid) {
-        queue = [];
-        queueStatus = 'PENDING';
-      }
-      loadedUid = viewerUid;
+      const current = ++generation;
       entry = nextEntry;
+      viewerUid = getUid();
+      rows = {};
       pending = true;
       onChange();
       try {
-        const uid = getUid();
-        const [publicRows, personal, moderatorClaim] = await Promise.all([
-          read(`screamParkReviews/${seasonId}/approved`, false),
-          uid ? read(`screamParkReviews/${seasonId}/submissions/${uid}`, true) : Promise.resolve(null),
-          uid ? getModerator() : Promise.resolve(false)
-        ]);
-        if (localGeneration !== generation) return;
-        approved = publicRows && typeof publicRows === 'object' ? publicRows : {};
-        own = personal || null;
-        moderator = moderatorClaim === true;
+        const result = await read(`screamParkReviews/${seasonId}`);
+        if (current !== generation) return;
+        rows = result && typeof result === 'object' ? result : {};
       } finally {
-        if (localGeneration === generation) { pending = false; onChange(); }
+        if (current === generation) { pending = false; onChange(); }
       }
     }
-    async function submit(value) {
-      if (!writable) throw new Error('Las opiniones nuevas siguen desactivadas.');
-      if (!entry) throw new Error('Abre primero la ficha del parque.');
+    async function save(input) {
+      if (!writable) throw new Error('Las opiniones no están disponibles.');
       const uid = getUid();
-      if (!uid) throw new Error('Entra con Google para publicar tu opinión.');
-      const { seasonId } = identity(entry);
-      const normalized = normalizeOpinion(value);
-      const next = await call('submitScreamParkReview',
-        { seasonId, expectedRevision: own?.revision || 0, ...normalized });
+      if (!uid || !entry) throw new Error('Entra con Google para escribir tu opinión.');
+      const { entityId, seasonId } = identity(entry);
+      const previous = rows[uid];
+      const value = normalizeOpinion({ ...input, userName: input?.userName || getUserName() });
+      const now = clock();
+      const record = { entityId, seasonId, ...value, createdAt: previous?.createdAt || now,
+        updatedAt: now, revision: (previous?.revision || 0) + 1 };
+      await put(`screamParkReviews/${seasonId}/${uid}`, record);
       await load(entry);
-      return next;
+      return record;
     }
     async function deleteOwn() {
-      if (!writable) throw new Error('Las opiniones nuevas siguen desactivadas.');
-      if (!entry || !getUid()) throw new Error('Entra con Google para eliminar tu opinión.');
+      const uid = getUid();
+      if (!writable || !uid || !entry) throw new Error('Entra con Google para eliminar tu opinión.');
       const { seasonId } = identity(entry);
-      if (own) await call('deleteScreamParkReview',
-        { seasonId, expectedRevision: own.revision });
+      if (rows[uid]) await remove(`screamParkReviews/${seasonId}/${uid}`);
       await load(entry);
     }
-    async function loadQueue(status = 'PENDING') {
-      if (!entry || !moderator) throw new Error('No tienes permisos de moderación.');
+    async function removeAsAdmin(authorUid) {
+      if (!writable || !entry || !getUid() || !isAdmin()) throw new Error('No tienes permisos de administración.');
       const { seasonId } = identity(entry);
-      const result = await call('listScreamParkReviewQueue', { seasonId, status });
-      queue = result.rows || [];
-      queueStatus = status;
-      onChange();
-      return queue;
+      if (!rows[authorUid]) throw new Error('La opinión ya no está disponible.');
+      await remove(`screamParkReviews/${seasonId}/${authorUid}`);
+      await load(entry);
     }
-    async function moderate(row, action) {
-      if (!entry || !moderator) throw new Error('No tienes permisos de moderación.');
-      const { seasonId } = identity(entry);
-      const result = await call('moderateScreamParkReview',
-        { seasonId, uid: row.uid, action, expectedFingerprint: row.fingerprint });
-      await Promise.all([loadQueue(queueStatus), load(entry)]);
-      return result;
+    function snapshot() {
+      const own = viewerUid ? rows[viewerUid] || null : null;
+      return { entry, rows, own, pending, writable, admin: !!getUid() && !!isAdmin(), ...aggregate(rows) };
     }
-    function snapshot() { return { entry, own, approved, pending, writable,
-      moderator, queue, queueStatus, ...aggregate(approved) }; }
-    return { load, submit, deleteOwn, loadQueue, moderate, snapshot, currentUid: getUid };
+    return { load, save, deleteOwn, removeAsAdmin, snapshot, currentUid: getUid };
   }
 
-  const api = { identity, normalizeOpinion, aggregate, createStore };
+  const api = { CATEGORIES, identity, validStars, normalizeOpinion, aggregate, createStore };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   root.VaultScreamParkReviews = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

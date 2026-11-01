@@ -50,7 +50,7 @@ class ScreamParkReviewSeoTests(unittest.TestCase):
         app = (ROOT / "index.html").read_text(encoding="utf-8")
         self.assertIn("scream-parks/reviews.js", app)
         self.assertIn("const communityEnabled = FIREBASE_CONFIG.screamReviewsEnabled === true", app)
-        self.assertIn("&& !!FIREBASE_CONFIG.appCheckSiteKey", app)
+        self.assertNotIn("FIREBASE_CONFIG.appCheckSiteKey", app)
         self.assertIn("const communityPreview = localPreview || communityEnabled", app)
 
     def test_static_home_includes_latest_scream_review_without_changing_escape_count(self):

@@ -1,4 +1,4 @@
-"""Release B community UI remains functional only with an isolated fake store."""
+"""Release B community UI against an isolated in-browser store, with no real Firebase."""
 import os
 from pathlib import Path
 from tests.browser.test_scream_park_reviews import V6BrowserTests
@@ -13,7 +13,8 @@ class CommunityBrowserTests(V6BrowserTests):
                     page.evaluate("""() => {
                       SCREAM_REVIEW_STORE = VaultScreamParkReviews.createStore({
                         getUid: () => null, read: async () => null,
-                        call: async () => { throw Error('No backend in visual test'); },
+                        put: async () => { throw Error('No backend in visual test'); },
+                        remove: async () => { throw Error('No backend in visual test'); },
                         onChange: () => TheVaultScreamParksPreview.current?.refreshReviews()
                       });
                       switchTab('scream-parks');
@@ -36,7 +37,7 @@ class CommunityBrowserTests(V6BrowserTests):
                 finally:
                     context.close()
 
-    def test_pending_opinion_never_appears_as_public(self):
+    def test_opinion_publishes_directly_and_can_be_edited_or_deleted(self):
         context, page, errors = self.page(390)
         try:
             page.evaluate("""() => {
@@ -45,13 +46,14 @@ class CommunityBrowserTests(V6BrowserTests):
               SCREAM_REVIEW_STORE = VaultScreamParkReviews.createStore({
                 getUid: () => AUTH_USER?.uid || null,
                 read: async path => records[path] || null,
-                call: async (name, payload) => {
-                  const path = `screamParkReviews/${payload.seasonId}/submissions/alice`;
-                  if (name === 'submitScreamParkReview') records[path] = {
-                    ...payload, entityId: 'horrorland', status: 'PENDING',
-                    revision: payload.expectedRevision + 1
-                  };
-                  if (name === 'deleteScreamParkReview') delete records[path];
+                put: async (path, value) => {
+                  const parent = path.slice(0, path.lastIndexOf('/'));
+                  records[parent] ||= {};
+                  records[parent][path.slice(path.lastIndexOf('/') + 1)] = value;
+                },
+                remove: async path => {
+                  const parent = path.slice(0, path.lastIndexOf('/'));
+                  delete records[parent][path.slice(path.lastIndexOf('/') + 1)];
                 },
                 onChange: () => TheVaultScreamParksPreview.current?.refreshReviews()
               });
@@ -60,15 +62,23 @@ class CommunityBrowserTests(V6BrowserTests):
             page.locator("#panel-scream-parks article.card[data-id=horrorland] button").first.click()
             page.get_by_role("button", name="ESCRIBIR MI OPINIÓN").click()
             page.locator(".sp-community-form").wait_for()
-            page.locator(".sp-community-form input[type=number]").fill("8.5")
+            for category in ("ambientacion", "acting", "organizacion", "terror", "variedad"):
+                page.locator(f'.sp-community-form .review-stars[data-category="{category}"]').click(position={"x": 70, "y": 10})
             page.locator(".sp-community-form textarea").fill("Una visita fantástica y bien organizada")
-            page.locator(".sp-community-form input[type=checkbox]").check()
-            page.get_by_role("button", name="ENVIAR A MODERACIÓN").click()
-            page.wait_for_function("!!window.__v6Records['screamParkReviews/horrorland-2026/submissions/alice']")
+            page.get_by_role("button", name="PUBLICAR OPINIÓN").click()
+            page.wait_for_function("!!window.__v6Records['screamParkReviews/horrorland-2026']?.alice")
             data = page.evaluate("window.__v6Records")
-            self.assertEqual(data["screamParkReviews/horrorland-2026/submissions/alice"]["status"], "PENDING")
+            self.assertEqual(data["screamParkReviews/horrorland-2026"]["alice"]["revision"], 1)
+            self.assertEqual(page.locator(".sp-community-opinion").count(), 1)
+            self.assertIn("Nota global", page.locator("#sp-community").inner_text())
+            page.get_by_role("button", name="EDITAR MI OPINIÓN").click()
+            page.locator(".sp-community-form textarea").fill("Segunda versión de nuestra visita")
+            page.get_by_role("button", name="ACTUALIZAR OPINIÓN").click()
+            page.wait_for_function("window.__v6Records['screamParkReviews/horrorland-2026'].alice.revision === 2")
+            page.on("dialog", lambda dialog: dialog.accept())
+            page.get_by_role("button", name="ELIMINAR MI OPINIÓN").click()
+            page.wait_for_function("!window.__v6Records['screamParkReviews/horrorland-2026'].alice")
             self.assertEqual(page.locator(".sp-community-opinion").count(), 0)
-            self.assertIn("Aún no hay valoraciones aprobadas", page.locator("#sp-community").inner_text())
             self.assertEqual(errors, [])
         finally:
             context.close()

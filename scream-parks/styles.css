@@ -69,13 +69,18 @@
 #scream-parks-app .sp-editorial-full h1{margin:.4em 0;font-size:clamp(1.35rem,3vw,2rem)}
 #scream-parks-app .sp-editorial-preview button,#scream-parks-app .sp-editorial-preview a,#scream-parks-app .sp-community-form button,#scream-parks-app .sp-review-delete{display:inline-flex;align-items:center;min-height:44px;padding:9px 13px;border:1px solid var(--amber);background:rgba(125,187,63,.09);color:var(--amber);cursor:pointer;text-decoration:none}
 #scream-parks-app .sp-community-average{color:var(--amber);font-weight:700}
+#scream-parks-app .sp-community-score-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px 10px;margin:8px 0 14px;color:var(--text2);font-size:.84rem}
+#scream-parks-app .sp-community-score-row{display:grid;gap:4px;padding:6px 0;border-top:1px solid var(--border)}
+#scream-parks-app .sp-community-score-label{color:var(--text);font-weight:700}
+#scream-parks-app .sp-community-score-row .review-stars{width:max-content;max-width:100%}
+#scream-parks-app .sp-community-score-row .review-stars:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+#scream-parks-app .sp-community-score-details{color:var(--text2);font-size:.78rem;line-height:1.4}
+@media(max-width:520px){#scream-parks-app .sp-community-score-grid{grid-template-columns:1fr}}
 #scream-parks-app #sp-community select{display:block;min-height:44px;margin:7px 0 12px;padding:8px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font:inherit}
 #scream-parks-app .sp-community-form{display:grid;gap:10px;max-width:620px}
 #scream-parks-app .sp-community-form label{display:grid;gap:5px;color:var(--text2)}
 #scream-parks-app .sp-community-form input,#scream-parks-app .sp-community-form textarea{box-sizing:border-box;width:100%;min-height:44px;padding:9px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font:inherit}
 #scream-parks-app .sp-community-form textarea{min-height:140px;resize:vertical}
-#scream-parks-app .sp-community-confirm{display:flex!important;align-items:flex-start;gap:7px}
-#scream-parks-app .sp-community-confirm input{width:auto;min-height:0;margin-top:5px}
 #scream-parks-app .sp-community-opinion{padding:13px 0;border-top:1px solid var(--border)}
 #scream-parks-app .sp-community-opinion p{white-space:pre-wrap;overflow-wrap:anywhere}
 #scream-parks-app .detail-grid>div{grid-column:1;grid-row:1;min-width:0}
@@ -83,9 +88,6 @@
 #scream-parks-app #sp-community{margin-top:10px}
 #scream-parks-app .sp-community-write,#scream-parks-app .sp-community-more{min-height:44px;padding:9px 13px;margin:8px 0;border:1px solid var(--amber);background:rgba(125,187,63,.09);color:var(--amber);font:inherit;cursor:pointer}
 #scream-parks-app .sp-community-form{margin:9px 0}
-#scream-parks-app .sp-community-moderation{margin-top:14px;padding:10px;border:1px solid var(--border)}
-#scream-parks-app .sp-community-moderation summary{color:var(--amber);cursor:pointer;font-weight:700}
-#scream-parks-app .sp-community-moderation button{min-height:44px;margin:7px 7px 0 0;padding:8px;border:1px solid var(--border);background:var(--bg3);color:var(--text);cursor:pointer}
 @media(max-width:900px){#scream-parks-app .detail-grid>aside,#scream-parks-app .detail-grid>div{grid-column:1;grid-row:auto}}
 @media(max-width:640px){#scream-parks-app .sp-editorial-full{padding:12px}#scream-parks-app .sp-editorial-body{font-size:.96rem}}
 

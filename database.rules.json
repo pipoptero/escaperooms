@@ -63,24 +63,59 @@
       }
     },
     "screamParkReviews": {
-  "$seasonId": {
-    ".write": false,
-    "approved": {
-      ".read": "$seasonId === 'darkland-2026' || $seasonId === 'extremiedo-2026' || $seasonId === 'halloween-horror-zone-2026' || $seasonId === 'horrorland-2025' || $seasonId === 'horrorland-2026' || $seasonId === 'hotel-delirium-2026' || $seasonId === 'inferno-scream-park-2026' || $seasonId === 'isla-magica-2026' || $seasonId === 'l-alqueria-del-terror-2026' || $seasonId === 'la-casa-dels-angels-2026' || $seasonId === 'la-zona-poble-espanyol-2026' || $seasonId === 'laberintus-scream-park-2026' || $seasonId === 'madhorror-2026' || $seasonId === 'nocturnia-lo-rufete-2026' || $seasonId === 'parque-de-atracciones-madrid-2026' || $seasonId === 'parque-warner-2026' || $seasonId === 'portaventura-world-2026' || $seasonId === 'screamfield-2026' || $seasonId === 'spantapajaros-2026' || $seasonId === 'terra-mitica-2026' || $seasonId === 'terrorland-2026' || $seasonId === 'the-village-2026' || $seasonId === 'tibidabo-2026'"
-    },
-    "submissions": {
-      "$uid": {
-        ".read": "auth != null && auth.uid === $uid"
+      "$seasonId": {
+        ".read": "$seasonId === 'darkland-2026' || $seasonId === 'extremiedo-2026' || $seasonId === 'halloween-horror-zone-2026' || $seasonId === 'horrorland-2025' || $seasonId === 'horrorland-2026' || $seasonId === 'hotel-delirium-2026' || $seasonId === 'inferno-scream-park-2026' || $seasonId === 'isla-magica-2026' || $seasonId === 'l-alqueria-del-terror-2026' || $seasonId === 'la-casa-dels-angels-2026' || $seasonId === 'la-zona-poble-espanyol-2026' || $seasonId === 'laberintus-scream-park-2026' || $seasonId === 'madhorror-2026' || $seasonId === 'nocturnia-lo-rufete-2026' || $seasonId === 'parque-de-atracciones-madrid-2026' || $seasonId === 'parque-warner-2026' || $seasonId === 'portaventura-world-2026' || $seasonId === 'screamfield-2026' || $seasonId === 'spantapajaros-2026' || $seasonId === 'terra-mitica-2026' || $seasonId === 'terrorland-2026' || $seasonId === 'the-village-2026' || $seasonId === 'tibidabo-2026'",
+        "$uid": {
+          ".write": "auth != null && ($seasonId === 'darkland-2026' || $seasonId === 'extremiedo-2026' || $seasonId === 'halloween-horror-zone-2026' || $seasonId === 'horrorland-2025' || $seasonId === 'horrorland-2026' || $seasonId === 'hotel-delirium-2026' || $seasonId === 'inferno-scream-park-2026' || $seasonId === 'isla-magica-2026' || $seasonId === 'l-alqueria-del-terror-2026' || $seasonId === 'la-casa-dels-angels-2026' || $seasonId === 'la-zona-poble-espanyol-2026' || $seasonId === 'laberintus-scream-park-2026' || $seasonId === 'madhorror-2026' || $seasonId === 'nocturnia-lo-rufete-2026' || $seasonId === 'parque-de-atracciones-madrid-2026' || $seasonId === 'parque-warner-2026' || $seasonId === 'portaventura-world-2026' || $seasonId === 'screamfield-2026' || $seasonId === 'spantapajaros-2026' || $seasonId === 'terra-mitica-2026' || $seasonId === 'terrorland-2026' || $seasonId === 'the-village-2026' || $seasonId === 'tibidabo-2026') && ((auth.uid === $uid && newData.exists()) || (!newData.exists() && (auth.uid === $uid || root.child('admins/' + auth.uid).val() === true)))",
+          ".validate": "newData.hasChildren(['entityId','seasonId','userName','scores','text','createdAt','updatedAt','revision']) && (($seasonId === 'darkland-2026' && newData.child('entityId').val() === 'darkland') || ($seasonId === 'extremiedo-2026' && newData.child('entityId').val() === 'extremiedo') || ($seasonId === 'halloween-horror-zone-2026' && newData.child('entityId').val() === 'halloween-horror-zone') || ($seasonId === 'horrorland-2025' && newData.child('entityId').val() === 'horrorland') || ($seasonId === 'horrorland-2026' && newData.child('entityId').val() === 'horrorland') || ($seasonId === 'hotel-delirium-2026' && newData.child('entityId').val() === 'hotel-delirium') || ($seasonId === 'inferno-scream-park-2026' && newData.child('entityId').val() === 'inferno-scream-park') || ($seasonId === 'isla-magica-2026' && newData.child('entityId').val() === 'isla-magica') || ($seasonId === 'l-alqueria-del-terror-2026' && newData.child('entityId').val() === 'l-alqueria-del-terror') || ($seasonId === 'la-casa-dels-angels-2026' && newData.child('entityId').val() === 'la-casa-dels-angels') || ($seasonId === 'la-zona-poble-espanyol-2026' && newData.child('entityId').val() === 'la-zona-poble-espanyol') || ($seasonId === 'laberintus-scream-park-2026' && newData.child('entityId').val() === 'laberintus-scream-park') || ($seasonId === 'madhorror-2026' && newData.child('entityId').val() === 'madhorror') || ($seasonId === 'nocturnia-lo-rufete-2026' && newData.child('entityId').val() === 'nocturnia-lo-rufete') || ($seasonId === 'parque-de-atracciones-madrid-2026' && newData.child('entityId').val() === 'parque-de-atracciones-madrid') || ($seasonId === 'parque-warner-2026' && newData.child('entityId').val() === 'parque-warner') || ($seasonId === 'portaventura-world-2026' && newData.child('entityId').val() === 'portaventura-world') || ($seasonId === 'screamfield-2026' && newData.child('entityId').val() === 'screamfield') || ($seasonId === 'spantapajaros-2026' && newData.child('entityId').val() === 'spantapajaros') || ($seasonId === 'terra-mitica-2026' && newData.child('entityId').val() === 'terra-mitica') || ($seasonId === 'terrorland-2026' && newData.child('entityId').val() === 'terrorland') || ($seasonId === 'the-village-2026' && newData.child('entityId').val() === 'the-village') || ($seasonId === 'tibidabo-2026' && newData.child('entityId').val() === 'tibidabo')) && newData.child('seasonId').val() === $seasonId && newData.child('createdAt').isNumber() && (data.exists() ? newData.child('createdAt').val() === data.child('createdAt').val() : (newData.child('createdAt').val() >= now - 300000 && newData.child('createdAt').val() <= now + 300000)) && newData.child('updatedAt').isNumber() && newData.child('updatedAt').val() >= now - 300000 && newData.child('updatedAt').val() <= now + 300000 && newData.child('updatedAt').val() >= newData.child('createdAt').val() && newData.child('revision').isNumber() && newData.child('revision').val() === (data.exists() ? data.child('revision').val() + 1 : 1)",
+          "entityId": {
+            ".validate": "newData.isString()"
+          },
+          "seasonId": {
+            ".validate": "newData.isString()"
+          },
+          "userName": {
+            ".validate": "newData.isString() && newData.val().length >= 2 && newData.val().length <= 40 && newData.val().matches(/^[^<>@]+$/)"
+          },
+          "scores": {
+            ".validate": "newData.hasChildren(['ambientacion','acting','organizacion','terror','variedad'])",
+            "ambientacion": {
+              ".validate": "newData.isNumber() && newData.val() >= 0.5 && newData.val() <= 5 && (newData.val() * 2) % 1 === 0"
+            },
+            "acting": {
+              ".validate": "newData.isNumber() && newData.val() >= 0.5 && newData.val() <= 5 && (newData.val() * 2) % 1 === 0"
+            },
+            "organizacion": {
+              ".validate": "newData.isNumber() && newData.val() >= 0.5 && newData.val() <= 5 && (newData.val() * 2) % 1 === 0"
+            },
+            "terror": {
+              ".validate": "newData.isNumber() && newData.val() >= 0.5 && newData.val() <= 5 && (newData.val() * 2) % 1 === 0"
+            },
+            "variedad": {
+              ".validate": "newData.isNumber() && newData.val() >= 0.5 && newData.val() <= 5 && (newData.val() * 2) % 1 === 0"
+            },
+            "$other": {
+              ".validate": false
+            }
+          },
+          "text": {
+            ".validate": "newData.isString() && newData.val().length >= 10 && newData.val().length <= 10000"
+          },
+          "createdAt": {
+            ".validate": "newData.isNumber()"
+          },
+          "updatedAt": {
+            ".validate": "newData.isNumber()"
+          },
+          "revision": {
+            ".validate": "newData.isNumber()"
+          },
+          "$other": {
+            ".validate": false
+          }
+        }
       }
     },
-    "moderation": {
-      ".read": false
-    },
-    "audit": {
-      ".read": false
-    }
-  }
-},
     "profiles": {
       "$uid": {
         ".read": "auth != null && auth.uid === $uid",

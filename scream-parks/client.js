@@ -57,7 +57,6 @@
     let communityError = '';
     let communityFormOpen = false;
     let communityVisible = 3;
-    let moderationOpen = false;
 
     function editorialFor(entry) {
       return editorialReviews.find(review => review.entityId === entry.id && review.seasonId === entry.seasonId);
@@ -116,6 +115,8 @@
         select.value = communitySeasonId || currentSeason;
         select.onchange = () => {
           communitySeasonId = select.value;
+          communityVisible = 3;
+          communityFormOpen = false;
           reviewStore.load({ ...state.entry, seasonId: communitySeasonId }).catch(error => {
             communityError = error.message; renderCommunity();
           });
@@ -125,9 +126,17 @@
       }
       if (state.pending) { target.append(create('p', 'Cargando opiniones…')); return; }
       if (communityError) target.append(create('p', communityError, 'caution'));
-      target.append(create('p', state.count
-        ? `Media de la comunidad: ${state.average.toFixed(1).replace('.', ',')}/10 · ${state.count} ${state.count === 1 ? 'voto' : 'votos'} aprobados`
-        : 'Aún no hay valoraciones aprobadas para esta edición.', 'sp-community-average'));
+      const stats = create('div', undefined, 'sp-community-stats');
+      stats.append(create('p', state.count
+        ? `Nota global: ${state.global.toFixed(1).replace('.', ',')}/10 · ${state.count} ${state.count === 1 ? 'valoración' : 'valoraciones'}`
+        : 'Aún no hay valoraciones para esta edición.', 'sp-community-average'));
+      if (state.count) {
+        const grid = create('div', undefined, 'sp-community-score-grid');
+        for (const [key, label] of window.VaultScreamParkReviews.CATEGORIES)
+          grid.append(create('span', `${label}: ${state.categories[key].toFixed(1).replace('.', ',')}/10`));
+        stats.append(grid);
+      }
+      target.append(stats);
       const uid = reviewStore.currentUid?.();
       const own = state.own;
       if (uid && state.writable) {
@@ -139,71 +148,108 @@
       }
       if (uid && state.writable && communityFormOpen) {
         const form = create('form', undefined, 'sp-community-form');
-        const nameLabel = create('label', 'Nombre público que se mostrará con tu opinión');
-        const displayName = create('input'); displayName.maxLength = 40;
-        displayName.value = own?.displayName === 'Visitante' ? '' : own?.displayName || '';
-        displayName.placeholder = 'Visitante'; nameLabel.append(displayName);
-        const ratingLabel = create('label', 'Tu valoración (1–10)');
-        const rating = create('input'); rating.type = 'number'; rating.min = '1'; rating.max = '10'; rating.step = '0.5';
-        rating.required = true; rating.value = String(own?.rating || ''); ratingLabel.append(rating);
-        const commentLabel = create('label', 'Tu opinión');
-        const comment = create('textarea'); comment.maxLength = 5000; comment.minLength = 10;
-        comment.required = true; comment.value = own?.comment || ''; commentLabel.append(comment);
-        const dateLabel = create('label', 'Fecha de visita (opcional)');
-        const visitDate = create('input'); visitDate.type = 'date'; visitDate.value = own?.visitDate || ''; dateLabel.append(visitDate);
-        const confirmLabel = create('label', undefined, 'sp-community-confirm');
-        const confirm = create('input'); confirm.type = 'checkbox'; confirm.required = true;
-        confirmLabel.append(confirm, document.createTextNode(' Confirmo que es mi experiencia, evito spoilers y acepto su revisión antes de publicarse.'));
-        const send = create('button', own ? 'REENVIAR A MODERACIÓN' : 'ENVIAR A MODERACIÓN'); send.type = 'submit';
-        const status = create('p', own ? 'Tu opinión está pendiente de revisión. Las ediciones vuelven a moderación.' : '', 'sp-community-status');
-        form.append(nameLabel, ratingLabel, commentLabel, dateLabel, confirmLabel, send, status);
+        const nameLabel = create('label', 'Nombre público');
+        const userName = create('input'); userName.maxLength = 40;
+        userName.value = own?.userName === 'Visitante' ? '' : own?.userName || '';
+        userName.placeholder = 'Visitante'; nameLabel.append(userName);
+        form.append(nameLabel);
+        const widgetId = `sp_${state.entry.seasonId}_${uid}`;
+        for (const [key, label] of window.VaultScreamParkReviews.CATEGORIES) {
+          const row = create('div', undefined, 'sp-community-score-row');
+          row.append(create('span', label, 'sp-community-score-label'));
+          const control = create('div');
+          if (typeof window.reviewStarsHtml === 'function') {
+            control.innerHTML = window.reviewStarsHtml(widgetId, key, own?.scores?.[key] || 0, true);
+            const stars = control.querySelector('.review-stars');
+            stars.tabIndex = 0;
+            stars.setAttribute('role', 'slider');
+            stars.setAttribute('aria-label', label);
+            stars.setAttribute('aria-valuemin', '0.5');
+            stars.setAttribute('aria-valuemax', '5');
+            stars.setAttribute('aria-valuenow', String(own?.scores?.[key] || 0.5));
+            stars.onkeydown = event => {
+              if (!['ArrowLeft', 'ArrowDown', 'ArrowRight', 'ArrowUp'].includes(event.key)) return;
+              event.preventDefault();
+              const next = Math.max(0.5, Math.min(5, (Number(stars.dataset.value) || 0.5)
+                + (['ArrowRight', 'ArrowUp'].includes(event.key) ? 0.5 : -0.5)));
+              window.setReviewCategoryScore(widgetId, key, next);
+              stars.setAttribute('aria-valuenow', String(next));
+            };
+          } else {
+            const select = create('select'); select.dataset.category = key;
+            option(select, '', 'Selecciona una puntuación');
+            for (let score = 0.5; score <= 5; score += 0.5) option(select, String(score), `${score * 2}/10`);
+            select.value = String(own?.scores?.[key] || '');
+            control.append(select);
+          }
+          row.append(control); form.append(row);
+        }
+        const textLabel = create('label', 'Tu experiencia, sin spoilers');
+        const opinion = create('textarea'); opinion.maxLength = 10000; opinion.minLength = 10;
+        opinion.required = true; opinion.value = own?.text || ''; textLabel.append(opinion);
+        const send = create('button', own ? 'ACTUALIZAR OPINIÓN' : 'PUBLICAR OPINIÓN'); send.type = 'submit';
+        const status = create('p', 'Tu opinión aparecerá al guardarse.', 'sp-community-status');
+        form.append(textLabel, send, status);
         form.onsubmit = async event => {
           event.preventDefault();
-          if (!confirm.checked) return;
+          const scores = Object.fromEntries(window.VaultScreamParkReviews.CATEGORIES.map(([key]) => [key,
+            Number(form.querySelector(`[data-category="${key}"]`)?.dataset.value
+              || form.querySelector(`select[data-category="${key}"]`)?.value || 0)]));
           send.disabled = true;
           try {
-            await reviewStore.submit({ rating: rating.value, comment: comment.value,
-              visitDate: visitDate.value, displayName: displayName.value });
+            await reviewStore.save({ scores, userName: userName.value, text: opinion.value });
             communityError = '';
             communityFormOpen = false;
             renderCommunity();
           } catch (error) { status.textContent = error.message; send.disabled = false; }
         };
         target.append(form);
-        if (own) {
-          const remove = create('button', 'ELIMINAR MI OPINIÓN', 'sp-review-delete');
-          remove.type = 'button';
-          remove.onclick = async () => {
-            if (!window.confirm('¿Eliminar tu opinión de esta edición?')) return;
-            remove.disabled = true;
-            try { await reviewStore.deleteOwn(); communityFormOpen = false; renderCommunity(); }
-            catch (error) { communityError = error.message; renderCommunity(); }
-          };
-          target.append(remove);
-        }
       } else if (!uid || !state.writable) {
         target.append(create('p', uid
           ? 'El envío de opiniones no está disponible en este entorno.'
-          : 'Entra con Google para compartir tu opinión. Se publicará tras revisión.'));
+          : 'Entra con Google para compartir tu opinión. Se publicará al guardarla.'));
         if (!uid && state.writable) {
           const login = create('button', 'ENTRAR CON GOOGLE', 'sp-community-write');
           login.type = 'button'; login.onclick = () => window.signInGoogle?.();
           target.append(login);
         }
       }
-      if (own) target.append(create('p',
-        own.status === 'APPROVED' ? 'Tu opinión está publicada.' :
-        own.status === 'REJECTED' ? 'Tu opinión fue rechazada; puedes revisarla y reenviarla.' :
-        own.status === 'HIDDEN' ? 'Tu opinión está oculta; puedes revisarla y reenviarla.' :
-        'Tu opinión está pendiente de revisión.', 'sp-community-status'));
+      if (own) {
+        const remove = create('button', 'ELIMINAR MI OPINIÓN', 'sp-review-delete');
+        remove.type = 'button';
+        remove.onclick = async () => {
+          if (!window.confirm('¿Eliminar tu opinión de esta edición?')) return;
+          remove.disabled = true;
+          try { await reviewStore.deleteOwn(); communityFormOpen = false; renderCommunity(); }
+          catch (error) { communityError = error.message; renderCommunity(); }
+        };
+        target.append(remove);
+      }
       const list = create('div', undefined, 'sp-community-list');
-      const rows = Object.values(state.approved).sort((a, b) =>
-        Number(b.approvedAt || 0) - Number(a.approvedAt || 0));
-      for (const item of rows.slice(0, communityVisible)) {
+      const rows = Object.entries(state.rows).filter(([, item]) =>
+        item && window.VaultScreamParkReviews.aggregate({ one: item }).count === 1).sort((a, b) =>
+        Number(b[1].updatedAt || 0) - Number(a[1].updatedAt || 0));
+      for (const [authorUid, item] of rows.slice(0, communityVisible)) {
         const article = create('article', undefined, 'sp-community-opinion');
-        const date = item.approvedAt ? new Date(item.approvedAt).toLocaleDateString('es-ES') : '';
-        article.append(create('strong', `${item.displayName || 'Visitante'} · ${Number(item.rating).toFixed(1).replace('.', ',')}/10 · ${date}`),
-          create('p', item.comment));
+        const date = item.updatedAt ? new Date(item.updatedAt).toLocaleDateString('es-ES') : '';
+        const score = window.VaultScreamParkReviews.aggregate({ one: item }).global;
+        article.append(create('strong', `${item.userName || 'Visitante'} · ${score.toFixed(1).replace('.', ',')}/10 · ${date}`),
+          create('p', item.text));
+        const detail = create('p', undefined, 'sp-community-score-details');
+        detail.textContent = window.VaultScreamParkReviews.CATEGORIES.map(([key, label]) =>
+          `${label}: ${Number(item.scores[key] * 2).toFixed(1).replace('.', ',')}/10`).join(' · ');
+        article.append(detail);
+        if (state.admin && authorUid !== uid) {
+          const remove = create('button', 'RETIRAR OPINIÓN', 'sp-review-delete');
+          remove.type = 'button';
+          remove.onclick = async () => {
+            if (!window.confirm('¿Retirar esta opinión pública?')) return;
+            remove.disabled = true;
+            try { await reviewStore.removeAsAdmin(authorUid); communityError = ''; }
+            catch (error) { communityError = error.message; renderCommunity(); }
+          };
+          article.append(remove);
+        }
         list.append(article);
       }
       target.append(list);
@@ -212,42 +258,6 @@
         more.type = 'button';
         more.onclick = () => { communityVisible += 5; renderCommunity(); };
         target.append(more);
-      }
-      if (state.moderator) {
-        const moderation = create('details', undefined, 'sp-community-moderation');
-        moderation.open = moderationOpen;
-        moderation.ontoggle = () => { moderationOpen = moderation.open; };
-        moderation.append(create('summary', 'MODERAR OPINIONES'));
-        const controls = create('div');
-        for (const [status, label] of [['PENDING', 'PENDIENTES'], ['APPROVED', 'PUBLICADAS']]) {
-          const button = create('button', label);
-          button.type = 'button';
-          button.onclick = async () => {
-            try { await reviewStore.loadQueue(status); communityError = ''; }
-            catch (error) { communityError = error.message; renderCommunity(); }
-          };
-          controls.append(button);
-        }
-        moderation.append(controls);
-        for (const row of state.queue) {
-          const item = create('article', undefined, 'sp-community-opinion');
-          item.append(create('strong', `${row.displayName || 'Visitante'} · ${Number(row.rating).toFixed(1).replace('.', ',')}/10`),
-            create('p', row.comment));
-          for (const [action, label] of state.queueStatus === 'PENDING'
-            ? [['APPROVED', 'APROBAR'], ['REJECTED', 'RECHAZAR']]
-            : [['HIDDEN', 'OCULTAR']]) {
-            const button = create('button', label);
-            button.type = 'button';
-            button.onclick = async () => {
-              button.disabled = true;
-              try { await reviewStore.moderate(row, action); communityError = ''; }
-              catch (error) { communityError = error.message; renderCommunity(); }
-            };
-            item.append(button);
-          }
-          moderation.append(item);
-        }
-        target.append(moderation);
       }
     }
 
@@ -287,7 +297,7 @@
       return value === 'all' || (value === 'unverified' && !entry[key]) || value === entry[key];
     }
     function showDetail(id) {
-      if (selectedId !== id) { communitySeasonId = ''; communityFormOpen = false; communityVisible = 3; moderationOpen = false; }
+      if (selectedId !== id) { communitySeasonId = ''; communityFormOpen = false; communityVisible = 3; }
       reviewMode = false;
       if (navigation === 'hash') {
         window.location.hash = id;

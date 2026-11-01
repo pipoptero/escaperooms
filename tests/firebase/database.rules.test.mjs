@@ -751,32 +751,77 @@ test('outsider y anónimo no administran ninguna rama pública ajena', async () 
   await assertSucceeds(get(ref(anonymous, 'publicProfiles/isaac/view')));
 });
 
-test('Scream Parks: lectura separada y todas las escrituras de opiniones reservadas al servidor', async () => {
-  const alice = env.authenticatedContext('alice').database();
-  const bob = env.authenticatedContext('bob').database();
+const screamRecord = (overrides = {}) => ({
+  entityId: 'horrorland', seasonId: 'horrorland-2026', userName: 'Visitante',
+  scores: { ambientacion: 4.5, acting: 4, organizacion: 3.5, terror: 5, variedad: 4 },
+  text: 'Una experiencia real y recomendable.',
+  createdAt: Date.now(), updatedAt: Date.now(), revision: 1, ...overrides
+});
+
+test('Scream Parks Spark: lectura pública y aislamiento de otras ramas', async () => {
   const guest = env.unauthenticatedContext().database();
-  const path = 'screamParkReviews/horrorland-2026/approved/opaque1';
-  const privatePath = 'screamParkReviews/horrorland-2026/submissions/alice';
-  const value = { entityId: 'horrorland', seasonId: 'horrorland-2026', rating: 9,
-    comment: 'Opinión moderada', visitDate: '', displayName: 'Visitante', approvedAt: 1000 };
-  await seed({ screamParkReviews: { 'horrorland-2026': {
-    approved: { opaque1: value }, submissions: { alice: { ...value, status: 'APPROVED' } },
-    moderation: { alice: { action: 'APPROVED' } }, audit: { event1: { uid: 'alice' } }
-  } } });
-  await assertSucceeds(get(ref(guest, path)));
-  await assertSucceeds(get(ref(alice, privatePath)));
-  await assertFails(get(ref(bob, privatePath)));
-  await assertFails(get(ref(guest, privatePath)));
-  await assertFails(get(ref(alice, 'screamParkReviews/horrorland-2026/submissions')));
-  await assertFails(get(ref(guest, 'screamParkReviews/horrorland-2026')));
-  await assertFails(get(ref(alice, 'screamParkReviews/horrorland-2026/moderation')));
-  await assertFails(get(ref(alice, 'screamParkReviews/horrorland-2026/audit')));
-  await assertFails(set(ref(alice, path), value));
-  await assertFails(set(ref(bob, path), value));
+  const alice = env.authenticatedContext('alice', { firebase: { sign_in_provider: 'google.com' } }).database();
+  const path = 'screamParkReviews/horrorland-2026/alice';
+  await seed({ screamParkReviews: { 'horrorland-2026': { alice: screamRecord() } } });
+  await assertSucceeds(get(ref(guest, 'screamParkReviews/horrorland-2026')));
+  await assertFails(get(ref(guest, 'screamParkReviews')));
+  await assertFails(get(ref(guest, 'screamParkReviews/unknown-2026')));
+  assert.equal((await get(ref(guest, path))).val().userName, 'Visitante');
+  await assertFails(set(ref(guest, path), screamRecord()));
+});
+
+test('Scream Parks Spark: Google propietario crea, edita y borra; otros usuarios no', async () => {
+  const alice = env.authenticatedContext('alice', { firebase: { sign_in_provider: 'google.com' } }).database();
+  const bob = env.authenticatedContext('bob', { firebase: { sign_in_provider: 'google.com' } }).database();
+  const guest = env.unauthenticatedContext().database();
+  const path = 'screamParkReviews/horrorland-2026/alice';
+  const first = screamRecord();
+  await assertFails(set(ref(guest, path), first));
+  await assertSucceeds(set(ref(alice, path), first));
+  await assertFails(set(ref(bob, path), first));
   await assertFails(remove(ref(bob, path)));
-  await assertFails(set(ref(alice, path), { ...value, rating: 10 }));
-  await assertFails(remove(ref(alice, path)));
-  await assertFails(set(ref(alice, privatePath), { ...value, status: 'PENDING' }));
-  await assertFails(remove(ref(alice, privatePath)));
-  await assertFails(set(ref(alice, 'screamParkReviews/unknown-2026/approved/opaque1'), value));
+  const second = { ...first, text: 'Una segunda versión de mi experiencia.', updatedAt: Date.now(), revision: 2 };
+  await assertSucceeds(set(ref(alice, path), second));
+  await assertFails(set(ref(alice, path), second));
+  await assertFails(set(ref(alice, path), { ...second, revision: 3, createdAt: Date.now() + 1000 }));
+  await assertSucceeds(remove(ref(alice, path)));
+  assert.equal((await get(ref(guest, path))).exists(), false);
+});
+
+test('Scream Parks Spark: cinco medias estrellas y esquema estricto', async () => {
+  const alice = env.authenticatedContext('alice', { firebase: { sign_in_provider: 'google.com' } }).database();
+  const path = 'screamParkReviews/horrorland-2026/alice';
+  const valid = screamRecord();
+  await assertSucceeds(set(ref(alice, path), valid));
+  await assertFails(set(ref(alice, path), { ...valid, revision: 2, scores: { ...valid.scores, acting: 4.25 } }));
+  await assertFails(set(ref(alice, path), { ...valid, revision: 2, scores: { ...valid.scores, terror: 0 } }));
+  await assertFails(set(ref(alice, path), { ...valid, revision: 2, scores: { ambientacion: 5 } }));
+  await assertFails(set(ref(alice, path), { ...valid, revision: 2, scores: { ...valid.scores, extra: 4 } }));
+  await assertFails(set(ref(alice, path), { ...valid, revision: 2, email: 'private@example.com' }));
+  await assertFails(set(ref(alice, path), { ...valid, revision: 2, text: 'Corto' }));
+  await assertFails(set(ref(alice, path), { ...valid, revision: 2, userName: 'mail@example.com' }));
+  await assertFails(set(ref(alice, path), { ...valid, revision: 2, updatedAt: Date.now() + 600000 }));
+  await assertFails(set(ref(alice, 'screamParkReviews/horrorland-2025/alice'), valid));
+});
+
+test('Scream Parks Spark: administrador existente solo retira reseñas ajenas', async () => {
+  await seed({ admins: { admin: true }, screamParkReviews: { 'horrorland-2026': { alice: screamRecord() } } });
+  const admin = env.authenticatedContext('admin').database();
+  const bob = env.authenticatedContext('bob').database();
+  const path = 'screamParkReviews/horrorland-2026/alice';
+  await assertFails(set(ref(admin, path), screamRecord({ userName: 'Suplantado', revision: 2 })));
+  await assertFails(remove(ref(bob, path)));
+  await assertSucceeds(remove(ref(admin, path)));
+  assert.equal((await get(ref(env.unauthenticatedContext().database(), path))).exists(), false);
+});
+
+test('Scream Parks Spark: escrituras parciales no eluden revisión ni esquema', async () => {
+  const alice = env.authenticatedContext('alice').database();
+  const path = 'screamParkReviews/horrorland-2026/alice';
+  await assertSucceeds(set(ref(alice, path), screamRecord()));
+  await assertFails(set(ref(alice, `${path}/scores/acting`), 4.5));
+  await assertFails(set(ref(alice, `${path}/text`), 'Texto cambiado sin revisión.'));
+  await assertFails(update(ref(alice, path), { revision: 2, 'scores/acting': 4.25 }));
+  await assertFails(set(ref(alice, `${path}/email`), 'private@example.com'));
+  await assertFails(remove(ref(alice, `screamParkReviews/horrorland-2026`)));
 });
