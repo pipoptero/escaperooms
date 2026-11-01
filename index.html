@@ -2349,7 +2349,7 @@
   <footer class="seo-footer" aria-label="Enlaces de reviews">
     <div class="seo-footer-inner">
       <span class="rights">&copy; 2026 The Vault Escape. Todos los derechos reservados.</span>
-      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v60</span>
+      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v61</span>
       <span>Reviews de escape rooms con URL propia</span>
       <a href="ranking-escape-rooms/">Ranking escape rooms España</a>
       <a href="mejores-escape-rooms/">Mejores escape rooms</a>
@@ -11569,17 +11569,29 @@ function screamReviewFactCards(items) {
 function screamEditorialGalleryHtml(review) {
   const photos = Array.isArray(review.images) ? review.images.filter(photo =>
     photo && typeof photo.src === 'string' && typeof photo.thumbnail === 'string') : [];
-  if (!photos.length) return '';
+  const videos = Array.isArray(review.videos) ? review.videos.filter(item =>
+    item && typeof item.src === 'string' && typeof item.poster === 'string') : [];
+  if (!photos.length && !videos.length) return '';
   const key = `scream-editorial-${review.seasonId}`;
   registerEditorialPhotoGallery(key, photos);
-  return `<section class="sp-visit-gallery" aria-label="Nuestra visita en imágenes">
-    <h3 class="sp-review-section-title">Nuestra visita en imágenes</h3>
+  return `<section class="sp-visit-gallery" aria-label="Nuestra visita en fotos y vídeos">
+    <h3 class="sp-review-section-title">Nuestra visita en fotos y vídeos</h3>
     <div class="sp-visit-grid">${photos.map((photo, index) => `
       <a href="${escapeHtml(photo.src)}" target="_blank" rel="noopener noreferrer" onclick="openPhotoLightbox(event, '${key}', ${index})" aria-label="Ampliar foto ${index + 1} de nuestra visita">
         <img src="${escapeHtml(photo.thumbnail)}" alt="${escapeHtml(photo.alt || 'Foto de nuestra visita a Horrorland')}" loading="lazy" decoding="async" width="450" height="600">
-      </a>`).join('')}</div>
+      </a>`).join('')}${videos.map((item, index) => `
+      <figure class="sp-visit-video-card"><video class="sp-visit-video" controls playsinline preload="none" poster="${escapeHtml(item.poster)}" width="${Number(item.width) || 464}" height="${Number(item.height) || 832}" aria-label="${escapeHtml(item.title || `Vídeo ${index + 1} de nuestra visita`)}">
+        <source src="${escapeHtml(item.src)}" type="video/mp4"></video>
+        <figcaption>▶ ${escapeHtml(item.title || `Vídeo ${index + 1} de nuestra visita`)}</figcaption></figure>`).join('')}</div>
   </section>`;
 }
+
+document.addEventListener('play', event => {
+  if (!event.target.matches?.('.sp-visit-video')) return;
+  document.querySelectorAll('.sp-visit-video').forEach(video => {
+    if (video !== event.target) video.pause();
+  });
+}, true);
 
 async function openScreamEditorialReview(seasonId, options = {}) {
   if (!/^[a-z0-9-]+$/.test(seasonId || '')) return false;

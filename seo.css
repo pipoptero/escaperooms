@@ -119,6 +119,13 @@ p { color: var(--text2); }
 .fact dd { margin: 4px 0 0; color: var(--text); overflow-wrap: anywhere; }
 .photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; }
 .photos img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border: 1px solid rgba(125,187,63,.22); background: #050507; }
+.scream-visit-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+.scream-visit-grid a { display: block; border: 1px solid rgba(125,187,63,.32); background: var(--bg2); }
+.scream-visit-grid a:focus-visible { outline: 3px solid var(--green); outline-offset: 2px; }
+.scream-visit-grid img { display: block; width: 100%; height: auto; aspect-ratio: 3/4; object-fit: contain; }
+.scream-visit-video-card { grid-column: 1 / -1; min-width: 0; margin: 0; padding: 8px; border: 1px solid rgba(125,187,63,.32); background: #050507; }
+.scream-visit-video-card video { display: block; width: min(100%, 340px); height: auto; max-width: 100%; aspect-ratio: 464/832; object-fit: contain; margin: 0 auto; }
+.scream-visit-video-card figcaption { padding: 8px 4px 2px; color: var(--green); }
 .video-frame { width: 100%; aspect-ratio: 16/9; display: block; border: 1px solid rgba(125,187,63,.24); background: #050507; }
 .video-frame.portrait { width: min(100%, 340px); aspect-ratio: 9/16; margin-inline: auto; }
 .media-note, .note, .explain { color: var(--text2); }

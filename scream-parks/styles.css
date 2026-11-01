@@ -85,7 +85,7 @@
 #scream-parks-app .sp-community-opinion p{white-space:pre-wrap;overflow-wrap:anywhere}
 #scream-parks-app .detail-grid>div{grid-column:1;grid-row:1;min-width:0}
 #scream-parks-app .detail-grid>aside{grid-column:2;grid-row:1;min-width:0}
-#scream-parks-app #sp-community{margin-top:10px}
+#scream-parks-app #sp-community{width:100%;margin:22px 0 0}
 #scream-parks-app .sp-community-write,#scream-parks-app .sp-community-more{min-height:44px;padding:9px 13px;margin:8px 0;border:1px solid var(--amber);background:rgba(125,187,63,.09);color:var(--amber);font:inherit;cursor:pointer}
 #scream-parks-app .sp-community-form{margin:9px 0}
 @media(max-width:900px){#scream-parks-app .detail-grid>aside,#scream-parks-app .detail-grid>div{grid-column:1;grid-row:auto}}
@@ -136,8 +136,13 @@
 .sp-visit-grid a{display:block;min-width:0;border:1px solid #485047;background:#090b0e;overflow:hidden}
 .sp-visit-grid a:hover,.sp-visit-grid a:focus-visible{border-color:var(--amber);outline:2px solid var(--amber);outline-offset:2px}
 .sp-visit-grid img{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:contain;background:#090b0e}
+.sp-visit-video-card{grid-column:span 2;min-width:0;margin:0;padding:8px;border:1px solid #485047;background:#090b0e}
+.sp-visit-video{display:block;width:min(100%,340px);height:auto;max-width:100%;aspect-ratio:464/832;object-fit:contain;margin:0 auto;background:#050608}
+.sp-visit-video:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+.sp-visit-video-card figcaption{padding:8px 4px 2px;color:var(--amber);font:700 .72rem 'Rajdhani',sans-serif;letter-spacing:.04em}
 #scream-parks-app .sp-visit-gallery{margin-top:16px;padding-top:16px}
-#scream-parks-app .sp-visit-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+#scream-parks-app .sp-visit-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}
+@media(max-width:900px){#scream-parks-app .sp-visit-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .scream-editorial-modal .sp-editorial-body p{margin:0 0 1em}
 .scream-editorial-modal .sp-editorial-body h3,.scream-editorial-modal .sp-editorial-body h4,.scream-editorial-modal .sp-editorial-body h5{color:#f0f2ec;margin:1.35em 0 .52em;line-height:1.2}
 .scream-editorial-modal .sp-editorial-body h3{font:700 1.42rem 'Rajdhani',sans-serif}

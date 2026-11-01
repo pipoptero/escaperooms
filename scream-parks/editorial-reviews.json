@@ -59,7 +59,25 @@
       "status": "PUBLISHED",
       "publishedAt": "2026-10-26",
       "version": 1,
-      "sourceSha256": "31ee778c23b6768b473d4f7a8d7f415e292868fe792cffae8f6c3f7b5a733597"
+      "sourceSha256": "31ee778c23b6768b473d4f7a8d7f415e292868fe792cffae8f6c3f7b5a733597",
+      "videos": [
+        {
+          "src": "images/scream-parks/horrorland-2026-visit/video-01.mp4",
+          "poster": "images/scream-parks/horrorland-2026-visit/video-01-poster.webp",
+          "title": "Nuestra visita a Horrorland 2026 · vídeo 1",
+          "durationSeconds": 2.165,
+          "width": 464,
+          "height": 832
+        },
+        {
+          "src": "images/scream-parks/horrorland-2026-visit/video-02.mp4",
+          "poster": "images/scream-parks/horrorland-2026-visit/video-02-poster.webp",
+          "title": "Nuestra visita a Horrorland 2026 · vídeo 2",
+          "durationSeconds": 7.728,
+          "width": 464,
+          "height": 832
+        }
+      ]
     }
   ]
 }

@@ -57,6 +57,8 @@
     let communityError = '';
     let communityFormOpen = false;
     let communityVisible = 3;
+    const detailMediaQuery = window.matchMedia('(max-width:900px)');
+    let detailMediaHandler = null;
 
     function editorialFor(entry) {
       return editorialReviews.find(review => review.entityId === entry.id && review.seasonId === entry.seasonId);
@@ -383,20 +385,73 @@
       row.append(create('span', label), create('strong', value));
       rootNode.append(row);
     }
+    function visitMediaPanel(entry) {
+      const review = editorialFor(entry);
+      const photos = Array.isArray(review?.images) ? review.images : [];
+      const videos = Array.isArray(review?.videos) ? review.videos : [];
+      if (!photos.length && !videos.length) return null;
+      const gallery = panel('NUESTRA VISITA EN FOTOS Y VÍDEOS');
+      gallery.classList.add('sp-visit-gallery');
+      const mediaGrid = create('div', undefined, 'sp-visit-grid');
+      const key = `scream-editorial-${entry.seasonId}`;
+      window.registerEditorialPhotoGallery?.(key, photos);
+      photos.forEach((photo, index) => {
+        if (!photo?.src || !photo?.thumbnail) return;
+        const link = create('a');
+        link.href = photo.src;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.setAttribute('aria-label', `Ampliar foto ${index + 1} de nuestra visita`);
+        link.onclick = event => window.openPhotoLightbox?.(event, key, index);
+        const image = create('img');
+        image.src = photo.thumbnail;
+        image.alt = photo.alt || 'Foto de nuestra visita a Horrorland';
+        image.loading = 'lazy';
+        image.decoding = 'async';
+        image.width = 450;
+        image.height = 600;
+        link.append(image);
+        mediaGrid.append(link);
+      });
+      videos.forEach((item, index) => {
+        if (!item?.src || !item?.poster) return;
+        const figure = create('figure', undefined, 'sp-visit-video-card');
+        const video = create('video', undefined, 'sp-visit-video');
+        video.controls = true;
+        video.playsInline = true;
+        video.preload = 'none';
+        video.poster = item.poster;
+        video.width = item.width || 464;
+        video.height = item.height || 832;
+        video.setAttribute('aria-label', item.title || `Vídeo ${index + 1} de nuestra visita`);
+        const source = create('source');
+        source.src = item.src;
+        source.type = 'video/mp4';
+        video.append(source);
+        figure.append(video, create('figcaption', `▶ ${item.title || `Vídeo ${index + 1} de nuestra visita`}`));
+        mediaGrid.append(figure);
+      });
+      gallery.append(mediaGrid);
+      return gallery;
+    }
     function detail(entry) {
       const rootNode = $('detail-content');
+      rootNode.querySelectorAll('video').forEach(video => video.pause());
       rootNode.replaceChildren();
       const grid = create('div', undefined, 'detail-grid');
       const main = create('div');
       const aside = create('aside');
-      main.append(create('div', `${entry.typeLabel} · ${entry.seasonId}`, 'eyebrow'),
+      const intro = create('div', undefined, 'sp-detail-intro');
+      const rest = create('div', undefined, 'sp-detail-rest');
+      intro.append(create('div', `${entry.typeLabel} · ${entry.seasonId}`, 'eyebrow'),
         create('h1', entry.name),
         create('p', entry.editorialSynopsis || (s4(entry)
           ? `Temporada ${entry.seasonId.slice(-4)}. Consulta la web del evento antes de planificar la visita.`
           : `Temporada ${entry.seasonId.slice(-4)} confirmada según las evidencias editoriales vigentes. Esta ficha sigue en PREVIEW_ONLY.`), 'lead'));
-      main.append(personalControls(entry));
+      main.append(intro);
       const review = editorialBlock(entry);
       if (review) main.append(review);
+      rest.append(personalControls(entry));
       const period = panel('Temporada y sesiones');
       if (entry.period.start && entry.period.end) fact(period,
         s4(entry) ? 'Fechas orientativas' : !entry.fieldSources || entry.period.source === 'VERIFIED_S2' ? 'Periodo verificado' : 'Periodo del Excel · sin verificar',
@@ -414,7 +469,7 @@
           ? 'Consulta los días de apertura en la web del evento antes de planificar la visita.'
           : 'No constan sesiones individuales verificadas. Consulta la web oficial antes de planificar la visita.', 'caution'));
       }
-      main.append(period);
+      rest.append(period);
       const context = panel('Información de la ficha');
       if (entry.operator) fact(context, s4(entry) ? 'Organiza' : 'Organiza · verificado', entry.operator);
       const place = [entry.city, entry.province || entry.region, entry.country].filter(Boolean).join(' · ');
@@ -429,7 +484,7 @@
       if (entry.warnings?.length) fact(context,
         s4(entry) ? 'Información para visitantes' : `Advertencias · ${sourceNote(entry, 'season.warnings')}`,
         Array.isArray(entry.warnings) ? entry.warnings.join(' · ') : entry.warnings);
-      main.append(context);
+      rest.append(context);
       if (entry.practical && Object.keys(entry.practical).length) {
         const practical = panel('Datos prácticos');
         const labels = {
@@ -443,7 +498,7 @@
           if (!labels[key] || value == null || value === '') continue;
           fact(practical, labels[key], Array.isArray(value) ? value.map(fmtDay).join(' · ') : value);
         }
-        main.append(practical);
+        rest.append(practical);
       }
       const officialUrl = safeExternalUrl(entry.officialUrl);
       const bookingUrl = safeExternalUrl(entry.bookingUrl);
@@ -470,45 +525,14 @@
           else if (!verified(entry, 'entity.officialUrl')) links.append(create('p', 'Enlace procedente del Excel, pendiente de verificar.', 'caution'));
           if (!bookingUrl) links.append(create('p', 'No hay enlace de reserva aprobado para esta ficha.', 'caution'));
         }
-        main.append(links);
+        rest.append(links);
       }
+      main.append(rest);
       const fallback = create('div', undefined, 'fallback');
       if (entry.images?.length) fallback.classList.add('has-cover');
       fallback.append(coverImage(entry));
       aside.append(fallback);
-      if (reviewStore) {
-        const community = panel('OPINIONES DE LA COMUNIDAD');
-        community.id = 'sp-community';
-        aside.append(community);
-      }
-      const visitPhotos = editorialFor(entry)?.images;
-      if (Array.isArray(visitPhotos) && visitPhotos.length) {
-        const gallery = panel('NUESTRA VISITA EN IMÁGENES');
-        gallery.classList.add('sp-visit-gallery');
-        const grid = create('div', undefined, 'sp-visit-grid');
-        const key = `scream-editorial-${entry.seasonId}`;
-        window.registerEditorialPhotoGallery?.(key, visitPhotos);
-        visitPhotos.forEach((photo, index) => {
-          if (!photo?.src || !photo?.thumbnail) return;
-          const link = create('a');
-          link.href = photo.src;
-          link.target = '_blank';
-          link.rel = 'noopener noreferrer';
-          link.setAttribute('aria-label', `Ampliar foto ${index + 1} de nuestra visita`);
-          link.onclick = event => window.openPhotoLightbox?.(event, key, index);
-          const image = create('img');
-          image.src = photo.thumbnail;
-          image.alt = photo.alt || 'Foto de nuestra visita a Horrorland';
-          image.loading = 'lazy';
-          image.decoding = 'async';
-          image.width = 450;
-          image.height = 600;
-          link.append(image);
-          grid.append(link);
-        });
-        gallery.append(grid);
-        aside.append(gallery);
-      }
+      const visitGallery = visitMediaPanel(entry);
       if (entry.images?.length > 1) {
         const gallery = create('div', undefined, 'sp-gallery');
         for (const source of entry.images.slice(1)) {
@@ -535,8 +559,27 @@
         videoPanel.append(frame);
         aside.append(videoPanel);
       }
-      grid.append(aside, main);
+      grid.append(main, aside);
       rootNode.append(grid);
+      if (visitGallery) rootNode.append(visitGallery);
+      if (reviewStore) {
+        const community = panel('OPINIONES DE LA COMUNIDAD');
+        community.id = 'sp-community';
+        rootNode.append(community);
+      }
+      if (detailMediaHandler) detailMediaQuery.removeEventListener('change', detailMediaHandler);
+      detailMediaHandler = () => {
+        if (detailMediaQuery.matches) {
+          if (visitGallery) main.insertBefore(visitGallery, rest);
+          main.insertBefore(fallback, rest);
+        } else {
+          aside.insertBefore(fallback, aside.firstChild);
+          if (visitGallery) rootNode.insertBefore(visitGallery, rootNode.querySelector('#sp-community'));
+        }
+        aside.hidden = !aside.children.length;
+      };
+      detailMediaQuery.addEventListener('change', detailMediaHandler);
+      detailMediaHandler();
       renderCommunity();
     }
     function route() {

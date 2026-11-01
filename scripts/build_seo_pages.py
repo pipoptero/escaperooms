@@ -121,6 +121,10 @@ p { color: var(--text2); }
 .lead { max-width: 900px; margin: 0; font-size: 1.08rem; }
 .detail-hero { display: grid; grid-template-columns: minmax(220px, 360px) minmax(0, 1fr); gap: 30px; align-items: start; }
 .cover { width: 100%; max-height: 540px; object-fit: contain; background: #050507; border: 1px solid rgba(255,255,255,.09); }
+@media (max-width: 620px) {
+  .scream-review-hero > div { order: -1; }
+  .scream-review-hero .cover { width: auto; max-width: 100%; max-height: 260px; justify-self: center; }
+}
 .company { color: var(--text3); font-family: 'Share Tech Mono', monospace; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; }
 .meta, .summary, .nav, .actions, .internal-links { display: flex; flex-wrap: wrap; gap: 8px; }
 .meta { margin: 18px 0; }
@@ -151,6 +155,9 @@ p { color: var(--text2); }
 .scream-visit-grid a { display: block; border: 1px solid rgba(125,187,63,.32); background: var(--bg2); }
 .scream-visit-grid a:focus-visible { outline: 3px solid var(--green); outline-offset: 2px; }
 .scream-visit-grid img { display: block; width: 100%; height: auto; aspect-ratio: 3/4; object-fit: contain; }
+.scream-visit-video-card { grid-column: 1 / -1; min-width: 0; margin: 0; padding: 8px; border: 1px solid rgba(125,187,63,.32); background: #050507; }
+.scream-visit-video-card video { display: block; width: min(100%, 340px); height: auto; max-width: 100%; aspect-ratio: 464/832; object-fit: contain; margin: 0 auto; }
+.scream-visit-video-card figcaption { padding: 8px 4px 2px; color: var(--green); }
 .video-frame { width: 100%; aspect-ratio: 16/9; display: block; border: 1px solid rgba(125,187,63,.24); background: #050507; }
 .video-frame.portrait { width: min(100%, 340px); aspect-ratio: 9/16; margin-inline: auto; }
 .media-note, .note, .explain { color: var(--text2); }
@@ -1129,8 +1136,10 @@ def scream_park_review_page(review, entry):
     body_html = review_text_html(review["body"])
     visit_photos = [photo for photo in review.get("images", [])
                     if isinstance(photo, dict) and photo.get("src") and photo.get("thumbnail")]
+    visit_videos = [item for item in review.get("videos", [])
+                    if isinstance(item, dict) and item.get("src") and item.get("poster")]
     visit_gallery = ""
-    if visit_photos:
+    if visit_photos or visit_videos:
         photo_links = "\n".join(
             f'<a href="{escape(asset_url(photo["src"]))}" target="_blank" rel="noopener noreferrer" '
             f'aria-label="Ampliar foto {index} de nuestra visita">'
@@ -1139,9 +1148,18 @@ def scream_park_review_page(review, entry):
             f'width="450" height="600" loading="lazy" decoding="async"></a>'
             for index, photo in enumerate(visit_photos, 1)
         )
-        visit_gallery = (f'<section class="section" aria-label="Nuestra visita en imágenes">'
-                         f'<h2>Nuestra visita en imágenes</h2><div class="scream-visit-grid">'
-                         f'{photo_links}</div></section>')
+        video_blocks = "\n".join(
+            f'<figure class="scream-visit-video-card"><video controls playsinline preload="none" '
+            f'poster="{escape(asset_url(item["poster"]))}" '
+            f'width="{int(item.get("width") or 464)}" height="{int(item.get("height") or 832)}" '
+            f'aria-label="{escape(item.get("title") or f"Vídeo {index} de nuestra visita")}">'
+            f'<source src="{escape(asset_url(item["src"]))}" type="video/mp4"></video>'
+            f'<figcaption>▶ {escape(item.get("title") or f"Vídeo {index} de nuestra visita")}</figcaption></figure>'
+            for index, item in enumerate(visit_videos, 1)
+        )
+        visit_gallery = (f'<section class="section" aria-label="Nuestra visita en fotos y vídeos">'
+                         f'<h2>Nuestra visita en fotos y vídeos</h2><div class="scream-visit-grid">'
+                         f'{photo_links}{video_blocks}</div></section>')
     date_published = text(review.get("publishedAt"))
     schema = {"@context": "https://schema.org", "@type": "Article", "headline": review["title"],
               "author": {"@type": "Organization", "name": "The Vault Escape"},

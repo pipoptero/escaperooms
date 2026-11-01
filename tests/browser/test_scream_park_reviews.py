@@ -157,6 +157,10 @@ class V6BrowserTests(unittest.TestCase):
                     self.assertEqual(errors, [])
                     photos = page.locator("#detail-modal .sp-visit-gallery img")
                     self.assertEqual(photos.count(), 9)
+                    videos = page.locator("#detail-modal .sp-visit-video")
+                    self.assertEqual(videos.count(), 2)
+                    self.assertEqual(videos.evaluate_all("nodes => nodes.map(el => [el.preload, el.controls, el.playsInline, el.autoplay])"),
+                                     [["none", True, True, False], ["none", True, True, False]])
                     photos.first.scroll_into_view_if_needed()
                     page.wait_for_function("() => document.querySelector('.scream-editorial-modal .sp-visit-gallery img')?.naturalWidth > 0")
                     page.locator("#detail-modal .sp-visit-gallery a").first.click()
@@ -211,8 +215,55 @@ class V6BrowserTests(unittest.TestCase):
             self.assertEqual(page.locator("#detail-modal.open").count(), 0)
             self.assertIn("Horrorland", page.locator("#sp-detail-content").inner_text())
             self.assertEqual(page.locator("#sp-detail-content .sp-visit-gallery img").count(), 9)
-            self.assertLess(page.locator("#sp-detail-content #sp-community").evaluate("el => el.getBoundingClientRect().top"),
-                            page.locator("#sp-detail-content .sp-visit-gallery").evaluate("el => el.getBoundingClientRect().top"))
+            self.assertEqual(page.locator("#sp-detail-content .sp-visit-video").count(), 2)
+            self.assertEqual(page.locator("#sp-detail-content > :last-child").get_attribute("id"), "sp-community")
+            self.assertGreater(page.locator("#sp-detail-content #sp-community").evaluate("el => el.getBoundingClientRect().top"),
+                               page.locator("#sp-detail-content .sp-visit-gallery").evaluate("el => el.getBoundingClientRect().top"))
+            self.assertEqual(errors, [])
+        finally:
+            context.close()
+
+    def test_visit_videos_play_inline_and_pause_each_other(self):
+        context, page, errors = self.page(390, mock=False)
+        try:
+            media_requests = []
+            page.on("request", lambda request: media_requests.append(request.url)
+                    if "/horrorland-2026-visit/video-" in request.url and request.url.endswith(".mp4") else None)
+            page.locator(".vault-latest-grid .vault-latest-card").first.click()
+            page.locator("#detail-modal.scream-editorial-modal.open").wait_for()
+            videos = page.locator("#detail-modal .sp-visit-video")
+            self.assertEqual(videos.count(), 2)
+            self.assertEqual(media_requests, [])
+            for index in range(2):
+                video = videos.nth(index)
+                video.evaluate("el => el.play()")
+                page.wait_for_function("index => document.querySelectorAll('#detail-modal .sp-visit-video')[index].currentTime > 0", arg=index, timeout=15000)
+                self.assertFalse(video.evaluate("el => el.paused && el.currentTime === 0"))
+            if self.browser.browser_type.name == "chromium":
+                self.assertEqual(len(set(media_requests)), 2)
+            self.assertTrue(videos.first.evaluate("el => el.paused"))
+            self.assertEqual(errors, [])
+        finally:
+            context.close()
+
+    def test_seo_page_uses_same_playable_videos(self):
+        context, page, errors = self.page(390, mock=False)
+        try:
+            base = f"http://127.0.0.1:{self.server.server_port}"
+            html = (ROOT / "scream-parks/reviews/horrorland-2026/index.html").read_text(encoding="utf-8")
+            html = html.replace("https://thevaultescape.com/images/scream-parks/horrorland-2026-visit/",
+                                base + "/images/scream-parks/horrorland-2026-visit/")
+            page.route(base + "/scream-parks/reviews/horrorland-2026/",
+                       lambda route: route.fulfill(body=html, content_type="text/html"))
+            page.goto(base + "/scream-parks/reviews/horrorland-2026/", wait_until="domcontentloaded")
+            videos = page.locator(".scream-visit-video-card video")
+            self.assertEqual(videos.count(), 2)
+            self.assertEqual(videos.evaluate_all("nodes => nodes.map(el => el.preload)"), ["none", "none"])
+            for index in range(2):
+                videos.nth(index).evaluate("el => el.play()")
+                page.wait_for_function("index => document.querySelectorAll('.scream-visit-video-card video')[index].currentTime > 0", arg=index, timeout=15000)
+            self.assertFalse(page.evaluate("document.documentElement.scrollWidth > document.documentElement.clientWidth"),
+                             page.evaluate("[...document.querySelectorAll('*')].filter(el => el.getBoundingClientRect().right > innerWidth + 1).slice(0, 12).map(el => [el.tagName, el.className, Math.round(el.getBoundingClientRect().x), Math.round(el.getBoundingClientRect().width), getComputedStyle(el).width, getComputedStyle(el).maxWidth, Math.round(el.parentElement.getBoundingClientRect().width)])"))
             self.assertEqual(errors, [])
         finally:
             context.close()

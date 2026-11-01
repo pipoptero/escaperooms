@@ -194,6 +194,7 @@ def validate():
     locations = (load_json("room_locations.json", errors).get("locations") or {})
     reviews = (load_json("published_reviews.json", errors).get("reviews") or {})
     review_photos = (load_json("review_photos.json", errors).get("photos") or {})
+    scream_reviews = (load_json("scream-parks/editorial-reviews.json", errors).get("reviews") or [])
     relationships = load_json("room_relationships.json", errors).get("families") or []
     scream_parks = load_json("scream-parks/data-2026.json", errors).get("entries") or []
     village_parks = [entry for entry in scream_parks if entry.get("id") == "the-village"]
@@ -334,6 +335,23 @@ def validate():
             oversized_media.append(value)
     if oversized_media:
         errors.append(f"Galerías: {len(oversized_media)} archivos superan 20 MB")
+    for review in scream_reviews:
+        if not isinstance(review, dict):
+            errors.append("Scream Parks: review editorial inválida")
+            continue
+        for collection, fields in (("images", ("src", "thumbnail")), ("videos", ("src", "poster"))):
+            for item in review.get(collection) or []:
+                if not isinstance(item, dict):
+                    errors.append(f"Scream Parks: {collection} inválido en {review.get('id')}")
+                    continue
+                for field in fields:
+                    value = item.get(field)
+                    if not isinstance(value, str) or not value.startswith("images/scream-parks/") or ".." in Path(value).parts:
+                        errors.append(f"Scream Parks: ruta inválida en {review.get('id')}.{collection}.{field}")
+                        continue
+                    asset = ROOT / value
+                    if not asset.is_file() or asset.stat().st_size > 20 * 1024 * 1024:
+                        errors.append(f"Scream Parks: recurso ausente o demasiado grande: {value}")
 
     sitemap_counts = {}
     for path in sorted(ROOT.glob("sitemap*.xml")):

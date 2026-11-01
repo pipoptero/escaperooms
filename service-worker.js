@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'the-vault-v60';
+const CACHE_VERSION = 'the-vault-v61';
 const APP_SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -112,6 +112,8 @@ self.addEventListener('fetch', event => {
   if (url.pathname.startsWith('/__/auth/') || url.pathname === '/__/firebase/init.json') return;
   if (url.pathname.startsWith('/api/') || url.pathname.startsWith('/private/')
       || url.pathname.startsWith('/admin/')) return;
+  // Let the browser issue byte-range requests for visitor videos directly.
+  if (url.pathname.startsWith('/images/scream-parks/') && /\.(?:mp4|webm)$/i.test(url.pathname)) return;
 
   const path = url.pathname.split('/').pop();
   if (['room-state.js', 'route-planner.js', 'saved-routes.js', 'public-profile.js', 'public-profile-firebase.js', 'public-profile-fixtures.js', 'public-profile-page.js', 'public-profile.css'].includes(path)) {

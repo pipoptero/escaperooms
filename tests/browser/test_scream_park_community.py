@@ -5,10 +5,10 @@ from tests.browser.test_scream_park_reviews import V6BrowserTests
 
 
 class CommunityBrowserTests(V6BrowserTests):
-    def test_community_follows_cover_and_precedes_gallery(self):
-        for width in (1440, 390):
+    def test_community_is_full_width_and_last(self):
+        for width in (1440, 900, 640, 390):
             with self.subTest(width=width):
-                context, page, errors = self.page(width)
+                context, page, errors = self.page(width, mock=False)
                 try:
                     page.evaluate("""() => {
                       SCREAM_REVIEW_STORE = VaultScreamParkReviews.createStore({
@@ -21,14 +21,26 @@ class CommunityBrowserTests(V6BrowserTests):
                     }""")
                     page.locator("#panel-scream-parks article.card[data-id=horrorland] button").first.click()
                     page.locator("#sp-community").wait_for()
-                    order = page.locator("#panel-scream-parks .detail-grid aside > *").evaluate_all(
-                        "nodes => nodes.map(node => node.className || node.id)")
-                    self.assertEqual(order[0], "fallback has-cover")
-                    self.assertIn("panel", order[1])
-                    self.assertEqual(page.locator("#panel-scream-parks .detail-grid aside > :nth-child(2)").get_attribute("id"), "sp-community")
+                    self.assertEqual(page.locator("#sp-detail-content > :last-child").get_attribute("id"), "sp-community")
+                    self.assertEqual(page.locator("#sp-detail-content #sp-community").count(), 1)
+                    bounds = page.locator("#sp-detail-content").evaluate("el => el.getBoundingClientRect().width")
+                    community_width = page.locator("#sp-community").evaluate("el => el.getBoundingClientRect().width")
+                    self.assertLess(abs(bounds - community_width), 2)
+                    if width <= 900:
+                        order = page.locator("#sp-detail-content .detail-grid > div > *").evaluate_all(
+                            "nodes => nodes.map(node => node.className.split(' ')[0])")
+                        self.assertEqual(order[:5], ["sp-detail-intro", "detail-panel", "detail-panel", "fallback", "sp-detail-rest"])
+                        self.assertIn("NUESTRA VISITA EN FOTOS Y VÍDEOS", page.locator("#sp-detail-content .sp-visit-gallery").inner_text())
+                    else:
+                        self.assertEqual(page.locator("#sp-detail-content .detail-grid > aside > :first-child").get_attribute("class"), "fallback has-cover")
                     self.assertEqual(page.get_by_text("Antes de ir", exact=True).count(), 0)
                     self.assertFalse(page.evaluate("document.documentElement.scrollWidth > document.documentElement.clientWidth"))
                     self.assertEqual(errors, [])
+                    photos = page.locator("#sp-detail-content .sp-visit-gallery img")
+                    self.assertEqual(photos.count(), 9)
+                    for photo in photos.all():
+                        photo.scroll_into_view_if_needed()
+                        page.wait_for_function("el => el.naturalWidth > 0", arg=photo.element_handle())
                     capture = os.getenv("VAULT_V61_CAPTURE_DIR")
                     if capture:
                         path = Path(capture) / f"{self.browser.browser_type.name}-{width}-park-community.png"
