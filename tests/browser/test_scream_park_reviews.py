@@ -234,11 +234,13 @@ class V6BrowserTests(unittest.TestCase):
             videos = page.locator("#detail-modal .sp-visit-video")
             self.assertEqual(videos.count(), 2)
             self.assertEqual(media_requests, [])
+            self.assertEqual(videos.evaluate_all("nodes => nodes.map(el => el.currentSrc)"), ["", ""])
             for index in range(2):
                 video = videos.nth(index)
-                video.evaluate("el => el.play()")
+                page.locator("#detail-modal .sp-visit-play").nth(index).click()
                 page.wait_for_function("index => document.querySelectorAll('#detail-modal .sp-visit-video')[index].currentTime > 0", arg=index, timeout=15000)
                 self.assertFalse(video.evaluate("el => el.paused && el.currentTime === 0"))
+                self.assertTrue(page.locator("#detail-modal .sp-visit-play").nth(index).is_hidden())
             if self.browser.browser_type.name == "chromium":
                 self.assertEqual(len(set(media_requests)), 2)
             self.assertTrue(videos.first.evaluate("el => el.paused"))
@@ -259,8 +261,9 @@ class V6BrowserTests(unittest.TestCase):
             videos = page.locator(".scream-visit-video-card video")
             self.assertEqual(videos.count(), 2)
             self.assertEqual(videos.evaluate_all("nodes => nodes.map(el => el.preload)"), ["none", "none"])
+            self.assertEqual(videos.evaluate_all("nodes => nodes.map(el => el.currentSrc)"), ["", ""])
             for index in range(2):
-                videos.nth(index).evaluate("el => el.play()")
+                page.locator(".scream-visit-video-card .sp-visit-play").nth(index).click()
                 page.wait_for_function("index => document.querySelectorAll('.scream-visit-video-card video')[index].currentTime > 0", arg=index, timeout=15000)
             self.assertFalse(page.evaluate("document.documentElement.scrollWidth > document.documentElement.clientWidth"),
                              page.evaluate("[...document.querySelectorAll('*')].filter(el => el.getBoundingClientRect().right > innerWidth + 1).slice(0, 12).map(el => [el.tagName, el.className, Math.round(el.getBoundingClientRect().x), Math.round(el.getBoundingClientRect().width), getComputedStyle(el).width, getComputedStyle(el).maxWidth, Math.round(el.parentElement.getBoundingClientRect().width)])"))

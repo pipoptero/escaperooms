@@ -424,11 +424,11 @@
         video.width = item.width || 464;
         video.height = item.height || 832;
         video.setAttribute('aria-label', item.title || `Vídeo ${index + 1} de nuestra visita`);
-        const source = create('source');
-        source.src = item.src;
-        source.type = 'video/mp4';
-        video.append(source);
-        figure.append(video, create('figcaption', `▶ ${item.title || `Vídeo ${index + 1} de nuestra visita`}`));
+        const play = create('button', '▶ Reproducir vídeo', 'sp-visit-play');
+        play.type = 'button';
+        play.dataset.videoSrc = item.src;
+        play.setAttribute('aria-label', `Reproducir ${item.title || `vídeo ${index + 1} de nuestra visita`}`);
+        figure.append(video, play, create('figcaption', item.title || `Vídeo ${index + 1} de nuestra visita`));
         mediaGrid.append(figure);
       });
       gallery.append(mediaGrid);

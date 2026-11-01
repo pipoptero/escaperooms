@@ -57,7 +57,9 @@ class ScreamParkReviewSeoTests(unittest.TestCase):
         self.assertIn('Pray For Us', page)
         self.assertIn('Nuestra visita en fotos y vídeos', page)
         self.assertEqual(page.count('aria-label="Ampliar foto '), 9)
-        self.assertEqual(page.count('<video controls playsinline preload="none"'), 2)
+        self.assertEqual(page.count('<video class="sp-visit-video" controls playsinline preload="none"'), 2)
+        self.assertEqual(page.count('class="sp-visit-play" type="button" data-video-src='), 2)
+        self.assertIn('<script src="/scream-parks/visit-video.js" defer></script>', page)
         self.assertEqual(page.count('"@type": "VideoObject"'), 0)  # No verified video upload date.
         self.assertIn('<meta property="og:image:width" content="900">', page)
         self.assertIn('<meta property="og:image:height" content="1350">', page)
@@ -65,7 +67,8 @@ class ScreamParkReviewSeoTests(unittest.TestCase):
         self.assertIn('https://thevaultescape.com/scream-parks/reviews/horrorland-2026/',
                       (ROOT / "sitemap-reviews.xml").read_text(encoding="utf-8"))
         shell = (ROOT / "service-worker.js").read_text(encoding="utf-8")
-        self.assertIn("the-vault-v61", shell)
+        self.assertIn("the-vault-v62", shell)
+        self.assertIn("./scream-parks/visit-video.js", shell)
         self.assertIn("./scream-parks/reviews/horrorland-2026/", shell)
         app = (ROOT / "index.html").read_text(encoding="utf-8")
         self.assertIn("scream-parks/reviews.js", app)

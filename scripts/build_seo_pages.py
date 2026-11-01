@@ -157,6 +157,9 @@ p { color: var(--text2); }
 .scream-visit-grid img { display: block; width: 100%; height: auto; aspect-ratio: 3/4; object-fit: contain; }
 .scream-visit-video-card { grid-column: 1 / -1; min-width: 0; margin: 0; padding: 8px; border: 1px solid rgba(125,187,63,.32); background: #050507; }
 .scream-visit-video-card video { display: block; width: min(100%, 340px); height: auto; max-width: 100%; aspect-ratio: 464/832; object-fit: contain; margin: 0 auto; }
+.sp-visit-play { display: block; min-height: 44px; width: min(100%, 340px); margin: 8px auto 0; border: 1px solid var(--green); background: #192018; color: var(--green); font: 700 .84rem 'Rajdhani', sans-serif; cursor: pointer; }
+.sp-visit-play:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+.sp-visit-play[hidden] { display: none; }
 .scream-visit-video-card figcaption { padding: 8px 4px 2px; color: var(--green); }
 .video-frame { width: 100%; aspect-ratio: 16/9; display: block; border: 1px solid rgba(125,187,63,.24); background: #050507; }
 .video-frame.portrait { width: min(100%, 340px); aspect-ratio: 9/16; margin-inline: auto; }
@@ -1149,12 +1152,13 @@ def scream_park_review_page(review, entry):
             for index, photo in enumerate(visit_photos, 1)
         )
         video_blocks = "\n".join(
-            f'<figure class="scream-visit-video-card"><video controls playsinline preload="none" '
+            f'<figure class="scream-visit-video-card"><video class="sp-visit-video" controls playsinline preload="none" '
             f'poster="{escape(asset_url(item["poster"]))}" '
             f'width="{int(item.get("width") or 464)}" height="{int(item.get("height") or 832)}" '
-            f'aria-label="{escape(item.get("title") or f"Vídeo {index} de nuestra visita")}">'
-            f'<source src="{escape(asset_url(item["src"]))}" type="video/mp4"></video>'
-            f'<figcaption>▶ {escape(item.get("title") or f"Vídeo {index} de nuestra visita")}</figcaption></figure>'
+            f'aria-label="{escape(item.get("title") or f"Vídeo {index} de nuestra visita")}"></video>'
+            f'<button class="sp-visit-play" type="button" data-video-src="{escape(asset_url(item["src"]))}" '
+            f'aria-label="Reproducir {escape(item.get("title") or f"vídeo {index} de nuestra visita")}">▶ Reproducir vídeo</button>'
+            f'<figcaption>{escape(item.get("title") or f"Vídeo {index} de nuestra visita")}</figcaption></figure>'
             for index, item in enumerate(visit_videos, 1)
         )
         visit_gallery = (f'<section class="section" aria-label="Nuestra visita en fotos y vídeos">'
@@ -1184,7 +1188,7 @@ def scream_park_review_page(review, entry):
   </article>
   <section class="section"><div class="review">{body_html}</div></section>
   {visit_gallery}
-</main>{seo_footer()}</body></html>"""
+</main>{seo_footer()}<script src="/scream-parks/visit-video.js" defer></script></body></html>"""
 
 
 def review_page(room, photos, social_image_path=""):

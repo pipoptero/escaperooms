@@ -2349,7 +2349,7 @@
   <footer class="seo-footer" aria-label="Enlaces de reviews">
     <div class="seo-footer-inner">
       <span class="rights">&copy; 2026 The Vault Escape. Todos los derechos reservados.</span>
-      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v61</span>
+      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v62</span>
       <span>Reviews de escape rooms con URL propia</span>
       <a href="ranking-escape-rooms/">Ranking escape rooms España</a>
       <a href="mejores-escape-rooms/">Mejores escape rooms</a>
@@ -2533,6 +2533,7 @@
 <script src="editorial-review-renderer.js"></script>
 <script src="scream-parks/personal-state.js"></script>
 <script src="scream-parks/reviews.js"></script>
+<script src="scream-parks/visit-video.js"></script>
 <script src="scream-parks/client.js"></script>
 <script>
 // ════════════════════════════════════════════════════════════
@@ -11580,18 +11581,11 @@ function screamEditorialGalleryHtml(review) {
       <a href="${escapeHtml(photo.src)}" target="_blank" rel="noopener noreferrer" onclick="openPhotoLightbox(event, '${key}', ${index})" aria-label="Ampliar foto ${index + 1} de nuestra visita">
         <img src="${escapeHtml(photo.thumbnail)}" alt="${escapeHtml(photo.alt || 'Foto de nuestra visita a Horrorland')}" loading="lazy" decoding="async" width="450" height="600">
       </a>`).join('')}${videos.map((item, index) => `
-      <figure class="sp-visit-video-card"><video class="sp-visit-video" controls playsinline preload="none" poster="${escapeHtml(item.poster)}" width="${Number(item.width) || 464}" height="${Number(item.height) || 832}" aria-label="${escapeHtml(item.title || `Vídeo ${index + 1} de nuestra visita`)}">
-        <source src="${escapeHtml(item.src)}" type="video/mp4"></video>
-        <figcaption>▶ ${escapeHtml(item.title || `Vídeo ${index + 1} de nuestra visita`)}</figcaption></figure>`).join('')}</div>
+      <figure class="sp-visit-video-card"><video class="sp-visit-video" controls playsinline preload="none" poster="${escapeHtml(item.poster)}" width="${Number(item.width) || 464}" height="${Number(item.height) || 832}" aria-label="${escapeHtml(item.title || `Vídeo ${index + 1} de nuestra visita`)}"></video>
+        <button class="sp-visit-play" type="button" data-video-src="${escapeHtml(item.src)}" aria-label="Reproducir ${escapeHtml(item.title || `vídeo ${index + 1} de nuestra visita`)}">▶ Reproducir vídeo</button>
+        <figcaption>${escapeHtml(item.title || `Vídeo ${index + 1} de nuestra visita`)}</figcaption></figure>`).join('')}</div>
   </section>`;
 }
-
-document.addEventListener('play', event => {
-  if (!event.target.matches?.('.sp-visit-video')) return;
-  document.querySelectorAll('.sp-visit-video').forEach(video => {
-    if (video !== event.target) video.pause();
-  });
-}, true);
 
 async function openScreamEditorialReview(seasonId, options = {}) {
   if (!/^[a-z0-9-]+$/.test(seasonId || '')) return false;
@@ -11672,6 +11666,7 @@ function returnToScreamPark(entityId) {
 
 function closeScreamEditorialModal(fromHistory = false) {
   const modal = document.getElementById('detail-modal');
+  modal.querySelectorAll('video').forEach(video => video.pause());
   const pushed = SCREAM_REVIEW_PUSHED;
   modal.classList.remove('open', 'scream-editorial-modal');
   modal.setAttribute('aria-hidden', 'true');
