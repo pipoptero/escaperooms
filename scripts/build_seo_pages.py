@@ -147,6 +147,10 @@ p { color: var(--text2); }
 .fact dd { margin: 4px 0 0; color: var(--text); overflow-wrap: anywhere; }
 .photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; }
 .photos img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border: 1px solid rgba(125,187,63,.22); background: #050507; }
+.scream-visit-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+.scream-visit-grid a { display: block; border: 1px solid rgba(125,187,63,.32); background: var(--bg2); }
+.scream-visit-grid a:focus-visible { outline: 3px solid var(--green); outline-offset: 2px; }
+.scream-visit-grid img { display: block; width: 100%; height: auto; aspect-ratio: 3/4; object-fit: contain; }
 .video-frame { width: 100%; aspect-ratio: 16/9; display: block; border: 1px solid rgba(125,187,63,.24); background: #050507; }
 .video-frame.portrait { width: min(100%, 340px); aspect-ratio: 9/16; margin-inline: auto; }
 .media-note, .note, .explain { color: var(--text2); }
@@ -1123,6 +1127,21 @@ def scream_park_review_page(review, entry):
             except OSError:
                 pass  # Omit dimensions rather than announce an unverified size.
     body_html = review_text_html(review["body"])
+    visit_photos = [photo for photo in review.get("images", [])
+                    if isinstance(photo, dict) and photo.get("src") and photo.get("thumbnail")]
+    visit_gallery = ""
+    if visit_photos:
+        photo_links = "\n".join(
+            f'<a href="{escape(asset_url(photo["src"]))}" target="_blank" rel="noopener noreferrer" '
+            f'aria-label="Ampliar foto {index} de nuestra visita">'
+            f'<img src="{escape(asset_url(photo["thumbnail"]))}" '
+            f'alt="{escape(photo.get("alt") or "Foto de nuestra visita a Horrorland")}" '
+            f'width="450" height="600" loading="lazy" decoding="async"></a>'
+            for index, photo in enumerate(visit_photos, 1)
+        )
+        visit_gallery = (f'<section class="section" aria-label="Nuestra visita en imágenes">'
+                         f'<h2>Nuestra visita en imágenes</h2><div class="scream-visit-grid">'
+                         f'{photo_links}</div></section>')
     date_published = text(review.get("publishedAt"))
     schema = {"@context": "https://schema.org", "@type": "Article", "headline": review["title"],
               "author": {"@type": "Organization", "name": "The Vault Escape"},
@@ -1146,6 +1165,7 @@ def scream_park_review_page(review, entry):
     </div>
   </article>
   <section class="section"><div class="review">{body_html}</div></section>
+  {visit_gallery}
 </main>{seo_footer()}</body></html>"""
 
 

@@ -2349,7 +2349,7 @@
   <footer class="seo-footer" aria-label="Enlaces de reviews">
     <div class="seo-footer-inner">
       <span class="rights">&copy; 2026 The Vault Escape. Todos los derechos reservados.</span>
-      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v59</span>
+      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v60</span>
       <span>Reviews de escape rooms con URL propia</span>
       <a href="ranking-escape-rooms/">Ranking escape rooms España</a>
       <a href="mejores-escape-rooms/">Mejores escape rooms</a>
@@ -2654,6 +2654,7 @@ const CATALOG_PAGE_SIZE = 120;
 let catalogVisibleCount = CATALOG_PAGE_SIZE;
 let GROUP_ROOM_INDEX = { pendientes: new Set(), hechos: new Set() };
 let PHOTO_LIGHTBOX_ITEMS = [];
+let PHOTO_LIGHTBOX_RETURN_FOCUS = null;
 let PHOTO_LIGHTBOX_INDEX = 0;
 let ACTIVE_TAB = 'thevault';
 let CURRENT_DETAIL_HASH = '';
@@ -11203,6 +11204,7 @@ function openPhotoLightbox(event, galleryKey, index = 0) {
   }
   const photos = PHOTO_LIGHTBOX_GALLERIES[galleryKey] || REVIEW_PHOTOS[galleryKey]?.photos || [];
   if (!photos.length) return;
+  PHOTO_LIGHTBOX_RETURN_FOCUS = event?.currentTarget || document.activeElement;
   PHOTO_LIGHTBOX_ITEMS = photos;
   PHOTO_LIGHTBOX_INDEX = Math.max(0, Math.min(Number(index) || 0, photos.length - 1));
   renderPhotoLightbox();
@@ -11210,6 +11212,13 @@ function openPhotoLightbox(event, galleryKey, index = 0) {
   modal.classList.add('open');
   modal.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
+  modal.querySelector('.photo-lightbox-close')?.focus({ preventScroll: true });
+}
+
+function registerEditorialPhotoGallery(key, photos) {
+  if (!/^scream-editorial-[a-z0-9-]+$/.test(key) || !Array.isArray(photos)) return;
+  PHOTO_LIGHTBOX_GALLERIES[key] = photos.filter(photo =>
+    photo && /^images\/scream-parks\/horrorland-2026-visit\/visit-\d{2}\.webp$/.test(photo.src));
 }
 
 function renderPhotoLightbox() {
@@ -11244,6 +11253,8 @@ function closePhotoLightbox(event) {
   modal.setAttribute('aria-hidden', 'true');
   PHOTO_LIGHTBOX_ITEMS = [];
   PHOTO_LIGHTBOX_INDEX = 0;
+  if (PHOTO_LIGHTBOX_RETURN_FOCUS?.isConnected) PHOTO_LIGHTBOX_RETURN_FOCUS.focus({ preventScroll: true });
+  PHOTO_LIGHTBOX_RETURN_FOCUS = null;
   if (!document.getElementById('detail-modal')?.classList.contains('open') && !document.getElementById('profile-modal')?.classList.contains('open')) {
     document.body.style.overflow = '';
   }
@@ -11555,6 +11566,21 @@ function screamReviewFactCards(items) {
   return items.map(item => `<div class="sp-review-fact"><span>${escapeHtml(item.label)}</span><strong>${escapeHtml(item.value)}</strong></div>`).join('');
 }
 
+function screamEditorialGalleryHtml(review) {
+  const photos = Array.isArray(review.images) ? review.images.filter(photo =>
+    photo && typeof photo.src === 'string' && typeof photo.thumbnail === 'string') : [];
+  if (!photos.length) return '';
+  const key = `scream-editorial-${review.seasonId}`;
+  registerEditorialPhotoGallery(key, photos);
+  return `<section class="sp-visit-gallery" aria-label="Nuestra visita en imágenes">
+    <h3 class="sp-review-section-title">Nuestra visita en imágenes</h3>
+    <div class="sp-visit-grid">${photos.map((photo, index) => `
+      <a href="${escapeHtml(photo.src)}" target="_blank" rel="noopener noreferrer" onclick="openPhotoLightbox(event, '${key}', ${index})" aria-label="Ampliar foto ${index + 1} de nuestra visita">
+        <img src="${escapeHtml(photo.thumbnail)}" alt="${escapeHtml(photo.alt || 'Foto de nuestra visita a Horrorland')}" loading="lazy" decoding="async" width="450" height="600">
+      </a>`).join('')}</div>
+  </section>`;
+}
+
 async function openScreamEditorialReview(seasonId, options = {}) {
   if (!/^[a-z0-9-]+$/.test(seasonId || '')) return false;
   const [reviews, entries] = await Promise.all([loadScreamEditorialReviews(), loadScreamParkEntries()]);
@@ -11592,12 +11618,13 @@ async function openScreamEditorialReview(seasonId, options = {}) {
       <div class="sp-review-hero-title"><span>Review editorial · ${escapeHtml(seasonId.slice(-4))}</span><strong>${escapeHtml(entry.name)}</strong></div>
     </div>`}`;
   document.getElementById('detail-content').innerHTML = `
-    ${bannerUrl ? `<figure class="sp-review-banner"><a href="${bannerUrl}" target="_blank" rel="noopener noreferrer" aria-label="Ampliar banner de ${escapeHtml(label)} en una pestaña nueva">
+    ${bannerUrl ? `<figure class="sp-review-banner">
       <img src="${bannerUrl}" width="2048" height="768" alt="Banner promocional de ${escapeHtml(label)} con experiencias y modalidades de entrada" decoding="async" onerror="this.closest('.sp-review-banner').hidden=true">
-      </a></figure>` : ''}
+      </figure>` : ''}
     <div class="sp-review-layout"><div class="sp-review-main">
-      ${bannerUrl ? `<div class="sp-review-intro-head"><h3 class="sp-review-section-title">Nuestra opinión</h3><a class="sp-review-expand" href="${bannerUrl}" target="_blank" rel="noopener noreferrer">Ampliar imagen ↗</a></div>` : '<h3 class="sp-review-section-title">Nuestra opinión</h3>'}
+      <h3 class="sp-review-section-title">Nuestra opinión</h3>
       <article class="sp-editorial-body">${reviewRichTextHtml(review.body)}</article>
+      ${screamEditorialGalleryHtml(review)}
     </div></div>`;
   document.getElementById('sp-editorial-footer').innerHTML = `
     <button class="sp-review-share" type="button" onclick="shareScreamEditorialReview('${seasonId}')">${detailShareIcon('share')}<span>Compartir</span></button>
@@ -11694,6 +11721,13 @@ document.addEventListener('keydown', event => {
     if (event.key === 'Escape') closePhotoLightbox();
     if (event.key === 'ArrowLeft') stepPhotoLightbox(-1);
     if (event.key === 'ArrowRight') stepPhotoLightbox(1);
+    if (event.key === 'Tab') {
+      const buttons = [...document.querySelectorAll('#photo-lightbox button')]
+        .filter(el => !el.hidden && !el.disabled);
+      const first = buttons[0], last = buttons[buttons.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    }
     return;
   }
   if (event.key === 'Tab' && document.getElementById('detail-modal')?.classList.contains('open')) {

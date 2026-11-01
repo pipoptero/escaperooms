@@ -95,7 +95,7 @@
 .scream-editorial-card .scream-review-cover{display:block;width:min(100%,180px);aspect-ratio:2/3;object-fit:cover;border:1px solid var(--border);margin-bottom:12px}
 .scream-editorial-card .rv-rank{min-width:0}
 .sp-editorial-footer{display:none}
-.scream-editorial-modal .detail-shell{width:min(1460px,calc(100vw - 28px));height:min(96vh,1020px)}
+.scream-editorial-modal .detail-shell{width:min(1180px,calc(100vw - 28px));height:min(96vh,1020px)}
 .scream-editorial-modal .detail-dialog{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;padding:0;overflow:hidden;background:#0c0e12;border:1px solid #454c45;box-shadow:0 28px 90px #000d,inset 0 0 0 1px #ffffff0b}
 .scream-editorial-modal .detail-close{top:16px;right:16px;width:52px;height:52px;border:1px solid #85977b;background:#101519ed;color:#f5f6f3;font-size:2rem;line-height:1}
 .scream-editorial-modal .detail-close:hover,.scream-editorial-modal .detail-close:focus-visible{border-color:var(--amber);color:var(--amber)}
@@ -115,15 +115,10 @@
 .scream-editorial-modal .sp-review-hero-title span{font:700 .74rem 'Rajdhani',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#d9dfd3}
 .scream-editorial-modal .sp-review-hero-title strong{font:900 clamp(2.5rem,6vw,5.4rem) 'Rajdhani',sans-serif;line-height:.9;letter-spacing:.025em;text-transform:uppercase;color:#f3f0e9}
 .scream-editorial-modal .sp-review-banner{margin:0;border-bottom:1px solid #465044;background:#08090b}
-.scream-editorial-modal .sp-review-banner a{display:block;color:#c9e995;text-decoration:none}
 .scream-editorial-modal .sp-review-banner img{display:block;width:100%;height:auto;aspect-ratio:8/3;object-fit:contain}
-.scream-editorial-modal .sp-review-intro-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
-.scream-editorial-modal .sp-review-intro-head .sp-review-section-title{margin:0}
-.scream-editorial-modal .sp-review-expand{display:inline-flex;align-items:center;min-height:44px;flex:none;color:#c9e995;text-decoration:none;font:700 .78rem 'Rajdhani',sans-serif;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap}
-.scream-editorial-modal .sp-review-expand:hover,.scream-editorial-modal .sp-review-expand:focus-visible{color:#f1f7e8;text-decoration:underline}
 .scream-editorial-modal .detail-content{min-height:0;padding:0;overflow:auto;overscroll-behavior:contain;background:repeating-linear-gradient(90deg,#ffffff02 0,#ffffff02 1px,transparent 1px,transparent 9px),#0e1113}
 .scream-editorial-modal .sp-review-layout{display:block;min-height:100%}
-.scream-editorial-modal .sp-review-main{min-width:0;max-width:920px;margin:auto;padding:24px clamp(20px,3vw,48px) 42px}
+.scream-editorial-modal .sp-review-main{min-width:0;width:100%;margin:0;padding:24px clamp(20px,3vw,44px) 42px}
 .scream-editorial-modal .sp-review-aside{min-width:0;padding:22px;border-left:1px solid #343c38;background:linear-gradient(135deg,#141a1b,#0b0e10)}
 .scream-editorial-modal .sp-review-section{margin:0 0 28px}
 .scream-editorial-modal .sp-review-section-title{margin:0 0 12px;padding:0 0 0 11px;border-left:3px solid var(--amber);color:#e7eae4;font:700 .78rem 'Rajdhani',sans-serif;letter-spacing:.14em;text-transform:uppercase}
@@ -135,7 +130,14 @@
 .scream-editorial-modal .sp-review-fact span{display:block;margin-bottom:6px;color:#a8db66;font:700 .69rem 'Rajdhani',sans-serif;letter-spacing:.13em;text-transform:uppercase}
 .scream-editorial-modal .sp-review-fact strong{display:block;color:#e0e4df;font:500 .89rem/1.35 'Rajdhani',sans-serif;overflow-wrap:anywhere}
 .scream-editorial-modal .sp-review-full{padding-top:7px;border-top:1px solid #3b433e}
-.scream-editorial-modal .sp-editorial-body{max-width:80ch;color:#bfc7c2;font:500 1rem/1.62 'Rajdhani',sans-serif;overflow-wrap:anywhere}
+.scream-editorial-modal .sp-editorial-body{max-width:none;color:#bfc7c2;font:500 1rem/1.62 'Rajdhani',sans-serif;overflow-wrap:anywhere}
+.sp-visit-gallery{margin-top:32px;border-top:1px solid #3b433e;padding-top:22px}
+.sp-visit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.sp-visit-grid a{display:block;min-width:0;border:1px solid #485047;background:#090b0e;overflow:hidden}
+.sp-visit-grid a:hover,.sp-visit-grid a:focus-visible{border-color:var(--amber);outline:2px solid var(--amber);outline-offset:2px}
+.sp-visit-grid img{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:contain;background:#090b0e}
+#scream-parks-app .sp-visit-gallery{margin-top:16px;padding-top:16px}
+#scream-parks-app .sp-visit-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
 .scream-editorial-modal .sp-editorial-body p{margin:0 0 1em}
 .scream-editorial-modal .sp-editorial-body h3,.scream-editorial-modal .sp-editorial-body h4,.scream-editorial-modal .sp-editorial-body h5{color:#f0f2ec;margin:1.35em 0 .52em;line-height:1.2}
 .scream-editorial-modal .sp-editorial-body h3{font:700 1.42rem 'Rajdhani',sans-serif}
@@ -178,6 +180,7 @@
   .scream-editorial-modal .detail-content{min-height:0;padding:0;overflow:auto}
   .scream-editorial-modal .sp-review-layout{grid-template-columns:minmax(0,1fr)}
   .scream-editorial-modal .sp-review-main{padding:20px 16px 28px}
+  .scream-editorial-modal .sp-visit-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
   .scream-editorial-modal .sp-review-aside{border-left:0;border-top:1px solid #343c38;padding:18px 16px 28px}
   .scream-editorial-modal .sp-review-qualities,.scream-editorial-modal .sp-review-facts{grid-template-columns:repeat(2,minmax(0,1fr))}
   .scream-editorial-modal .sp-review-fact{padding:10px}

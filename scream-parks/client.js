@@ -481,6 +481,34 @@
         community.id = 'sp-community';
         aside.append(community);
       }
+      const visitPhotos = editorialFor(entry)?.images;
+      if (Array.isArray(visitPhotos) && visitPhotos.length) {
+        const gallery = panel('NUESTRA VISITA EN IMÁGENES');
+        gallery.classList.add('sp-visit-gallery');
+        const grid = create('div', undefined, 'sp-visit-grid');
+        const key = `scream-editorial-${entry.seasonId}`;
+        window.registerEditorialPhotoGallery?.(key, visitPhotos);
+        visitPhotos.forEach((photo, index) => {
+          if (!photo?.src || !photo?.thumbnail) return;
+          const link = create('a');
+          link.href = photo.src;
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+          link.setAttribute('aria-label', `Ampliar foto ${index + 1} de nuestra visita`);
+          link.onclick = event => window.openPhotoLightbox?.(event, key, index);
+          const image = create('img');
+          image.src = photo.thumbnail;
+          image.alt = photo.alt || 'Foto de nuestra visita a Horrorland';
+          image.loading = 'lazy';
+          image.decoding = 'async';
+          image.width = 450;
+          image.height = 600;
+          link.append(image);
+          grid.append(link);
+        });
+        gallery.append(grid);
+        aside.append(gallery);
+      }
       if (entry.images?.length > 1) {
         const gallery = create('div', undefined, 'sp-gallery');
         for (const source of entry.images.slice(1)) {

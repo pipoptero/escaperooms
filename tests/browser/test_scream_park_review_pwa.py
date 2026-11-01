@@ -36,7 +36,7 @@ class EditorialPwaTests(unittest.TestCase):
                     page.evaluate("navigator.serviceWorker.register('/service-worker.js')")
                     page.wait_for_function("navigator.serviceWorker.controller !== null", timeout=30000)
                     keys = page.evaluate("caches.keys()")
-                    self.assertIn("the-vault-v59-shell", keys)
+                    self.assertIn("the-vault-v60-shell", keys)
                     self.assertNotIn("the-vault-v57-shell", keys)
                     context.set_offline(True)
                     if os.getenv("VAULT_TEST_BROWSER") == "webkit":
