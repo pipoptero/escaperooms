@@ -428,7 +428,7 @@
         play.type = 'button';
         play.dataset.videoSrc = item.src;
         play.setAttribute('aria-label', `Reproducir ${item.title || `vídeo ${index + 1} de nuestra visita`}`);
-        figure.append(video, play, create('figcaption', item.title || `Vídeo ${index + 1} de nuestra visita`));
+        figure.append(video, play);
         mediaGrid.append(figure);
       });
       gallery.append(mediaGrid);

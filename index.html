@@ -2657,6 +2657,7 @@ let GROUP_ROOM_INDEX = { pendientes: new Set(), hechos: new Set() };
 let PHOTO_LIGHTBOX_ITEMS = [];
 let PHOTO_LIGHTBOX_RETURN_FOCUS = null;
 let PHOTO_LIGHTBOX_INDEX = 0;
+let PHOTO_LIGHTBOX_HIDE_CAPTION = false;
 let ACTIVE_TAB = 'thevault';
 let CURRENT_DETAIL_HASH = '';
 const AWARD_CACHE = new Map();
@@ -11208,6 +11209,7 @@ function openPhotoLightbox(event, galleryKey, index = 0) {
   PHOTO_LIGHTBOX_RETURN_FOCUS = event?.currentTarget || document.activeElement;
   PHOTO_LIGHTBOX_ITEMS = photos;
   PHOTO_LIGHTBOX_INDEX = Math.max(0, Math.min(Number(index) || 0, photos.length - 1));
+  PHOTO_LIGHTBOX_HIDE_CAPTION = galleryKey === 'scream-editorial-horrorland-2026';
   renderPhotoLightbox();
   const modal = document.getElementById('photo-lightbox');
   modal.classList.add('open');
@@ -11234,7 +11236,8 @@ function renderPhotoLightbox() {
   if (!photo) return;
   img.src = photo.src || '';
   img.alt = photo.alt || 'Foto del grupo';
-  caption.textContent = photo.alt || 'Foto del grupo';
+  caption.textContent = PHOTO_LIGHTBOX_HIDE_CAPTION ? '' : (photo.alt || 'Foto del grupo');
+  caption.hidden = PHOTO_LIGHTBOX_HIDE_CAPTION;
   count.textContent = `${PHOTO_LIGHTBOX_INDEX + 1} / ${PHOTO_LIGHTBOX_ITEMS.length}`;
   const single = PHOTO_LIGHTBOX_ITEMS.length < 2;
   prev.hidden = single;
@@ -11254,6 +11257,7 @@ function closePhotoLightbox(event) {
   modal.setAttribute('aria-hidden', 'true');
   PHOTO_LIGHTBOX_ITEMS = [];
   PHOTO_LIGHTBOX_INDEX = 0;
+  PHOTO_LIGHTBOX_HIDE_CAPTION = false;
   if (PHOTO_LIGHTBOX_RETURN_FOCUS?.isConnected) PHOTO_LIGHTBOX_RETURN_FOCUS.focus({ preventScroll: true });
   PHOTO_LIGHTBOX_RETURN_FOCUS = null;
   if (!document.getElementById('detail-modal')?.classList.contains('open') && !document.getElementById('profile-modal')?.classList.contains('open')) {
@@ -11583,7 +11587,7 @@ function screamEditorialGalleryHtml(review) {
       </a>`).join('')}${videos.map((item, index) => `
       <figure class="sp-visit-video-card"><video class="sp-visit-video" controls playsinline preload="none" poster="${escapeHtml(item.poster)}" width="${Number(item.width) || 464}" height="${Number(item.height) || 832}" aria-label="${escapeHtml(item.title || `Vídeo ${index + 1} de nuestra visita`)}"></video>
         <button class="sp-visit-play" type="button" data-video-src="${escapeHtml(item.src)}" aria-label="Reproducir ${escapeHtml(item.title || `vídeo ${index + 1} de nuestra visita`)}">▶ Reproducir vídeo</button>
-        <figcaption>${escapeHtml(item.title || `Vídeo ${index + 1} de nuestra visita`)}</figcaption></figure>`).join('')}</div>
+      </figure>`).join('')}</div>
   </section>`;
 }
 

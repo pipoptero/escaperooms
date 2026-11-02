@@ -59,6 +59,7 @@ class ScreamParkReviewSeoTests(unittest.TestCase):
         self.assertEqual(page.count('aria-label="Ampliar foto '), 9)
         self.assertEqual(page.count('<video class="sp-visit-video" controls playsinline preload="none"'), 2)
         self.assertEqual(page.count('class="sp-visit-play" type="button" data-video-src='), 2)
+        self.assertNotIn('<figcaption>Nuestra visita a Horrorland 2026 · vídeo', page)
         self.assertIn('<script src="/scream-parks/visit-video.js" defer></script>', page)
         self.assertEqual(page.count('"@type": "VideoObject"'), 0)  # No verified video upload date.
         self.assertIn('<meta property="og:image:width" content="900">', page)

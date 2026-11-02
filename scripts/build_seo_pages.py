@@ -160,7 +160,6 @@ p { color: var(--text2); }
 .sp-visit-play { display: block; min-height: 44px; width: min(100%, 340px); margin: 8px auto 0; border: 1px solid var(--green); background: #192018; color: var(--green); font: 700 .84rem 'Rajdhani', sans-serif; cursor: pointer; }
 .sp-visit-play:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 .sp-visit-play[hidden] { display: none; }
-.scream-visit-video-card figcaption { padding: 8px 4px 2px; color: var(--green); }
 .video-frame { width: 100%; aspect-ratio: 16/9; display: block; border: 1px solid rgba(125,187,63,.24); background: #050507; }
 .video-frame.portrait { width: min(100%, 340px); aspect-ratio: 9/16; margin-inline: auto; }
 .media-note, .note, .explain { color: var(--text2); }
@@ -1158,7 +1157,7 @@ def scream_park_review_page(review, entry):
             f'aria-label="{escape(item.get("title") or f"Vídeo {index} de nuestra visita")}"></video>'
             f'<button class="sp-visit-play" type="button" data-video-src="{escape(asset_url(item["src"]))}" '
             f'aria-label="Reproducir {escape(item.get("title") or f"vídeo {index} de nuestra visita")}">▶ Reproducir vídeo</button>'
-            f'<figcaption>{escape(item.get("title") or f"Vídeo {index} de nuestra visita")}</figcaption></figure>'
+            f'</figure>'
             for index, item in enumerate(visit_videos, 1)
         )
         visit_gallery = (f'<section class="section" aria-label="Nuestra visita en fotos y vídeos">'

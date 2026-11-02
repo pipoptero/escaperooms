@@ -216,6 +216,7 @@ class V6BrowserTests(unittest.TestCase):
             self.assertIn("Horrorland", page.locator("#sp-detail-content").inner_text())
             self.assertEqual(page.locator("#sp-detail-content .sp-visit-gallery img").count(), 9)
             self.assertEqual(page.locator("#sp-detail-content .sp-visit-video").count(), 2)
+            self.assertEqual(page.locator("#sp-detail-content .sp-visit-video-card figcaption").count(), 0)
             self.assertEqual(page.locator("#sp-detail-content > :last-child").get_attribute("id"), "sp-community")
             self.assertGreater(page.locator("#sp-detail-content #sp-community").evaluate("el => el.getBoundingClientRect().top"),
                                page.locator("#sp-detail-content .sp-visit-gallery").evaluate("el => el.getBoundingClientRect().top"))
@@ -233,6 +234,11 @@ class V6BrowserTests(unittest.TestCase):
             page.locator("#detail-modal.scream-editorial-modal.open").wait_for()
             videos = page.locator("#detail-modal .sp-visit-video")
             self.assertEqual(videos.count(), 2)
+            self.assertEqual(page.locator("#detail-modal .sp-visit-video-card figcaption").count(), 0)
+            page.locator("#detail-modal .sp-visit-grid a").first.click()
+            self.assertTrue(page.locator("#photo-lightbox-caption").is_hidden())
+            self.assertEqual(page.locator("#photo-lightbox-count").inner_text(), "1 / 9")
+            page.locator("#photo-lightbox .photo-lightbox-close").click()
             self.assertEqual(media_requests, [])
             self.assertEqual(videos.evaluate_all("nodes => nodes.map(el => el.currentSrc)"), ["", ""])
             for index in range(2):
@@ -260,6 +266,7 @@ class V6BrowserTests(unittest.TestCase):
             page.goto(base + "/scream-parks/reviews/horrorland-2026/", wait_until="domcontentloaded")
             videos = page.locator(".scream-visit-video-card video")
             self.assertEqual(videos.count(), 2)
+            self.assertEqual(page.locator(".scream-visit-video-card figcaption").count(), 0)
             self.assertEqual(videos.evaluate_all("nodes => nodes.map(el => el.preload)"), ["none", "none"])
             self.assertEqual(videos.evaluate_all("nodes => nodes.map(el => el.currentSrc)"), ["", ""])
             for index in range(2):
