@@ -1135,7 +1135,10 @@ def scream_park_review_page(review, entry):
                     dimensions = cover_image.size
             except OSError:
                 pass  # Omit dimensions rather than announce an unverified size.
-    body_html = review_text_html(review["body"])
+    display_body = review["body"]
+    if season_id == "the-village-2026":
+        display_body = re.sub(r"^#[^\n]*\n\s*", "", display_body, count=1)
+    body_html = review_text_html(display_body)
     visit_photos = [photo for photo in review.get("images", [])
                     if isinstance(photo, dict) and photo.get("src") and photo.get("thumbnail")]
     visit_videos = [item for item in review.get("videos", [])
@@ -1146,7 +1149,7 @@ def scream_park_review_page(review, entry):
             f'<a href="{escape(asset_url(photo["src"]))}" target="_blank" rel="noopener noreferrer" '
             f'aria-label="Ampliar foto {index} de nuestra visita">'
             f'<img src="{escape(asset_url(photo["thumbnail"]))}" '
-            f'alt="{escape(photo.get("alt") or "Foto de nuestra visita a Horrorland")}" '
+            f'alt="{escape(photo.get("alt") or "Foto de nuestra visita")}" '
             f'width="450" height="600" loading="lazy" decoding="async"></a>'
             for index, photo in enumerate(visit_photos, 1)
         )
@@ -1160,8 +1163,9 @@ def scream_park_review_page(review, entry):
             f'</figure>'
             for index, item in enumerate(visit_videos, 1)
         )
-        visit_gallery = (f'<section class="section" aria-label="Nuestra visita en fotos y vídeos">'
-                         f'<h2>Nuestra visita en fotos y vídeos</h2><div class="scream-visit-grid">'
+        media_label = "Nuestra visita en fotos y vídeos" if visit_videos else "Nuestra visita en fotos"
+        visit_gallery = (f'<section class="section" aria-label="{media_label}">'
+                         f'<h2>{media_label}</h2><div class="scream-visit-grid">'
                          f'{photo_links}{video_blocks}</div></section>')
     date_published = text(review.get("publishedAt"))
     schema = {"@context": "https://schema.org", "@type": "Article", "headline": review["title"],

@@ -30,7 +30,7 @@ class ScreamParkReviewSeoTests(unittest.TestCase):
 
     def test_candidate_is_complete_and_isolated(self):
         registry = json.loads((ROOT / "scream-parks/editorial-reviews.json").read_text(encoding="utf-8"))
-        self.assertEqual(len(registry["reviews"]), 1)
+        self.assertEqual(len(registry["reviews"]), 2)
         review = registry["reviews"][0]
         self.assertEqual(review["seasonId"], "horrorland-2026")
         self.assertEqual(review["publishedAt"], "2026-10-26")
@@ -68,9 +68,10 @@ class ScreamParkReviewSeoTests(unittest.TestCase):
         self.assertIn('https://thevaultescape.com/scream-parks/reviews/horrorland-2026/',
                       (ROOT / "sitemap-reviews.xml").read_text(encoding="utf-8"))
         shell = (ROOT / "service-worker.js").read_text(encoding="utf-8")
-        self.assertIn("the-vault-v62", shell)
+        self.assertIn("the-vault-v63", shell)
         self.assertIn("./scream-parks/visit-video.js", shell)
         self.assertIn("./scream-parks/reviews/horrorland-2026/", shell)
+        self.assertIn("./scream-parks/reviews/the-village-2026/", shell)
         app = (ROOT / "index.html").read_text(encoding="utf-8")
         self.assertIn("scream-parks/reviews.js", app)
         self.assertIn("const communityEnabled = FIREBASE_CONFIG.screamReviewsEnabled === true", app)
@@ -81,9 +82,40 @@ class ScreamParkReviewSeoTests(unittest.TestCase):
         stats = {"catalog": 1740, "reviews": 43, "ranking": 948, "locations": 44}
         html = static_home_fallback(stats, [])
         self.assertIn('scream-parks/reviews/horrorland-2026/', html)
+        self.assertIn('scream-parks/reviews/the-village-2026/', html)
         self.assertIn('Review The Vault · Scream Park', html)
         self.assertIn('id="vault-stat-reviews">43</strong>', html)
         self.assertNotIn('THE VAULT SCORE', html)
+
+    def test_the_village_source_media_and_seo_are_exact(self):
+        registry = json.loads((ROOT / "scream-parks/editorial-reviews.json").read_text(encoding="utf-8"))
+        review = next(item for item in registry["reviews"] if item["seasonId"] == "the-village-2026")
+        entries = json.loads((ROOT / "scream-parks/data-2026.json").read_text(encoding="utf-8"))["entries"]
+        entry = next(item for item in entries if item["id"] == "the-village")
+        self.assertEqual(sum(item["id"] == "the-village" for item in entries), 1)
+        self.assertEqual(review["entityId"], "the-village")
+        self.assertEqual(review["visitDate"], None)
+        self.assertEqual(review["sourceSha256"], "b11b8923b7a24cc8fc1482fab849cb291a209fba22babd5f11a6e0352bbd4a05")
+        self.assertEqual(hashlib.sha256(review["body"].encode()).hexdigest(), review["sourceSha256"])
+        self.assertEqual(len(review["images"]), 12)
+        self.assertEqual(review["videos"], [])
+        for photo in review["images"]:
+            for key in ("src", "thumbnail"):
+                path = ROOT / photo[key]
+                self.assertTrue(path.is_file(), photo[key])
+                data = path.read_bytes()
+                self.assertEqual((data[:4], data[8:12]), (b"RIFF", b"WEBP"))
+                self.assertNotIn(b"EXIF", data)
+        page = (ROOT / "scream-parks/reviews/the-village-2026/index.html").read_text(encoding="utf-8")
+        self.assertEqual(page, scream_park_review_page(review, entry))
+        self.assertIn('href="https://thevaultescape.com/scream-parks/reviews/the-village-2026/"', page)
+        self.assertEqual(page.count('aria-label="Ampliar foto '), 12)
+        self.assertNotIn('class="sp-visit-video"', page)
+        self.assertNotIn('ratingValue', page)
+        self.assertNotIn('https://www.tiktok.com/player/v1/', page)
+        self.assertIn('href="/#scream-park/the-village"', page)
+        self.assertEqual((ROOT / "sitemap-reviews.xml").read_text(encoding="utf-8").count(
+            'https://thevaultescape.com/scream-parks/reviews/the-village-2026/'), 1)
 
     def test_draft_and_wrong_identity_cannot_generate_public_page(self):
         entry = {"id": "horrorland", "seasonId": "horrorland-2026", "name": "Horrorland"}

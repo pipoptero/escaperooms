@@ -98,8 +98,7 @@ class V6BrowserTests(unittest.TestCase):
         context, page, errors = self.page(390)
         try:
             page.locator(".vault-latest-grid .vault-latest-card").first.wait_for()
-            self.assertIn("Horrorland", page.locator(".vault-latest-grid .vault-latest-card").first.inner_text())
-            page.locator(".vault-latest-grid .vault-latest-card").first.click()
+            page.locator('.vault-latest-grid button.vault-latest-card[onclick*="horrorland-2026"]').click()
             page.locator("#detail-modal.open").wait_for()
             page.go_back()
             self.assertEqual(page.locator("#detail-modal.open").count(), 0)
@@ -127,9 +126,9 @@ class V6BrowserTests(unittest.TestCase):
                     if capture_dir:
                         Path(capture_dir).mkdir(parents=True, exist_ok=True)
                         page.screenshot(path=str(Path(capture_dir) / f"{self.browser.browser_type.name}-{width}-home.png"))
-                    self.assertIn("Horrorland 2026", page.locator(".vault-latest-grid .vault-latest-card").first.inner_text())
+                    self.assertIn("The Village", page.locator(".vault-latest-grid .vault-latest-card").first.inner_text())
                     self.assertEqual(page.locator(".vault-latest-grid .vault-latest-card").count(), 3)
-                    page.locator(".vault-latest-grid .vault-latest-card").first.click()
+                    page.locator('.vault-latest-grid button.vault-latest-card[onclick*="horrorland-2026"]').click()
                     page.locator("#detail-modal.scream-editorial-modal.open").wait_for()
                     page.wait_for_function("() => document.querySelector('.sp-review-banner img')?.naturalWidth === 2048")
                     if capture_dir:
@@ -179,7 +178,7 @@ class V6BrowserTests(unittest.TestCase):
                     page.keyboard.press("Escape")
                     self.assertEqual(page.locator("#detail-modal.open").count(), 0)
                     page.locator("#tab-hecho").click()
-                    page.locator("#grid-hechos .scream-editorial-card").wait_for()
+                    page.locator("#grid-hechos .scream-editorial-card").first.wait_for()
                     if capture_dir:
                         page.screenshot(path=str(Path(capture_dir) / f"{self.browser.browser_type.name}-{width}-reviews.png"))
                 finally:
@@ -191,7 +190,7 @@ class V6BrowserTests(unittest.TestCase):
             page.locator(".vault-latest-grid .vault-latest-card").first.wait_for()
             page.evaluate("AUTH_USER = {uid:'v61-local-test', displayName:'Prueba'}; renderVaultGuide()")
             page.locator(".vault-home-shell .vault-latest-grid .vault-latest-card").first.wait_for()
-            self.assertIn("Horrorland", page.locator(".vault-home-shell .vault-latest-grid .vault-latest-card").first.inner_text())
+            self.assertIn("The Village", page.locator(".vault-home-shell .vault-latest-grid .vault-latest-card").first.inner_text())
             self.assertEqual(page.locator(".vault-home-shell .vault-latest-grid .vault-latest-card").count(), 3)
             self.assertEqual(errors, [])
         finally:
@@ -201,7 +200,7 @@ class V6BrowserTests(unittest.TestCase):
         context, page, errors = self.page(390, mock=False)
         try:
             page.set_viewport_size({"width": 390, "height": 560})
-            page.locator(".vault-latest-grid .vault-latest-card").first.click()
+            page.locator('.vault-latest-grid button.vault-latest-card[onclick*="horrorland-2026"]').click()
             page.locator("#detail-modal.scream-editorial-modal.open").wait_for()
             content = page.locator("#detail-content")
             self.assertGreater(content.evaluate("el => el.scrollHeight"), content.evaluate("el => el.clientHeight"))
@@ -230,7 +229,7 @@ class V6BrowserTests(unittest.TestCase):
             media_requests = []
             page.on("request", lambda request: media_requests.append(request.url)
                     if "/horrorland-2026-visit/video-" in request.url and request.url.endswith(".mp4") else None)
-            page.locator(".vault-latest-grid .vault-latest-card").first.click()
+            page.locator('.vault-latest-grid button.vault-latest-card[onclick*="horrorland-2026"]').click()
             page.locator("#detail-modal.scream-editorial-modal.open").wait_for()
             videos = page.locator("#detail-modal .sp-visit-video")
             self.assertEqual(videos.count(), 2)
@@ -253,6 +252,71 @@ class V6BrowserTests(unittest.TestCase):
             self.assertEqual(errors, [])
         finally:
             context.close()
+
+    def test_the_village_review_and_visit_gallery(self):
+        for width in (1440, 390):
+            with self.subTest(width=width):
+                context, page, errors = self.page(width, mock=False)
+                try:
+                    captures = os.getenv("VAULT_VILLAGE_CAPTURE_DIR")
+                    if captures:
+                        Path(captures).mkdir(parents=True, exist_ok=True)
+                        page.screenshot(path=str(Path(captures) / f"{self.browser.browser_type.name}-{width}-home.png"))
+                    page.locator('#tab-scream').click()
+                    page.locator('#panel-scream-parks article.card[data-id="the-village"] button').first.click()
+                    page.locator('#sp-detail-content .sp-visit-gallery').wait_for()
+                    self.assertEqual(page.locator('#sp-detail-content .sp-visit-gallery img').count(), 12)
+                    self.assertEqual(page.locator('#sp-detail-content .sp-visit-video').count(), 0)
+                    self.assertIn('NUESTRA VISITA EN FOTOS', page.locator('#sp-detail-content .sp-visit-gallery h2').inner_text().upper())
+                    self.assertNotIn('VÍDEOS', page.locator('#sp-detail-content .sp-visit-gallery h2').inner_text().upper())
+                    self.assertEqual(page.locator('#sp-detail-content > :last-child').get_attribute('id'), 'sp-community')
+                    if captures:
+                        page.screenshot(path=str(Path(captures) / f"{self.browser.browser_type.name}-{width}-detail.png"))
+                    page.get_by_role('button', name='LEER REVIEW COMPLETA').click()
+                    page.locator('#detail-modal.scream-editorial-modal.open').wait_for()
+                    self.assertIn('#scream-park-review/the-village-2026', page.url)
+                    self.assertEqual(page.locator('#detail-modal .sp-review-banner').count(), 0)
+                    self.assertEqual(page.locator('#detail-modal .sp-review-hero img').count(), 1)
+                    body = page.locator('#detail-modal .sp-editorial-body').inner_text()
+                    self.assertGreater(len(body), 14000)
+                    self.assertIn('Familia Krugger', body)
+                    self.assertIn('Panic Test', body)
+                    self.assertIn('The Garage', body)
+                    self.assertIn('¡SIN DUDA!', body)
+                    self.assertNotIn('THE VILLAGE — INSOMNIA', body)
+                    self.assertEqual(page.locator('#detail-modal .sp-visit-gallery img').count(), 12)
+                    self.assertEqual(page.locator('#detail-modal .sp-visit-video').count(), 0)
+                    self.assertEqual(page.locator('#detail-modal .sp-visit-gallery h3').inner_text().upper(), 'NUESTRA VISITA EN FOTOS')
+                    if captures:
+                        page.screenshot(path=str(Path(captures) / f"{self.browser.browser_type.name}-{width}-modal.png"))
+                    page.locator('#detail-modal .sp-visit-gallery a').first.click()
+                    self.assertTrue(page.locator('#photo-lightbox.open').is_visible())
+                    self.assertTrue(page.locator('#photo-lightbox-caption').is_hidden())
+                    page.keyboard.press('ArrowRight')
+                    self.assertEqual(page.locator('#photo-lightbox-count').inner_text(), '2 / 12')
+                    page.keyboard.press('Escape')
+                    self.assertEqual(page.locator('#photo-lightbox.open').count(), 0)
+                    page.locator('#detail-modal .sp-editorial-body p').last.scroll_into_view_if_needed()
+                    if captures:
+                        page.screenshot(path=str(Path(captures) / f"{self.browser.browser_type.name}-{width}-modal-end.png"))
+                    page.locator('#detail-modal .sp-review-return').click()
+                    page.locator('#sp-detail:visible').wait_for()
+                    self.assertEqual(page.locator('#sp-detail-content .sp-visit-gallery img').count(), 12)
+                    self.assertEqual(page.locator('#sp-detail-content > :last-child').get_attribute('id'), 'sp-community')
+                    page.locator('#tab-hecho').click()
+                    page.locator('#grid-hechos .scream-editorial-card').first.wait_for()
+                    self.assertEqual(page.locator('#grid-hechos .scream-editorial-card').count(), 2)
+                    self.assertEqual(page.locator('#grid-hechos .scream-editorial-card').filter(has_text='The Village').count(), 1)
+                    self.assertFalse(page.evaluate('document.documentElement.scrollWidth > document.documentElement.clientWidth'))
+                    page.goto(f'http://127.0.0.1:{self.server.server_port}/scream-parks/reviews/the-village-2026/')
+                    self.assertEqual(page.locator('link[rel="canonical"]').get_attribute('href'),
+                                     'https://thevaultescape.com/scream-parks/reviews/the-village-2026/')
+                    self.assertEqual(page.locator('.scream-visit-grid img').count(), 12)
+                    self.assertEqual(page.locator('.scream-visit-grid').locator('..').locator('h2').inner_text().upper(), 'NUESTRA VISITA EN FOTOS')
+                    self.assertFalse(page.evaluate('document.documentElement.scrollWidth > document.documentElement.clientWidth'))
+                    self.assertEqual(errors, [])
+                finally:
+                    context.close()
 
     def test_seo_page_uses_same_playable_videos(self):
         context, page, errors = self.page(390, mock=False)

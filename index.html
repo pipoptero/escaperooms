@@ -2181,7 +2181,7 @@
         <div class="vault-mini-list"><div class="vault-mini-item"><span>Historial y pendientes</span><strong>✓</strong></div><div class="vault-mini-item"><span>Mapa, XP y logros</span><strong>✓</strong></div><div class="vault-mini-item"><span>Grupos y rutas</span><strong>✓</strong></div><div class="vault-mini-item"><span>Avatares y cosméticos</span><strong>✓</strong></div></div>
       </section>
       <div class="vault-section-head"><div class="vault-section-title">Últimas reviews</div><div class="vault-section-note">Contenido disponible sin iniciar sesión</div></div>
-      <div class="vault-latest-grid"><a class="vault-latest-card" href="scream-parks/reviews/horrorland-2026/" onclick="if(window.openScreamEditorialReview){event.preventDefault();openScreamEditorialReview('horrorland-2026')}"><span class="vault-latest-img"><img src="images/scream-parks/horrorland.jpg" alt="" width="78" height="104"></span><span><span class="vault-latest-kicker">Review The Vault · Scream Park</span><strong class="vault-latest-name">Horrorland 2026</strong><span class="vault-latest-meta">Vilassar de Dalt</span></span></a><a class="vault-latest-card" href="reviews/cronologic-la-creacion/"><span class="vault-latest-img"><span>C</span></span><span><span class="vault-latest-kicker">Cronologic</span><strong class="vault-latest-name">Cronologic: La Creacion</strong><span class="vault-latest-meta">Barcelona - Barcelona</span></span></a><a class="vault-latest-card" href="reviews/la-vitrina/"><span class="vault-latest-img"><span>L</span></span><span><span class="vault-latest-kicker">Malorial Experience</span><strong class="vault-latest-name">La Vitrina</strong><span class="vault-latest-meta">Terrassa - Barcelona</span></span></a></div>
+      <div class="vault-latest-grid"><a class="vault-latest-card" href="scream-parks/reviews/the-village-2026/" onclick="if(window.openScreamEditorialReview){event.preventDefault();openScreamEditorialReview('the-village-2026')}"><span class="vault-latest-img"><img src="images/scream-parks/the-village.jpg" alt="" width="78" height="104"></span><span><span class="vault-latest-kicker">Review The Vault · Scream Park</span><strong class="vault-latest-name">The Village — Insomnia Escape &amp; Scream Park 2026</strong><span class="vault-latest-meta">Entorno de Berga</span></span></a><a class="vault-latest-card" href="scream-parks/reviews/horrorland-2026/" onclick="if(window.openScreamEditorialReview){event.preventDefault();openScreamEditorialReview('horrorland-2026')}"><span class="vault-latest-img"><img src="images/scream-parks/horrorland.jpg" alt="" width="78" height="104"></span><span><span class="vault-latest-kicker">Review The Vault · Scream Park</span><strong class="vault-latest-name">Horrorland 2026</strong><span class="vault-latest-meta">Vilassar de Dalt</span></span></a><a class="vault-latest-card" href="reviews/cronologic-la-creacion/"><span class="vault-latest-img"><span>C</span></span><span><span class="vault-latest-kicker">Cronologic</span><strong class="vault-latest-name">Cronologic: La Creacion</strong><span class="vault-latest-meta">Barcelona - Barcelona</span></span></a></div>
       <!-- STATIC_HOME_END --></div>
     </div>
 
@@ -2349,7 +2349,7 @@
   <footer class="seo-footer" aria-label="Enlaces de reviews">
     <div class="seo-footer-inner">
       <span class="rights">&copy; 2026 The Vault Escape. Todos los derechos reservados.</span>
-      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v62</span>
+      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v63</span>
       <span>Reviews de escape rooms con URL propia</span>
       <a href="ranking-escape-rooms/">Ranking escape rooms España</a>
       <a href="mejores-escape-rooms/">Mejores escape rooms</a>
@@ -11209,7 +11209,7 @@ function openPhotoLightbox(event, galleryKey, index = 0) {
   PHOTO_LIGHTBOX_RETURN_FOCUS = event?.currentTarget || document.activeElement;
   PHOTO_LIGHTBOX_ITEMS = photos;
   PHOTO_LIGHTBOX_INDEX = Math.max(0, Math.min(Number(index) || 0, photos.length - 1));
-  PHOTO_LIGHTBOX_HIDE_CAPTION = galleryKey === 'scream-editorial-horrorland-2026';
+  PHOTO_LIGHTBOX_HIDE_CAPTION = galleryKey.startsWith('scream-editorial-');
   renderPhotoLightbox();
   const modal = document.getElementById('photo-lightbox');
   modal.classList.add('open');
@@ -11220,8 +11220,10 @@ function openPhotoLightbox(event, galleryKey, index = 0) {
 
 function registerEditorialPhotoGallery(key, photos) {
   if (!/^scream-editorial-[a-z0-9-]+$/.test(key) || !Array.isArray(photos)) return;
+  const root = `images/scream-parks/${key.slice('scream-editorial-'.length)}-visit/`;
   PHOTO_LIGHTBOX_GALLERIES[key] = photos.filter(photo =>
-    photo && /^images\/scream-parks\/horrorland-2026-visit\/visit-\d{2}\.webp$/.test(photo.src));
+    photo && typeof photo.src === 'string' && photo.src.startsWith(root)
+    && /^visit-\d{2}\.webp$/.test(photo.src.slice(root.length)));
 }
 
 function renderPhotoLightbox() {
@@ -11551,6 +11553,12 @@ function screamReviewIntro(body) {
   return opening.split(/\n\s*\n/).filter(part => part.trim() && !part.trim().startsWith('#')).slice(0, 4).join('\n\n');
 }
 
+function screamEditorialBodyForDisplay(review) {
+  const body = String(review?.body || '');
+  // The Village's source starts with the same headline shown by the modal and SEO page.
+  return review?.seasonId === 'the-village-2026' ? body.replace(/^#[^\n]*\n\s*/, '') : body;
+}
+
 function screamReviewLabeledLines(body, heading) {
   const lines = String(body || '').split('\n');
   const start = lines.findIndex(line => {
@@ -11579,11 +11587,12 @@ function screamEditorialGalleryHtml(review) {
   if (!photos.length && !videos.length) return '';
   const key = `scream-editorial-${review.seasonId}`;
   registerEditorialPhotoGallery(key, photos);
-  return `<section class="sp-visit-gallery" aria-label="Nuestra visita en fotos y vídeos">
-    <h3 class="sp-review-section-title">Nuestra visita en fotos y vídeos</h3>
+  const mediaLabel = videos.length ? 'Nuestra visita en fotos y vídeos' : 'Nuestra visita en fotos';
+  return `<section class="sp-visit-gallery" aria-label="${mediaLabel}">
+    <h3 class="sp-review-section-title">${mediaLabel}</h3>
     <div class="sp-visit-grid">${photos.map((photo, index) => `
       <a href="${escapeHtml(photo.src)}" target="_blank" rel="noopener noreferrer" onclick="openPhotoLightbox(event, '${key}', ${index})" aria-label="Ampliar foto ${index + 1} de nuestra visita">
-        <img src="${escapeHtml(photo.thumbnail)}" alt="${escapeHtml(photo.alt || 'Foto de nuestra visita a Horrorland')}" loading="lazy" decoding="async" width="450" height="600">
+        <img src="${escapeHtml(photo.thumbnail)}" alt="${escapeHtml(photo.alt || 'Foto de nuestra visita')}" loading="lazy" decoding="async" width="450" height="600">
       </a>`).join('')}${videos.map((item, index) => `
       <figure class="sp-visit-video-card"><video class="sp-visit-video" controls playsinline preload="none" poster="${escapeHtml(item.poster)}" width="${Number(item.width) || 464}" height="${Number(item.height) || 832}" aria-label="${escapeHtml(item.title || `Vídeo ${index + 1} de nuestra visita`)}"></video>
         <button class="sp-visit-play" type="button" data-video-src="${escapeHtml(item.src)}" aria-label="Reproducir ${escapeHtml(item.title || `vídeo ${index + 1} de nuestra visita`)}">▶ Reproducir vídeo</button>
@@ -11632,8 +11641,8 @@ async function openScreamEditorialReview(seasonId, options = {}) {
       <img src="${bannerUrl}" width="2048" height="768" alt="Banner promocional de ${escapeHtml(label)} con experiencias y modalidades de entrada" decoding="async" onerror="this.closest('.sp-review-banner').hidden=true">
       </figure>` : ''}
     <div class="sp-review-layout"><div class="sp-review-main">
-      <h3 class="sp-review-section-title">Nuestra opinión</h3>
-      <article class="sp-editorial-body">${reviewRichTextHtml(review.body)}</article>
+      ${seasonId === 'the-village-2026' ? '' : '<h3 class="sp-review-section-title">Nuestra opinión</h3>'}
+      <article class="sp-editorial-body">${reviewRichTextHtml(screamEditorialBodyForDisplay(review))}</article>
       ${screamEditorialGalleryHtml(review)}
     </div></div>`;
   document.getElementById('sp-editorial-footer').innerHTML = `

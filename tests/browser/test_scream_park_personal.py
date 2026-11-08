@@ -177,11 +177,15 @@ class ScreamParkPersonalTests(unittest.TestCase):
         context = self.browser.new_context(service_workers='allow')
         page = context.new_page()
         try:
-            page.goto(f'http://127.0.0.1:{self.server.server_port}/', wait_until='domcontentloaded')
+            # The app registers the worker itself on load. Use the static review
+            # page so this cache assertion has one registration, not a race with
+            # the app's update/reload handler in WebKit.
+            page.goto(f'http://127.0.0.1:{self.server.server_port}/scream-parks/reviews/the-village-2026/',
+                      wait_until='domcontentloaded')
             cached = page.evaluate("""async () => {
               await navigator.serviceWorker.register('/service-worker.js');
               await navigator.serviceWorker.ready;
-              const shell = await caches.open('the-vault-v62-shell');
+              const shell = await caches.open('the-vault-v63-shell');
               return !!(await shell.match('/scream-parks/personal-state.js'));
             }""")
             self.assertTrue(cached)

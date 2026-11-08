@@ -64,6 +64,11 @@
       return editorialReviews.find(review => review.entityId === entry.id && review.seasonId === entry.seasonId);
     }
 
+    function editorialBodyForDisplay(review) {
+      const body = String(review?.body || '');
+      return review?.seasonId === 'the-village-2026' ? body.replace(/^#[^\n]*\n\s*/, '') : body;
+    }
+
     function reviewDocument(entry, review) {
       const section = create('article', undefined, 'sp-editorial-full');
       const back = create('button', `← Volver a ${entry.name}`, 'back');
@@ -77,7 +82,7 @@
         create('h1', review.title), create('p', review.status === 'DRAFT' ? 'BORRADOR PRIVADO · NO PUBLICADO' : 'REVIEW THE VAULT', 'sp-review-label'));
       const body = create('div', undefined, 'sp-editorial-body');
       // The shared editorial renderer escapes source text before adding markup.
-      body.innerHTML = window.TheVaultEditorialReview.renderEditorialReview(review.body);
+      body.innerHTML = window.TheVaultEditorialReview.renderEditorialReview(editorialBodyForDisplay(review));
       section.append(body);
       return section;
     }
@@ -89,7 +94,7 @@
       section.classList.add('sp-editorial-preview');
       section.append(create('h3', review.title));
       if (review.status === 'DRAFT') section.append(create('p', 'Borrador privado · no publicado', 'sp-review-label'));
-      const excerpt = window.TheVaultEditorialReview.excerptEditorialReview(review.body, 720);
+      const excerpt = window.TheVaultEditorialReview.excerptEditorialReview(editorialBodyForDisplay(review), 720);
       const body = create('div', undefined, 'sp-editorial-body');
       body.innerHTML = window.TheVaultEditorialReview.renderEditorialReview(excerpt.text);
       section.append(body);
@@ -390,7 +395,7 @@
       const photos = Array.isArray(review?.images) ? review.images : [];
       const videos = Array.isArray(review?.videos) ? review.videos : [];
       if (!photos.length && !videos.length) return null;
-      const gallery = panel('NUESTRA VISITA EN FOTOS Y VÍDEOS');
+      const gallery = panel(videos.length ? 'NUESTRA VISITA EN FOTOS Y VÍDEOS' : 'NUESTRA VISITA EN FOTOS');
       gallery.classList.add('sp-visit-gallery');
       const mediaGrid = create('div', undefined, 'sp-visit-grid');
       const key = `scream-editorial-${entry.seasonId}`;
@@ -405,7 +410,7 @@
         link.onclick = event => window.openPhotoLightbox?.(event, key, index);
         const image = create('img');
         image.src = photo.thumbnail;
-        image.alt = photo.alt || 'Foto de nuestra visita a Horrorland';
+        image.alt = photo.alt || 'Foto de nuestra visita';
         image.loading = 'lazy';
         image.decoding = 'async';
         image.width = 450;
