@@ -2260,9 +2260,8 @@
     <div id="panel-hechos" class="panel" style="display:none">
       <div class="sort-row" role="group" aria-label="Tipo de review">
         <span class="filter-label">Reviews:</span>
-        <button class="sort-btn active" type="button" data-review-type="all" onclick="setReviewTypeFilter('all')">Todos</button>
-        <button class="sort-btn" type="button" data-review-type="escape" onclick="setReviewTypeFilter('escape')">Escape Rooms</button>
-        <button class="sort-btn" type="button" data-review-type="scream" onclick="setReviewTypeFilter('scream')">Scream Parks</button>
+        <button class="sort-btn active" type="button" data-review-type="escape" aria-pressed="true" onclick="setReviewTypeFilter('escape')">Escape Rooms</button>
+        <button class="sort-btn" type="button" data-review-type="scream" aria-pressed="false" onclick="setReviewTypeFilter('scream')">Scream Parks</button>
       </div>
       <div class="filters">
         <span class="filter-label">Filtrar:</span>
@@ -2349,7 +2348,7 @@
   <footer class="seo-footer" aria-label="Enlaces de reviews">
     <div class="seo-footer-inner">
       <span class="rights">&copy; 2026 The Vault Escape. Todos los derechos reservados.</span>
-      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v63</span>
+      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v64</span>
       <span>Reviews de escape rooms con URL propia</span>
       <a href="ranking-escape-rooms/">Ranking escape rooms España</a>
       <a href="mejores-escape-rooms/">Mejores escape rooms</a>
@@ -2759,7 +2758,7 @@ let ADMIN_EDITING_DRAFT_ID = '';
 let STATIC_PUBLISHED_REVIEWS = {};
 let SCREAM_EDITORIAL_REVIEWS = [];
 let SCREAM_EDITORIAL_REQUEST = null;
-let REVIEW_TYPE_FILTER = 'all';
+let REVIEW_TYPE_FILTER = 'escape';
 let ADMIN_PUBLISHED_REVIEWS = {};
 let REVIEW_ROOMS_CACHE = null;
 let USER_GROUPS = {};
@@ -8600,7 +8599,12 @@ function loadScreamParkEntries() {
 
 function screamParkSavedCard(entry, stateLabel) {
   const image = entry.images?.[0] || 'images/brand/icon-round-192.png';
-  return `<article class="sp-saved-card"><img src="${escapeHtml(image)}" alt="" loading="lazy"><div><span>${escapeHtml(entry.typeLabel || 'Scream Park')} · ${escapeHtml(entry.seasonId.slice(-4))}</span><strong>${escapeHtml(entry.name)}</strong><small>${escapeHtml(stateLabel)}</small><button class="auth-btn secondary" type="button" onclick="openScreamParkFromLists('${jsString(entry.id)}')">Ver ficha</button></div></article>`;
+  const state = window.VaultScreamParkStates.current(entry);
+  const actions = ['pending', 'done'].map(action => {
+    const label = action === 'done' ? (state.done ? 'Quitar hecho' : 'Hecho por mí') : (state.pending ? 'Quitar pendiente' : 'Pendiente');
+    return `<button class="sp-saved-state${state[action] ? ' active' : ''}" type="button" aria-pressed="${state[action]}" onclick="transitionScreamParkFromLists('${jsString(entry.id)}','${jsString(entry.seasonId)}','${action}',this)">${label}</button>`;
+  }).join('');
+  return `<article class="sp-saved-card"><img src="${escapeHtml(image)}" alt="" loading="lazy"><div><span>${escapeHtml(entry.typeLabel || 'Scream Park')} · ${escapeHtml(entry.seasonId.slice(-4))}</span><strong>${escapeHtml(entry.name)}</strong><small>${escapeHtml(stateLabel)}</small><div class="sp-saved-actions"><button class="auth-btn secondary" type="button" onclick="openScreamParkFromLists('${jsString(entry.id)}','${jsString(entry.seasonId)}')">Ver ficha</button>${actions}</div><span class="sp-saved-status" role="status"></span></div></article>`;
 }
 
 function screamParkProfileHtml() {
@@ -8629,8 +8633,19 @@ function renderScreamParkLists() {
   if (profile) profile.outerHTML = screamParkProfileHtml();
 }
 
-function openScreamParkFromLists(entityId) {
-  const entry = window.VaultScreamParkStates.entries.find(item => item.id === entityId);
+async function transitionScreamParkFromLists(entityId, seasonId, action, button) {
+  const store = window.VaultScreamParkStates;
+  const entry = store.entries.find(item => item.id === entityId && item.seasonId === seasonId);
+  if (!entry || !store.authenticated || !['done', 'pending'].includes(action)) return;
+  const status = button.closest('.sp-saved-card').querySelector('.sp-saved-status');
+  button.disabled = true;
+  status.textContent = 'Guardando…';
+  try { await store.transition(entry, action); }
+  catch (error) { button.disabled = false; status.textContent = `No se pudo guardar. ${error.message}`; }
+}
+
+function openScreamParkFromLists(entityId, seasonId) {
+  const entry = window.VaultScreamParkStates.entries.find(item => item.id === entityId && item.seasonId === seasonId);
   if (!entry) return;
   switchTab('scream-parks');
   mountScreamParksPreview()?.open(entityId);
@@ -12042,8 +12057,15 @@ function renderMisHechos() {
 }
 
 function setReviewTypeFilter(type) {
-  REVIEW_TYPE_FILTER = ['all', 'escape', 'scream'].includes(type) ? type : 'all';
-  document.querySelectorAll('[data-review-type]').forEach(button => button.classList.toggle('active', button.dataset.reviewType === REVIEW_TYPE_FILTER));
+  REVIEW_TYPE_FILTER = type === 'scream' ? 'scream' : 'escape';
+  document.querySelectorAll('[data-review-type]').forEach(button => {
+    const active = button.dataset.reviewType === REVIEW_TYPE_FILTER;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-pressed', String(active));
+  });
+  const difficulty = document.getElementById('filter-dif-hecho');
+  difficulty.disabled = REVIEW_TYPE_FILTER === 'scream';
+  difficulty.hidden = REVIEW_TYPE_FILTER === 'scream';
   renderHechos();
 }
 
@@ -12083,15 +12105,17 @@ function renderHechos() {
     return (a.nombre || '').localeCompare(b.nombre || '');
   });
 
-  const scream = SCREAM_EDITORIAL_REVIEWS.filter(review => {
-    if (d) return false;
-    const entry = window.VaultScreamParkStates?.entries?.find(item => item.id === review.entityId);
-    return textMatchesSearch([review.title, entry?.name || '', entry?.city || ''], s);
-  });
-  const visibleEscape = REVIEW_TYPE_FILTER === 'scream' ? [] : f;
-  const visibleScream = REVIEW_TYPE_FILTER === 'escape' ? [] : scream;
-  document.getElementById('result-info-hecho').textContent = `${visibleEscape.length + visibleScream.length} reviews · ${visibleEscape.length} Escape Rooms · ${visibleScream.length} Scream Parks`;
-  document.getElementById('grid-hechos').innerHTML = [...visibleScream.map(screamEditorialCard), ...visibleEscape.map((h, i) => cardHecho(h, i + 1))].join('');
+  if (REVIEW_TYPE_FILTER === 'scream') {
+    const scream = SCREAM_EDITORIAL_REVIEWS.filter(review => {
+      const entry = window.VaultScreamParkStates?.entries?.find(item => item.id === review.entityId && item.seasonId === review.seasonId);
+      return textMatchesSearch([review.title, entry?.name || '', entry?.city || ''], s);
+    });
+    document.getElementById('result-info-hecho').textContent = `${scream.length} reviews · Scream Parks`;
+    document.getElementById('grid-hechos').innerHTML = scream.map(screamEditorialCard).join('');
+  } else {
+    document.getElementById('result-info-hecho').textContent = `${f.length} reviews · Escape Rooms`;
+    document.getElementById('grid-hechos').innerHTML = f.map((h, i) => cardHecho(h, i + 1)).join('');
+  }
 }
 
 function renderCatalogo() {

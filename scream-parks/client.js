@@ -317,21 +317,26 @@
       const store = window.VaultScreamParkStates;
       const section = create('section', undefined, compact ? 'sp-personal compact' : 'sp-personal');
       if (!store?.authenticated) {
-        if (!compact) section.append(create('p', 'Entra con Google para guardar este parque y su edición en tus listas.', 'sp-personal-hint'));
+        section.append(create('p', 'Inicia sesión con Google para marcar Hecho o Pendiente.', 'sp-personal-hint'));
+        const signIn = create('button', 'Entrar con Google', 'sp-personal-login');
+        signIn.type = 'button';
+        signIn.onclick = event => { event.stopPropagation(); window.signInGoogle?.(); };
+        section.append(signIn);
         return section;
       }
       const state = store.current(entry);
       if (!compact) section.append(create('h2', `Mi edición ${entry.seasonId.slice(-4)}`));
       const actions = create('div', undefined, 'sp-personal-actions');
       for (const [action, label, activeLabel] of [
-        ['done', 'Hecho', '✓ Hecho'], ['pending', 'Pendiente', '✓ Pendiente'],
+        ['done', 'Hecho por mí', 'Quitar hecho'], ['pending', 'Pendiente', 'Quitar pendiente'],
         ['favorite', 'Favorito', '♥ Favorito']
       ]) {
         const button = create('button', state[action] ? activeLabel : label, `sp-state-button ${action}${state[action] ? ' active' : ''}`);
         button.type = 'button';
         button.setAttribute('aria-pressed', String(state[action]));
-        button.setAttribute('aria-label', `${label}: ${entry.name}${action === 'favorite' ? '' : `, edición ${entry.seasonId.slice(-4)}`}`);
-        button.onclick = async () => {
+        button.setAttribute('aria-label', `${state[action] ? activeLabel : label}: ${entry.name}${action === 'favorite' ? '' : `, edición ${entry.seasonId.slice(-4)}`}`);
+        button.onclick = async event => {
+          event.stopPropagation();
           button.disabled = true;
           status.textContent = 'Guardando…';
           try { await store.transition(entry, action); }
@@ -365,7 +370,7 @@
       button.type = 'button';
       button.onclick = () => showDetail(entry.id);
       bottom.append(button);
-      if (window.VaultScreamParkStates?.authenticated) bottom.append(personalControls(entry, true));
+      bottom.append(personalControls(entry, true));
       body.append(bottom);
       article.append(art, body);
       return article;

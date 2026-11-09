@@ -97,14 +97,22 @@ class ScreamParkPersonalTests(unittest.TestCase):
                     page.locator('#panel-scream-parks article.card').first.wait_for()
                     self.assertEqual(page.locator('#panel-scream-parks article.card').count(), 22)
                     self.assertEqual(page.locator('#panel-scream-parks .sp-state-button').count(), 0)
+                    self.assertEqual(page.locator('#panel-scream-parks .sp-personal-login').count(), 22)
+                    self.assertIn('Inicia sesión con Google', page.locator('#panel-scream-parks article.card').first.inner_text())
+                    page.evaluate("() => { window.__loginClicks = 0; window.signInGoogle = () => { window.__loginClicks++; }; }")
+                    page.locator('#panel-scream-parks article.card').first.locator('.sp-personal-login').click()
+                    self.assertEqual(page.evaluate('window.__loginClicks'), 1)
+                    self.assertTrue(page.locator('#sp-detail').is_hidden())
                     backend = {'data': {}, 'fail': False}
                     self.install_fake_account(context, page, backend)
                     card = page.locator('#panel-scream-parks article.card[data-id="the-village"]')
                     card.locator('.sp-state-button.pending').click()
                     page.wait_for_function("() => document.querySelector('.card[data-id=\"the-village\"] .sp-state-button.pending')?.getAttribute('aria-pressed') === 'true'")
+                    self.assertTrue(page.locator('#sp-detail').is_hidden())
                     self.assertEqual(backend['data']['screamParkUserStates/alice/editions/the-village-2026']['pending'], True)
                     page.evaluate("switchTab('pendientes')")
                     self.assertEqual(page.locator('#sp-pending-count').inner_text(), '1')
+                    self.assertEqual(page.locator('#sp-pending-list .sp-saved-state.active').inner_text(), 'Quitar pendiente')
                     page.evaluate("document.querySelector('#sp-pending-list')?.scrollIntoView()")
                     page.screenshot(path=str(ARTIFACTS / f'{self.browser_name}-{width}-pending.png'))
                     page.evaluate("switchTab('scream-parks')")
@@ -122,6 +130,17 @@ class ScreamParkPersonalTests(unittest.TestCase):
                     page.locator('#sp-back').click()
                     page.evaluate("switchTab('mis-hechos')")
                     self.assertEqual(page.locator('#sp-done-count').inner_text(), '1')
+                    self.assertEqual(page.locator('#sp-done-list .sp-saved-state.active').inner_text(), 'Quitar hecho')
+                    page.locator('#sp-done-list .sp-saved-state.active').click()
+                    page.wait_for_function("() => document.querySelector('#sp-done-count')?.textContent === '0'")
+                    self.assertNotIn('screamParkUserStates/alice/editions/the-village-2026', backend['data'])
+                    page.evaluate("switchTab('scream-parks')")
+                    card.locator('.sp-state-button.pending').click()
+                    page.wait_for_function("() => document.querySelector('.card[data-id=\"the-village\"] .sp-state-button.pending')?.getAttribute('aria-pressed') === 'true'")
+                    page.evaluate("switchTab('pendientes')")
+                    page.locator('#sp-pending-list .sp-saved-state:not(.active)').click()
+                    page.wait_for_function("() => document.querySelector('#sp-done-count')?.textContent === '1'")
+                    self.assertEqual(page.locator('#sp-pending-count').inner_text(), '0')
                     self.assertEqual(page.locator('#badge-mine').inner_text(), '0')
                     page.evaluate("switchTab('pendientes')")
                     self.assertEqual(page.locator('#sp-pending-count').inner_text(), '0')
@@ -185,7 +204,7 @@ class ScreamParkPersonalTests(unittest.TestCase):
             cached = page.evaluate("""async () => {
               await navigator.serviceWorker.register('/service-worker.js');
               await navigator.serviceWorker.ready;
-              const shell = await caches.open('the-vault-v63-shell');
+              const shell = await caches.open('the-vault-v64-shell');
               return !!(await shell.match('/scream-parks/personal-state.js'));
             }""")
             self.assertTrue(cached)
