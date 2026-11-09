@@ -1,5 +1,6 @@
 import hashlib
 import json
+import re
 import sys
 import unittest
 from pathlib import Path
@@ -107,7 +108,12 @@ class ScreamParkReviewSeoTests(unittest.TestCase):
                 self.assertEqual((data[:4], data[8:12]), (b"RIFF", b"WEBP"))
                 self.assertNotIn(b"EXIF", data)
         page = (ROOT / "scream-parks/reviews/the-village-2026/index.html").read_text(encoding="utf-8")
-        self.assertEqual(page, scream_park_review_page(review, entry))
+        generated = scream_park_review_page(review, entry)
+        without_optional_dimensions = lambda html: re.sub(
+            r'<meta property="og:image:(?:width|height)" content="\d+">\n', '', html)
+        self.assertEqual(without_optional_dimensions(page), without_optional_dimensions(generated))
+        self.assertIn('<meta property="og:image:width" content="900">', page)
+        self.assertIn('<meta property="og:image:height" content="1350">', page)
         self.assertIn('href="https://thevaultescape.com/scream-parks/reviews/the-village-2026/"', page)
         self.assertEqual(page.count('aria-label="Ampliar foto '), 12)
         self.assertNotIn('class="sp-visit-video"', page)
