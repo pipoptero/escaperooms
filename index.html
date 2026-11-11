@@ -2348,7 +2348,7 @@
   <footer class="seo-footer" aria-label="Enlaces de reviews">
     <div class="seo-footer-inner">
       <span class="rights">&copy; 2026 The Vault Escape. Todos los derechos reservados.</span>
-      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v64</span>
+      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v65</span>
       <span>Reviews de escape rooms con URL propia</span>
       <a href="ranking-escape-rooms/">Ranking escape rooms España</a>
       <a href="mejores-escape-rooms/">Mejores escape rooms</a>
@@ -3957,6 +3957,7 @@ async function initFirebaseAuth() {
       AUTH_USER = user;
       USER_ID = user ? user.uid : LOCAL_USER_ID;
       AUTH_TOKEN = user ? await user.getIdToken() : '';
+      window.VaultScreamParkStates?.setSession(user?.uid || null);
       setAuthFlowState(user ? 'authenticated' : (redirectFailureCode ? 'error' : 'unauthenticated'), user ? '' : redirectFailureCode);
       renderAuthStatus();
       off();
@@ -3968,20 +3969,26 @@ async function initFirebaseAuth() {
   });
 }
 
-async function refreshSignedSession() {
-  if (AUTH_USER) AUTH_TOKEN = await AUTH_USER.getIdToken();
-  await loadUserRoomStates();
-  window.VaultScreamParkStates.setSession(AUTH_USER?.uid || null);
-  window.TheVaultScreamParksPreview?.current?.reloadReviews?.()?.catch(error =>
-    console.warn('No se pudieron cargar las opiniones de esta edición:', error.message));
+async function refreshScreamParkPersonalState() {
+  const store = window.VaultScreamParkStates;
+  if (!store) return;
+  store.setSession(AUTH_USER?.uid || null);
   if (AUTH_USER) {
     try {
       await loadScreamParkEntries();
-      await window.VaultScreamParkStates.load();
+      await store.load();
     } catch (error) {
       console.warn('No se pudieron sincronizar tus Scream Parks:', error.message);
     }
   }
+}
+
+async function refreshSignedSession() {
+  if (AUTH_USER) AUTH_TOKEN = await AUTH_USER.getIdToken();
+  await refreshScreamParkPersonalState();
+  await loadUserRoomStates();
+  window.TheVaultScreamParksPreview?.current?.reloadReviews?.()?.catch(error =>
+    console.warn('No se pudieron cargar las opiniones de esta edición:', error.message));
   await loadUserProfile();
   await loadAdminRole();
   await loadAdminReviewDrafts();
@@ -9352,6 +9359,7 @@ async function refreshLiveData({ force = false, reason = 'auto' } = {}) {
   LIVE_REFRESH_IN_PROGRESS = true;
   try {
     await initFirebaseAuth();
+    await refreshScreamParkPersonalState();
     await loadUserRoomStates();
     await loadUserProfile();
     await loadAdminRole();

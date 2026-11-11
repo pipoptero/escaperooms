@@ -326,15 +326,14 @@
       }
       const state = store.current(entry);
       if (!compact) section.append(create('h2', `Mi edición ${entry.seasonId.slice(-4)}`));
-      const actions = create('div', undefined, 'sp-personal-actions');
+      const actions = create('div', undefined, 'sp-personal-actions personal-actions');
       for (const [action, label, activeLabel] of [
-        ['done', 'Hecho por mí', 'Quitar hecho'], ['pending', 'Pendiente', 'Quitar pendiente'],
-        ['favorite', 'Favorito', '♥ Favorito']
+        ['done', 'Hecho por mí', 'Quitar hecho'], ['pending', 'Pendiente', 'Quitar pendiente']
       ]) {
-        const button = create('button', state[action] ? activeLabel : label, `sp-state-button ${action}${state[action] ? ' active' : ''}`);
+        const button = create('button', state[action] ? activeLabel : label, `sp-state-button personal-btn ${action}${state[action] ? ' active' : ''}`);
         button.type = 'button';
         button.setAttribute('aria-pressed', String(state[action]));
-        button.setAttribute('aria-label', `${state[action] ? activeLabel : label}: ${entry.name}${action === 'favorite' ? '' : `, edición ${entry.seasonId.slice(-4)}`}`);
+        button.setAttribute('aria-label', `${state[action] ? activeLabel : label}: ${entry.name}, edición ${entry.seasonId.slice(-4)}`);
         button.onclick = async event => {
           event.stopPropagation();
           button.disabled = true;
@@ -352,12 +351,37 @@
       section.append(actions, status);
       return section;
     }
+    function favoriteControl(entry) {
+      const store = window.VaultScreamParkStates;
+      const active = !!store?.authenticated && store.current(entry).favorite;
+      const button = create('button', '♥', `sp-card-favorite${active ? ' active' : ''}`);
+      button.type = 'button';
+      button.title = store?.authenticated ? (active ? 'Quitar de favoritos' : 'Añadir a favoritos') : 'Entra con Google para guardar favoritos';
+      button.setAttribute('aria-label', store?.authenticated
+        ? `${active ? 'Quitar de favoritos' : 'Añadir a favoritos'}: ${entry.name}`
+        : `Entrar con Google para marcar favorito: ${entry.name}`);
+      if (store?.authenticated) button.setAttribute('aria-pressed', String(active));
+      const status = create('span', '', 'sp-card-favorite-status');
+      status.setAttribute('role', 'status');
+      button.onclick = async event => {
+        event.stopPropagation();
+        if (!store?.authenticated) { window.signInGoogle?.(); return; }
+        button.disabled = true;
+        status.textContent = 'Guardando…';
+        try { await store.transition(entry, 'favorite'); }
+        catch (error) {
+          button.disabled = false;
+          status.textContent = `No se pudo guardar. ${error.message}`;
+        }
+      };
+      return [button, status];
+    }
     function card(entry) {
       const article = create('article', undefined, 'card');
       article.dataset.id = entry.id;
       const art = create('div', undefined, 'card-art');
       if (entry.images?.length) art.classList.add('has-cover');
-      art.append(coverImage(entry));
+      art.append(coverImage(entry), ...favoriteControl(entry));
       const body = create('div', undefined, 'card-body');
       body.append(create('div', entry.typeLabel, 'kicker'), create('h3', entry.name));
       const location = [entry.city, entry.province || entry.region, entry.country].filter(Boolean).join(' · ');
@@ -540,7 +564,7 @@
       main.append(rest);
       const fallback = create('div', undefined, 'fallback');
       if (entry.images?.length) fallback.classList.add('has-cover');
-      fallback.append(coverImage(entry));
+      fallback.append(coverImage(entry), ...favoriteControl(entry));
       aside.append(fallback);
       const visitGallery = visitMediaPanel(entry);
       if (entry.images?.length > 1) {

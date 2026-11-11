@@ -98,14 +98,19 @@ class ScreamParkPersonalTests(unittest.TestCase):
                     self.assertEqual(page.locator('#panel-scream-parks article.card').count(), 22)
                     self.assertEqual(page.locator('#panel-scream-parks .sp-state-button').count(), 0)
                     self.assertEqual(page.locator('#panel-scream-parks .sp-personal-login').count(), 22)
+                    self.assertEqual(page.locator('#panel-scream-parks .card-art .sp-card-favorite').count(), 22)
                     self.assertIn('Inicia sesión con Google', page.locator('#panel-scream-parks article.card').first.inner_text())
                     page.evaluate("() => { window.__loginClicks = 0; window.signInGoogle = () => { window.__loginClicks++; }; }")
                     page.locator('#panel-scream-parks article.card').first.locator('.sp-personal-login').click()
                     self.assertEqual(page.evaluate('window.__loginClicks'), 1)
+                    page.locator('#panel-scream-parks article.card').first.locator('.sp-card-favorite').click()
+                    self.assertEqual(page.evaluate('window.__loginClicks'), 2)
                     self.assertTrue(page.locator('#sp-detail').is_hidden())
                     backend = {'data': {}, 'fail': False}
                     self.install_fake_account(context, page, backend)
                     card = page.locator('#panel-scream-parks article.card[data-id="the-village"]')
+                    self.assertEqual(card.locator('.sp-state-button').count(), 2)
+                    self.assertEqual(card.locator('.sp-personal-login').count(), 0)
                     card.locator('.sp-state-button.pending').click()
                     page.wait_for_function("() => document.querySelector('.card[data-id=\"the-village\"] .sp-state-button.pending')?.getAttribute('aria-pressed') === 'true'")
                     self.assertTrue(page.locator('#sp-detail').is_hidden())
@@ -119,13 +124,18 @@ class ScreamParkPersonalTests(unittest.TestCase):
                     card.locator('.sp-state-button.done').click()
                     page.wait_for_function("() => document.querySelector('.card[data-id=\"the-village\"] .sp-state-button.done')?.getAttribute('aria-pressed') === 'true'")
                     self.assertFalse(backend['data']['screamParkUserStates/alice/editions/the-village-2026']['pending'])
-                    card.locator('.sp-state-button.favorite').click()
-                    page.wait_for_function("() => document.querySelector('.card[data-id=\"the-village\"] .sp-state-button.favorite')?.getAttribute('aria-pressed') === 'true'")
+                    card.locator('.card-art .sp-card-favorite').click()
+                    page.wait_for_function("() => document.querySelector('.card[data-id=\"the-village\"] .sp-card-favorite')?.getAttribute('aria-pressed') === 'true'")
                     self.assertEqual(backend['data']['screamParkUserStates/alice/favorites/the-village'], True)
                     self.assertEqual(page.evaluate('personalDoneRoomIds().length'), 0)
+                    card.screenshot(path=str(ARTIFACTS / f'{self.browser_name}-{width}-card-detail.png'))
                     page.screenshot(path=str(ARTIFACTS / f'{self.browser_name}-{width}-cards.png'), full_page=True)
                     card.get_by_role('button', name='VER FICHA').click()
-                    page.locator('#sp-detail .sp-state-button.favorite.active').wait_for()
+                    page.locator('#sp-detail .fallback .sp-card-favorite.active').wait_for()
+                    page.locator('#sp-detail .fallback .sp-card-favorite').click()
+                    page.wait_for_function("() => document.querySelector('#sp-detail .sp-card-favorite')?.getAttribute('aria-pressed') === 'false'")
+                    page.locator('#sp-detail .fallback .sp-card-favorite').click()
+                    page.wait_for_function("() => document.querySelector('#sp-detail .sp-card-favorite')?.getAttribute('aria-pressed') === 'true'")
                     page.screenshot(path=str(ARTIFACTS / f'{self.browser_name}-{width}-detail.png'), full_page=True)
                     page.locator('#sp-back').click()
                     page.evaluate("switchTab('mis-hechos')")
@@ -158,14 +168,13 @@ class ScreamParkPersonalTests(unittest.TestCase):
                         read: window.__spTestRead, put: window.__spTestPut, remove: window.__spTestRemove,
                         onChange: () => { window.TheVaultScreamParksPreview?.current?.refreshStates(); renderScreamParkLists(); }
                       });
-                      window.VaultScreamParkStates.setSession('alice');
-                      await loadScreamParkEntries();
-                      await window.VaultScreamParkStates.load();
+                      await refreshScreamParkPersonalState();
                       switchTab('scream-parks');
                     }""")
                     restored = page.locator('#panel-scream-parks article.card[data-id="the-village"]')
                     restored.locator('.sp-state-button.done.active').wait_for()
-                    self.assertEqual(restored.locator('.sp-state-button.favorite').get_attribute('aria-pressed'), 'true')
+                    self.assertEqual(restored.locator('.sp-card-favorite').get_attribute('aria-pressed'), 'true')
+                    self.assertEqual(restored.locator('.sp-personal-login').count(), 0)
                     self.assertEqual(page.evaluate('personalDoneRoomIds().length'), 0)
                     self.assertLessEqual(page.evaluate('document.documentElement.scrollWidth'), width + 1)
                     self.assertEqual(errors, [])
@@ -204,7 +213,7 @@ class ScreamParkPersonalTests(unittest.TestCase):
             cached = page.evaluate("""async () => {
               await navigator.serviceWorker.register('/service-worker.js');
               await navigator.serviceWorker.ready;
-              const shell = await caches.open('the-vault-v64-shell');
+              const shell = await caches.open('the-vault-v65-shell');
               return !!(await shell.match('/scream-parks/personal-state.js'));
             }""")
             self.assertTrue(cached)
