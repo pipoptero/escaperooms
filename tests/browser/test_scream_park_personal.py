@@ -161,6 +161,7 @@ class ScreamParkPersonalTests(unittest.TestCase):
                     page.evaluate("document.querySelector('#sp-profile-section')?.scrollIntoView()")
                     page.screenshot(path=str(ARTIFACTS / f'{self.browser_name}-{width}-profile.png'))
                     page.screenshot(path=str(ARTIFACTS / f'{self.browser_name}-{width}.png'), full_page=True)
+                    page.wait_for_function("() => STATIC_ENHANCEMENTS_LOADED")
                     page.reload(wait_until='domcontentloaded')
                     page.evaluate("""async () => {
                       AUTH_USER = {uid:'alice'}; USER_ID = 'alice';
@@ -177,6 +178,7 @@ class ScreamParkPersonalTests(unittest.TestCase):
                     self.assertEqual(restored.locator('.sp-personal-login').count(), 0)
                     self.assertEqual(page.evaluate('personalDoneRoomIds().length'), 0)
                     self.assertLessEqual(page.evaluate('document.documentElement.scrollWidth'), width + 1)
+                    page.wait_for_function("() => STATIC_ENHANCEMENTS_LOADED")
                     self.assertEqual(errors, [])
                 finally:
                     context.close()
