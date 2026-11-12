@@ -65,7 +65,8 @@ class ScreamParkCommunityEmulatorTest(unittest.TestCase):
               AUTH_TOKEN = token; USER_ID = uid;
             }""", {'uid': uid, 'token': token})
             page.locator('#tab-scream').click()
-            page.locator('#panel-scream-parks article.card[data-id=horrorland] button').first.click()
+            page.locator('#panel-scream-parks article.card[data-id=horrorland]').get_by_role(
+                'button', name='VER FICHA', exact=True).click()
             page.get_by_role('button', name='ESCRIBIR MI OPINIÓN').click()
             for category in ('ambientacion', 'acting', 'organizacion', 'terror', 'variedad'):
                 page.locator(f'.sp-community-form .review-stars[data-category="{category}"]').click(position={'x': 70, 'y': 10})
