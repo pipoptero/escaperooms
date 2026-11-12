@@ -1,7 +1,7 @@
 {
   "meta": {
     "generated_at": "2026-09-28T15:13:37Z",
-    "rooms": 223,
+    "rooms": 224,
     "source": "official_web_high_confidence",
     "videos_with_upload_date": 147
   },
@@ -2237,6 +2237,31 @@
       "score": null,
       "upload_date": "",
       "aspect_ratio": "9/16"
+    },
+    "haunt": {
+      "videos": [
+        {
+          "provider": "videopress",
+          "embed_url": "https://videopress.com/embed/mKQdybBt?cover=1&hd=0&preloadContent=metadata&useAverageColor=1",
+          "source_video_url": "https://videopress.com/v/mKQdybBt",
+          "label": "Vídeo oficial 1",
+          "source_page_url": "https://hauntescaperoom.com/"
+        },
+        {
+          "provider": "videopress",
+          "embed_url": "https://videopress.com/embed/4vmJX0GT?cover=1&hd=0&preloadContent=metadata&useAverageColor=1",
+          "source_video_url": "https://videopress.com/v/4vmJX0GT",
+          "label": "Vídeo oficial 2",
+          "source_page_url": "https://hauntescaperoom.com/"
+        },
+        {
+          "provider": "videopress",
+          "embed_url": "https://videopress.com/embed/wjk1Ii7F?cover=1&hd=0&preloadContent=metadata&useAverageColor=1",
+          "source_video_url": "https://videopress.com/v/wjk1Ii7F",
+          "label": "Vídeo oficial 3",
+          "source_page_url": "https://hauntescaperoom.com/"
+        }
+      ]
     }
   }
 }

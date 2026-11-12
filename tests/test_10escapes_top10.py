@@ -45,7 +45,7 @@ class TenEscapesTopTenTests(unittest.TestCase):
         self.assertEqual([sum(a["category"] == "Top " + category for a in top)
                           for category in ("Room", "Horror", "Wild")], [10, 10, 10])
 
-    def test_gastro_escape_is_one_minimal_identity(self):
+    def test_gastro_escape_keeps_identity_with_owner_material(self):
         room = self.catalog["gastro-escape-experiencity"]
         self.assertEqual(sum(r["nombre"].casefold() == "gastro escape" and
                              r["empresa"].casefold() == "experiencity"
@@ -54,8 +54,8 @@ class TenEscapesTopTenTests(unittest.TestCase):
         self.assertEqual(room["empresa"], "Experiencity")
         self.assertEqual(room["ciudad"], "Madrid")
         self.assertEqual(room["web"], "https://gastroescaperoom.com/")
-        self.assertEqual(room["descripcion"], "Sin sinopsis")
-        self.assertEqual(room["imagen"], "")
+        self.assertGreater(len(room["descripcion"]), 100)
+        self.assertEqual(room["imagen"], "images/catalgo_propio_web_escape/optimized/gastro-escape-experiencity.webp")
         self.assertIsNone(room["duracion"])
         self.assertIsNone(room["min_personas"])
         self.assertIsNone(room["max_personas"])

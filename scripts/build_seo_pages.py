@@ -1991,7 +1991,7 @@ def room_facts(room, location_data):
         ("Ciudad", city),
         ("Provincia", province),
         ("Comunidad", canonical_region(room.get("comunidad"))),
-        ("Dirección", text(location_data.get("address"))),
+        ("Dirección", text(location_data.get("address")) or text(room.get("direccion"))),
         ("Duración", f'{text(room.get("duracion"))} minutos' if text(room.get("duracion")) else ""),
         ("Jugadores", room_players(room)),
         ("Precio orientativo", room_price(room)),
@@ -2112,6 +2112,10 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
     if region_link and region_link != city_link:
         links.append((f"Escape rooms en {region}", site_url(f"/{region_link}/")))
     links.append(("Ranking de escape rooms", site_url("/ranking-escape-rooms/")))
+    park_id = text(room.get("scream_park_id"))
+    park_names = {"the-village": "The Village", "terrorland": "Terrorland"}
+    if park_id in park_names:
+        links.append((f"Pertenece a {park_names[park_id]}", site_url(f"/#scream-park/{park_id}")))
     review_slug = room_url_slug(room)
     if review_slug in (review_slugs or set()):
         links.append((f"Review de {name}", site_url(f"/reviews/{review_slug}/")))
@@ -2188,7 +2192,7 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
                 "url": canonical,
                 "address": {
                     "@type": "PostalAddress",
-                    "streetAddress": text(location_data.get("address")),
+                    "streetAddress": text(location_data.get("address")) or text(room.get("direccion")),
                     "addressLocality": city,
                     "addressRegion": province,
                     "addressCountry": "ES",
@@ -2269,7 +2273,7 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
       <h1>{escape(name)}</h1>
       <div class="company">{escape(company)}</div>
       <div class="meta">{meta_html}</div>
-      {score_comparison_html}
+{f'      {score_comparison_html}' if score_comparison_html else ''}
       <p>{escape(body_description)}</p>{ranking_method_html}
       <div class="actions">
         <a class="btn" href="{escape(app_link)}">Abrir ficha interactiva</a>
@@ -2286,7 +2290,7 @@ def room_page(item, position, location_links=None, review_slugs=None, videos_dat
     <div class="meta">{sources_html}</div>
     <p class="explain">Estas son las fuentes disponibles para la sala, junto con sus votos conocidos cuando constan en los datos.</p>
   </section>''' if sources_html else ''}
-{f'<section class="section"><h2>Sinopsis</h2><div class="review">{escape(synopsis)}</div></section>' if synopsis and folded(synopsis) != 'sin sinopsis' else ''}
+{f'<section class="section"><h2>Sinopsis</h2><div class="review">{review_text_html(synopsis) if room.get("descripcion_formato") == "markdown" else escape(synopsis)}</div></section>' if synopsis and folded(synopsis) != 'sin sinopsis' else ''}
 {f'''<section class="section">
     <h2>Vídeo de introducción</h2>
     {video_html}

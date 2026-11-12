@@ -14,8 +14,8 @@ class TheVillageReleaseTests(unittest.TestCase):
         parks = json.loads((ROOT / "scream-parks/data-2026.json").read_text(encoding="utf-8"))["entries"]
         self.assertEqual(len(parks), 22)
         self.assertEqual(len({park["id"] for park in parks}), 22)
-        self.assertEqual(len(catalog["catalogo"]), 1746)
-        self.assertEqual(catalog["meta"]["count"], 1746)
+        self.assertEqual(len(catalog["catalogo"]), 1759)
+        self.assertEqual(catalog["meta"]["count"], 1759)
         self.assertFalse(any(room.get("id") == "the-village" for room in catalog["catalogo"]))
         village = [park for park in parks if park.get("id") == "the-village"]
         self.assertEqual(len(village), 1)

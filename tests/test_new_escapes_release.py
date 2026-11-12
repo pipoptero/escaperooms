@@ -18,14 +18,14 @@ class NewEscapesReleaseTests(unittest.TestCase):
         cls.awards = json.loads((ROOT / "extra_awards.json").read_text(encoding="utf-8"))["awards"]
 
     def test_minimal_rooms_and_unique_identity(self):
-        self.assertEqual(len(self.catalog), 1746)
+        self.assertEqual(len(self.catalog), 1759)
         self.assertEqual(len({room["id"] for room in self.catalog}), len(self.catalog))
         rooms = {room["id"]: room for room in self.catalog}
         self.assertEqual(NEW_IDS, NEW_IDS & rooms.keys())
         for identity in NEW_IDS:
             room = rooms[identity]
-            self.assertEqual(room["descripcion"], "Sin sinopsis")
-            self.assertEqual(room["imagen"], "")
+            self.assertGreater(len(room["descripcion"]), 1000)
+            self.assertTrue((ROOT / room["imagen"]).exists())
             self.assertTrue(room["web"].startswith("https://"))
             self.assertNotIn("escapecollector.com", room["web"])
 
