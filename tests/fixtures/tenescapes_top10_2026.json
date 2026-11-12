@@ -1,0 +1,306 @@
+{
+  "source_url": "https://10escapes.com/ganadores26/",
+  "checked_at": "2026-11-12",
+  "positions": [
+    {
+      "category": "ROOM",
+      "rank": 1,
+      "official_room": "Londium",
+      "official_company": "SAGA",
+      "canonical_room_id": "londium",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://londiumescaperoom.com/"
+    },
+    {
+      "category": "ROOM",
+      "rank": 2,
+      "official_room": "Katrina",
+      "official_company": "Elements (Antes: Kenopsia Games)",
+      "canonical_room_id": "katrina",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://www.elementsescaperoom.com/katrina/"
+    },
+    {
+      "category": "ROOM",
+      "rank": 3,
+      "official_room": "Intracorpus",
+      "official_company": "Vortex",
+      "canonical_room_id": "intracorpus",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://vortexescape.com/intracorpus"
+    },
+    {
+      "category": "ROOM",
+      "rank": 4,
+      "official_room": "Abduction 6",
+      "official_company": "Tortugas",
+      "canonical_room_id": null,
+      "status": "NO EXISTE EN CATÁLOGO",
+      "reason": "Abduction 6 Tortugas ausente del catálogo.",
+      "identity_evidence_url": ""
+    },
+    {
+      "category": "ROOM",
+      "rank": 5,
+      "official_room": "Atraco al Compadre",
+      "official_company": "Start Play",
+      "canonical_room_id": "atraco-al-compadre",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://startplay.es/escape-room-en-murcia/"
+    },
+    {
+      "category": "ROOM",
+      "rank": 6,
+      "official_room": "Jurasico",
+      "official_company": "Golden Pop",
+      "canonical_room_id": "jurasico",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://goldenpop.es/jurasico/"
+    },
+    {
+      "category": "ROOM",
+      "rank": 7,
+      "official_room": "Night of the Meteor (by Mad Mansion Games)",
+      "official_company": "Escape Lab",
+      "canonical_room_id": "night-of-the-meteor",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://www.escapelabvalencia.es/"
+    },
+    {
+      "category": "ROOM",
+      "rank": 8,
+      "official_room": "El secreto de Jaipur",
+      "official_company": "Kadabra Escape Rooms",
+      "canonical_room_id": "el-secreto-de-jaipur",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://www.kadabraescape.com/el-secreto-de-jaipur/"
+    },
+    {
+      "category": "ROOM",
+      "rank": 9,
+      "official_room": "Kong Protocol",
+      "official_company": "Escape Barcelona",
+      "canonical_room_id": "k-o-n-g-protocol",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://www.escapebarcelona.com/kong-protocol.php"
+    },
+    {
+      "category": "ROOM",
+      "rank": 10,
+      "official_room": "Sweeny Tott",
+      "official_company": "Open Mind Room Escape",
+      "canonical_room_id": "sweneey-tott",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://openmindroomescape.es/"
+    },
+    {
+      "category": "HORROR",
+      "rank": 1,
+      "official_room": "Horror Asylum",
+      "official_company": "Arena Xcape",
+      "canonical_room_id": "horror-asylum",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://horrorasylum.es/"
+    },
+    {
+      "category": "HORROR",
+      "rank": 2,
+      "official_room": "NightShift",
+      "official_company": "Crupont Legacy",
+      "canonical_room_id": "nightshift",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://www.crupontlegacy.com/home"
+    },
+    {
+      "category": "HORROR",
+      "rank": 3,
+      "official_room": "Exorcista",
+      "official_company": "Terror Stories by Experiencity",
+      "canonical_room_id": null,
+      "status": "NO EXISTE EN CATÁLOGO",
+      "reason": "Exorcista de Terror Stories ausente; Exorcismo es otro operador.",
+      "identity_evidence_url": ""
+    },
+    {
+      "category": "HORROR",
+      "rank": 4,
+      "official_room": "La Coleccionista",
+      "official_company": "Kalon",
+      "canonical_room_id": "la-coleccionista",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://www.kalonescape.com/el-juego/"
+    },
+    {
+      "category": "HORROR",
+      "rank": 5,
+      "official_room": "Proyecto Dcrisis",
+      "official_company": "Paradiso",
+      "canonical_room_id": "proyecto-dcrisis",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://paradisoescaperoom.es/proyecto-dcrisis"
+    },
+    {
+      "category": "HORROR",
+      "rank": 6,
+      "official_room": "Bites Motel",
+      "official_company": "Bite the fly",
+      "canonical_room_id": "bites-motel",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://www.bitethefly.com/bites-motel"
+    },
+    {
+      "category": "HORROR",
+      "rank": 7,
+      "official_room": "La Novia",
+      "official_company": "Black Lake",
+      "canonical_room_id": "la-novia",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://blacklakeescaperoom.es/experiencias/la-novia/"
+    },
+    {
+      "category": "HORROR",
+      "rank": 8,
+      "official_room": "Blasphemia",
+      "official_company": "Cindy Box",
+      "canonical_room_id": "blasphemia",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://cindyescapebox.com/rooms/blasphemia-room-escape"
+    },
+    {
+      "category": "HORROR",
+      "rank": 9,
+      "official_room": "Dark City",
+      "official_company": "Obscura Experiences",
+      "canonical_room_id": "dark-city",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://obscuraexperiences.com/"
+    },
+    {
+      "category": "HORROR",
+      "rank": 10,
+      "official_room": "La Casa",
+      "official_company": "Insomnia Corporation",
+      "canonical_room_id": "la-casa",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://www.insomniacorp.com/escapes/6"
+    },
+    {
+      "category": "WILD",
+      "rank": 1,
+      "official_room": "Space Base",
+      "official_company": "Mayto Kingdom",
+      "canonical_room_id": null,
+      "status": "NO EXISTE EN CATÁLOGO",
+      "reason": "Space Base de Mayto Kingdom ausente del catálogo.",
+      "identity_evidence_url": ""
+    },
+    {
+      "category": "WILD",
+      "rank": 2,
+      "official_room": "Gaya",
+      "official_company": "Mindblow",
+      "canonical_room_id": "gaya",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://mindblowescape.com/es/escape-room/gaya/"
+    },
+    {
+      "category": "WILD",
+      "rank": 3,
+      "official_room": "Gastro Escape",
+      "official_company": "Experiencity",
+      "canonical_room_id": null,
+      "status": "NO EXISTE EN CATÁLOGO",
+      "reason": "Gastro Escape de Experiencity ausente del catálogo.",
+      "identity_evidence_url": ""
+    },
+    {
+      "category": "WILD",
+      "rank": 4,
+      "official_room": "Operación Delaware",
+      "official_company": "Rubik Escape Room",
+      "canonical_room_id": "operacion-delawer",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://rubikescaperoom.com/juegos/23-operacion-delawer---escape-room-temporal.html"
+    },
+    {
+      "category": "WILD",
+      "rank": 5,
+      "official_room": "Hostal 83 Hater",
+      "official_company": "Hostal 83",
+      "canonical_room_id": "hostal-83-hater",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://hostal83.com/hostal-83-hater/"
+    },
+    {
+      "category": "WILD",
+      "rank": 6,
+      "official_room": "Catalepsia",
+      "official_company": "Horror Box",
+      "canonical_room_id": "catalepsia",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://www.vivetuentierro.com/"
+    },
+    {
+      "category": "WILD",
+      "rank": 7,
+      "official_room": "Roomions",
+      "official_company": "Virus Room Escape",
+      "canonical_room_id": "roomions",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://virusroomescape.com/es/escape-room-calella-roomions/"
+    },
+    {
+      "category": "WILD",
+      "rank": 8,
+      "official_room": "Abduction 5 - Versus",
+      "official_company": "Abduction",
+      "canonical_room_id": "versus",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://www.abduction.es/badalona/abduction5"
+    },
+    {
+      "category": "WILD",
+      "rank": 9,
+      "official_room": "Euforia",
+      "official_company": "Good Lock",
+      "canonical_room_id": "euforia",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://goodlock.es/euforia-game/"
+    },
+    {
+      "category": "WILD",
+      "rank": 10,
+      "official_room": "GAME ON",
+      "official_company": "La Clau Escape Room",
+      "canonical_room_id": "game-on",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://www.laclauroomescape.com/#games"
+    }
+  ]
+}

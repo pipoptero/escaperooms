@@ -6,6 +6,7 @@ Hard errors stop CI. Editorial gaps are warnings and remain visible in reports.
 import argparse
 import json
 import re
+import subprocess
 import sys
 import unicodedata
 import xml.etree.ElementTree as ET
@@ -186,6 +187,18 @@ def editorial_cross_source_mismatches(catalog, reviews, aliases):
 
 def validate():
     errors, warnings = [], []
+    tracked = subprocess.run(["git", "ls-files", "-z"], cwd=ROOT, capture_output=True, check=True).stdout
+    for raw_path in tracked.split(b"\0"):
+        if not raw_path:
+            continue
+        path = raw_path.decode("utf-8", errors="replace").replace("\\", "/")
+        lower = path.lower()
+        parts = lower.split("/")
+        if ("private" in parts or "backup" in parts or "backups" in parts
+                or lower.endswith((".sqlite", ".sqlite3", ".db", ".xls", ".xlsx"))
+                or any(term in lower for term in ("source-checkpoint", "raw-response", "evidence-ledger", "credentials"))):
+            if path != "escape_rooms_tracker_mejorado.xlsx":
+                errors.append(f"Archivo privado rastreado por Git: {path}")
     catalog_payload = load_json("catalog.json", errors)
     catalog = catalog_payload.get("catalogo") or []
     aliases_payload = load_json("room_aliases.json", errors)

@@ -2348,7 +2348,7 @@
   <footer class="seo-footer" aria-label="Enlaces de reviews">
     <div class="seo-footer-inner">
       <span class="rights">&copy; 2026 The Vault Escape. Todos los derechos reservados.</span>
-      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v66</span>
+      <span class="pwa-version" id="pwa-version" onclick="handlePwaVersionTap()">PWA v67</span>
       <span>Reviews de escape rooms con URL propia</span>
       <a href="ranking-escape-rooms/">Ranking escape rooms España</a>
       <a href="mejores-escape-rooms/">Mejores escape rooms</a>
@@ -10704,6 +10704,12 @@ function awardPriority(award) {
   return statusScore + rankScore + (parseInt(award.year) || 0) / 10000;
 }
 
+function isTenEscapes2026TopTen(award) {
+  return award.source_id === '10escapes' && Number(award.year) === 2026
+    && ['Top Room', 'Top Horror', 'Top Wild'].includes(award.category)
+    && Number.isInteger(Number(award.rank)) && Number(award.rank) >= 1 && Number(award.rank) <= 10;
+}
+
 function companyMatchesAward(roomCompany, awardCompany) {
   const roomKey = compactKey(roomCompany || '');
   const awardKey = compactKey(awardCompany || '');
@@ -10725,7 +10731,7 @@ function extraAwardsFor(room) {
     new Set(candidates.map(a => compactKey(a.company || '')).filter(Boolean)).size <= 1 ? candidates : []
   );
   return usable
-    .filter(a => a.status !== 'ranked')
+    .filter(a => a.status !== 'ranked' || isTenEscapes2026TopTen(a))
     .sort((a, b) => awardPriority(b) - awardPriority(a));
 }
 
@@ -10797,9 +10803,12 @@ function awardSealHtml(award) {
   const logo = sourceMeta.logo;
   const alt = sourceMeta.alt;
   const logoClass = sourceMeta.logoClass || 'award-logo-wide';
+  const badgeLabel = isTenEscapes2026TopTen(award)
+    ? `10ESCAPES · ${escapeHtml(award.category.slice(4).toUpperCase())}<br>#${Number(award.rank)} · 2026`
+    : label;
   return `<div class="award-seal ${cls}" title="${escapeHtml(title)}">
     <img class="${logoClass}" src="${logo}" alt="${alt}">
-    <span>${label}</span>
+    <span>${badgeLabel}</span>
   </div>`;
 }
 
@@ -10812,7 +10821,8 @@ function awardSeals(room, limit = 3) {
       visible[Math.max(0, limit - 1 - index)] = preferred;
     }
   });
-  return visible.map(awardSealHtml).join('');
+  const topTen = awards.filter(isTenEscapes2026TopTen);
+  return [...topTen, ...visible.filter(award => !topTen.includes(award))].map(awardSealHtml).join('');
 }
 
 function awardTags(room, limit = 4) {

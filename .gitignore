@@ -7,6 +7,16 @@ firebase-config.js
 *.local.js
 reports/
 private/
+*.sqlite
+*.sqlite3
+*.db
+*.xlsx
+*.xls
+!escape_rooms_tracker_mejorado.xlsx
+*source-checkpoint*
+*raw-response*
+*evidence-ledger*
+*credentials*
 public-site/
 __pycache__/
 *.pyc

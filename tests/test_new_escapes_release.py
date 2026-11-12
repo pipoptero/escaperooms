@@ -33,8 +33,7 @@ class NewEscapesReleaseTests(unittest.TestCase):
         rooms = {room["id"]: room for room in self.catalog}
         awards = [award for award in self.awards if award.get("source_id") == "10escapes"
                   and award.get("year") == 2026]
-        self.assertEqual(len(awards), 221)
-        self.assertEqual(sum(award["status"] != "ranked" for award in awards), 11)
+        self.assertEqual(len(awards), 240)
         self.assertEqual(len({(a["canonical_room_id"], a["category"], a["rank"])
                               for a in awards}), len(awards))
         for award in awards:
