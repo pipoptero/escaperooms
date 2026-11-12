@@ -65,7 +65,7 @@ class V6BrowserTests(unittest.TestCase):
                 try:
                     page.locator("#tab-scream").click()
                     page.locator("#panel-scream-parks article.card").first.wait_for()
-                    page.locator("#panel-scream-parks article.card[data-id=horrorland] button").first.click()
+                    page.locator("#panel-scream-parks article.card[data-id=horrorland]").get_by_role("button", name="VER FICHA", exact=True).click()
                     self.assertEqual(page.locator(".sp-editorial-preview").count(), 1)
                     page.get_by_role("button", name="LEER REVIEW COMPLETA").click()
                     page.locator("#detail-modal.scream-editorial-modal.open").wait_for()
@@ -273,7 +273,7 @@ class V6BrowserTests(unittest.TestCase):
                         Path(captures).mkdir(parents=True, exist_ok=True)
                         page.screenshot(path=str(Path(captures) / f"{self.browser.browser_type.name}-{width}-home.png"))
                     page.locator('#tab-scream').click()
-                    page.locator('#panel-scream-parks article.card[data-id="the-village"] button').first.click()
+                    page.locator('#panel-scream-parks article.card[data-id="the-village"]').get_by_role("button", name="VER FICHA", exact=True).click()
                     page.locator('#sp-detail-content .sp-visit-gallery').wait_for()
                     self.assertEqual(page.locator('#sp-detail-content .sp-visit-gallery img').count(), 12)
                     self.assertEqual(page.locator('#sp-detail-content .sp-visit-video').count(), 0)

@@ -19,7 +19,7 @@ class CommunityBrowserTests(V6BrowserTests):
                       });
                       switchTab('scream-parks');
                     }""")
-                    page.locator("#panel-scream-parks article.card[data-id=horrorland] button").first.click()
+                    page.locator("#panel-scream-parks article.card[data-id=horrorland]").get_by_role("button", name="VER FICHA", exact=True).click()
                     page.locator("#sp-community").wait_for()
                     self.assertEqual(page.locator("#sp-detail-content > :last-child").get_attribute("id"), "sp-community")
                     self.assertEqual(page.locator("#sp-detail-content #sp-community").count(), 1)
@@ -71,7 +71,7 @@ class CommunityBrowserTests(V6BrowserTests):
               });
               switchTab('scream-parks');
             }""")
-            page.locator("#panel-scream-parks article.card[data-id=horrorland] button").first.click()
+            page.locator("#panel-scream-parks article.card[data-id=horrorland]").get_by_role("button", name="VER FICHA", exact=True).click()
             page.get_by_role("button", name="ESCRIBIR MI OPINIÓN").click()
             page.locator(".sp-community-form").wait_for()
             for category in ("ambientacion", "acting", "organizacion", "terror", "variedad"):
