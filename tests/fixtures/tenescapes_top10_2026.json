@@ -37,10 +37,10 @@
       "rank": 4,
       "official_room": "Abduction 6",
       "official_company": "Tortugas",
-      "canonical_room_id": null,
-      "status": "NO EXISTE EN CATÁLOGO",
-      "reason": "Abduction 6 Tortugas ausente del catálogo.",
-      "identity_evidence_url": ""
+      "canonical_room_id": "abduction-6-tortugas",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://www.abduction.es/badalona/abduction6.html"
     },
     {
       "category": "ROOM",
@@ -127,10 +127,10 @@
       "rank": 3,
       "official_room": "Exorcista",
       "official_company": "Terror Stories by Experiencity",
-      "canonical_room_id": null,
-      "status": "NO EXISTE EN CATÁLOGO",
-      "reason": "Exorcista de Terror Stories ausente; Exorcismo es otro operador.",
-      "identity_evidence_url": ""
+      "canonical_room_id": "seccion-esoterica-exorcista",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://terrorstories.com/barcelona/exorcista-escape-room"
     },
     {
       "category": "HORROR",
@@ -207,10 +207,10 @@
       "rank": 1,
       "official_room": "Space Base",
       "official_company": "Mayto Kingdom",
-      "canonical_room_id": null,
-      "status": "NO EXISTE EN CATÁLOGO",
-      "reason": "Space Base de Mayto Kingdom ausente del catálogo.",
-      "identity_evidence_url": ""
+      "canonical_room_id": "space-base-extermination",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://maytokingdom.es/"
     },
     {
       "category": "WILD",
@@ -227,10 +227,10 @@
       "rank": 3,
       "official_room": "Gastro Escape",
       "official_company": "Experiencity",
-      "canonical_room_id": null,
-      "status": "NO EXISTE EN CATÁLOGO",
-      "reason": "Gastro Escape de Experiencity ausente del catálogo.",
-      "identity_evidence_url": ""
+      "canonical_room_id": "gastro-escape-experiencity",
+      "status": "VISIBLE",
+      "reason": "",
+      "identity_evidence_url": "https://gastroescaperoom.com/"
     },
     {
       "category": "WILD",

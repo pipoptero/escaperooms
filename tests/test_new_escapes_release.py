@@ -18,7 +18,7 @@ class NewEscapesReleaseTests(unittest.TestCase):
         cls.awards = json.loads((ROOT / "extra_awards.json").read_text(encoding="utf-8"))["awards"]
 
     def test_minimal_rooms_and_unique_identity(self):
-        self.assertEqual(len(self.catalog), 1745)
+        self.assertEqual(len(self.catalog), 1746)
         self.assertEqual(len({room["id"] for room in self.catalog}), len(self.catalog))
         rooms = {room["id"]: room for room in self.catalog}
         self.assertEqual(NEW_IDS, NEW_IDS & rooms.keys())
@@ -33,7 +33,7 @@ class NewEscapesReleaseTests(unittest.TestCase):
         rooms = {room["id"]: room for room in self.catalog}
         awards = [award for award in self.awards if award.get("source_id") == "10escapes"
                   and award.get("year") == 2026]
-        self.assertEqual(len(awards), 240)
+        self.assertEqual(len(awards), 244)
         self.assertEqual(len({(a["canonical_room_id"], a["category"], a["rank"])
                               for a in awards}), len(awards))
         for award in awards:

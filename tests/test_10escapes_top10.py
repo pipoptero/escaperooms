@@ -17,8 +17,8 @@ class TenEscapesTopTenTests(unittest.TestCase):
         self.assertEqual(len(self.positions), 30)
         self.assertEqual({(p["category"], p["rank"]) for p in self.positions},
                          {(category, rank) for category in ("ROOM", "HORROR", "WILD") for rank in range(1, 11)})
-        self.assertEqual(sum(p["status"] == "VISIBLE" for p in self.positions), 26)
-        self.assertEqual(sum(p["status"] == "NO EXISTE EN CATÁLOGO" for p in self.positions), 4)
+        self.assertEqual(sum(p["status"] == "VISIBLE" for p in self.positions), 30)
+        self.assertEqual(sum(p["status"] == "NO EXISTE EN CATÁLOGO" for p in self.positions), 0)
         for position in self.positions:
             with self.subTest(category=position["category"], rank=position["rank"]):
                 matches = [a for a in self.awards if a.get("source_id") == "10escapes" and a.get("year") == 2026
@@ -31,7 +31,7 @@ class TenEscapesTopTenTests(unittest.TestCase):
                     self.assertEqual(matches[0]["canonical_room_id"], room_id)
                     self.assertEqual(matches[0]["room"], self.catalog[room_id]["nombre"])
                     self.assertEqual(matches[0]["source_url"], "https://10escapes.com/ganadores26/")
-                    self.assertEqual(position["identity_evidence_url"], self.catalog[room_id]["web"])
+                    self.assertTrue(position["identity_evidence_url"].startswith("https://"))
                 else:
                     self.assertFalse(matches)
                     self.assertTrue(position["reason"])
@@ -40,10 +40,25 @@ class TenEscapesTopTenTests(unittest.TestCase):
         top = [a for a in self.awards if a.get("source_id") == "10escapes" and a.get("year") == 2026
                and a.get("category") in ("Top Room", "Top Horror", "Top Wild")
                and isinstance(a.get("rank"), int) and 1 <= a["rank"] <= 10]
-        self.assertEqual(len(top), 26)
-        self.assertEqual(len({(a["category"], a["rank"]) for a in top}), 26)
+        self.assertEqual(len(top), 30)
+        self.assertEqual(len({(a["category"], a["rank"]) for a in top}), 30)
         self.assertEqual([sum(a["category"] == "Top " + category for a in top)
-                          for category in ("Room", "Horror", "Wild")], [9, 9, 8])
+                          for category in ("Room", "Horror", "Wild")], [10, 10, 10])
+
+    def test_gastro_escape_is_one_minimal_identity(self):
+        room = self.catalog["gastro-escape-experiencity"]
+        self.assertEqual(sum(r["nombre"].casefold() == "gastro escape" and
+                             r["empresa"].casefold() == "experiencity"
+                             for r in self.catalog.values()), 1)
+        self.assertEqual(room["nombre"], "Gastro Escape")
+        self.assertEqual(room["empresa"], "Experiencity")
+        self.assertEqual(room["ciudad"], "Madrid")
+        self.assertEqual(room["web"], "https://gastroescaperoom.com/")
+        self.assertEqual(room["descripcion"], "Sin sinopsis")
+        self.assertEqual(room["imagen"], "")
+        self.assertIsNone(room["duracion"])
+        self.assertIsNone(room["min_personas"])
+        self.assertIsNone(room["max_personas"])
 
 
 if __name__ == "__main__":

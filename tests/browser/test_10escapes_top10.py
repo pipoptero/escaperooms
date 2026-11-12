@@ -59,7 +59,7 @@ class TenEscapesBrowserTests(unittest.TestCase):
                           logo:cardBadge?.querySelector('img')?.getAttribute('src') || ''};
                       });
                     }""", [p for p in POSITIONS if p["canonical_room_id"]])
-                    self.assertEqual(len(results), 26)
+                    self.assertEqual(len(results), 30)
                     for result in results:
                         with self.subTest(id=result["id"]):
                             self.assertTrue(result["card"], result)

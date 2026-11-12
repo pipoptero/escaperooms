@@ -6,9 +6,9 @@
       "https://www.gibaescape.com/proyectos/escape-room-giba-awards",
       "https://ocioterror.es/category/horror-awards/"
     ],
-    "count": 2178,
+    "count": 2182,
     "by_source": {
-      "10escapes": 1605,
+      "10escapes": 1609,
       "escape_room_awards": 83,
       "giba_awards": 191,
       "horror_awards": 299
@@ -28568,6 +28568,62 @@
       "company": "La Clau Room Escape",
       "company_key": "la clau room escape",
       "canonical_room_id": "game-on"
+    },
+    {
+      "source_id": "10escapes",
+      "source_name": "10Escapes",
+      "source_url": "https://10escapes.com/ganadores26/",
+      "year": 2026,
+      "category": "Top Room",
+      "status": "winner",
+      "rank": 4,
+      "room": "Abduction Tortugas",
+      "room_key": "abduction tortugas",
+      "company": "Abduction",
+      "company_key": "abduction",
+      "canonical_room_id": "abduction-6-tortugas"
+    },
+    {
+      "source_id": "10escapes",
+      "source_name": "10Escapes",
+      "source_url": "https://10escapes.com/ganadores26/",
+      "year": 2026,
+      "category": "Top Horror",
+      "status": "winner",
+      "rank": 3,
+      "room": "Sección Esoterismo: Exorcista",
+      "room_key": "seccion esoterismo exorcista",
+      "company": "Terror Stories",
+      "company_key": "terror stories",
+      "canonical_room_id": "seccion-esoterica-exorcista"
+    },
+    {
+      "source_id": "10escapes",
+      "source_name": "10Escapes",
+      "source_url": "https://10escapes.com/ganadores26/",
+      "year": 2026,
+      "category": "Top Wild",
+      "status": "winner",
+      "rank": 1,
+      "room": "Space Base Extermination",
+      "room_key": "space base extermination",
+      "company": "Space Base Extermination",
+      "company_key": "space base extermination",
+      "canonical_room_id": "space-base-extermination"
+    },
+    {
+      "source_id": "10escapes",
+      "source_name": "10Escapes",
+      "source_url": "https://10escapes.com/ganadores26/",
+      "year": 2026,
+      "category": "Top Wild",
+      "status": "winner",
+      "rank": 3,
+      "room": "Gastro Escape",
+      "room_key": "gastro escape",
+      "company": "Experiencity",
+      "company_key": "experiencity",
+      "canonical_room_id": "gastro-escape-experiencity"
     }
   ]
 }
