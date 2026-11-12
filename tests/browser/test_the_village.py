@@ -51,7 +51,7 @@ class TheVillageTests(unittest.TestCase):
                     self.assertIn("The Village", page.locator("#sp-detail h1").inner_text())
                     self.assertEqual(page.locator("#tab-scream[aria-current='page']").count(), 1)
                     page.evaluate("ensureStaticEnhancementsLoaded()")
-                    self.assertEqual(page.evaluate("CATALOGO.length"), 1738)
+                    self.assertEqual(page.evaluate("CATALOGO.length"), 1739)
                     self.assertEqual(page.evaluate("CATALOGO.filter(r => r.id === 'the-village').length"), 0)
                     self.assertFalse(page.evaluate("rankingRooms().some(r => r.id === 'the-village')"))
                     self.assertEqual(page.locator("#sp-cards .card[data-id='the-village']").count(), 1)
