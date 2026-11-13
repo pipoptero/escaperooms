@@ -69,7 +69,7 @@ class ScreamParkReviewSeoTests(unittest.TestCase):
         self.assertIn('https://thevaultescape.com/scream-parks/reviews/horrorland-2026/',
                       (ROOT / "sitemap-reviews.xml").read_text(encoding="utf-8"))
         shell = (ROOT / "service-worker.js").read_text(encoding="utf-8")
-        self.assertIn("the-vault-v68", shell)
+        self.assertIn("the-vault-v69", shell)
         self.assertIn("./scream-parks/visit-video.js", shell)
         self.assertIn("./scream-parks/reviews/horrorland-2026/", shell)
         self.assertIn("./scream-parks/reviews/the-village-2026/", shell)
