@@ -2,13 +2,7 @@ name: Actualizar datos desde Excel
 
 on:
   push:
-    paths:
-      - "**.xlsx"
-      - "**.xls"
-      - "convert.py"
-      - "scripts/build_review_photos.py"
-      - "scripts/build_seo_pages.py"
-      - "images/Hechos/**"
+    branches: [main]
 
 jobs:
   detect_release:
@@ -50,40 +44,26 @@ jobs:
           echo "Managed release detected"
           echo "Auto-update writers disabled"
           echo "No child commit will be created"
+          python scripts/check_public_repository.py
           python scripts/managed_release_guard.py verify --expected-sha "$GITHUB_SHA"
 
-  convert-and-deploy:
+  reject_unmanaged:
     needs: detect_release
     if: needs.detect_release.outputs.managed != 'true'
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-
+      contents: read
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - run: |
+          echo "Solo se admiten publicaciones Managed Release"
+          exit 1
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Instalar dependencias
-        run: pip install openpyxl pillow
-
-      - name: Convertir Excel, optimizar fotos y generar paginas SEO
-        run: |
-          python convert.py
-          python scripts/optimize_generated_covers.py
-          python scripts/build_review_photos.py
-          python scripts/build_seo_pages.py --update-main-stats
-
-      - name: Commit y push datos generados
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data.json review_photos.json site_stats.json robots.txt sitemap*.xml video-sitemap.xml llms.txt seo.css reviews/ ranking/ ranking-escape-rooms/ mejores-escape-rooms/ mejores-escape-rooms-terror/ escape-rooms/ escape-rooms-*/ salas/ images/seo/
-          git diff --staged --quiet && echo "Sin cambios en datos generados" || (
-            git commit -m "Auto-update datos y SEO"
-            git push
-          )
+  # Nombre conservado para el monitor del panel Gestión. No contiene writers.
+  convert-and-deploy:
+    needs: detect_release
+    if: ${{ false }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - run: echo "Writer heredado retirado"

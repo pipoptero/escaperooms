@@ -1,4 +1,4 @@
-"""Managed update-data mode and unchanged legacy writer path."""
+"""Managed update-data mode without public writers."""
 
 from __future__ import annotations
 
@@ -67,20 +67,21 @@ class ManagedReleaseGuardTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "HEAD differs"):
             verify_validation_only(head, self.repo)
 
-    def test_workflow_separates_read_only_managed_and_legacy_writers(self):
+    def test_workflow_is_read_only_and_preserves_monitor_job_name(self):
         workflow = (REPO / ".github" / "workflows" / "update-data.yml").read_text(encoding="utf-8")
-        managed = workflow.split("  validate_managed:\n", 1)[1].split("  convert-and-deploy:\n", 1)[0]
-        legacy = workflow.split("  convert-and-deploy:\n", 1)[1]
+        managed = workflow.split("  validate_managed:\n", 1)[1].split("  reject_unmanaged:\n", 1)[0]
+        inert = workflow.split("  convert-and-deploy:\n", 1)[1]
         self.assertIn("if: needs.detect_release.outputs.managed == 'true'", managed)
         self.assertIn("contents: read", managed)
         self.assertIn("persist-credentials: false", managed)
         for writer in ("python convert.py", "python scripts/optimize_generated_covers.py",
                        "python scripts/build_review_photos.py", "python scripts/build_seo_pages.py",
                        "git add", "git commit", "git push"):
-            self.assertNotIn(writer, managed)
-            self.assertIn(writer, legacy)
-        self.assertIn("if: needs.detect_release.outputs.managed != 'true'", legacy)
-        self.assertIn("contents: write", legacy)
+            self.assertNotIn(writer, workflow)
+        self.assertIn("if: ${{ false }}", inert)
+        self.assertNotIn("contents: write", workflow)
+        pages = (REPO / ".github" / "workflows" / "deploy-pages.yml").read_text(encoding="utf-8")
+        self.assertIn("Require Managed Release", pages)
 
 
 if __name__ == "__main__":

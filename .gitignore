@@ -1,5 +1,11 @@
 # general
 .env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.kdbx
 .DS_Store
 .github/prova
 .github/workflows/p
@@ -12,7 +18,14 @@ private/
 *.db
 *.xlsx
 *.xls
-!escape_rooms_tracker_mejorado.xlsx
+*.7z
+*.sqlite-wal
+*.sqlite-shm
+*checkpoint*.json
+*raw-response*.json
+*research*.xlsx
+*evidence*.jsonl
+*-backup*/
 *source-checkpoint*
 *raw-response*
 *evidence-ledger*

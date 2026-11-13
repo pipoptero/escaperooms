@@ -197,10 +197,14 @@ def validate():
         if ("private" in parts or "backup" in parts or "backups" in parts
                 or lower.endswith((".sqlite", ".sqlite3", ".db", ".xls", ".xlsx"))
                 or any(term in lower for term in ("source-checkpoint", "raw-response", "evidence-ledger", "credentials"))):
-            if path != "escape_rooms_tracker_mejorado.xlsx":
-                errors.append(f"Archivo privado rastreado por Git: {path}")
+            errors.append(f"Archivo privado rastreado por Git: {path}")
     catalog_payload = load_json("catalog.json", errors)
     catalog = catalog_payload.get("catalogo") or []
+    for room in catalog:
+        if "alta_policy" in room:
+            errors.append(f"catalog.json: metadato interno alta_policy en {room.get('id')}")
+        if "_ec_" in str(room.get("fuente_tipo", "")):
+            errors.append(f"catalog.json: procedencia técnica privada en {room.get('id')}")
     aliases_payload = load_json("room_aliases.json", errors)
     aliases = {slug(k): slug(v) for k, v in (aliases_payload.get("aliases") or {}).items()}
     videos = (load_json("official_videos.json", errors).get("videos") or {})

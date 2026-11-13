@@ -28,8 +28,13 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Require Managed Release
+        run: test "$(python scripts/managed_release_guard.py detect)" = "managed=true"
+
       - name: Validate generated site
-        run: python scripts/validate_site_data.py --strict
+        run: |
+          python scripts/check_public_repository.py
+          python scripts/validate_site_data.py --strict
 
       - name: Validate Firebase secrets
         run: |

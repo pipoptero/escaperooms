@@ -1,29 +1,34 @@
 #!/usr/bin/env python3
 """
-Convierte escape_rooms.xlsx → data.json
-Ejecutado automáticamente por GitHub Actions.
+Convierte un Excel privado del grupo en el data.json público.
+La entrada y la salida se indican expresamente; no busca Excels en Git.
 """
 
 import json
 import sys
-import glob
-import os
 import re
 import unicodedata
-import openpyxl
+import argparse
+from pathlib import Path
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-# ── Buscar el archivo Excel en el repo ───────────────────────────────────────
-xlsx_files = glob.glob("*.xlsx") + glob.glob("*.xls")
-if not xlsx_files:
-    print("❌ No se encontró ningún archivo .xlsx en el repositorio.")
-    sys.exit(1)
+parser = argparse.ArgumentParser(description="Genera data.json desde el Excel privado del grupo")
+parser.add_argument("--input", required=True, type=Path, help="Excel privado explícito")
+parser.add_argument("--output", required=True, type=Path, help="JSON de salida")
+args = parser.parse_args()
+EXCEL_FILE = args.input.expanduser().resolve()
+OUTPUT_FILE = args.output.resolve()
+if EXCEL_FILE.suffix.lower() != ".xlsx" or not EXCEL_FILE.is_file():
+    parser.error("--input debe ser un archivo .xlsx existente")
+if EXCEL_FILE.is_relative_to(Path(__file__).resolve().parent):
+    parser.error("El Excel debe permanecer fuera del repositorio público")
+if OUTPUT_FILE == EXCEL_FILE:
+    parser.error("Entrada y salida deben ser archivos distintos")
+print("📂 Leyendo Excel privado")
 
-EXCEL_FILE = xlsx_files[0]
-print(f"📂 Leyendo: {EXCEL_FILE}")
-
+import openpyxl
 wb = openpyxl.load_workbook(EXCEL_FILE, data_only=True)
 
 # ── Detectar hojas ────────────────────────────────────────────────────────────
@@ -122,9 +127,10 @@ def slugify(text):
 
 def local_image_for(nombre):
     slug = slugify(nombre)
-    generated_path = os.path.join("images", "generated-catalog", slug + ".png")
-    if os.path.exists(generated_path):
-        return generated_path.replace("\\", "/")
+    for extension in (".webp", ".png"):
+        generated_path = Path(__file__).resolve().parent / "images" / "generated-catalog" / (slug + extension)
+        if generated_path.exists():
+            return generated_path.relative_to(Path(__file__).resolve().parent).as_posix()
     return ""
 
 def parse_sheet(ws, debug_fields=None):
@@ -159,9 +165,6 @@ def parse_sheet(ws, debug_fields=None):
                     val = safe_num(raw)
                     if key in INTEGER_FIELDS and isinstance(val, float):
                         val = int(val)
-                    # Debug campos numéricos problemáticos
-                    if debug_fields and key in debug_fields and raw != "" and raw is not None:
-                        print(f"   [{key}] raw={repr(raw)} ({type(raw).__name__}) → {repr(val)}")
                 else:
                     val = safe_str(raw)
             obj[key] = val
@@ -173,7 +176,7 @@ def parse_sheet(ws, debug_fields=None):
 
 # ── Parsear hojas ─────────────────────────────────────────────────────────────
 print(f"\n📋 Hoja Pendientes:")
-pendientes_raw = parse_sheet(wb[pend_name], debug_fields={"rating"})
+pendientes_raw = parse_sheet(wb[pend_name])
 # Deduplicar por nombre (conservar primera aparición)
 seen = set()
 pendientes = []
@@ -186,7 +189,7 @@ if len(pendientes_raw) != len(pendientes):
     print(f"   ⚠ Duplicados eliminados: {len(pendientes_raw) - len(pendientes)}")
 
 print(f"\n📋 Hoja Hechos:")
-hechos_raw2 = parse_sheet(wb[hecho_name], debug_fields={"valoracion"})
+hechos_raw2 = parse_sheet(wb[hecho_name])
 seen2 = set()
 hechos_dedup = []
 for h in hechos_raw2:
@@ -212,13 +215,15 @@ data = {
     "pendientes": pendientes,
     "hechos": hechos,
     "meta": {
-        "source": EXCEL_FILE,
+        "source": EXCEL_FILE.name,
         "pendientes_count": len(pendientes),
         "hechos_count": len(hechos),
     }
 }
 
-with open("data.json", "w", encoding="utf-8") as f:
+OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
+with OUTPUT_FILE.open("w", encoding="utf-8", newline="\n") as f:
     json.dump(data, f, ensure_ascii=False, indent=2)
+    f.write("\n")
 
-print(f"✅ data.json generado → {len(pendientes)} pendientes, {len(hechos)} hechos.")
+print(f"✅ JSON generado → {len(pendientes)} pendientes, {len(hechos)} hechos.")

@@ -1368,8 +1368,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "alkatraz-classic",
@@ -1394,8 +1393,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "alkatraz-medieval-santiago-de-compostela",
@@ -1443,8 +1441,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "alkatraz-medieval",
@@ -1469,8 +1466,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "alma",
@@ -1884,8 +1880,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "amores-que-matan",
@@ -2555,8 +2550,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "asesinato-en-la-escuela-de-magia",
@@ -4032,8 +4026,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "boomker-hall-escape",
@@ -4385,8 +4378,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "cain",
@@ -4778,8 +4770,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "la-fuga-de-casanova",
@@ -5084,8 +5075,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "celda-612431",
@@ -5314,8 +5304,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "chernobyl",
@@ -5340,8 +5329,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "chernobyl-1986",
@@ -6253,8 +6241,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "criogenic-609591",
@@ -6379,8 +6366,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "crisys-rivas-vaciamadrid",
@@ -6892,8 +6878,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "desaparecidos",
@@ -7647,8 +7632,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "el-anillo-del-dragon",
@@ -7723,8 +7707,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "el-antidoto",
@@ -8019,8 +8002,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "el-asesino-de-la-red",
@@ -10259,8 +10241,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "el-gran-golpe-529701",
@@ -10907,8 +10888,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "importada_desde_bbdd_privada_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "el-laberinto-de-harry-799711",
@@ -11430,8 +11410,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "manicomio",
@@ -11951,8 +11930,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "importada_desde_bbdd_privada_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "el-misterio-de-la-sagra",
@@ -12001,8 +11979,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "el-misterio-de-nefertiti-878741",
@@ -12154,8 +12131,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "comunidad": "",
@@ -12382,8 +12358,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "el-orfanato-173671",
@@ -12408,8 +12383,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "el-orfanato-fear-factory",
@@ -12434,8 +12408,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "el-origen",
@@ -13241,8 +13214,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "el-rescate",
@@ -13774,8 +13746,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "el-secreter",
@@ -14447,8 +14418,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "el-secuestro",
@@ -15569,8 +15539,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "el-ultimo-concierto",
@@ -16042,8 +16011,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "el-virus-murcia",
@@ -16769,8 +16737,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "escapafantasmas",
@@ -17997,8 +17964,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "expediente-hamelin",
@@ -18441,8 +18407,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "experiencias-vr",
@@ -19283,8 +19248,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "game-over-434321",
@@ -21750,8 +21714,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "jumanji-playa-de-las-americas",
@@ -22829,8 +22792,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "importada_desde_bbdd_privada_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "la-cabana",
@@ -22878,8 +22840,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "la-cabana-velilla-de-san-antonio",
@@ -22904,8 +22865,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "importada_desde_bbdd_privada_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "la-cabana-889251",
@@ -22978,8 +22938,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "la-cabana-de-las-brujas",
@@ -23078,8 +23037,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "la-cafeteria-del-joker",
@@ -23158,8 +23116,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "la-caida-del-regimen-valencia",
@@ -23639,8 +23596,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "la-casa-encantada",
@@ -23944,8 +23900,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "comunidad": "",
@@ -24581,8 +24536,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "la-entrevista-201251",
@@ -24655,8 +24609,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "la-espada-de-oro",
@@ -25175,8 +25128,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "la-fuga",
@@ -25201,8 +25153,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "la-fuga-de-alcatrax",
@@ -25254,8 +25205,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "la-fuga-de-santa-agueda",
@@ -25721,8 +25671,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "la-herencia-988601",
@@ -26523,8 +26472,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "importada_desde_bbdd_privada_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "el-ermitano",
@@ -26856,8 +26804,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "la-mansion",
@@ -26930,8 +26877,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "la-maquina-del-tiempo-227711",
@@ -27331,8 +27277,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "la-nevera-show",
@@ -27704,8 +27649,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "la-piedra-filosofal-gijon",
@@ -27904,8 +27848,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "la-psiquiatria",
@@ -28306,8 +28249,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "la-sospecha",
@@ -28638,8 +28580,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "la-torre-de-babel-sabadell",
@@ -29451,8 +29392,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "las-badliquias-del-pasado",
@@ -29727,8 +29667,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "las-reliquias-de-judy-692401",
@@ -30366,8 +30305,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "los-hermanos-kraks",
@@ -31318,8 +31256,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "matadero-madrid",
@@ -31564,8 +31501,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "mental-experiment",
@@ -31942,8 +31878,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "mision-imposible",
@@ -31968,8 +31903,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "mision-nemesis",
@@ -33803,8 +33737,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "operacion-diamante-712321",
@@ -33853,8 +33786,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "operacion-diamante-719561",
@@ -34252,8 +34184,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "origen",
@@ -34278,8 +34209,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "oscuridad",
@@ -34955,8 +34885,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "pesadillas-2",
@@ -34981,8 +34910,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "petit-piaf-hotel",
@@ -35783,8 +35711,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "prison-break",
@@ -38554,8 +38481,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "silence-circus",
@@ -39034,8 +38960,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "steampunk-el-futuro",
@@ -39543,8 +39468,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "tentacle-disco-pub",
@@ -39846,8 +39770,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "the-bunker-bank",
@@ -40554,8 +40477,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "el-submarino-sovietico",
@@ -42167,8 +42089,7 @@
       "fuente_revisada": "2026-08-18",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-18",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-18"
     },
     {
       "id": "venecia",
@@ -42894,8 +42815,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "white-black-977431",
@@ -43045,8 +42965,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "new",
       "estado_origen": "new",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "wolf",
@@ -43296,8 +43215,7 @@
       "fuente_revisada": "2026-08-13",
       "estado_verificacion": "verificada",
       "estado_origen": "active",
-      "estado_origen_fecha": "2026-08-13",
-      "alta_policy": "ficha_minima_sin_sinopsis_ni_imagen_de_agregadores"
+      "estado_origen_fecha": "2026-08-13"
     },
     {
       "id": "zombie-outbreak",
@@ -43772,7 +43690,6 @@
       "rating": null,
       "votos": null,
       "verificado": false,
-      "fuente_tipo": "web_oficial_identidad_ec_datos_estructurados",
       "fuente_url": "https://openmindroomescape.es/escape-room-investigacion-csi/",
       "fuente_revisada": "2026-11-11",
       "estado_verificacion": "new",
@@ -43800,7 +43717,6 @@
       "rating": null,
       "votos": null,
       "verificado": false,
-      "fuente_tipo": "web_oficial_identidad_ec_datos_estructurados",
       "fuente_url": "https://incognitoescape.es/the-monster/",
       "fuente_revisada": "2026-11-11",
       "estado_verificacion": "new",
@@ -43828,7 +43744,6 @@
       "rating": null,
       "votos": null,
       "verificado": false,
-      "fuente_tipo": "web_oficial_identidad_ec_datos_estructurados",
       "fuente_url": "https://colorsescaperoom.com/valencia/experiencia-roble-escape-room",
       "fuente_revisada": "2026-11-11",
       "estado_verificacion": "new",
@@ -43856,7 +43771,6 @@
       "rating": null,
       "votos": null,
       "verificado": false,
-      "fuente_tipo": "web_oficial_identidad_ec_datos_estructurados",
       "fuente_url": "https://petraescaperoom.com/index.php/adrenalina/",
       "fuente_revisada": "2026-11-11",
       "estado_verificacion": "new",
@@ -43884,7 +43798,6 @@
       "rating": null,
       "votos": null,
       "verificado": false,
-      "fuente_tipo": "web_oficial_identidad_ec_datos_estructurados",
       "fuente_url": "https://openmindroomescape.es/escape-room-infantil-academia-detectives/",
       "fuente_revisada": "2026-11-11",
       "estado_verificacion": "new",
