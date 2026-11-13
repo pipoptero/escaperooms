@@ -2,12 +2,20 @@
 import json
 import unittest
 from pathlib import Path
+from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 NEW_IDS = {
     "csi-investigacion-en-equipo", "the-monster",
     "experiencia-roble-los-siete-enanitos", "adrenalina",
     "academia-de-detectives",
+}
+OFFICIAL_HOSTS = {
+    "csi-investigacion-en-equipo": "openmindroomescape.es",
+    "the-monster": "incognitoescape.es",
+    "experiencia-roble-los-siete-enanitos": "colorsescaperoom.com",
+    "adrenalina": "petraescaperoom.com",
+    "academia-de-detectives": "openmindroomescape.es",
 }
 
 
@@ -27,7 +35,8 @@ class NewEscapesReleaseTests(unittest.TestCase):
             self.assertGreater(len(room["descripcion"]), 1000)
             self.assertTrue((ROOT / room["imagen"]).exists())
             self.assertTrue(room["web"].startswith("https://"))
-            self.assertNotIn("escapecollector.com", room["web"])
+            self.assertEqual(urlsplit(room["web"]).hostname, OFFICIAL_HOSTS[identity])
+            self.assertFalse({"source_checkpoint", "raw_response", "external_source_id"} & room.keys())
 
     def test_2026_awards_have_exact_catalog_identity(self):
         rooms = {room["id"]: room for room in self.catalog}

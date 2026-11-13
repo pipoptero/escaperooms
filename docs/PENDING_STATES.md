@@ -73,7 +73,7 @@ Resultados finales del 9 de septiembre de 2026:
 El servidor de comprobación debe publicar directamente la raíz `escaperooms-work`. En la última validación `http://127.0.0.1:8769/` servía esta versión y `index.html`, `data.json`, `catalog.json`, `room-state.js`, `room_aliases.json` y `service-worker.js` respondían 200. Chromium completó una carga real con la app visible, la pantalla de error oculta y 1.728 salas. Si vuelve a aparecer «Error al cargar datos», comprobar primero que el servidor siga vivo y reiniciarlo desde esa carpeta:
 
 ```powershell
-cd C:\Users\Isaac\Documents\SCAPEROOMS\escaperooms-work
+cd <ruta-del-checkout-web>
 python -m http.server 8769 --bind 127.0.0.1
 ```
 

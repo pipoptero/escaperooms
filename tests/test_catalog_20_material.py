@@ -37,7 +37,7 @@ class CatalogMaterialTests(unittest.TestCase):
             self.assertEqual(room.get("descripcion_formato"), "markdown")
             self.assertTrue(room["imagen"].startswith("images/catalgo_propio_web_escape/optimized/"))
             self.assertTrue((ROOT / room["imagen"]).is_file())
-            self.assertNotIn("escapecollector", json.dumps(room).lower())
+            self.assertFalse({"source_checkpoint", "raw_response", "external_source_id"} & room.keys())
 
     def test_park_references_are_exact(self):
         parks = {park["id"]: park for park in json.loads(

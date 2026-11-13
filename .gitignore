@@ -13,6 +13,9 @@ firebase-config.js
 *.local.js
 reports/
 private/
+# Normative instructions live in the separate private workspace.
+/AGENTS.md
+/docs/standards/
 *.sqlite
 *.sqlite3
 *.db
